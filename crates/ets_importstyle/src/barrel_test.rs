@@ -9,10 +9,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go test: internal/importstyle/barrel_test.go:14 fakeFiles d9398467a380dabc
-// fakeFiles serves loaded files as parsed program files and every file,
-// loaded or not, through readFile, counting reads per file.
-//
+// go test: internal/importstyle/barrel_test.go:12 fakeFiles 0812ee443e033984
 // Rust: shared with the reader's closures, so the maps sit behind an `Arc` and the counts behind a lock.
 struct FakeFiles {
     loaded: FxHashMap<String, P<SourceFile>>,
@@ -20,7 +17,7 @@ struct FakeFiles {
     reads: Mutex<FxHashMap<String, i64>>,
 }
 
-// go test: internal/importstyle/barrel_test.go:20 newFakeFiles 6dd82a4d32e2aeb8
+// go test: internal/importstyle/barrel_test.go:18 newFakeFiles 6dd82a4d32e2aeb8
 fn new_fake_files(loaded: &[(&str, &str)], disk: &[(&str, &str)]) -> Arc<FakeFiles> {
     let mut files = FakeFiles {
         loaded: FxHashMap::default(),
@@ -45,7 +42,7 @@ fn new_fake_files(loaded: &[(&str, &str)], disk: &[(&str, &str)]) -> Arc<FakeFil
     Arc::new(files)
 }
 
-// go test: internal/importstyle/barrel_test.go:33 fakeFiles.reader 584f132ba3aa4c2a
+// go test: internal/importstyle/barrel_test.go:31 fakeFiles.reader 584f132ba3aa4c2a
 fn reader(f: &Arc<FakeFiles>) -> BarrelReader {
     let loaded = Arc::clone(f);
     let disk = Arc::clone(f);
@@ -58,7 +55,7 @@ fn reader(f: &Arc<FakeFiles>) -> BarrelReader {
     )
 }
 
-// go test: internal/importstyle/barrel_test.go:44 TestIsBarrelFile 8b0cc03c3b24631c
+// go test: internal/importstyle/barrel_test.go:42 TestIsBarrelFile 8b0cc03c3b24631c
 #[test]
 fn test_is_barrel_file() {
     ets_go::testing::run(|t| {
@@ -79,7 +76,7 @@ fn test_is_barrel_file() {
     });
 }
 
-// go test: internal/importstyle/barrel_test.go:63 TestBarrelReaderFind 23afa14f312a33ec
+// go test: internal/importstyle/barrel_test.go:61 TestBarrelReaderFind 23afa14f312a33ec
 #[test]
 fn test_barrel_reader_find() {
     ets_go::testing::run(|t| {
@@ -212,7 +209,7 @@ fn test_barrel_reader_find() {
     });
 }
 
-// go test: internal/importstyle/barrel_test.go:105 TestBarrelReaderReadsEachIndexOnce 89924fb9a0daeac6
+// go test: internal/importstyle/barrel_test.go:103 TestBarrelReaderReadsEachIndexOnce 89924fb9a0daeac6
 #[test]
 fn test_barrel_reader_reads_each_index_once() {
     ets_go::testing::run(|t| {

@@ -1,9 +1,6 @@
-use ets_go::testing::T;
-use ets_shim::lsproto;
-
 use crate::*;
 
-// go test: internal/completions/error_key_patterns_test.go:10 errorKeyPatternTsConfig 515bd0bc82d68b0f
+// go test: internal/completions/error_key_patterns_test.go:5 errorKeyPatternTsConfig 515bd0bc82d68b0f
 const ERROR_KEY_PATTERN_TS_CONFIG: &str = r#"{
   "compilerOptions": {
     "strict": true,
@@ -22,7 +19,7 @@ const ERROR_KEY_PATTERN_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/completions/error_key_patterns_test.go:28 taggedClassKeyPatternTsConfig 47f671e7f9868a50
+// go test: internal/completions/error_key_patterns_test.go:23 taggedClassKeyPatternTsConfig 47f671e7f9868a50
 const TAGGED_CLASS_KEY_PATTERN_TS_CONFIG: &str = r#"{
   "compilerOptions": {
     "strict": true,
@@ -40,33 +37,7 @@ const TAGGED_CLASS_KEY_PATTERN_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/completions/error_key_patterns_test.go:45 namedPackageJson 7c071f81e6612149
-const NAMED_PACKAGE_JSON: &str = r#"{ "name": "@effect/harness-effect-v4" }"#;
-
-// go test: internal/completions/error_key_patterns_test.go:47 taggedItems 8e2b17c083a7a1c4
-fn tagged_items(
-    t: &T,
-    tsconfig: &str,
-    package_json: &str,
-    source: &str,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    let content = format!(
-        "// @Filename: /tsconfig.json\n{tsconfig}\n// @Filename: /package.json\n{package_json}\n// @Filename: /test.ts\n{source}/*1*/"
-    );
-
-    let mut f = ets_fourslash::new_fourslash(t, None, &content);
-
-    f.go_to_marker(t, "1");
-    let completions = f.get_completions(t, None);
-    f.done(t);
-    let Some(completions) = completions else {
-        return Vec::new();
-    };
-    completions.items
-}
-
-// go test: internal/completions/error_key_patterns_test.go:64 TestErrorKeyPatterns 8a1389a6a1ccefd8
+// go test: internal/completions/error_key_patterns_test.go:40 TestErrorKeyPatterns 56bbf248824ff8df
 #[test]
 fn test_error_key_patterns() {
     go_test(|t| {
@@ -200,9 +171,10 @@ fn test_error_key_patterns() {
                 t.parallel();
                 let mut package_json = tc.package_json;
                 if package_json.is_empty() {
-                    package_json = NAMED_PACKAGE_JSON;
+                    package_json = HARNESS_PACKAGE_JSON;
                 }
-                let items = tagged_items(t, tc.tsconfig, package_json, tc.source);
+                let items =
+                    completion_items_in(t, tc.tsconfig, package_json, tc.source, tc.source.len());
                 let Some(item) = find_completion_item(&items, tc.label) else {
                     t.fatal(format!("completion {:?} not found", tc.label));
                 };

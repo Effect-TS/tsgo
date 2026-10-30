@@ -92,7 +92,7 @@ export const narrowed = Effect.isEffect(guarded) ? guarded : null
     });
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:76 TestNodeCannotBeEffectLibraryTypePrimitiveExpressions d042a0e5c46c9a25
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:76 TestNodeCannotBeEffectLibraryTypePrimitiveExpressions 966b845e777b2020
 #[test]
 fn test_node_cannot_be_effect_library_type_primitive_expressions() {
     run(|t| {
@@ -116,19 +116,7 @@ export const effect = Effect.void";
             compile_and_get_checker_and_source_file_with_effect_v4_internal(t, source);
         let mut tp = compiled.type_parser();
 
-        let mut initializers: FxHashMap<String, Option<P<Node>>> = FxHashMap::default();
-        for &statement in sf.statements().nodes() {
-            if statement.kind() != Kind::VariableStatement {
-                continue;
-            }
-            let declaration_list = statement.as_variable_statement().declaration_list();
-            for &declaration in
-                declaration_list.as_variable_declaration_list().declarations().nodes()
-            {
-                let name = declaration.name().expect("a variable declaration has a name");
-                initializers.insert(name.text().to_string(), declaration.initializer());
-            }
-        }
+        let initializers = exported_initializers(sf);
         // Rust: Go ranges over a map literal (random order); the cases only report errors, so a fixed order reports
         // the same set.
         for (name, expected) in [
@@ -178,9 +166,7 @@ enum ParsedType {
     Flag,
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:129 atLocationParser 19214ce229bc74e7
-// atLocationParser pairs an AtLocation parser with the parser it applies to
-// the type of a node; each reports its result and whether it is non-nil.
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:119 atLocationParser ec5df3cb7397c09f
 // Rust: the closures take the parser as an argument instead of capturing it, and a result is non-nil when it is
 // `Some`.
 struct AtLocationParser {
@@ -189,7 +175,7 @@ struct AtLocationParser {
     parse: fn(&mut TypeParser<'_>, Option<P<Type>>) -> Option<ParsedType>,
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:135 atLocationParsers e7030614e51afe5d
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:125 atLocationParsers e7030614e51afe5d
 fn at_location_parsers() -> Vec<AtLocationParser> {
     vec![
         AtLocationParser {
@@ -240,7 +226,7 @@ fn at_location_parsers() -> Vec<AtLocationParser> {
     ]
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:158 exportedInitializers 07beef450b626781
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:148 exportedInitializers 07beef450b626781
 fn exported_initializers(sf: P<SourceFile>) -> FxHashMap<String, Option<P<Node>>> {
     let mut initializers = FxHashMap::default();
     for &statement in sf.statements().nodes() {
@@ -256,11 +242,7 @@ fn exported_initializers(sf: P<SourceFile>) -> FxHashMap<String, Option<P<Node>>
     initializers
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:175 checkAtLocationParsers 8e5ee70b5ada5c3c
-// checkAtLocationParsers asserts that every AtLocation parser matches its
-// parser applied to GetTypeAtLocation, that the parsers named in expected
-// (and only those) succeed, and that a node ruled out by every parser that
-// skips it is never typed.
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:161 checkAtLocationParsers 5feca0ebe09e73e5
 // Rust: Go ranges over the expected map (random order); a slice reports the same set of errors.
 fn check_at_location_parsers(
     t: &T,
@@ -311,7 +293,7 @@ fn check_at_location_parsers(
     }
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:203 TestAtLocationParsersV4 deae00ec468c8cdd
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:189 TestAtLocationParsersV4 deae00ec468c8cdd
 #[test]
 fn test_at_location_parsers_v4() {
     run(|t| {
@@ -354,7 +336,7 @@ export const number = 1"#,
     });
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:234 TestAtLocationParsersV3 b0cacb5d2e2fbfeb
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:220 TestAtLocationParsersV3 129eb4929cc52cdc
 #[test]
 fn test_at_location_parsers_v3() {
     run(|t| {
@@ -377,17 +359,17 @@ export const number = 1"#,
         );
         let mut tp = compiled.type_parser();
 
+        let v3_stream_also_parses_as_effect = ["Effect", "EffectTypeId", "Stream", "Yieldable"];
         check_at_location_parsers(
             t,
             &mut tp,
             sf,
             &[
-                // v3 Streams carry the Effect variance struct, so the two overlap.
-                ("effect", &["Effect", "EffectTypeId", "StrictEffect", "Stream", "Yieldable"]),
+                ("effect", &[&["StrictEffect"][..], &v3_stream_also_parses_as_effect].concat()),
                 ("layer", &["Layer"]),
-                ("stream", &["Stream", "Effect", "EffectTypeId", "Yieldable"]),
+                ("stream", &v3_stream_also_parses_as_effect),
                 ("schema", &["Schema"]),
-                ("tag", &["ContextTag", "Effect", "EffectTypeId", "Stream", "Yieldable"]),
+                ("tag", &[&["ContextTag"][..], &v3_stream_also_parses_as_effect].concat()),
                 ("object", &[]),
                 ("arrow", &[]),
                 ("number", &[]),
@@ -396,7 +378,7 @@ export const number = 1"#,
     });
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:264 TestAtLocationParsersAreNilSafe 832fa13e22b81454
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:250 TestAtLocationParsersAreNilSafe 832fa13e22b81454
 // Rust: a TypeParser is never nil nor without a checker, so only the nil node case is ported, on a parser of an
 // empty program.
 #[test]

@@ -5,7 +5,7 @@ use ets_shim::core::context::Context;
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/checked_expression_types_test.go:5 TestCheckedExpressionTypeRemembersOnlyCheckedSourceFiles 449e575b22ccfff0
+// go test: internal/typeparser/checked_expression_types_test.go:5 TestCheckedExpressionTypeRemembersOnlyCheckedSourceFiles 39b0dbabcdc30956
 #[test]
 fn test_checked_expression_type_remembers_only_checked_source_files() {
     run(|t| {
@@ -53,7 +53,6 @@ fn test_checked_expression_type_remembers_only_checked_source_files() {
             t.fatal("expected the checked first file to be remembered");
         }
 
-        // a negative answer is not remembered, the file is asked again once checked
         if tp.checked_expression_type(second).is_some() {
             t.fatal("expected no checked type for the unchecked second file");
         }

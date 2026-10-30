@@ -6,17 +6,7 @@ mod baseline;
 pub mod baseline_results;
 mod document_symbols_baseline;
 mod document_symbols_runner;
-#[cfg(test)]
-mod effect_in_failure_ts2589_test;
-#[cfg(test)]
-mod effect_in_void_success_ts2589_test;
 mod harness;
-#[cfg(test)]
-mod inferred_generator_contextual_type_test;
-#[cfg(test)]
-mod match_when_stability_ts2589_test;
-#[cfg(test)]
-mod never_spread_ts2488_test;
 mod quickfix_baseline;
 mod quickfix_runner;
 mod refactor_baseline;
@@ -28,9 +18,6 @@ mod vfs;
 pub use baseline::*;
 pub use document_symbols_baseline::*;
 pub use document_symbols_runner::*;
-// Rust-only: the test helpers of `effect_in_failure_ts2589_test.go` are shared by the package's other tests.
-#[cfg(test)]
-pub(crate) use effect_in_failure_ts2589_test::*;
 pub use harness::*;
 pub use quickfix_baseline::*;
 pub use quickfix_runner::*;

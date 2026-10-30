@@ -397,40 +397,7 @@ pub(crate) fn same_symbol_reference(
     left.is_some() && right.is_some() && get_symbol_if_same_reference(c, left, right).is_some()
 }
 
-// go: internal/typeparser/data_first_signature.go:285 DerivePipeableSignatureFromDataFirst 5bf4e7a85c8fce07
-// DerivePipeableSignatureFromDataFirst removes the subject parameter from a
-// data-first signature and moves it to a unary function in the return type.
-pub fn derive_pipeable_signature_from_data_first(
-    c: &mut Checker,
-    sig: Option<P<Signature>>,
-    subject_index: i64,
-) -> Option<P<Signature>> {
-    let sig = sig?;
-    let params = sig.parameters();
-    if subject_index < 0 || subject_index >= params.len() as i64 {
-        return None;
-    }
-    let subject = params[subject_index as usize];
-
-    let mut outer_params: Vec<P<Symbol>> = Vec::with_capacity(params.len() - 1);
-    for (i, &param) in params.iter().enumerate() {
-        if i as i64 == subject_index {
-            continue;
-        }
-        outer_params.push(param);
-    }
-
-    let return_type = c.get_return_type_of_signature_exported(sig);
-    let inner_fn_type = c.new_function_type(&[], None, &[subject], return_type);
-    Some(c.new_call_signature(
-        sig.type_parameters(),
-        sig.this_parameter(),
-        &outer_params,
-        inner_fn_type,
-    ))
-}
-
-// go: internal/typeparser/data_first_signature.go:313 isLikelySelfParameter 8ef23c8d4686debe
+// go: internal/typeparser/data_first_signature.go:283 isLikelySelfParameter 8ef23c8d4686debe
 pub(crate) fn is_likely_self_parameter(sym: Option<P<Symbol>>) -> bool {
     let Some(sym) = sym else {
         return false;
@@ -448,7 +415,7 @@ fn go_to_lower(s: &str) -> String {
         .collect()
 }
 
-// go: internal/typeparser/data_first_signature.go:321 omitArgAt a7472eff4597285f
+// go: internal/typeparser/data_first_signature.go:291 omitArgAt a7472eff4597285f
 pub(crate) fn omit_arg_at(nodes: &[P<Node>], index: usize) -> Vec<P<Node>> {
     let mut result = Vec::with_capacity(nodes.len().saturating_sub(1));
     for (i, &node) in nodes.iter().enumerate() {

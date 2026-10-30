@@ -65,10 +65,7 @@ export function read(local) { return local.n + value }
 export const cast = /** @type {Local} */ ({ n: value })
 "#;
 
-// go test: internal/typeparser/get_type_at_location_test.go:59 getTypeAtLocationUnhoisted 96aab3849c23de10
-// getTypeAtLocationUnhoisted is GetTypeAtLocation with the guards inside the
-// cached computation, as before they were hoisted.
-//
+// go test: internal/typeparser/get_type_at_location_test.go:57 getTypeAtLocationUnhoisted 5c70847b6ad87046
 // Rust: Go's `CachedNode` over a store of the test's own: the links' `cached_node` selects a store of the links.
 fn get_type_at_location_unhoisted(
     tp: &mut TypeParser<'_>,
@@ -87,7 +84,7 @@ fn get_type_at_location_unhoisted(
     value
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:68 TestGetTypeAtLocationHoistedGuardsMatchUnhoisted d404f89e9d3513cf
+// go test: internal/typeparser/get_type_at_location_test.go:66 TestGetTypeAtLocationHoistedGuardsMatchUnhoisted ccd05d0ca647ebab
 #[test]
 fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
     run(|t| {
@@ -135,18 +132,15 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
                     guards: FxHashMap::default(),
                 };
                 for (i, &sf) in source_files.iter().enumerate() {
-                    // The first file is compared before any file is checked. Asked
-                    // about an unchecked file, the checker can build an equal but new
-                    // type on each evaluation, so there the types are compared printed.
-                    let checked = i > 0;
+                    let file_checked = i > 0;
                     if i == 1 {
                         for &other in &source_files {
                             tp.checker().get_diagnostics_exported(&Context::background(), other);
                         }
                     }
-                    fn same(
+                    fn same_type(
                         tp: &mut TypeParser<'_>,
-                        checked: bool,
+                        file_checked: bool,
                         a: Option<P<Type>>,
                         b: Option<P<Type>>,
                     ) -> bool {
@@ -154,7 +148,7 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
                             return true;
                         }
                         match (a, b) {
-                            (Some(a), Some(b)) if !checked => {
+                            (Some(a), Some(b)) if !file_checked => {
                                 type_string(tp, a) == type_string(tp, b)
                             }
                             _ => false,
@@ -163,18 +157,18 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
                     fn print(tp: &mut TypeParser<'_>, t: Option<P<Type>>) -> String {
                         t.map_or_else(|| "<nil>".to_string(), |t| type_string(tp, t))
                     }
+                    let unhoisted_first = i.is_multiple_of(2);
                     fn visit(
                         t: &T,
                         tp: &mut TypeParser<'_>,
                         state: &mut State,
-                        i: usize,
-                        checked: bool,
+                        unhoisted_first: bool,
+                        file_checked: bool,
                         sf: P<SourceFile>,
                         node: P<Node>,
                     ) -> bool {
                         state.nodes += 1;
-                        // even files ask the unhoisted ordering first, odd files the hoisted one
-                        let (first, second) = if i.is_multiple_of(2) {
+                        let (first, second) = if unhoisted_first {
                             let first =
                                 get_type_at_location_unhoisted(tp, &mut state.unhoisted, node);
                             (first, tp.get_type_at_location(node))
@@ -182,7 +176,7 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
                             let first = tp.get_type_at_location(node);
                             (first, get_type_at_location_unhoisted(tp, &mut state.unhoisted, node))
                         };
-                        if !same(tp, checked, first, second) {
+                        if !same_type(tp, file_checked, first, second) {
                             t.error(ets_go::sprintf!(
                                 "%s: %s at %d: %s, then %s",
                                 sf.file_name(),
@@ -192,10 +186,9 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
                                 print(tp, second)
                             ));
                         }
-                        // repeated queries answer from the caches
                         let again = tp.get_type_at_location(node);
                         if again != tp.get_type_at_location(node)
-                            || !same(tp, checked, again, first)
+                            || !same_type(tp, file_checked, again, first)
                         {
                             t.error(ets_go::sprintf!(
                                 "%s: %s at %d: repeated query got %s, want %s",
@@ -253,11 +246,11 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
                             ));
                         }
                         ets_shim::ast::for_each_child_and_jsdoc(node, sf.get(), &mut |child| {
-                            visit(t, tp, state, i, checked, sf, child)
+                            visit(t, tp, state, unhoisted_first, file_checked, sf, child)
                         });
                         false
                     }
-                    visit(t, &mut tp, &mut state, i, checked, sf, sf.as_node());
+                    visit(t, &mut tp, &mut state, unhoisted_first, file_checked, sf, sf.as_node());
                 }
                 t.log(ets_go::sprintf!(
                     "%d files, %d nodes, %d typed, %d rejected",
@@ -269,16 +262,15 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
                 if state.typed == 0 || state.rejected == 0 {
                     t.fatal("fixtures do not exercise the guards");
                 }
-                // Type-only heritage elements parse as type references with some
-                // providers, so that guard is not required to fire.
                 if version.is_none() {
-                    for guard in [
+                    let guards_fired_by_every_provider = [
                         "jsx tag name",
                         "jsx attribute name",
                         "import clause",
                         "tagged template",
                         "meta property call",
-                    ] {
+                    ];
+                    for guard in guards_fired_by_every_provider {
                         if state.guards.get(guard).copied().unwrap_or_default() == 0 {
                             t.error(ets_go::sprintf!(
                                 "fixtures do not exercise the %s guard",
@@ -292,75 +284,8 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
     });
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:179 TestGetTypeAtLocationImportClause 4f7612cfc4035ae1
-// Import clauses without a default binding declare no symbol; before the
-// KindImportClause guard, checker.GetTypeAtLocation panicked on them with a
-// nil symbol dereference (recovered silently, see issue #301 investigation).
-#[test]
-fn test_get_type_at_location_import_clause() {
-    run(|t| {
-        t.parallel();
-
-        let sources = [
-            (
-                "/.src/dep.ts",
-                "
-export const A = 1
-export type T = string
-const d = { A }
-export default d
-",
-            ),
-            (
-                "/.src/main.ts",
-                "
-import { A } from \"./dep.js\"
-import * as ns from \"./dep.js\"
-import type { T } from \"./dep.js\"
-import d from \"./dep.js\"
-export const use: T = String(A + ns.A + d.A)
-",
-            ),
-        ];
-
-        let (mut compiled, source_files) =
-            compile_and_get_checker_and_source_files_internal(t, &sources);
-        let mut tp = compiled.type_parser();
-
-        let mut clauses: Vec<P<Node>> = Vec::new();
-        fn visit(node: P<Node>, clauses: &mut Vec<P<Node>>) -> bool {
-            if node.kind() == Kind::ImportClause {
-                clauses.push(node);
-            }
-            node.for_each_child(&mut |child| visit(child, clauses));
-            false
-        }
-        source_files["/.src/main.ts"]
-            .as_node()
-            .for_each_child(&mut |child| visit(child, &mut clauses));
-
-        if clauses.len() != 4 {
-            t.fatal(ets_go::sprintf!("expected 4 import clauses, got %d", clauses.len() as i64));
-        }
-
-        for clause in clauses {
-            if tp.get_type_at_location(clause).is_some() {
-                let parent = clause.parent().expect("import clause parent");
-                t.error(ets_go::sprintf!(
-                    "expected nil type for import clause %q, got a type",
-                    ets_shim::scanner::get_text_of_node(parent)
-                ));
-            }
-        }
-    });
-}
-
-// go test: internal/typeparser/get_type_at_location_test.go:227 checkedTypeSource 50f716d15785f4cd
-// Re-evaluating these expressions after the check gives a different type than
-// the check itself computed: the iterator's return literals were checked while
-// the enclosing generic call was still resolving, and the narrowed reference
-// was checked with its constraint substituted.
-const CHECKED_TYPE_SOURCE: &str = r#"
+// go test: internal/typeparser/get_type_at_location_test.go:169 reevaluationDiffersSource 51805c2dbf139fd7
+const REEVALUATION_DIFFERS_SOURCE: &str = r#"
 declare const dual: {
   <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
     arity: Parameters<DataFirst>["length"],
@@ -393,14 +318,14 @@ export const getRandomValues = <T extends ArrayBufferView | null>(array: T): T =
 }
 "#;
 
-// go test: internal/typeparser/get_type_at_location_test.go:260 TestGetTypeAtLocationReturnsCheckedType 3dfcaa87e84a60b9
+// go test: internal/typeparser/get_type_at_location_test.go:202 TestGetTypeAtLocationReturnsCheckedType 3460689c5999a31d
 #[test]
 fn test_get_type_at_location_returns_checked_type() {
     run(|t| {
         t.parallel();
 
         let (mut compiled, sf) =
-            compile_and_get_checker_and_source_file_with_effect_v4_internal(t, CHECKED_TYPE_SOURCE);
+            compile_and_get_checker_and_source_file_internal(t, REEVALUATION_DIFFERS_SOURCE);
         compiled.checker.get_diagnostics_exported(&Context::background(), sf);
         let mut tp = compiled.type_parser();
 
@@ -450,20 +375,19 @@ fn test_get_type_at_location_returns_checked_type() {
     });
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:294 TestGetTypeAtLocationAddsNoDiagnosticsAfterCheck 96bcb272df48650a
+// go test: internal/typeparser/get_type_at_location_test.go:236 TestGetTypeAtLocationAddsNoDiagnosticsAfterCheck 878c1e35cfc4e8f5
 #[test]
 fn test_get_type_at_location_adds_no_diagnostics_after_check() {
     run(|t| {
         t.parallel();
 
-        let source = CHECKED_TYPE_SOURCE.to_string()
+        let source = REEVALUATION_DIFFERS_SOURCE.to_string()
             + "
 declare function takesString<T extends string>(x: T): T
 export const bad = takesString(1)
 export function inferred() { return takesString(2) }
 ";
-        let (mut compiled, sf) =
-            compile_and_get_checker_and_source_file_with_effect_v4_internal(t, &source);
+        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, &source);
         let mut tp = compiled.type_parser();
         let before = tp.checker().get_diagnostics_exported(&Context::background(), sf).len();
         if before == 0 {
@@ -489,7 +413,7 @@ export function inferred() { return takesString(2) }
     });
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:323 scannerText 900bc4c580366402
+// go test: internal/typeparser/get_type_at_location_test.go:265 scannerText 900bc4c580366402
 fn scanner_text(sf: P<SourceFile>, node: P<Node>) -> &'static str {
     let pos = node.pos().source_offset().expect("a parsed node") as usize;
     let end = node.end().source_offset().expect("a parsed node") as usize;

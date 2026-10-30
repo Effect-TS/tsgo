@@ -6,17 +6,15 @@ use crate::helpers_test::*;
 use crate::returning_dispatch_test::find_returning_dispatch_test_function;
 use crate::*;
 
-// go test: internal/typeparser/function_module_test.go:9 functionReferenceCase f356ec00a209292a
+// go test: internal/typeparser/function_module_test.go:9 functionReferenceCase 6da1b419a2788bff
 struct FunctionReferenceCase {
     name: &'static str,
     member: &'static str,
     want: bool,
-    // viaVariable marks references that only reach the export through a local
-    // variable, which the direct variant must reject.
-    via_variable: bool,
+    via_local_variable: bool,
 }
 
-// go test: internal/typeparser/function_module_test.go:18 TestIsNodeReferenceToEffectFunctionModuleApi 11bf8947742b922a
+// go test: internal/typeparser/function_module_test.go:16 TestIsNodeReferenceToEffectFunctionModuleApi da0d6f3bb0850ff1
 #[test]
 fn test_is_node_reference_to_effect_function_module_api() {
     run(|t| {
@@ -44,11 +42,11 @@ fn test_is_node_reference_to_effect_function_module_api() {
 				const viaTypedAlias = () => typedAlias
 			"#
                 .to_string();
-                let case = |name, member, want, via_variable| FunctionReferenceCase {
+                let case = |name, member, want, via_local_variable| FunctionReferenceCase {
                     name,
                     member,
                     want,
-                    via_variable,
+                    via_local_variable,
                 };
                 let mut cases = vec![
                     case("root", "identity", true, false),
@@ -90,7 +88,7 @@ fn test_is_node_reference_to_effect_function_module_api() {
                             tt.want
                         ));
                     }
-                    let want_direct = tt.want && !tt.via_variable;
+                    let want_direct = tt.want && !tt.via_local_variable;
                     let got =
                         tp.is_node_direct_reference_to_effect_function_module_api(body, tt.member);
                     if got != want_direct {

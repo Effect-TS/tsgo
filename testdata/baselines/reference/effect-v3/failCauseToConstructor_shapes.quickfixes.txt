@@ -17,9 +17,6 @@
   Fix 1: "Disable failCauseToConstructor for entire file"
   Fix 2: "Replace with Effect.dieSync"
 
-[D5] (25:60-25:77) TS2322: Type 'Promise<Cause<Error>>' is not assignable to type 'Cause<unknown>'.
-  (no quick fixes)
-
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable failCauseToConstructor for this line" ===
@@ -73,6 +70,7 @@ export const lazyTypeArgument = Effect.failCauseSync(() => Cause.fail<Error | st
 export const lazyDie = Effect.dieSync(() => defect)
 
 // MUST NOT TRIGGER: async thunk
+// @ts-expect-error
 export const asyncThunk = Effect.failCauseSync(async () => Cause.fail(error))
 
 // MUST NOT TRIGGER: generator thunk

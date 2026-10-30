@@ -4,10 +4,9 @@ Effect version: 4.0.2
 /.src/failCauseToConstructor_shapes.ts(11,57): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
 /.src/failCauseToConstructor_shapes.ts(16,16): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
 /.src/failCauseToConstructor_shapes.ts(19,33): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
-/.src/failCauseToConstructor_shapes.ts(25,60): error TS2740: Type 'Promise<Cause<Error>>' is missing the following properties from type 'Cause<unknown>': [TypeId], reasons, toJSON, [NodeInspectSymbol], and 3 more.
 
 
-==== /.src/failCauseToConstructor_shapes.ts (4 errors) ====
+==== /.src/failCauseToConstructor_shapes.ts (3 errors) ====
     // @effect-v4
     // @effect-diagnostics *:off
     // @effect-diagnostics failCauseToConstructor:warning
@@ -38,10 +37,8 @@ Effect version: 4.0.2
     export const lazyDie = Effect.failCauseSync(() => Cause.die(defect))
     
     // MUST NOT TRIGGER: async thunk
+    // @ts-expect-error
     export const asyncThunk = Effect.failCauseSync(async () => Cause.fail(error))
-                                                               ~~~~~~~~~~~~~~~~~
-!!! error TS2740: Type 'Promise<Cause<Error>>' is missing the following properties from type 'Cause<unknown>': [TypeId], reasons, toJSON, [NodeInspectSymbol], and 3 more.
-!!! related TS6502 /node_modules/effect/dist/Function.d.ts(281,26): The expected type comes from the return type of this signature.
     
     // MUST NOT TRIGGER: generator thunk
     export const generatorThunk = Effect.failCauseSync(function*() {

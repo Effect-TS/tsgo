@@ -14,7 +14,7 @@ use ets_shim::vfs::vfstest::MapFile;
 use ets_shim::vfs::{FS, bundled, vfstest};
 use ets_typeparser::{PipingFlow, TransformationKind};
 
-// go test: internal/rewriter/piping_flow_test.go:24 TestRemoveTrailingPipingFlowTransformation 3018df64867d41f2
+// go test: internal/rewriter/piping_flow_test.go:24 TestRemoveTrailingPipingFlowTransformation 36abfd9384732484
 // Rust: Go's `(*rewriter.Tracker)(nil)` receiver check is left out (a Rust `&mut Tracker` is never nil). The
 // subtests run in sequence; each program is leaked, as the test process ends right after.
 #[test]
@@ -192,10 +192,10 @@ export const value = "#;
             for test in tests {
                 t.run(test.name, |t| {
                     let source = format!("{PREFIX}{}", test.source);
-                    let PipingFlowRewriteFixture { sf, flow, mut tracker, converters, .. } =
-                        new_piping_flow_rewrite_fixture(t, &source);
+                    let mut fixture = new_piping_flow_rewrite_fixture(t, &source);
+                    let sf = fixture.sf;
                     if let Some(kind) = test.kind {
-                        let transformations = flow.transformations();
+                        let transformations = fixture.flow.transformations();
                         if transformations.len() == 0
                             || transformations.at(transformations.len() - 1).kind() != kind
                         {
@@ -205,35 +205,37 @@ export const value = "#;
                             ));
                         }
                     }
-                    let got =
-                        tracker.remove_trailing_piping_flow_transformation(Some(sf), Some(&flow));
+                    let got = fixture
+                        .tracker
+                        .remove_trailing_piping_flow_transformation(Some(sf), Some(&fixture.flow));
                     if got != test.remove {
                         t.fatal(format!("removal = {got}, want {}", test.remove));
                     }
-                    if tracker.remove_trailing_piping_flow_transformation(Some(sf), None)
-                        || tracker.remove_trailing_piping_flow_transformation(None, Some(&flow))
+                    if fixture.tracker.remove_trailing_piping_flow_transformation(Some(sf), None)
+                        || fixture
+                            .tracker
+                            .remove_trailing_piping_flow_transformation(None, Some(&fixture.flow))
                     {
                         t.fatal("nil inputs must not remove transformations");
                     }
-                    let edits =
-                        tracker.get_changes().shift_remove(sf.file_name()).unwrap_or_default();
+                    let edits = fixture
+                        .tracker
+                        .get_changes()
+                        .shift_remove(sf.file_name())
+                        .unwrap_or_default();
                     if !test.remove && !edits.is_empty() {
                         t.fatal(format!("unsupported removal produced {} edits", edits.len()));
                     }
-                    let mut changes = Vec::new();
                     for edit in &edits {
                         if test.deletions_only && !edit.new_text.is_empty() {
                             t.fatal(format!("pipe removal inserted text {:?}", edit.new_text));
                         }
-                        let span = converters.from_lsp_range_to_original(&sf, edit.range);
-                        changes
-                            .push(TextChange { text_range: span, new_text: edit.new_text.clone() });
                     }
-                    let mut expected = source.clone();
+                    let mut expected = source;
                     if test.remove {
                         expected = format!("{PREFIX}{}", test.expected);
                     }
-                    let got = ets_shim::core::apply_bulk_edits(&source, &changes);
+                    let got = fixture.apply();
                     if got != expected {
                         t.fatal(format!("replacement = {got:?}, want {expected:?}"));
                     }
@@ -243,7 +245,7 @@ export const value = "#;
     });
 }
 
-// go test: internal/rewriter/piping_flow_test.go:147 TestReplacePipingFlowPrefix 15a6f1b2e43982be
+// go test: internal/rewriter/piping_flow_test.go:144 TestReplacePipingFlowPrefix 15a6f1b2e43982be
 // Rust: the subtests run in sequence; each program is leaked, as the test process ends right after.
 #[test]
 fn test_replace_piping_flow_prefix() {
@@ -335,10 +337,7 @@ export const value = "#;
     });
 }
 
-// go test: internal/rewriter/piping_flow_test.go:196 pipingFlowRewriteFixture 7b4405e4a6340191
-// pipingFlowRewriteFixture holds the longest piping flow at the initializer of a
-// source's last declaration, and a tracker to rewrite it.
-//
+// go test: internal/rewriter/piping_flow_test.go:191 pipingFlowRewriteFixture 526247405ab29f3c
 // Rust: the checker handle is kept for the fixture's lifetime (Go releases it in `t.Cleanup`).
 struct PipingFlowRewriteFixture {
     source: String,
@@ -349,7 +348,7 @@ struct PipingFlowRewriteFixture {
     _checker: CheckerHandle,
 }
 
-// go test: internal/rewriter/piping_flow_test.go:204 newPipingFlowRewriteFixture f4d8a84b1829431a
+// go test: internal/rewriter/piping_flow_test.go:199 newPipingFlowRewriteFixture f4d8a84b1829431a
 fn new_piping_flow_rewrite_fixture(
     t: &ets_go::testing::T,
     source: &str,
@@ -416,9 +415,7 @@ fn new_piping_flow_rewrite_fixture(
 }
 
 impl PipingFlowRewriteFixture {
-    // go test: internal/rewriter/piping_flow_test.go:237 pipingFlowRewriteFixture.apply 952b31a2fbe263eb
-    // apply returns the source with the tracker's edits applied.
-    //
+    // go test: internal/rewriter/piping_flow_test.go:231 pipingFlowRewriteFixture.apply ee24b8275872b783
     // Rust: Go's `t` argument is only used for `t.Helper()`, so it is dropped.
     fn apply(&mut self) -> String {
         let mut changes = Vec::new();

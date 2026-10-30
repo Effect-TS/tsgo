@@ -2,17 +2,9 @@
 Effect version: 3.19.19
 
 /.src/flatMapIdentityToFlatten_callbackShapes.ts(10,34): warning TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(19,74): error TS2740: Type 'Promise<Effect<string, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [Symbol.iterator], pipe, [SinkTypeId], [StreamTypeId], and 2 more.
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(25,57): error TS2345: Argument of type '(inner_0: Effect.Effect<string, never, never>) => [Effect.Effect<string, never, never>]' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(31,61): error TS2345: Argument of type '(inner?: Effect.Effect<string>) => Effect.Effect<string, never, never> | undefined' is not assignable to parameter of type '(a: Effect<string, never, never> | undefined) => Effect<string, never, never>'.
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(34,70): error TS2322: Type 'void' is not assignable to type 'Effect<unknown, unknown, unknown>'.
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(37,59): error TS2345: Argument of type '<Elem, Err, Done>() => Channel<Elem, Elem, Err, Err, Done, Done, never>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, never>'.
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(40,48): error TS2345: Argument of type '<A>(a: A) => A' is not assignable to parameter of type '(a: unknown) => Effect<unknown, unknown, unknown>'.
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(47,67): error TS2345: Argument of type '(inner: Effect<string, never, never>) => Promise<Effect<string, never, never>>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
-/.src/flatMapIdentityToFlatten_callbackShapes.ts(50,71): error TS2345: Argument of type '(inner: Effect<string, never, never>) => Generator<never, Effect<string, never, never>, unknown>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
 
 
-==== /.src/flatMapIdentityToFlatten_callbackShapes.ts (9 errors) ====
+==== /.src/flatMapIdentityToFlatten_callbackShapes.ts (1 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics flatMapIdentityToFlatten:warning
@@ -33,56 +25,46 @@ Effect version: 3.19.19
     export const typeArguments = source.pipe(Effect.flatMap<Effect.Effect<string>, string, never, never>(identity))
     
     // MUST NOT TRIGGER: async callback
+    // @ts-expect-error
     export const asyncCallback = source.pipe(Effect.flatMap(async (inner) => inner))
-                                                                             ~~~~~
-!!! error TS2740: Type 'Promise<Effect<string, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [Symbol.iterator], pipe, [SinkTypeId], [StreamTypeId], and 2 more.
-!!! related TS6502 /node_modules/effect/dist/dts/Effect.d.ts(17040,23): The expected type comes from the return type of this signature.
     
     // MUST NOT TRIGGER: callback with a second parameter
     export const twoParameters = source.pipe(Effect.flatMap((inner, _extra?: number) => inner))
     
     // MUST NOT TRIGGER: rest parameter
+    // @ts-expect-error
     export const restParameter = source.pipe(Effect.flatMap((...inner: [Effect.Effect<string>]) => inner))
-                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(inner_0: Effect.Effect<string, never, never>) => [Effect.Effect<string, never, never>]' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
     
     // MUST NOT TRIGGER: parameter initializer
     export const initializer = source.pipe(Effect.flatMap((inner = fallback) => inner))
     
     // MUST NOT TRIGGER: optional parameter
+    // @ts-expect-error
     export const optionalParameter = source.pipe(Effect.flatMap((inner?: Effect.Effect<string>) => inner))
-                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(inner?: Effect.Effect<string>) => Effect.Effect<string, never, never> | undefined' is not assignable to parameter of type '(a: Effect<string, never, never> | undefined) => Effect<string, never, never>'.
     
     // MUST NOT TRIGGER: destructured parameter
+    // @ts-expect-error
     export const destructured = source.pipe(Effect.flatMap(({ pipe }) => pipe()))
-                                                                         ~~~~~~
-!!! error TS2322: Type 'void' is not assignable to type 'Effect<unknown, unknown, unknown>'.
-!!! related TS6502 /node_modules/effect/dist/dts/Effect.d.ts(17040,23): The expected type comes from the return type of this signature.
     
     // MUST NOT TRIGGER: Channel.identity is not the Function identity
+    // @ts-expect-error
     export const channelIdentity = source.pipe(Effect.flatMap(Channel.identity))
-                                                              ~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<Elem, Err, Done>() => Channel<Elem, Elem, Err, Err, Done, Done, never>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, never>'.
     
     // MUST NOT TRIGGER: data-last call with identity
+    // @ts-expect-error
     export const dataLastIdentity = Effect.flatMap(identity)(source)
-                                                   ~~~~~~~~
-!!! error TS2345: Argument of type '<A>(a: A) => A' is not assignable to parameter of type '(a: unknown) => Effect<unknown, unknown, unknown>'.
     
     // MUST NOT TRIGGER: an annotated alias of identity with the exact type
     const exactAlias: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
     export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
     
     // MUST NOT TRIGGER: async function expression
+    // @ts-expect-error
     export const asyncFunctionExpression = source.pipe(Effect.flatMap(async function(inner) { return inner }))
-                                                                      ~~~~~
-!!! error TS2345: Argument of type '(inner: Effect<string, never, never>) => Promise<Effect<string, never, never>>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
     
     // MUST NOT TRIGGER: generator function expression
+    // @ts-expect-error
     export const generatorFunctionExpression = source.pipe(Effect.flatMap(function*(inner) { return inner }))
-                                                                          ~~~~~~~~
-!!! error TS2345: Argument of type '(inner: Effect<string, never, never>) => Generator<never, Effect<string, never, never>, unknown>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
     
     // MUST NOT TRIGGER: function expression with a widening parameter annotation
     export const typedFunctionExpression = source.pipe(Effect.flatMap(function(inner: Effect.Effect<string, unknown>) { return inner }))

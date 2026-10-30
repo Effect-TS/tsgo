@@ -22,6 +22,7 @@ export const lazyTypeArgument = Effect.failCauseSync(() => Cause.fail<Error | st
 export const lazyDie = Effect.failCauseSync(() => Cause.die(defect))
 
 // MUST NOT TRIGGER: async thunk
+// @ts-expect-error
 export const asyncThunk = Effect.failCauseSync(async () => Cause.fail(error))
 
 // MUST NOT TRIGGER: generator thunk

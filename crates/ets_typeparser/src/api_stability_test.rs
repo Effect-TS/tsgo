@@ -12,13 +12,14 @@ use ets_shim::core::P;
 use ets_shim::core::context::Context;
 use rustc_hash::FxHashSet;
 
-use crate::api_stability_surface_test::api_stability_shared_type_entry;
+use crate::api_stability_surface_test::{
+    api_stability_shared_signature_entry, api_stability_shared_type_entry,
+    assert_api_stability_surface_excludes_own_tag,
+};
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/api_stability_test.go:15 apiStabilityTestExport 5d6383b4dfc316e6
-// apiStabilityTestExport looks up a module export by name so the cache tests can
-// exercise the public TypeParser API the same way the diagnostic does.
+// go test: internal/typeparser/api_stability_test.go:15 apiStabilityTestExport f28b1fb5adf53da6
 pub(crate) fn api_stability_test_export(
     t: &T,
     c: &mut Checker,
@@ -56,13 +57,7 @@ pub(crate) fn contains_dependency(used: &ApiStabilityUsed, name: &str) -> bool {
     false
 }
 
-// go test: internal/typeparser/api_stability_test.go:52 primeApiStabilityChecker 1c6161e9ed07d19a
-// primeApiStabilityChecker type checks the program against the checker, the
-// way the normal rule lifecycle does before a diagnostic run. Only then are the
-// public types the analysis reads through its cached-materialization peeks
-// available; an unprimed checker models a first run whose type-driven surfaces
-// must stay incomplete (and are never reported as stable).
-//
+// go test: internal/typeparser/api_stability_test.go:47 primeApiStabilityChecker d22211443a6d7d32
 // Rust: Go runs `program.GetSemanticDiagnostics(ctx, nil)`, which checks every file the program does not skip
 // with the program's (single) checker. The test already holds that checker's handle, and asking the program would
 // take it again (a deadlock in tsrs), so the same files are checked through the held handle.
@@ -82,12 +77,7 @@ fn names(used: &ApiStabilityUsed) -> String {
     format!("{:?}", api_stability_dependency_names(used))
 }
 
-// go test: internal/typeparser/api_stability_test.go:66 TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames e6272d68610d1185
-// TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames proves the
-// declared index-info accessor inspects index signatures without resolving the
-// symbol's late-bound member table: a cold interface carrying a recursively
-// computed property name is inspected with zero checker instantiation and no
-// compiler diagnostic.
+// go test: internal/typeparser/api_stability_test.go:56 TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames 40ae3567958cd774
 #[test]
 fn test_api_stability_declared_index_infos_do_not_resolve_computed_names() {
     run(|t| {
@@ -127,12 +117,7 @@ fn test_api_stability_declared_index_infos_do_not_resolve_computed_names() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:103 TestApiStabilityDeclaredCacheSharedAcrossTypeParsers db643a2f63294019
-// TestApiStabilityDeclaredCacheSharedAcrossTypeParsers proves declared lookups
-// persist per checker: a second TypeParser built from the same checker reuses
-// the first parser's declared results, so a run over a different source file
-// does not recompute the same tag lookup. Computed-surface persistence is
-// covered by TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse.
+// go test: internal/typeparser/api_stability_test.go:88 TestApiStabilityDeclaredCacheSharedAcrossTypeParsers 7a3cc3ac5b1e24bb
 #[test]
 fn test_api_stability_declared_cache_shared_across_type_parsers() {
     run(|t| {
@@ -172,8 +157,6 @@ fn test_api_stability_declared_cache_shared_across_type_parsers() {
         let links1 = Arc::clone(&tp1.links);
         drop(tp1);
 
-        // A fresh parser over the same checker (the situation when another source
-        // file later runs the rule) shares the declared EffectLinks cache.
         let mut tp2 = compiled.type_parser();
         if !Arc::ptr_eq(&tp2.links, &links1) {
             t.fatal("TypeParser instances over one checker should share EffectLinks");
@@ -186,8 +169,6 @@ fn test_api_stability_declared_cache_shared_across_type_parsers() {
             t.fatal(format!("second parser returned a different surface: {}", names(&got)));
         }
 
-        // A symbol declared in a different source file resolves through the same
-        // declared store, which is what lets separate file runs reuse tag lookups.
         let consumer_sym = api_stability_test_export(t, tp2.checker, consumer, "Consumer");
         let consumer_deps = tp2.api_stability_used_by_symbol(consumer_sym);
         if !contains_dependency(&consumer_deps, "E") {
@@ -199,11 +180,7 @@ fn test_api_stability_declared_cache_shared_across_type_parsers() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:161 TestApiStabilityNestedNamedSurfaceStaysShallow e291a863313bfcb3
-// TestApiStabilityNestedNamedSurfaceStaysShallow proves the documented shallow
-// named-dependency boundary: a named interface reached inside another surface is
-// reported as a dependency but its arbitrary members are not expanded into the
-// owner's dependencies. Directly exposed callable signatures are still searched.
+// go test: internal/typeparser/api_stability_test.go:138 TestApiStabilityNestedNamedSurfaceStaysShallow 8db6898117729933
 #[test]
 fn test_api_stability_nested_named_surface_stays_shallow() {
     run(|t| {
@@ -243,14 +220,7 @@ fn test_api_stability_nested_named_surface_stays_shallow() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:203 TestApiStabilityCacheDeclaredCeilingIsPerAlias 0b3099603b9199a9
-// TestApiStabilityCacheDeclaredCeilingIsPerAlias verifies the declared-stability
-// cache stores the symbol's own declaration tag only. A tag on a selected-file
-// `export ... from` declaration is source-specific and is applied by the rule,
-// so it must not leak into the reusable symbol cache. Both aliases resolve to
-// the same target, whose dependency surface is one shared per-checker result
-// keyed by the concrete target identity, independent of the alias and of any
-// forwarding ceiling.
+// go test: internal/typeparser/api_stability_test.go:173 TestApiStabilityCacheDeclaredCeilingIsPerAlias 81504979902a3b09
 #[test]
 fn test_api_stability_cache_declared_ceiling_is_per_alias() {
     run(|t| {
@@ -276,8 +246,6 @@ fn test_api_stability_cache_declared_ceiling_is_per_alias() {
         let plain = api_stability_test_export(t, tp.checker, files["/.src/plain.ts"], "Leaky");
         let tagged = api_stability_test_export(t, tp.checker, files["/.src/tagged.ts"], "Leaky");
 
-        // The symbol-level lookup sees only the forwarded symbol's own declarations,
-        // so the selected-file forwarding tag is not part of the shared cache.
         let level = tp.declared_api_stability(plain);
         if level != ApiStabilityLevel::Stable {
             t.fatal(format!("plain reexport symbol level = {}, want stable", level as i64));
@@ -290,8 +258,6 @@ fn test_api_stability_cache_declared_ceiling_is_per_alias() {
             ));
         }
 
-        // Both aliases resolve to the same target, so the actual surface (which
-        // contains E) is computed independently of any forwarding ceiling.
         let target = resolve_aliased_symbol_for_test(t, tp.checker, Some(plain));
         if !contains_dependency(&tp.api_stability_used_by_symbol(target), "E") {
             t.fatal("target surface should expose E");
@@ -302,7 +268,7 @@ fn test_api_stability_cache_declared_ceiling_is_per_alias() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:243 resolveAliasedSymbolForTest 9a1e621bc0689ad8
+// go test: internal/typeparser/api_stability_test.go:209 resolveAliasedSymbolForTest 9a1e621bc0689ad8
 pub(crate) fn resolve_aliased_symbol_for_test(
     t: &T,
     c: &mut Checker,
@@ -330,156 +296,7 @@ pub(crate) fn resolve_aliased_symbol_for_test(
     symbol
 }
 
-// go test: internal/typeparser/api_stability_test.go:266 TestApiStabilityCacheDifferentCheckerIsolation 27235a48a984a805
-// TestApiStabilityCacheDifferentCheckerIsolation proves two checkers do not
-// share declared results or pointer identity and that each analyzer computes an
-// independent session-local surface.
-#[test]
-fn test_api_stability_cache_different_checker_isolation() {
-    run(|t| {
-        t.parallel();
-
-        let source = "/** @stability experimental */\ninterface E { value: string }\nexport interface Leaky { value: E }\n";
-
-        let (mut compiled1, sf1) = compile_and_get_checker_and_source_file_internal(t, source);
-        let (mut compiled2, sf2) = compile_and_get_checker_and_source_file_internal(t, source);
-        prime_api_stability_checker(t, &mut compiled1);
-        prime_api_stability_checker(t, &mut compiled2);
-        let mut tp1 = compiled1.type_parser();
-        let mut tp2 = compiled2.type_parser();
-
-        if Arc::ptr_eq(&tp1.links, &tp2.links) {
-            t.fatal("different checkers must not share EffectLinks");
-        }
-
-        let sym1 = api_stability_test_export(t, tp1.checker, sf1, "Leaky");
-        let sym2 = api_stability_test_export(t, tp2.checker, sf2, "Leaky");
-        if sym1 == sym2 {
-            t.fatal("checkers should produce distinct symbol pointers");
-        }
-
-        if !contains_dependency(&tp1.api_stability_used_by_symbol(sym1), "E") {
-            t.fatal("first checker surface should expose E");
-        }
-        if !tp1.links().api_stability_declared_symbol.contains_key(&sym1) {
-            t.fatal("first checker should have cached its declared lookup");
-        }
-        if tp2.links().api_stability_declared_symbol.contains_key(&sym1) {
-            t.fatal("second checker observed the first checker's declared cache");
-        }
-        if !contains_dependency(&tp2.api_stability_used_by_symbol(sym2), "E") {
-            t.fatal("second checker surface should expose E independently");
-        }
-        if tp1.links().api_stability_declared_symbol.contains_key(&sym2) {
-            t.fatal("first checker observed the second checker's declared cache");
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:311 TestApiStabilityCacheGenericArgumentsDoNotContaminate 81fa642068ddcea8
-// TestApiStabilityCacheGenericArgumentsDoNotContaminate proves the type-keyed
-// cache keeps distinct instantiations distinct: an experimental type argument
-// in one instantiation must not appear in another, in both declaration orders.
-#[test]
-fn test_api_stability_cache_generic_arguments_do_not_contaminate() {
-    run(|t| {
-        t.parallel();
-
-        for order in ["leaky-first", "clean-first"] {
-            t.run(order, |t| {
-                t.parallel();
-                let leaky_declaration = "export type Leaky = Box<E>";
-                let clean_declaration = "export type Clean = Box<string>";
-                let mut declarations = format!("{leaky_declaration}\n{clean_declaration}");
-                if order == "clean-first" {
-                    declarations = format!("{clean_declaration}\n{leaky_declaration}");
-                }
-
-                let source = format!(
-                    "/** @stability experimental */\ninterface E {{ value: string }}\ninterface Box<T> {{ value: T }}\n{declarations}\n"
-                );
-                let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-                    t,
-                    &[("/.src/test.ts", &source)],
-                );
-                prime_api_stability_checker(t, &mut compiled);
-                let mut tp = compiled.type_parser();
-
-                let leaky = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "Leaky");
-                let clean = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "Clean");
-
-                if !contains_dependency(&tp.api_stability_used_by_symbol(leaky), "E") {
-                    t.fatal("Box<E> should expose E");
-                }
-                if contains_dependency(&tp.api_stability_used_by_symbol(clean), "E") {
-                    let used = tp.api_stability_used_by_symbol(clean);
-                    t.fatal(format!("Box<string> must not inherit E, got {}", names(&used)));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:349 TestApiStabilityDeclaredReadsDoNotCompute 8edf9d12e0ab2f24
-// TestApiStabilityDeclaredReadsDoNotCompute proves the declared caches are
-// independent of the computed caches: asking for a declared level must never
-// trigger a symbol or signature surface computation.
-#[test]
-fn test_api_stability_declared_reads_do_not_compute() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-            t,
-            &[(
-                "/.src/test.ts",
-                "/** @stability experimental */\ninterface E { value: string }\nexport interface Leaky { value: E }\nexport function f(x: E): E { return x }\n",
-            )],
-        );
-        let mut tp = compiled.type_parser();
-
-        let leaky = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "Leaky");
-        let f = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "f");
-        let signatures = api_stability_test_signatures(t, tp.checker, Some(f));
-
-        let before = tp.checker.total_instantiation_count;
-        let level = tp.declared_api_stability(leaky);
-        if level != ApiStabilityLevel::Stable {
-            t.fatal(format!("Leaky declared = {}, want stable", level as i64));
-        }
-        let _ = tp.declared_api_stability_of_signature(signatures[0]);
-        let delta = tp.checker.total_instantiation_count - before;
-        if delta != 0 {
-            t.fatal(ets_go::sprintf!(
-                "declared reads instantiated %d types, want 0",
-                i64::from(delta)
-            ));
-        }
-
-        // A fresh computed session starts empty: declared reads never populate a
-        // symbol or signature memo and never publish a shared surface.
-        let session = tp.new_api_stability_session();
-        if !session.analysis.session_symbols.is_empty()
-            || !session.analysis.session_types.is_empty()
-            || !session.analysis.session_signatures.is_empty()
-            || !session.analysis.session_components.is_empty()
-        {
-            t.fatal("declared reads left computed analysis state");
-        }
-        if !tp.links().api_stability_declared_symbol.contains_key(&leaky) {
-            t.fatal("declared symbol should be cached");
-        }
-        let raw = raw_signature(Some(signatures[0])).expect("raw signature");
-        if !tp.links().api_stability_declared_signature.contains_key(&raw) {
-            t.fatal("declared signature should be cached");
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:392 TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct d88bd400812f8f76
-// TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct proves a tagged
-// overload keeps its own declared level even when the symbol-level lookup picks
-// up another declaration's tag, and that both are cached separately.
+// go test: internal/typeparser/api_stability_test.go:229 TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct 3ee91d5f43dfe447
 #[test]
 fn test_api_stability_signature_declared_cache_keeps_overloads_distinct() {
     run(|t| {
@@ -527,7 +344,7 @@ fn test_api_stability_signature_declared_cache_keeps_overloads_distinct() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:426 apiStabilityTestSignatures 0166fbdc0fa6dbd5
+// go test: internal/typeparser/api_stability_test.go:261 apiStabilityTestSignatures 5d9d0853c8093485
 pub(crate) fn api_stability_test_signatures(
     t: &T,
     c: &mut Checker,
@@ -545,10 +362,7 @@ pub(crate) fn api_stability_test_signatures(
     signatures
 }
 
-// go test: internal/typeparser/api_stability_test.go:441 TestApiStabilitySignatureSurfaceRetainsSubstitution 2fe9058bb965db48
-// TestApiStabilitySignatureSurfaceRetainsSubstitution proves an instantiated
-// inferred return keeps its represented argument while the raw target stays
-// shallow, and that a session memoizes the completed signature surface.
+// go test: internal/typeparser/api_stability_test.go:273 TestApiStabilitySignatureSurfaceRetainsSubstitution ab7a1be642390022
 #[test]
 fn test_api_stability_signature_surface_retains_substitution() {
     run(|t| {
@@ -585,8 +399,6 @@ fn test_api_stability_signature_surface_retains_substitution() {
             t.fatal("repeated session query recomputed the memoized signature surface");
         }
 
-        // The raw target's type parameter is not an experimental dependency, so the
-        // shallow form must not report E.
         let raw = raw_signature(Some(instantiated)).expect("raw signature");
         if raw == instantiated {
             t.fatal("expected an instantiated signature with a raw target");
@@ -598,99 +410,7 @@ fn test_api_stability_signature_surface_retains_substitution() {
     });
 }
 
-/// Rust-only: the body shared by the substitution-context tests: compiles `prelude` plus the `clean`/`leaky`
-/// declarations in `order` and checks the clean root stays clean and the leaky one exposes E (Go repeats it).
-fn check_clean_and_leaky_roots(
-    t: &T,
-    order: &str,
-    prelude: &str,
-    clean: &str,
-    leaky: &str,
-    clean_message: &str,
-    leaky_message: &str,
-) {
-    let mut declarations = format!("{clean}\n{leaky}");
-    if order == "leaky-first" {
-        declarations = format!("{leaky}\n{clean}");
-    }
-    let source = format!("{prelude}{declarations}\n");
-    let (mut compiled, files) =
-        compile_and_get_checker_and_source_files_internal(t, &[("/.src/test.ts", &source)]);
-    prime_api_stability_checker(t, &mut compiled);
-    let mut tp = compiled.type_parser();
-
-    let clean_sym = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "clean");
-    let leaky_sym = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "leaky");
-
-    let clean_used = tp.api_stability_used_by_symbol(clean_sym);
-    if contains_dependency(&clean_used, "E") {
-        t.fatal(format!("{clean_message}, got {}", names(&clean_used)));
-    }
-    let leaky_used = tp.api_stability_used_by_symbol(leaky_sym);
-    if !contains_dependency(&leaky_used, "E") {
-        t.fatal(format!("{leaky_message}, got {}", names(&leaky_used)));
-    }
-}
-
-// go test: internal/typeparser/api_stability_test.go:490 TestApiStabilityComputedSignatureCacheSeparatesSubstitutionContexts 05a4600d758cb2f7
-// TestApiStabilityComputedSignatureCacheSeparatesSubstitutionContexts proves the
-// same raw signature analyzed under different enclosing substitutions is not
-// conflated: the clean instantiation stays clean and the leaking one reports,
-// regardless of which is computed first.
-#[test]
-fn test_api_stability_computed_signature_cache_separates_substitution_contexts() {
-    run(|t| {
-        t.parallel();
-
-        for order in ["clean-first", "leaky-first"] {
-            t.run(order, |t| {
-                t.parallel();
-                check_clean_and_leaky_roots(
-                    t,
-                    order,
-                    "/** @stability experimental */\ninterface E { value: string }\ndeclare function make<T>(): (x: T) => T\n",
-                    "export const clean = make<string>()",
-                    "export const leaky = make<E>()",
-                    "clean instantiation must not inherit E",
-                    "leaky instantiation should expose E",
-                );
-            });
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:531 TestApiStabilityComputedSignatureCacheSeparatesNestedSubstitutionContexts 754c75e8a375fd33
-// TestApiStabilityComputedSignatureCacheSeparatesNestedSubstitutionContexts
-// covers the same contamination through a nested inferred object surface. The
-// computed signature cache is keyed by the concrete signature identity, so the
-// clean and leaking materializations never share a cached result in either
-// order.
-#[test]
-fn test_api_stability_computed_signature_cache_separates_nested_substitution_contexts() {
-    run(|t| {
-        t.parallel();
-
-        for order in ["clean-first", "leaky-first"] {
-            t.run(order, |t| {
-                t.parallel();
-                check_clean_and_leaky_roots(
-                    t,
-                    order,
-                    "/** @stability experimental */\ninterface E { value: string }\ndeclare function make<T>(): { nested: { fn: (x: T) => T } }\n",
-                    "export const clean = make<string>()",
-                    "export const leaky = make<E>()",
-                    "clean nested instantiation must not inherit E",
-                    "leaky nested instantiation should expose E",
-                );
-            });
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:570 TestApiStabilityComputedIncludesDeclaredMemberStability 7e521e569495e34e
-// TestApiStabilityComputedIncludesDeclaredMemberStability proves the computed
-// minimum covers the declared stability of public properties and call
-// signatures, with provenance naming the offender.
+// go test: internal/typeparser/api_stability_test.go:316 TestApiStabilityComputedIncludesDeclaredMemberStability 9b67130bc4422959
 #[test]
 fn test_api_stability_computed_includes_declared_member_stability() {
     run(|t| {
@@ -745,10 +465,7 @@ fn test_api_stability_computed_includes_declared_member_stability() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:614 TestApiStabilityReplacedDefaultStaysClean 380f263a45b3d213
-// TestApiStabilityReplacedDefaultStaysClean proves a generic default replaced by
-// an explicit argument is not part of the represented surface, including the
-// annotation provenance pass.
+// go test: internal/typeparser/api_stability_test.go:357 TestApiStabilityReplacedDefaultStaysClean b64bd67afc390667
 #[test]
 fn test_api_stability_replaced_default_stays_clean() {
     run(|t| {
@@ -771,53 +488,7 @@ fn test_api_stability_replaced_default_stays_clean() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:635 TestApiStabilitySignatureCacheIsolation 3621dd6a51076c42
-// TestApiStabilitySignatureCacheIsolation proves a computed signature surface
-// is checker-local: two checkers compute the same-looking signature
-// independently and neither can observe the other's analysis.
-#[test]
-fn test_api_stability_signature_cache_isolation() {
-    run(|t| {
-        t.parallel();
-
-        let source = "/** @stability experimental */\ninterface E { value: string }\nexport const f = (x: E): E => x\n";
-
-        let (mut compiled1, sf1) = compile_and_get_checker_and_source_file_internal(t, source);
-        let (mut compiled2, sf2) = compile_and_get_checker_and_source_file_internal(t, source);
-        prime_api_stability_checker(t, &mut compiled1);
-        prime_api_stability_checker(t, &mut compiled2);
-        let mut tp1 = compiled1.type_parser();
-        let mut tp2 = compiled2.type_parser();
-
-        if Arc::ptr_eq(&tp1.links, &tp2.links) {
-            t.fatal("different checkers must not share EffectLinks");
-        }
-
-        let f1 = api_stability_test_export(t, tp1.checker, sf1, "f");
-        let f2 = api_stability_test_export(t, tp2.checker, sf2, "f");
-        let sig1 = api_stability_test_signatures(t, tp1.checker, Some(f1))[0];
-        let sig2 = api_stability_test_signatures(t, tp2.checker, Some(f2))[0];
-
-        if !contains_dependency(&tp1.api_stability_used_by_signature(sig1), "E") {
-            t.fatal("first checker signature should expose E");
-        }
-        if !contains_dependency(&tp2.api_stability_used_by_signature(sig2), "E") {
-            t.fatal("second checker signature should expose E independently");
-        }
-        // A fresh session never observes an earlier session's local signature
-        // memo, whichever checker or signature produced an earlier result; only a
-        // published complete snapshot can be reused, and it is composed anew.
-        let session = tp2.new_api_stability_session();
-        if !session.analysis.session_signatures.is_empty() {
-            t.fatal("a fresh session observed an earlier session's local signature memo");
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:676 TestApiStabilityCacheCyclesAndEmptyResultsAreSafe 03aaae3fcc7b4356
-// TestApiStabilityCacheCyclesAndEmptyResultsAreSafe proves a cyclic surface
-// still reports its leak, that settled results are reusable inside the session
-// that computed them, and that a stable/empty surface is a complete memo entry.
+// go test: internal/typeparser/api_stability_test.go:375 TestApiStabilityCacheCyclesAndEmptyResultsAreSafe 99cb8309652861a6
 #[test]
 fn test_api_stability_cache_cycles_and_empty_results_are_safe() {
     run(|t| {
@@ -827,7 +498,7 @@ fn test_api_stability_cache_cycles_and_empty_results_are_safe() {
             t,
             &[(
                 "/.src/test.ts",
-                "/** @stability experimental */\ninterface E { value: string }\nexport interface Node { next: Node; payload: E }\ntype B = { c: C; payload: E }\ntype C = { b: B }\nexport type A = { b: B }\nexport type Z = { c: C }\nexport interface Stable { value: string }\n",
+                "/** @stability experimental */\ninterface E { value: string }\n/** @stability unstable */\nexport interface Node { next: Node; payload: E }\nexport interface Stable { value: string }\n",
             )],
         );
         prime_api_stability_checker(t, &mut compiled);
@@ -836,13 +507,29 @@ fn test_api_stability_cache_cycles_and_empty_results_are_safe() {
         let test_file = files["/.src/test.ts"];
         let node = api_stability_test_export(t, tp.checker, test_file, "Node");
         let mut session = tp.new_api_stability_session();
-        if !contains_dependency(&session.used_by_symbol(&mut tp, node), "E") {
-            t.fatal("self-referential Node should expose E");
+        let node_used = session.used_by_symbol(&mut tp, node);
+        if node_used.incomplete
+            || node_used.minimum != ApiStabilityLevel::Experimental
+            || !contains_dependency(&node_used, "E")
+        {
+            t.fatal(format!(
+                "self-referential Node should expose E, got min={} deps={}",
+                node_used.minimum as i64,
+                names(&node_used)
+            ));
         }
-        // A settled cyclic surface is complete and reusable within its session.
+        assert_api_stability_surface_excludes_own_tag(t, &node_used, "Node");
         let surface = session.analysis.session_symbols.get(&node).cloned().unwrap_or_default();
         if !surface.complete || surface.blocked {
             t.fatal("a settled cyclic surface should be a complete session result");
+        }
+        if session
+            .analysis
+            .session_symbols
+            .get(&node)
+            .is_none_or(|surface| surface.findings.is_empty())
+        {
+            t.fatal("the stored cyclic surface must keep the own tag");
         }
         let work = session.analysis.work;
         if !contains_dependency(&session.used_by_symbol(&mut tp, node), "E") {
@@ -850,26 +537,6 @@ fn test_api_stability_cache_cycles_and_empty_results_are_safe() {
         }
         if session.analysis.work != work {
             t.fatal("repeated session query recomputed the settled cyclic surface");
-        }
-        // The same symbol computation starts fresh for a new export: symbol results
-        // stay analysis-local, and only complete type/signature snapshots may be
-        // reused by a later session.
-        if !tp.new_api_stability_session().analysis.session_symbols.is_empty() {
-            t.fatal("a fresh session observed the earlier computed symbol surface");
-        }
-
-        // A leak reached through a mutual cycle must be reported for every root,
-        // regardless of which root was analyzed first.
-        let a = api_stability_test_export(t, tp.checker, test_file, "A");
-        let z = api_stability_test_export(t, tp.checker, test_file, "Z");
-        if !contains_dependency(&tp.api_stability_used_by_symbol(a), "E") {
-            t.fatal("A should expose E through the B/C cycle");
-        }
-        if !contains_dependency(&tp.api_stability_used_by_symbol(z), "E") {
-            t.fatal("Z should expose E through the B/C cycle");
-        }
-        if !tp.new_api_stability_session().analysis.session_symbols.is_empty() {
-            t.fatal("mutual-cycle queries published symbol state");
         }
 
         let stable = api_stability_test_export(t, tp.checker, test_file, "Stable");
@@ -886,186 +553,7 @@ fn test_api_stability_cache_cycles_and_empty_results_are_safe() {
     });
 }
 
-/// Rust-only: the body shared by the concrete-carrier tests: compiles `prelude` plus the `clean`/`leaky`
-/// declarations in `order` and checks the exports named `clean_name`/`leaky_name` (Go repeats it).
-fn check_concrete_carriers(
-    t: &T,
-    order: &str,
-    prelude: &str,
-    (clean, clean_name, clean_message): (&str, &str, &str),
-    (leaky, leaky_name, leaky_message): (&str, &str, &str),
-) {
-    let mut declarations = format!("{clean}\n{leaky}");
-    if order == "leaky-first" {
-        declarations = format!("{leaky}\n{clean}");
-    }
-    let source = format!("{prelude}{declarations}\n");
-    let (mut compiled, files) =
-        compile_and_get_checker_and_source_files_internal(t, &[("/.src/test.ts", &source)]);
-    prime_api_stability_checker(t, &mut compiled);
-    let mut tp = compiled.type_parser();
-
-    let clean_sym = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], clean_name);
-    let leaky_sym = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], leaky_name);
-    if contains_dependency(&tp.api_stability_used_by_symbol(clean_sym), "E") {
-        t.fatal(clean_message);
-    }
-    if !contains_dependency(&tp.api_stability_used_by_symbol(leaky_sym), "E") {
-        t.fatal(leaky_message);
-    }
-}
-
-// go test: internal/typeparser/api_stability_test.go:747 TestApiStabilityConcreteCarrierSeparatesSharedRawTargets ef2b09bf69f29c54
-// TestApiStabilityConcreteCarrierSeparatesSharedRawTargets proves the type and
-// signature caches keep concrete identities: the same raw component (an
-// interface member whose type depends on the interface's type parameter) is
-// analyzed under two distinct concrete outer materializations and must not
-// contaminate either direction, in both declaration orders.
-#[test]
-fn test_api_stability_concrete_carrier_separates_shared_raw_targets() {
-    run(|t| {
-        t.parallel();
-
-        for order in ["clean-first", "leaky-first"] {
-            t.run(order, |t| {
-                t.parallel();
-                check_concrete_carriers(
-                    t,
-                    order,
-                    "/** @stability experimental */\ninterface E { value: string }\ntype Deep<T> = T extends string ? Deep<T> : T\ninterface DeepHolder<T> { value: Deep<T> }\n",
-                    (
-                        "export declare const clean: DeepHolder<string>",
-                        "clean",
-                        "DeepHolder<string> must not expose E",
-                    ),
-                    (
-                        "export declare const leaky: DeepHolder<E>",
-                        "leaky",
-                        "DeepHolder<E> should expose E",
-                    ),
-                );
-            });
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:784 TestApiStabilityConcreteCarrierSeparatesHeritageMaterializations 8b94eeb221b82ed6
-// TestApiStabilityConcreteCarrierSeparatesHeritageMaterializations covers the
-// same concrete-identity requirement through inherited members: two exports
-// inherit the same shared base declaration with different concrete arguments.
-#[test]
-fn test_api_stability_concrete_carrier_separates_heritage_materializations() {
-    run(|t| {
-        t.parallel();
-
-        for order in ["clean-first", "leaky-first"] {
-            t.run(order, |t| {
-                t.parallel();
-                check_concrete_carriers(
-                    t,
-                    order,
-                    "/** @stability experimental */\ninterface E { value: string }\ninterface Base<T> { value: T }\n",
-                    (
-                        "export interface Clean extends Base<string> {}",
-                        "Clean",
-                        "Clean extends Base<string> and must not expose E",
-                    ),
-                    (
-                        "export interface Leaky extends Base<E> {}",
-                        "Leaky",
-                        "Leaky extends Base<E> and should expose E",
-                    ),
-                );
-            });
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:819 TestApiStabilityCycleOrderDoesNotHideLeaks c138388df0363fb7
-// TestApiStabilityCycleOrderDoesNotHideLeaks analyzes the mutual cycle roots in
-// the reverse order so a cached intermediate result can never suppress the leak.
-#[test]
-fn test_api_stability_cycle_order_does_not_hide_leaks() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-            t,
-            &[(
-                "/.src/test.ts",
-                "/** @stability experimental */\ninterface E { value: string }\ntype B = { c: C; payload: E }\ntype C = { b: B }\nexport type A = { b: B }\nexport type Z = { c: C }\n",
-            )],
-        );
-        prime_api_stability_checker(t, &mut compiled);
-        let mut tp = compiled.type_parser();
-
-        let test_file = files["/.src/test.ts"];
-        let z = api_stability_test_export(t, tp.checker, test_file, "Z");
-        if !contains_dependency(&tp.api_stability_used_by_symbol(z), "E") {
-            t.fatal("Z analyzed first should still expose E through the cycle");
-        }
-        let a = api_stability_test_export(t, tp.checker, test_file, "A");
-        if !contains_dependency(&tp.api_stability_used_by_symbol(a), "E") {
-            t.fatal("A analyzed second should still expose E through the cached cycle");
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:850 TestApiStabilityColdLazyReadsMaterialize 6fb146f59bac78f9
-// TestApiStabilityColdLazyReadsMaterialize proves a cold public surface is
-// materialized through the checker's ordinary lazy reads: the analysis no
-// longer needs the language service to warm the checker first. The cold surface
-// exposes E and is complete in its session, and the same checker after type
-// checking recomputes to the same surface from a fresh session.
-#[test]
-fn test_api_stability_cold_lazy_reads_materialize() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-            t,
-            &[(
-                "/.src/test.ts",
-                "/** @stability experimental */\ninterface E { value: string }\ntype Deep<T> = T extends string ? Deep<T> : T\ninterface Callable<T> { (x: T): void }\nexport declare const f: Callable<Deep<E>>\n",
-            )],
-        );
-        let mut tp = compiled.type_parser();
-
-        let f = api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "f");
-        let mut cold_session = tp.new_api_stability_session();
-        let cold = cold_session.used_by_symbol(&mut tp, f);
-        if !contains_dependency(&cold, "E") {
-            t.fatal(format!("the cold surface should lazily materialize E, got {}", names(&cold)));
-        }
-        let surface = cold_session.analysis.session_symbols.get(&f).cloned().unwrap_or_default();
-        if !surface.complete || surface.blocked {
-            t.fatal("a complete cold surface should settle complete in its session");
-        }
-        drop(tp);
-
-        // A warmed checker materializes the declaration the way the language
-        // service would, and a fresh session agrees with the cold result.
-        prime_api_stability_checker(t, &mut compiled);
-        let mut fresh = compiled.type_parser();
-        let warm = fresh.api_stability_used_by_symbol(f);
-        if !contains_dependency(&warm, "E") {
-            t.fatal("the materialized surface should expose E");
-        }
-        if cold.minimum != warm.minimum || cold.dependencies.len() != warm.dependencies.len() {
-            t.fatal(format!(
-                "cold and warm results disagree: cold={} warm={}",
-                names(&cold),
-                names(&warm)
-            ));
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_test.go:890 TestApiStabilityColdLazyFiniteApplicationMatchesWarm c419bf7f4e117ba4
-// TestApiStabilityColdLazyFiniteApplicationMatchesWarm proves a finite
-// recursive alias application resolves through the ordinary lazy read on a
-// genuinely cold checker, and the cold session result matches the materialized
-// recomputation in a new session.
+// go test: internal/typeparser/api_stability_test.go:422 TestApiStabilityColdLazyFiniteApplicationMatchesWarm 42f25a832b16af4c
 #[test]
 fn test_api_stability_cold_lazy_finite_application_matches_warm() {
     run(|t| {
@@ -1093,8 +581,6 @@ fn test_api_stability_cold_lazy_finite_application_matches_warm() {
             t.fatal(format!("the materialized surface should expose E, got {}", names(&warm)));
         }
 
-        // The materialized checker is recomputed by a fresh session; it must agree
-        // with the first cold and warm results.
         let recomputed = compiled.type_parser().api_stability_used_by_symbol(x);
         if !contains_dependency(&recomputed, "E") {
             t.fatal(format!(
@@ -1114,14 +600,7 @@ fn test_api_stability_cold_lazy_finite_application_matches_warm() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:932 TestApiStabilityExplicitStableDeclaredPresence 7adf8d6eabdaca61
-// TestApiStabilityExplicitStableDeclaredPresence pins that branch-style
-// `@stability stable` tags are parsed as an explicit value, not as an absent
-// tag. The root symbol and each public signature keep their declaration
-// provenance in the per-checker declared caches, while an untagged overload
-// stays stable with no declaration. The leak rule's ceiling and the forwarding
-// presence check read these caches, so explicit stable roots and explicitly
-// stable signatures stay distinguishable from untagged ones.
+// go test: internal/typeparser/api_stability_test.go:455 TestApiStabilityExplicitStableDeclaredPresence e04d48572f1c2bf0
 #[test]
 fn test_api_stability_explicit_stable_declared_presence() {
     run(|t| {
@@ -1192,14 +671,7 @@ fn test_api_stability_explicit_stable_declared_presence() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:994 TestApiStabilityComputedPublicMembers 719cdb6eaab82f8e
-// TestApiStabilityComputedPublicMembers pins that a root public surface
-// traverses public computed members of interfaces, classes and anonymous object
-// types: well-known symbols, custom unique symbols and literal computed names
-// all contribute their represented member types, while private and protected
-// computed members stay excluded. It also pins that a checker late-bound name
-// never leaks into a diagnostic: a tagged computed member renders its readable
-// declaration spelling.
+// go test: internal/typeparser/api_stability_test.go:510 TestApiStabilityComputedPublicMembers feba370ada52456b
 #[test]
 fn test_api_stability_computed_public_members() {
     run(|t| {
@@ -1315,13 +787,7 @@ export declare const computedObject: {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1084 TestApiStabilityEarlyTableComputedMembersNotCachedComplete f0c4ec53afb2568a
-// TestApiStabilityEarlyTableComputedMembersNotCachedComplete pins the
-// complete-result invariant for the early member table: an interface whose
-// computed member has not been late-bound yet must stay incomplete and never be
-// reported as a complete surface, because its early table omits the member.
-// Once the checker materializes the member table a retry settles complete with
-// the computed dependency.
+// go test: internal/typeparser/api_stability_test.go:594 TestApiStabilityEarlyTableComputedMembersNotCachedComplete 04a7e6a0b5015fcc
 #[test]
 fn test_api_stability_early_table_computed_members_not_cached_complete() {
     run(|t| {
@@ -1386,11 +852,7 @@ fn test_api_stability_early_table_computed_members_not_cached_complete() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1132 TestApiStabilitySettleSkipRequiresNoAdvancement 9f9aae44969f6ab2
-// TestApiStabilitySettleSkipRequiresNoAdvancement pins the corrected
-// settlement predicate: a blocked surface is only skipped after the guard
-// budget is exhausted when no analysis read advanced the materialization epoch
-// since it was collected and no earlier settle round advanced any surface.
+// go test: internal/typeparser/api_stability_test.go:638 TestApiStabilitySettleSkipRequiresNoAdvancement f639cfc42120b742
 #[test]
 fn test_api_stability_settle_skip_requires_no_advancement() {
     run(|t| {
@@ -1446,13 +908,7 @@ fn cold_root_members(t: &T, c: &mut Checker, sym: P<Symbol>) -> (P<Symbol>, Vec<
     (value, signatures)
 }
 
-// go test: internal/typeparser/api_stability_test.go:1170 TestApiStabilitySettleRecollectsMaterializedMember 08014a56f5d316e7
-// TestApiStabilitySettleRecollectsMaterializedMember pins the
-// P1 within one analysis: a component the guard refused while the budget was
-// exhausted can be materialized by a later ordinary read in the same collection,
-// and settlement must recollect the blocked root instead of assuming it cannot
-// advance. The result still stays blocked so a later analysis retries it,
-// and no new guard read is consumed.
+// go test: internal/typeparser/api_stability_test.go:670 TestApiStabilitySettleRecollectsMaterializedMember 3b6d169f5528e4eb
 #[test]
 fn test_api_stability_settle_recollects_materialized_member() {
     run(|t| {
@@ -1516,7 +972,6 @@ fn test_api_stability_settle_recollects_materialized_member() {
             t.fatal("callback did not run");
         }
 
-        // A later analysis on the materialized checker retries and settles complete.
         let mut tp = compiled.type_parser();
         let mut fresh = new_api_stability_analysis();
         fresh.symbol_surface(&mut tp, Some(sym));
@@ -1532,12 +987,7 @@ fn test_api_stability_settle_recollects_materialized_member() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1244 TestApiStabilityNaturalBudgetMaterializationRetry 5b47c9c8be0d0e16
-// TestApiStabilityNaturalBudgetMaterializationRetry reproduces the natural-budget
-// probe: the shared guard budget is exhausted by an
-// ordinary member while a later inferred return materializes a previously
-// refused experimental member. Settlement must collect the finding, keep the
-// side effects bounded and leave the surface blocked for a later retry.
+// go test: internal/typeparser/api_stability_test.go:738 TestApiStabilityNaturalBudgetMaterializationRetry 500741f636d399b0
 #[test]
 fn test_api_stability_natural_budget_materialization_retry() {
     run(|t| {
@@ -1594,22 +1044,7 @@ fn test_api_stability_natural_budget_materialization_retry() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1311 TestApiStabilityRecoveryPropagatesFindingsToEarlierResults b746df13c60bf11f
-// TestApiStabilityRecoveryPropagatesFindingsToEarlierResults pins the
-// recovery settlement defect: a recovery round can discover a
-// finding in a component after the fixpoint has converged, but the blocked
-// parent that was collected before that discovery must be revisited within the
-// same bounded recovery loop. Advancing the materialization epoch after a
-// changed recovery round makes exactly those earlier results stale, so the root
-// reflects the finding its own component discovered even though the analysis
-// stays exhausted and the root remains blocked and never settled as stable.
-//
-// Without the advancement the component holds `E` after the recovery sweep
-// while the root still reports nothing: the export's returned Used set (what
-// the rule reports) misses the dependency, and the caller sees a stable
-// surface that a later analysis would have reported. The test consumes no
-// additional guard work: recovery recollects represented components through
-// ordinary reads, it never authorizes a new guarded read.
+// go test: internal/typeparser/api_stability_test.go:790 TestApiStabilityRecoveryPropagatesFindingsToEarlierResults f30ea94a3ef52d1c
 #[test]
 fn test_api_stability_recovery_propagates_findings_to_earlier_results() {
     run(|t| {
@@ -1667,10 +1102,6 @@ fn test_api_stability_recovery_propagates_findings_to_earlier_results() {
             let mut tp = new_type_parser(program, cc);
             let mut analysis = new_api_stability_analysis();
             analysis.safety_work = API_STABILITY_SAFETY_MAX_WORK + 1;
-            // A cycle-cut signature contributes no findings until it is recollected,
-            // which is what makes the recovery sweep the only round that can find it.
-            // The result is stored directly, exactly like an independent seeded
-            // analysis; settlement must reconcile it into its visit order.
             analysis
                 .session_signatures
                 .insert(ApiStabilitySignatureKey { signature, carrier: None }, cycle_cut_surface());
@@ -1713,16 +1144,7 @@ fn test_api_stability_recovery_propagates_findings_to_earlier_results() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1399 TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse 2d2de59710f12a30
-// TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse pins the
-// current cache policy (updated from the original local-only policy,
-// which the latest shared-surface design supersedes): declared symbol/signature
-// stability persists per checker and is shared across analyses and TypeParser
-// instances; a complete, settled, context-free concrete type or signature
-// surface is published to the per-checker shared caches and reused by later
-// exports, files and parsers; symbol results and every incomplete or
-// substitution-context result stay local to the session that computed them.
-// Declared lookups never trigger a computed analysis.
+// go test: internal/typeparser/api_stability_test.go:865 TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse 83d3e9af02afa291
 #[test]
 fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
     run(|t| {
@@ -1742,17 +1164,7 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
         let also_leaky =
             api_stability_test_export(t, tp.checker, files["/.src/dep.ts"], "AlsoLeaky");
 
-        // A fresh session starts with no local computed state: symbol results and
-        // unpublishable results are never carried by an earlier session.
         let mut session = tp.new_api_stability_session();
-        if !session.analysis.session_symbols.is_empty()
-            || !session.analysis.session_types.is_empty()
-            || !session.analysis.session_signatures.is_empty()
-            || !session.analysis.session_components.is_empty()
-        {
-            t.fatal("a fresh session must start with no local computed state");
-        }
-
         let used = session.used_by_symbol(&mut tp, leaky);
         if used.incomplete || !contains_dependency(&used, "E") {
             t.fatal(format!(
@@ -1762,8 +1174,6 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
             ));
         }
 
-        // Repeating the same component inside the export reuses the session memo:
-        // the second query consumes no analysis work and returns the same surface.
         let work = session.analysis.work;
         let repeat = session.used_by_symbol(&mut tp, leaky);
         if repeat.incomplete || !contains_dependency(&repeat, "E") {
@@ -1777,9 +1187,6 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
             t.fatal("repeated session query recomputed a completed surface");
         }
 
-        // The complete concrete type surface was published: a new export still
-        // starts with an empty symbol memo, yet composes the same result and a
-        // direct type query consumes no analysis work at all.
         let declared = tp.checker.get_declared_type_of_symbol_exported(leaky);
         if api_stability_shared_type_entry(&tp, Some(declared), ApiStabilityInspection::Expand)
             .is_none()
@@ -1787,9 +1194,6 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
             t.fatal("the complete Leaky type surface should be published for reuse");
         }
         let mut next = tp.new_api_stability_session();
-        if !next.analysis.session_symbols.is_empty() {
-            t.fatal("a new export must not observe an earlier export's symbol memo");
-        }
         let next_used = next.used_by_symbol(&mut tp, also_leaky);
         if next_used.incomplete || !contains_dependency(&next_used, "E") {
             t.fatal(format!(
@@ -1810,8 +1214,6 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
         }
         drop(tp);
 
-        // Declared stability persists per checker and is shared across parsers;
-        // the declared read never triggers a computed analysis or a publication.
         let mut tp2 = compiled.type_parser();
         if !tp2.links().api_stability_declared_symbol.contains_key(&leaky) {
             t.fatal("declared symbol should be cached per checker");
@@ -1841,7 +1243,6 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
         }
         drop(tp2);
 
-        // Reused snapshots still produce the same surface content.
         let mut fresh_tp = compiled.type_parser();
         let mut fresh = fresh_tp.new_api_stability_session();
         let again = fresh.used_by_symbol(&mut fresh_tp, leaky);
@@ -1855,54 +1256,301 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1492 TestApiStabilityIncompleteIsNotStable 5cb0a37b70cca1d7
-// TestApiStabilityIncompleteIsNotStable pins that a surface the checker
-// has not materialized reports Incomplete from the public result, publishes
-// nothing, and that a later session over the materialized checker recomputes a
-// complete result: an incomplete result is never carried over as a finished
-// surface.
+// go test: internal/typeparser/api_stability_test.go:935 TestApiStabilityInstantiationsDoNotContaminate 370bf817fab50e85
 #[test]
-fn test_api_stability_incomplete_is_not_stable() {
+fn test_api_stability_instantiations_do_not_contaminate() {
     run(|t| {
         t.parallel();
 
-        let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-            t,
-            &[(
-                "/.src/test.ts",
-                "/** @stability experimental */\ninterface E { value: string }\nexport interface WellKnownOnly { plain: number; [Symbol.iterator](): E }\n",
-            )],
-        );
-        let mut tp = compiled.type_parser();
+        #[derive(Clone, Copy)]
+        struct Export {
+            declaration: &'static str,
+            name: &'static str,
+            leaks: bool,
+        }
+        struct Case {
+            name: &'static str,
+            prelude: &'static str,
+            exports: [Export; 2],
+        }
+        let export = |declaration, name, leaks| Export { declaration, name, leaks };
+        let tests = [
+            Case {
+                name: "generic arguments",
+                prelude: "interface Box<T> { value: T }",
+                exports: [
+                    export("export type Leaky = Box<E>", "Leaky", true),
+                    export("export type Clean = Box<string>", "Clean", false),
+                ],
+            },
+            Case {
+                name: "signature substitution",
+                prelude: "declare function make<T>(): (x: T) => T",
+                exports: [
+                    export("export const leaky = make<E>()", "leaky", true),
+                    export("export const clean = make<string>()", "clean", false),
+                ],
+            },
+            Case {
+                name: "nested signature substitution",
+                prelude: "declare function make<T>(): { nested: { fn: (x: T) => T } }",
+                exports: [
+                    export("export const leaky = make<E>()", "leaky", true),
+                    export("export const clean = make<string>()", "clean", false),
+                ],
+            },
+            Case {
+                name: "shared raw member target",
+                prelude: "type Deep<T> = T extends string ? Deep<T> : T\ninterface DeepHolder<T> { value: Deep<T> }",
+                exports: [
+                    export("export declare const leaky: DeepHolder<E>", "leaky", true),
+                    export("export declare const clean: DeepHolder<string>", "clean", false),
+                ],
+            },
+            Case {
+                name: "heritage materializations",
+                prelude: "interface Base<T> { value: T }",
+                exports: [
+                    export("export interface Leaky extends Base<E> {}", "Leaky", true),
+                    export("export interface Clean extends Base<string> {}", "Clean", false),
+                ],
+            },
+            Case {
+                name: "mutual cycle roots",
+                prelude: "type B = { c: C; payload: E }\ntype C = { b: B }",
+                exports: [
+                    export("export type A = { b: B }", "A", true),
+                    export("export type Z = { c: C }", "Z", true),
+                ],
+            },
+        ];
+        for test in &tests {
+            for declarations_reversed in [false, true] {
+                for queries_reversed in [false, true] {
+                    t.run(
+                        &format!(
+                            "{}/declarationsReversed={declarations_reversed}/queriesReversed={queries_reversed}",
+                            test.name
+                        ),
+                        |t| {
+                            t.parallel();
+                            let mut declarations =
+                                [test.exports[0].declaration, test.exports[1].declaration];
+                            if declarations_reversed {
+                                declarations.reverse();
+                            }
+                            let source = format!(
+                                "/** @stability experimental */\ninterface E {{ value: string }}\n{}\n{}\n",
+                                test.prelude,
+                                declarations.join("\n")
+                            );
+                            let (mut compiled, files) =
+                                compile_and_get_checker_and_source_files_internal(
+                                    t,
+                                    &[("/.src/test.ts", &source)],
+                                );
+                            prime_api_stability_checker(t, &mut compiled);
+                            let mut tp = compiled.type_parser();
 
-        let symbol =
-            api_stability_test_export(t, tp.checker, files["/.src/test.ts"], "WellKnownOnly");
-        let declared = tp.checker.get_declared_type_of_symbol_exported(symbol);
-        let cold = tp.api_stability_used_by_symbol(symbol);
-        if !cold.incomplete {
-            t.fatal("an unmaterialized computed member must report an incomplete result");
-        }
-        if api_stability_shared_type_entry(&tp, Some(declared), ApiStabilityInspection::Expand)
-            .is_some()
-        {
-            t.fatal("an incomplete result must never be published");
-        }
-        drop(tp);
-
-        prime_api_stability_checker(t, &mut compiled);
-        let mut warm_tp = compiled.type_parser();
-        let warm = warm_tp.api_stability_used_by_symbol(symbol);
-        if warm.incomplete || !contains_dependency(&warm, "E") {
-            t.fatal(format!(
-                "the materialized retry should settle complete with E, got {} (incomplete={})",
-                names(&warm),
-                warm.incomplete
-            ));
-        }
-        if api_stability_shared_type_entry(&warm_tp, Some(declared), ApiStabilityInspection::Expand)
-            .is_none()
-        {
-            t.fatal("the materialized retry should publish its complete surface");
+                            let mut exports = test.exports.to_vec();
+                            if queries_reversed {
+                                exports.reverse();
+                            }
+                            for export in exports {
+                                let symbol = api_stability_test_export(
+                                    t,
+                                    tp.checker,
+                                    files["/.src/test.ts"],
+                                    export.name,
+                                );
+                                let used = tp.api_stability_used_by_symbol(symbol);
+                                if contains_dependency(&used, "E") != export.leaks {
+                                    t.fatal(format!(
+                                        "{} exposes E = {}, want {}: {}",
+                                        export.name,
+                                        !export.leaks,
+                                        export.leaks,
+                                        names(&used)
+                                    ));
+                                }
+                            }
+                        },
+                    );
+                }
+            }
         }
     });
+}
+
+// go test: internal/typeparser/api_stability_test.go:1010 TestApiStabilityDeclaredReadsDoNotCompute ca0b49d575f1f49a
+#[test]
+fn test_api_stability_declared_reads_do_not_compute() {
+    run(|t| {
+        t.parallel();
+
+        for prime in [false, true] {
+            t.run(&format!("prime={prime}"), |t| {
+                t.parallel();
+                let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
+                    t,
+                    &[(
+                        "/.src/test.ts",
+                        "/** @stability experimental */\ninterface E { value: string }\nexport interface Leaky { value: E }\n/** @stability unstable */\nexport interface Tagged { leak: string }\n/** @stability unstable */\nexport declare function taggedFn(): string\n",
+                    )],
+                );
+                if prime {
+                    prime_api_stability_checker(t, &mut compiled);
+                }
+                let mut tp = compiled.type_parser();
+
+                let test_file = files["/.src/test.ts"];
+                let leaky = api_stability_test_export(t, tp.checker, test_file, "Leaky");
+                let tagged = api_stability_test_export(t, tp.checker, test_file, "Tagged");
+                let tagged_fn = api_stability_test_export(t, tp.checker, test_file, "taggedFn");
+                let signature = api_stability_test_signatures(t, tp.checker, Some(tagged_fn))[0];
+
+                let before = tp.checker.total_instantiation_count;
+                let levels = [
+                    tp.declared_api_stability(leaky),
+                    tp.declared_api_stability_of_symbol(tagged).level,
+                    tp.declared_api_stability_of_symbol(tagged_fn).level,
+                    tp.declared_api_stability_of_signature(signature).level,
+                ];
+                let delta = tp.checker.total_instantiation_count - before;
+                if delta != 0 {
+                    t.fatal(ets_go::sprintf!(
+                        "declared reads instantiated %d types, want 0",
+                        i64::from(delta)
+                    ));
+                }
+                let want = [
+                    ApiStabilityLevel::Stable,
+                    ApiStabilityLevel::Unstable,
+                    ApiStabilityLevel::Unstable,
+                    ApiStabilityLevel::Unstable,
+                ];
+                if levels != want {
+                    t.fatal(format!(
+                        "declared levels = {:?}, want {:?}",
+                        levels.map(|level| level as i64),
+                        want.map(|level| level as i64)
+                    ));
+                }
+                for symbol in [leaky, tagged, tagged_fn] {
+                    if !tp.links().api_stability_declared_symbol.contains_key(&symbol) {
+                        t.fatal(format!("declared lookup of {} should be cached", symbol.name()));
+                    }
+                }
+                let raw = raw_signature(Some(signature)).expect("raw signature");
+                if !tp.links().api_stability_declared_signature.contains_key(&raw) {
+                    t.fatal("declared signature lookup should be cached");
+                }
+                for symbol in [leaky, tagged] {
+                    let declared = tp.checker.get_declared_type_of_symbol_exported(symbol);
+                    if api_stability_shared_type_entry(
+                        &tp,
+                        Some(declared),
+                        ApiStabilityInspection::Expand,
+                    )
+                    .is_some()
+                    {
+                        t.fatal(format!(
+                            "a declared read published the {} type surface",
+                            symbol.name()
+                        ));
+                    }
+                }
+                if api_stability_shared_signature_entry(&tp, Some(signature)).is_some() {
+                    t.fatal("a declared read published a signature surface");
+                }
+                if prime {
+                    let used = tp.new_api_stability_session().used_by_symbol(&mut tp, tagged_fn);
+                    if used.incomplete
+                        || used.minimum != ApiStabilityLevel::Stable
+                        || !used.dependencies.is_empty()
+                    {
+                        t.fatal(format!(
+                            "taggedFn surface should be empty, got min={} deps={}",
+                            used.minimum as i64,
+                            names(&used)
+                        ));
+                    }
+                }
+            });
+        }
+    });
+}
+
+// go test: internal/typeparser/api_stability_test.go:1077 TestApiStabilityCachesAreCheckerLocal a98e679f072a32b1
+#[test]
+fn test_api_stability_caches_are_checker_local() {
+    run(|t| {
+        t.parallel();
+
+        let source = "/** @stability experimental */\nexport interface E { value: string }\nexport interface Leaky { value: E }\nexport const f = (x: E): E => x\n/** @stability unstable */\nexport interface Shared { leak: E }\nexport interface Holder { child: Shared }\n";
+        let (mut compiled1, sf1) = compile_and_get_checker_and_source_file_internal(t, source);
+        let (mut compiled2, sf2) = compile_and_get_checker_and_source_file_internal(t, source);
+        prime_api_stability_checker(t, &mut compiled1);
+        prime_api_stability_checker(t, &mut compiled2);
+        let mut tp1 = compiled1.type_parser();
+        let mut tp2 = compiled2.type_parser();
+
+        if Arc::ptr_eq(&tp1.links, &tp2.links) {
+            t.fatal("different checkers must not share EffectLinks");
+        }
+        let leaky1 = api_stability_test_export(t, tp1.checker, sf1, "Leaky");
+        let leaky2 = api_stability_test_export(t, tp2.checker, sf2, "Leaky");
+        let shared1 = api_stability_test_export(t, tp1.checker, sf1, "Shared");
+        let shared1 = tp1.checker.get_declared_type_of_symbol_exported(shared1);
+        let shared2 = api_stability_test_export(t, tp2.checker, sf2, "Shared");
+        let shared2 = tp2.checker.get_declared_type_of_symbol_exported(shared2);
+        if leaky1 == leaky2 || shared1 == shared2 {
+            t.fatal("checkers should produce distinct identities");
+        }
+
+        let shallow = ApiStabilityInspection::Shallow;
+        query_caches_are_checker_local(t, &mut tp1, sf1);
+        if !tp1.links().api_stability_declared_symbol.contains_key(&leaky1) {
+            t.fatal("the first checker should cache its declared lookup");
+        }
+        if api_stability_shared_type_entry(&tp1, Some(shared1), shallow).is_none() {
+            t.fatal("the first checker should publish its shallow snapshot");
+        }
+        if tp2.links().api_stability_declared_symbol.contains_key(&leaky1)
+            || api_stability_shared_type_entry(&tp2, Some(shared1), shallow).is_some()
+        {
+            t.fatal("the second checker observed the first checker's caches");
+        }
+        if tp2.links().api_stability_declared_symbol.contains_key(&leaky2)
+            || api_stability_shared_type_entry(&tp2, Some(shared2), shallow).is_some()
+        {
+            t.fatal("the second checker cached results before its own queries");
+        }
+
+        query_caches_are_checker_local(t, &mut tp2, sf2);
+        if tp1.links().api_stability_declared_symbol.contains_key(&leaky2)
+            || api_stability_shared_type_entry(&tp1, Some(shared2), shallow).is_some()
+        {
+            t.fatal("the first checker observed the second checker's caches");
+        }
+    });
+}
+
+// go test: internal/typeparser/api_stability_test.go:1077 TestApiStabilityCachesAreCheckerLocal a98e679f072a32b1
+// Rust: Go's `query` closure.
+fn query_caches_are_checker_local(t: &T, tp: &mut TypeParser<'_>, sf: P<SourceFile>) {
+    t.helper();
+    let leaky = api_stability_test_export(t, tp.checker, sf, "Leaky");
+    if !contains_dependency(&tp.api_stability_used_by_symbol(leaky), "E") {
+        t.fatal("Leaky should expose E");
+    }
+    let f = api_stability_test_export(t, tp.checker, sf, "f");
+    let signature = api_stability_test_signatures(t, tp.checker, Some(f))[0];
+    if !contains_dependency(&tp.api_stability_used_by_signature(signature), "E") {
+        t.fatal("f's signature should expose E");
+    }
+    let holder = api_stability_test_export(t, tp.checker, sf, "Holder");
+    if !contains_dependency(&tp.new_api_stability_session().used_by_symbol(tp, holder), "Shared") {
+        t.fatal("Holder should expose Shared");
+    }
 }

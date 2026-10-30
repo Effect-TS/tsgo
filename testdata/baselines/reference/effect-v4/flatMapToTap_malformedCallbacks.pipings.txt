@@ -33,7 +33,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 13:29 - 13:99
+Location: 14:29 - 14:99
 Node: source.pipe(Effect.flatMap(async (n) => Effect.as(Effect.log(n), n)))
 Node Kind: KindCallExpression
 
@@ -47,7 +47,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 13:69 - 13:97
+Location: 14:69 - 14:97
 Node: Effect.as(Effect.log(n), n)
 Node Kind: KindCallExpression
 
@@ -65,7 +65,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 16:33 - 16:114
+Location: 18:33 - 18:114
 Node: source.pipe(Effect.flatMap(function*(n) { return Effect.as(Effect.log(n), n) }))
 Node Kind: KindCallExpression
 
@@ -79,7 +79,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 16:82 - 16:110
+Location: 18:82 - 18:110
 Node: Effect.as(Effect.log(n), n)
 Node Kind: KindCallExpression
 
@@ -97,7 +97,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 19:29 - 19:100
+Location: 22:29 - 22:100
 Node: source.pipe(Effect.flatMap((n, extra) => Effect.as(Effect.log(n), n)))
 Node Kind: KindCallExpression
 
@@ -111,7 +111,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 19:70 - 19:98
+Location: 22:70 - 22:98
 Node: Effect.as(Effect.log(n), n)
 Node Kind: KindCallExpression
 
@@ -129,7 +129,7 @@ Transformations (2):
       outType: Effect<any, never, never>
 
 === Piping Flow ===
-Location: 22:31 - 22:101
+Location: 25:31 - 25:101
 Node: source.pipe(Effect.flatMap(<A>(n: A) => Effect.as(Effect.log(n), n)))
 Node Kind: KindCallExpression
 
@@ -143,7 +143,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 22:71 - 22:99
+Location: 25:71 - 25:99
 Node: Effect.as(Effect.log(n), n)
 Node Kind: KindCallExpression
 
@@ -161,7 +161,7 @@ Transformations (2):
       outType: Effect<A, never, never>
 
 === Piping Flow ===
-Location: 25:28 - 25:84
+Location: 29:28 - 29:84
 Node: source.pipe(Effect.flatMap((n) => Effect.as(inner, n)))
 Node Kind: KindCallExpression
 
@@ -175,7 +175,7 @@ Transformations (1):
       outType: Effect<number, unknown, unknown>
 
 === Piping Flow ===
-Location: 25:62 - 25:82
+Location: 29:62 - 29:82
 Node: Effect.as(inner, n)
 Node Kind: KindCallExpression
 
@@ -189,7 +189,7 @@ Transformations (1):
       outType: Effect<number, unknown, unknown>
 
 === Piping Flow ===
-Location: 28:26 - 28:87
+Location: 32:26 - 32:87
 Node: source.pipe(Effect.flatMap((n) => loose.pipe(Effect.as(n))))
 Node Kind: KindCallExpression
 
@@ -203,7 +203,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 28:60 - 28:85
+Location: 32:60 - 32:85
 Node: loose.pipe(Effect.as(n))
 Node Kind: KindCallExpression
 
@@ -217,7 +217,7 @@ Transformations (1):
       outType: 
 
 === Piping Flow ===
-Location: 31:26 - 31:97
+Location: 35:26 - 35:97
 Node: loose.pipe(Effect.flatMap((n: number) => Effect.as(Effect.log(n), n)))
 Node Kind: KindCallExpression
 
@@ -231,7 +231,7 @@ Transformations (1):
       outType: 
 
 === Piping Flow ===
-Location: 31:67 - 31:95
+Location: 35:67 - 35:95
 Node: Effect.as(Effect.log(n), n)
 Node Kind: KindCallExpression
 

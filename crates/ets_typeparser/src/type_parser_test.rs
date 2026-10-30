@@ -7,7 +7,8 @@
 use std::cell::Cell;
 
 use ets_go::sprintf;
-use ets_shim::ast::{NodeFactoryHooks, Symbol, SymbolFlags};
+use ets_shim::ast::{Node, NodeFactoryHooks, Symbol, SymbolFlags};
+use ets_shim::core::P;
 use ets_shim::core::arena::Region;
 use rustc_hash::FxHashMap;
 
@@ -89,7 +90,19 @@ fn test_cached_caches_negative_values() {
     });
 }
 
-// go test: internal/typeparser/type_parser_test.go:57 TestCachedNodeCachesPerNode a39705d15f872b83
+// go test: internal/typeparser/type_parser_test.go:57 withGlobalNodeId 2bf2f52b1d1f8aba
+fn with_global_node_id(node: P<Node>) -> P<Node> {
+    ets_shim::ast::get_node_id(node);
+    node
+}
+
+// go test: internal/typeparser/type_parser_test.go:62 withGlobalSymbolId f83c1fd452709687
+fn with_global_symbol_id(symbol: P<Symbol>) -> P<Symbol> {
+    ets_shim::ast::get_symbol_id(symbol);
+    symbol
+}
+
+// go test: internal/typeparser/type_parser_test.go:67 TestCachedNodeCachesPerNode 9716d4d44279cca4
 // Rust: the store is a node-keyed store of optional nodes (Go: `checker.NodeLinkStore[*string]`); the values are
 // identifiers whose text is Go's string.
 #[test]
@@ -103,10 +116,7 @@ fn test_cached_node_caches_per_node() {
         let factory = ets_shim::ast::new_node_factory(NodeFactoryHooks::default());
         let first = factory.new_identifier("first");
         let second = factory.new_identifier("second");
-        // A node that already has an id from the global counter, as nodes queried
-        // through other compiler paths do.
-        let numbered = factory.new_identifier("numbered");
-        ets_shim::ast::get_node_id(numbered);
+        let numbered = with_global_node_id(factory.new_identifier("numbered"));
 
         let calls = Cell::new(0);
         let compute = |value| {
@@ -118,9 +128,7 @@ fn test_cached_node_caches_per_node() {
         };
         let second_value = factory.new_identifier("second");
         let numbered_value = factory.new_identifier("numbered");
-        let text = |value: Option<ets_shim::core::P<ets_shim::ast::Node>>| {
-            value.map(|value| value.text().to_string())
-        };
+        let text = |value: Option<P<Node>>| value.map(|value| value.text().to_string());
 
         if tp.links().effect_yield_generator_function.contains_key(&first) {
             t.fatal("expected an empty store");
@@ -186,7 +194,7 @@ fn test_cached_node_caches_per_node() {
     });
 }
 
-// go test: internal/typeparser/type_parser_test.go:104 TestSymbolLinkStoreKeepsOneSlotPerSymbol f8489c931aefa018
+// go test: internal/typeparser/type_parser_test.go:111 TestSymbolLinkStoreKeepsOneSlotPerSymbol e23d6769422da4d5
 // Rust: Go's `checker.SymbolLinkStore[V]` is a symbol-keyed map (`FxHashMap<P<Symbol>, V>`, as in `EffectLinks`):
 // `TryGet` is `get`, `Get` is `entry(..).or_default()`.
 #[test]
@@ -198,12 +206,9 @@ fn test_symbol_link_store_keeps_one_slot_per_symbol() {
         let _scope = region.enter();
         let (first, second) =
             (Symbol::new(SymbolFlags::None, ""), Symbol::new(SymbolFlags::None, ""));
-        // A symbol that already has an id from the global counter, as symbols
-        // numbered by symbol accessibility or the node builder do.
-        let numbered = Symbol::new(SymbolFlags::None, "");
-        ets_shim::ast::get_symbol_id(numbered);
+        let numbered = with_global_symbol_id(Symbol::new(SymbolFlags::None, ""));
 
-        let mut store: FxHashMap<ets_shim::core::P<Symbol>, String> = FxHashMap::default();
+        let mut store: FxHashMap<P<Symbol>, String> = FxHashMap::default();
         if store.contains_key(&first) {
             t.fatal("expected an empty store");
         }

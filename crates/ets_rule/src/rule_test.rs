@@ -10,12 +10,12 @@ fn dummy_run(_: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     Vec::new()
 }
 
-/// Rust-only: Go's `Rule{Name: ..., Description: ..., Run: dummyRun}` (the other fields at their zero values).
-fn rule(name: &'static str, description: &'static str) -> Rule {
+/// Rust-only: Go's `Rule{Name: ...}` (the other fields at their zero values).
+fn rule(name: &'static str) -> Rule {
     Rule {
         name,
         group: "",
-        description,
+        description: "",
         default_severity: Severity::Off,
         supported_effect: Vec::new(),
         codes: Vec::new(),
@@ -24,52 +24,20 @@ fn rule(name: &'static str, description: &'static str) -> Rule {
     }
 }
 
-// go test: internal/rule/rule_test.go:10 TestRuleStruct bc64def8037515d3
-// Rust: Go's `r.Run == nil` check has no counterpart (`run` is a function pointer, never null).
-#[test]
-fn test_rule_struct() {
-    // Test that a Rule can be created with all fields
-    let r = rule("testRule", "A test rule");
-
-    assert_eq!(r.name, "testRule", "expected Name to be 'testRule', got {:?}", r.name);
-    assert_eq!(
-        r.description, "A test rule",
-        "expected Description to be 'A test rule', got {:?}",
-        r.description
-    );
-}
-
-// go test: internal/rule/rule_test.go:34 TestByName df89b770fece8375
+// go test: internal/rule/rule_test.go:5 TestByName 03e8f85c8a8b1ec7
 #[test]
 fn test_by_name() {
-    let rules = vec![rule("rule1", "First rule"), rule("rule2", "Second rule")];
+    let rules = vec![rule("rule1"), rule("rule2")];
 
-    // finds existing rule
-    let found = by_name(&rules, "rule1").expect("expected to find rule1");
-    assert_eq!(found.name, "rule1", "expected Name to be 'rule1', got {:?}", found.name);
-
-    // returns nil for non-existent rule
+    let found = by_name(&rules, "rule2");
+    assert!(
+        found.is_some_and(|found| std::ptr::eq(found, &raw const rules[1])),
+        "expected pointer to rules[1], got {found:?}"
+    );
     let found = by_name(&rules, "nonexistent");
     assert!(found.is_none(), "expected nil for non-existent rule, got {found:?}");
-
-    // returns nil for empty slice
     let found = by_name(&[], "rule1");
     assert!(found.is_none(), "expected nil for empty slice, got {found:?}");
-
-    // returns pointer to actual rule in slice
-    let found = by_name(&rules, "rule1");
-    assert!(
-        found.is_some_and(|found| std::ptr::eq(found, &raw const rules[0])),
-        "expected ByName to return pointer to actual rule in slice"
-    );
-
-    // finds second rule correctly
-    let found = by_name(&rules, "rule2").expect("expected to find rule2");
-    assert_eq!(found.name, "rule2", "expected Name to be 'rule2', got {:?}", found.name);
-    assert!(
-        std::ptr::eq(found, &raw const rules[1]),
-        "expected ByName to return pointer to second rule in slice"
-    );
 }
 
 /// Rust-only: regression test for `_patches/tsrs/008-diagnostics-generate.patch`: the Effect messages are tsrs

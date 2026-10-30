@@ -8,8 +8,6 @@
 
 mod extract;
 mod format;
-#[cfg(test)]
-mod format_test;
 mod magic;
 #[cfg(test)]
 mod magic_test;

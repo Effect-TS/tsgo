@@ -1,11 +1,10 @@
 use ets_go::strconv::quote;
 use ets_shim::ast::{SourceFile, SourceFileParseOptions};
 use ets_shim::core::{P, ScriptKind};
-use ets_shim::scanner;
 
 use crate::*;
 
-// go test: internal/completion/position_test.go:12 parseSource f4cd2f032a49fd07
+// go test: internal/completion/position_test.go:11 parseSource f4cd2f032a49fd07
 fn parse_source(source: &str) -> P<SourceFile> {
     ets_shim::parser::parse_source_file(
         SourceFileParseOptions { file_name: "/test.ts".to_string(), ..Default::default() },
@@ -19,158 +18,70 @@ fn len(source: &str) -> u32 {
     u32::try_from(source.len()).unwrap()
 }
 
-// go test: internal/completion/position_test.go:18 TestParseDataForExtendsClassCompletion_AfterDot a2aa5ef59b9115f5
+// go test: internal/completion/position_test.go:17 TestParseDataForExtendsClassCompletion 00faa2725d89f1b8
 #[test]
-fn test_parse_data_for_extends_class_completion_after_dot() {
+fn test_parse_data_for_extends_class_completion() {
     ets_go::testing::run(|t| {
         t.parallel();
-        // class Foo extends Schema.| (cursor after the dot)
-        let source = "class Foo extends Schema.";
-        let sf = parse_source(source);
-        let pos = len(source);
-
-        let Some(data) = parse_data_for_extends_class_completion(sf, pos) else {
-            t.fatal("expected non-nil result for 'class Foo extends Schema.'");
-        };
-        let got = data.accessed_object_text();
-        if got != "Schema" {
-            t.error(format!("AccessedObjectText = {}, want {}", quote(&got), quote("Schema")));
-        }
-        let got = data.class_name_text();
-        if got != "Foo" {
-            t.error(format!("ClassNameText = {}, want {}", quote(&got), quote("Foo")));
+        for (source, want_object, want_replaced) in [
+            ("class Foo extends Schema.", "Schema", "Schema."),
+            ("class Foo extends X.Schema.", "X.Schema", "X.Schema."),
+            ("class Foo extends Schema.Class", "Schema", "Schema.Class"),
+            ("class Foo extends Schema", "Schema", "Schema"),
+        ] {
+            t.run(source, |t| {
+                t.parallel();
+                let Some(data) =
+                    parse_data_for_extends_class_completion(parse_source(source), len(source))
+                else {
+                    t.fatal(format!("expected non-nil result for {}", quote(source)));
+                };
+                let got = data.accessed_object_text();
+                if got != want_object {
+                    t.error(format!(
+                        "AccessedObjectText = {}, want {}",
+                        quote(&got),
+                        quote(want_object)
+                    ));
+                }
+                let got = data.class_name_text();
+                if got != "Foo" {
+                    t.error(format!("ClassNameText = {}, want {}", quote(&got), quote("Foo")));
+                }
+                let start = data.replacement_start as usize;
+                let got = &source[start..start + data.replacement_length as usize];
+                if got != want_replaced {
+                    t.error(format!(
+                        "replacement span covers {}, want {}",
+                        quote(got),
+                        quote(want_replaced)
+                    ));
+                }
+            });
         }
     });
 }
 
-// go test: internal/completion/position_test.go:37 TestParseDataForExtendsClassCompletion_BarrelNamespaceAfterDot d19c34753982e042
+// go test: internal/completion/position_test.go:48 TestParseDataForExtendsClassCompletion_Rejected 2494facc59a84dcf
 #[test]
-fn test_parse_data_for_extends_class_completion_barrel_namespace_after_dot() {
+fn test_parse_data_for_extends_class_completion_rejected() {
     ets_go::testing::run(|t| {
         t.parallel();
-        // class Foo extends X.Schema.| (cursor after the dot)
-        let source = "class Foo extends X.Schema.";
-        let sf = parse_source(source);
-
-        let Some(data) = parse_data_for_extends_class_completion(sf, len(source)) else {
-            t.fatal("expected non-nil result for 'class Foo extends X.Schema.'");
-        };
-        let got = data.accessed_object_text();
-        if got != "X.Schema" {
-            t.error(format!("AccessedObjectText = {}, want {}", quote(&got), quote("X.Schema")));
-        }
-    });
-}
-
-// go test: internal/completion/position_test.go:52 TestParseDataForExtendsClassCompletion_AfterPropertyName 3ac39f38f40625d0
-#[test]
-fn test_parse_data_for_extends_class_completion_after_property_name() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        // class Foo extends Schema.Class| (cursor after Class)
-        let source = "class Foo extends Schema.Class";
-        let sf = parse_source(source);
-        let pos = len(source);
-
-        let Some(data) = parse_data_for_extends_class_completion(sf, pos) else {
-            t.fatal("expected non-nil result for 'class Foo extends Schema.Class'");
-        };
-        let got = data.accessed_object_text();
-        if got != "Schema" {
-            t.error(format!("AccessedObjectText = {}, want {}", quote(&got), quote("Schema")));
-        }
-        let got = data.class_name_text();
-        if got != "Foo" {
-            t.error(format!("ClassNameText = {}, want {}", quote(&got), quote("Foo")));
-        }
-    });
-}
-
-// go test: internal/completion/position_test.go:71 TestParseDataForExtendsClassCompletion_StandaloneIdentifier 91f50fd950c2da1a
-#[test]
-fn test_parse_data_for_extends_class_completion_standalone_identifier() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        // class Foo extends Schema| (cursor after standalone identifier)
-        let source = "class Foo extends Schema";
-        let sf = parse_source(source);
-        let pos = len(source);
-
-        let Some(data) = parse_data_for_extends_class_completion(sf, pos) else {
-            t.fatal("expected non-nil result for 'class Foo extends Schema'");
-        };
-        let got = scanner::get_text_of_node(data.accessed_object);
-        if got != "Schema" {
-            t.error(format!("AccessedObject text = {}, want {}", quote(&got), quote("Schema")));
-        }
-        let got = data.class_name_text();
-        if got != "Foo" {
-            t.error(format!("ClassNameText = {}, want {}", quote(&got), quote("Foo")));
-        }
-    });
-}
-
-// go test: internal/completion/position_test.go:91 TestParseDataForExtendsClassCompletion_NonClassContext 5152ebf59cd0c807
-#[test]
-fn test_parse_data_for_extends_class_completion_non_class_context() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        // Not in a class extends clause
-        let source = "const x = Schema.Class";
-        let sf = parse_source(source);
-        let pos = len(source);
-
-        let data = parse_data_for_extends_class_completion(sf, pos);
-        if data.is_some() {
-            t.error("expected nil result for non-class context");
-        }
-    });
-}
-
-// go test: internal/completion/position_test.go:104 TestParseDataForExtendsClassCompletion_InsideImportDeclaration dd0618fdb24627b1
-#[test]
-fn test_parse_data_for_extends_class_completion_inside_import_declaration() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r#"import { Schema } from "effect""#;
-        let sf = parse_source(source);
-        // Position after "Schema" inside the import
-        let pos = len("import { Schema");
-
-        let data = parse_data_for_extends_class_completion(sf, pos);
-        if data.is_some() {
-            t.error("expected nil result for position inside import declaration");
-        }
-    });
-}
-
-// go test: internal/completion/position_test.go:117 TestParseDataForExtendsClassCompletion_ReplacementSpan b756611c4d28aca1
-#[test]
-fn test_parse_data_for_extends_class_completion_replacement_span() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = "class Foo extends Schema.Class";
-        let sf = parse_source(source);
-        let pos = len(source);
-
-        let Some(data) = parse_data_for_extends_class_completion(sf, pos) else {
-            t.fatal("expected non-nil result");
-        };
-        // The replacement span should cover "Schema.Class"
-        if data.replacement_length == 0 {
-            t.error(format!(
-                "expected positive ReplacementLength, got {}",
-                data.replacement_length
-            ));
-        }
-        let start = data.replacement_start as usize;
-        let replaced = &source[start..start + data.replacement_length as usize];
-        if replaced != "Schema.Class" {
-            t.error(format!(
-                "replacement span covers {}, want {}",
-                quote(replaced),
-                quote("Schema.Class")
-            ));
+        for (name, source, position) in [
+            ("non-class context", "const x = Schema.Class", len("const x = Schema.Class")),
+            (
+                "inside import declaration",
+                r#"import { Schema } from "effect""#,
+                len("import { Schema"),
+            ),
+        ] {
+            t.run(name, |t| {
+                t.parallel();
+                if parse_data_for_extends_class_completion(parse_source(source), position).is_some()
+                {
+                    t.error(format!("expected nil result for {} at {}", quote(source), position));
+                }
+            });
         }
     });
 }

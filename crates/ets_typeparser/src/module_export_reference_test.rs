@@ -21,15 +21,19 @@ const MODULE_EXPORT_REFERENCE_PACKAGE_JSON: &str = r#"{
   "exports": { ".": "./index.d.ts" }
 }"#;
 
-// go test: internal/typeparser/module_export_reference_test.go:28 testDescriptorSourceFile 2ada651c621dac2e
+// go test: internal/typeparser/module_export_reference_test.go:28 testDescriptorSourceFile 8e42877293f28dcf
 const TEST_DESCRIPTOR_SOURCE_FILE: ModuleDescriptorId =
     ModuleDescriptorId(ModuleDescriptorId::Count.0);
 const TEST_DESCRIPTOR_ANY_FILE: ModuleDescriptorId =
     ModuleDescriptorId(ModuleDescriptorId::Count.0 + 1);
 const TEST_DESCRIPTOR_OTHER_FILE: ModuleDescriptorId =
     ModuleDescriptorId(ModuleDescriptorId::Count.0 + 2);
+const TEST_DESCRIPTOR_RENAMED_FILE: ModuleDescriptorId =
+    ModuleDescriptorId(ModuleDescriptorId::Count.0 + 3);
+const TEST_DESCRIPTOR_CJS_FILE: ModuleDescriptorId =
+    ModuleDescriptorId(ModuleDescriptorId::Count.0 + 4);
 
-// go test: internal/typeparser/module_export_reference_test.go:34 moduleExportReferenceSources 790276c35d9ee5f5
+// go test: internal/typeparser/module_export_reference_test.go:36 moduleExportReferenceSources 790276c35d9ee5f5
 fn module_export_reference_sources() -> Vec<(&'static str, String)> {
     vec![
         (
@@ -112,7 +116,7 @@ export = api"
     ]
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:92 moduleExportReferenceFixture 561c00dee5ea4e4f
+// go test: internal/typeparser/module_export_reference_test.go:119 moduleExportReferenceFixture 561c00dee5ea4e4f
 fn module_export_reference_fixture(t: &T) -> (Compiled, FxHashMap<String, P<SourceFile>>) {
     t.helper();
 
@@ -122,7 +126,7 @@ fn module_export_reference_fixture(t: &T) -> (Compiled, FxHashMap<String, P<Sour
     compile_and_get_checker_and_source_files_internal(t, &sources)
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:99 sourceFileNameMatcher 4166f14b62d78a75
+// go test: internal/typeparser/module_export_reference_test.go:126 sourceFileNameMatcher 4166f14b62d78a75
 // Rust: the matcher is leaked to be `'static` like the package-level descriptors' functions; `calls` is shared.
 fn source_file_name_matcher(
     suffix: &'static str,
@@ -136,95 +140,103 @@ fn source_file_name_matcher(
     }))
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:69 TestIsNodeReferenceToModuleExport_ConstantAliases 23ebf925175c3013
+// go test: internal/typeparser/module_export_reference_test.go:71 TestIsNodeReferenceToModuleExport c5dbba5e7d13ed8b
 #[test]
-fn test_is_node_reference_to_module_export_constant_aliases() {
+fn test_is_node_reference_to_module_export() {
     run(|t| {
         t.parallel();
 
         let (mut compiled, source_files) = module_export_reference_fixture(t);
         let mut tp = compiled.type_parser();
 
-        let desc = new_package_source_file_descriptor(
+        let source_desc = new_package_source_file_descriptor(
             TEST_DESCRIPTOR_SOURCE_FILE,
             "cache-fixture",
             Some(source_file_name_matcher("/source.d.ts", None)),
         );
-        let main = source_files["/.src/main.ts"];
-        let constant_alias_declaration = find_identifier_by_text(t, main, "rootFooAlias2", 0);
-        let constant_alias = find_identifier_by_text(t, main, "rootFooAlias2", 1);
-        let mutable_alias = find_identifier_by_text(t, main, "mutableFooAlias", 2);
-
-        if tp.is_node_reference_to_module_export(constant_alias_declaration, &desc, "Foo") {
-            t.fatal("expected a constant alias declaration name not to match the Foo export");
-        }
-        if !tp.is_node_reference_to_module_export(constant_alias, &desc, "Foo") {
-            t.fatal("expected a constant alias chain to match the Foo export");
-        }
-        if tp.is_node_reference_to_module_export(mutable_alias, &desc, "Foo") {
-            t.fatal("expected a mutable alias not to match the Foo export");
-        }
-    });
-}
-
-// go test: internal/typeparser/module_export_reference_test.go:108 TestIsNodeReferenceToModuleExport_AliasesAndReexports c056b4c90f38798b
-#[test]
-fn test_is_node_reference_to_module_export_aliases_and_reexports() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, source_files) = module_export_reference_fixture(t);
-        let mut tp = compiled.type_parser();
-
-        let desc = new_package_source_file_descriptor(
-            TEST_DESCRIPTOR_SOURCE_FILE,
-            "cache-fixture",
-            Some(source_file_name_matcher("/source.d.ts", None)),
-        );
-        let main = source_files["/.src/main.ts"];
-        let root_foo = find_identifier_by_text(t, main, "RootFoo", 1);
-        let root_bar = find_identifier_by_text(t, main, "Bar", 1);
-
-        if !tp.is_node_reference_to_module_export(root_foo, &desc, "Foo") {
-            t.fatal("expected aliased Foo reference through a reexport to match");
-        }
-        if tp.is_node_reference_to_module_export(root_foo, &desc, "Bar") {
-            t.fatal("expected Foo reference not to match the Bar export");
-        }
-        if !tp.is_node_reference_to_module_export(root_bar, &desc, "Bar") {
-            t.fatal("expected Bar reference through a reexport to match");
-        }
-    });
-}
-
-// go test: internal/typeparser/module_export_reference_test.go:130 TestIsNodeReferenceToModuleExport_DuplicatePackageVersions 47d8753d97385a21
-#[test]
-fn test_is_node_reference_to_module_export_duplicate_package_versions() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, source_files) = module_export_reference_fixture(t);
-        let mut tp = compiled.type_parser();
-
-        let desc =
+        let any_desc =
             new_package_source_file_descriptor(TEST_DESCRIPTOR_ANY_FILE, "cache-fixture", None);
+        let renamed_desc = new_package_source_file_descriptor(
+            TEST_DESCRIPTOR_RENAMED_FILE,
+            "cache-fixture",
+            Some(source_file_name_matcher("/renamed.d.ts", None)),
+        );
+        let cjs_desc =
+            new_package_source_file_descriptor(TEST_DESCRIPTOR_CJS_FILE, "cjs-fixture", None);
+        for (name, file, identifier, occurrence, desc, member, want) in [
+            (
+                "constant alias declaration name",
+                "/.src/main.ts",
+                "rootFooAlias2",
+                0,
+                &source_desc,
+                "Foo",
+                false,
+            ),
+            (
+                "constant alias chain",
+                "/.src/main.ts",
+                "rootFooAlias2",
+                1,
+                &source_desc,
+                "Foo",
+                true,
+            ),
+            ("mutable alias", "/.src/main.ts", "mutableFooAlias", 2, &source_desc, "Foo", false),
+            ("aliased reexport", "/.src/main.ts", "RootFoo", 1, &source_desc, "Foo", true),
+            (
+                "aliased reexport other member",
+                "/.src/main.ts",
+                "RootFoo",
+                1,
+                &source_desc,
+                "Bar",
+                false,
+            ),
+            ("reexport", "/.src/main.ts", "Bar", 1, &source_desc, "Bar", true),
+            ("root package version", "/.src/main.ts", "RootFoo", 1, &any_desc, "Foo", true),
+            (
+                "nested package version",
+                "/packages/consumer/main.ts",
+                "NestedFoo",
+                1,
+                &any_desc,
+                "Foo",
+                true,
+            ),
+            ("Base as Base", "/.src/renamed.ts", "Base", 1, &renamed_desc, "Base", true),
+            ("Base as Renamed", "/.src/renamed.ts", "Base", 1, &renamed_desc, "Renamed", true),
+            ("Base as Foo", "/.src/renamed.ts", "Base", 1, &renamed_desc, "Foo", false),
+            ("Renamed as Base", "/.src/renamed.ts", "Renamed", 1, &renamed_desc, "Base", true),
+            (
+                "Renamed as Renamed",
+                "/.src/renamed.ts",
+                "Renamed",
+                1,
+                &renamed_desc,
+                "Renamed",
+                true,
+            ),
+            ("Renamed as Foo", "/.src/renamed.ts", "Renamed", 1, &renamed_desc, "Foo", false),
+            ("export= member", "/.src/cjs.ts", "run", 0, &cjs_desc, "run", true),
+            ("export= other member", "/.src/cjs.ts", "run", 0, &cjs_desc, "stop", false),
+        ] {
+            let node = find_identifier_by_text(t, source_files[file], identifier, occurrence);
+            let got = tp.is_node_reference_to_module_export(node, desc, member);
+            if got != want {
+                t.error(ets_go::sprintf!("%s: got %v, want %v", name, got, want));
+            }
+        }
         let root_foo = find_identifier_by_text(t, source_files["/.src/main.ts"], "RootFoo", 1);
         let nested_foo =
             find_identifier_by_text(t, source_files["/packages/consumer/main.ts"], "NestedFoo", 1);
-
-        if !tp.is_node_reference_to_module_export(root_foo, &desc, "Foo") {
-            t.fatal("expected Foo from the root package version to match");
-        }
-        if !tp.is_node_reference_to_module_export(nested_foo, &desc, "Foo") {
-            t.fatal("expected Foo from the nested package version to match independently");
-        }
         if tp.reference_symbol_at_node(root_foo) == tp.reference_symbol_at_node(nested_foo) {
             t.fatal("expected duplicate package versions to resolve to distinct symbols");
         }
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:151 TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember 57ce0d6b39f71f1f
+// go test: internal/typeparser/module_export_reference_test.go:135 TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember 57ce0d6b39f71f1f
 #[test]
 fn test_is_node_reference_to_module_export_caches_by_symbol_descriptor_and_member() {
     run(|t| {
@@ -272,69 +284,7 @@ fn test_is_node_reference_to_module_export_caches_by_symbol_descriptor_and_membe
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:183 TestIsNodeReferenceToModuleExport_SymbolExportedUnderTwoNames c5e01414885378f5
-#[test]
-fn test_is_node_reference_to_module_export_symbol_exported_under_two_names() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, source_files) = module_export_reference_fixture(t);
-        let mut tp = compiled.type_parser();
-
-        let desc = new_package_source_file_descriptor(
-            TEST_DESCRIPTOR_SOURCE_FILE,
-            "cache-fixture",
-            Some(source_file_name_matcher("/renamed.d.ts", None)),
-        );
-        let renamed = source_files["/.src/renamed.ts"];
-        for node in [
-            find_identifier_by_text(t, renamed, "Base", 1),
-            find_identifier_by_text(t, renamed, "Renamed", 1),
-        ] {
-            for member in ["Base", "Renamed"] {
-                if !tp.is_node_reference_to_module_export(node, &desc, member) {
-                    t.fatal(ets_go::sprintf!(
-                        "expected %s to match the %s export of the same declaration",
-                        node.text(),
-                        member
-                    ));
-                }
-            }
-            if tp.is_node_reference_to_module_export(node, &desc, "Foo") {
-                t.fatal(ets_go::sprintf!("expected %s not to match the Foo export", node.text()));
-            }
-        }
-    });
-}
-
-// go test: internal/typeparser/module_export_reference_test.go:203 TestIsNodeReferenceToModuleExport_ExportEqualsMembers 902cb0f85156f2d4
-#[test]
-fn test_is_node_reference_to_module_export_export_equals_members() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, source_files) = module_export_reference_fixture(t);
-        let mut tp = compiled.type_parser();
-
-        let desc =
-            new_package_source_file_descriptor(TEST_DESCRIPTOR_ANY_FILE, "cjs-fixture", None);
-        let run = find_identifier_by_text(t, source_files["/.src/cjs.ts"], "run", 0);
-
-        if !tp.is_node_reference_to_module_export(run, &desc, "run") {
-            t.fatal("expected a member of an export= value to match its name");
-        }
-        if tp.is_node_reference_to_module_export(run, &desc, "stop") {
-            t.fatal("expected run not to match the stop member");
-        }
-    });
-}
-
-// go test: internal/typeparser/module_export_reference_test.go:224 compileFixturesWithJS 4226795ad67cff8b
-// compileFixturesWithJS compiles every .ts, .tsx and .js source outside
-// node_modules as a root file, with JS checking and JSX enabled. When version
-// is not empty the bundled Effect package is mounted too. Source files are
-// returned sorted by name.
-//
+// go test: internal/typeparser/module_export_reference_test.go:167 compileFixturesWithJS 3dd5ae8355bd83d2
 // Rust: Go's empty version is `None`.
 #[expect(
     clippy::case_sensitive_file_extension_comparisons,
@@ -387,7 +337,7 @@ pub(crate) fn kind_string(kind: Kind) -> String {
     format!("Kind{kind:?}")
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:276 TestReferenceSymbolAtNode_MatchesUngatedComputation d5a1d2a0c705144d
+// go test: internal/typeparser/module_export_reference_test.go:219 TestReferenceSymbolAtNode_MatchesUngatedComputation d5a1d2a0c705144d
 #[test]
 fn test_reference_symbol_at_node_matches_ungated_computation() {
     run(|t| {
@@ -635,7 +585,7 @@ pub(crate) fn node_pos(node: P<Node>) -> i64 {
     node.pos().source_offset().map_or(-1, i64::from)
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:430 TestSymbolHasDeclarationInModuleCached_DeclarationCounts 5f0275243d57355e
+// go test: internal/typeparser/module_export_reference_test.go:373 TestSymbolHasDeclarationInModuleCached_DeclarationCounts 5f0275243d57355e
 #[test]
 fn test_symbol_has_declaration_in_module_cached_declaration_counts() {
     run(|t| {

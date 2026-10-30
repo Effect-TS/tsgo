@@ -16,10 +16,7 @@ use ets_shim::vfs::{FS, bundled, vfstest};
 use ets_typeparser::{ApiStabilityLevel, ApiStabilityUsed};
 use rustc_hash::FxHashMap;
 
-// go test: internal/rulerunner/api_stability_leak_test.go:30 apiStabilityLifecycleOptions c9d550e3d49c8743
-// apiStabilityLifecycleOptions builds the effect plugin options with only the
-// API stability leak rule enabled at warning severity (or disabled entirely
-// for the control run).
+// go test: internal/rulerunner/api_stability_leak_test.go:27 apiStabilityLifecycleOptions 28267f3a3e75b8ff
 pub(crate) fn api_stability_lifecycle_options(enabled: bool) -> EffectPluginOptions {
     let mut severity = FxHashMap::default();
     for r in ets_rules::ALL.iter() {
@@ -35,16 +32,7 @@ pub(crate) fn api_stability_lifecycle_options(enabled: bool) -> EffectPluginOpti
     }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:49 apiStabilityLifecycleDiagnostics e88e1aa2aabf71dd
-// apiStabilityLifecycleDiagnostics runs a virtual multi-file project through
-// the real after-check callback path (etscheckerhooks -> rulerunner) and returns
-// the diagnostics reported for the project, including global (file-less)
-// diagnostics such as TS2589. With wholeProgram set it asks the program for the
-// semantic diagnostics; otherwise it asks the checker for the file diagnostics,
-// which is the lifecycle the language service uses. Globals are collected on
-// both paths: a rule-triggered instantiation guard reports TS2589 as a global,
-// and omitting globals would hide it from the enabled/disabled comparison.
-//
+// go test: internal/rulerunner/api_stability_leak_test.go:38 apiStabilityLifecycleDiagnostics 6a723b2e84bc99e5
 // Rust: `files` is a slice of (name, source) pairs (Go ranges over a map, then sorts the names).
 pub(crate) fn api_stability_lifecycle_diagnostics(
     t: &T,
@@ -122,7 +110,7 @@ pub(crate) fn api_stability_lifecycle_diagnostics(
     messages
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:114 apiStabilityLifecycleContains edacfd637d66f4aa
+// go test: internal/rulerunner/api_stability_leak_test.go:103 apiStabilityLifecycleContains edacfd637d66f4aa
 pub(crate) fn api_stability_lifecycle_contains(messages: &[String], want: &str) -> bool {
     for message in messages {
         if message.contains(want) {
@@ -138,530 +126,39 @@ fn borrow_files<'a>(files: &'a [(&'a str, String)]) -> Vec<(&'a str, &'a str)> {
     files.iter().map(|(name, source)| (*name, source.as_str())).collect()
 }
 
-/// Rust-only: Go's `files[name]` on a test's file map (`""` when absent).
-fn file_source<'a>(files: &[(&str, &'a str)], name: &str) -> &'a str {
-    files.iter().find(|(n, _)| *n == name).map_or("", |(_, source)| *source)
-}
-
 /// Rust-only: Go's `strings.Contains(message, "effect(apiStabilityLeak)")`, repeated by every case.
 fn is_rule_message(message: &str) -> bool {
     message.contains("effect(apiStabilityLeak)")
 }
 
-/// Rust-only: a lifecycle table case (Go's anonymous `struct{name; files; want; notWant}`).
-struct LifecycleCase {
-    name: &'static str,
-    files: Vec<(&'static str, String)>,
-    want: Vec<&'static str>,
-    not_want: Vec<&'static str>,
-}
-
-/// Rust-only: builds a [`LifecycleCase`].
-fn lifecycle_case(
-    name: &'static str,
-    files: Vec<(&'static str, String)>,
-    want: &[&'static str],
-    not_want: &[&'static str],
-) -> LifecycleCase {
-    LifecycleCase { name, files, want: want.to_vec(), not_want: not_want.to_vec() }
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:128 TestApiStabilityLeakLifecycle afe486f13809036b
-// apiStabilityLifecycleCases covers the lazy-read lifecycle findings under the
-// corrected boundary. Each case runs through the production after-check
-// callback with normal diagnostics, in both the per-file and whole-program
-// lifecycles, and compares against a control run with the rule disabled so a
-// compiler diagnostic introduced by the rule cannot hide.
-#[test]
-#[expect(clippy::literal_string_with_formatting_args, reason = "TypeScript fixtures with braces")]
-fn test_api_stability_leak_lifecycle() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let prefix =
-            "/** @stability experimental */\ninterface E {value:string}\ndeclare const e:E\n";
-        let p = |s: &str| format!("{prefix}{s}");
-
-        let cases = vec![
-            lifecycle_case(
-                "anonymous inferred conditional return",
-                vec![("test.ts", p("declare function make<T>():{value:T extends string ? number:E}; export const x=make<number>()"))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "inferred callable conditional return",
-                vec![("test.ts", p("declare function make<T>():()=>T extends string ? number:E; export const x=make<number>()"))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "nested anonymous conditional return",
-                vec![("test.ts", p("declare function make<T>():{f:()=>{value:T extends string?number:E}}; export const x=make<number>()"))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "contravariant conditional member",
-                vec![("test.ts", p(r#"interface C<in T>{f:(x:T)=>void}; interface Holder<T>{value:T extends C<string> ? number:E}; export declare const x:Holder<C<"x">>"#))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "invariant conditional member",
-                vec![("test.ts", p(r#"interface C<in out T>{f:(x:T)=>T}; interface Holder<T>{value:T extends C<string> ? number:E}; export declare const x:Holder<C<"x">>"#))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "array wrapped conditional member",
-                vec![("test.ts", p(r#"interface C<in T>{f:(x:T)=>void}; interface Holder<T>{value:T extends C<string>[] ? number:E}; export declare const x:Holder<C<"x">[]>"#))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "structural conditional member stays clean",
-                vec![("test.ts", p("interface Holder<T>{value:T extends {value:string} ? number:E}; export declare const x:Holder<{value:string}>"))],
-                &[],
-                &["`x` exposes `E`"],
-            ),
-            lifecycle_case(
-                "represented indexed callable return",
-                vec![("test.ts", p(r#"interface I{value:E}; type Read<T>=T["value" & keyof T]; declare function make<T>():()=>Read<T>; export const x=make<I>(); x()"#))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "lazily materialized indexed callable return",
-                vec![("test.ts", p(r#"interface I{value:E}; type Read<T>=T["value" & keyof T]; declare function make<T>():()=>Read<T>; export const x=make<I>()"#))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "single-file barrel ts dependency",
-                vec![
-                    ("test.ts", r#"export {f} from "./dep.js""#.to_string()),
-                    ("dep.ts", p("export declare function f(x:E):void")),
-                ],
-                &["`f` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "single-file barrel dts dependency",
-                vec![
-                    ("test.ts", r#"export {f} from "./dep.js""#.to_string()),
-                    ("dep.d.ts", p("export declare function f(x:E):void")),
-                ],
-                &["`f` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "single-file star barrel dts dependency",
-                vec![
-                    ("test.ts", r#"export * from "./dep.js""#.to_string()),
-                    ("dep.d.ts", p("export interface X {value:E}")),
-                ],
-                &["`X` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "shallow nested named reference stays quiet",
-                vec![("test.ts", p("interface Hidden<T>{value:E}; declare const h:Hidden<string>; h.value; export interface X{hidden:Hidden<string>}"))],
-                &[],
-                &["`X` exposes `E`"],
-            ),
-            lifecycle_case(
-                "shallow nested tagged reference stays quiet",
-                vec![("test.ts", p("interface Hidden<T>{/** @stability experimental */ value:string}; declare const h:Hidden<string>; h.value; export interface X{hidden:Hidden<string>}"))],
-                &[],
-                &["`X` exposes `E`"],
-            ),
-            lifecycle_case(
-                "erased alias in collapsed union",
-                vec![("test.ts", "/** @stability experimental */\ntype A=string\nexport declare const x: never|number|A".to_string())],
-                &["`x` exposes `A`"],
-                &[],
-            ),
-            lifecycle_case(
-                "erased alias in reordered union",
-                vec![("test.ts", "/** @stability experimental */\ntype A=string\nexport declare const x: number|A|never".to_string())],
-                &["`x` exposes `A`"],
-                &[],
-            ),
-            lifecycle_case(
-                "erased alias in collapsed intersection",
-                vec![("test.ts", "/** @stability experimental */\ntype A=string\nexport declare const x: A&string".to_string())],
-                &["`x` exposes `A`"],
-                &[],
-            ),
-            lifecycle_case(
-                "declared conditional alias branch",
-                vec![("test.ts", p("export type X<T> = T extends string ? number : E"))],
-                &["`X` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "finite recursive alias application",
-                vec![("test.ts", p("type A<T> = T extends string ? A<number> : E\nexport declare const x: A<string>"))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "finite recursive tuple alias application",
-                vec![("test.ts", p("type Step<T extends unknown[]> = T extends [unknown, ...infer Tail] ? Step<Tail> : E\nexport declare const x: Step<[0, 0]>"))],
-                &["`x` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "declared index signature tag",
-                vec![("test.ts", "export interface I {\n/** @stability experimental */\n[key:string]:number\n}".to_string())],
-                &["`I` exposes `index signature`"],
-                &[],
-            ),
-        ];
-
-        for test in &cases {
-            for whole_program in [false, true] {
-                let mode = if whole_program { "program" } else { "file" };
-                t.run(&format!("{}/{mode}", test.name), |t| {
-                    t.parallel();
-                    let files = borrow_files(&test.files);
-                    let messages =
-                        api_stability_lifecycle_diagnostics(t, &files, true, whole_program);
-                    let control =
-                        api_stability_lifecycle_diagnostics(t, &files, false, whole_program);
-                    for want in &test.want {
-                        if !api_stability_lifecycle_contains(&messages, want) {
-                            t.error(sprintf!("missing %q in %v", want, messages));
-                        }
-                    }
-                    for not_want in &test.not_want {
-                        if api_stability_lifecycle_contains(&messages, not_want) {
-                            t.error(sprintf!("unexpected %q in %v", not_want, messages));
-                        }
-                    }
-                    // The rule must not introduce compiler diagnostics on
-                    // semantically valid code: every non-rule message must also be
-                    // present in the control. Rule messages carry the effect code.
-                    for message in &messages {
-                        if is_rule_message(message) {
-                            continue;
-                        }
-                        if !api_stability_lifecycle_contains(&control, message) {
-                            t.error(sprintf!(
-                                "rule introduced compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                                message,
-                                messages,
-                                control
-                            ));
-                        }
-                    }
-                });
-            }
-        }
-    });
-}
-
-/// Rust-only: the case loop shared by the export-visibility and import-equals lifecycle tests (Go repeats it in
-/// both).
-fn run_strict_lifecycle_cases(t: &T, cases: &[LifecycleCase]) {
-    for test in cases {
-        for whole_program in [false, true] {
-            let mode = if whole_program { "program" } else { "file" };
-            t.run(&format!("{}/{mode}", test.name), |t| {
-                t.parallel();
-                let files = borrow_files(&test.files);
-                let control = api_stability_lifecycle_diagnostics(t, &files, false, whole_program);
-                if !control.is_empty() {
-                    t.fatal(sprintf!("invalid control: %v", control));
-                }
-                let messages = api_stability_lifecycle_diagnostics(t, &files, true, whole_program);
-                for want in &test.want {
-                    if !api_stability_lifecycle_contains(&messages, want) {
-                        t.error(sprintf!("missing %q in %v", want, messages));
-                    }
-                }
-                for not_want in &test.not_want {
-                    if api_stability_lifecycle_contains(&messages, not_want) {
-                        t.error(sprintf!("unexpected %q in %v", not_want, messages));
-                    }
-                }
-                for message in &messages {
-                    if is_rule_message(message) {
-                        continue;
-                    }
-                    t.error(sprintf!(
-                        "rule introduced compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                        message,
-                        messages,
-                        control
-                    ));
-                }
-                if messages.join("\n").contains("TS2589") {
-                    t.error(sprintf!("rule introduced TS2589: %v", messages));
-                }
-            });
-        }
-    }
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:299 TestApiStabilityLeakExportVisibilityLifecycle 1e6fe2351caa6738
-// TestApiStabilityLeakExportVisibilityLifecycle runs the corrected
-// export-level visibility policy through the production after-check callback in
-// both lifecycles: the explicit export winner beats a redundant star forward,
-// declared namespaces filter tagged members, and import-then-export aliases
-// follow their import target. Public peers and public targets still warn, and
-// the disabled-rule control stays diagnostic-free, so no compiler diagnostic is
-// introduced by the metadata decisions.
-#[test]
-fn test_api_stability_leak_export_visibility_lifecycle() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let prefix = "/** @stability experimental */\ninterface E { value: string }\n/** @stability experimental */\ninterface F { value: string }\n";
-        let p = |s: &str| format!("{prefix}{s}");
-
-        let cases = vec![
-            lifecycle_case(
-                "tagged named export plus redundant star",
-                vec![
-                    ("test.ts", "/** @internal */\nexport { Leaky } from \"./dep\"\nexport * from \"./dep\"\n".to_string()),
-                    ("dep.ts", p("export interface Leaky { value: E }\n")),
-                ],
-                &[],
-                // dep.ts's own direct export of Leaky is public there and is
-                // legitimately checked; only the tagged test.ts re-export is
-                // expected to stay quiet.
-                &["/.src/test.ts:`Leaky` exposes"],
-            ),
-            lifecycle_case(
-                "tagged local export plus redundant cyclic star",
-                vec![
-                    ("test.ts", p("/** @internal */\nexport interface Leaky { value: E }\nexport * from \"./dep\"\n")),
-                    ("dep.ts", "export { Leaky } from \"./test\"\n".to_string()),
-                ],
-                &[],
-                &["`Leaky` exposes"],
-            ),
-            lifecycle_case(
-                "public local export plus tagged redundant star stays checked",
-                vec![
-                    ("test.ts", p("export interface Leaky { value: E }\n/** @internal */\nexport * from \"./dep\"\n")),
-                    ("dep.ts", "export * from \"./test\"\n".to_string()),
-                ],
-                &["`Leaky` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "declared namespace filters tagged member",
-                vec![("test.ts", p("export namespace Api {\n  /** @internal */\n  export interface Hidden { value: E }\n  export interface Shown { value: string }\n}\n"))],
-                &[],
-                &["`Api` exposes `E`"],
-            ),
-            lifecycle_case(
-                "declared namespace public peer still checked",
-                vec![("test.ts", p("export namespace Api {\n  /** @internal */\n  export interface Hidden { value: E }\n  export interface Shown { value: F }\n}\n"))],
-                &["`Api` exposes `F`"],
-                &["`Api` exposes `E`"],
-            ),
-            lifecycle_case(
-                "import then export follows internal named target",
-                vec![
-                    ("test.ts", "import { Hidden } from \"./dep\"\nexport { Hidden }\n".to_string()),
-                    ("dep.ts", p("/** @internal */\nexport interface Hidden { value: E }\n")),
-                ],
-                &[],
-                &["`Hidden` exposes"],
-            ),
-            lifecycle_case(
-                "default import then export default follows internal target",
-                vec![
-                    ("test.ts", "import Hidden from \"./dep\"\nexport default Hidden\n".to_string()),
-                    ("dep.ts", p("/** @internal */\nexport default function hidden(): E { return null as unknown as E }\n")),
-                ],
-                &[],
-                &["`default` exposes"],
-            ),
-            lifecycle_case(
-                "public import then export still warns",
-                vec![
-                    ("test.ts", "import { Shown } from \"./dep\"\nexport { Shown }\n".to_string()),
-                    ("dep.ts", p("export interface Shown { value: E }\n")),
-                ],
-                &["`Shown` exposes `E`"],
-                &[],
-            ),
-            lifecycle_case(
-                "internal and public peers keep independent verdicts",
-                vec![("test.ts", p("/** @internal */\nexport declare const aHidden: E\nexport declare const zShown: E\n"))],
-                &["`zShown` exposes `E`"],
-                &["`aHidden` exposes"],
-            ),
-        ];
-
-        run_strict_lifecycle_cases(t, &cases);
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:429 TestApiStabilityLeakImportEqualsLifecycle 5d26fd931066a58a
-// TestApiStabilityLeakImportEqualsLifecycle pins the import-equals metadata
-// decision in the production after-check lifecycle: an `export import X = ...` alias follows
-// the target named by its module reference, so the tagged target stays quiet in
-// both the file and whole-program hook paths while its untagged peer is checked,
-// and the disabled-rule control stays diagnostic-free. The same decision is
-// exercised for a namespace qualifier, a named import of that namespace and an
-// external `require`.
-#[test]
-fn test_api_stability_leak_import_equals_lifecycle() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let prefix = "/** @stability experimental */\ninterface E { value: string }\n";
-        let p = |s: &str| format!("{prefix}{s}");
-
-        let cases = vec![
-            lifecycle_case(
-                "local namespace import equals follows internal target",
-                vec![("test.ts", p("namespace Impl {\n  /** @internal */\n  export interface Hidden { value: E }\n  export interface Shown { value: E }\n}\nexport import Hidden = Impl.Hidden\nexport import Shown = Impl.Shown\n"))],
-                &["`Shown` exposes `E`"],
-                &["`Hidden` exposes"],
-            ),
-            lifecycle_case(
-                "cross file namespace import equals follows internal target",
-                vec![
-                    ("test.ts", "import { Impl } from \"./dep\"\nexport import Hidden = Impl.Hidden\nexport import Shown = Impl.Shown\n".to_string()),
-                    ("dep.ts", p("export namespace Impl {\n  /** @internal */\n  export interface Hidden { value: E }\n  export interface Shown { value: E }\n}\n")),
-                ],
-                &["`Shown` exposes `E`"],
-                &["`Hidden` exposes"],
-            ),
-            lifecycle_case(
-                "external require import equals follows internal member",
-                vec![
-                    ("test.ts", "import Dep = require(\"./dep\")\nexport import Hidden = Dep.Hidden\nexport import Shown = Dep.Shown\n".to_string()),
-                    ("dep.ts", p("/** @internal */\nexport interface Hidden { value: E }\nexport interface Shown { value: E }\n")),
-                ],
-                &["`Shown` exposes `E`"],
-                &["`Hidden` exposes"],
-            ),
-        ];
-
-        run_strict_lifecycle_cases(t, &cases);
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:509 TestApiStabilityLeakVisibilityLifecycleRecursiveSafety a0e9ca83539de92b
-// TestApiStabilityLeakVisibilityLifecycleRecursiveSafety keeps the
-// recursive-alias budget of the visibility fixtures: the star/cycle and
-// namespace shapes used by the regressions must add no compiler
-// diagnostics to a program whose checking is unaffected, including the repeated
-// star cycle.
-#[test]
-fn test_api_stability_leak_visibility_lifecycle_recursive_safety() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let deep_alias = "type Deep<T> = T extends string ? Deep<T> : T\n";
-
-        let test_ts = format!(
-            "{deep_alias}/** @internal */\nexport interface Cyclic {{ value: Deep<string> }}\nexport * from \"./dep\"\n"
-        );
-        let files = [("test.ts", test_ts.as_str()), ("dep.ts", "export * from \"./test\"\n")];
-        for whole_program in [false, true] {
-            let mode = if whole_program { "program" } else { "file" };
-            t.run(mode, |t| {
-                t.parallel();
-                let messages = api_stability_lifecycle_diagnostics(t, &files, true, whole_program);
-                let control = api_stability_lifecycle_diagnostics(t, &files, false, whole_program);
-                for message in &messages {
-                    if is_rule_message(message) {
-                        continue;
-                    }
-                    if !api_stability_lifecycle_contains(&control, message) {
-                        t.error(sprintf!(
-                            "rule introduced compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                            message,
-                            messages,
-                            control
-                        ));
-                    }
-                }
-                if api_stability_lifecycle_contains(&messages, "`Cyclic` exposes") {
-                    t.error(sprintf!("tagged cyclic export was checked: %v", messages));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:546 TestApiStabilityLeakLifecycleRecursiveSafety 9a5683459a8d3ab2
-// TestApiStabilityLeakLifecycleRecursiveSafety keeps the recursive-alias safety
-// property in the production lifecycle: a recursive generic alias is never
-// expanded by the rule, so the rule adds no TS2589 to a program whose own
-// checking does not produce one, and a program that already produces one keeps
-// exactly its baseline diagnostics.
+// go test: internal/rulerunner/api_stability_leak_test.go:112 TestApiStabilityLeakLifecycleRecursiveSafety 7d2f8ba03c0b0d72
 #[test]
 fn test_api_stability_leak_lifecycle_recursive_safety() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let deep_alias = "type Deep<T> = T extends string ? Deep<T> : T\n";
-
-        t.run("member budget adds no diagnostic", |t| {
-            t.parallel();
-            let source = format!(
-                "{deep_alias}interface Wrapper<T> {{ value: Deep<T> }}\nexport declare const exposed: Wrapper<string>\n"
-            );
-            let files = [("test.ts", source.as_str())];
-            let messages = api_stability_lifecycle_diagnostics(t, &files, true, true);
-            let control = api_stability_lifecycle_diagnostics(t, &files, false, true);
-            for message in &messages {
-                if is_rule_message(message) {
-                    continue;
-                }
-                if !api_stability_lifecycle_contains(&control, message) {
-                    t.error(sprintf!(
-                        "rule introduced compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                        message,
-                        messages,
-                        control
-                    ));
-                }
-            }
-        });
-
-        t.run("computed name baseline preserved", |t| {
-            t.parallel();
-            let source = format!(
-                "{deep_alias}declare const key: Deep<string>\nexport interface X {{ [key]: number }}\n"
-            );
-            let files = [("test.ts", source.as_str())];
-            let messages = api_stability_lifecycle_diagnostics(t, &files, true, true);
-            let control = api_stability_lifecycle_diagnostics(t, &files, false, true);
-            // The baseline already reports TS2589 for this intentionally invalid
-            // input; the rule must not change that diagnostic set.
-            if messages.len() != control.len() {
-                t.error(sprintf!(
-                    "rule changed diagnostics for an already-erroring Deep input:\nrule=%v\ncontrol=%v",
-                    messages,
-                    control
-                ));
-            }
-            if control.is_empty() {
-                t.fatal(sprintln!("expected the control to report the baseline TS2589"));
-            }
-        });
+        let source = format!(
+            "{API_STABILITY_RECURSIVE_PREFIX}declare const key: Deep<string>\nexport interface X {{ [key]: number }}\n"
+        );
+        let files = [("test.ts", source.as_str())];
+        let messages = api_stability_lifecycle_diagnostics(t, &files, true, true);
+        let control = api_stability_lifecycle_diagnostics(t, &files, false, true);
+        if messages.len() != control.len() {
+            t.error(sprintf!(
+                "rule changed diagnostics for an already-erroring Deep input:\nrule=%v\ncontrol=%v",
+                messages,
+                control
+            ));
+        }
+        if control.is_empty() {
+            t.fatal(sprintln!("expected the control to report the baseline TS2589"));
+        }
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:588 apiStabilityRecursivePrefix 308a98c787b5d7c4
-// apiStabilityRecursivePrefix declares the recursive alias used by the recursive-alias
-// safety regressions. `Deep<T>` keeps expanding itself so any speculative
-// resolution of an application of it would trip the checker's depth guard.
+// go test: internal/rulerunner/api_stability_leak_test.go:127 apiStabilityRecursivePrefix 165c09ee2c2db74b
 const API_STABILITY_RECURSIVE_PREFIX: &str = "type Deep<T> = T extends string ? Deep<T> : T\n";
 
-// go test: internal/rulerunner/api_stability_leak_test.go:596 runApiStabilitySafetyCase bccee7d2d8a89589
-// runApiStabilitySafetyCase runs one project through the production after-check
-// callback in the per-file and whole-program lifecycles, with the rule enabled
-// and disabled. It asserts that the rule changes no compiler diagnostic on
-// either lifecycle in either direction (added or lost, globals included, so a
-// rule-provoked TS2589 cannot hide and a suppressed ordinary diagnostic cannot
-// disappear) and checks the expected and forbidden rule diagnostics.
+// go test: internal/rulerunner/api_stability_leak_test.go:129 runApiStabilitySafetyCase 6cb2ca3c8beb9b3a
 fn run_api_stability_safety_case(
     t: &T,
     name: &str,
@@ -713,12 +210,7 @@ fn run_api_stability_safety_case(
     }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:638 apiStabilityProgram 6b86b2b21aab796c
-// apiStabilityProgram builds one virtual project and returns its program
-// and checker without running any rule. The caller owns the returned cleanup,
-// which releases the checker; sharing one checker across a sequence of queries
-// is what the later-read regressions need.
-//
+// go test: internal/rulerunner/api_stability_leak_test.go:167 apiStabilityProgram 4188662c9b57bd65
 // Rust: the checker handle is the cleanup (dropping it is Go's `done()`).
 fn api_stability_program(
     t: &T,
@@ -765,8 +257,7 @@ fn api_stability_program(
     (program, c)
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:670 apiStabilityExport 2349d26885120317
-// apiStabilityExport returns the named export of a source file.
+// go test: internal/rulerunner/api_stability_leak_test.go:198 apiStabilityExport fc5354e37580c2b3
 fn api_stability_export(t: &T, c: &mut Checker, sf: P<SourceFile>, name: &str) -> P<Symbol> {
     t.helper();
     let module_symbol = ets_typeparser::get_symbol_of_declaration(c, sf.as_node());
@@ -785,112 +276,7 @@ fn source_file(program: &'static Program, name: &str) -> P<SourceFile> {
     program.get_source_file(name).unwrap_or_else(|| panic!("missing source file {name}"))
 }
 
-/// Rust-only: Go's `text[d.Pos():d.End()]`.
-fn diagnostic_text(d: P<Diagnostic>, text: &str) -> &str {
-    &text[d.pos().unwrap_or_default() as usize..d.end().unwrap_or_default() as usize]
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:682 TestApiStabilityLeakRelatedDeclaration b5f856db8730d8f3
-#[test]
-fn test_api_stability_leak_related_declaration() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        struct Case {
-            name: &'static str,
-            files: Vec<(&'static str, &'static str)>,
-            file: &'static str,
-            identifier: &'static str,
-        }
-        let cases = [
-            Case {
-                name: "local type",
-                files: vec![(
-                    "test.ts",
-                    "
-/** @stability experimental */
-interface Experimental { value: string }
-export interface Public { value: Experimental }
-",
-                )],
-                file: "test.ts",
-                identifier: "Experimental",
-            },
-            Case {
-                name: "cross-file re-export",
-                files: vec![
-                    (
-                        "dep.ts",
-                        "
-/** @stability unstable */
-export interface Unstable { value: string }
-export interface Public { value: Unstable }
-",
-                    ),
-                    ("test.ts", r#"export { Public } from "./dep.js""#),
-                ],
-                file: "dep.ts",
-                identifier: "Unstable",
-            },
-            Case {
-                name: "tagged overload",
-                files: vec![(
-                    "test.ts",
-                    "
-interface Callable {
-  /** @stability experimental */
-  (value: string): string;
-  (value: number): number;
-}
-export interface Public { call: Callable }
-",
-                )],
-                file: "test.ts",
-                identifier: "(value: string): string;",
-            },
-        ];
-        for tc in &cases {
-            t.run(tc.name, |t| {
-                t.parallel();
-                let (program, mut c) = api_stability_program(t, &tc.files, true);
-                let sf = source_file(program, "/.src/test.ts");
-                let mut leaks = Vec::new();
-                for diagnostic in c.get_diagnostics_exported(&Context::background(), sf) {
-                    if diagnostic.code() == 377_137 {
-                        leaks.push(diagnostic);
-                    }
-                }
-                if leaks.len() != 1 {
-                    t.fatal(sprintf!("expected one leak, got %d", leaks.len()));
-                }
-                if leaks[0].file() != Some(sf)
-                    || diagnostic_text(leaks[0], file_source(&tc.files, "test.ts")) != "Public"
-                {
-                    t.fatal(sprintln!("primary diagnostic must point to the Public export"));
-                }
-                let related = leaks[0].related_information();
-                if related.len() != 1 {
-                    t.fatal(sprintf!("expected one related declaration, got %d", related.len()));
-                }
-                if related[0].file() != program.get_source_file(&format!("/.src/{}", tc.file)) {
-                    t.fatal(sprintln!("related diagnostic points to the wrong source file"));
-                }
-                let got = diagnostic_text(related[0], file_source(&tc.files, tc.file));
-                if got != tc.identifier {
-                    t.fatal(sprintf!("related location = %q, want %q", got, tc.identifier));
-                }
-                if !related[0].localize().contains("is declared") {
-                    t.fatal(sprintf!("unexpected related message: %s", related[0].localize()));
-                }
-                drop(c);
-            });
-        }
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:761 apiStabilityDiagnostics 0597570547d1c563
-// apiStabilityDiagnostics collects the checker diagnostics for one file
-// plus the global diagnostics, excluding the rule's own reports so a control
-// run can be compared exactly with an enabled run.
+// go test: internal/rulerunner/api_stability_leak_test.go:210 apiStabilityDiagnostics 9bee25eb6adb5ffb
 fn api_stability_diagnostics(t: &T, c: &mut Checker, sf: P<SourceFile>) -> Vec<String> {
     t.helper();
     let mut out = Vec::new();
@@ -911,9 +297,7 @@ fn api_stability_diagnostics(t: &T, c: &mut Checker, sf: P<SourceFile>) -> Vec<S
     out
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:785 apiStabilityProgramDiagnostics 34d59c38e411e43c
-// apiStabilityProgramDiagnostics collects the whole-program semantic and
-// global diagnostics, excluding the rule's own reports.
+// go test: internal/rulerunner/api_stability_leak_test.go:232 apiStabilityProgramDiagnostics 080b308b15cc6703
 fn api_stability_program_diagnostics(t: &T, program: &'static Program) -> Vec<String> {
     t.helper();
     let mut out = Vec::new();
@@ -951,246 +335,179 @@ fn api_stability_whole_program_diagnostics(
     api_stability_program_diagnostics(t, program)
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:813 TestApiStabilityLeakWholeSurfaceSafety f23069223aa90bcd
-// TestApiStabilityLeakWholeSurfaceSafety pins findings 1-4: a complete
-// structured surface is never materialized when any declaration it would
-// resolve (own members, inherited members, index values, alias defaults, wide
-// tuples) can expand a recursive alias. The comparison against a disabled
-// control includes global diagnostics, so the rule cannot add TS2589, and the
-// reverse comparison ensures it cannot lose an ordinary diagnostic either.
+// go test: internal/rulerunner/api_stability_leak_test.go:254 TestApiStabilityLeakWholeSurfaceSafety 9dae35346859ba32
 #[test]
 fn test_api_stability_leak_whole_surface_safety() {
     ets_go::testing::run(|t| {
         t.parallel();
         let p = |s: &str| format!("{API_STABILITY_RECURSIVE_PREFIX}{s}");
 
-        t.run("recursive index value", |t| {
-            t.parallel();
-            let source =
-                p("interface I<T> { [s: string]: Deep<T> }\nexport declare const x: I<string>\n");
-            run_api_stability_safety_case(
-                t,
-                "recursive index value",
-                &[("test.ts", &source)],
-                &[],
-                &[],
-            );
-        });
-
-        t.run("inherited recursive index value", |t| {
-            t.parallel();
-            let source = p("interface Base<T> { [s: string]: Deep<T> }\ninterface I<T> extends Base<T> {}\nexport declare const x: I<string>\n");
-            run_api_stability_safety_case(t, "inherited recursive index value", &[("test.ts", &source)], &[], &[]);
-        });
-
-        t.run("anonymous recursive index return", |t| {
-            t.parallel();
-            let source = p("declare function make<T>(): { [s: string]: Deep<T> }\nexport const x = make<string>()\n");
-            run_api_stability_safety_case(t, "anonymous recursive index return", &[("test.ts", &source)], &[], &[]);
-        });
-
-        t.run("compound indexed callable return", |t| {
-            t.parallel();
-            let source = p("interface I<T> { v: Deep<T> }\ndeclare function make<T>(): () => T[\"v\" & keyof T]\nexport const x = make<I<string>>()\n");
-            run_api_stability_safety_case(t, "compound indexed callable return", &[("test.ts", &source)], &[], &[]);
-        });
-
-        t.run("compound indexed parameter", |t| {
-            t.parallel();
-            let source = p("interface I<T> { v: Deep<T> }\ndeclare function make<T>(): (x: T[\"v\" & keyof T]) => void\nexport const x = make<I<string>>()\n");
-            run_api_stability_safety_case(t, "compound indexed parameter", &[("test.ts", &source)], &[], &[]);
-        });
-
-        t.run("compound indexed nested return", |t| {
-            t.parallel();
-            let source = p("interface I<T> { v: Deep<T> }\ndeclare function make<T>(): () => { value: T[\"v\" & keyof T] }\nexport const x = make<I<string>>()\n");
-            run_api_stability_safety_case(t, "compound indexed nested return", &[("test.ts", &source)], &[], &[]);
-        });
-
-        t.run("compound indexed alias return", |t| {
-            t.parallel();
-            let source = p("interface I<T> { v: Deep<T> }\ntype Read<T> = T[\"v\" & keyof T]\ndeclare function make<T>(): () => Read<T>\nexport const x = make<I<string>>()\n");
-            run_api_stability_safety_case(t, "compound indexed alias return", &[("test.ts", &source)], &[], &[]);
-        });
-
-        t.run("wide tuple recursive member", |t| {
-            t.parallel();
-            let elements = "number,".repeat(4100);
-            let source = p(&format!(
-                "interface I<T> {{\n  v: [{elements}Deep<T>]\n}}\nexport declare const x: I<string>\n"
-            ));
-            run_api_stability_safety_case(t, "wide tuple recursive member", &[("test.ts", &source)], &[], &[]);
-        });
-
-        t.run("skipped declaration alias default", |t| {
-            t.parallel();
-            let dep = p("type D<T = Deep<string>> = T\nexport interface X { v: D }\n");
-            run_api_stability_safety_case(
-                t,
-                "skipped declaration alias default",
-                &[("test.ts", "export * as ns from \"./dep.js\"\n"), ("dep.d.ts", &dep)],
-                &[],
-                &[],
-            );
-        });
-
-        t.run("generic default references earlier parameter", |t| {
-            t.parallel();
-            let source =
-                p("interface I<A, B = Deep<A>> { v: B }\nexport declare const x: I<string>\n");
-            run_api_stability_safety_case(
-                t,
-                "generic default references earlier parameter",
-                &[("test.ts", &source)],
-                &[],
-                &[],
-            );
-        });
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:910 TestApiStabilityLeakCoverage 2924b17ae407c603
-// TestApiStabilityLeakCoverage pins findings 5-8: bare generic binders
-// and safe inferred closures expose their concrete dependency; flattened
-// compound aliases keep their declared provenance; nested class statics stay
-// shallow.
-#[test]
-fn test_api_stability_leak_coverage() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-
-        let prefix = "/** @stability experimental */\ninterface E { v: string }\n";
-        let p = |s: &str| format!("{prefix}{s}");
-
-        t.run("bare generic callable return leaky first", |t| {
-            t.parallel();
-            let source = p("declare function make<T>(): () => T\nexport const x = make<E>()\n");
-            run_api_stability_safety_case(
-                t,
-                "bare generic callable return leaky first",
-                &[("test.ts", &source)],
-                &["`x` exposes `E`"],
-                &[],
-            );
-        });
-
-        t.run("bare generic callable return clean first", |t| {
-            t.parallel();
-            run_api_stability_safety_case(
-                t,
-                "bare generic callable return clean first",
-                &[(
+        struct Case {
+            name: &'static str,
+            files: Vec<(&'static str, String)>,
+            not_want: Vec<&'static str>,
+        }
+        let cases = [
+            Case {
+                name: "recursive member",
+                files: vec![(
                     "test.ts",
-                    "declare function make<T>(): () => T\nexport const x = make<E>()\n/** @stability experimental */\ninterface E { v: string }\n",
+                    p(
+                        "interface Wrapper<T> { value: Deep<T> }\nexport declare const exposed: Wrapper<string>\n",
+                    ),
                 )],
-                &["`x` exposes `E`"],
-                &[],
-            );
-        });
-
-        t.run("inferred closure", |t| {
-            t.parallel();
-            let source = p("declare const e: E\nfunction make<T>(t: T) { return () => ({ v: t }) }\nexport const x = make(e)\n");
-            run_api_stability_safety_case(t, "inferred closure", &[("test.ts", &source)], &["`x` exposes `E`"], &[]);
-        });
-
-        t.run("inferred direct closure", |t| {
-            t.parallel();
-            let source = p("declare const e: E\nfunction make<T>(t: T) { return () => t }\nexport const x = make(e)\n");
-            run_api_stability_safety_case(t, "inferred direct closure", &[("test.ts", &source)], &["`x` exposes `E`"], &[]);
-        });
-
-        t.run("inferred nested closure", |t| {
-            t.parallel();
-            let source = p("declare const e: E\nfunction make<T>(t: T) { return () => () => t }\nexport const x = make(e)\n");
-            run_api_stability_safety_case(t, "inferred nested closure", &[("test.ts", &source)], &["`x` exposes `E`"], &[]);
-        });
-
-        t.run("inferred property closure", |t| {
-            t.parallel();
-            let source = p("declare const e: E\nfunction make<T>(t: T) { return { f: () => t } }\nexport const x = make(e)\n");
-            run_api_stability_safety_case(t, "inferred property closure", &[("test.ts", &source)], &["`x` exposes `E`"], &[]);
-        });
-
-        t.run("flattened union alias", |t| {
-            t.parallel();
+                not_want: vec![],
+            },
+            Case {
+                name: "recursive index value",
+                files: vec![(
+                    "test.ts",
+                    p(
+                        "interface I<T> { [s: string]: Deep<T> }\nexport declare const x: I<string>\n",
+                    ),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "inherited recursive index value",
+                files: vec![(
+                    "test.ts",
+                    p(
+                        "interface Base<T> { [s: string]: Deep<T> }\ninterface I<T> extends Base<T> {}\nexport declare const x: I<string>\n",
+                    ),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "anonymous recursive index return",
+                files: vec![(
+                    "test.ts",
+                    p(
+                        "declare function make<T>(): { [s: string]: Deep<T> }\nexport const x = make<string>()\n",
+                    ),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "compound indexed callable return",
+                files: vec![(
+                    "test.ts",
+                    p(
+                        "interface I<T> { v: Deep<T> }\ndeclare function make<T>(): () => T[\"v\" & keyof T]\nexport const x = make<I<string>>()\n",
+                    ),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "compound indexed parameter",
+                files: vec![(
+                    "test.ts",
+                    p(
+                        "interface I<T> { v: Deep<T> }\ndeclare function make<T>(): (x: T[\"v\" & keyof T]) => void\nexport const x = make<I<string>>()\n",
+                    ),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "compound indexed nested return",
+                files: vec![(
+                    "test.ts",
+                    p(
+                        "interface I<T> { v: Deep<T> }\ndeclare function make<T>(): () => { value: T[\"v\" & keyof T] }\nexport const x = make<I<string>>()\n",
+                    ),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "compound indexed alias return",
+                files: vec![(
+                    "test.ts",
+                    p(
+                        "interface I<T> { v: Deep<T> }\ntype Read<T> = T[\"v\" & keyof T]\ndeclare function make<T>(): () => Read<T>\nexport const x = make<I<string>>()\n",
+                    ),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "wide tuple recursive member",
+                files: vec![(
+                    "test.ts",
+                    p(&format!(
+                        "interface I<T> {{\n  v: [{}Deep<T>]\n}}\nexport declare const x: I<string>\n",
+                        "number,".repeat(4100)
+                    )),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "skipped declaration alias default",
+                files: vec![
+                    ("test.ts", "export * as ns from \"./dep.js\"\n".to_string()),
+                    ("dep.d.ts", p("type D<T = Deep<string>> = T\nexport interface X { v: D }\n")),
+                ],
+                not_want: vec![],
+            },
+            Case {
+                name: "generic default references earlier parameter",
+                files: vec![(
+                    "test.ts",
+                    p("interface I<A, B = Deep<A>> { v: B }\nexport declare const x: I<string>\n"),
+                )],
+                not_want: vec![],
+            },
+            Case {
+                name: "internal export behind a star cycle",
+                files: vec![
+                    (
+                        "test.ts",
+                        p(
+                            "/** @internal */\nexport interface Cyclic { value: Deep<string> }\nexport * from \"./dep\"\n",
+                        ),
+                    ),
+                    ("dep.ts", "export * from \"./test\"\n".to_string()),
+                ],
+                not_want: vec!["`Cyclic` exposes"],
+            },
+            Case {
+                name: "recursive inferred accessor",
+                files: vec![
+                    ("test.ts", "export { f } from \"./dep.js\"".to_string()),
+                    (
+                        "dep.ts",
+                        p(
+                            "declare function make<T>(): Deep<T>\nexport const f = { get v() { return make<string>() } }",
+                        ),
+                    ),
+                ],
+                not_want: vec!["exposes"],
+            },
+            Case {
+                name: "recursive class accessor",
+                files: vec![
+                    ("test.ts", "export { C } from \"./dep.js\"".to_string()),
+                    (
+                        "dep.ts",
+                        p(
+                            "declare const deep: Deep<string>\nexport class C { get value() { return deep } }",
+                        ),
+                    ),
+                ],
+                not_want: vec!["exposes"],
+            },
+        ];
+        for test in &cases {
             run_api_stability_safety_case(
                 t,
-                "flattened union alias",
-                &[("test.ts", "/** @stability experimental */\ntype A = string | number\nexport declare const x: A | boolean\n")],
-                &["`x` exposes `A`"],
+                test.name,
+                &borrow_files(&test.files),
                 &[],
+                &test.not_want,
             );
-        });
-
-        t.run("flattened intersection alias", |t| {
-            t.parallel();
-            run_api_stability_safety_case(
-                t,
-                "flattened intersection alias",
-                &[("test.ts", "/** @stability experimental */\ntype A = { a: string } & { b: number }\nexport declare const x: A & { c: boolean }\n")],
-                &["`x` exposes `A`"],
-                &[],
-            );
-        });
-
-        t.run("nested class static shallow", |t| {
-            t.parallel();
-            let source = p("class C { static value: E }\nexport interface X { ctor: typeof C }\n");
-            run_api_stability_safety_case(
-                t,
-                "nested class static shallow",
-                &[("test.ts", &source)],
-                &[],
-                &["`X` exposes `E`"],
-            );
-        });
-
-        t.run("benign default references earlier parameter", |t| {
-            t.parallel();
-            let source = p("interface I<A, B = A> { v: B }\nexport declare const x: I<E>\n");
-            run_api_stability_safety_case(
-                t,
-                "benign default references earlier parameter",
-                &[("test.ts", &source)],
-                &["`x` exposes `E`"],
-                &[],
-            );
-        });
-
-        t.run("declared infer conditional alias", |t| {
-            t.parallel();
-            let source =
-                p("export type First<T> = T extends [infer U, ...unknown[]] ? E : never\n");
-            run_api_stability_safety_case(
-                t,
-                "declared infer conditional alias",
-                &[("test.ts", &source)],
-                &["`First` exposes `E`"],
-                &[],
-            );
-        });
-
-        t.run("materialized infer conditional outcome", |t| {
-            t.parallel();
-            let source = p("export declare const x: string[] extends Array<infer U> ? E : never\n");
-            run_api_stability_safety_case(
-                t,
-                "materialized infer conditional outcome",
-                &[("test.ts", &source)],
-                &["`x` exposes `E`"],
-                &[],
-            );
-        });
+        }
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1019 TestApiStabilityLeakBareBinderOrders ceba70e7431d94bb
-// TestApiStabilityLeakBareBinderOrders exercises the bare generic binder
-// return with actual `make<string>()` / `make<E>()` applications across clean
-// and leaky export orders on one shared checker. Five repeated queries per
-// order pin that a shared cache never lets the concrete `string` application
-// contaminate the `E` application or the other way around.
+// go test: internal/rulerunner/api_stability_leak_test.go:367 TestApiStabilityLeakBareBinderOrders f04aaf0edf9a606c
 #[test]
 fn test_api_stability_leak_bare_binder_orders() {
     ets_go::testing::run(|t| {
@@ -1254,13 +571,7 @@ export const clean = make<string>()
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1075 TestApiStabilityLeakSubsequentCheckerExactness b62c2823ce8da062
-// TestApiStabilityLeakSubsequentCheckerExactness checks the checker with
-// the rule enabled and disabled after the same read sequence: a namespace
-// barrel checked before the file that uses the recursive dependency. Both the
-// later diagnostics (the TS2589 the ordinary read produces) and the ordinary
-// type of the use site must match the control exactly, so the pre-flight guard
-// can neither poison a later type nor consume a later diagnostic.
+// go test: internal/rulerunner/api_stability_leak_test.go:417 TestApiStabilityLeakSubsequentCheckerExactness 9a5effc0247d42ed
 #[test]
 fn test_api_stability_leak_subsequent_checker_exactness() {
     ets_go::testing::run(|t| {
@@ -1365,13 +676,7 @@ fn test_api_stability_leak_subsequent_checker_exactness() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1159 TestApiStabilityLeakInferredForwardingDiagnostics b8a417c13a43de2c
-// TestApiStabilityLeakInferredForwardingDiagnostics checks that
-// forwarding an ordinary inferred function resolves its body only through the
-// checker's native lazy inference, which attributes diagnostics to the
-// declaring file's own expressions: a later check of the declaring file must
-// still report the function's own diagnostics, exactly as the rule-disabled
-// control does, and the whole-program diagnostic set must be identical too.
+// go test: internal/rulerunner/api_stability_leak_test.go:495 TestApiStabilityLeakInferredForwardingDiagnostics 0ef3333b744caf80
 #[test]
 fn test_api_stability_leak_inferred_forwarding_diagnostics() {
     ets_go::testing::run(|t| {
@@ -1412,8 +717,6 @@ fn test_api_stability_leak_inferred_forwarding_diagnostics() {
                         program_results[1]
                     ));
                 }
-                // The forwarding probe is only meaningful when the control actually
-                // reports something at the later check.
                 if results[0].is_empty() {
                     t.fatal(sprintf!(
                         "control reported no later dependency diagnostics for %q",
@@ -1431,14 +734,7 @@ fn diagnostic_messages(diagnostics: &[P<Diagnostic>]) -> Vec<String> {
     diagnostics.iter().map(|d| d.localize()).collect()
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1203 TestApiStabilityLeakBlockedSurfaceNotCached 2c211c2f3d297e4f
-// TestApiStabilityLeakBlockedSurfaceNotCached checks that a surface whose
-// recursive component the guard refuses is never reported as stable and that
-// repeating the query does no checker work. It then resolves the ordinary
-// checker read to prove the pre-flight guard left the checker untouched: the
-// finite inherited index resolves to its exact `number` value (not the error
-// `any` a poisoned checker would report) and the recursive index still reports
-// its own ordinary TS2589, both matching a rule-disabled control.
+// go test: internal/rulerunner/api_stability_leak_test.go:530 TestApiStabilityLeakBlockedSurfaceNotCached 7a482d7f36623c69
 #[test]
 fn test_api_stability_leak_blocked_surface_not_cached() {
     ets_go::testing::run(|t| {
@@ -1492,9 +788,6 @@ export declare const x: I<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>
                     ));
                 }
                 let c = tp.checker();
-                // The ordinary read must be exact and must not have been poisoned by
-                // the analysis: the finite application resolves to its exact
-                // declared value without a global diagnostic.
                 let x_symbol = api_stability_export(t, c, sf, "x");
                 let value = c.get_type_of_symbol_exported(x_symbol);
                 let infos = c.get_index_infos_of_type_exported(value);
@@ -1524,26 +817,12 @@ export declare const x: I<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1281 apiStabilityRecursiveAlias dcc029423cc0e0ed
-// apiStabilityRecursiveAlias is the self-expanding alias the regression
-// probes use. Any speculative resolution of an application of it trips the
-// checker's instantiation depth guard, so a rule that approves it would add
-// TS2589 to a program whose own checking does not produce one.
-const API_STABILITY_RECURSIVE_ALIAS: &str = "type Deep<T> = T extends string ? Deep<T> : T\n";
-
-// go test: internal/rulerunner/api_stability_leak_test.go:1290 TestApiStabilityLeakRelationSafety 00ba3ff16c767aac
-// TestApiStabilityLeakRelationSafety pins that the conditional-branch
-// relation is only asked after a relation-operand pre-flight has established
-// that resolving the full projected operand surfaces is bounded. Every probe
-// runs the rule-enabled and rule-disabled programs through the same checker
-// sequence and compares the checked file diagnostics, the later use-site
-// diagnostics and types, and the global diagnostics exactly, so the rule can
-// neither add nor lose a compiler diagnostic nor change a later type.
+// go test: internal/rulerunner/api_stability_leak_test.go:601 TestApiStabilityLeakRelationSafety b251723244c045cf
 #[test]
 fn test_api_stability_leak_relation_safety() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let a = |s: &str| format!("{API_STABILITY_RECURSIVE_ALIAS}{s}");
+        let a = |s: &str| format!("{API_STABILITY_RECURSIVE_PREFIX}{s}");
 
         let cases = [
             (
@@ -1626,9 +905,6 @@ fn test_api_stability_leak_relation_safety() {
                     let delta = c.total_instantiation_count - before;
                     let dep_file = source_file(program, "/.src/dep.d.ts");
                     if enabled {
-                        // While the dependency is still unchecked, the refused
-                        // recursive read reports an incomplete result; nothing
-                        // computed is persisted for a later analysis.
                         let x = api_stability_export(t, &mut c, dep_file, "X");
                         let refused =
                             ets_typeparser::new_type_parser(program, &mut c).api_stability_used_by_symbol(x);
@@ -1683,17 +959,12 @@ fn test_api_stability_leak_relation_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1422 TestApiStabilityLeakRefusedSurfaceStaysRetryable ae7f5ed0181eb636
-// TestApiStabilityLeakRefusedSurfaceStaysRetryable repeats the direct
-// symbol query on one shared checker: a refused recursive surface always
-// reports an incomplete result, and every repeated query after the first
-// performs no checker instantiation, which proves the guard failed closed
-// instead of settling a partial result.
+// go test: internal/rulerunner/api_stability_leak_test.go:725 TestApiStabilityLeakRefusedSurfaceStaysRetryable 571ac330a0100afe
 #[test]
 fn test_api_stability_leak_refused_surface_stays_retryable() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let a = |s: &str| format!("{API_STABILITY_RECURSIVE_ALIAS}{s}");
+        let a = |s: &str| format!("{API_STABILITY_RECURSIVE_PREFIX}{s}");
 
         let cases = [
             (
@@ -1744,192 +1015,12 @@ fn test_api_stability_leak_refused_surface_stays_retryable() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1468 TestApiStabilityLeakExplicitStableForwarding 73f7cee9228b608b
-// TestApiStabilityLeakExplicitStableForwarding pins that a forwarding
-// `@stability stable` tag on a re-export is an explicit ceiling, distinct from
-// an absent tag: it tightens the forwarded symbol's inherited stability even
-// though stable is the default tier. Named, star and namespace re-exports are
-// covered.
-#[test]
-fn test_api_stability_leak_explicit_stable_forwarding() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-
-        let dep = "/** @stability experimental */
-interface E { v: string }
-/** @stability experimental */
-export interface X { v: E }";
-        // Rust: (label, want, absentLeak, source). absentLeak is true when an untagged re-export still reports: a
-        // namespace alias inherits the untagged module's stable default, while
-        // named and star re-exports inherit the forwarded symbol's own tag.
-        let forwards = [
-            ("named", "`X` exposes `E`", false, r#"export { X } from "./dep.js""#),
-            ("star", "`X` exposes `E`", false, r#"export * from "./dep.js""#),
-            ("namespace", "`ns` exposes `E`", true, r#"export * as ns from "./dep.js""#),
-        ];
-        for (label, want, absent_leak, forward_source) in forwards {
-            for tag in ["stable", "unstable", "experimental", ""] {
-                let name = if tag.is_empty() {
-                    format!("{label}/absent")
-                } else {
-                    format!("{label}/{tag}")
-                };
-                t.run(&name, |t| {
-                    t.parallel();
-                    let source = if tag.is_empty() {
-                        forward_source.to_string()
-                    } else {
-                        format!("/** @stability {tag} */\n{forward_source}")
-                    };
-                    let files = [("dep.d.ts", dep), ("test.ts", source.as_str())];
-                    let got = api_stability_lifecycle_diagnostics(t, &files, true, false);
-                    let control = api_stability_lifecycle_diagnostics(t, &files, false, false);
-                    // The rule may only add its own reports; every compiler
-                    // diagnostic must be exactly the control's.
-                    for message in &got {
-                        if is_rule_message(message) {
-                            continue;
-                        }
-                        if !api_stability_lifecycle_contains(&control, message) {
-                            t.error(sprintf!(
-                                "added compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                                message,
-                                got,
-                                control
-                            ));
-                        }
-                    }
-                    for message in &control {
-                        if !api_stability_lifecycle_contains(&got, message) {
-                            t.error(sprintf!(
-                                "lost compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                                message,
-                                got,
-                                control
-                            ));
-                        }
-                    }
-                    match tag {
-                        "stable" | "unstable" => {
-                            if !api_stability_lifecycle_contains(&got, want) {
-                                t.error(sprintf!("explicit %s ceiling ignored: %v", tag, got));
-                            }
-                        }
-                        "experimental" => {
-                            if api_stability_lifecycle_contains(&got, "exposes") {
-                                t.error(sprintf!(
-                                    "unexpected leak for experimental ceiling: %v",
-                                    got
-                                ));
-                            }
-                        }
-                        // Rust: Go's `case "":`; the tag is one of the four above.
-                        _ => {
-                            if absent_leak != api_stability_lifecycle_contains(&got, "exposes") {
-                                t.error(sprintf!(
-                                    "absent ceiling leak=%v, want %v: %v",
-                                    api_stability_lifecycle_contains(&got, "exposes"),
-                                    absent_leak,
-                                    got
-                                ));
-                            }
-                        }
-                    }
-                });
-            }
-        }
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:1544 TestApiStabilityLeakInferredReexportCoverage a0413e2159ae98f4
-// TestApiStabilityLeakInferredReexportCoverage pins that an ordinary
-// inferred re-export is reported in both the per-file and the whole-program
-// lifecycle, while the dependency's own diagnostics stay exactly the control's.
-// Inference is the checker's native lazy path: its diagnostics are attributed
-// to the declaring file's expressions, so a later check of that file observes
-// the same diagnostics and types.
-#[test]
-fn test_api_stability_leak_inferred_reexport_coverage() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-
-        let prefix =
-            "/** @stability experimental */\ninterface E { v: string }\ndeclare const e: E\n";
-        let p = |s: &str| format!("{prefix}{s}");
-        let deps = [
-            ("function", p("export function f() { return e }")),
-            (
-                "generic closure",
-                p("function make<T>(t: T) { return () => ({ v: t }) }\nexport const f = make(e)"),
-            ),
-            (
-                "direct closure",
-                p("function make<T>(t: T) { return () => t }\nexport const f = make(e)"),
-            ),
-        ];
-        let barrels = [
-            ("named", r#"export { f } from "./dep.js""#, "exposes `E`"),
-            ("star", r#"export * from "./dep.js""#, "exposes `E`"),
-            ("namespace", r#"export * as ns from "./dep.js""#, "exposes `E`"),
-        ];
-        for (barrel_name, barrel_source, barrel_want) in barrels {
-            for (dep_name, dep_source) in &deps {
-                t.run(&format!("{barrel_name}/{dep_name}"), |t| {
-                    t.parallel();
-                    let files = [("test.ts", barrel_source), ("dep.ts", dep_source.as_str())];
-                    for whole_program in [false, true] {
-                        let got =
-                            api_stability_lifecycle_diagnostics(t, &files, true, whole_program);
-                        let control =
-                            api_stability_lifecycle_diagnostics(t, &files, false, whole_program);
-                        if !api_stability_lifecycle_contains(&got, barrel_want) {
-                            t.error(sprintf!(
-                                "missing inferred leak whole=%v: %v",
-                                whole_program,
-                                got
-                            ));
-                        }
-                        for message in &got {
-                            if is_rule_message(message) {
-                                continue;
-                            }
-                            if !api_stability_lifecycle_contains(&control, message) {
-                                t.error(sprintf!(
-                                    "added compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                                    message,
-                                    got,
-                                    control
-                                ));
-                            }
-                        }
-                        for message in &control {
-                            if !api_stability_lifecycle_contains(&got, message) {
-                                t.error(sprintf!(
-                                    "lost compiler diagnostic %q\nrule=%v\ncontrol=%v",
-                                    message,
-                                    got,
-                                    control
-                                ));
-                            }
-                        }
-                    }
-                });
-            }
-        }
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:1595 TestApiStabilityLeakInferredDiagnosticsStayExact 273304ec2b2239da
-// TestApiStabilityLeakInferredDiagnosticsStayExact pins that reading an
-// inferred re-export through native inference never changes the dependency's
-// own diagnostics, including the TS2589 a genuinely recursive initializer
-// produces. The per-file request and the whole-program run are both compared
-// against the rule-disabled control exactly.
+// go test: internal/rulerunner/api_stability_leak_test.go:766 TestApiStabilityLeakInferredDiagnosticsStayExact dedf17e80decbfef
 #[test]
 fn test_api_stability_leak_inferred_diagnostics_stay_exact() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let a = |s: &str| format!("{API_STABILITY_RECURSIVE_ALIAS}{s}");
+        let a = |s: &str| format!("{API_STABILITY_RECURSIVE_PREFIX}{s}");
 
         let cases = [
             ("name error body", "export function f() { return nope }".to_string()),
@@ -1982,13 +1073,7 @@ fn test_api_stability_leak_inferred_diagnostics_stay_exact() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1639 TestApiStabilityLeakRelationOperands f6151f8e024b0c18
-// TestApiStabilityLeakRelationOperands pins the relation
-// preflight fixes. A named property reached through a nested callable parameter
-// or return and an anonymous compound operand whose raw structure mentions a
-// substituted parameter must be refused before the compiler relation is asked:
-// enabling the rule adds no compiler diagnostic, loses none, and reports the
-// refused reads as incomplete.
+// go test: internal/rulerunner/api_stability_leak_test.go:804 TestApiStabilityLeakRelationOperands e847c523eb6eb342
 #[test]
 fn test_api_stability_leak_relation_operands() {
     ets_go::testing::run(|t| {
@@ -2107,10 +1192,6 @@ export interface X { y: Select<F> }",
                     collected.extend(api_stability_diagnostics(t, &mut c, test_file));
                     collected.extend(api_stability_diagnostics(t, &mut c, use_file));
                     if enabled {
-                        // The rule must report a refused surface as incomplete
-                        // while the dependency is still unchecked. Once the
-                        // checker itself materializes the inferred component below,
-                        // completion is sound and is not asserted against.
                         let x = api_stability_export(t, &mut c, dep_file, "X");
                         let refused =
                             ets_typeparser::new_type_parser(program, &mut c).api_stability_used_by_symbol(x);
@@ -2118,8 +1199,6 @@ export interface X { y: Select<F> }",
                             t.error("refused surface X was not reported incomplete before the dependency was checked");
                         }
                     }
-                    // Check the dependency twice: a refused read must not gain or
-                    // lose a diagnostic between the first and the repeated check.
                     let first = api_stability_diagnostics(t, &mut c, dep_file);
                     let second = api_stability_diagnostics(t, &mut c, dep_file);
                     if first != second {
@@ -2155,117 +1234,7 @@ export interface X { y: Select<F> }",
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1788 TestApiStabilityLeakAccessors 0d25102857833365
-// TestApiStabilityLeakAccessors pins that inferred accessors re-exported
-// through named, star and namespace barrels are reported in the per-file and
-// whole-program lifecycles, including class accessors and accessors inside
-// generic closures. Accessor body diagnostics and recursive inference must stay
-// exactly the control's.
-#[test]
-fn test_api_stability_leak_accessors() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-
-        const PREFIX: &str =
-            "/** @stability experimental */\ninterface E { v: string }\ndeclare const e: E\n";
-        let p = |s: &str| format!("{PREFIX}{s}");
-        let r = |s: &str| format!("{API_STABILITY_RECURSIVE_PREFIX}{s}");
-        // Rust: (name, dep, barrel, want, notWant).
-        let cases: [(&str, String, &str, &[&str], &[&str]); 11] = [
-            (
-                "object accessor",
-                p("export const f = { get v() { return e } }"),
-                r#"export { f } from "./dep.js""#,
-                &["`f` exposes `E`"],
-                &[],
-            ),
-            (
-                "star forwarded object accessor",
-                p("export const f = { get v() { return e } }"),
-                r#"export * from "./dep.js""#,
-                &["`f` exposes `E`"],
-                &[],
-            ),
-            (
-                "namespace forwarded object accessor",
-                p("export const f = { get v() { return e } }"),
-                r#"export * as ns from "./dep.js""#,
-                &["`ns` exposes `E`"],
-                &[],
-            ),
-            (
-                "class accessor",
-                p("export class C { get value() { return e } }"),
-                r#"export { C } from "./dep.js""#,
-                &["`C` exposes `E`"],
-                &[],
-            ),
-            (
-                "generic closure accessor",
-                p(
-                    "function make<T>(t: T) { return { get v() { return t } } }\nexport const f = make(e)",
-                ),
-                r#"export { f } from "./dep.js""#,
-                &["`f` exposes `E`"],
-                &[],
-            ),
-            (
-                "setter parameter accessor",
-                p("export const f = { set v(x: E) {} }"),
-                r#"export { f } from "./dep.js""#,
-                &["`f` exposes `E`"],
-                &[],
-            ),
-            (
-                "accessor body name error",
-                p("export const f = { get v() { return nope } }"),
-                r#"export { f } from "./dep.js""#,
-                &[],
-                &["exposes"],
-            ),
-            (
-                "annotated accessor with error body",
-                p("export const f = { get v(): E { return nope } }"),
-                r#"export { f } from "./dep.js""#,
-                &["`f` exposes `E`"],
-                &[],
-            ),
-            (
-                "setter body error",
-                p("export const f = { set v(x: number) { x.missing } }"),
-                r#"export { f } from "./dep.js""#,
-                &[],
-                &["exposes"],
-            ),
-            (
-                "recursive inferred accessor",
-                r(
-                    "declare function make<T>(): Deep<T>\nexport const f = { get v() { return make<string>() } }",
-                ),
-                r#"export { f } from "./dep.js""#,
-                &[],
-                &["exposes"],
-            ),
-            (
-                "recursive class accessor",
-                r(
-                    "declare const deep: Deep<string>\nexport class C { get value() { return deep } }",
-                ),
-                r#"export { C } from "./dep.js""#,
-                &[],
-                &["exposes"],
-            ),
-        ];
-        for (name, dep, barrel, want, not_want) in &cases {
-            let files = [("test.ts", *barrel), ("dep.ts", dep.as_str())];
-            run_api_stability_safety_case(t, name, &files, want, not_want);
-        }
-    });
-}
-
-// go test: internal/rulerunner/api_stability_leak_test.go:1874 apiStabilityAccessorDiagnostic 961d1fb3b453dfda
-// apiStabilityAccessorDiagnostic serializes one diagnostic exactly so the enabled
-// and disabled runs can be compared including positions, codes and messages.
+// go test: internal/rulerunner/api_stability_leak_test.go:942 apiStabilityAccessorDiagnostic 8ddc0a752ca1597a
 fn api_stability_accessor_diagnostic(diagnostic: P<Diagnostic>) -> String {
     let mut name = "global".to_string();
     if let Some(file) = diagnostic.file() {
@@ -2274,10 +1243,7 @@ fn api_stability_accessor_diagnostic(diagnostic: P<Diagnostic>) -> String {
     format!("{name}:{}", diagnostic.localize())
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1885 TestApiStabilityLeakAccessorDiagnosticsExact b7da0bf7b9b89ceb
-// TestApiStabilityLeakAccessorDiagnosticsExact forces the accessor
-// through the rule lifecycle and compares the exact diagnostics of the barrel,
-// the dependency file (checked twice) and the globals with a disabled control.
+// go test: internal/rulerunner/api_stability_leak_test.go:950 TestApiStabilityLeakAccessorDiagnosticsExact 197b166d6e42c8c0
 #[test]
 fn test_api_stability_leak_accessor_diagnostics_exact() {
     ets_go::testing::run(|t| {

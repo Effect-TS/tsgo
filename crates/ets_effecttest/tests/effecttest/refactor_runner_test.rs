@@ -6,91 +6,26 @@ use ets_bundledeffect::EffectVersion;
 use ets_effecttest::baseline_results;
 use libtest_mimic::Trial;
 
-use crate::{case_name, parent_failure, run_case};
+use crate::runner_test::run_fixture_cases;
 
-// go test: internal/effecttest/refactor_runner_test.go:17 TestEffectRefactors af71f2ace81fcf59
-// Rust: one libtest trial per Go subtest (`TestEffectRefactors/<case>`), as `test_effect_diagnostics`.
+// go test: internal/effecttest/refactor_runner_test.go:13 TestEffectRefactors f6fb48c10d96b23f
 pub(crate) fn test_effect_refactors() -> Vec<Trial> {
-    const NAME: &str = "TestEffectRefactors";
-    if let Err(err) = ets_bundledeffect::ensure_package_installed(EffectVersion::V4, "effect") {
-        return parent_failure(NAME, format!("Effect not installed: {err}"), true);
-    }
-
-    let cases = match ets_effecttest::discover_refactor_test_cases(EffectVersion::V4) {
-        Ok(cases) => cases,
-        Err(err) => {
-            return parent_failure(
-                NAME,
-                format!("Failed to discover refactor test cases: {err}"),
-                false,
-            );
-        }
-    };
-
-    if cases.is_empty() {
-        return parent_failure(NAME, "No Effect refactor test cases found".to_string(), true);
-    }
-
-    let mut trials = Vec::new();
-    for tc in cases {
-        let name = case_name(&tc);
-
-        trials.push(run_case(format!("{NAME}/{name}"), move |t| {
-            t.parallel();
-            ets_effecttest::run_effect_refactor_test(t, EffectVersion::V4, &tc);
-            // Rust-only: a reference baseline the runner did not write (it stopped early).
-            baseline_results::report_missing(
-                t,
-                &baseline_results::ls_runner_outputs(
-                    EffectVersion::V4.as_str(),
-                    &name,
-                    "refactors.txt",
-                ),
-            );
-        }));
-    }
-    trials
+    run_fixture_cases(
+        "TestEffectRefactors",
+        EffectVersion::V4,
+        ets_effecttest::discover_refactor_test_cases,
+        ets_effecttest::run_effect_refactor_test,
+        |subfolder, name| baseline_results::ls_runner_outputs(subfolder, name, "refactors.txt"),
+    )
 }
 
-// go test: internal/effecttest/refactor_runner_test.go:43 TestEffectV3Refactors d25d66d9806bf8ce
+// go test: internal/effecttest/refactor_runner_test.go:18 TestEffectV3Refactors 1dc9ff72b2a08948
 pub(crate) fn test_effect_v3_refactors() -> Vec<Trial> {
-    const NAME: &str = "TestEffectV3Refactors";
-    if let Err(err) = ets_bundledeffect::ensure_package_installed(EffectVersion::V3, "effect") {
-        return parent_failure(NAME, format!("Effect V3 not installed: {err}"), true);
-    }
-
-    let cases = match ets_effecttest::discover_refactor_test_cases(EffectVersion::V3) {
-        Ok(cases) => cases,
-        Err(err) => {
-            return parent_failure(
-                NAME,
-                format!("Failed to discover V3 refactor test cases: {err}"),
-                false,
-            );
-        }
-    };
-
-    if cases.is_empty() {
-        return parent_failure(NAME, "No Effect V3 refactor test cases found".to_string(), true);
-    }
-
-    let mut trials = Vec::new();
-    for tc in cases {
-        let name = case_name(&tc);
-
-        trials.push(run_case(format!("{NAME}/{name}"), move |t| {
-            t.parallel();
-            ets_effecttest::run_effect_refactor_test(t, EffectVersion::V3, &tc);
-            // Rust-only: see test_effect_refactors.
-            baseline_results::report_missing(
-                t,
-                &baseline_results::ls_runner_outputs(
-                    EffectVersion::V3.as_str(),
-                    &name,
-                    "refactors.txt",
-                ),
-            );
-        }));
-    }
-    trials
+    run_fixture_cases(
+        "TestEffectV3Refactors",
+        EffectVersion::V3,
+        ets_effecttest::discover_refactor_test_cases,
+        ets_effecttest::run_effect_refactor_test,
+        |subfolder, name| baseline_results::ls_runner_outputs(subfolder, name, "refactors.txt"),
+    )
 }

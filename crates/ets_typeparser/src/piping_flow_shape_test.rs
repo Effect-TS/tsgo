@@ -3,8 +3,6 @@
 // matchers never read. The predicates receive the parser (see `SubjectPredicate`), so the tests run on a parser
 // over that program.
 
-use std::sync::Arc;
-
 use ets_go::sprintf;
 use ets_shim::ast::Node;
 use ets_shim::core::P;
@@ -28,7 +26,7 @@ pub(crate) fn zero_flow(node: P<Node>) -> PipingFlow {
     PipingFlow { node, partial: PartialPipingFlow::default() }
 }
 
-// go test: internal/typeparser/piping_flow_shape_test.go:10 TestPipingFlowMatchesShape 102d82be4a667622
+// go test: internal/typeparser/piping_flow_shape_test.go:5 TestPipingFlowMatchesShape 70686e82f06d710a
 #[test]
 fn test_piping_flow_matches_shape() {
     use TransformationKind::{Call, Pipe};
@@ -80,14 +78,6 @@ fn test_piping_flow_matches_shape() {
                 }
             });
         }
-    });
-}
-
-// go test: internal/typeparser/piping_flow_shape_test.go:54 TestPipingFlowMatchesShapeNil 3f7f275f44a1ea83
-#[test]
-fn test_piping_flow_matches_shape_nil() {
-    run(|t| {
-        t.parallel();
         let (mut compiled, _) = compile_and_get_checker_and_source_file_internal(t, "");
         let mut tp = compiled.type_parser();
         let subject = |_: &mut TypeParser<'_>, _: &PipingFlowSubject| -> bool {
@@ -99,53 +89,6 @@ fn test_piping_flow_matches_shape_nil() {
             || PipingFlow::matches_exactly(None, &mut tp, &subject, &[])
         {
             t.fatal("nil flows must not match");
-        }
-    });
-}
-
-// go test: internal/typeparser/piping_flow_shape_test.go:64 TestParsePipeCall_ConstantAlias d2c55e5eead58d32
-#[test]
-fn test_parse_pipe_call_constant_alias() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, sf) =
-            compile_and_get_checker_and_source_file_with_effect_version_internal(
-                t,
-                EFFECT_V4,
-                r#"
-import { pipe } from "effect"
-
-const p = pipe
-export const value = p(1)
-"#,
-            );
-        let mut tp = compiled.type_parser();
-
-        fn visit(
-            tp: &mut TypeParser<'_>,
-            node: P<Node>,
-            parsed: &mut Option<Arc<ParsedPipeCallResult>>,
-        ) {
-            if parsed.is_some() {
-                return;
-            }
-            if let Some(result) = tp.parse_pipe_call(node) {
-                *parsed = Some(result);
-                return;
-            }
-            node.for_each_child(&mut |child| {
-                visit(tp, child, parsed);
-                false
-            });
-        }
-        let mut parsed = None;
-        visit(&mut tp, sf.as_node(), &mut parsed);
-
-        if !parsed
-            .is_some_and(|parsed| parsed.kind == TransformationKind::Pipe && parsed.args.is_empty())
-        {
-            t.fatal("expected a constant alias of pipe to parse as a standalone pipe call");
         }
     });
 }

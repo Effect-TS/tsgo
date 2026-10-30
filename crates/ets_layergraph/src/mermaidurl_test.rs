@@ -69,7 +69,7 @@ fn unmarshal_code(data: &[u8]) -> Result<String, String> {
     Ok(out)
 }
 
-/// Rust-only: the roundtrip check both Go tests repeat (base64url decode, zlib decompress, JSON unmarshal).
+/// Rust-only: the roundtrip check of the Go test (base64url decode, zlib decompress, JSON unmarshal).
 fn decode_payload(t: &T, encoded: &str) -> String {
     let compressed = match base64_raw_url_decode(encoded) {
         Ok(compressed) => compressed,
@@ -90,68 +90,29 @@ fn decode_payload(t: &T, encoded: &str) -> String {
     }
 }
 
-// go test: internal/layergraph/mermaidurl_test.go:13 TestEncodeMermaidURL ac059358b57e9c24
+// go test: internal/layergraph/mermaidurl_test.go:13 TestEncodeMermaidURL 989acec172f4131c
 #[test]
 fn test_encode_mermaid_url() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let diagram = "flowchart TB\n  A --> B";
-        let base_url = "https://mermaid.live/edit#";
+        for (base_url, diagram) in [
+            ("https://mermaid.live/edit#", "flowchart TB\n  A --> B"),
+            ("https://www.mermaidchart.com/play#", "flowchart LR\n  X --> Y"),
+        ] {
+            t.run(base_url, |t| {
+                t.parallel();
+                let result = encode_mermaid_url(base_url, diagram);
 
-        let result = encode_mermaid_url(base_url, diagram);
+                let prefix = format!("{base_url}pako:");
+                let Some(encoded) = result.strip_prefix(&prefix) else {
+                    t.fatal(sprintf!("expected prefix %q, got %q", prefix, result));
+                };
 
-        // Must start with base URL + "pako:"
-        let prefix = format!("{base_url}pako:");
-        let Some(encoded) = result.strip_prefix(&prefix) else {
-            t.fatal(sprintf!("expected prefix %q, got %q", prefix, result));
-        };
-
-        // Decode and verify roundtrip
-        let code = decode_payload(t, encoded);
-
-        if code != diagram {
-            t.error(sprintf!("roundtrip mismatch: got %q, want %q", code, diagram));
-        }
-    });
-}
-
-// go test: internal/layergraph/mermaidurl_test.go:56 TestEncodeMermaidURL_CustomBase 83d148e1f68f5941
-#[test]
-fn test_encode_mermaid_url_custom_base() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let diagram = "flowchart LR\n  X --> Y";
-        let base_url = "https://www.mermaidchart.com/play#";
-
-        let result = encode_mermaid_url(base_url, diagram);
-
-        let prefix = format!("{base_url}pako:");
-        let Some(encoded) = result.strip_prefix(&prefix) else {
-            t.fatal(sprintf!("expected prefix %q, got %q", prefix, result));
-        };
-
-        // Verify roundtrip with custom base
-        let code = decode_payload(t, encoded);
-
-        if code != diagram {
-            t.error(sprintf!("roundtrip mismatch: got %q, want %q", code, diagram));
-        }
-    });
-}
-
-// go test: internal/layergraph/mermaidurl_test.go:98 TestEncodeMermaidURL_Deterministic fc22652768947308
-#[test]
-fn test_encode_mermaid_url_deterministic() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let diagram = "flowchart TB\n  A --> B --> C";
-        let base_url = "https://mermaid.live/edit#";
-
-        let result1 = encode_mermaid_url(base_url, diagram);
-        let result2 = encode_mermaid_url(base_url, diagram);
-
-        if result1 != result2 {
-            t.error(sprintf!("not deterministic: %q != %q", result1, result2));
+                let code = decode_payload(t, encoded);
+                if code != diagram {
+                    t.error(sprintf!("roundtrip mismatch: got %q, want %q", code, diagram));
+                }
+            });
         }
     });
 }

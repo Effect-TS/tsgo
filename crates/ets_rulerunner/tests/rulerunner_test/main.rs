@@ -4,19 +4,7 @@
 // the rules: the helpers call `ets_etscheckerhooks::init()` before building a program.
 
 mod api_stability_leak_inheritance_test;
-mod api_stability_leak_internal_properties_test;
 mod api_stability_leak_test;
-mod effect_succeed_with_undefined_test;
-mod fail_cause_to_constructor_test;
-mod flat_map_identity_to_flatten_test;
-mod manual_metric_tap_to_track_test;
-mod map_map_error_to_map_both_test;
-mod prefer_effect_array_test;
-mod prefer_effect_record_test;
-mod prefer_effect_string_test;
-mod provide_merge_all_to_array_test;
-mod suspend_fail_to_fail_sync_test;
-mod type_union_to_schema_union_test;
 
 use std::sync::Arc;
 

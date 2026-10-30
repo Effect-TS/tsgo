@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 18:29 - 18:81
+Location: 19:29 - 19:81
 Node: source.pipe(Effect.flatMap(async (inner) => inner))
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 21:29 - 21:92
+Location: 22:29 - 22:92
 Node: source.pipe(Effect.flatMap((inner, _extra?: number) => inner))
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 24:29 - 24:103
+Location: 26:29 - 26:103
 Node: source.pipe(Effect.flatMap((...inner: [Effect.Effect<string>]) => inner))
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 27:27 - 27:84
+Location: 29:27 - 29:84
 Node: source.pipe(Effect.flatMap((inner = fallback) => inner))
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 30:33 - 30:103
+Location: 33:33 - 33:103
 Node: source.pipe(Effect.flatMap((inner?: Effect.Effect<string>) => inner))
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 33:28 - 33:78
+Location: 37:28 - 37:78
 Node: source.pipe(Effect.flatMap(({ pipe }) => pipe()))
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 36:31 - 36:77
+Location: 41:31 - 41:77
 Node: source.pipe(Effect.flatMap(Channel.identity))
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 39:32 - 39:65
+Location: 45:32 - 45:65
 Node: Effect.flatMap(identity)(source)
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 43:31 - 43:71
+Location: 49:31 - 49:71
 Node: source.pipe(Effect.flatMap(exactAlias))
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 46:39 - 46:107
+Location: 53:39 - 53:107
 Node: source.pipe(Effect.flatMap(async function(inner) { return inner }))
 Node Kind: KindCallExpression
 
@@ -183,7 +183,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 49:43 - 49:106
+Location: 57:43 - 57:106
 Node: source.pipe(Effect.flatMap(function*(inner) { return inner }))
 Node Kind: KindCallExpression
 
@@ -197,7 +197,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 52:39 - 52:133
+Location: 60:39 - 60:133
 Node: source.pipe(Effect.flatMap(function(inner: Effect.Effect<string, unknown>) { return inner }))
 Node Kind: KindCallExpression
 

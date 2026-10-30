@@ -5,27 +5,7 @@
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
 
-[D2] (14:70-14:97) TS2740: Type 'Promise<Effect<number, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [Symbol.iterator], pipe, [SinkTypeId], [StreamTypeId], and 2 more.
-  (no quick fixes)
-
-[D3] (17:61-17:69) TS2345: Argument of type '(n: number) => Generator<never, Effect<number, never, never>, unknown>' is not assignable to parameter of type '(a: number) => Effect<unknown, unknown, unknown>'.
-  Type 'Generator<never, Effect<number, never, never>, unknown>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': pipe, [SinkTypeId], [StreamTypeId], [ChannelTypeId], [EffectTypeId]
-  (no quick fixes)
-
-[D4] (20:57-20:98) TS2345: Argument of type '(n: any, extra: any) => Effect<any, never, never>' is not assignable to parameter of type '(a: any) => Effect<any, never, never>'.
-  Target signature provides too few arguments. Expected 2 or more, but got 1.
-  (no quick fixes)
-
-[D5] (20:58-20:59) TS7006: Parameter 'n' implicitly has an 'any' type.
-  (no quick fixes)
-
-[D6] (20:61-20:66) TS6133: 'extra' is declared but its value is never read.
-  (no quick fixes)
-
-[D7] (20:61-20:66) TS7006: Parameter 'extra' implicitly has an 'any' type.
-  (no quick fixes)
-
-[D8] (26:73-26:78) TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Effect<unknown, unknown, unknown>'.
+[D2] (23:61-23:66) TS6133: 'extra' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -52,18 +32,22 @@ declare const loose: any
 export const valid = source.pipe(Effect.tap((n) => Effect.log(n)))
 
 // MUST NOT TRIGGER: async callback
+// @ts-expect-error
 export const asyncCallback = source.pipe(Effect.flatMap(async (n) => Effect.as(Effect.log(n), n)))
 
 // MUST NOT TRIGGER: generator callback
+// @ts-expect-error
 export const generatorCallback = source.pipe(Effect.flatMap(function*(n) { return Effect.as(Effect.log(n), n) }))
 
 // MUST NOT TRIGGER: callback with a second parameter
+// @ts-expect-error
 export const twoParameters = source.pipe(Effect.flatMap((n, extra) => Effect.as(Effect.log(n), n)))
 
 // MUST NOT TRIGGER: generic callback
 export const genericCallback = source.pipe(Effect.flatMap(<A>(n: A) => Effect.as(Effect.log(n), n)))
 
 // MUST NOT TRIGGER: the inner value is not an Effect
+// @ts-expect-error
 export const unknownInner = source.pipe(Effect.flatMap((n) => Effect.as(inner, n)))
 
 // MUST NOT TRIGGER: the inner value is any

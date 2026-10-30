@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 use ets_etscore::{ResolvedEffectPluginOptions, TopLevelNamedReexportsMode};
 use ets_go::sprintf;
-use ets_importstyle::Style;
 use ets_shim::ast::SymbolFlags;
 use ets_shim::ls::autoimport::{Export, ExportID, ExportSyntax, Fix, ModuleID};
 use ets_shim::lsproto;
@@ -32,35 +31,7 @@ fn dbg(value: &impl std::fmt::Debug) -> String {
     format!("{value:?}")
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:15 TestNewStylePolicy 2d737ebaa8a6f017
-#[test]
-fn test_new_style_policy() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect", "Effect"]),
-            barrel_import_packages: strings(&["@effect/platform"]),
-            import_aliases: string_map(&[("effect", "Fx")]),
-            ..Default::default()
-        }));
-
-        if sp.styles.package_style("effect") != Style::Namespace {
-            t.error("expected 'effect' in namespace packages");
-        }
-        if sp.styles.package_style("EFFECT") != Style::Namespace {
-            t.error("expected case-insensitive match for 'EFFECT'");
-        }
-        if sp.styles.package_style("@effect/platform") != Style::Barrel {
-            t.error("expected '@effect/platform' in barrel packages");
-        }
-        let alias = sp.aliases.get("effect").cloned().unwrap_or_default();
-        if alias != "Fx" {
-            t.error(sprintf!("expected alias 'Fx' for 'effect', got %q", alias));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:37 TestStylePolicyIsEmpty e66ecdfe0cb46176
+// go test: internal/autoimportstyle/stylepolicy_test.go:15 TestStylePolicyIsEmpty e66ecdfe0cb46176
 #[test]
 fn test_style_policy_is_empty() {
     ets_go::testing::run(|t| {
@@ -85,7 +56,7 @@ fn test_style_policy_is_empty() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:57 makeExport ff2d7fd984dda74d
+// go test: internal/autoimportstyle/stylepolicy_test.go:35 makeExport ff2d7fd984dda74d
 fn make_export(package_name: &str, module_id: &str, target_module_id: &str) -> Export {
     let mut export = Export::default();
     export.export_id.module_id = new_ambient_module_id(module_id);
@@ -96,7 +67,7 @@ fn make_export(package_name: &str, module_id: &str, target_module_id: &str) -> E
     export
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:68 makeAddNewFix e1a0a09857f61dc6
+// go test: internal/autoimportstyle/stylepolicy_test.go:46 makeAddNewFix e1a0a09857f61dc6
 fn make_add_new_fix(import_kind: lsproto::ImportKind, module_specifier: &str, name: &str) -> Fix {
     let usage_position = lsproto::Position { line: 1, character: 1 };
     Fix {
@@ -112,149 +83,7 @@ fn make_add_new_fix(import_kind: lsproto::ImportKind, module_specifier: &str, na
     }
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:81 TestApplyNamespaceRewrite 810530f827d54c29
-#[test]
-fn test_apply_namespace_rewrite() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            ..Default::default()
-        }));
-
-        let export = make_export("effect", "effect/Effect", "");
-        let fix =
-            Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"));
-
-        let Some(result) = sp.apply(Some(&export), Some(fix)) else {
-            t.fatal("expected non-nil result");
-        };
-        if result.import_kind != lsproto::ImportKind::NAMESPACE {
-            t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result.import_kind)));
-        }
-        if result.name != "succeed" {
-            t.error(sprintf!(
-                "expected name 'succeed' (original export name), got %q",
-                result.name
-            ));
-        }
-        if result.namespace_prefix != "Effect" {
-            t.error(sprintf!(
-                "expected namespace prefix 'Effect', got %q",
-                result.namespace_prefix
-            ));
-        }
-        if result.module_specifier != "effect/Effect" {
-            t.error(sprintf!(
-                "expected module specifier 'effect/Effect', got %q",
-                result.module_specifier
-            ));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:109 TestApplySuppressesEffectInternalImport 4fe0b0838bb52032
-#[test]
-fn test_apply_suppresses_effect_internal_import() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            ..Default::default()
-        }));
-
-        let export = make_export("effect", "effect/internal/schema/parser", "");
-        let fix = Arc::new(make_add_new_fix(
-            lsproto::ImportKind::NAMED,
-            "effect/internal/schema/parser",
-            "succeed",
-        ));
-
-        if let Some(result) = sp.apply(Some(&export), Some(fix)) {
-            t.error(sprintf!(
-                "expected blocked Effect internal import to be suppressed, got %#v",
-                dbg(&result)
-            ));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:123 TestApplyNamespaceRewriteFromAddToExisting a87ca1d37d878442
-#[test]
-fn test_apply_namespace_rewrite_from_add_to_existing() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            ..Default::default()
-        }));
-
-        let export = make_export("effect", "effect/testing/TestClock", "");
-        let mut fix = make_add_new_fix(
-            lsproto::ImportKind::NAMED,
-            "effect/testing/TestClock",
-            "testClockWith",
-        );
-        fix.auto_import_fix.kind = lsproto::AutoImportFixKind::ADD_TO_EXISTING;
-
-        let Some(result) = sp.apply(Some(&export), Some(Arc::new(fix))) else {
-            t.fatal("expected non-nil result");
-        };
-        if result.kind != lsproto::AutoImportFixKind::ADD_NEW {
-            t.error(sprintf!("expected rewrite to AddNew, got %v", dbg(&result.kind)));
-        }
-        if result.import_kind != lsproto::ImportKind::NAMESPACE {
-            t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result.import_kind)));
-        }
-        if result.module_specifier != "effect/testing/TestClock" {
-            t.error(sprintf!(
-                "expected module specifier 'effect/testing/TestClock', got %q",
-                result.module_specifier
-            ));
-        }
-        if result.namespace_prefix != "TestClock" {
-            t.error(sprintf!(
-                "expected namespace prefix 'TestClock', got %q",
-                result.namespace_prefix
-            ));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:152 TestApplyNamespaceRewriteWithAlias 06d3c4e5ae429037
-#[test]
-fn test_apply_namespace_rewrite_with_alias() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            import_aliases: string_map(&[("effect", "Fx")]),
-            ..Default::default()
-        }));
-
-        let export = make_export("effect", "effect/Effect", "");
-        let fix =
-            Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"));
-
-        let Some(result) = sp.apply(Some(&export), Some(fix)) else {
-            t.fatal("expected non-nil result");
-        };
-        if result.import_kind != lsproto::ImportKind::NAMESPACE {
-            t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result.import_kind)));
-        }
-        if result.name != "succeed" {
-            t.error(sprintf!(
-                "expected name 'succeed' (original export name), got %q",
-                result.name
-            ));
-        }
-        if result.namespace_prefix != "Fx" {
-            t.error(sprintf!("expected namespace prefix 'Fx', got %q", result.namespace_prefix));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:178 TestApplyNamespaceReexport 36cbc80197764799
+// go test: internal/autoimportstyle/stylepolicy_test.go:59 TestApplyNamespaceReexport 36cbc80197764799
 #[test]
 fn test_apply_namespace_reexport() {
     ets_go::testing::run(|t| {
@@ -315,7 +144,7 @@ fn test_apply_namespace_reexport() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:220 newBarrelPolicy 934b69e60f6b14c2
+// go test: internal/autoimportstyle/stylepolicy_test.go:101 newBarrelPolicy 934b69e60f6b14c2
 fn new_barrel_policy(options: &ResolvedEffectPluginOptions, disk: &[(&str, &str)]) -> StylePolicy {
     let mut sp = new_style_policy(Some(options));
     let disk = string_map(disk);
@@ -326,19 +155,251 @@ fn new_barrel_policy(options: &ResolvedEffectPluginOptions, disk: &[(&str, &str)
     sp
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:232 makeBarrelFix 64087d0c4013252e
+// go test: internal/autoimportstyle/stylepolicy_test.go:113 makeBarrelFix 64087d0c4013252e
 fn make_barrel_fix(module_specifier: &str, module_file_name: &str, name: &str) -> Fix {
     let mut fix = make_add_new_fix(lsproto::ImportKind::NAMED, module_specifier, name);
     fix.module_file_name = module_file_name.to_string();
     fix
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:238 TestApplyBarrelRewrite c33e3dbfe1d9e097
+// go test: internal/autoimportstyle/stylepolicy_test.go:119 TestApplyNamespaceRewrite 48440aec1e9f17b8
+#[test]
+#[expect(
+    clippy::suspicious_operation_groupings,
+    reason = "compares the result's name with the export name, as Go"
+)]
+fn test_apply_namespace_rewrite() {
+    ets_go::testing::run(|t| {
+        t.parallel();
+        struct Case {
+            name: &'static str,
+            options: ResolvedEffectPluginOptions,
+            module_specifier: &'static str,
+            export_name: &'static str,
+            fix_kind: lsproto::AutoImportFixKind,
+            want_prefix: &'static str,
+        }
+        let tests = [
+            Case {
+                name: "add new",
+                options: ResolvedEffectPluginOptions {
+                    namespace_import_packages: strings(&["effect"]),
+                    ..Default::default()
+                },
+                module_specifier: "effect/Effect",
+                export_name: "succeed",
+                fix_kind: lsproto::AutoImportFixKind::ADD_NEW,
+                want_prefix: "Effect",
+            },
+            Case {
+                name: "add to existing",
+                options: ResolvedEffectPluginOptions {
+                    namespace_import_packages: strings(&["effect"]),
+                    ..Default::default()
+                },
+                module_specifier: "effect/testing/TestClock",
+                export_name: "testClockWith",
+                fix_kind: lsproto::AutoImportFixKind::ADD_TO_EXISTING,
+                want_prefix: "TestClock",
+            },
+            Case {
+                name: "alias",
+                options: ResolvedEffectPluginOptions {
+                    namespace_import_packages: strings(&["effect"]),
+                    import_aliases: string_map(&[("effect", "Fx")]),
+                    ..Default::default()
+                },
+                module_specifier: "effect/Effect",
+                export_name: "succeed",
+                fix_kind: lsproto::AutoImportFixKind::ADD_NEW,
+                want_prefix: "Fx",
+            },
+            Case {
+                name: "case-insensitive package",
+                options: ResolvedEffectPluginOptions {
+                    namespace_import_packages: strings(&["Effect"]),
+                    ..Default::default()
+                },
+                module_specifier: "effect/Effect",
+                export_name: "succeed",
+                fix_kind: lsproto::AutoImportFixKind::ADD_NEW,
+                want_prefix: "Effect",
+            },
+        ];
+        for tt in &tests {
+            t.run(tt.name, |t| {
+                t.parallel();
+                let mut fix = make_add_new_fix(
+                    lsproto::ImportKind::NAMED,
+                    tt.module_specifier,
+                    tt.export_name,
+                );
+                fix.auto_import_fix.kind = tt.fix_kind;
+                let result = new_style_policy(Some(&tt.options)).apply(
+                    Some(&make_export("effect", tt.module_specifier, "")),
+                    Some(Arc::new(fix)),
+                );
+                let Some(result) = result else {
+                    t.fatal("expected non-nil result");
+                };
+                if result.kind != lsproto::AutoImportFixKind::ADD_NEW
+                    || result.import_kind != lsproto::ImportKind::NAMESPACE
+                {
+                    t.error(sprintf!(
+                        "expected AddNew namespace import, got kind %v import kind %v",
+                        dbg(&result.kind),
+                        dbg(&result.import_kind)
+                    ));
+                }
+                if result.name != tt.export_name
+                    || result.module_specifier != tt.module_specifier
+                    || result.namespace_prefix != tt.want_prefix
+                {
+                    t.error(sprintf!(
+                        "got name %q specifier %q prefix %q, want %q %q %q",
+                        result.name,
+                        result.module_specifier,
+                        result.namespace_prefix,
+                        tt.export_name,
+                        tt.module_specifier,
+                        tt.want_prefix
+                    ));
+                }
+            });
+        }
+    });
+}
+
+// go test: internal/autoimportstyle/stylepolicy_test.go:184 TestApplyBarrelRewrite 231848707b1aa425
 #[test]
 fn test_apply_barrel_rewrite() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let sp = new_barrel_policy(
+        let platform_disk: &[(&str, &str)] = &[(
+            "/node_modules/@effect/platform/dist/dts/index.d.ts",
+            r#"export * as HttpClient from "./HttpClient.js""#,
+        )];
+        let acme_disk: &[(&str, &str)] = &[
+            ("/node_modules/acme/dist/index.d.ts", r#"export * as Http from "./HttpClient.ts""#),
+            (
+                "/node_modules/acme/dist/forms/index.d.ts",
+                r#"export * as TextInput from "./TextInput.ts""#,
+            ),
+        ];
+        struct Case<'a> {
+            name: &'static str,
+            options: ResolvedEffectPluginOptions,
+            disk: &'a [(&'a str, &'a str)],
+            package_name: &'static str,
+            module_specifier: &'static str,
+            module_file_name: &'static str,
+            want_barrel: &'static str,
+            want_prefix: &'static str,
+        }
+        let tests = [
+            Case {
+                name: "package root barrel",
+                options: ResolvedEffectPluginOptions {
+                    barrel_import_packages: strings(&["@effect/platform"]),
+                    ..Default::default()
+                },
+                disk: platform_disk,
+                package_name: "@effect/platform",
+                module_specifier: "@effect/platform/HttpClient",
+                module_file_name: "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts",
+                want_barrel: "@effect/platform",
+                want_prefix: "HttpClient",
+            },
+            Case {
+                name: "alias",
+                options: ResolvedEffectPluginOptions {
+                    barrel_import_packages: strings(&["@effect/platform"]),
+                    import_aliases: string_map(&[("@effect/platform", "Platform")]),
+                    ..Default::default()
+                },
+                disk: platform_disk,
+                package_name: "@effect/platform",
+                module_specifier: "@effect/platform/HttpClient",
+                module_file_name: "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts",
+                want_barrel: "@effect/platform",
+                want_prefix: "Platform",
+            },
+            Case {
+                name: "export name differs from module",
+                options: ResolvedEffectPluginOptions {
+                    barrel_import_packages: strings(&["acme"]),
+                    ..Default::default()
+                },
+                disk: acme_disk,
+                package_name: "acme",
+                module_specifier: "acme/HttpClient",
+                module_file_name: "/node_modules/acme/dist/HttpClient.d.ts",
+                want_barrel: "acme",
+                want_prefix: "Http",
+            },
+            Case {
+                name: "nearest forwarding barrel",
+                options: ResolvedEffectPluginOptions {
+                    barrel_import_packages: strings(&["acme"]),
+                    ..Default::default()
+                },
+                disk: acme_disk,
+                package_name: "acme",
+                module_specifier: "acme/forms/TextInput",
+                module_file_name: "/node_modules/acme/dist/forms/TextInput.d.ts",
+                want_barrel: "acme/forms",
+                want_prefix: "TextInput",
+            },
+        ];
+        for tt in &tests {
+            t.run(tt.name, |t| {
+                t.parallel();
+                let sp = new_barrel_policy(&tt.options, tt.disk);
+                let result = sp.apply(
+                    Some(&make_export(tt.package_name, tt.module_specifier, "")),
+                    Some(Arc::new(make_barrel_fix(
+                        tt.module_specifier,
+                        tt.module_file_name,
+                        "request",
+                    ))),
+                );
+                let Some(result) = result else {
+                    t.fatal("expected non-nil result");
+                };
+                if result.import_kind != lsproto::ImportKind::NAMED || result.name != "request" {
+                    t.error(sprintf!(
+                        "expected named import of 'request', got import kind %v name %q",
+                        dbg(&result.import_kind),
+                        result.name
+                    ));
+                }
+                if result.module_specifier != tt.want_barrel
+                    || result.namespace_prefix != tt.want_prefix
+                {
+                    t.error(sprintf!(
+                        "got specifier %q prefix %q, want %q %q",
+                        result.module_specifier,
+                        result.namespace_prefix,
+                        tt.want_barrel,
+                        tt.want_prefix
+                    ));
+                }
+            });
+        }
+    });
+}
+
+// go test: internal/autoimportstyle/stylepolicy_test.go:263 TestApplyPassthrough 2b5fa03d4b3febff
+#[test]
+fn test_apply_passthrough() {
+    ets_go::testing::run(|t| {
+        t.parallel();
+        let namespace_policy = new_style_policy(Some(&ResolvedEffectPluginOptions {
+            namespace_import_packages: strings(&["effect"]),
+            top_level_named_reexports: TopLevelNamedReexportsMode::Ignore,
+            ..Default::default()
+        }));
+        let platform_policy = new_barrel_policy(
             &ResolvedEffectPluginOptions {
                 barrel_import_packages: strings(&["@effect/platform"]),
                 ..Default::default()
@@ -348,135 +409,14 @@ fn test_apply_barrel_rewrite() {
                 r#"export * as HttpClient from "./HttpClient.js""#,
             )],
         );
-
-        let export = make_export("@effect/platform", "@effect/platform/HttpClient", "");
-        let fix = Arc::new(make_barrel_fix(
-            "@effect/platform/HttpClient",
-            "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts",
-            "request",
-        ));
-
-        let Some(result) = sp.apply(Some(&export), Some(fix)) else {
-            t.fatal("expected non-nil result");
-        };
-        if result.import_kind != lsproto::ImportKind::NAMED {
-            t.error(sprintf!("expected ImportKindNamed, got %v", dbg(&result.import_kind)));
-        }
-        if result.module_specifier != "@effect/platform" {
-            t.error(sprintf!(
-                "expected module specifier '@effect/platform', got %q",
-                result.module_specifier
-            ));
-        }
-        if result.name != "request" {
-            t.error(sprintf!(
-                "expected name 'request' (original export name), got %q",
-                result.name
-            ));
-        }
-        if result.namespace_prefix != "HttpClient" {
-            t.error(sprintf!(
-                "expected namespace prefix 'HttpClient', got %q",
-                result.namespace_prefix
-            ));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:265 TestApplyBarrelRewriteUsesNearestForwardingBarrel 3e8db9f727614b40
-#[test]
-fn test_apply_barrel_rewrite_uses_nearest_forwarding_barrel() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_barrel_policy(
-            &ResolvedEffectPluginOptions {
-                barrel_import_packages: strings(&["acme"]),
-                ..Default::default()
-            },
-            &[
-                (
-                    "/node_modules/acme/dist/index.d.ts",
-                    r#"export * as Http from "./HttpClient.ts""#,
-                ),
-                (
-                    "/node_modules/acme/dist/forms/index.d.ts",
-                    r#"export * as TextInput from "./TextInput.ts""#,
-                ),
-            ],
-        );
-
-        let tests: &[(&str, &str, &str, &str)] = &[
-            ("acme/HttpClient", "/node_modules/acme/dist/HttpClient.d.ts", "acme", "Http"),
-            (
-                "acme/forms/TextInput",
-                "/node_modules/acme/dist/forms/TextInput.d.ts",
-                "acme/forms",
-                "TextInput",
-            ),
-        ];
-        for &(module_specifier, module_file_name, barrel, prefix) in tests {
-            let result = sp.apply(
-                Some(&make_export("acme", module_specifier, "")),
-                Some(Arc::new(make_barrel_fix(module_specifier, module_file_name, "make"))),
-            );
-            let Some(result) = result else {
-                t.fatal(sprintf!("%s: expected non-nil result", module_specifier));
-            };
-            if result.module_specifier != barrel {
-                t.error(sprintf!(
-                    "%s: expected module specifier %q, got %q",
-                    module_specifier,
-                    barrel,
-                    result.module_specifier
-                ));
-            }
-            if result.namespace_prefix != prefix {
-                t.error(sprintf!(
-                    "%s: expected namespace prefix %q, got %q",
-                    module_specifier,
-                    prefix,
-                    result.namespace_prefix
-                ));
-            }
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:297 TestApplyBarrelRewriteWithoutBarrelPassthrough d957a428833351e8
-#[test]
-fn test_apply_barrel_rewrite_without_barrel_passthrough() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_barrel_policy(
+        let acme_policy = new_barrel_policy(
             &ResolvedEffectPluginOptions {
                 barrel_import_packages: strings(&["acme"]),
                 ..Default::default()
             },
             &[("/node_modules/acme/dist/index.d.ts", r#"export * as Button from "./Button.ts""#)],
         );
-
-        let fix = Arc::new(make_barrel_fix(
-            "acme/Private",
-            "/node_modules/acme/dist/Private.d.ts",
-            "secret",
-        ));
-        let result =
-            sp.apply(Some(&make_export("acme", "acme/Private", "")), Some(Arc::clone(&fix)));
-        if !result.as_ref().is_some_and(|result| Arc::ptr_eq(result, &fix)) {
-            t.error(sprintf!(
-                "expected fix for a module no barrel forwards to be returned unchanged, got %#v",
-                dbg(&result)
-            ));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:309 TestApplyBarrelRewriteFromBarrelPassthrough 84a9f9ae5c6fda9f
-#[test]
-fn test_apply_barrel_rewrite_from_barrel_passthrough() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_barrel_policy(
+        let effect_barrel_policy = new_barrel_policy(
             &ResolvedEffectPluginOptions {
                 barrel_import_packages: strings(&["effect"]),
                 ..Default::default()
@@ -487,259 +427,159 @@ fn test_apply_barrel_rewrite_from_barrel_passthrough() {
             )],
         );
 
-        for (module_specifier, module_file_name) in [
-            ("effect", "/node_modules/effect/dist/index.d.ts"),
-            ("effect/testing", "/node_modules/effect/dist/testing/index.d.ts"),
-            ("effect/http", "/node_modules/effect/dist/http/index.d.ts"),
-        ] {
-            let mut export = make_export("effect", module_specifier, "effect/Function");
+        let without_usage = |mut fix: Fix| -> Fix {
+            fix.auto_import_fix.usage_position = None;
+            fix
+        };
+        let with_kind = |mut fix: Fix, kind: lsproto::AutoImportFixKind| -> Fix {
+            fix.auto_import_fix.kind = kind;
+            fix
+        };
+        let named_reexport = |module_id: &str, target_module_id: &str| -> Export {
+            let mut export = make_export("effect", module_id, target_module_id);
             export.syntax = ExportSyntax::Named;
-            let fix = Arc::new(make_barrel_fix(module_specifier, module_file_name, "pipe"));
-            let result = sp.apply(Some(&export), Some(Arc::clone(&fix)));
-            if !result.as_ref().is_some_and(|result| Arc::ptr_eq(result, &fix)) {
-                t.error(sprintf!(
-                    "%s: expected fix from a barrel to be returned unchanged, got %#v",
-                    module_specifier,
-                    dbg(&result)
-                ));
-            }
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:329 TestApplyBarrelRewriteWithAlias 32bd7258cc756df8
-#[test]
-fn test_apply_barrel_rewrite_with_alias() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_barrel_policy(
-            &ResolvedEffectPluginOptions {
-                barrel_import_packages: strings(&["@effect/platform"]),
-                import_aliases: string_map(&[("@effect/platform", "Platform")]),
-                ..Default::default()
-            },
-            &[(
-                "/node_modules/@effect/platform/dist/dts/index.d.ts",
-                r#"export * as HttpClient from "./HttpClient.js""#,
-            )],
-        );
-
-        let export = make_export("@effect/platform", "@effect/platform/HttpClient", "");
-        let fix = Arc::new(make_barrel_fix(
-            "@effect/platform/HttpClient",
-            "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts",
-            "request",
-        ));
-
-        let Some(result) = sp.apply(Some(&export), Some(fix)) else {
-            t.fatal("expected non-nil result");
+            export
         };
-        if result.name != "request" {
-            t.error(sprintf!(
-                "expected name 'request' (original export name), got %q",
-                result.name
-            ));
-        }
-        if result.namespace_prefix != "Platform" {
-            t.error(sprintf!(
-                "expected namespace prefix 'Platform', got %q",
-                result.namespace_prefix
-            ));
+
+        let tests: Vec<(&str, &StylePolicy, Export, Fix)> = vec![
+            (
+                "package without style",
+                &namespace_policy,
+                make_export("lodash", "lodash", ""),
+                make_add_new_fix(lsproto::ImportKind::NAMED, "lodash", "map"),
+            ),
+            (
+                "use namespace fix",
+                &namespace_policy,
+                make_export("effect", "effect/Effect", ""),
+                with_kind(
+                    make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"),
+                    lsproto::AutoImportFixKind::USE_NAMESPACE,
+                ),
+            ),
+            (
+                "namespace without usage position",
+                &namespace_policy,
+                make_export("effect", "effect/Effect", ""),
+                without_usage(make_add_new_fix(
+                    lsproto::ImportKind::NAMED,
+                    "effect/Effect",
+                    "succeed",
+                )),
+            ),
+            (
+                "ignored top-level reexport",
+                &namespace_policy,
+                named_reexport("effect", "effect/Effect"),
+                make_add_new_fix(lsproto::ImportKind::NAMED, "effect", "succeed"),
+            ),
+            (
+                "barrel without usage position",
+                &platform_policy,
+                make_export("@effect/platform", "@effect/platform/HttpClient", ""),
+                without_usage(make_barrel_fix(
+                    "@effect/platform/HttpClient",
+                    "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts",
+                    "request",
+                )),
+            ),
+            (
+                "module no barrel forwards",
+                &acme_policy,
+                make_export("acme", "acme/Private", ""),
+                make_barrel_fix("acme/Private", "/node_modules/acme/dist/Private.d.ts", "secret"),
+            ),
+            (
+                "from barrel effect",
+                &effect_barrel_policy,
+                named_reexport("effect", "effect/Function"),
+                make_barrel_fix("effect", "/node_modules/effect/dist/index.d.ts", "pipe"),
+            ),
+            (
+                "from barrel effect/testing",
+                &effect_barrel_policy,
+                named_reexport("effect/testing", "effect/Function"),
+                make_barrel_fix(
+                    "effect/testing",
+                    "/node_modules/effect/dist/testing/index.d.ts",
+                    "pipe",
+                ),
+            ),
+            (
+                "from barrel effect/http",
+                &effect_barrel_policy,
+                named_reexport("effect/http", "effect/Function"),
+                make_barrel_fix("effect/http", "/node_modules/effect/dist/http/index.d.ts", "pipe"),
+            ),
+        ];
+        for (name, policy, export, fix) in tests {
+            t.run(name, |t| {
+                t.parallel();
+                let fix = Arc::new(fix);
+                let result = policy.apply(Some(&export), Some(Arc::clone(&fix)));
+                if !result.as_ref().is_some_and(|result| Arc::ptr_eq(result, &fix)) {
+                    t.error(sprintf!(
+                        "expected fix to be returned unchanged, got %#v",
+                        dbg(&result)
+                    ));
+                }
+            });
         }
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:351 TestApplyNamespaceRewriteWithoutUsagePositionFallsBack ffa0f1bc3d6837cb
+// go test: internal/autoimportstyle/stylepolicy_test.go:319 TestApplySuppressed b960e379870d2b71
 #[test]
-fn test_apply_namespace_rewrite_without_usage_position_falls_back() {
+fn test_apply_suppressed() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            ..Default::default()
-        }));
-
-        let export = make_export("effect", "effect/Effect", "");
-        let mut fix = make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed");
-        fix.auto_import_fix.usage_position = None;
-        let fix = Arc::new(fix);
-
-        let result = sp.apply(Some(&export), Some(Arc::clone(&fix)));
-        if !result.is_some_and(|result| Arc::ptr_eq(&result, &fix)) {
-            t.error("expected unchanged fix when usage position is unavailable");
+        let mut follow_reexport = make_export("effect", "effect", "effect/Effect");
+        follow_reexport.syntax = ExportSyntax::Named;
+        struct Case {
+            name: &'static str,
+            options: ResolvedEffectPluginOptions,
+            export: Export,
+            fix: Fix,
         }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:367 TestApplyBarrelRewriteWithoutUsagePositionFallsBack 49e93e1223fe65a0
-#[test]
-fn test_apply_barrel_rewrite_without_usage_position_falls_back() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_barrel_policy(
-            &ResolvedEffectPluginOptions {
-                barrel_import_packages: strings(&["@effect/platform"]),
-                ..Default::default()
+        let tests = vec![
+            Case {
+                name: "effect internal module",
+                options: ResolvedEffectPluginOptions {
+                    namespace_import_packages: strings(&["effect"]),
+                    ..Default::default()
+                },
+                export: make_export("effect", "effect/internal/schema/parser", ""),
+                fix: make_add_new_fix(
+                    lsproto::ImportKind::NAMED,
+                    "effect/internal/schema/parser",
+                    "succeed",
+                ),
             },
-            &[(
-                "/node_modules/@effect/platform/dist/dts/index.d.ts",
-                r#"export * as HttpClient from "./HttpClient.js""#,
-            )],
-        );
-
-        let export = make_export("@effect/platform", "@effect/platform/HttpClient", "");
-        let mut fix = make_barrel_fix(
-            "@effect/platform/HttpClient",
-            "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts",
-            "request",
-        );
-        fix.auto_import_fix.usage_position = None;
-        let fix = Arc::new(fix);
-
-        let result = sp.apply(Some(&export), Some(Arc::clone(&fix)));
-        if !result.is_some_and(|result| Arc::ptr_eq(&result, &fix)) {
-            t.error("expected unchanged fix when usage position is unavailable");
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:383 TestApplyTopLevelReexportIgnore ca4fa6054f23534f
-#[test]
-fn test_apply_top_level_reexport_ignore() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            top_level_named_reexports: TopLevelNamedReexportsMode::Ignore, // "ignore"
-            ..Default::default()
-        }));
-
-        // Export is a reexport (target module differs from module)
-        let mut export = make_export("effect", "effect", "effect/Effect");
-        export.syntax = ExportSyntax::Named;
-        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect", "succeed"));
-
-        let Some(result) = sp.apply(Some(&export), Some(fix)) else {
-            t.fatal("expected non-nil result");
-        };
-        // When ignoring reexports, the fix should be returned unchanged
-        if result.import_kind != lsproto::ImportKind::NAMED {
-            t.error(sprintf!(
-                "expected ImportKindNamed (unchanged), got %v",
-                dbg(&result.import_kind)
-            ));
-        }
-        if result.name != "succeed" {
-            t.error(sprintf!("expected name 'succeed' (unchanged), got %q", result.name));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:409 TestApplyTopLevelReexportFollow 1e0e21297cdf3fe9
-#[test]
-fn test_apply_top_level_reexport_follow() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            top_level_named_reexports: TopLevelNamedReexportsMode::Follow, // "follow"
-            ..Default::default()
-        }));
-
-        // Export is a reexport (target module differs from module)
-        let mut export = make_export("effect", "effect", "effect/Effect");
-        export.syntax = ExportSyntax::Named;
-        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect", "succeed"));
-
-        let result = sp.apply(Some(&export), Some(fix));
-        // When following reexports, the reexport fix should be suppressed (nil)
-        // so the direct submodule namespace import wins instead
-        if let Some(result) = result {
-            t.error(sprintf!(
-                "expected nil result (suppressed reexport), got fix with ImportKind=%v",
-                dbg(&result.import_kind)
-            ));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:429 TestApplyNoMatchPassthrough be688778fed9c48c
-#[test]
-fn test_apply_no_match_passthrough() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            ..Default::default()
-        }));
-
-        let export = make_export("lodash", "lodash", "");
-        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "lodash", "map"));
-
-        let result = sp.apply(Some(&export), Some(Arc::clone(&fix)));
-        if !result.is_some_and(|result| Arc::ptr_eq(&result, &fix)) {
-            t.error("expected fix to be returned unchanged (same pointer)");
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:444 TestApplyNonAddNewPassthrough 6784310e4e8a0e78
-#[test]
-fn test_apply_non_add_new_passthrough() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["effect"]),
-            ..Default::default()
-        }));
-
-        let export = make_export("effect", "effect/Effect", "");
-        let fix = Arc::new(Fix {
-            auto_import_fix: lsproto::AutoImportFix {
-                kind: lsproto::AutoImportFixKind::ADD_TO_EXISTING,
-                import_kind: lsproto::ImportKind::NAMED,
-                module_specifier: "effect/Effect".to_string(),
-                name: "succeed".to_string(),
-                ..Default::default()
+            Case {
+                name: "followed top-level reexport",
+                options: ResolvedEffectPluginOptions {
+                    namespace_import_packages: strings(&["effect"]),
+                    top_level_named_reexports: TopLevelNamedReexportsMode::Follow,
+                    ..Default::default()
+                },
+                export: follow_reexport,
+                fix: make_add_new_fix(lsproto::ImportKind::NAMED, "effect", "succeed"),
             },
-            ..Default::default()
-        });
-
-        let result = sp.apply(Some(&export), Some(Arc::clone(&fix)));
-        if !result.is_some_and(|result| Arc::ptr_eq(&result, &fix)) {
-            t.error("expected non-AddNew fix to be returned unchanged");
+        ];
+        for tt in tests {
+            t.run(tt.name, |t| {
+                t.parallel();
+                if let Some(result) = new_style_policy(Some(&tt.options))
+                    .apply(Some(&tt.export), Some(Arc::new(tt.fix)))
+                {
+                    t.error(sprintf!("expected fix to be suppressed, got %#v", dbg(&result)));
+                }
+            });
         }
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:466 TestApplyCaseInsensitiveMatching 74ded0a10e2596be
-#[test]
-fn test_apply_case_insensitive_matching() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let sp = new_style_policy(Some(&ResolvedEffectPluginOptions {
-            namespace_import_packages: strings(&["Effect"]),
-            ..Default::default()
-        }));
-
-        // Package name is lowercase but config was uppercase
-        let export = make_export("effect", "effect/Effect", "");
-        let fix =
-            Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"));
-
-        let Some(result) = sp.apply(Some(&export), Some(fix)) else {
-            t.fatal("expected non-nil result");
-        };
-        if result.import_kind != lsproto::ImportKind::NAMESPACE {
-            t.error(sprintf!(
-                "expected case-insensitive match to trigger namespace rewrite, got %v",
-                dbg(&result.import_kind)
-            ));
-        }
-    });
-}
-
-// go test: internal/autoimportstyle/stylepolicy_test.go:484 TestApplyNilInputs b61459d6e6745119
+// go test: internal/autoimportstyle/stylepolicy_test.go:355 TestApplyNilInputs b61459d6e6745119
 #[test]
 fn test_apply_nil_inputs() {
     ets_go::testing::run(|t| {
@@ -762,7 +602,7 @@ fn test_apply_nil_inputs() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:500 TestNewFixTransformerNilForEmptyPrefs 11879c762289cce9
+// go test: internal/autoimportstyle/stylepolicy_test.go:371 TestNewFixTransformerNilForEmptyPrefs 11879c762289cce9
 #[test]
 fn test_new_fix_transformer_nil_for_empty_prefs() {
     ets_go::testing::run(|t| {
@@ -775,7 +615,7 @@ fn test_new_fix_transformer_nil_for_empty_prefs() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:508 TestNewFixTransformerAppliesPolicy b69a773c3e058a13
+// go test: internal/autoimportstyle/stylepolicy_test.go:379 TestNewFixTransformerAppliesPolicy b69a773c3e058a13
 #[test]
 fn test_new_fix_transformer_applies_policy() {
     ets_go::testing::run(|t| {
@@ -809,7 +649,7 @@ fn test_new_fix_transformer_applies_policy() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:529 TestNewFixTransformerPrefersExistingNamespaceUse cac50b277e2fadc0
+// go test: internal/autoimportstyle/stylepolicy_test.go:400 TestNewFixTransformerPrefersExistingNamespaceUse cac50b277e2fadc0
 #[test]
 fn test_new_fix_transformer_prefers_existing_namespace_use() {
     ets_go::testing::run(|t| {

@@ -10,10 +10,8 @@ mod duration_input_test;
 mod effect_codegens_comment_test;
 mod effect_diagnostics_comment_test;
 mod effect_jsdoc_comment_test;
-mod effect_rpc_make_classes_test;
 mod effect_schema_self_in_classes_test;
 mod effect_self_in_classes_test;
-mod effect_sql_model_self_in_classes_test;
 mod error_key_patterns_test;
 mod fn_function_star_test;
 mod schema_brand_test;
@@ -53,40 +51,23 @@ pub(crate) const COMPLETION_TEST_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/completions/fourslash_test.go:29 completionItemsAt 0efe0a729348a592
+// go test: internal/completions/fourslash_test.go:29 harnessPackageJSON 3907809bc130966a
+pub(crate) const HARNESS_PACKAGE_JSON: &str = r#"{ "name": "@effect/harness-effect-v4" }"#;
+
+// go test: internal/completions/fourslash_test.go:31 completionItemsAt 85078df334181dba
 pub(crate) fn completion_items_at(
     t: &T,
     source: &str,
     position: usize,
 ) -> Vec<lsproto::CompletionItem> {
     t.helper();
-
-    if position > source.len() {
-        t.fatal(format!(
-            "invalid completion position {position} for source length {}",
-            source.len()
-        ));
-    }
-
-    let source_with_marker = format!("{}/*1*/{}", &source[..position], &source[position..]);
-    let content = format!(
-        "// @Filename: /tsconfig.json\n{COMPLETION_TEST_TS_CONFIG}\n// @Filename: /test.ts\n{source_with_marker}"
-    );
-
-    let mut f = ets_fourslash::new_fourslash(t, None, &content);
-
-    f.go_to_marker(t, "1");
-    let completions = f.get_completions(t, None);
-    f.done(t);
-    let Some(completions) = completions else {
-        return Vec::new();
-    };
-    completions.items
+    completion_items_in(t, COMPLETION_TEST_TS_CONFIG, "", source, position)
 }
 
-// go test: internal/completions/fourslash_test.go:51 completionItemsAtWithPackageJSON 106832f810f8a102
-pub(crate) fn completion_items_at_with_package_json(
+// go test: internal/completions/fourslash_test.go:36 completionItemsIn 974b851ab004090c
+pub(crate) fn completion_items_in(
     t: &T,
+    tsconfig: &str,
     package_json: &str,
     source: &str,
     position: usize,
@@ -100,10 +81,12 @@ pub(crate) fn completion_items_at_with_package_json(
         ));
     }
 
-    let source_with_marker = format!("{}/*1*/{}", &source[..position], &source[position..]);
-    let content = format!(
-        "// @Filename: /tsconfig.json\n{COMPLETION_TEST_TS_CONFIG}\n// @Filename: /package.json\n{package_json}\n// @Filename: /test.ts\n{source_with_marker}"
-    );
+    let mut content = "// @Filename: /tsconfig.json\n".to_string() + tsconfig + "\n";
+    if !package_json.is_empty() {
+        content = content + "// @Filename: /package.json\n" + package_json + "\n";
+    }
+    content =
+        content + "// @Filename: /test.ts\n" + &source[..position] + "/*1*/" + &source[position..];
 
     let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
@@ -116,7 +99,7 @@ pub(crate) fn completion_items_at_with_package_json(
     completions.items
 }
 
-// go test: internal/completions/fourslash_test.go:74 filterCompletionItems bafb82cb32041e59
+// go test: internal/completions/fourslash_test.go:60 filterCompletionItems bafb82cb32041e59
 pub(crate) fn filter_completion_items(
     items: Vec<lsproto::CompletionItem>,
     keep: impl Fn(&lsproto::CompletionItem) -> bool,
@@ -124,7 +107,7 @@ pub(crate) fn filter_completion_items(
     items.into_iter().filter(|item| keep(item)).collect()
 }
 
-// go test: internal/completions/fourslash_test.go:90 findCompletionItem a6f4a6fdbfd26361
+// go test: internal/completions/fourslash_test.go:76 findCompletionItem a6f4a6fdbfd26361
 pub(crate) fn find_completion_item<'a>(
     items: &'a [lsproto::CompletionItem],
     label: &str,
@@ -132,7 +115,7 @@ pub(crate) fn find_completion_item<'a>(
     items.iter().find(|item| item.label == label)
 }
 
-// go test: internal/completions/fourslash_test.go:99 fnFunctionStarItems fb56911749cca170
+// go test: internal/completions/fourslash_test.go:85 fnFunctionStarItems fb56911749cca170
 pub(crate) fn fn_function_star_items(
     t: &T,
     source: &str,
@@ -146,129 +129,64 @@ pub(crate) fn fn_function_star_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:106 effectJsdocCommentItems 04e61bcc80bfe785
-pub(crate) fn effect_jsdoc_comment_items(
+// go test: internal/completions/fourslash_test.go:92 labeledItems 41a6cf71f85702ba
+pub(crate) fn labeled_items(
     t: &T,
     source: &str,
     position: usize,
+    labels: &[&str],
 ) -> Vec<lsproto::CompletionItem> {
     t.helper();
     filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label == "@effect-identifier"
+        labels.contains(&item.label.as_str())
     })
 }
 
-// go test: internal/completions/fourslash_test.go:113 effectCodegensCommentItems 3d688c18669bc6fe
-pub(crate) fn effect_codegens_comment_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
+// go test: internal/completions/fourslash_test.go:99 runCommentDirectiveTriggerCases 3ac98edbe88c94c9
+pub(crate) fn run_comment_directive_trigger_cases(t: &T, labels: &[&str]) {
     t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label == "@effect-codegens"
-    })
-}
-
-// go test: internal/completions/fourslash_test.go:120 effectDiagnosticsCommentItems 45f107a8ab889340
-pub(crate) fn effect_diagnostics_comment_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label == "@effect-diagnostics" || item.label == "@effect-diagnostics-next-line"
-    })
-}
-
-// go test: internal/completions/fourslash_test.go:127 durationInputItems faaa0afc25a5cc71
-pub(crate) fn duration_input_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        ["nanos", "micros", "millis", "seconds", "minutes", "hours", "days", "weeks"]
-            .contains(&item.label.as_str())
-    })
-}
-
-// go test: internal/completions/fourslash_test.go:134 effectSelfInClassesItems 7401f14c674bb805
-pub(crate) fn effect_self_in_classes_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label.starts_with("Service<") || item.label.starts_with(r#"Tag(""#)
-    })
-}
-
-// go test: internal/completions/fourslash_test.go:141 contextSelfInClassesItems daba8b5542e70518
-pub(crate) fn context_self_in_classes_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label.starts_with(r#"Tag(""#)
-    })
-}
-
-// go test: internal/completions/fourslash_test.go:148 contextSelfInClassesItemsWithPackageJSON 3d9a8c0f60cd9adb
-pub(crate) fn context_self_in_classes_items_with_package_json(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    const PACKAGE_JSON: &str = r#"{
-	  "name": "@effect/harness-effect-v4"
-	}"#;
-    filter_completion_items(
-        completion_items_at_with_package_json(t, PACKAGE_JSON, source, position),
-        |item| item.label.starts_with(r#"Tag(""#) || item.label.starts_with("Service<"),
-    )
-}
-
-// go test: internal/completions/fourslash_test.go:158 effectSQLModelSelfInClassesItems 011e7bd874e5d46c
-pub(crate) fn effect_sql_model_self_in_classes_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label.starts_with("Class<")
-    })
-}
-
-// go test: internal/completions/fourslash_test.go:165 rpcMakeClassesItems 22c0dc870abd18bb
-pub(crate) fn rpc_make_classes_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label.starts_with(r#"make(""#)
-    })
-}
-
-// go test: internal/completions/fourslash_test.go:172 schemaBrandItems db5c66bf239f9abd
-pub(crate) fn schema_brand_items(
-    t: &T,
-    source: &str,
-    position: usize,
-) -> Vec<lsproto::CompletionItem> {
-    t.helper();
-    filter_completion_items(completion_items_at(t, source, position), |item| {
-        item.label.starts_with(r#"brand(""#)
-    })
+    for (name, source, trigger) in [
+        ("line comment", "// @", true),
+        ("block comment", "/* @", true),
+        ("jsdoc comment", "/** @", true),
+        ("extra whitespace", "//  @  ", true),
+        ("second line", "const x = 1\n// @", true),
+        ("no at sign", "// some comment without at", false),
+        ("at outside comment", "const x = @", false),
+    ] {
+        t.run(name, |t| {
+            t.parallel();
+            let items = labeled_items(t, source, source.len(), labels);
+            if !trigger {
+                if !items.is_empty() {
+                    t.error(format!("expected no items for {source:?}, got {}", items.len()));
+                }
+                return;
+            }
+            if items.len() != labels.len() {
+                t.fatal(format!(
+                    "expected {} items for {source:?}, got {}",
+                    labels.len(),
+                    items.len()
+                ));
+            }
+            let at = source.rfind('@').unwrap();
+            let want_line = source[..at].matches('\n').count();
+            let want_character = at - source[..at].rfind('\n').map_or(0, |i| i + 1);
+            for (i, item) in items.iter().enumerate() {
+                if item.label != labels[i] {
+                    t.error(format!("item[{i}].Label = {:?}, want {:?}", item.label, labels[i]));
+                }
+                let start = edit_range(item).start;
+                if start.line as usize != want_line || start.character as usize != want_character {
+                    t.error(format!(
+                        "item[{i}] replacement starts at {}:{}, want {want_line}:{want_character}",
+                        start.line, start.character
+                    ));
+                }
+            }
+        });
+    }
 }
 
 /// Rust-only: Go's `items[i].TextEdit.TextEdit.NewText` (a nil pointer panics in Go as `unwrap` does here).

@@ -111,7 +111,7 @@ Transformations (1):
       outType: Cause<never>
 
 === Piping Flow ===
-Location: 25:26 - 25:78
+Location: 26:26 - 26:78
 Node: Effect.failCauseSync(async () => Cause.fail(error))
 Node Kind: KindCallExpression
 
@@ -125,7 +125,7 @@ Transformations (1):
       outType: Effect<never, unknown, never>
 
 === Piping Flow ===
-Location: 25:59 - 25:77
+Location: 26:59 - 26:77
 Node: Cause.fail(error)
 Node Kind: KindCallExpression
 
@@ -139,7 +139,7 @@ Transformations (1):
       outType: Cause<Error>
 
 === Piping Flow ===
-Location: 28:30 - 30:10
+Location: 29:30 - 31:10
 Node: Effect.failCauseSync(function*() {\n  return Cause.fail(error)\n} as any)
 Node Kind: KindCallExpression
 
@@ -153,7 +153,7 @@ Transformations (1):
       outType: Effect<never, unknown, never>
 
 === Piping Flow ===
-Location: 29:9 - 29:27
+Location: 30:9 - 30:27
 Node: Cause.fail(error)
 Node Kind: KindCallExpression
 
@@ -167,7 +167,7 @@ Transformations (1):
       outType: Cause<Error>
 
 === Piping Flow ===
-Location: 33:30 - 33:117
+Location: 34:30 - 34:117
 Node: Effect.failCauseSync(((_?: unknown) => Cause.fail(error)) as () => Cause.Cause<Error>)
 Node Kind: KindCallExpression
 
@@ -181,7 +181,7 @@ Transformations (1):
       outType: Effect<never, Error, never>
 
 === Piping Flow ===
-Location: 33:69 - 33:87
+Location: 34:69 - 34:87
 Node: Cause.fail(error)
 Node Kind: KindCallExpression
 

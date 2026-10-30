@@ -12,9 +12,6 @@
   Fix 0: "Disable failCauseToConstructor for this line"
   Fix 1: "Disable failCauseToConstructor for entire file"
 
-[D4] (25:60-25:77) TS2740: Type 'Promise<Cause<Error>>' is missing the following properties from type 'Cause<unknown>': [TypeId], reasons, toJSON, [NodeInspectSymbol], and 3 more.
-  (no quick fixes)
-
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable failCauseToConstructor for this line" ===

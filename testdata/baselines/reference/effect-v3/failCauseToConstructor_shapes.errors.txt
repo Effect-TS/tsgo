@@ -5,10 +5,9 @@ Effect version: 3.19.19
 /.src/failCauseToConstructor_shapes.ts(16,16): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
 /.src/failCauseToConstructor_shapes.ts(19,33): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
 /.src/failCauseToConstructor_shapes.ts(22,24): warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
-/.src/failCauseToConstructor_shapes.ts(25,60): error TS2322: Type 'Promise<Cause<Error>>' is not assignable to type 'Cause<unknown>'.
 
 
-==== /.src/failCauseToConstructor_shapes.ts (5 errors) ====
+==== /.src/failCauseToConstructor_shapes.ts (4 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics failCauseToConstructor:warning
@@ -41,10 +40,8 @@ Effect version: 3.19.19
 !!! warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
     
     // MUST NOT TRIGGER: async thunk
+    // @ts-expect-error
     export const asyncThunk = Effect.failCauseSync(async () => Cause.fail(error))
-                                                               ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Promise<Cause<Error>>' is not assignable to type 'Cause<unknown>'.
-!!! related TS6502 /node_modules/effect/dist/dts/Function.d.ts(252,18): The expected type comes from the return type of this signature.
     
     // MUST NOT TRIGGER: generator thunk
     export const generatorThunk = Effect.failCauseSync(function*() {
