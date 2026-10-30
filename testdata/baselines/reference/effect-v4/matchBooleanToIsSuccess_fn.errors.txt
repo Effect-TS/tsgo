@@ -1,0 +1,129 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/matchBooleanToIsSuccess_fn.ts(10,3): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_fn.ts(21,3): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_fn.ts(32,3): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_fn.ts(40,17): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_fn.ts(70,44): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.matchEager` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_fn.ts(76,37): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.matchEager` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_fn.ts(86,3): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.matchEager` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+
+
+==== /.src/matchBooleanToIsSuccess_fn.ts (7 errors) ====
+    import { Effect } from "effect"
+    
+    declare const saveUser: Effect.Effect<void, Error>
+    
+    // MUST TRIGGER: Effect.fn trailing pipe step -> Effect.isSuccess
+    export const trySave = Effect.fn(
+      function*() {
+        return yield* saveUser
+      },
+      Effect.match({
+      ~~~~~~~~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+        onFailure: () => false,
+        onSuccess: () => true
+      })
+    )
+    
+    // MUST TRIGGER: named Effect.fn trailing pipe step -> Effect.isSuccess
+    export const trySaveNamed = Effect.fn("trySaveNamed")(
+      function*() {
+        return yield* saveUser
+      },
+      Effect.match({
+      ~~~~~~~~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+        onFailure: () => false,
+        onSuccess: () => true
+      })
+    )
+    
+    // MUST TRIGGER: Effect.fnUntraced trailing pipe step with swapped literals -> Effect.isFailure
+    export const saveFailed = Effect.fnUntraced(
+      function*() {
+        return yield* saveUser
+      },
+      Effect.match({
+      ~~~~~~~~~~~~
+!!! suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+        onFailure: () => true,
+        onSuccess: () => false
+      })
+    )
+    
+    // MUST TRIGGER: data-first Effect.match inside an Effect.fn body -> Effect.isSuccess
+    export const checkSave = Effect.fn(function*() {
+      return yield* Effect.match(saveUser, {
+                    ~~~~~~~~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+        onFailure: () => false,
+        onSuccess: () => true
+      })
+    })
+    
+    // MUST NOT TRIGGER: Effect.matchCause trailing step converts defects too
+    export const trySaveCause = Effect.fn(
+      function*() {
+        return yield* saveUser
+      },
+      Effect.matchCause({
+        onFailure: () => false,
+        onSuccess: () => true
+      })
+    )
+    
+    // MUST NOT TRIGGER: trailing step handler reads its parameter
+    export const trySaveMessage = Effect.fn(
+      function*() {
+        return yield* saveUser
+      },
+      Effect.match({
+        onFailure: (error) => error.message.length === 0,
+        onSuccess: () => true
+      })
+    )
+    
+    
+    // MUST TRIGGER: Effect.matchEager in a pipeable flow -> Effect.isSuccess
+    export const eagerPipeable = saveUser.pipe(Effect.matchEager({
+                                               ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.matchEager` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+      onFailure: () => false,
+      onSuccess: () => true
+    }))
+    
+    // MUST TRIGGER: Effect.matchEager data-last form applied directly -> Effect.isFailure
+    export const eagerDataLastApplied = Effect.matchEager({
+                                        ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.matchEager` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+      onFailure: () => true,
+      onSuccess: () => false
+    })(saveUser)
+    
+    // MUST TRIGGER: Effect.matchEager as an Effect.fn trailing pipe step -> Effect.isSuccess
+    export const trySaveEager = Effect.fn(
+      function*() {
+        return yield* saveUser
+      },
+      Effect.matchEager({
+      ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.matchEager` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+        onFailure: () => false,
+        onSuccess: () => true
+      })
+    )
+    
+    // MUST NOT TRIGGER: Effect.matchCauseEager trailing step converts defects too
+    export const trySaveCauseEager = Effect.fn(
+      function*() {
+        return yield* saveUser
+      },
+      Effect.matchCauseEager({
+        onFailure: () => false,
+        onSuccess: () => true
+      })
+    )
+    

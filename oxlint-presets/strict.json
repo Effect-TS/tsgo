@@ -53,6 +53,7 @@
     "effecttsgo/manual-metric-tap-to-track": "error",
     "effecttsgo/map-const-to-as": "error",
     "effecttsgo/map-some-to-as-some": "error",
+    "effecttsgo/match-boolean-to-is-success": "error",
     "effecttsgo/match-effect-to-map-both": "error",
     "effecttsgo/match-effect-to-match": "error",
     "effecttsgo/missing-effect-context": "error",

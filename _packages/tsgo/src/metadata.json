@@ -78,6 +78,7 @@
         "manualMetricTapToTrack": "suggestion",
         "mapConstToAs": "suggestion",
         "mapSomeToAsSome": "suggestion",
+        "matchBooleanToIsSuccess": "suggestion",
         "matchEffectToMapBoth": "suggestion",
         "matchEffectToMatch": "suggestion",
         "missingEffectContext": "error",
@@ -177,6 +178,7 @@
         "manualMetricTapToTrack": "error",
         "mapConstToAs": "error",
         "mapSomeToAsSome": "error",
+        "matchBooleanToIsSuccess": "error",
         "matchEffectToMapBoth": "error",
         "matchEffectToMatch": "error",
         "missingEffectContext": "error",
@@ -349,6 +351,7 @@
         "mapConstToAs": "warning",
         "mapMapErrorToMapBoth": "warning",
         "mapSomeToAsSome": "warning",
+        "matchBooleanToIsSuccess": "warning",
         "matchEffectToMapBoth": "warning",
         "matchEffectToMatch": "warning",
         "missedPipeableOpportunity": "warning",
@@ -2882,6 +2885,31 @@
             "start": 271,
             "end": 281,
             "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "matchBooleanToIsSuccess",
+      "group": "style",
+      "description": "Suggests Effect.isSuccess or Effect.isFailure when Effect.match or Effect.matchEager folds to complementary boolean literals",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377173,
+        377174
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const saveUser: Effect.Effect\u003cvoid, Error\u003e\n\nexport const saved = Effect.match(saveUser, {\n  onFailure: () =\u003e false,\n  onSuccess: () =\u003e true\n})\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 118,
+            "text": "`Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)"
           }
         ]
       }
