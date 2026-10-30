@@ -1,4 +1,4 @@
-use ets_shim::ast::{Kind, Node, NodeFlags, SymbolFlags};
+use ets_shim::ast::{Kind, Node, NodeFlags, Symbol, SymbolFlags};
 use ets_shim::core::P;
 
 use crate::*;
@@ -106,5 +106,164 @@ impl TypeParser<'_> {
                 && declaration.end() <= location.pos()
                 && self.checker.is_block_scoped_name_declared_before_use(declaration, location)
         })
+    }
+
+    // go: internal/typeparser/expression_stability.go:87 TypeParser.IsExpressionEvaluableAtLocation 365647b28ff4a0d0
+    // IsExpressionEvaluableAtLocation reports whether evaluating expression once at
+    // location, instead of at its own deferred site, reads the same bindings. Reads
+    // inside nested function bodies still happen when those functions run, so only
+    // the eagerly evaluated part of expression is checked: it must not read a
+    // mutable binding or a binding that is still uninitialized at location.
+    //
+    // Rust: Go's nil checks on `tp` and its checker drop (a `&mut self` always has one).
+    pub fn is_expression_evaluable_at_location(
+        &mut self,
+        expression: impl Into<Option<P<Node>>>,
+        location: impl Into<Option<P<Node>>>,
+    ) -> bool {
+        let (Some(expression), Some(location)) = (expression.into(), location.into()) else {
+            return false;
+        };
+
+        // Rust: Go's recursive `visit` closure, with the `evaluable` flag it captures.
+        fn visit(
+            tp: &mut TypeParser<'_>,
+            node: P<Node>,
+            expression: P<Node>,
+            location: P<Node>,
+            evaluable: &mut bool,
+        ) -> bool {
+            if ets_shim::ast::is_part_of_type_node(node) {
+                return false;
+            }
+            if ets_shim::ast::is_function_like_declaration(node) {
+                // The body runs later; a computed name is evaluated with the enclosing expression.
+                if let Some(name) = node.name()
+                    && ets_shim::ast::is_computed_property_name(name)
+                {
+                    visit(tp, name, expression, location, evaluable);
+                }
+                return !*evaluable;
+            }
+            if node.kind() == Kind::Identifier {
+                if let Some(symbol) = tp.evaluated_reference_symbol(node)
+                    && !tp.is_binding_evaluable_at_location(symbol, expression, location)
+                {
+                    *evaluable = false;
+                }
+                return !*evaluable;
+            }
+            node.for_each_child(&mut |child| visit(tp, child, expression, location, evaluable));
+            !*evaluable
+        }
+
+        let mut evaluable = true;
+        visit(self, expression, expression, location, &mut evaluable);
+        evaluable
+    }
+
+    // go: internal/typeparser/expression_stability.go:122 TypeParser.evaluatedReferenceSymbol 5b5f32eba40bce68
+    // evaluatedReferenceSymbol resolves an identifier that reads a binding. The
+    // second result is false for identifiers that name a declaration, property or
+    // label instead of reading a value.
+    //
+    // Rust: Go's `(symbol, ok)` is `Option<Option<P<Symbol>>>`: `None` for Go's false, `Some(None)` for a read
+    // that resolves to no symbol.
+    #[expect(clippy::option_option, reason = "Go's (*Symbol, bool): the outer None is Go's false")]
+    pub(crate) fn evaluated_reference_symbol(
+        &mut self,
+        node: P<Node>,
+    ) -> Option<Option<P<Symbol>>> {
+        let parent = node.parent();
+        if let Some(parent) = parent
+            && ets_shim::ast::is_shorthand_property_assignment(parent)
+            && parent.name() == Some(node)
+        {
+            return Some(self.checker.get_shorthand_assignment_value_symbol(Some(parent)));
+        }
+        if ets_shim::ast::is_declaration_name_or_import_property_name(node)
+            || ets_shim::ast::is_label_name(node)
+        {
+            return None;
+        }
+        if let Some(parent) = parent {
+            match parent.kind() {
+                Kind::PropertyAccessExpression => {
+                    if parent.name() == Some(node) {
+                        return None;
+                    }
+                }
+                Kind::QualifiedName => {
+                    if parent.as_qualified_name().right() == node {
+                        return None;
+                    }
+                }
+                Kind::PropertyAssignment | Kind::BindingElement => {
+                    if parent.name() == Some(node) || parent.property_name() == Some(node) {
+                        return None;
+                    }
+                }
+                Kind::MetaProperty => {
+                    return None;
+                }
+                _ => {}
+            }
+        }
+        Some(self.get_symbol_at_location(node))
+    }
+
+    // go: internal/typeparser/expression_stability.go:153 TypeParser.isBindingEvaluableAtLocation 17b77cb6bf7f98a1
+    // isBindingEvaluableAtLocation reports whether reading symbol at location
+    // observes the value it holds when read from within expression.
+    pub(crate) fn is_binding_evaluable_at_location(
+        &mut self,
+        symbol: Option<P<Symbol>>,
+        expression: P<Node>,
+        location: P<Node>,
+    ) -> bool {
+        let Some(symbol) = symbol else {
+            return false;
+        };
+        if symbol.flags().intersects(SymbolFlags::Alias) {
+            return true;
+        }
+
+        let source_file = ets_shim::ast::get_source_file_of_node(location);
+        let mut declarations = Vec::new();
+        for &declaration in symbol.declarations() {
+            if ets_shim::ast::get_source_file_of_node(declaration) == source_file {
+                declarations.push(declaration);
+            }
+        }
+        // Globals from lib and other files are initialized before this module runs.
+        if declarations.is_empty() {
+            return true;
+        }
+
+        for declaration in declarations {
+            if ets_shim::ast::is_node_descendant_of(declaration, expression) {
+                continue;
+            }
+            let root = ets_shim::ast::get_root_declaration(declaration);
+            if root.kind() == Kind::Parameter
+                || ets_shim::ast::is_variable_declaration(root)
+                    && root.parent().is_some_and(|parent| parent.kind() == Kind::CatchClause)
+            {
+                if self.checker.is_symbol_assigned(symbol) {
+                    return false;
+                }
+            } else if ets_shim::ast::is_variable_declaration(root) {
+                if !ets_shim::ast::is_var_const(root)
+                    || !self.is_declared_before_location(Some(root), location)
+                {
+                    return false;
+                }
+            } else if root.kind() == Kind::FunctionDeclaration {
+                // Function declarations are hoisted with their value.
+            } else if !self.is_declared_before_location(Some(root), location) {
+                return false;
+            }
+        }
+        true
     }
 }

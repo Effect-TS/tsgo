@@ -99,6 +99,7 @@
     "effecttsgo/unnecessary-pipe": "error",
     "effecttsgo/unnecessary-pipe-chain": "error",
     "effecttsgo/unnecessary-typeof-type": "error",
-    "effecttsgo/unstable-api-usage": "error"
+    "effecttsgo/unstable-api-usage": "error",
+    "effecttsgo/zip-via-nested-flat-map-to-all": "error"
   }
 }

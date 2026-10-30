@@ -3065,6 +3065,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
           "description": "Warns when using an API marked @stability unstable"
+        },
+        "zipViaNestedFlatMapToAll": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.all when a nested Effect.flatMap/Effect.map only pairs two independent effects"
         }
       },
       "type": "object"
