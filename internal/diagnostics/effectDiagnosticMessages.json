@@ -646,5 +646,9 @@
     "`Effect.{0}` builds this {1} lazily directly instead of wrapping `Effect.{2}` in `Effect.suspend`. effect(suspendFailToFailSync)": {
         "category": "Suggestion",
         "code": 377163
+    },
+    "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)": {
+        "category": "Suggestion",
+        "code": 377165
     }
 }
