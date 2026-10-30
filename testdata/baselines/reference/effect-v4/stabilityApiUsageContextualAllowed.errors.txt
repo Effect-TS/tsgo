@@ -1,0 +1,75 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/emptyEntry.ts(5,5): warning TS377135: `effect-v4-tests/api#Reportable` is an experimental API. effect(experimentalApiUsage)
+/.src/otherExport.ts(5,5): warning TS377135: `effect-v4-tests/api#Reportable` is an experimental API. effect(experimentalApiUsage)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [{
+          "name": "@effect/language-service",
+          "overrides": [
+            { "include": ["emptyEntry.ts"], "options": { "allowedExperimentalApis": [""] } },
+            { "include": ["package.ts"], "options": { "allowedExperimentalApis": ["effect-v4-tests"] } },
+            { "include": ["module.ts"], "options": { "allowedExperimentalApis": ["effect-v4-tests/api"] } },
+            { "include": ["export.ts"], "options": { "allowedExperimentalApis": ["effect-v4-tests/api#Reportable"] } },
+            { "include": ["otherExport.ts"], "options": { "allowedExperimentalApis": ["effect-v4-tests/api#other"] } }
+          ]
+        }]
+      }
+    }
+    
+
+==== /.src/api.ts (0 errors) ====
+    /** @stability stable */
+    export interface Reportable {
+      /** @stability experimental */
+      readonly test?: number
+    }
+    
+
+==== /.src/emptyEntry.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning
+    import type { Reportable } from "./api.js"
+    declare function x(arg: Reportable): void
+    x({ test: 42 })
+        ~~~~
+!!! warning TS377135: `effect-v4-tests/api#Reportable` is an experimental API. effect(experimentalApiUsage)
+    
+
+==== /.src/package.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning
+    import type { Reportable } from "./api.js"
+    declare function x(arg: Reportable): void
+    x({ test: 42 })
+    
+
+==== /.src/module.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning
+    import type { Reportable } from "./api.js"
+    declare function x(arg: Reportable): void
+    x({ test: 42 })
+    
+
+==== /.src/export.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning
+    import type { Reportable } from "./api.js"
+    declare function x(arg: Reportable): void
+    x({ test: 42 })
+    
+
+==== /.src/otherExport.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning
+    import type { Reportable } from "./api.js"
+    declare function x(arg: Reportable): void
+    x({ test: 42 })
+        ~~~~
+!!! warning TS377135: `effect-v4-tests/api#Reportable` is an experimental API. effect(experimentalApiUsage)
+    

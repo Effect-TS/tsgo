@@ -1,0 +1,30 @@
+==== /.src/valueImport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:27 - 10:66
+Node: source.pipe(flatMap((inner) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: flatMap
+      args: [(inner) => inner]
+      outType: Effect<string, never, never>
+==== /.src/typeOnlyImport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:27 - 10:66
+Node: source.pipe(flatMap((inner) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<number, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: flatMap
+      args: [(inner) => inner]
+      outType: Effect<number, never, never>

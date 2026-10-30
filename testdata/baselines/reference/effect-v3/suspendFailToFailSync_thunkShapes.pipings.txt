@@ -1,0 +1,225 @@
+==== /.src/suspendFailToFailSync_thunkShapes.ts (16 flows) ====
+
+=== Piping Flow ===
+Location: 11:24 - 11:65
+Node: Effect.suspend(() => Effect.fail(error))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail(error)
+Subject Type: () => Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 11:45 - 11:64
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 14:23 - 14:64
+Node: Effect.suspend(() => Effect.die(defect))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.die(defect)
+Subject Type: () => Effect<never, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 14:44 - 14:63
+Node: Effect.die(defect)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 17:29 - 19:3
+Node: Effect.suspend(function() {\n  return Effect.fail(error)\n})
+Node Kind: KindCallExpression
+
+Subject: function() {\n  return Effect.fail(error)\n}
+Subject Type: () => Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 18:9 - 18:28
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 22:26 - 22:82
+Node: Effect.suspend((async () => Effect.fail(error)) as any)
+Node Kind: KindCallExpression
+
+Subject: (async () => Effect.fail(error)) as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 22:54 - 22:73
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 25:30 - 27:10
+Node: Effect.suspend(function*() {\n  return Effect.fail(error)\n} as any)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return Effect.fail(error)\n} as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 26:9 - 26:28
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 30:34 - 30:78
+Node: Effect.suspend(<T>() => Effect.fail(error))
+Node Kind: KindCallExpression
+
+Subject: <T>() => Effect.fail(error)
+Subject Type: <T>() => Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 30:58 - 30:77
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 33:30 - 33:73
+Node: Effect.suspend(() => Effect.fail(...args))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail(...args)
+Subject Type: () => Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 36:27 - 38:11
+Node: Effect.suspend((() => {\n  return\n}) as any)
+Node Kind: KindCallExpression
+
+Subject: (() => {\n  return\n}) as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 42:32 - 42:73
+Node: Effect.suspend(() => Effect.fail(error))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail(error)
+Subject Type: () => Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 42:53 - 42:72
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>

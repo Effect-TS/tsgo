@@ -66,7 +66,7 @@ impl TypeParser<'_> {
     // conservative union walk handles), so a conclusively non-Effect declared
     // return type rules the node out.
     //
-    // Rust: Go's nil-signature check drops (tsrs's GetResolvedSignature never returns nil, see docs/TSRS_API.md).
+    // Rust: Go's nil-signature check drops (tsrs's GetResolvedSignature never returns nil, see porting/TSRS_API.md).
     pub(crate) fn call_could_return_strict_effect(&mut self, node: P<Node>) -> bool {
         // Go: a deferred recover turns a panic into true.
         recover(AssertUnwindSafe(|| {

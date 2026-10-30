@@ -9,7 +9,7 @@ use regex::Regex;
 
 use crate::run_case;
 
-/// Rust-only: `docs/DIVERGENCES.md`, `layergraph.EncodeMermaidURL`: the `pako:` fragment of a Mermaid link holds
+/// Rust-only: `porting/DIVERGENCES.md`, `layergraph.EncodeMermaidURL`: the `pako:` fragment of a Mermaid link holds
 /// zlib-compressed bytes that differ from Go's (an equally valid deflate encoding of the same payload). Hover
 /// expectations with such links are compared after replacing each fragment with its decompressed payload, as the
 /// layergraph tests compare the decoded roundtrip.
@@ -193,7 +193,7 @@ declare const /*2*/myEffect: Effect.Effect<string, Error, never>"#;
 
     // Hover over a Layer-typed variable should show providers/requirers summary,
     // Mermaid diagram links, and Layer type parameters
-    // Rust-only: Mermaid links compared decoded (docs/DIVERGENCES.md).
+    // Rust-only: Mermaid links compared decoded (porting/DIVERGENCES.md).
     verify_quick_info_at_decoded(
         &mut f,
         t,
@@ -304,7 +304,7 @@ const app2 = /*2*/app"#;
     let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
 
     // Marker 1: on the variable name — should show full Layer hover enrichment
-    // Rust-only: Mermaid links compared decoded (docs/DIVERGENCES.md).
+    // Rust-only: Mermaid links compared decoded (porting/DIVERGENCES.md).
     verify_quick_info_at_decoded(
         &mut f,
         t,
@@ -394,7 +394,7 @@ const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))"#;
     let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
 
     // With mermaidProvider="mermaid.com", links should use mermaidchart.com URL
-    // Rust-only: Mermaid links compared decoded (docs/DIVERGENCES.md).
+    // Rust-only: Mermaid links compared decoded (porting/DIVERGENCES.md).
     verify_quick_info_at_decoded(
         &mut f,
         t,

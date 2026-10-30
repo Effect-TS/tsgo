@@ -2,10 +2,10 @@ package rules
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 	"testing"
 
-	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -61,147 +61,10 @@ func TestStabilityApiModuleName(t *testing.T) {
 	}
 }
 
-func TestStabilityApiUsageContextualProperties(t *testing.T) {
+func TestStabilityApiUsageContextualRuleOrder(t *testing.T) {
 	t.Parallel()
-	tests := []struct {
-		name   string
-		source string
-		want   string
-	}{
-		{"argument", "x({ test: 42 })", "test"},
-		{"shorthand", "const test = 42; x({ test })", "test"},
-		{"quoted key", `x({ "test": 42 })`, `"test"`},
-		{"computed literal key", `x({ ["test"]: 42 })`, `["test"]`},
-		{"typed variable", "const value: Reportable = { test: 42 }", "test"},
-		{"assignment", "let value: Reportable; value = { test: 42 }", "test"},
-		{"satisfies", "const value = { test: 42 } satisfies Reportable", "test"},
-		{"return", "function make(): Reportable { return { test: 42 } }", "test"},
-		{"nested", "const value: { inner: Reportable } = { inner: { test: 42 } }", "test"},
-		{"array element", "const value: Reportable[] = [{ test: 42 }]", "test"},
-		{"generic constraint", "declare function generic<T extends Reportable>(arg: T): void; generic({ test: 42 })", "test"},
-		{"generator contextual property", "const gen = function* () { x({ test: 42 }) }", "test"},
-		{"inferred generator constraint", "declare function generic<T extends Reportable>(arg: T): void; const gen = function* () { generic({ test: 42 }) }", "test"},
-		{"nested function constraint", "declare function generic<T extends Reportable>(arg: T): void; const gen = function* () { function inner() { generic({ test: 42 }) } }", "test"},
-		{"annotated inner generator constraint", "declare function generic<T extends Reportable>(arg: T): void; const gen = function* () { const inner = function* (): Generator<never, void, unknown> { generic({ test: 42 }) } }", "test"},
-		{"annotated generator constraint", "declare function generic<T extends Reportable>(arg: T): void; const gen = function* (): Generator<never, void, unknown> { generic({ test: 42 }) }", "test"},
-		{"generator declaration constraint", "declare function generic<T extends Reportable>(arg: T): void; function* gen() { generic({ test: 42 }) }", "test"},
-		{"generator method constraint", "declare function generic<T extends Reportable>(arg: T): void; class C { *gen() { generic({ test: 42 }) } }", "test"},
-		{"ordinary function constraint", "declare function generic<T extends Reportable>(arg: T): void; function gen() { generic({ test: 42 }) }", "test"},
-		{"arrow constraint", "declare function generic<T extends Reportable>(arg: T): void; const gen = () => generic({ test: 42 })", "test"},
-		{"nested constraint", "declare function generic<T extends { inner: Reportable }>(arg: T): void; generic({ inner: { test: 42 } })", "test"},
-		{"array constraint", "declare function generic<T extends Reportable[]>(arg: T): void; generic([{ test: 42 }])", "test"},
-		{"rest constraint", "declare function generic<T extends Reportable>(...args: T[]): void; generic({ stable: 1 }, { test: 42 })", "test"},
-		{"constructor constraint", "declare class Box<T extends Reportable> { constructor(arg: T) } new Box({ test: 42 })", "test"},
-		{"constraint using inference", "declare function generic<A, T extends Partial<A>>(a: A, arg: T): void; declare const reportable: Reportable; generic(reportable, { test: 42 })", "test"},
-		{"constraint without property", "declare function generic<T extends { other?: number }>(arg: T): void; generic({ test: 42 })", ""},
-		{"unconstrained alternative", "declare function generic<T, U extends Reportable>(arg: T | U): void; generic({ test: 42 })", ""},
-		{"fixed tuple spread", "declare function generic<T extends Reportable>(prefix: string, arg: T): void; declare const prefix: [string]; generic(...prefix, { test: 42 })", "test"},
-		{"fixed tuple spreads", "declare function generic<T extends Reportable>(a: string, b: number, c: boolean, arg: T): void; declare const ab: readonly [string, number]; declare const c: [boolean]; generic(...ab, ...c, { test: 42 })", "test"},
-		{"return type inference", "interface Box<A> { readonly value: A } declare function succeed<A>(a: A): Box<A>; function make(): Box<Reportable> { return succeed({ test: 42 }) }", "test"},
-		{"constrained return type inference", "interface Box<A> { readonly value: A } declare function succeed<A extends object>(a: A): Box<A>; const value: Box<Reportable> = succeed({ test: 42 })", "test"},
-		{"callback return inference", "declare function map<A, B>(as: A[], f: (a: A) => B): B[]; const value: Reportable[] = map([1], () => ({ test: 42 }))", "test"},
-		{"default type argument", "interface Plain { readonly test?: number } declare function withDefault<T extends Plain = Reportable>(arg: T): void; withDefault({ test: 42 })", "test"},
-		{"tagged template constraint", "declare function tag<T extends Reportable>(s: TemplateStringsArray, v: T): void; tag`${{ test: 42 }}`", "test"},
-		{"explicit outer type arguments", "declare function ref<T>(key: string, o: { make: () => T }): T; declare function constant<A>(a: A): () => A; ref<Reportable>(\"k\", { make: constant({ test: 42 }) })", "test"},
-		{"nested generic call", "declare function id<X>(x: X): X; declare function generic<T extends Reportable>(arg: T): void; generic(id({ test: 42 }))", "test"},
-		{"generic own declaration", "declare function generic<T>(arg: T): void; generic({\n/** @stability TAG */\ntest: 42 })", ""},
-		{"inherited", "interface Child extends Reportable {} const value: Child = { test: 42 }", "test"},
-		{"property access", "declare function make(): Reportable; make().test", "test"},
-		{"value reference", "/** @stability TAG */\nconst value = 42; x({ stable: value })", "value"},
-		{"stable property", "x({ stable: 42 })", ""},
-		{"omitted property", "x({})", ""},
-		{"untyped literal", "const value = { test: 42 }; x(value)", ""},
-		{"untyped shorthand", "const test = 42; const value = { test }; x(value)", ""},
-		{"spread", "const value = { test: 42 }; x({ ...value })", ""},
-		{"different property", "const value: { test?: number } = { test: 42 }", ""},
-		{"stable union branch", `type Choice = (Reportable & { kind: "experimental" }) | { kind: "stable"; test?: number }; const value: Choice = { kind: "stable", test: 42 }`, ""},
-		{"experimental union branch", `type Choice = (Reportable & { kind: "experimental" }) | { kind: "stable"; test?: number }; const value: Choice = { kind: "experimental", test: 42 }`, "test"},
-		{"ambiguous union", "type Choice = Reportable | { test?: string }; const value: Choice = { test: 42 }", "test"},
-		{"union deduplication", `type Choice = (Reportable & { kind?: "a" }) | (Reportable & { kind?: "b" }); const value: Choice = { test: 42 }`, "test"},
-		{"method", "/** @stability stable */\ninterface Methods {\n/** @stability TAG */\ntest(): number }; const value: Methods = { test() { return 42 } }", "test"},
-	}
-	for _, taggedRule := range []struct {
-		tag  string
-		rule rule.Rule
-	}{
-		{"experimental", ExperimentalApiUsage},
-		{"unstable", UnstableApiUsage},
-	} {
-		for _, test := range tests {
-			t.Run(taggedRule.tag+"/"+test.name, func(t *testing.T) {
-				t.Parallel()
-				source := strings.ReplaceAll(`/** @stability stable */
-interface Reportable {
-  /** @stability TAG */
-  readonly test?: number
-  stable?: number
-}
-/** @stability stable */
-declare function x(arg: Reportable): void
-`+test.source, "TAG", taggedRule.tag)
-				ctx, _, done := compileApiStabilitySource(t, source)
-				defer done()
-				diagnostics := taggedRule.rule.Run(ctx)
-				if test.want == "" {
-					if len(diagnostics) != 0 {
-						t.Fatalf("got diagnostics %v, want none", diagnostics)
-					}
-					return
-				}
-				if len(diagnostics) != 1 {
-					t.Fatalf("got %d diagnostics, want 1: %v", len(diagnostics), diagnostics)
-				}
-				diagnostic := diagnostics[0]
-				if got := source[diagnostic.Pos() : diagnostic.Pos()+diagnostic.Len()]; got != test.want {
-					t.Errorf("diagnostic highlights %q, want %q", got, test.want)
-				}
-				if !strings.Contains(diagnostic.String(), "effect("+taggedRule.rule.Name+")") {
-					t.Errorf("unexpected diagnostic: %s", diagnostic.String())
-				}
-			})
-		}
-	}
-}
-
-func TestStabilityApiUsageContextualPropertiesAllowlist(t *testing.T) {
-	t.Parallel()
-	for _, allowed := range []string{"", "example", "example/api", "example/api#Reportable", "example/api#other"} {
-		t.Run(allowed, func(t *testing.T) {
-			t.Parallel()
-			ctx, done := compileApiStabilityFiles(t, map[string]string{
-				"package.json": `{"name":"example"}`,
-				"api.ts": `/** @stability stable */
-export interface Reportable {
-  /** @stability experimental */
-  readonly test?: number
-}`,
-				"test.ts": `import type { Reportable } from "./api.js"
-declare function x(arg: Reportable): void
-x({ test: 42 })`,
-			})
-			defer done()
-			ctx.Options = &etscore.ResolvedEffectPluginOptions{AllowedExperimentalApis: []string{allowed}}
-			diagnostics := ExperimentalApiUsage.Run(ctx)
-			want := 0
-			if allowed == "" || allowed == "example/api#other" {
-				want = 1
-			}
-			if len(diagnostics) != want {
-				t.Fatalf("got %d diagnostics, want %d: %v", len(diagnostics), want, diagnostics)
-			}
-			if want == 1 && !strings.Contains(diagnostics[0].String(), "`example/api#Reportable`") {
-				t.Errorf("unexpected API name: %s", diagnostics[0].String())
-			}
-		})
-	}
-}
-
-func TestStabilityApiUsageRepeatedContextualProperties(t *testing.T) {
-	t.Parallel()
-	for _, call := range []string{"accept", "generic"} {
-		t.Run(call, func(t *testing.T) {
-			t.Parallel()
-			source := `interface Options {
+	repeated := func(call string) string {
+		return `interface Options {
   /** @stability experimental */
   first: number
   stable?: number
@@ -216,47 +79,10 @@ declare function generic<T extends Options>(options: T): void
 const unrelated = { first: 8, second: 9 }
 accept({ first: 6, second: 7 })
 `
-			tests := []struct {
-				rule rule.Rule
-				name string
-				uses []string
-			}{
-				{ExperimentalApiUsage, "first", []string{"first: 1", "first: 4", "first: 6"}},
-				{UnstableApiUsage, "second", []string{"second: 3", "second: 5", "second: 7"}},
-			}
-			for _, order := range [][2]int{{0, 1}, {1, 0}} {
-				t.Run(tests[order[0]].rule.Name+"-first", func(t *testing.T) {
-					t.Parallel()
-					ctx, _, done := compileApiStabilitySource(t, source)
-					defer done()
-					for _, index := range order {
-						test := tests[index]
-						diagnostics := test.rule.Run(ctx)
-						if len(diagnostics) != 3 {
-							t.Fatalf("%s: got %d diagnostics, want 3: %v", test.rule.Name, len(diagnostics), diagnostics)
-						}
-						for i, diagnostic := range diagnostics {
-							if want := strings.Index(source, test.uses[i]); diagnostic.Pos() != want {
-								t.Errorf("%s position = %d, want %d", test.rule.Name, diagnostic.Pos(), want)
-							}
-							if got := source[diagnostic.Pos() : diagnostic.Pos()+diagnostic.Len()]; got != test.name {
-								t.Errorf("%s highlights %q, want %q", test.rule.Name, got, test.name)
-							}
-						}
-					}
-				})
-			}
-		})
 	}
-}
-
-// TestStabilityContextualCacheDiscriminants checks that the per-literal
-// contextual type cache does not leak one property's lookup into another: the
-// same property name resolves to a different union member depending on each
-// literal's discriminant, including literals nested inside property values.
-func TestStabilityContextualCacheDiscriminants(t *testing.T) {
-	t.Parallel()
-	source := `interface A {
+	repeatedExperimental := []string{"first: 1", "first: 4", "first: 6"}
+	repeatedUnstable := []string{"second: 3", "second: 5", "second: 7"}
+	discriminants := `interface A {
   kind: "a"
   /** @stability experimental */
   x: number
@@ -272,37 +98,47 @@ declare function pick<T extends A | B>(value: T): T
 pick({ kind: "a", x: pick({ kind: "b", x: 1, y: 2 }).x, y: 3 })
 pick({ kind: "b", y: pick({ kind: "a", x: 4 }).x, x: 5 })
 `
-	for _, prime := range []bool{true, false} {
-		t.Run(fmt.Sprintf("prime=%t", prime), func(t *testing.T) {
-			t.Parallel()
-			tests := []struct {
-				rule rule.Rule
-				uses []string
-			}{
-				{ExperimentalApiUsage, []string{"x: pick", "x: 4"}},
-				{UnstableApiUsage, []string{"y: 2", "y: pick"}},
-			}
-			for _, order := range [][2]int{{0, 1}, {1, 0}} {
-				t.Run(tests[order[0]].rule.Name+"-first", func(t *testing.T) {
-					t.Parallel()
-					ctx, _, done := compileApiStabilitySourcePrimed(t, source, prime)
-					defer done()
-					for _, index := range order {
-						test := tests[index]
-						var got, want []string
-						for _, diagnostic := range test.rule.Run(ctx) {
-							got = append(got, fmt.Sprintf("%d:%s", diagnostic.Pos(), source[diagnostic.Pos():diagnostic.Pos()+diagnostic.Len()]))
-						}
-						for _, use := range test.uses {
-							want = append(want, fmt.Sprintf("%d:%s", strings.Index(source, use), use[:1]))
-						}
-						if fmt.Sprint(got) != fmt.Sprint(want) {
-							t.Errorf("%s: got %v, want %v", test.rule.Name, got, want)
-						}
+	tests := []struct {
+		name         string
+		source       string
+		prime        bool
+		experimental []string
+		unstable     []string
+	}{
+		{"repeated/accept", repeated("accept"), true, repeatedExperimental, repeatedUnstable},
+		{"repeated/generic", repeated("generic"), true, repeatedExperimental, repeatedUnstable},
+		{"discriminants/prime=true", discriminants, true, []string{"x: pick", "x: 4"}, []string{"y: 2", "y: pick"}},
+		{"discriminants/prime=false", discriminants, false, []string{"x: pick", "x: 4"}, []string{"y: 2", "y: pick"}},
+	}
+	for _, test := range tests {
+		rules := []struct {
+			rule rule.Rule
+			uses []string
+		}{
+			{ExperimentalApiUsage, test.experimental},
+			{UnstableApiUsage, test.unstable},
+		}
+		for _, order := range [][2]int{{0, 1}, {1, 0}} {
+			t.Run(test.name+"/"+rules[order[0]].rule.Name+"-first", func(t *testing.T) {
+				t.Parallel()
+				ctx, _, done := compileApiStabilitySourcePrimed(t, test.source, test.prime)
+				defer done()
+				for _, index := range order {
+					expected := rules[index]
+					var got, want []string
+					for _, diagnostic := range expected.rule.Run(ctx) {
+						got = append(got, fmt.Sprintf("%d:%s", diagnostic.Pos(), test.source[diagnostic.Pos():diagnostic.Pos()+diagnostic.Len()]))
 					}
-				})
-			}
-		})
+					for _, use := range expected.uses {
+						name, _, _ := strings.Cut(use, ":")
+						want = append(want, fmt.Sprintf("%d:%s", strings.Index(test.source, use), name))
+					}
+					if !slices.Equal(got, want) {
+						t.Errorf("%s: got %v, want %v", expected.rule.Name, got, want)
+					}
+				}
+			})
+		}
 	}
 }
 

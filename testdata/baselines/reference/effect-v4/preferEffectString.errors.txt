@@ -35,18 +35,19 @@ Effect version: 4.0.2
 /.src/preferEffectString.ts(37,7): warning TS377150: Consider effect/String.trimEnd instead of native String.trimRight. Deprecated alias of trimEnd; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
 /.src/preferEffectString.ts(39,7): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
 /.src/preferEffectString.ts(40,7): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(41,9): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(42,7): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(44,11): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(45,12): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(47,9): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(49,10): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(51,9): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(53,7): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
-/.src/preferEffectString.ts(54,69): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(41,7): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(42,9): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(43,7): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(45,11): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(46,12): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(48,9): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(50,10): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(52,9): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(54,7): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+/.src/preferEffectString.ts(55,69): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
 
 
-==== /.src/preferEffectString.ts (43 errors) ====
+==== /.src/preferEffectString.ts (44 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectString:warning
     import * as Str from "effect/String"
@@ -154,6 +155,9 @@ Effect version: 4.0.2
 !!! warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
     value[`trim`]()
           ~~~~~~
+!!! warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+    value.tr\u0069m()
+          ~~~~~~~~~
 !!! warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
     ;(value.trim)()
             ~~~~

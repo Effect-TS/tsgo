@@ -1,0 +1,75 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:21-8:35) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+  Fix 0: "Disable preferSucceedSomeOrNone for this line"
+  Fix 1: "Disable preferSucceedSomeOrNone for entire file"
+  Fix 2: "Replace with Effect.succeedSome"
+
+[D2] (9:21-9:35) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+  Fix 0: "Disable preferSucceedSomeOrNone for this line"
+  Fix 1: "Disable preferSucceedSomeOrNone for entire file"
+  Fix 2: "Replace with Effect.succeedNone"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferSucceedSomeOrNone for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferSucceedSomeOrNone for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.succeedSome" ===
+
+--- file:///.src/pipingFlows_dataFirstEffectApis.ts ---
+import { Effect, Exit, Option, Result, UndefinedOr } from "effect"
+
+declare const option: Option.Option<number>
+declare const result: Result.Result<number, string>
+declare const maybe: number | undefined
+declare const exit: Exit.Exit<number, string>
+
+export const some = Effect.succeedSome(1)
+export const none = Effect.succeed(((Option.none())))
+
+export const optionGetOrElse = Option.getOrElse(option, () => "none")
+export const resultMatch = Result.match(result, {
+  onFailure: (error) => error.length,
+  onSuccess: (value) => value
+})
+export const undefinedOrMap = UndefinedOr.map(maybe, (value) => String(value))
+export const exitMatch = Exit.match(exit, {
+  onFailure: (cause) => String(cause),
+  onSuccess: (value) => value
+})
+
+
+=== [D2] Fix 0: "Disable preferSucceedSomeOrNone for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferSucceedSomeOrNone for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.succeedNone" ===
+
+--- file:///.src/pipingFlows_dataFirstEffectApis.ts ---
+import { Effect, Exit, Option, Result, UndefinedOr } from "effect"
+
+declare const option: Option.Option<number>
+declare const result: Result.Result<number, string>
+declare const maybe: number | undefined
+declare const exit: Exit.Exit<number, string>
+
+export const some = Effect.succeed(((Option.some(1))))
+export const none = Effect.succeedNone
+
+export const optionGetOrElse = Option.getOrElse(option, () => "none")
+export const resultMatch = Result.match(result, {
+  onFailure: (error) => error.length,
+  onSuccess: (value) => value
+})
+export const undefinedOrMap = UndefinedOr.map(maybe, (value) => String(value))
+export const exitMatch = Exit.match(exit, {
+  onFailure: (cause) => String(cause),
+  onSuccess: (value) => value
+})
+

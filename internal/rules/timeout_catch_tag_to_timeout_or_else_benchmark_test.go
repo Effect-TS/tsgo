@@ -3,7 +3,6 @@ package rules
 import (
 	"context"
 	"fmt"
-	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -16,12 +15,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/compiler"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 )
 
 var benchmarkTimeoutMatches []TimeoutCatchTagToTimeoutOrElseMatch
 
-// benchmarkTimeoutFixture builds a checked source file outside the timed loop.
 func benchmarkTimeoutFixture(b *testing.B, scenario string) (*typeparser.TypeParser, *checker.Checker, *ast.SourceFile) {
 	b.Helper()
 	var source strings.Builder
@@ -55,8 +54,6 @@ func benchmarkTimeoutFixture(b *testing.B, scenario string) (*typeparser.TypePar
 	return typeparser.NewTypeParser(program, c), c, program.GetSourceFile(tspath.RootedFilePath("/.src/main.ts"))
 }
 
-// BenchmarkTimeoutRule measures warmed source-file analysis. Compilation and
-// initial parsing/checker cache population are excluded from timing.
 func BenchmarkTimeoutRule(b *testing.B) {
 	for _, scenario := range []string{"no_match", "sparse", "dense", "option"} {
 		b.Run(scenario, func(b *testing.B) {

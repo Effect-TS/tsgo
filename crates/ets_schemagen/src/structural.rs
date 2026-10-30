@@ -23,9 +23,9 @@ use crate::*;
 //
 // Rust: Go keeps the checker and the type parser in the generator; the parser borrows the checker mutably, so
 // the generator owns only its own state and every method that reads types takes the parser as `tp`
-// (docs/PORTING.md, "Types"; the checker is `tp.checker()`). The tracker is borrowed (Go: a pointer). Go's maps
+// (porting/PORTING.md, "Types"; the checker is `tp.checker()`). The tracker is borrowed (Go: a pointer). Go's maps
 // that are iterated (`hoistedSchemas`, `nameToType`) iterate in random order; here they keep insertion order
-// (docs/DIVERGENCES.md, "`schemagen` structural generator map order").
+// (porting/DIVERGENCES.md, "`schemagen` structural generator map order").
 pub struct StructuralSchemaGen<'t> {
     pub tracker: &'t Tracker,
     pub source_file: P<SourceFile>,

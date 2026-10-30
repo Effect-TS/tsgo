@@ -37,7 +37,7 @@ pub(crate) fn filter_diagnostics_for_exit_code(
 // Non-Effect diagnostics are always retained. If opts is nil, the original slice is
 // returned unchanged.
 //
-// Rust: `_exported` tells it apart from the callback `filterDiagnosticsForExitCode` (docs/PORTING.md, "Naming");
+// Rust: `_exported` tells it apart from the callback `filterDiagnosticsForExitCode` (porting/PORTING.md, "Naming");
 // the unchanged slice is a copy of the handles.
 pub fn filter_diagnostics_for_exit_code_exported(
     opts: Option<&EffectPluginOptions>,

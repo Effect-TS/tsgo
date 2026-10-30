@@ -1,0 +1,73 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:1-4:26) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D2] (9:1-9:56) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D3] (16:1-16:56) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D4] (20:1-20:71) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D5] (23:1-23:34) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D6] (27:1-27:75) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D7] (30:1-30:62) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default

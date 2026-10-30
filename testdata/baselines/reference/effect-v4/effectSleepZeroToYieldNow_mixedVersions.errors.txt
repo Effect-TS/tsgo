@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: unknown
+
+
+
+==== /.src/mixedVersions.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectSleepZeroToYieldNow:suggestion
+    import { Effect } from "effect"
+    import { marker } from "nested"
+    
+    // MUST NOT TRIGGER: the program also loads Effect v3, so the Effect version is ambiguous
+    export const sleep = Effect.sleep(0)
+    export const mixedPackage = marker
+    

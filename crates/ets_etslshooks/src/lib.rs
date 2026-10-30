@@ -21,7 +21,7 @@ mod document_symbols;
 mod init;
 mod inlay_hints;
 
-/// Rust-only: runs the package's Go `init()` once (docs/PORTING.md, "Go runtime equivalents").
+/// Rust-only: runs the package's Go `init()` once (porting/PORTING.md, "Go runtime equivalents").
 pub fn init() {
     static INIT: std::sync::Once = std::sync::Once::new();
     INIT.call_once(init::init);

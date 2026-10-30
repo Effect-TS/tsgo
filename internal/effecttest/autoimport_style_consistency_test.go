@@ -15,33 +15,41 @@ import (
 	_ "github.com/effect-ts/tsgo/etstesthooks"
 )
 
-func TestAutoImportEffectStyleConsistency_namespace(t *testing.T) {
-	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
+func autoImportStyleContent(pluginOptions string, files string) string {
+	return `// @Filename: /tsconfig.json
 {
   "compilerOptions": {
     "plugins": [
       {
         "name": "@effect/language-service",
-        "namespaceImportPackages": ["EFFECT"]
+        ` + pluginOptions + `
       }
     ]
   }
 }
 // @effect-v4
-// @Filename: /mainCompletion.ts
-runPromiseExit/*completion*/();
-// @Filename: /mainFix.ts
-runPromiseExit/*fix*/();
-`
+` + files
+}
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	defer done()
-
-	preferences := &lsutil.UserPreferences{
+func autoImportStylePreferences() *lsutil.UserPreferences {
+	return &lsutil.UserPreferences{
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
+}
+
+func TestAutoImportEffectStyleConsistency_namespace(t *testing.T) {
+	t.Parallel()
+	content := autoImportStyleContent(`"namespaceImportPackages": ["EFFECT"]`, `// @Filename: /mainCompletion.ts
+runPromiseExit/*completion*/();
+// @Filename: /mainFix.ts
+runPromiseExit/*fix*/();
+`)
+
+	f, done := fourslash.NewFourslash(t, nil, content)
+	defer done()
+
+	preferences := autoImportStylePreferences()
 	completion := "completion"
 
 	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
@@ -63,31 +71,16 @@ Effect.runPromiseExit();
 
 func TestAutoImportEffectStyleConsistency_namespaceReexport(t *testing.T) {
 	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
+	content := autoImportStyleContent(`"namespaceImportPackages": ["effect"]`, `// @Filename: /mainCompletion.ts
 const completion = Effect/*completion*/;
 // @Filename: /mainFix.ts
 const fix = Effect/*fix*/;
-`
+`)
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
-	preferences := &lsutil.UserPreferences{
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-	}
+	preferences := autoImportStylePreferences()
 	completion := "completion"
 
 	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
@@ -105,34 +98,14 @@ const completion = Effect;`),
 
 func TestAutoImportEffectStyleConsistency_barrel(t *testing.T) {
 	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "barrelImportPackages": ["EFFECT"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
-succeed/*completion*/(1);
-// @Filename: /mainFix.ts
+	content := autoImportStyleContent(`"barrelImportPackages": ["EFFECT"]`, `// @Filename: /mainFix.ts
 succeed/*fix*/(1);
-`
+`)
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
-	preferences := &lsutil.UserPreferences{
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-	}
-	f.GoToMarker(t, "fix")
-	// Barrel imports preserve the namespace-qualified call shape and use the
-	// public group barrel for nested modules.
+	preferences := autoImportStylePreferences()
 	verifyImportFixContentsUnordered(t, f, "fix", "succeed(1);\n", []string{
 		"import { Channel } from \"effect\";\n\nChannel.succeed(1);\n",
 		"import { Config } from \"effect\";\n\nConfig.succeed(1);\n",
@@ -267,38 +240,15 @@ func lspPositionToOffset(text string, lineMap *lsconv.LSPLineMap, pos lsproto.Po
 
 func TestAutoImportEffectStyleConsistency_topLevelNamedReexportsIgnore(t *testing.T) {
 	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"],
-        "topLevelNamedReexports": "ignore"
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
-succeed/*completion*/(1);
-// @Filename: /mainFix.ts
+	content := autoImportStyleContent(`"namespaceImportPackages": ["effect"], "topLevelNamedReexports": "ignore"`, `// @Filename: /mainFix.ts
 succeed/*fix*/(1);
-`
+`)
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
-	preferences := &lsutil.UserPreferences{
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-	}
-	completion := "completion"
-	_ = completion
-
+	preferences := autoImportStylePreferences()
 	f.GoToMarker(t, "fix")
-	// With the real effect-v4 package mounted, succeed is surfaced from multiple
-	// namespace modules rather than as a direct named import from "effect".
 	f.VerifyImportFixAtPosition(t, []string{
 		"import * as Channel from \"effect/Channel\";\n\nChannel.succeed(1);\n",
 		"import * as Config from \"effect/Config\";\n\nConfig.succeed(1);\n",
@@ -319,35 +269,15 @@ succeed/*fix*/(1);
 
 func TestAutoImportEffectStyleConsistency_topLevelNamedReexportsFollow(t *testing.T) {
 	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"],
-        "topLevelNamedReexports": "follow"
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
-runPromiseExit/*completion*/();
-// @Filename: /mainFix.ts
+	content := autoImportStyleContent(`"namespaceImportPackages": ["effect"], "topLevelNamedReexports": "follow"`, `// @Filename: /mainFix.ts
 runPromiseExit/*fix*/();
-`
+`)
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
-	preferences := &lsutil.UserPreferences{
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-	}
+	preferences := autoImportStylePreferences()
 
-	// With topLevelNamedReexports="follow", the reexport from "effect" is suppressed,
-	// leaving only the direct namespace import from "effect/Effect".
 	f.GoToMarker(t, "fix")
 	f.VerifyImportFixAtPosition(t, []string{`import * as Effect from "effect/Effect";
 
@@ -357,31 +287,16 @@ Effect.runPromiseExit();
 
 func TestAutoImportEffectStyleConsistency_testClockWithNamespace(t *testing.T) {
 	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
+	content := autoImportStyleContent(`"namespaceImportPackages": ["effect"]`, `// @Filename: /mainCompletion.ts
 testClockWith/*completion*/(() => undefined as any);
 // @Filename: /mainFix.ts
 testClockWith/*fix*/(() => undefined as any);
-`
+`)
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
-	preferences := &lsutil.UserPreferences{
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-	}
+	preferences := autoImportStylePreferences()
 	completion := "completion"
 
 	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
@@ -403,32 +318,17 @@ TestClock.testClockWith(() => undefined as any);
 
 func TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedImport(t *testing.T) {
 	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainFix.ts
+	content := autoImportStyleContent(`"namespaceImportPackages": ["effect"]`, `// @Filename: /mainFix.ts
 import { adjust } from "effect/testing/TestClock"
 
 void adjust
 testClockWith/*fix*/(() => undefined as any);
-`
+`)
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
-	preferences := &lsutil.UserPreferences{
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-	}
+	preferences := autoImportStylePreferences()
 
 	f.GoToMarker(t, "fix")
 	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
@@ -441,32 +341,17 @@ TestClock.testClockWith(() => undefined as any);
 
 func TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImport(t *testing.T) {
 	t.Parallel()
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainFix.ts
+	content := autoImportStyleContent(`"namespaceImportPackages": ["effect"]`, `// @Filename: /mainFix.ts
 import * as TestClock from "effect/testing/TestClock";
 
 void TestClock.adjust
 testClockWith/*fix*/(() => undefined as any);
-`
+`)
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
-	preferences := &lsutil.UserPreferences{
-		IncludeCompletionsForModuleExports:    core.TSTrue,
-		IncludeCompletionsForImportStatements: core.TSTrue,
-	}
+	preferences := autoImportStylePreferences()
 
 	f.GoToMarker(t, "fix")
 	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";

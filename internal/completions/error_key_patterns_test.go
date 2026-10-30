@@ -1,11 +1,6 @@
 package completions_test
 
-import (
-	"testing"
-
-	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
-	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
-)
+import "testing"
 
 const errorKeyPatternTsConfig = `{
   "compilerOptions": {
@@ -41,25 +36,6 @@ const taggedClassKeyPatternTsConfig = `{
     ]
   }
 }`
-
-const namedPackageJson = `{ "name": "@effect/harness-effect-v4" }`
-
-func taggedItems(t *testing.T, tsconfig string, packageJson string, source string) []*lsproto.CompletionItem {
-	t.Helper()
-	content := "// @Filename: /tsconfig.json\n" + tsconfig + "\n" +
-		"// @Filename: /package.json\n" + packageJson + "\n" +
-		"// @Filename: /test.ts\n" + source + "/*1*/"
-
-	f, done := fourslash.NewFourslash(t, nil, content)
-	defer done()
-
-	f.GoToMarker(t, "1")
-	completions := f.GetCompletions(t, nil)
-	if completions == nil {
-		return nil
-	}
-	return completions.Items
-}
 
 func TestErrorKeyPatterns(t *testing.T) {
 	t.Parallel()
@@ -178,9 +154,9 @@ func TestErrorKeyPatterns(t *testing.T) {
 			t.Parallel()
 			packageJson := tc.packageJson
 			if packageJson == "" {
-				packageJson = namedPackageJson
+				packageJson = harnessPackageJSON
 			}
-			item := findCompletionItem(taggedItems(t, tc.tsconfig, packageJson, tc.source), tc.label)
+			item := findCompletionItem(completionItemsIn(t, tc.tsconfig, packageJson, tc.source, len(tc.source)), tc.label)
 			if item == nil {
 				t.Fatalf("completion %q not found", tc.label)
 			}

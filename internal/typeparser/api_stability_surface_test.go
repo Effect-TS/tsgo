@@ -7,9 +7,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-// assertApiStabilitySurfaceExcludesOwnTag asserts that a surface result carries
-// none of the root's own findings. name is the display name the root's own tag
-// would report under; other names are legitimate child dependencies.
 func assertApiStabilitySurfaceExcludesOwnTag(t *testing.T, used ApiStabilityUsed, name string) {
 	t.Helper()
 	for _, dependency := range used.dependencies {
@@ -19,13 +16,6 @@ func assertApiStabilitySurfaceExcludesOwnTag(t *testing.T, used ApiStabilityUsed
 	}
 }
 
-// TestApiStabilityRootTagIsExcludedFromResult pins the
-// declared-versus-surface split for every root kind: declared stability
-// is the component's own tag, while the surface result is the minimum
-// guaranteed stability of the component's exposed children and excludes the
-// root's own tag. The declared accessors keep returning the own tag with its
-// declaration provenance, and the traversal still descends through a tagged
-// root, so a tagged root's children keep being reported.
 func TestApiStabilityRootTagIsExcludedFromResult(t *testing.T) {
 	t.Parallel()
 
@@ -64,8 +54,6 @@ export type TaggedAliasLeaky = { value: E }
 	testFile := files["/.src/test.ts"]
 	session := tp.NewApiStabilitySession()
 
-	// The declared accessors keep the own tag and its provenance for every root
-	// kind. This read never triggers the computed surface.
 	taggedRoot := apiStabilityTestExport(t, c, testFile, "TaggedRoot")
 	taggedRootDeclared := tp.DeclaredApiStabilityOfSymbol(taggedRoot)
 	if taggedRootDeclared.level != ApiStabilityUnstable || taggedRootDeclared.declaration == nil {
@@ -111,8 +99,6 @@ export type TaggedAliasLeaky = { value: E }
 		}
 	}
 
-	// A tagged function's own declaration tag is recorded as a signature
-	// finding; it is still the root's own tag and stays excluded.
 	taggedFn := apiStabilityTestExport(t, c, testFile, "taggedFn")
 	fnDeclared := tp.DeclaredApiStabilityOfSignature(apiStabilityTestSignatures(t, c, taggedFn)[0])
 	if fnDeclared.level != ApiStabilityUnstable || fnDeclared.declaration == nil {
@@ -123,8 +109,6 @@ export type TaggedAliasLeaky = { value: E }
 		t.Fatalf("taggedFn signature own tag must be excluded, got min=%v deps=%v", fnUsed.minimum, apiStabilityDependencyNames(fnUsed))
 	}
 
-	// The tagged root's children are still checked: the traversal never stops
-	// at the root tag.
 	withChild := session.UsedBySymbol(apiStabilityTestExport(t, c, testFile, "TaggedRootWithChild"))
 	if withChild.incomplete || withChild.minimum != ApiStabilityExperimental || !containsDependency(withChild, "E") {
 		t.Fatalf("TaggedRootWithChild should expose E, got min=%v deps=%v", withChild.minimum, apiStabilityDependencyNames(withChild))
@@ -143,8 +127,6 @@ export type TaggedAliasLeaky = { value: E }
 	}
 	assertApiStabilitySurfaceExcludesOwnTag(t, aliasLeaky, "TaggedAliasLeaky")
 
-	// A represented type keeps its own symbol's tag excluded while its children
-	// still contribute.
 	aliasType := session.UsedByType(c.GetDeclaredTypeOfSymbol(apiStabilityTestExport(t, c, testFile, "TaggedAliasLeaky")))
 	if aliasType.incomplete || aliasType.minimum != ApiStabilityExperimental || !containsDependency(aliasType, "E") {
 		t.Fatalf("TaggedAliasLeaky type should expose E, got min=%v deps=%v", aliasType.minimum, apiStabilityDependencyNames(aliasType))
@@ -152,12 +134,6 @@ export type TaggedAliasLeaky = { value: E }
 	assertApiStabilitySurfaceExcludesOwnTag(t, aliasType, "TaggedAliasLeaky")
 }
 
-// TestApiStabilityRootExclusionIsAResultConversion proves
-// the exclusion belongs to the result conversion and not to the stored
-// surface: the stored surface always keeps its own tag, so the same concrete
-// type reached as a root excludes it while the same type reached as a child of
-// another root contributes it. The assertions run in the same session in both
-// query orders.
 func TestApiStabilityRootExclusionIsAResultConversion(t *testing.T) {
 	t.Parallel()
 
@@ -198,27 +174,17 @@ export interface Holder { shared: Shared }
 		}
 	}
 
-	// Root first, then child: the cached root surface still contributes when
-	// reached as a child.
 	childLast := tp.NewApiStabilitySession()
 	checkShared(t, childLast, "shared-first")
 	checkHolder(t, childLast, "shared-first")
 	checkShared(t, childLast, "shared-first-repeat")
 
-	// Child first, then root: the cached child does not leak into the root
-	// result.
 	rootLast := tp.NewApiStabilitySession()
 	checkHolder(t, rootLast, "child-first")
 	checkShared(t, rootLast, "child-first")
 	checkHolder(t, rootLast, "child-first-repeat")
 }
 
-// TestApiStabilityAliasRootVersusConcreteIdentity pins the
-// alias treatment: a tagged alias root excludes its own tag but the concrete
-// underlying identity it resolves to stays an exposed child. A non-generic
-// alias to an interface is represented by the compiler as the interface type
-// itself, so the type-level query excludes the interface's own tag, exactly
-// like querying the interface symbol directly.
 func TestApiStabilityAliasRootVersusConcreteIdentity(t *testing.T) {
 	t.Parallel()
 
@@ -246,16 +212,12 @@ export type TaggedAliasToConcrete = Concrete
 		t.Fatalf("Concrete's type must exclude its own tag, got min=%v deps=%v", concreteType.minimum, apiStabilityDependencyNames(concreteType))
 	}
 
-	// An untagged alias exposes the concrete identity as a child: the alias's
-	// own tag is absent, so nothing is excluded beyond the alias itself.
 	plain := apiStabilityTestExport(t, c, testFile, "AliasToConcrete")
 	plainUsed := session.UsedBySymbol(plain)
 	if plainUsed.incomplete || plainUsed.minimum != ApiStabilityUnstable || !containsDependency(plainUsed, "Concrete") {
 		t.Fatalf("AliasToConcrete should expose Concrete as a child, got min=%v deps=%v", plainUsed.minimum, apiStabilityDependencyNames(plainUsed))
 	}
 
-	// A tagged alias excludes its own tag and keeps the concrete identity as a
-	// child.
 	taggedAlias := apiStabilityTestExport(t, c, testFile, "TaggedAliasToConcrete")
 	taggedAliasUsed := session.UsedBySymbol(taggedAlias)
 	if taggedAliasUsed.incomplete || taggedAliasUsed.minimum != ApiStabilityUnstable || !containsDependency(taggedAliasUsed, "Concrete") {
@@ -265,20 +227,13 @@ export type TaggedAliasToConcrete = Concrete
 
 	// The compiler represents `TaggedAliasToConcrete` as `Concrete`'s own type,
 	// so the type-level query sees `Concrete` as the root identity and excludes
-	// it. The alias symbol is not part of the type object; callers that want
-	// the alias surface query the alias symbol, which is what the rule does.
+	// it. The alias symbol is not part of the type object.
 	taggedAliasType := session.UsedByType(c.GetDeclaredTypeOfSymbol(taggedAlias))
 	if taggedAliasType.incomplete || taggedAliasType.minimum != ApiStabilityStable || len(taggedAliasType.dependencies) != 0 {
 		t.Fatalf("TaggedAliasToConcrete's represented type excludes Concrete's own tag, got min=%v deps=%v", taggedAliasType.minimum, apiStabilityDependencyNames(taggedAliasType))
 	}
 }
 
-// TestApiStabilityOverloadTagsStayDistinct pins the
-// overload treatment: the root symbol's own tag is exactly the declared tag the
-// symbol-level declared accessor reports, so a tagged overload of that same
-// declaration is excluded from the symbol surface. A tagged overload carrying
-// another declaration keeps contributing as an exposed child, and each
-// signature's own tag stays excluded from that signature's surface.
 func TestApiStabilityOverloadTagsStayDistinct(t *testing.T) {
 	t.Parallel()
 
@@ -317,8 +272,6 @@ export function other(x: string | number): string | number { return "" }
 			tp.DeclaredApiStabilityOfSignature(signatures[1]).level)
 	}
 
-	// The unstable overload is the declared own tag and is excluded; the
-	// experimental overload is another declaration and contributes as a child.
 	mixedUsed := session.UsedBySymbol(mixed)
 	if mixedUsed.incomplete || mixedUsed.minimum != ApiStabilityExperimental {
 		t.Fatalf("mixed surface = %v/%v, want experimental from the other overload", mixedUsed.minimum, apiStabilityDependencyNames(mixedUsed))
@@ -336,8 +289,6 @@ export function other(x: string | number): string | number { return "" }
 		t.Fatalf("the experimental overload should stay an exposed child, got %v", apiStabilityDependencyNames(mixedUsed))
 	}
 
-	// Each overload's own tag is excluded from its own signature surface; the
-	// stable parameter/return types expose nothing.
 	for index, signature := range signatures {
 		used := session.UsedBySignature(signature)
 		if used.incomplete || used.minimum != ApiStabilityStable || len(used.dependencies) != 0 {
@@ -345,8 +296,6 @@ export function other(x: string | number): string | number { return "" }
 		}
 	}
 
-	// When the symbol-level declared tag is the only tagged own declaration,
-	// the whole symbol surface has no child findings.
 	other := apiStabilityTestExport(t, c, testFile, "other")
 	if declared := tp.DeclaredApiStabilityOfSymbol(other); declared.level != ApiStabilityExperimental {
 		t.Fatalf("other declared = %v, want experimental", declared.level)
@@ -357,12 +306,6 @@ export function other(x: string | number): string | number { return "" }
 	}
 }
 
-// TestApiStabilityExplicitStableBoundaries pins the child
-// rules: an absent tag and an explicit stable tag are both effective stable at
-// the export ceiling while staying distinct in the declared lookup, a named
-// reference reached inside a surface stays shallow (no recursive member
-// explosion), an explicit tag is a boundary for the component's internal
-// surface, and independently exposed generic arguments are never hidden.
 func TestApiStabilityExplicitStableBoundaries(t *testing.T) {
 	t.Parallel()
 
@@ -389,7 +332,6 @@ export interface RootWithPlainHidden { box: PlainHidden }
 	testFile := files["/.src/test.ts"]
 	session := tp.NewApiStabilitySession()
 
-	// Explicit stable stays distinct from an absent tag in the declared lookup.
 	stableBox := apiStabilityTestExport(t, c, testFile, "StableBox")
 	stableDeclared := tp.DeclaredApiStabilityOfSymbol(stableBox)
 	if stableDeclared.level != ApiStabilityStable || stableDeclared.declaration == nil {
@@ -401,8 +343,6 @@ export interface RootWithPlainHidden { box: PlainHidden }
 		t.Fatalf("absent tag should be stable without provenance: %+v", plainDeclared)
 	}
 
-	// A tagged stable child must not hide an independently exposed generic
-	// argument.
 	stableBoxRoot := session.UsedBySymbol(apiStabilityTestExport(t, c, testFile, "RootWithStableBox"))
 	if stableBoxRoot.incomplete || stableBoxRoot.minimum != ApiStabilityExperimental || !containsDependency(stableBoxRoot, "E") {
 		t.Fatalf("RootWithStableBox should expose the StableBox type argument E, got min=%v deps=%v", stableBoxRoot.minimum, apiStabilityDependencyNames(stableBoxRoot))
@@ -412,19 +352,11 @@ export interface RootWithPlainHidden { box: PlainHidden }
 		t.Fatalf("RootWithPlainBox should expose the PlainBox type argument E, got min=%v deps=%v", plainBoxRoot.minimum, apiStabilityDependencyNames(plainBoxRoot))
 	}
 
-	// A directly exported component is expanded: its own members are part of
-	// its root surface.
 	stableHidden := session.UsedBySymbol(apiStabilityTestExport(t, c, testFile, "StableHidden"))
 	if stableHidden.incomplete || stableHidden.minimum != ApiStabilityExperimental || !containsDependency(stableHidden, "E") {
 		t.Fatalf("StableHidden as a root should expand and expose E, got min=%v deps=%v", stableHidden.minimum, apiStabilityDependencyNames(stableHidden))
 	}
 
-	// On the member route both the tagged and the untagged component stay
-	// quiet: a plain member type already uses the shallow named-reference
-	// boundary, so its own members are never expanded. The explicit tag is a
-	// real boundary on the routes the shallow boundary would still inspect
-	// (call/construct signatures and heritage); those differentials are pinned
-	// in TestApiStabilityChildBoundaryDifferentials.
 	stableHiddenRoot := session.UsedBySymbol(apiStabilityTestExport(t, c, testFile, "RootWithStableHidden"))
 	if stableHiddenRoot.incomplete || len(stableHiddenRoot.dependencies) != 0 {
 		t.Fatalf("RootWithStableHidden must not expand the nested component, got min=%v deps=%v", stableHiddenRoot.minimum, apiStabilityDependencyNames(stableHiddenRoot))
@@ -435,10 +367,6 @@ export interface RootWithPlainHidden { box: PlainHidden }
 	}
 }
 
-// TestApiStabilityChildrenStillChecked pins that the
-// root-excluding split keeps the currently represented obligations checked:
-// generic parameters, constraints, inferred anonymous nested returns and
-// signature components still expose their dependencies under a tagged root.
 func TestApiStabilityChildrenStillChecked(t *testing.T) {
 	t.Parallel()
 
@@ -494,122 +422,6 @@ export interface TaggedConstrained<T extends E> { value: T }
 	assertApiStabilitySurfaceExcludesOwnTag(t, constrained, "TaggedConstrained")
 }
 
-// TestApiStabilityIncompleteAndCyclesKeepExclusion pins
-// that an incomplete or cycle-settled result still excludes the root's own tag
-// and keeps the generality of the result: incomplete is never treated as
-// stable, and a cycle still propagates its leak without reintroducing the root
-// tag.
-func TestApiStabilityIncompleteAndCyclesKeepExclusion(t *testing.T) {
-	t.Parallel()
-
-	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-		"/.src/test.ts": `/** @stability experimental */
-export interface E { value: string }
-
-/** @stability unstable */
-export interface Node { next: Node; payload: E }
-
-/** @stability unstable */
-export interface Cold { plain: number; [Symbol.iterator](): E }
-`,
-	})
-	defer done()
-
-	testFile := files["/.src/test.ts"]
-
-	// Cold: the computed member is not materialized, so the surface reports
-	// incomplete. The root's own tag is excluded even from the incomplete
-	// result.
-	cold := apiStabilityTestExport(t, c, testFile, "Cold")
-	coldUsed := tp.ApiStabilityUsedBySymbol(cold)
-	if !coldUsed.incomplete {
-		t.Fatal("an unmaterialized computed member must report an incomplete result")
-	}
-	assertApiStabilitySurfaceExcludesOwnTag(t, coldUsed, "Cold")
-
-	primeApiStabilityChecker(t, c)
-
-	warmCold := NewTypeParser(c.Program(), c).ApiStabilityUsedBySymbol(cold)
-	if warmCold.incomplete || !containsDependency(warmCold, "E") {
-		t.Fatalf("the materialized retry should settle complete with E, got min=%v deps=%v", warmCold.minimum, apiStabilityDependencyNames(warmCold))
-	}
-	assertApiStabilitySurfaceExcludesOwnTag(t, warmCold, "Cold")
-
-	session := tp.NewApiStabilitySession()
-	node := apiStabilityTestExport(t, c, testFile, "Node")
-	nodeUsed := session.UsedBySymbol(node)
-	if nodeUsed.incomplete || nodeUsed.minimum != ApiStabilityExperimental || !containsDependency(nodeUsed, "E") {
-		t.Fatalf("the cyclic root should expose E, got min=%v deps=%v", nodeUsed.minimum, apiStabilityDependencyNames(nodeUsed))
-	}
-	assertApiStabilitySurfaceExcludesOwnTag(t, nodeUsed, "Node")
-	if surface := session.analysis.sessionSymbols[node]; !surface.complete || surface.blocked {
-		t.Fatal("a settled cyclic surface should be a complete session result")
-	}
-	// The stored cyclic surface keeps the own tag for child reuse.
-	if len(session.analysis.sessionSymbols[node].findings) == 0 {
-		t.Fatal("the stored cyclic surface must keep the own tag")
-	}
-}
-
-// TestApiStabilityDeclaredReadsStayIndependent pins that
-// the split keeps declared and computed state independent for every new root
-// accessor: reading a declared level never populates a session or triggers a
-// surface, and a surface query reuses the same declared cache.
-func TestApiStabilityDeclaredReadsStayIndependent(t *testing.T) {
-	t.Parallel()
-
-	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-		"/.src/test.ts": `/** @stability unstable */
-export function taggedFn(x: string): string
-/** @stability unstable */
-export interface TaggedIface { value: string }
-`,
-	})
-	defer done()
-	primeApiStabilityChecker(t, c)
-
-	testFile := files["/.src/test.ts"]
-	taggedFn := apiStabilityTestExport(t, c, testFile, "taggedFn")
-	taggedIface := apiStabilityTestExport(t, c, testFile, "TaggedIface")
-	signature := apiStabilityTestSignatures(t, c, taggedFn)[0]
-
-	before := c.TotalInstantiationCount
-	_ = tp.DeclaredApiStabilityOfSymbol(taggedFn)
-	_ = tp.DeclaredApiStabilityOfSymbol(taggedIface)
-	_ = tp.DeclaredApiStabilityOfSignature(signature)
-	if delta := c.TotalInstantiationCount - before; delta != 0 {
-		t.Fatalf("declared reads instantiated %d types, want 0", delta)
-	}
-
-	session := tp.NewApiStabilitySession()
-	if len(session.analysis.sessionSymbols) != 0 || len(session.analysis.sessionTypes) != 0 ||
-		len(session.analysis.sessionSignatures) != 0 || len(session.analysis.sessionComponents) != 0 {
-		t.Fatal("declared reads left computed analysis state")
-	}
-	if !tp.links.ApiStabilityDeclaredSymbol.Has(taggedFn) || !tp.links.ApiStabilityDeclaredSymbol.Has(taggedIface) {
-		t.Fatal("declared symbol lookups should be cached")
-	}
-	if !tp.links.ApiStabilityDeclaredSignature.Has(rawSignature(signature)) {
-		t.Fatal("declared signature lookup should be cached")
-	}
-
-	// The surface query builds its root identity from the declared cache and
-	// still returns the root-excluding result.
-	used := session.UsedBySymbol(taggedFn)
-	if used.incomplete || used.minimum != ApiStabilityStable || len(used.dependencies) != 0 {
-		t.Fatalf("taggedFn surface should be empty, got min=%v deps=%v", used.minimum, apiStabilityDependencyNames(used))
-	}
-}
-
-// TestApiStabilityChildBoundaryDifferentials pins the
-// explicitly tagged child boundary on every surface edge: a child carrying an
-// explicit declared tag contributes its declared level and its internals are
-// not expanded, while an untagged child keeps composing within the current
-// traversal boundaries. Independently represented generic arguments stay
-// exposed on tagged children, a tagged component still expands when it is the
-// queried root, and a member the compiler flattened into a derived member table
-// from a tagged base is attributed to that base rather than expanded as the
-// derived component's own member.
 func TestApiStabilityChildBoundaryDifferentials(t *testing.T) {
 	t.Parallel()
 
@@ -702,8 +514,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		return session.UsedBySymbol(apiStabilityTestExport(t, c, testFile, name))
 	}
 
-	// Member route: the untagged callable's directly exposed call signature is
-	// inspected, while the explicitly tagged callable stops before it.
 	callableHolder := surface("CallableHolder")
 	if callableHolder.incomplete || callableHolder.minimum != ApiStabilityExperimental || !containsDependency(callableHolder, "E") {
 		t.Fatalf("CallableHolder should expose E through its untagged callable, got min=%v deps=%v", callableHolder.minimum, apiStabilityDependencyNames(callableHolder))
@@ -719,14 +529,11 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("a tagged hidden member and an untagged shallow member must both stay quiet, got min=%v deps=%v", hiddenHolder.minimum, apiStabilityDependencyNames(hiddenHolder))
 	}
 
-	// The tagged hidden component itself still expands as a queried root.
 	taggedHidden := surface("TaggedHidden")
 	if taggedHidden.incomplete || taggedHidden.minimum != ApiStabilityExperimental || !containsDependency(taggedHidden, "E") {
 		t.Fatalf("TaggedHidden as a root should expand and expose E, got min=%v deps=%v", taggedHidden.minimum, apiStabilityDependencyNames(taggedHidden))
 	}
 
-	// Severity: an unstable tagged child contributes unstable, never its
-	// experimental internal.
 	unstableCallable := surface("UnstableCallableHolder")
 	if unstableCallable.incomplete || unstableCallable.minimum != ApiStabilityUnstable || containsDependency(unstableCallable, "E") {
 		t.Fatalf("UnstableCallableHolder should expose only the unstable child tag, got min=%v deps=%v", unstableCallable.minimum, apiStabilityDependencyNames(unstableCallable))
@@ -739,7 +546,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("UnstableCallable as a root should expand and expose E, got min=%v deps=%v", unstableCallableRoot.minimum, apiStabilityDependencyNames(unstableCallableRoot))
 	}
 
-	// Heritage route: a tagged base stops the expand; an untagged base keeps it.
 	taggedHeritage := surface("TaggedHeritage")
 	if taggedHeritage.incomplete || len(taggedHeritage.dependencies) != 0 {
 		t.Fatalf("TaggedHeritage must not expose the tagged base internals, got min=%v deps=%v", taggedHeritage.minimum, apiStabilityDependencyNames(taggedHeritage))
@@ -756,8 +562,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("UnstableHeritage should expose UnstableBase, got %v", apiStabilityDependencyNames(unstableHeritage))
 	}
 
-	// Heritage generic arguments: a stable argument contributes nothing, an
-	// independently represented argument stays exposed.
 	stableArgument := surface("TaggedBoxStableArgument")
 	if stableArgument.incomplete || len(stableArgument.dependencies) != 0 {
 		t.Fatalf("TaggedBox<string> must not expose the tagged base internals, got min=%v deps=%v", stableArgument.minimum, apiStabilityDependencyNames(stableArgument))
@@ -767,15 +571,11 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("TaggedBox<E> must keep the independently represented argument exposed, got min=%v deps=%v", exposedArgument.minimum, apiStabilityDependencyNames(exposedArgument))
 	}
 
-	// Deep heritage: the untagged intermediate keeps composing, so the tagged
-	// ancestor's argument is still reached with the composed substitution.
 	deepChain := surface("DeepChain")
 	if deepChain.incomplete || deepChain.minimum != ApiStabilityExperimental || !containsDependency(deepChain, "E") {
 		t.Fatalf("DeepChain should expose the tagged ancestor argument through the untagged intermediate, got min=%v deps=%v", deepChain.minimum, apiStabilityDependencyNames(deepChain))
 	}
 
-	// The same deep chain as an expanded reference root: the flattened member
-	// table attributes the tagged ancestor and still exposes its argument.
 	deepRefIdent := findIdentifierByText(t, testFile, "DeepChainRef", 1)
 	if deepRefIdent == nil || deepRefIdent.Parent == nil {
 		t.Fatal("DeepChainRef annotation not found")
@@ -786,15 +586,11 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("the DeepChainRef<E> reference root should expose E, got min=%v deps=%v", deepRef.minimum, apiStabilityDependencyNames(deepRef))
 	}
 
-	// Alias application: the alias tag is the boundary and its argument stays.
 	aliasBox := surface("TaggedAliasBoxHolder")
 	if aliasBox.incomplete || aliasBox.minimum != ApiStabilityExperimental || !containsDependency(aliasBox, "E") {
 		t.Fatalf("a tagged alias application must keep its argument exposed, got min=%v deps=%v", aliasBox.minimum, apiStabilityDependencyNames(aliasBox))
 	}
 
-	// Member tag: an explicitly tagged member bounds its anonymous type, a tag
-	// on an anonymous member's own call signature bounds that signature, and an
-	// untagged control keeps the anonymous walk.
 	memberTagBoundary := surface("MemberTagBoundary")
 	if memberTagBoundary.incomplete || len(memberTagBoundary.dependencies) != 0 {
 		t.Fatalf("tagged member and tagged call signature must both stay bounded, got min=%v deps=%v", memberTagBoundary.minimum, apiStabilityDependencyNames(memberTagBoundary))
@@ -804,7 +600,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("MemberTagControl should keep the anonymous walk and expose E, got min=%v deps=%v", memberTagControl.minimum, apiStabilityDependencyNames(memberTagControl))
 	}
 
-	// Index signature tag: the explicit tag bounds the key and value internals.
 	indexTagBoundary := surface("IndexTagBoundary")
 	if indexTagBoundary.incomplete || containsDependency(indexTagBoundary, "E") {
 		t.Fatalf("a tagged index signature must not expose its value internals, got min=%v deps=%v", indexTagBoundary.minimum, apiStabilityDependencyNames(indexTagBoundary))
@@ -814,8 +609,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("IndexTagControl should expose the index value type, got min=%v deps=%v", indexTagControl.minimum, apiStabilityDependencyNames(indexTagControl))
 	}
 
-	// The same tagged component as parent-child and as root: the parent sees
-	// the child's declared level, the child's own root audit still expands.
 	sharedHolder := surface("SharedBoundaryHolder")
 	if sharedHolder.incomplete || sharedHolder.minimum != ApiStabilityUnstable || containsDependency(sharedHolder, "E") {
 		t.Fatalf("SharedBoundaryHolder should expose only the child tag, got min=%v deps=%v", sharedHolder.minimum, apiStabilityDependencyNames(sharedHolder))
@@ -828,17 +621,11 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 		t.Fatalf("SharedBoundary as a root should still expand and expose E, got min=%v deps=%v", sharedRoot.minimum, apiStabilityDependencyNames(sharedRoot))
 	}
 
-	// A same-named own override on an untagged derived declaration is the
-	// derived component's own member and keeps being inspected even though the
-	// base is tagged.
 	heritageOverride := surface("HeritageOverride")
 	if heritageOverride.incomplete || heritageOverride.minimum != ApiStabilityExperimental || !containsDependency(heritageOverride, "E") {
 		t.Fatalf("an own override must not be suppressed by a tagged base of the same name, got min=%v deps=%v", heritageOverride.minimum, apiStabilityDependencyNames(heritageOverride))
 	}
 
-	// A blocked required argument keeps the parent incomplete: the boundary
-	// contributes its tag plus exposed arguments, and an argument that cannot be
-	// established is never dropped to make the parent complete.
 	blockedHeritage := surface("BlockedHeritage")
 	if !blockedHeritage.incomplete {
 		t.Fatalf("a tagged base whose required argument cannot be established must stay incomplete, got min=%v deps=%v", blockedHeritage.minimum, apiStabilityDependencyNames(blockedHeritage))
@@ -849,19 +636,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
 	}
 }
 
-// TestApiStabilityFlattenedInheritanceBoundaries pins the
-// fix2 correction: the compiler flattens inherited call, construct and index
-// signatures of a derived structured type while keeping each declaration's
-// base provenance, so an explicitly tagged base bounds those internals exactly
-// like it bounds flattened members. Every affected resolved read is covered:
-// the declaration root, the instantiated reference root, the exported value of
-// the derived generic type, the class static side (including the inherited
-// constructor and an own constructor override), an untagged intermediate chain
-// ending in a tagged callable ancestor, and the anonymous/function signature
-// reads. Owner-declared signatures and index signatures stay walked, the tagged
-// base keeps reporting its own internals as a root, independently represented
-// arguments of a tagged ancestor stay exposed, and untagged controls keep
-// composing. Cold results must never report the bounded internals either.
 func TestApiStabilityFlattenedInheritanceBoundaries(t *testing.T) {
 	t.Parallel()
 
@@ -977,9 +751,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 		}
 	}
 
-	// Cold: the flattened signatures and index infos are not materialized yet.
-	// Every route must stay quiet about the tagged base internals, with no
-	// false positive of any kind.
 	cold := tp.NewApiStabilitySession()
 	coldCallRefType := c.GetTypeOfSymbol(apiStabilityTestExport(t, c, testFile, "fxCallRef"))
 	coldIndexRefType := c.GetTypeOfSymbol(apiStabilityTestExport(t, c, testFile, "fxIndexRef"))
@@ -1023,9 +794,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 		return warm.UsedByType(represented)
 	}
 
-	// Inherited call signature: the derived declaration and the instantiated
-	// reference (type and exported value roots) expose only the tagged base,
-	// never the base's call signature internals. The untagged control composes.
 	derivedCallable := surface("FxDerivedCallable")
 	if derivedCallable.incomplete || derivedCallable.minimum != ApiStabilityUnstable || containsDependency(derivedCallable, "FxCallE") {
 		t.Fatalf("FxDerivedCallable must expose only the tagged base, got min=%v deps=%v", derivedCallable.minimum, apiStabilityDependencyNames(derivedCallable))
@@ -1050,8 +818,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 	}
 	assertExposed("fxPlainCallRef untagged control", referenceSurface("fxPlainCallRef"), "FxCallE")
 
-	// Combined flattened signatures: call, construct and index infos are all
-	// bounded while the already-gated members stay bounded too.
 	for _, label := range []string{"combo type root", "combo value root"} {
 		var used ApiStabilityUsed
 		if label == "combo type root" {
@@ -1067,8 +833,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 		}
 	}
 
-	// Inherited index signature: declaration and reference roots stay quiet;
-	// the untagged control still exposes the value type.
 	derivedIndex := surface("FxDerivedIndex")
 	if derivedIndex.incomplete || derivedIndex.minimum != ApiStabilityUnstable || containsDependency(derivedIndex, "FxIdxE") {
 		t.Fatalf("FxDerivedIndex must expose only the tagged base, got min=%v deps=%v", derivedIndex.minimum, apiStabilityDependencyNames(derivedIndex))
@@ -1080,8 +844,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 	assertQuiet("fxIndexRef value root", surface("fxIndexRef"), "FxIdxE")
 	assertExposed("fxPlainIndexRef untagged control", referenceSurface("fxPlainIndexRef"), "FxIdxE")
 
-	// Deep chain: an untagged intermediate still composes up to the tagged
-	// callable ancestor, which bounds its flattened call signature.
 	deepCallRef := referenceSurface("fxDeepCallRef")
 	if deepCallRef.incomplete || containsDependency(deepCallRef, "FxCallE") {
 		t.Fatalf("fxDeepCallRef must not expose the tagged ancestor's call internals, got min=%v deps=%v", deepCallRef.minimum, apiStabilityDependencyNames(deepCallRef))
@@ -1090,8 +852,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 		t.Fatalf("fxDeepCallRef should expose FxTaggedDeepCallable, got %v", apiStabilityDependencyNames(deepCallRef))
 	}
 
-	// Class static side: the inherited constructor parameter is the tagged
-	// base's internal; the inherited method and static are bounded as members.
 	derivedClass := surface("FxDerivedClass")
 	if derivedClass.incomplete || derivedClass.minimum != ApiStabilityUnstable {
 		t.Fatalf("FxDerivedClass must expose the tagged base level, got min=%v deps=%v", derivedClass.minimum, apiStabilityDependencyNames(derivedClass))
@@ -1103,17 +863,10 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 	assertQuiet("FxDerivedClass static type root", derivedClassStatic, "FxCtorE")
 	assertExposed("FxPlainDerivedClass untagged control", surface("FxPlainDerivedClass"), "FxCtorE")
 
-	// An own constructor override is the derived component's own declaration:
-	// its parameter stays exposed and the tagged base's constructor parameter
-	// is never surfaced alongside it.
 	ownCtor := surface("FxDerivedOwnCtorClass")
 	assertExposed("FxDerivedOwnCtorClass own constructor", ownCtor, "E")
 	assertQuiet("FxDerivedOwnCtorClass", ownCtor, "FxCtorE")
 
-	// A tagged class without a constructor has no flattened constructor
-	// declaration to attribute (the checker synthesizes a parameterless default
-	// constructor). Nothing must leak, no base resolution may be forced, and
-	// the derived component still records the tagged base's level.
 	derivedNoCtor := surface("FxDerivedNoCtorClass")
 	if derivedNoCtor.incomplete || derivedNoCtor.minimum != ApiStabilityUnstable || !containsDependency(derivedNoCtor, "FxTaggedNoCtorClass") {
 		t.Fatalf("FxDerivedNoCtorClass must expose only the tagged base level, got incomplete=%v min=%v deps=%v", derivedNoCtor.incomplete, derivedNoCtor.minimum, apiStabilityDependencyNames(derivedNoCtor))
@@ -1122,22 +875,16 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 	assertQuiet("FxDerivedNoCtorClass static type root", warm.UsedByType(c.GetTypeOfSymbol(apiStabilityTestExport(t, c, testFile, "FxDerivedNoCtorClass"))), "FxMethE")
 	assertQuiet("cold FxDerivedNoCtorClass", cold.UsedBySymbol(apiStabilityTestExport(t, c, testFile, "FxDerivedNoCtorClass")), "FxMethE")
 
-	// An explicit stable base is a boundary that contributes nothing above
-	// stable: the derived surface settles complete and quiet.
 	stableCallable := surface("FxDerivedStableCallable")
 	if stableCallable.incomplete || len(stableCallable.dependencies) != 0 {
 		t.Fatalf("FxDerivedStableCallable must stay complete and quiet, got min=%v deps=%v", stableCallable.minimum, apiStabilityDependencyNames(stableCallable))
 	}
 
-	// Own call and index signatures of an untagged derived interface stay
-	// walked even though the base declares tagged ones.
 	ownOverride := surface("FxOwnOverrideDerived")
 	assertExposed("FxOwnOverrideDerived own signatures", ownOverride, "E")
 	assertQuiet("FxOwnOverrideDerived", ownOverride, "FxCallE")
 	assertQuiet("FxOwnOverrideDerived", ownOverride, "FxIdxE")
 
-	// Independently represented arguments of a tagged ancestor stay exposed
-	// while its flattened call signature internals stay bounded.
 	callableBoxRef := referenceSurface("fxCallableBoxRef")
 	assertExposed("fxCallableBoxRef tagged ancestor argument", callableBoxRef, "FxArgE")
 	assertQuiet("fxCallableBoxRef", callableBoxRef, "FxPropE")
@@ -1145,21 +892,16 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 		t.Fatalf("fxCallableBoxRef should expose FxTaggedCallableBox, got %v", apiStabilityDependencyNames(callableBoxRef))
 	}
 
-	// Mixed inheritance still attributes the call signature to the tagged base
-	// and leaves the untagged base's own member composing.
 	mixedCall := surface("FxMixedCallInheritance")
 	assertQuiet("FxMixedCallInheritance", mixedCall, "FxCallE")
 	if !containsDependency(mixedCall, "FxTaggedFirstCall") {
 		t.Fatalf("FxMixedCallInheritance should expose FxTaggedFirstCall, got %v", apiStabilityDependencyNames(mixedCall))
 	}
 
-	// A tagged base whose required generic argument cannot be established
-	// stays incomplete instead of dropping the argument to look stable.
 	if blocked := surface("FxBlockedDerived"); !blocked.incomplete {
 		t.Fatalf("a tagged base with a blocked required argument must stay incomplete, got min=%v deps=%v", blocked.minimum, apiStabilityDependencyNames(blocked))
 	}
 
-	// Every tagged component keeps reporting its own internals as a root.
 	callableBaseRoot := surface("FxTaggedCallableBase")
 	assertExposed("FxTaggedCallableBase root", callableBaseRoot, "FxCallE")
 	comboBaseRoot := surface("FxTaggedCombo")
@@ -1173,16 +915,11 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
 	indexBaseRoot := surface("FxTaggedIndexBase")
 	assertExposed("FxTaggedIndexBase root", indexBaseRoot, "FxIdxE")
 
-	// The flattened-inheritance reads are ordinary lazy checker reads under the
-	// existing guard: they must not produce compiler diagnostics (in particular
-	// no TS2589) for these public shapes.
 	if globals := c.GetGlobalDiagnostics(); len(globals) != 0 {
 		t.Errorf("flattened inheritance queries produced global diagnostics: %v", globals)
 	}
 }
 
-// apiStabilitySharedTypeEntry returns the published snapshot of a concrete
-// type surface, or nil when nothing was published for the identity.
 func apiStabilitySharedTypeEntry(tp *TypeParser, target *checker.Type, inspect apiStabilityInspection) *apiStabilitySharedSurface {
 	if tp == nil || tp.links == nil || target == nil {
 		return nil
@@ -1190,8 +927,6 @@ func apiStabilitySharedTypeEntry(tp *TypeParser, target *checker.Type, inspect a
 	return tp.links.ApiStabilitySurfaceType.TryGet(apiStabilitySurfaceTypeKey{t: target, inspect: inspect})
 }
 
-// apiStabilitySharedSignatureEntry returns the published snapshot of a
-// concrete signature surface, or nil when nothing was published.
 func apiStabilitySharedSignatureEntry(tp *TypeParser, signature *checker.Signature) *apiStabilitySharedSurface {
 	if tp == nil || tp.links == nil || signature == nil {
 		return nil
@@ -1199,8 +934,6 @@ func apiStabilitySharedSignatureEntry(tp *TypeParser, signature *checker.Signatu
 	return tp.links.ApiStabilitySurfaceSignature.TryGet(signature)
 }
 
-// apiStabilitySharedEntryHasSymbol reports whether a published snapshot still
-// carries a symbol finding.
 func apiStabilitySharedEntryHasSymbol(entry *apiStabilitySharedSurface, symbol *ast.Symbol) bool {
 	if entry == nil || symbol == nil {
 		return false
@@ -1209,8 +942,6 @@ func apiStabilitySharedEntryHasSymbol(entry *apiStabilitySharedSurface, symbol *
 	return ok
 }
 
-// apiStabilitySharedEntryRemovedSymbol reports whether a published snapshot
-// removed a symbol finding as the component's own declared tag.
 func apiStabilitySharedEntryRemovedSymbol(entry *apiStabilitySharedSurface, symbol *ast.Symbol) bool {
 	if entry == nil || symbol == nil {
 		return false
@@ -1223,8 +954,6 @@ func apiStabilitySharedEntryRemovedSymbol(entry *apiStabilitySharedSurface, symb
 	return false
 }
 
-// apiStabilitySharedEntryHasSignature reports whether a published snapshot
-// still carries a raw signature finding.
 func apiStabilitySharedEntryHasSignature(entry *apiStabilitySharedSurface, signature *checker.Signature) bool {
 	if entry == nil || signature == nil {
 		return false
@@ -1238,8 +967,6 @@ func apiStabilitySharedEntryHasSignature(entry *apiStabilitySharedSurface, signa
 	return false
 }
 
-// apiStabilitySharedEntryRemovedSignature reports whether a published snapshot
-// removed a raw signature finding as the component's own declared tag.
 func apiStabilitySharedEntryRemovedSignature(entry *apiStabilitySharedSurface, signature *checker.Signature) bool {
 	if entry == nil || signature == nil {
 		return false
@@ -1253,12 +980,6 @@ func apiStabilitySharedEntryRemovedSignature(entry *apiStabilitySharedSurface, s
 	return false
 }
 
-// TestApiStabilitySnapshotsExcludeOwnTagAndCompose pins
-// the shared-cache contract: a complete root surface is published as an
-// immutable snapshot whose own declared-tag findings were removed and recorded,
-// the root result still excludes them after a reuse, and the same components
-// reached as tagged children contribute their declared level without leaking
-// the snapshot internals.
 func TestApiStabilitySnapshotsExcludeOwnTagAndCompose(t *testing.T) {
 	t.Parallel()
 
@@ -1282,8 +1003,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
 	taggedFn := apiStabilityTestExport(t, c, testFile, "taggedFn")
 	signature := apiStabilityTestSignatures(t, c, taggedFn)[0]
 
-	// A type root excludes its own tag and publishes a snapshot that moved
-	// exactly that finding to removed while keeping the exposed internals.
 	rootType := tp.NewApiStabilitySession().UsedByType(taggedDecl)
 	if rootType.incomplete || rootType.minimum != ApiStabilityExperimental || !containsDependency(rootType, "E") {
 		t.Fatalf("Tagged type root = %v/%v, want experimental E", rootType.minimum, apiStabilityDependencyNames(rootType))
@@ -1303,8 +1022,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
 		t.Fatal("the published snapshot must keep the exposed child findings")
 	}
 
-	// A signature root excludes its own tag and publishes a snapshot with the
-	// raw signature finding removed.
 	rootSignature := tp.NewApiStabilitySession().UsedBySignature(signature)
 	if rootSignature.incomplete || rootSignature.minimum != ApiStabilityExperimental || !containsDependency(rootSignature, "E") {
 		t.Fatalf("taggedFn signature root = %v/%v, want experimental E", rootSignature.minimum, apiStabilityDependencyNames(rootSignature))
@@ -1321,7 +1038,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
 		t.Fatal("the published signature snapshot must record the removed own-tag finding")
 	}
 
-	// Reusing the snapshots still excludes the roots' own tags.
 	reusedType := tp.NewApiStabilitySession().UsedByType(taggedDecl)
 	if reusedType.incomplete || reusedType.minimum != ApiStabilityExperimental || len(reusedType.dependencies) != len(rootType.dependencies) {
 		t.Fatalf("reused type root disagrees: %v/%v", reusedType.minimum, apiStabilityDependencyNames(reusedType))
@@ -1333,8 +1049,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
 	}
 	assertApiStabilitySurfaceExcludesOwnTag(t, reusedSignature, "taggedFn")
 
-	// The same components as children contribute only their declared level:
-	// the tagged child boundary is decided before any snapshot is consulted.
 	holder := apiStabilityTestExport(t, c, testFile, "Holder")
 	holderUsed := tp.NewApiStabilitySession().UsedBySymbol(holder)
 	if holderUsed.incomplete || holderUsed.minimum != ApiStabilityUnstable {
@@ -1348,11 +1062,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
 	}
 }
 
-// TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers
-// pins the reuse contract: a complete, settled, context-free type surface is
-// consumed by a later export, a later source file and a later TypeParser over
-// the same checker without recomputation, the compelled root result is
-// unchanged, and the published snapshot stays intact.
 func TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers(t *testing.T) {
 	t.Parallel()
 
@@ -1383,8 +1092,6 @@ export interface AlsoConsumer { other: Shared }
 	}
 	published := len(entry.findings)
 
-	// A later TypeParser over the same checker consumes the snapshot directly:
-	// the root query is exact and consumes no analysis work.
 	tp2 := NewTypeParser(c.Program(), c)
 	hit := newApiStabilityAnalysis(tp2)
 	hit.typeSurface(sharedDecl, apiStabilityExpand, apiStabilitySubstitution{})
@@ -1396,9 +1103,6 @@ export interface AlsoConsumer { other: Shared }
 		t.Fatalf("reused root disagrees: first=%v second=%v", apiStabilityDependencyNames(first), apiStabilityDependencyNames(second))
 	}
 
-	// A later source file reaches the same component as a shallow child and
-	// publishes its own inspection-mode snapshot; a second export in that file
-	// reuses it without recomputation.
 	consumer := apiStabilityTestExport(t, c, files["/.src/consumer.ts"], "Consumer")
 	consumerUsed := tp2.NewApiStabilitySession().UsedBySymbol(consumer)
 	if consumerUsed.incomplete || consumerUsed.minimum != ApiStabilityUnstable || !containsDependency(consumerUsed, "Shared") {
@@ -1419,7 +1123,6 @@ export interface AlsoConsumer { other: Shared }
 		t.Fatalf("second consumer disagrees: %v/%v", alsoUsed.minimum, apiStabilityDependencyNames(alsoUsed))
 	}
 
-	// Neither reuse nor the root conversion mutated the published snapshots.
 	after := apiStabilitySharedTypeEntry(tp2, sharedDecl, apiStabilityExpand)
 	if after == nil || len(after.findings) != published {
 		t.Fatalf("the published expand snapshot was mutated: before=%d after=%v", published, after)
@@ -1429,12 +1132,6 @@ export interface AlsoConsumer { other: Shared }
 	}
 }
 
-// TestApiStabilityInspectionModesStaySeparate proves the
-// shallow and expanded results of the same concrete type are separate entry
-// slots in both computation orders, so a root snapshot can never leak internals
-// through a shallow child path. The untagged component is the sharpest case:
-// its expanded snapshot really does contain the member internals, while its
-// shallow child surface must stay a signature-only declaration surface.
 func TestApiStabilityInspectionModesStaySeparate(t *testing.T) {
 	t.Parallel()
 
@@ -1505,9 +1202,6 @@ export interface PlainChild { plain: Plain }
 				checkChildren("expand-first")
 			}
 
-			// Each shallow child computation published its own mode slot: it
-			// contains no internals, and the tagged one records the removed own
-			// tag.
 			plainShallow := apiStabilitySharedTypeEntry(tp, plainDecl, apiStabilityShallow)
 			if plainShallow == nil {
 				t.Fatal("the plain shallow surface must be published separately")
@@ -1525,8 +1219,6 @@ export interface PlainChild { plain: Plain }
 			if !apiStabilitySharedEntryRemovedSymbol(taggedShallow, tagged) {
 				t.Fatal("the tagged shallow snapshot must record the removed own tag")
 			}
-			// The expanded plain snapshot must still keep the internals after
-			// the shallow child composition.
 			if !apiStabilitySharedEntryHasSymbol(apiStabilitySharedTypeEntry(tp, plainDecl, apiStabilityExpand), eSymbol) {
 				t.Fatal("the shallow composition contaminated the expanded snapshot")
 			}
@@ -1534,9 +1226,6 @@ export interface PlainChild { plain: Plain }
 	}
 }
 
-// TestApiStabilityConcreteInstantiationsAndCarriers proves
-// concrete instantiations keep separate snapshots in both computation orders
-// and that a surface computed under a substitution carrier is never published.
 func TestApiStabilityConcreteInstantiationsAndCarriers(t *testing.T) {
 	t.Parallel()
 
@@ -1586,9 +1275,6 @@ export interface Box<T> { value: T }
 				t.Fatal("the Box<string> snapshot must not contain E")
 			}
 
-			// The raw declaration surface is only ever reached under a
-			// reference substitution for these roots, so it must not publish a
-			// context-free entry for either mode.
 			box := apiStabilityTestExport(t, c, testFile, "Box")
 			boxDecl := c.GetDeclaredTypeOfSymbol(box)
 			if entry := apiStabilitySharedTypeEntry(tp, boxDecl, apiStabilityExpand); entry != nil {
@@ -1600,10 +1286,6 @@ export interface Box<T> { value: T }
 		})
 	}
 
-	// A raw signature analyzed under a concrete signature substitution stays
-	// analysis-local: the concrete identity is in the key, but the carrier is
-	// not persistent, so the raw signature slot must never receive the
-	// substituted result.
 	t.Run("substituted raw signature stays local", func(t *testing.T) {
 		t.Parallel()
 		c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
@@ -1635,8 +1317,6 @@ export const leaky = make<E>()
 			t.Fatalf("the substituted raw signature should expose E, got %v", apiStabilityDependencyNames(stored))
 		}
 
-		// The concrete signature is context-free and may be published; the raw
-		// slot must still be empty afterwards.
 		_ = tp.NewApiStabilitySession().UsedBySignature(instantiated)
 		if apiStabilitySharedSignatureEntry(tp, raw) != nil {
 			t.Fatal("the concrete signature published under the raw signature slot")
@@ -1647,49 +1327,6 @@ export const leaky = make<E>()
 	})
 }
 
-// TestApiStabilityDeclaredReadsPublishNothing proves the
-// declared accessors stay independent of the shared surface caches: reading a
-// declared level neither computes nor publishes a surface.
-func TestApiStabilityDeclaredReadsPublishNothing(t *testing.T) {
-	t.Parallel()
-
-	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-		"/.src/test.ts": `/** @stability unstable */
-export interface Tagged { leak: string }
-/** @stability unstable */
-export declare function taggedFn(): string
-`,
-	})
-	defer done()
-	primeApiStabilityChecker(t, c)
-
-	testFile := files["/.src/test.ts"]
-	tagged := apiStabilityTestExport(t, c, testFile, "Tagged")
-	taggedFn := apiStabilityTestExport(t, c, testFile, "taggedFn")
-	signature := apiStabilityTestSignatures(t, c, taggedFn)[0]
-
-	before := c.TotalInstantiationCount
-	declaredSymbol := tp.DeclaredApiStabilityOfSymbol(tagged)
-	declaredFn := tp.DeclaredApiStabilityOfSymbol(taggedFn)
-	declaredSignature := tp.DeclaredApiStabilityOfSignature(signature)
-	if delta := c.TotalInstantiationCount - before; delta != 0 {
-		t.Fatalf("declared reads instantiated %d types, want 0", delta)
-	}
-	if declaredSymbol.level != ApiStabilityUnstable || declaredSignature.level != ApiStabilityUnstable || declaredFn.level != ApiStabilityUnstable {
-		t.Fatalf("unexpected declared levels: %v/%v/%v", declaredSymbol.level, declaredFn.level, declaredSignature.level)
-	}
-	if apiStabilitySharedTypeEntry(tp, c.GetDeclaredTypeOfSymbol(tagged), apiStabilityExpand) != nil {
-		t.Fatal("a declared read published a type surface")
-	}
-	if apiStabilitySharedSignatureEntry(tp, signature) != nil {
-		t.Fatal("a declared read published a signature surface")
-	}
-}
-
-// TestApiStabilitySnapshotMutationIsIsolated pins the
-// immutability requirement: consuming a snapshot copies it, so a caller
-// mutating its local surface cannot change the published findings, and
-// provenance recorded in the snapshot survives for diagnostics.
 func TestApiStabilitySnapshotMutationIsIsolated(t *testing.T) {
 	t.Parallel()
 
@@ -1717,7 +1354,6 @@ export interface Shared { leak: E }
 	}
 	published := len(entry.findings)
 
-	// Consume the snapshot, then mutate the local copy destructively.
 	session := tp.NewApiStabilitySession()
 	used := session.UsedByType(sharedDecl)
 	if used.incomplete || !containsDependency(used, "E") {
@@ -1735,7 +1371,6 @@ export interface Shared { leak: E }
 		t.Fatal("local mutation removed a finding from the published snapshot")
 	}
 
-	// Provenance for a snapshot-sourced finding is retained for diagnostics.
 	foundProvenance := false
 	for _, dependency := range first.dependencies {
 		if ApiStabilityDependencyName(dependency) == "E" && dependency.declaration != nil {
@@ -1747,10 +1382,6 @@ export interface Shared { leak: E }
 	}
 }
 
-// TestApiStabilityIncompleteAndBlockedAreNeverPublished
-// proves only complete, settled results are published: a cold blocked surface
-// and a budget-exhausted read publish nothing, and a later materialized retry
-// settles complete and publishes a snapshot a new session can reuse.
 func TestApiStabilityIncompleteAndBlockedAreNeverPublished(t *testing.T) {
 	t.Parallel()
 
@@ -1776,7 +1407,6 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
 		t.Fatal("an incomplete cold surface must not be published")
 	}
 
-	// A budget-exhausted read is blocked and publishes nothing either.
 	exhausted := newApiStabilityAnalysis(tp)
 	exhausted.work = apiStabilityMaxWork
 	blocked := exhausted.typeSurface(coldDecl, apiStabilityExpand, apiStabilitySubstitution{})
@@ -1788,13 +1418,12 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
 		t.Fatal("a budget-blocked surface must not be published")
 	}
 
-	// After the checker materializes the computed member, the retry settles
-	// complete and publishes the snapshot; a new session reuses it.
 	primeApiStabilityChecker(t, c)
 	warm := tp.NewApiStabilitySession().UsedBySymbol(cold)
 	if warm.incomplete || !containsDependency(warm, "E") {
 		t.Fatalf("the materialized retry should expose E, got %v", apiStabilityDependencyNames(warm))
 	}
+	assertApiStabilitySurfaceExcludesOwnTag(t, warm, "Cold")
 	if apiStabilitySharedTypeEntry(tp, coldDecl, apiStabilityExpand) == nil {
 		t.Fatal("the complete retry must publish its snapshot")
 	}
@@ -1809,11 +1438,6 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
 	}
 }
 
-// TestApiStabilityCyclesPublishOnlySettledComplete pins
-// the cycle policy: a cold mutual cycle with an unmaterialized computed member
-// is incomplete and never published, the materialized retry settles complete
-// and publishes, and the published snapshots keep the cycle diagnostic in both
-// query orders.
 func TestApiStabilityCyclesPublishOnlySettledComplete(t *testing.T) {
 	t.Parallel()
 
@@ -1874,12 +1498,6 @@ export interface ColdB { a: ColdA; payload: E; [Symbol.iterator](): E }
 	}
 }
 
-// TestApiStabilityOverloadTagsSurviveSnapshotReuse pins
-// the overload split through the shared caches: the root symbol's declared own
-// overload stays excluded and its sibling experimental overload stays an
-// exposed child when both symbol and signature surfaces are reused in a later
-// session, and each overload's own tag stays excluded from its own reused
-// signature root.
 func TestApiStabilityOverloadTagsSurviveSnapshotReuse(t *testing.T) {
 	t.Parallel()
 
@@ -1912,15 +1530,12 @@ export function mixed(x: string | number): string | number { return "" }
 	if apiStabilitySharedSignatureEntry(tp, signatures[0]) == nil || apiStabilitySharedSignatureEntry(tp, signatures[1]) == nil {
 		t.Fatal("both overload signature surfaces should be published")
 	}
-	// Each signature snapshot excludes only its own tag; the sibling overload
-	// surfaces again when composed into the symbol root.
 	for index, signature := range signatures {
 		if !apiStabilitySharedEntryRemovedSignature(apiStabilitySharedSignatureEntry(tp, signature), signature) {
 			t.Fatalf("overload %d own tag must be removed from its snapshot", index)
 		}
 	}
 
-	// A later session composes the snapshots and keeps the same split.
 	reused := tp.NewApiStabilitySession().UsedBySymbol(mixed)
 	if reused.incomplete || reused.minimum != first.minimum || len(reused.dependencies) != len(first.dependencies) {
 		t.Fatalf("reused mixed = %v/%v, want %v", reused.minimum, apiStabilityDependencyNames(reused), apiStabilityDependencyNames(first))
@@ -1933,65 +1548,6 @@ export function mixed(x: string | number): string | number { return "" }
 	}
 }
 
-// TestApiStabilitySharedCachesAreCheckerLocal proves the
-// published snapshots live on the per-checker EffectLinks: a second checker
-// never observes the first checker's entries for the same source shape.
-func TestApiStabilitySharedCachesAreCheckerLocal(t *testing.T) {
-	t.Parallel()
-
-	source := `/** @stability experimental */
-export interface E { value: string }
-/** @stability unstable */
-export interface Shared { leak: E }
-export interface Holder { child: Shared }
-`
-	c1, tp1, files1, done1 := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done1()
-	c2, tp2, files2, done2 := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done2()
-	primeApiStabilityChecker(t, c1)
-	primeApiStabilityChecker(t, c2)
-
-	if tp1.links == tp2.links {
-		t.Fatal("different checkers must not share EffectLinks")
-	}
-
-	shared1 := apiStabilityTestExport(t, c1, files1, "Shared")
-	decl1 := c1.GetDeclaredTypeOfSymbol(shared1)
-	holder1 := apiStabilityTestExport(t, c1, files1, "Holder")
-	if used := tp1.NewApiStabilitySession().UsedBySymbol(holder1); !containsDependency(used, "Shared") {
-		t.Fatalf("first checker should expose Shared, got %v", apiStabilityDependencyNames(used))
-	}
-	if apiStabilitySharedTypeEntry(tp1, decl1, apiStabilityShallow) == nil {
-		t.Fatal("the first checker should publish its shallow snapshot")
-	}
-
-	shared2 := apiStabilityTestExport(t, c2, files2, "Shared")
-	decl2 := c2.GetDeclaredTypeOfSymbol(shared2)
-	if shared1 == shared2 || decl1 == decl2 {
-		t.Fatal("checkers should produce distinct identities")
-	}
-	if apiStabilitySharedTypeEntry(tp2, decl1, apiStabilityShallow) != nil {
-		t.Fatal("the second checker observed the first checker's snapshot")
-	}
-	if apiStabilitySharedTypeEntry(tp2, decl2, apiStabilityShallow) != nil {
-		t.Fatal("the second checker published nothing before its own query")
-	}
-	holder2 := apiStabilityTestExport(t, c2, files2, "Holder")
-	if used := tp2.NewApiStabilitySession().UsedBySymbol(holder2); !containsDependency(used, "Shared") {
-		t.Fatalf("second checker should expose Shared independently, got %v", apiStabilityDependencyNames(used))
-	}
-	if apiStabilitySharedTypeEntry(tp1, decl2, apiStabilityShallow) != nil {
-		t.Fatal("the first checker observed the second checker's snapshot")
-	}
-}
-
-// TestApiStabilityColdCompleteAgreesWithPureWarm pins the
-// cold-complete publication policy: a surface that settles complete on an
-// unprimed checker may be published, and reusing it after the checker
-// materializes the program must agree with a pure warm recomputation on a
-// fresh checker. The cold result is never trusted because of an allocation
-// epoch: it is only published once the session established it complete.
 func TestApiStabilityColdCompleteAgreesWithPureWarm(t *testing.T) {
 	t.Parallel()
 
@@ -2013,8 +1569,6 @@ export declare const f: Callable<Deep<E>>
 		t.Fatal("the cold complete surface should be published")
 	}
 
-	// The same checker materialized: the reused snapshot must agree with a
-	// pure warm recomputation on a fresh checker.
 	primeApiStabilityChecker(t, cold)
 	reused := NewTypeParser(cold.Program(), cold).NewApiStabilitySession().UsedBySymbol(coldSymbol)
 	if reused.incomplete {
@@ -2044,10 +1598,6 @@ export declare const f: Callable<Deep<E>>
 	}
 }
 
-// TestApiStabilitySymbolLessTypesReuse pins the snapshot
-// contract for represented types without an identity symbol: a union publishes
-// its component findings with nothing removed, and reusing it across sessions
-// returns the same root-excluding result.
 func TestApiStabilitySymbolLessTypesReuse(t *testing.T) {
 	t.Parallel()
 

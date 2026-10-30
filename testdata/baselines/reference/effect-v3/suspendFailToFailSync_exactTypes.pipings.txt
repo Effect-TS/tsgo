@@ -1,0 +1,170 @@
+==== /.src/exact.ts (10 flows) ====
+
+=== Piping Flow ===
+Location: 15:29 - 15:76
+Node: Effect.suspend(() => Effect.fail("not found"))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail("not found")
+Subject Type: () => Effect<never, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 15:50 - 15:75
+Node: Effect.fail("not found")
+Node Kind: KindCallExpression
+
+Subject: "not found"
+Subject Type: "not found"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 19:33 - 19:90
+Node: Effect.suspend(() => Effect.fail<Error | string>(error))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail<Error | string>(error)
+Subject Type: () => Effect<never, string | Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, string | Error, never>
+
+=== Piping Flow ===
+Location: 19:54 - 19:89
+Node: Effect.fail<Error | string>(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string | Error, never>
+
+=== Piping Flow ===
+Location: 23:29 - 23:81
+Node: Effect.suspend(() => Effect.fail({ _tag: "Oops" }))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail({ _tag: "Oops" })
+Subject Type: () => Effect<never, { _tag: string; }, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, { _tag: string; }, never>
+
+=== Piping Flow ===
+Location: 23:50 - 23:80
+Node: Effect.fail({ _tag: "Oops" })
+Node Kind: KindCallExpression
+
+Subject: { _tag: "Oops" }
+Subject Type: { _tag: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, { _tag: string; }, never>
+
+=== Piping Flow ===
+Location: 27:28 - 27:67
+Node: Effect.suspend(() => Effect.fail(tag))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail(tag)
+Subject Type: () => Effect<never, "A" | "B", never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, "A" | "B", never>
+
+=== Piping Flow ===
+Location: 27:49 - 27:66
+Node: Effect.fail(tag)
+Node Kind: KindCallExpression
+
+Subject: tag
+Subject Type: "A" | "B"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, "A" | "B", never>
+
+=== Piping Flow ===
+Location: 31:25 - 31:76
+Node: pipe(() => pipe(tag, Effect.fail), Effect.suspend)
+Node Kind: KindCallExpression
+
+Subject: () => pipe(tag, Effect.fail)
+Subject Type: () => Effect<never, "A" | "B", never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, "A" | "B", never>
+
+=== Piping Flow ===
+Location: 31:36 - 31:59
+Node: pipe(tag, Effect.fail)
+Node Kind: KindCallExpression
+
+Subject: tag
+Subject Type: "A" | "B"
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, "A" | "B", never>
+==== /.src/namedImportsOnly.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 9:21 - 9:48
+Node: suspend(() => fail(error))
+Node Kind: KindCallExpression
+
+Subject: () => fail(error)
+Subject Type: () => Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: suspend
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 9:35 - 9:47
+Node: fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: fail
+      args: (constant)
+      outType: Effect<never, Error, never>

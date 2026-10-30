@@ -10,7 +10,7 @@ description = "Port of internal/rules"
 [lints]
 workspace = true
 
-# Go's imports of internal/rules, one for one, as far as the ported rules use them (docs/PORTING.md, "Adding a rule
+# Go's imports of internal/rules, one for one, as far as the ported rules use them (porting/PORTING.md, "Adding a rule
 # to ets_rules"): etscore, rule and typeparser so far; importstyle, keybuilder, layergraph and readonly join with the
 # rules that import them.
 [dependencies]

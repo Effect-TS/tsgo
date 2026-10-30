@@ -1,0 +1,69 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/exact.ts(15,30): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/exact.ts(19,34): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/exact.ts(23,30): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/exact.ts(27,29): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/exact.ts(31,61): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/namedImportsOnly.ts(9,22): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+
+
+==== /.src/exact.ts (5 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics suspendFailToFailSync:warning
+    import * as Effect from "effect/Effect"
+    import { pipe } from "effect/Function"
+    
+    // Each check line fails to compile unless the value keeps exactly the given type,
+    // so a fix that changes the inferred error type does not compile.
+    type Exact<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false
+    
+    declare const error: Error
+    declare const tag: "A" | "B"
+    
+    // MUST TRIGGER: a single literal widens to string in both forms -> Effect.failSync(() => "not found")
+    export const singleLiteral = Effect.suspend(() => Effect.fail("not found"))
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    export const singleLiteralCheck: Exact<typeof singleLiteral, Effect.Effect<never, string>> = true
+    
+    // MUST TRIGGER: the inner type argument is carried over -> Effect.failSync<Error | string>(() => error)
+    export const innerTypeArgument = Effect.suspend(() => Effect.fail<Error | string>(error))
+                                     ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    export const innerTypeArgumentCheck: Exact<typeof innerTypeArgument, Effect.Effect<never, Error | string>> = true
+    
+    // MUST TRIGGER: a bare object literal is parenthesized -> Effect.failSync(() => ({ _tag: "Oops" }))
+    export const objectLiteral = Effect.suspend(() => Effect.fail({ _tag: "Oops" }))
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    export const objectLiteralCheck: Exact<typeof objectLiteral, Effect.Effect<never, { _tag: string }>> = true
+    
+    // MUST TRIGGER: a union-typed binding -> Effect.failSync(() => tag)
+    export const unionBinding = Effect.suspend(() => Effect.fail(tag))
+                                ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    export const unionBindingCheck: Exact<typeof unionBinding, Effect.Effect<never, "A" | "B">> = true
+    
+    // MUST TRIGGER: suspend and fail as pipe steps -> pipe(() => tag, Effect.failSync)
+    export const pipeSteps = pipe(() => pipe(tag, Effect.fail), Effect.suspend)
+                                                                ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    export const pipeStepsCheck: Exact<typeof pipeSteps, Effect.Effect<never, "A" | "B">> = true
+    
+
+==== /.src/namedImportsOnly.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics suspendFailToFailSync:warning
+    import { fail, suspend } from "effect/Effect"
+    
+    declare const error: Error
+    
+    // MUST TRIGGER (report only): without an Effect module binding the fallback receiver would be unbound
+    export const value = suspend(() => fail(error))
+                         ~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    

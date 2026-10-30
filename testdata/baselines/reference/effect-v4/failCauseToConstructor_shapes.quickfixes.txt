@@ -1,0 +1,36 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:57-11:73) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D2] (16:16-16:32) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D3] (19:33-19:53) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D4] (25:60-25:77) TS2740: Type 'Promise<Cause<Error>>' is missing the following properties from type 'Cause<unknown>': [TypeId], reasons, toJSON, [NodeInspectSymbol], and 3 more.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default

@@ -1,0 +1,85 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:57-11:73) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D2] (16:16-16:32) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D3] (19:33-19:53) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D4] (22:24-22:44) TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.dieSync"
+
+[D5] (25:60-25:77) TS2322: Type 'Promise<Cause<Error>>' is not assignable to type 'Cause<unknown>'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.dieSync" ===
+
+--- file:///.src/failCauseToConstructor_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import { Cause, Effect, pipe } from "effect"
+
+declare const error: Error
+declare const defect: unknown
+declare const wrap: (e: Error) => Error
+
+// MUST TRIGGER: Cause.fail and Effect.failCause at the end of a longer flow -> Effect.fail
+export const longerPipe = pipe(error, wrap, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: trailing Effect.fn pipeline steps -> Effect.fail
+export const effectFnTrailing = Effect.fn(function*() {
+  return yield* Effect.succeed(error)
+}, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: explicit type argument on the lazy inner constructor -> Effect.failSync
+export const lazyTypeArgument = Effect.failCauseSync(() => Cause.fail<Error | string>(error))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => defect)
+export const lazyDie = Effect.dieSync(() => defect)
+
+// MUST NOT TRIGGER: async thunk
+export const asyncThunk = Effect.failCauseSync(async () => Cause.fail(error))
+
+// MUST NOT TRIGGER: generator thunk
+export const generatorThunk = Effect.failCauseSync(function*() {
+  return Cause.fail(error)
+} as any)
+
+// MUST NOT TRIGGER: thunk with a parameter
+export const parameterThunk = Effect.failCauseSync(((_?: unknown) => Cause.fail(error)) as () => Cause.Cause<Error>)
+

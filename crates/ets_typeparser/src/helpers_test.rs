@@ -35,7 +35,7 @@ fn init() {
 pub(crate) type TestFS = FxHashMap<String, MapFile>;
 
 /// Rust-only: a checker and the program it belongs to (Go returns the checker and reads `c.Program()`), with what
-/// the program allocated, so that dropping it frees the program as Go's GC does (`docs/TSRS_API.md`, "The API
+/// the program allocated, so that dropping it frees the program as Go's GC does (`porting/TSRS_API.md`, "The API
 /// path", step 6). The checker handle is dropped first (Go's `done`), then the program with its checkers (and
 /// their `EffectLinks`), then its regions.
 pub(crate) struct Compiled {

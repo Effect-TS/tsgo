@@ -1,0 +1,29 @@
+==== /.src/failCauseToConstructor_lazyObjectLiteral.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 8:33 - 8:87
+Node: Effect.failCauseSync(() => Cause.fail({ _tag: "E" }))
+Node Kind: KindCallExpression
+
+Subject: () => Cause.fail({ _tag: "E" })
+Subject Type: () => Cause<{ _tag: string; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, { _tag: string; }, never>
+
+=== Piping Flow ===
+Location: 8:60 - 8:86
+Node: Cause.fail({ _tag: "E" })
+Node Kind: KindCallExpression
+
+Subject: { _tag: "E" }
+Subject Type: { _tag: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<{ _tag: string; }>

@@ -7,8 +7,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-// makeNodeInfo creates a minimal LayerGraphNodeInfo for testing walkLeavesMatching.
-// When hasTag is true, Provides gets a non-empty slice so the predicate matches.
 func makeNodeInfo(hasTag bool) LayerGraphNodeInfo {
 	info := LayerGraphNodeInfo{}
 	if hasTag {
@@ -17,7 +15,6 @@ func makeNodeInfo(hasTag bool) LayerGraphNodeInfo {
 	return info
 }
 
-// tagPredicate returns true for nodes where Provides is non-empty.
 func tagPredicate(node LayerGraphNodeInfo) bool {
 	return len(node.Provides) > 0
 }
@@ -48,8 +45,6 @@ func TestWalkLeavesMatching(t *testing.T) {
 
 	t.Run("linear chain, all match, emits deepest", func(t *testing.T) {
 		t.Parallel()
-		// root(match) -> middle(match) -> leaf(match)
-		// Should emit only the leaf (deepest match).
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
 		root := g.AddNode(makeNodeInfo(true))
 		middle := g.AddNode(makeNodeInfo(true))
@@ -65,8 +60,6 @@ func TestWalkLeavesMatching(t *testing.T) {
 
 	t.Run("linear chain, only root matches", func(t *testing.T) {
 		t.Parallel()
-		// root(match) -> middle(no) -> leaf(no)
-		// root's outgoing neighbor (middle) doesn't match, so root is emitted.
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
 		root := g.AddNode(makeNodeInfo(true))
 		middle := g.AddNode(makeNodeInfo(false))
@@ -82,8 +75,6 @@ func TestWalkLeavesMatching(t *testing.T) {
 
 	t.Run("branching graph, multiple leaves match", func(t *testing.T) {
 		t.Parallel()
-		// root(match) -> left(match), root -> right(match)
-		// left and right are both leaf matches (no outgoing matching neighbors).
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
 		root := g.AddNode(makeNodeInfo(true))
 		left := g.AddNode(makeNodeInfo(true))
@@ -112,8 +103,6 @@ func TestWalkLeavesMatching(t *testing.T) {
 
 	t.Run("diamond graph, all match, emits only sink", func(t *testing.T) {
 		t.Parallel()
-		// A(match) -> B(match), A -> C(match), B -> D(match), C -> D(match)
-		// D is the deepest leaf match. Should only emit D.
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
 		a := g.AddNode(makeNodeInfo(true))
 		b := g.AddNode(makeNodeInfo(true))

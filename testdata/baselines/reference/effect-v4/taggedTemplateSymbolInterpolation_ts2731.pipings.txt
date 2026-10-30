@@ -1,0 +1,29 @@
+==== /.src/taggedTemplateSymbolInterpolation_ts2731.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 1:28 - 1:43
+Node: Symbol("self")
+Node Kind: KindCallExpression
+
+Subject: "self"
+Subject Type: "self"
+
+Transformations (1):
+  [0] kind: call
+      callee: Symbol
+      args: (constant)
+      outType: symbol
+
+=== Piping Flow ===
+Location: 3:9 - 3:27
+Node: strings.join("?")
+Node Kind: KindCallExpression
+
+Subject: "?"
+Subject Type: "?"
+
+Transformations (1):
+  [0] kind: call
+      callee: strings.join
+      args: (constant)
+      outType: string

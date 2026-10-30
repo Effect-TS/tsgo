@@ -1,0 +1,29 @@
+==== /.src/floatingEffect_wildcardSkipFile.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 3:32 - 5:63
+Node: Effect.succeed("skip-file wins over later section directives")
+Node Kind: KindCallExpression
+
+Subject: "skip-file wins over later section directives"
+Subject Type: "skip-file wins over later section directives"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 7:23 - 9:3
+Node: Effect.gen(function*() {\n  return 1\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return 1\n}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>

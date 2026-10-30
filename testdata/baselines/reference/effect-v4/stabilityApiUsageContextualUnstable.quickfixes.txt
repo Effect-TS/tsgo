@@ -1,0 +1,494 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:5-11:9) TS377136: `effect-v4-tests/argument` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D2] (11:22-11:26) TS377136: `effect-v4-tests/shorthand` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D3] (11:5-11:11) TS377136: `effect-v4-tests/quotedKey` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D4] (11:5-11:13) TS377136: `effect-v4-tests/computedLiteralKey` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D5] (11:7-11:12) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (11:29-11:33) TS377136: `effect-v4-tests/typedVariable` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D7] (11:34-11:38) TS377136: `effect-v4-tests/assignment` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D8] (11:7-11:12) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D9] (11:17-11:21) TS377136: `effect-v4-tests/satisfies` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D10] (11:10-11:14) TS6133: 'make' is declared but its value is never read.
+  (no quick fixes)
+
+[D11] (11:40-11:44) TS377136: `effect-v4-tests/return` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D12] (11:7-11:12) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D13] (11:49-11:53) TS377136: `effect-v4-tests/nested` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D14] (11:7-11:12) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D15] (11:32-11:36) TS377136: `effect-v4-tests/arrayElement` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D16] (11:73-11:77) TS377136: `effect-v4-tests/genericConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D17] (11:7-11:10) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D18] (11:32-11:36) TS377136: `effect-v4-tests/generatorContextualProperty` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D19] (11:69-11:72) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D20] (11:100-11:104) TS377136: `effect-v4-tests/inferredGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D21] (11:69-11:72) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D22] (11:99-11:104) TS6133: 'inner' is declared but its value is never read.
+  (no quick fixes)
+
+[D23] (11:119-11:123) TS377136: `effect-v4-tests/nestedFunctionConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D24] (11:69-11:72) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D25] (11:96-11:101) TS6133: 'inner' is declared but its value is never read.
+  (no quick fixes)
+
+[D26] (11:162-11:166) TS377136: `effect-v4-tests/annotatedInnerGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D27] (11:69-11:72) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D28] (11:133-11:137) TS377136: `effect-v4-tests/annotatedGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D29] (11:73-11:76) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D30] (11:91-11:95) TS377136: `effect-v4-tests/generatorDeclarationConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D31] (11:69-11:70) TS6196: 'C' is declared but never used.
+  (no quick fixes)
+
+[D32] (11:92-11:96) TS377136: `effect-v4-tests/generatorMethodConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D33] (11:72-11:75) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D34] (11:90-11:94) TS377136: `effect-v4-tests/ordinaryFunctionConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D35] (11:69-11:72) TS6133: 'gen' is declared but its value is never read.
+  (no quick fixes)
+
+[D36] (11:91-11:95) TS377136: `effect-v4-tests/arrowConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D37] (11:93-11:97) TS377136: `effect-v4-tests/nestedConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D38] (11:76-11:80) TS377136: `effect-v4-tests/arrayConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D39] (11:94-11:98) TS377136: `effect-v4-tests/restConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D40] (11:75-11:79) TS377136: `effect-v4-tests/constructorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D41] (11:132-11:136) TS377136: `effect-v4-tests/constraintUsingInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D42] (11:81-11:85) TS2353: Object literal may only specify known properties, and 'test' does not exist in type '{ other?: number | undefined; }'.
+  (no quick fixes)
+
+[D43] (11:132-11:136) TS377136: `effect-v4-tests/fixedTupleSpread` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D44] (11:193-11:197) TS377136: `effect-v4-tests/fixedTupleSpreads` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D45] (11:92-11:96) TS6133: 'make' is declared but its value is never read.
+  (no quick fixes)
+
+[D46] (11:135-11:139) TS377136: `effect-v4-tests/returnTypeInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D47] (11:104-11:109) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D48] (11:139-11:143) TS377136: `effect-v4-tests/constrainedReturnTypeInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D49] (11:65-11:70) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D50] (11:105-11:109) TS377136: `effect-v4-tests/callbackReturnInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D51] (11:132-11:136) TS377136: `effect-v4-tests/defaultTypeArgument` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D52] (11:90-11:94) TS377136: `effect-v4-tests/taggedTemplateConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D53] (11:149-11:153) TS377136: `effect-v4-tests/explicitOuterTypeArguments` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D54] (11:109-11:113) TS377136: `effect-v4-tests/nestedGenericCall` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D55] (11:45-11:50) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D56] (11:62-11:66) TS377136: `effect-v4-tests/inherited` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D57] (11:45-11:49) TS377136: `effect-v4-tests/propertyAccess` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D58] (12:31-12:36) TS377136: `effect-v4-tests/valueReference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D59] (11:7-11:12) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D60] (11:98-11:103) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D61] (11:98-11:103) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D62] (11:138-11:142) TS377136: `effect-v4-tests/experimentalUnionBranch` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D63] (11:53-11:58) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D64] (11:71-11:75) TS377136: `effect-v4-tests/ambiguousUnion` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D65] (11:84-11:89) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D66] (11:102-11:106) TS377136: `effect-v4-tests/unionDeduplication` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D67] (14:25-14:30) TS6133: 'value' is declared but its value is never read.
+  (no quick fixes)
+
+[D68] (14:44-14:48) TS377136: `effect-v4-tests/method` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D26] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D26] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D28] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D28] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D30] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D30] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D32] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D32] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D34] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D34] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D36] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D36] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D37] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D37] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D38] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D38] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D39] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D39] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D40] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D40] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D41] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D41] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D43] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D43] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D44] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D44] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D46] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D46] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D48] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D48] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D50] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D50] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D51] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D51] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D52] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D52] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D53] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D53] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D54] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D54] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D56] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D56] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D57] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D57] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D58] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D58] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D62] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D62] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D64] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D64] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D66] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D66] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D68] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D68] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default

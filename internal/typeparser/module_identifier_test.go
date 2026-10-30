@@ -15,107 +15,15 @@ func parseSource(source string) *ast.SourceFile {
 	}, source, core.ScriptKindTS)
 }
 
-func TestFindModuleReferenceForPackage_NamespaceImport(t *testing.T) {
-	t.Parallel()
-	source := `import * as SchemaModules from "effect/schema"`
-	sf := parseSource(source)
-
-	got := FindModuleReferenceForPackage(sf, "effect", "schema").String()
-	if got != "SchemaModules" {
-		t.Errorf("FindModuleReferenceForPackage = %q, want %q", got, "SchemaModules")
-	}
-}
-
-func TestFindModuleReferenceForPackage_NamedImportWithAlias(t *testing.T) {
-	t.Parallel()
-	source := `import { Model as M } from "effect/schema"`
-	sf := parseSource(source)
-
-	got := FindModuleReferenceForPackage(sf, "effect/schema", "Model").String()
-	if got != "M" {
-		t.Errorf("FindModuleReferenceForPackage = %q, want %q", got, "M")
-	}
-}
-
-func TestFindModuleReferenceForPackage_NamedImportNoAlias(t *testing.T) {
-	t.Parallel()
-	source := `import { Model } from "effect/schema"`
-	sf := parseSource(source)
-
-	got := FindModuleReferenceForPackage(sf, "effect/schema", "Model").String()
-	if got != "Model" {
-		t.Errorf("FindModuleReferenceForPackage = %q, want %q", got, "Model")
-	}
-}
-
-func TestFindModuleReferenceForPackage_NoMatchingImport(t *testing.T) {
-	t.Parallel()
-	source := `import { Schema } from "effect"`
-	sf := parseSource(source)
-
-	got := FindModuleReferenceForPackage(sf, "effect/schema", "Model").String()
-	if got != "Model" {
-		t.Errorf("FindModuleReferenceForPackage = %q, want fallback %q", got, "Model")
-	}
-}
-
-func TestFindModuleReferenceForPackage_NilSourceFile(t *testing.T) {
-	t.Parallel()
-	got := FindModuleReferenceForPackage(nil, "effect/schema", "Model").String()
-	if got != "Model" {
-		t.Errorf("FindModuleReferenceForPackage = %q, want fallback %q", got, "Model")
-	}
-}
-
-func TestFindModuleReference_ExistingBehavior(t *testing.T) {
-	t.Parallel()
-
-	t.Run("namespace import", func(t *testing.T) {
-		t.Parallel()
-		source := `import * as S from "effect/Schema"`
-		sf := parseSource(source)
-		got := FindModuleReference(sf, "Schema").String()
-		if got != "S" {
-			t.Errorf("FindModuleReference = %q, want %q", got, "S")
-		}
-	})
-
-	t.Run("named import with alias", func(t *testing.T) {
-		t.Parallel()
-		source := `import { Schema as Sc } from "effect"`
-		sf := parseSource(source)
-		got := FindModuleReference(sf, "Schema").String()
-		if got != "Sc" {
-			t.Errorf("FindModuleReference = %q, want %q", got, "Sc")
-		}
-	})
-
-	t.Run("named import no alias", func(t *testing.T) {
-		t.Parallel()
-		source := `import { Schema } from "effect"`
-		sf := parseSource(source)
-		got := FindModuleReference(sf, "Schema").String()
-		if got != "Schema" {
-			t.Errorf("FindModuleReference = %q, want %q", got, "Schema")
-		}
-	})
-
-	t.Run("fallback", func(t *testing.T) {
-		t.Parallel()
-		source := `const x = 1`
-		sf := parseSource(source)
-		got := FindModuleReference(sf, "Schema").String()
-		if got != "Schema" {
-			t.Errorf("FindModuleReference = %q, want fallback %q", got, "Schema")
-		}
-	})
-}
-
-func TestFindModuleReference_BarrelNamespaceImport(t *testing.T) {
+func TestFindModuleReferenceForPackage(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name, source, pkg, module, want string
 	}{
+		{"namespace import", `import * as SchemaModules from "effect/schema"`, "effect", "schema", "SchemaModules"},
+		{"named import with alias", `import { Model as M } from "effect/schema"`, "effect/schema", "Model", "M"},
+		{"named import no alias", `import { Model } from "effect/schema"`, "effect/schema", "Model", "Model"},
+		{"no matching import", `import { Schema } from "effect"`, "effect/schema", "Model", "Model"},
 		{"effect barrel", `import * as X from "effect"`, "effect", "Effect", "X.Effect"},
 		{"effect barrel other module", `import * as X from "effect"`, "effect", "Layer", "X.Layer"},
 		{"schema barrel", `import * as S from "effect/schema"`, "effect/schema", "Model", "S.Model"},
@@ -129,6 +37,29 @@ func TestFindModuleReference_BarrelNamespaceImport(t *testing.T) {
 			got := FindModuleReferenceForPackage(parseSource(c.source), c.pkg, c.module)
 			if got.String() != c.want {
 				t.Errorf("FindModuleReferenceForPackage = %q, want %q", got.String(), c.want)
+			}
+		})
+	}
+	if got := FindModuleReferenceForPackage(nil, "effect/schema", "Model").String(); got != "Model" {
+		t.Errorf("FindModuleReferenceForPackage(nil) = %q, want fallback %q", got, "Model")
+	}
+}
+
+func TestFindModuleReference(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name, source, want string
+	}{
+		{"namespace import", `import * as S from "effect/Schema"`, "S"},
+		{"named import with alias", `import { Schema as Sc } from "effect"`, "Sc"},
+		{"named import no alias", `import { Schema } from "effect"`, "Schema"},
+		{"fallback", `const x = 1`, "Schema"},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
+			if got := FindModuleReference(parseSource(c.source), "Schema").String(); got != c.want {
+				t.Errorf("FindModuleReference = %q, want %q", got, c.want)
 			}
 		})
 	}

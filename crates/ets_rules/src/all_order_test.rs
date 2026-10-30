@@ -1,4 +1,4 @@
-//! Rust-only: `ALL` holds the ported rules in Go's `All` order (docs/PORTING.md, "Adding a rule to `ets_rules`").
+//! Rust-only: `ALL` holds the ported rules in Go's `All` order (porting/PORTING.md, "Adding a rule to `ets_rules`").
 
 use crate::*;
 

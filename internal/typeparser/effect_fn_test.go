@@ -31,31 +31,11 @@ func findFirstEffectFnCall(t *testing.T, tp *TypeParser, sf *ast.SourceFile) *Ef
 	return result
 }
 
-func compileEffectFnTest(t *testing.T, version bundledeffect.EffectVersion, source string) (*TypeParser, *ast.SourceFile, func()) {
-	t.Helper()
-	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, source)
-	return tp, sf, done
-}
-
-func assertEffectFnFunctionReturnType(t *testing.T, version bundledeffect.EffectVersion, source string, want string) {
-	t.Helper()
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, source)
-	defer done()
-
-	parsed := findFirstEffectFnCall(t, tp, sf)
-	if parsed.functionReturnType == nil {
-		t.Fatal("expected FunctionReturnType")
-	}
-	if got := c.TypeToString(parsed.FunctionReturnType()); got != want {
-		t.Fatalf("FunctionReturnType = %q", got)
-	}
-}
-
 func TestEffectFnCall_ConstantAlias(t *testing.T) {
 	t.Parallel()
 
 	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV3, bundledeffect.EffectV4} {
-		tp, sf, done := compileEffectFnTest(t, version, `
+		_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, `
 import { Effect } from "effect"
 
 const fn = Effect.fn
@@ -72,24 +52,34 @@ export const make = fn(function*() {
 	}
 }
 
-func TestEffectFnCall_FunctionReturnType_NoPipe(t *testing.T) {
+func TestEffectFnCall_FunctionReturnType(t *testing.T) {
 	t.Parallel()
 
-	source := `
+	bothVersions := []bundledeffect.EffectVersion{bundledeffect.EffectV4, bundledeffect.EffectV3}
+	tests := []struct {
+		name        string
+		versions    []bundledeffect.EffectVersion
+		source      string
+		want        string
+		wantTrace   bool
+		wantOptions bool
+	}{
+		{
+			name:     "NoPipe",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = Effect.fn(function*(n: number) {
   return n + 1
 })
-`
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<number, never, never>")
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV3, source, "Effect<number, never, never>")
-}
-
-func TestEffectFnCall_FunctionReturnType_FirstPipeInput(t *testing.T) {
-	t.Parallel()
-
-	source := `
+`,
+			want: "Effect<number, never, never>",
+		},
+		{
+			name:     "FirstPipeInput",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -98,15 +88,13 @@ export const make = Effect.fn(
   },
   Effect.map((n) => n.toString())
 )
-`
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<number, never, never>")
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV3, source, "Effect<number, never, never>")
-}
-
-func TestEffectFnCall_FunctionReturnType_Generic(t *testing.T) {
-	t.Parallel()
-
-	source := `
+`,
+			want: "Effect<number, never, never>",
+		},
+		{
+			name:     "Generic",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -115,29 +103,25 @@ export const make = Effect.fn(
   },
   Effect.map((a) => [a] as const)
 )
-`
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<A, never, never>")
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV3, source, "Effect<A, never, never>")
-}
-
-func TestEffectFnCall_FunctionReturnType_GenericNoPipe(t *testing.T) {
-	t.Parallel()
-
-	source := `
+`,
+			want: "Effect<A, never, never>",
+		},
+		{
+			name:     "GenericNoPipe",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = Effect.fn(function*<A>(a: A) {
   return a
 })
-`
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<A, never, never>")
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV3, source, "Effect<A, never, never>")
-}
-
-func TestEffectFnCall_FunctionReturnType_ConstrainedGeneric(t *testing.T) {
-	t.Parallel()
-
-	source := `
+`,
+			want: "Effect<A, never, never>",
+		},
+		{
+			name:     "ConstrainedGeneric",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -146,15 +130,13 @@ export const make = Effect.fn(
   },
   Effect.tap((a) => Effect.log(a.id))
 )
-`
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<A, never, never>")
-	assertEffectFnFunctionReturnType(t, bundledeffect.EffectV3, source, "Effect<A, never, never>")
-}
-
-func TestEffectFnCall_FunctionReturnType_NamedSpan(t *testing.T) {
-	t.Parallel()
-
-	source := `
+`,
+			want: "Effect<A, never, never>",
+		},
+		{
+			name:     "NamedSpan",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -165,30 +147,14 @@ export const make = Effect.fn(
   },
   Effect.map((n) => n.toString())
 )
-`
-	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV4, bundledeffect.EffectV3} {
-		c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, source)
-		parsed := findFirstEffectFnCall(t, tp, sf)
-		if parsed.traceExpression == nil {
-			done()
-			t.Fatal("expected TraceExpression")
-		}
-		if parsed.functionReturnType == nil {
-			done()
-			t.Fatal("expected FunctionReturnType")
-		}
-		if got := c.TypeToString(parsed.FunctionReturnType()); got != "Effect<number, never, never>" {
-			done()
-			t.Fatalf("FunctionReturnType = %q", got)
-		}
-		done()
-	}
-}
-
-func TestEffectFnCall_FunctionReturnType_SelfObject(t *testing.T) {
-	t.Parallel()
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, `
+`,
+			want:      "Effect<number, never, never>",
+			wantTrace: true,
+		},
+		{
+			name:     "SelfObject",
+			versions: []bundledeffect.EffectVersion{bundledeffect.EffectV4},
+			source: `
 import { Effect } from "effect"
 
 const self = {
@@ -202,17 +168,28 @@ export const make = Effect.fn(
   },
   Effect.map((value) => value.length)
 )
-`)
-	defer done()
+`,
+			want:        "Effect<string, never, never>",
+			wantOptions: true,
+		},
+	}
 
-	parsed := findFirstEffectFnCall(t, tp, sf)
-	if parsed.optionsNode == nil {
-		t.Fatal("expected OptionsNode")
-	}
-	if parsed.functionReturnType == nil {
-		t.Fatal("expected FunctionReturnType")
-	}
-	if got := c.TypeToString(parsed.FunctionReturnType()); got != "Effect<string, never, never>" {
-		t.Fatalf("FunctionReturnType = %q", got)
+	for _, tt := range tests {
+		for _, version := range tt.versions {
+			c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, tt.source)
+			parsed := findFirstEffectFnCall(t, tp, sf)
+			if got := parsed.traceExpression != nil; got != tt.wantTrace {
+				t.Errorf("%s/%s: has trace expression = %v, want %v", tt.name, version, got, tt.wantTrace)
+			}
+			if got := parsed.optionsNode != nil; got != tt.wantOptions {
+				t.Errorf("%s/%s: has options node = %v, want %v", tt.name, version, got, tt.wantOptions)
+			}
+			if parsed.functionReturnType == nil {
+				t.Errorf("%s/%s: expected FunctionReturnType", tt.name, version)
+			} else if got := c.TypeToString(parsed.FunctionReturnType()); got != tt.want {
+				t.Errorf("%s/%s: FunctionReturnType = %q, want %q", tt.name, version, got, tt.want)
+			}
+			done()
+		}
 	}
 }

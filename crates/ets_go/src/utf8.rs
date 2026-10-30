@@ -91,7 +91,7 @@ pub fn is_wtf8(bytes: &[u8]) -> bool {
 /// A Go `string(bytes)` as a Rust `String`, when [`is_wtf8`] holds.
 ///
 /// The bytes are kept unchanged, as Go keeps them. `None` for any other invalid UTF-8, which a Rust `String`
-/// cannot hold (`docs/DIVERGENCES.md`, "Strings that are not UTF-8").
+/// cannot hold (`porting/DIVERGENCES.md`, "Strings that are not UTF-8").
 pub fn string_from_wtf8(bytes: &[u8]) -> Option<String> {
     if !is_wtf8(bytes) {
         return None;
@@ -108,7 +108,7 @@ pub fn string_from_wtf8(bytes: &[u8]) -> Option<String> {
 }
 
 /// A Go `string(bytes)` as a Rust `String`: [`string_from_wtf8`], else `String::from_utf8_lossy` (U+FFFD for
-/// the sequences a Rust `String` cannot hold: `docs/DIVERGENCES.md`, "Strings that are not UTF-8").
+/// the sequences a Rust `String` cannot hold: `porting/DIVERGENCES.md`, "Strings that are not UTF-8").
 pub fn string_from_go_bytes(bytes: &[u8]) -> String {
     string_from_wtf8(bytes).unwrap_or_else(|| String::from_utf8_lossy(bytes).into_owned())
 }

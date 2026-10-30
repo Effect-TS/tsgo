@@ -14,7 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 )
 
-func findNativeArrayAccess(t testing.TB, sf *ast.SourceFile, text string) *ast.Node {
+func findMemberAccess(t testing.TB, sf *ast.SourceFile, text string) *ast.Node {
 	t.Helper()
 	var found *ast.Node
 	var walk ast.Visitor
@@ -32,6 +32,22 @@ func findNativeArrayAccess(t testing.TB, sf *ast.SourceFile, text string) *ast.N
 		t.Fatalf("member access %q not found", text)
 	}
 	return found
+}
+
+func compileNoLibSource(t *testing.T, source string) (*TypeParser, *ast.SourceFile, func()) {
+	t.Helper()
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
+		"/.src/test.ts": &fstest.MapFile{Data: []byte(source)},
+	}, tspath.CaseSensitive))
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+			NoLib: core.TSTrue, Target: core.ScriptTargetESNext, Strict: core.TSTrue,
+		}, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
+		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+		SingleThreaded: core.TSTrue,
+	})
+	c, done := program.GetTypeChecker(t.Context())
+	return NewTypeParser(program, c), program.GetSourceFile("/.src/test.ts"), done
 }
 
 func TestArrayType(t *testing.T) {
@@ -158,7 +174,7 @@ alias;
 		{"conflicting.map", "map", false, false},
 		{"conflicting.map", "filter", false, false},
 	} {
-		node := findNativeArrayAccess(t, sf, tc.access)
+		node := findMemberAccess(t, sf, tc.access)
 		query, otherNamespace := tp.IsNativeArrayMethodReference, tp.IsNativeArrayConstructorMethodReference
 		if tc.constructor {
 			query, otherNamespace = otherNamespace, query
@@ -178,7 +194,7 @@ alias;
 	}
 	if tp.IsNativeArrayMethodReference(nil, "map") ||
 		tp.IsNativeArrayMethodReference(findIdentifierByText(t, sf, "alias", 1), "map") ||
-		tp.IsNativeArrayMethodReference(findNativeArrayAccess(t, sf, "values.map"), "") {
+		tp.IsNativeArrayMethodReference(findMemberAccess(t, sf, "values.map"), "") {
 		t.Error("unsupported reference matched a native Array method")
 	}
 }
@@ -203,17 +219,17 @@ Array.of;
 `)
 	defer done()
 	for _, access := range []string{"values.map", "readonly.map"} {
-		if tp.IsNativeArrayMethodReference(findNativeArrayAccess(t, sf, access), "map") {
+		if tp.IsNativeArrayMethodReference(findMemberAccess(t, sf, access), "map") {
 			t.Errorf("augmented member %s matched", access)
 		}
 	}
 	for _, access := range []string{"values.filter", "readonly.filter"} {
-		if !tp.IsNativeArrayMethodReference(findNativeArrayAccess(t, sf, access), "filter") {
+		if !tp.IsNativeArrayMethodReference(findMemberAccess(t, sf, access), "filter") {
 			t.Errorf("unaugmented member %s did not match", access)
 		}
 	}
-	if tp.IsNativeArrayConstructorMethodReference(findNativeArrayAccess(t, sf, "Array.isArray"), "isArray") ||
-		!tp.IsNativeArrayConstructorMethodReference(findNativeArrayAccess(t, sf, "Array.of"), "of") {
+	if tp.IsNativeArrayConstructorMethodReference(findMemberAccess(t, sf, "Array.isArray"), "isArray") ||
+		!tp.IsNativeArrayConstructorMethodReference(findMemberAccess(t, sf, "Array.of"), "of") {
 		t.Error("constructor augmentation affected the wrong members")
 	}
 }
@@ -228,7 +244,7 @@ declare global {
 Array.isArray;
 `)
 	defer done()
-	node := findNativeArrayAccess(t, sf, "Array.isArray")
+	node := findMemberAccess(t, sf, "Array.isArray")
 	if !tp.IsNativeArrayConstructorMethodReference(node, "isArray") {
 		t.Error("Array.isArray constructor reference = false, want true")
 	}
@@ -247,22 +263,10 @@ declare const values: number[];
 values.map;
 Array.isArray;
 `
-	fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
-		"/.src/test.ts": &fstest.MapFile{Data: []byte(source)},
-	}, tspath.CaseSensitive))
-	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{
-			NoLib: core.TSTrue, Target: core.ScriptTargetESNext, Strict: core.TSTrue,
-		}, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
-		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
-		SingleThreaded: core.TSTrue,
-	})
-	c, done := program.GetTypeChecker(t.Context())
+	tp, sf, done := compileNoLibSource(t, source)
 	defer done()
-	tp := NewTypeParser(program, c)
-	sf := program.GetSourceFile("/.src/test.ts")
-	if tp.IsNativeArrayMethodReference(findNativeArrayAccess(t, sf, "values.map"), "map") ||
-		tp.IsNativeArrayConstructorMethodReference(findNativeArrayAccess(t, sf, "Array.isArray"), "isArray") {
+	if tp.IsNativeArrayMethodReference(findMemberAccess(t, sf, "values.map"), "map") ||
+		tp.IsNativeArrayConstructorMethodReference(findMemberAccess(t, sf, "Array.isArray"), "isArray") {
 		t.Error("noLib user declarations matched native Array members")
 	}
 	if len(tp.links.nativeArrayRegistry.instance) != 0 || len(tp.links.nativeArrayRegistry.constructor) != 0 {
@@ -290,7 +294,7 @@ custom.map;
 	}
 	second := NewTypeParser(c.Program(), c)
 	for _, access := range []string{"values.map", "custom.map"} {
-		node := findNativeArrayAccess(t, files["/.src/first.ts"], access)
+		node := findMemberAccess(t, files["/.src/first.ts"], access)
 		want := access == "values.map"
 		if got := tp.IsNativeArrayMethodReference(node, "map"); got != want {
 			t.Fatalf("first parser %s = %v, want %v", access, got, want)
@@ -309,16 +313,16 @@ custom.map;
 		}
 	}
 	registry := tp.links.nativeArrayRegistry
-	if !second.IsNativeArrayMethodReference(findNativeArrayAccess(t, files["/.src/second.ts"], "values.map"), "map") || second.links.nativeArrayRegistry != registry {
+	if !second.IsNativeArrayMethodReference(findMemberAccess(t, files["/.src/second.ts"], "values.map"), "map") || second.links.nativeArrayRegistry != registry {
 		t.Fatal("second source file did not reuse the canonical registry")
 	}
 	_, other, otherFile, otherDone := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer otherDone()
-	firstSymbol := tp.GetSymbolAtLocation(findNativeArrayAccess(t, files["/.src/first.ts"], "values.map"))
+	firstSymbol := tp.GetSymbolAtLocation(findMemberAccess(t, files["/.src/first.ts"], "values.map"))
 	if other.links == tp.links || other.links.nativeArrayRegistry != nil || other.links.nativeArrayMember.TryGet(firstSymbol) != nil {
 		t.Fatal("separate checker inherited native Array cache entries")
 	}
-	otherNode := findNativeArrayAccess(t, otherFile, "values.map")
+	otherNode := findMemberAccess(t, otherFile, "values.map")
 	if !other.IsNativeArrayMethodReference(otherNode, "map") || other.links.nativeArrayRegistry == registry || other.GetSymbolAtLocation(otherNode) == firstSymbol {
 		t.Fatal("separate checker did not build its own native Array cache")
 	}

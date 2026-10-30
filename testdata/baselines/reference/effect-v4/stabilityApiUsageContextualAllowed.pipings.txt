@@ -1,0 +1,76 @@
+==== /.src/api.ts (0 flows) ====
+==== /.src/emptyEntry.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:42 - 5:16
+Node: x({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/package.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:42 - 5:16
+Node: x({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/module.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:42 - 5:16
+Node: x({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/export.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:42 - 5:16
+Node: x({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/otherExport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:42 - 5:16
+Node: x({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void

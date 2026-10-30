@@ -1,0 +1,69 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/forms.ts(9,100): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/forms.ts(13,79): warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/forms.ts(17,75): warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/forms.ts(20,26): warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/namedImportTarget.ts(9,53): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/namespaceImport.ts(9,76): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+
+
+==== /.src/forms.ts (4 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapMapErrorToMapBoth:warning
+    import { Effect } from "effect"
+    
+    declare const source: Effect.Effect<number, string>
+    
+    // MUST TRIGGER: across chained .pipe(...) calls, other steps are kept on both sides
+    // -> source.pipe(Effect.tap(() => Effect.void)).pipe(Effect.mapBoth({ ... }), Effect.asVoid)
+    export const crossPipe = source.pipe(Effect.tap(() => Effect.void), Effect.map((n) => n + 1)).pipe(Effect.mapError((e) => e.length), Effect.asVoid)
+                                                                                                       ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+    // MUST TRIGGER: the first .pipe(...) is emptied and collapses to its subject
+    // -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+    export const emptiedPipe = source.pipe(Effect.mapError((e) => e.length)).pipe(Effect.map((n) => n + 1))
+                                                                                  ~~~~~~~~~~
+!!! warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+    // MUST TRIGGER: reverse order keeps the callbacks in their original order
+    // -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+    export const reverseOrder = source.pipe(Effect.mapError((e) => e.length), Effect.map((n) => n + 1))
+                                                                              ~~~~~~~~~~
+!!! warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+    // MUST TRIGGER: nested data-first -> Effect.mapBoth(source, { onFailure: ..., onSuccess: ... })
+    export const dataFirst = Effect.map(Effect.mapError(source, (e) => e.length), (n) => n + 1)
+                             ~~~~~~~~~~
+!!! warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+
+==== /.src/namedImportTarget.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapMapErrorToMapBoth:warning
+    import type { Effect } from "effect"
+    import { map, mapBoth, mapError } from "effect/Effect"
+    
+    declare const source: Effect.Effect<number, string>
+    
+    // MUST TRIGGER: the named mapBoth import is the fix target -> source.pipe(mapBoth({ ... }))
+    export const value = source.pipe(map((n) => n + 1), mapError((e) => e.length))
+                                                        ~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+
+==== /.src/namespaceImport.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapMapErrorToMapBoth:warning
+    import * as E from "effect/Effect"
+    
+    declare const source: E.Effect<number, string>
+    
+    // MUST TRIGGER: namespace import, surrounding steps are kept
+    // -> source.pipe(E.tap(() => E.void), E.mapBoth({ ... }), E.asVoid)
+    export const value = source.pipe(E.tap(() => E.void), E.map((n) => n + 1), E.mapError((e) => e.length), E.asVoid)
+                                                                               ~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    

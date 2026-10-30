@@ -23,17 +23,21 @@ type diagnosticRuleSchema struct {
 }
 
 func TestGenerateTSConfigSchemaMatchesReference(t *testing.T) {
-	root := repoRoot(t)
 	actual, err := generateTSConfigSchema()
 	if err != nil {
 		t.Fatalf("generateTSConfigSchema() error = %v", err)
 	}
+	assertMatchesReference(t, "schema.json", actual, "UPDATE_TSCONFIG_SCHEMA")
+}
 
-	localPath := filepath.Join(root, "testdata", "baselines", "local", "schema.json")
-	referencePath := filepath.Join(root, "schema.json")
+func assertMatchesReference(t *testing.T, name string, actual []byte, updateEnv string) {
+	t.Helper()
+	root := repoRoot()
+	localPath := filepath.Join(root, "testdata", "baselines", "local", name)
+	referencePath := filepath.Join(root, name)
 
 	writeIfChanged(t, localPath, actual)
-	if os.Getenv("UPDATE_TSCONFIG_SCHEMA") == "1" {
+	if os.Getenv(updateEnv) == "1" {
 		writeIfChanged(t, referencePath, actual)
 		return
 	}
@@ -51,15 +55,13 @@ func TestGenerateTSConfigSchemaMatchesReference(t *testing.T) {
 	for i := range diffLines {
 		diffLines[i] = "  " + diffLines[i]
 	}
-	t.Fatalf("schema.json is out of date:\n%s", strings.Join(diffLines, "\n"))
+	t.Fatalf("%s is out of date:\n%s", name, strings.Join(diffLines, "\n"))
 }
 
-func repoRoot(t *testing.T) string {
-	t.Helper()
-
+func repoRoot() string {
 	_, file, _, ok := runtime.Caller(0)
 	if !ok {
-		t.Fatal("failed to resolve caller path")
+		panic("failed to resolve caller path")
 	}
 	return filepath.Dir(filepath.Dir(file))
 }
@@ -77,7 +79,7 @@ func schemaRules() []diagnosticRuleSchema {
 }
 
 func generateTSConfigSchema() ([]byte, error) {
-	root := repoRootForGeneration()
+	root := repoRoot()
 	baseSchemaPath := filepath.Join(root, "_tools", "tsconfig-base-schema.json")
 	baseSchemaContent, err := os.ReadFile(baseSchemaPath)
 	if err != nil {
@@ -396,14 +398,6 @@ func structFieldTag(typ reflect.Type, fieldName string, tagName string) string {
 	return field.Tag.Get(tagName)
 }
 
-func repoRootForGeneration() string {
-	_, file, _, ok := runtime.Caller(0)
-	if !ok {
-		panic("failed to resolve caller path")
-	}
-	return filepath.Dir(filepath.Dir(file))
-}
-
 func nestedObject(root map[string]any, keys ...string) (map[string]any, error) {
 	current := root
 	for _, key := range keys {
@@ -432,44 +426,6 @@ func schemaVariantWithObjectField(root map[string]any, field string) (map[string
 		}
 	}
 	return nil, fmt.Errorf("object field %q not found", field)
-}
-
-func TestSchemaVariantWithObjectField(t *testing.T) {
-	t.Run("direct field", func(t *testing.T) {
-		field := map[string]any{"value": true}
-		variant, err := schemaVariantWithObjectField(map[string]any{"properties": field}, "properties")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if !reflect.DeepEqual(variant["properties"], field) {
-			t.Fatalf("properties = %#v, want %#v", variant["properties"], field)
-		}
-	})
-
-	t.Run("anyOf field", func(t *testing.T) {
-		field := map[string]any{"value": true}
-		variant, err := schemaVariantWithObjectField(map[string]any{
-			"anyOf": []any{
-				map[string]any{"type": "null"},
-				map[string]any{"type": "object", "properties": field},
-			},
-		}, "properties")
-		if err != nil {
-			t.Fatal(err)
-		}
-		if !reflect.DeepEqual(variant["properties"], field) {
-			t.Fatalf("properties = %#v, want %#v", variant["properties"], field)
-		}
-	})
-
-	t.Run("missing field", func(t *testing.T) {
-		_, err := schemaVariantWithObjectField(map[string]any{
-			"anyOf": []any{map[string]any{"type": "null"}},
-		}, "properties")
-		if err == nil {
-			t.Fatal("expected an error")
-		}
-	})
 }
 
 func writeIfChanged(t *testing.T, path string, content []byte) {

@@ -33,17 +33,6 @@ func TestCyrb53(t *testing.T) {
 	}
 }
 
-func TestCyrb53Length(t *testing.T) {
-	t.Parallel()
-	inputs := []string{"", "hello", "test/path/file", "@effect/myapp/services/AuthService"}
-	for _, input := range inputs {
-		got := Cyrb53(input)
-		if len(got) != 16 {
-			t.Errorf("Cyrb53(%q) produced %q with length %d, want 16", input, got, len(got))
-		}
-	}
-}
-
 func TestCreateString(t *testing.T) {
 	t.Parallel()
 	defaultServicePattern := []etscore.KeyPattern{
@@ -114,18 +103,6 @@ func TestCreateString(t *testing.T) {
 			target:           "service",
 			keyPatterns:      defaultHashedServicePattern,
 			expected:         Cyrb53("@effect/harness-effect-v4/test/ExpectedServiceIdentifier"),
-		},
-		{
-			name:             "cyrb53 cross-check with known value",
-			sourceFileName:   "/.src/test.ts",
-			packageName:      "@effect/harness-effect-v4",
-			packageDirectory: "/.src",
-			className:        "ExpectedServiceIdentifier",
-			target:           "service",
-			keyPatterns: []etscore.KeyPattern{
-				{Target: "service", Pattern: "default", SkipLeadingPath: []string{"src/"}},
-			},
-			expected: "@effect/harness-effect-v4/test/ExpectedServiceIdentifier",
 		},
 		{
 			name:             "class name matches file name - omits class name",

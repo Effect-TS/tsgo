@@ -190,12 +190,6 @@ func TestParseResultDispatchTagHints(t *testing.T) {
 			tagValues:   []string{`"Some"`},
 		},
 		{
-			name:        "reversed tag equality predicate",
-			function:    `(error: unknown) => "ReasonA" == error.reason._tag ? first : fallback`,
-			tagSubjects: []string{"error.reason"},
-			tagValues:   []string{`"ReasonA"`},
-		},
-		{
 			name: "tag switch cases",
 			function: `(value: unknown) => {
 				switch (value._tag) {
@@ -208,20 +202,8 @@ func TestParseResultDispatchTagHints(t *testing.T) {
 			tagValues:   []string{`"Some"`, `"None"`},
 		},
 		{
-			name:        "non-literal tag value remains source evidence",
-			function:    `(value: unknown) => value._tag === expectedTag ? first : fallback`,
-			tagSubjects: []string{"value"},
-			tagValues:   []string{"expectedTag"},
-		},
-		{
 			name:        "non-tag predicate has no hints",
 			function:    `(value: unknown) => value.kind === "Some" ? first : fallback`,
-			tagSubjects: []string{""},
-			tagValues:   []string{""},
-		},
-		{
-			name:        "non-equality tag predicate has no hints",
-			function:    `(value: unknown) => value._tag !== "Some" ? first : fallback`,
 			tagSubjects: []string{""},
 			tagValues:   []string{""},
 		},
@@ -261,6 +243,7 @@ func TestParseTagMatch(t *testing.T) {
 		{name: "strict equality", expression: `error._tag === "NotFound"`, subject: "error", value: `"NotFound"`},
 		{name: "reversed loose equality", expression: `("Timeout" as string) == error._tag`, subject: "error", value: `"Timeout"`},
 		{name: "nested subject", expression: `error.reason._tag === "Invalid"`, subject: "error.reason", value: `"Invalid"`},
+		{name: "non-literal tag value", expression: `error._tag === expectedTag`, subject: "error", value: "expectedTag"},
 		{name: "inequality", expression: `error._tag !== "NotFound"`},
 		{name: "different property", expression: `error.kind === "NotFound"`},
 		{name: "compound expression", expression: `error._tag === "NotFound" && ready`},

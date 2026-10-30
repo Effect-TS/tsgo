@@ -27,7 +27,7 @@ pub(crate) fn mermaid_entity_encode(s: &str) -> String {
 }
 
 /// Rust-only: Go's `s[:n]` on a string longer than `n` bytes. Go keeps a split UTF-8 sequence as invalid bytes;
-/// Rust strings cannot hold them, so a split character becomes U+FFFD (docs/DIVERGENCES.md).
+/// Rust strings cannot hold them, so a split character becomes U+FFFD (porting/DIVERGENCES.md).
 fn truncate_bytes(s: &str, n: usize) -> String {
     String::from_utf8_lossy(&s.as_bytes()[..n]).into_owned()
 }

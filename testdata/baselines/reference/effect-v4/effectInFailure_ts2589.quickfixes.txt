@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:24-17:3) TS377054: The error channel contains an Effect (Effect<never, { readonly _tag: "A"; readonly a: { readonly _tag: "A"; readonly a: { readonly _tag: "A"; readonly a: { readonly _tag: "A"; readonly a: { readonly _tag: "A"; readonly a: { readonly _tag: "A"; readonly a: { readonly _tag: "A"; readonly a: { readonly _tag: "A"; readonly a: ... | ...; } | ...; } | ...; } ...). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
+  Fix 0: "Disable effectInFailure for this line"
+  Fix 1: "Disable effectInFailure for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectInFailure for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectInFailure for entire file" ===
+skipped by default

@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:23-6:30) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_namedUndefinedImport.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { succeed, undefined as undefinedEffect } from "effect/Effect"
+
+// MUST TRIGGER: no Effect module binding, but the replacement can still reach Effect.undefined
+export const result = undefinedEffect
+
+export const used = undefinedEffect
+

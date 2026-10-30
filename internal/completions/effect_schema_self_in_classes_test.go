@@ -255,16 +255,9 @@ func TestEffectSchemaSelfInClasses_BrandedSchemaClasses(t *testing.T) {
 			t.Parallel()
 			config := strings.Replace(completionTestTsConfig, `"name": "@effect/language-service"`, `"name": "@effect/language-service", `+test.options, 1)
 			const source = "import { Schema } from \"effect\"\nclass Foo extends Schema."
-			content := "// @Filename: /tsconfig.json\n" + config + "\n// @Filename: /test.ts\n" + source + "/*1*/"
-			f, done := fourslash.NewFourslash(t, nil, content)
-			defer done()
-			f.GoToMarker(t, "1")
-			completions := f.GetCompletions(t, nil)
-			if completions == nil {
-				t.Fatal("missing completions")
-			}
+			items := completionItemsIn(t, config, "", source, len(source))
 			for _, expected := range schemaClassCompletionCases[0].snippets {
-				item := findCompletionItem(completions.Items, expected.api+"<Foo>")
+				item := findCompletionItem(items, expected.api+"<Foo>")
 				if item == nil || item.TextEdit == nil || item.TextEdit.TextEdit == nil {
 					t.Errorf("missing snippet text edit for %s<Foo>", expected.api)
 					continue

@@ -1,0 +1,7 @@
+==== /.src/members.ts (0 layer exports) ====
+==== /.src/erased.ts (0 layer exports) ====
+==== /.src/internalReferenced.ts (0 layer exports) ====
+==== /.src/schemaInternal.ts (0 layer exports) ====
+==== /.src/augmentInternal.ts (0 layer exports) ====
+==== /.src/schemaPublic.ts (0 layer exports) ====
+==== /.src/augmentPublic.ts (0 layer exports) ====

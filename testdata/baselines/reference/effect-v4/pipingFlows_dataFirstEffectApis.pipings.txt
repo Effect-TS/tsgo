@@ -1,0 +1,117 @@
+==== /.src/pipingFlows_dataFirstEffectApis.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 8:20 - 8:55
+Node: Effect.succeed(((Option.some(1))))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 9:20 - 9:54
+Node: Effect.succeed(((Option.none())))
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 11:31 - 11:70
+Node: Option.getOrElse(option, () => "none")
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.getOrElse
+      args: [() => "none"]
+      outType: string | number
+
+=== Piping Flow ===
+Location: 12:27 - 15:3
+Node: Result.match(result, {\n  onFailure: (error) => error.length,\n  onSuccess: (value) => value\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, string>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: (error) => error.length,\n  onSuccess: (value) => value\n}]
+      outType: number
+
+=== Piping Flow ===
+Location: 16:30 - 16:79
+Node: UndefinedOr.map(maybe, (value) => String(value))
+Node Kind: KindCallExpression
+
+Subject: maybe
+Subject Type: number | undefined
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: UndefinedOr.map
+      args: [(value) => String(value)]
+      outType: string | undefined
+
+=== Piping Flow ===
+Location: 16:64 - 16:78
+Node: String(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 17:25 - 20:3
+Node: Exit.match(exit, {\n  onFailure: (cause) => String(cause),\n  onSuccess: (value) => value\n})
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Exit.match
+      args: [{\n  onFailure: (cause) => String(cause),\n  onSuccess: (value) => value\n}]
+      outType: string | number
+
+=== Piping Flow ===
+Location: 18:24 - 18:38
+Node: String(cause)
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: Cause<string>
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string

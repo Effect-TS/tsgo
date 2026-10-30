@@ -31,53 +31,44 @@ func findFirstEffectGenCall(t *testing.T, tp *TypeParser, sf *ast.SourceFile) *E
 	return result
 }
 
-func assertEffectGenFunctionReturnType(t *testing.T, version bundledeffect.EffectVersion, source string, want string) {
-	t.Helper()
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, source)
-	defer done()
-
-	parsed := findFirstEffectGenCall(t, tp, sf)
-	returnType := tp.GetTypeAtLocation(parsed.call.AsNode())
-	if returnType == nil {
-		t.Fatal("expected return type")
-	}
-	if got := c.TypeToString(returnType); got != want {
-		t.Fatalf("FunctionReturnType = %q", got)
-	}
-}
-
-func TestEffectGenCall_FunctionReturnType_NoPipe(t *testing.T) {
+func TestEffectGenCall_FunctionReturnType(t *testing.T) {
 	t.Parallel()
 
-	source := `
+	bothVersions := []bundledeffect.EffectVersion{bundledeffect.EffectV4, bundledeffect.EffectV3}
+	tests := []struct {
+		name     string
+		versions []bundledeffect.EffectVersion
+		source   string
+		want     string
+	}{
+		{
+			name:     "NoPipe",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = Effect.gen(function*() {
   return 1
 })
-`
-	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<number, never, never>")
-	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV3, source, "Effect<number, never, never>")
-}
-
-func TestEffectGenCall_FunctionReturnType_GenericNoPipe(t *testing.T) {
-	t.Parallel()
-
-	source := `
+`,
+			want: "Effect<number, never, never>",
+		},
+		{
+			name:     "GenericNoPipe",
+			versions: bothVersions,
+			source: `
 import { Effect } from "effect"
 
 export const make = <A>(a: A) => Effect.gen(function*() {
   return a
 })
-`
-	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<A, never, never>")
-	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV3, source, "Effect<A, never, never>")
-}
-
-func TestEffectGenCall_FunctionReturnType_SelfObject(t *testing.T) {
-	t.Parallel()
-
-	source := `
+`,
+			want: "Effect<A, never, never>",
+		},
+		{
+			name:     "SelfObject",
+			versions: []bundledeffect.EffectVersion{bundledeffect.EffectV4},
+			source: `
 import { Effect } from "effect"
 
 const self = {
@@ -87,29 +78,48 @@ const self = {
 export const make = Effect.gen({ self }, function*(this: typeof self) {
   return this.prefix
 })
-`
-	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV4, source, "Effect<string, never, never>")
-}
-
-func TestEffectGenCall_FunctionReturnType_GenericSelfObject(t *testing.T) {
-	t.Parallel()
-
-	sourceV4 := `
+`,
+			want: "Effect<string, never, never>",
+		},
+		{
+			name:     "GenericSelfObject",
+			versions: []bundledeffect.EffectVersion{bundledeffect.EffectV4},
+			source: `
 import { Effect } from "effect"
 
 export const make = <A>(self: { readonly value: A }) => Effect.gen({ self }, function*(this: typeof self) {
   return this.value
 })
-`
-	sourceV3 := `
+`,
+			want: "Effect<A, never, never>",
+		},
+		{
+			name:     "GenericSelfArgument",
+			versions: []bundledeffect.EffectVersion{bundledeffect.EffectV3},
+			source: `
 import { Effect } from "effect"
 
 export const make = <A>(self: { readonly value: A }) => Effect.gen(self, function*(this: typeof self) {
   return this.value
 })
-`
-	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV4, sourceV4, "Effect<A, never, never>")
-	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV3, sourceV3, "Effect<A, never, never>")
+`,
+			want: "Effect<A, never, never>",
+		},
+	}
+
+	for _, tt := range tests {
+		for _, version := range tt.versions {
+			c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, tt.source)
+			parsed := findFirstEffectGenCall(t, tp, sf)
+			returnType := tp.GetTypeAtLocation(parsed.call.AsNode())
+			if returnType == nil {
+				t.Errorf("%s/%s: expected return type", tt.name, version)
+			} else if got := c.TypeToString(returnType); got != tt.want {
+				t.Errorf("%s/%s: return type = %q, want %q", tt.name, version, got, tt.want)
+			}
+			done()
+		}
+	}
 }
 
 func TestEffectGenCall_ConstantAlias(t *testing.T) {

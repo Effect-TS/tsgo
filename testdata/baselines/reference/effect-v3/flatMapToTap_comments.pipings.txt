@@ -1,0 +1,87 @@
+==== /.src/flatMapToTap_comments.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 9:35 - 12:4
+Node: source.pipe(Effect.flatMap((n) => Effect.log(n).pipe(\n  Effect.map(() => 1), // Keep this explanation of the prior step.\n  Effect.as(n)\n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.log(n).pipe(\n  Effect.map(() => 1), // Keep this explanation of the prior step.\n  Effect.as(n)\n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:69 - 12:2
+Node: Effect.log(n).pipe(\n  Effect.map(() => 1), // Keep this explanation of the prior step.\n  Effect.as(n)\n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => 1]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.as
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:29 - 19:4
+Node: source.pipe(Effect.andThen((n) => {\n  // Keep the callback's logging.\n  console.log(n)\n  return Effect.log(/* keep this argument */ n).pipe(Effect.map(() => 1), Effect.as(n))\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [(n) => {\n  // Keep the callback's logging.\n  console.log(n)\n  return Effect.log(/* keep this argument */ n).pipe(Effect.map(() => 1), Effect.as(n))\n}]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:65 - 17:17
+Node: console.log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 18:9 - 18:88
+Node: Effect.log(/* keep this argument */ n).pipe(Effect.map(() => 1), Effect.as(n))
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => 1]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.as
+      args: [n]
+      outType: Effect<number, never, never>

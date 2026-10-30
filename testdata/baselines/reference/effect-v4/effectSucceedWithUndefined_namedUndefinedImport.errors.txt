@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectSucceedWithUndefined_namedUndefinedImport.ts(6,23): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+
+
+==== /.src/effectSucceedWithUndefined_namedUndefinedImport.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectSucceedWithUndefined:suggestion
+    import { succeed, undefined as undefinedEffect } from "effect/Effect"
+    
+    // MUST TRIGGER: no Effect module binding, but the replacement can still reach Effect.undefined
+    export const result = succeed(undefined)
+                          ~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    export const used = undefinedEffect
+    

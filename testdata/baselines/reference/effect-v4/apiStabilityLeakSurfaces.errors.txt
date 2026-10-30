@@ -1,0 +1,544 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/bareBinderCleanFirst.ts(4,14): warning TS377137: `effect-v4-tests/bareBinderCleanFirst#x` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/computed.ts(10,22): warning TS377137: `effect-v4-tests/computed#x` exposes `MethodAlias`, an experimental API. effect(apiStabilityLeak)
+/.src/computed.ts(10,22): warning TS377137: `effect-v4-tests/computed#x` exposes `ParameterAlias`, an experimental API. effect(apiStabilityLeak)
+/.src/computed.ts(10,22): warning TS377137: `effect-v4-tests/computed#x` exposes `PropertyAlias`, an experimental API. effect(apiStabilityLeak)
+/.src/conditionalMembers.ts(8,22): warning TS377137: `effect-v4-tests/conditionalMembers#contravariant` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/conditionalMembers.ts(11,22): warning TS377137: `effect-v4-tests/conditionalMembers#invariant` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/conditionalMembers.ts(13,22): warning TS377137: `effect-v4-tests/conditionalMembers#arrayWrapped` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/conditionalReturns.ts(6,14): warning TS377137: `effect-v4-tests/conditionalReturns#anonymousConditional` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/conditionalReturns.ts(8,14): warning TS377137: `effect-v4-tests/conditionalReturns#callableConditional` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/conditionalReturns.ts(10,14): warning TS377137: `effect-v4-tests/conditionalReturns#nestedConditional` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleAFirst.ts(8,13): warning TS377137: `effect-v4-tests/cycleAFirst#A` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleAFirst.ts(9,13): warning TS377137: `effect-v4-tests/cycleAFirst#Z` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleAFirst.ts(10,13): warning TS377137: `effect-v4-tests/cycleAFirst#SelfA` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleAFirst.ts(11,13): warning TS377137: `effect-v4-tests/cycleAFirst#SelfB` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleZFirst.ts(7,13): warning TS377137: `effect-v4-tests/cycleZFirst#Z` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleZFirst.ts(8,13): warning TS377137: `effect-v4-tests/cycleZFirst#A` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleZFirst.ts(9,13): warning TS377137: `effect-v4-tests/cycleZFirst#SelfB` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/cycleZFirst.ts(10,13): warning TS377137: `effect-v4-tests/cycleZFirst#SelfA` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/defaultArrow.ts(5,1): warning TS377137: `effect-v4-tests/defaultArrow#default` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/indexedLazy.ts(8,14): warning TS377137: `effect-v4-tests/indexedLazy#x` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/indexedRepresented.ts(8,14): warning TS377137: `effect-v4-tests/indexedRepresented#x` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(6,17): warning TS377137: `effect-v4-tests/inferred#nestedResult` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(7,14): warning TS377137: `effect-v4-tests/inferred#nestedArrowResult` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(9,13): warning TS377137: `effect-v4-tests/inferred#InferredObjectType` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(10,17): warning TS377137: `effect-v4-tests/inferred#parameterObject` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(12,22): warning TS377137: `effect-v4-tests/inferred#typeofInferredArrow` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(14,22): warning TS377137: `effect-v4-tests/inferred#typeofNestedClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(18,14): warning TS377137: `effect-v4-tests/inferred#bareBinder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(20,14): warning TS377137: `effect-v4-tests/inferred#objectClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(22,14): warning TS377137: `effect-v4-tests/inferred#directClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(24,14): warning TS377137: `effect-v4-tests/inferred#nestedClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/inferred.ts(26,14): warning TS377137: `effect-v4-tests/inferred#propertyClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/relatedOverload.ts(9,18): warning TS377137: `effect-v4-tests/relatedOverload#Public` exposes `call signature`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(11,17): warning TS377137: `effect-v4-tests/signatures#publicOverload` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(16,14): warning TS377137: `effect-v4-tests/signatures#instantiationExpression` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(18,18): warning TS377137: `effect-v4-tests/signatures#CallableMember` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(19,22): warning TS377137: `effect-v4-tests/signatures#callableUnion` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(20,14): warning TS377137: `effect-v4-tests/signatures#ErasedAccessor` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(24,25): warning TS377137: `effect-v4-tests/signatures#erasedUnion` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(25,22): warning TS377137: `effect-v4-tests/signatures#erasedArgument` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(27,22): warning TS377137: `effect-v4-tests/signatures#aliasOfInterface` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(29,22): warning TS377137: `effect-v4-tests/signatures#aliasOfLiteral` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(31,22): warning TS377137: `effect-v4-tests/signatures#typeofCallable` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(34,18): warning TS377137: `effect-v4-tests/signatures#TaggedProperty` exposes `value`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(38,18): warning TS377137: `effect-v4-tests/signatures#TaggedCallSignature` exposes `call signature`, an unstable API. effect(apiStabilityLeak)
+/.src/signatures.ts(42,18): warning TS377137: `effect-v4-tests/signatures#TaggedIndexSignature` exposes `index signature`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(46,22): warning TS377137: `effect-v4-tests/signatures#taggedAnonymousProperty` exposes `value`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(50,22): warning TS377137: `effect-v4-tests/signatures#taggedAnonymousMethod` exposes `f`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(54,22): warning TS377137: `effect-v4-tests/signatures#taggedAnonymousCall` exposes `call signature`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(58,13): warning TS377137: `effect-v4-tests/signatures#TaggedBranchMember` exposes `value`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(65,13): warning TS377137: `effect-v4-tests/signatures#GenericBranch` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(66,13): warning TS377137: `effect-v4-tests/signatures#GenericArrayBranch` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(67,13): warning TS377137: `effect-v4-tests/signatures#DeferredErasedBranch` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(68,13): warning TS377137: `effect-v4-tests/signatures#FirstInfer` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(69,22): warning TS377137: `effect-v4-tests/signatures#materializedInfer` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(75,22): warning TS377137: `effect-v4-tests/signatures#finiteRecursive` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(77,22): warning TS377137: `effect-v4-tests/signatures#finiteTuple` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(80,22): warning TS377137: `effect-v4-tests/signatures#indexedErased` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(86,22): warning TS377137: `effect-v4-tests/signatures#collapsedUnion` exposes `Erased`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(87,22): warning TS377137: `effect-v4-tests/signatures#reorderedUnion` exposes `Erased`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(88,22): warning TS377137: `effect-v4-tests/signatures#collapsedIntersection` exposes `Erased`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(91,22): warning TS377137: `effect-v4-tests/signatures#flattenedUnion` exposes `FlatUnion`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(94,22): warning TS377137: `effect-v4-tests/signatures#flattenedIntersection` exposes `FlatIntersection`, an experimental API. effect(apiStabilityLeak)
+/.src/signatures.ts(100,22): warning TS377137: `effect-v4-tests/signatures#benignDefault` exposes `E`, an experimental API. effect(apiStabilityLeak)
+
+
+==== /.src/computed.ts (3 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // Computed member names are not evaluated; their annotations are reported.
+    /** @stability experimental */
+    type PropertyAlias = string
+    /** @stability experimental */
+    type ParameterAlias = string
+    /** @stability experimental */
+    type MethodAlias = string
+    export declare const x: {
+                         ~
+!!! warning TS377137: `effect-v4-tests/computed#x` exposes `MethodAlias`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/computed.ts(9,6): `MethodAlias` is declared experimental here. effect(apiStabilityLeak)
+                         ~
+!!! warning TS377137: `effect-v4-tests/computed#x` exposes `ParameterAlias`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/computed.ts(7,6): `ParameterAlias` is declared experimental here. effect(apiStabilityLeak)
+                         ~
+!!! warning TS377137: `effect-v4-tests/computed#x` exposes `PropertyAlias`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/computed.ts(5,6): `PropertyAlias` is declared experimental here. effect(apiStabilityLeak)
+      [Symbol.iterator]?: PropertyAlias
+      [Symbol.toStringTag](value: ParameterAlias): MethodAlias
+      ["computed"]: PropertyAlias
+    }
+    export type Y = { readonly [Symbol.iterator]?: never }
+    export interface Z { readonly [Symbol.iterator]?: never }
+    
+
+==== /.src/defaultArrow.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    export default (x: E): E => x
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/defaultArrow#default` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/defaultArrow.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/inferred.ts (11 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    declare const e: E
+    export function nestedResult() { return { nested: { value: e } } }
+                    ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#nestedResult` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export const nestedArrowResult = () => ({ nested: { value: e } })
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#nestedArrowResult` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    const inferredObject = { value: e }
+    export type InferredObjectType = typeof inferredObject
+                ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#InferredObjectType` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export function parameterObject(x = { value: e }): void {}
+                    ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#parameterObject` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    const inferredArrow = () => e
+    export declare const typeofInferredArrow: typeof inferredArrow
+                         ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#typeofInferredArrow` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    const inferredNestedClosure = () => () => e
+    export declare const typeofNestedClosure: typeof inferredNestedClosure
+                         ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#typeofNestedClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    // Closures returned from generic functions expose their concrete binder.
+    declare function makeThunk<T>(): () => T
+    export const bareBinder = makeThunk<E>()
+                 ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#bareBinder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    function makeObjectClosure<T>(t: T) { return () => ({ v: t }) }
+    export const objectClosure = makeObjectClosure(e)
+                 ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#objectClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    function makeDirectClosure<T>(t: T) { return () => t }
+    export const directClosure = makeDirectClosure(e)
+                 ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#directClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    function makeNestedClosure<T>(t: T) { return () => () => t }
+    export const nestedClosure = makeNestedClosure(e)
+                 ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#nestedClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    function makePropertyClosure<T>(t: T) { return { f: () => t } }
+    export const propertyClosure = makePropertyClosure(e)
+                 ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/inferred#propertyClosure` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/inferred.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/bareBinderCleanFirst.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    declare function make<T>(): () => T
+    export const x = make<E>()
+                 ~
+!!! warning TS377137: `effect-v4-tests/bareBinderCleanFirst#x` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/bareBinderCleanFirst.ts(6,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability experimental */
+    interface E { v: string }
+    
+
+==== /.src/signatures.ts (31 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    /** @stability experimental */
+    type Text = string
+    
+    // Hidden overload implementations do not leak; public overloads do.
+    export function hiddenImplementation(x: string): string
+    export function hiddenImplementation(x: string | E): string { return "" }
+    export function publicOverload(x: E): E
+                    ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#publicOverload` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export function publicOverload(x: string): string
+    export function publicOverload(x: E | string): E | string { return x as E }
+    
+    declare function identity<T>(x: T): T
+    export const instantiationExpression = identity<E>
+                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#instantiationExpression` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    interface Callable<T> { (x: E): T }
+    export interface CallableMember { f: Callable<string> }
+                     ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#CallableMember` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export declare const callableUnion: Callable<string> | undefined
+                         ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#callableUnion` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export class ErasedAccessor {
+                 ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#ErasedAccessor` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(6,6): `Text` is declared experimental here. effect(apiStabilityLeak)
+      get value(): Text { return "x" }
+    }
+    interface Box<T> { value: T }
+    export declare function erasedUnion(x: Text | undefined): void
+                            ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#erasedUnion` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(6,6): `Text` is declared experimental here. effect(apiStabilityLeak)
+    export declare const erasedArgument: Box<Text>
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#erasedArgument` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(6,6): `Text` is declared experimental here. effect(apiStabilityLeak)
+    type Alias<T> = Box<T>
+    export declare const aliasOfInterface: Alias<E>
+                         ~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#aliasOfInterface` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    type Wrapper<T> = { value: T }
+    export declare const aliasOfLiteral: Wrapper<E>
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#aliasOfLiteral` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    declare function fn(x: E): void
+    export declare const typeofCallable: typeof fn
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#typeofCallable` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    // Declared member and signature tags contribute with their own provenance.
+    export interface TaggedProperty {
+                     ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#TaggedProperty` exposes `value`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(36,3): `value` is declared experimental here. effect(apiStabilityLeak)
+      /** @stability experimental */
+      value: string
+    }
+    export interface TaggedCallSignature {
+                     ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#TaggedCallSignature` exposes `call signature`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(40,3): `call signature` is declared unstable here. effect(apiStabilityLeak)
+      /** @stability unstable */
+      (x: string): string
+    }
+    export interface TaggedIndexSignature {
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#TaggedIndexSignature` exposes `index signature`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(44,3): `index signature` is declared experimental here. effect(apiStabilityLeak)
+      /** @stability experimental */
+      [key: string]: number
+    }
+    export declare const taggedAnonymousProperty: {
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#taggedAnonymousProperty` exposes `value`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(48,3): `value` is declared experimental here. effect(apiStabilityLeak)
+      /** @stability experimental */
+      value: string
+    }
+    export declare const taggedAnonymousMethod: {
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#taggedAnonymousMethod` exposes `f`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(52,3): `f` is declared experimental here. effect(apiStabilityLeak)
+      /** @stability experimental */
+      f(x: string): void
+    }
+    export declare const taggedAnonymousCall: {
+                         ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#taggedAnonymousCall` exposes `call signature`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(56,3): `call signature` is declared experimental here. effect(apiStabilityLeak)
+      /** @stability experimental */
+      (x: string): void
+    }
+    export type TaggedBranchMember<T> = T extends number ? {
+                ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#TaggedBranchMember` exposes `value`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(60,3): `value` is declared experimental here. effect(apiStabilityLeak)
+      /** @stability experimental */
+      value: string
+    } : boolean
+    
+    // Declared conditional branches are represented; defaulted applications
+    // select the compiler's branch.
+    export type GenericBranch<T> = T extends string ? E : number
+                ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#GenericBranch` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type GenericArrayBranch<T> = T[] extends string[] ? E : number
+                ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#GenericArrayBranch` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type DeferredErasedBranch<T> = T extends number ? Text : boolean
+                ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#DeferredErasedBranch` exposes `Text`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(6,6): `Text` is declared experimental here. effect(apiStabilityLeak)
+    export type FirstInfer<T> = T extends [infer U, ...unknown[]] ? E : never
+                ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#FirstInfer` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export declare const materializedInfer: string[] extends Array<infer U> ? E : never
+                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#materializedInfer` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    interface DefaultHolder<T = string> { value: T extends string ? number : E }
+    export declare const defaultInterface: DefaultHolder
+    type DefaultAlias<T = string> = T extends string ? number : E
+    export declare const defaultAlias: DefaultAlias
+    type Finite<T> = T extends string ? Finite<number> : E
+    export declare const finiteRecursive: Finite<string>
+                         ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#finiteRecursive` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    type Step<T extends unknown[]> = T extends [unknown, ...infer Tail] ? Step<Tail> : E
+    export declare const finiteTuple: Step<[0, 0]>
+                         ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#finiteTuple` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    interface Indexed { value: E }
+    type Read<T> = T["value" & keyof T]
+    export declare const indexedErased: Read<Indexed>
+                         ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#indexedErased` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    // Erased and flattened aliases keep their provenance in unions and
+    // intersections.
+    /** @stability experimental */
+    type Erased = string
+    export declare const collapsedUnion: never | number | Erased
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#collapsedUnion` exposes `Erased`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(85,6): `Erased` is declared experimental here. effect(apiStabilityLeak)
+    export declare const reorderedUnion: number | Erased | never
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#reorderedUnion` exposes `Erased`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(85,6): `Erased` is declared experimental here. effect(apiStabilityLeak)
+    export declare const collapsedIntersection: Erased & string
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#collapsedIntersection` exposes `Erased`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(85,6): `Erased` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability experimental */
+    type FlatUnion = string | number
+    export declare const flattenedUnion: FlatUnion | boolean
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#flattenedUnion` exposes `FlatUnion`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(90,6): `FlatUnion` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability experimental */
+    type FlatIntersection = { a: string } & { b: number }
+    export declare const flattenedIntersection: FlatIntersection & { c: boolean }
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#flattenedIntersection` exposes `FlatIntersection`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(93,6): `FlatIntersection` is declared experimental here. effect(apiStabilityLeak)
+    
+    // Nested class statics stay shallow; benign defaults keep their argument.
+    class WithStatic { static value: E }
+    export interface StaticHolder { ctor: typeof WithStatic }
+    interface Defaulted<A, B = A> { v: B }
+    export declare const benignDefault: Defaulted<E>
+                         ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/signatures#benignDefault` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/signatures.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/cycleAFirst.ts (4 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // Anonymous compound cycles complete their dependencies for every root.
+    /** @stability experimental */
+    interface E { value: string }
+    type B = { c: C; payload: E }
+    type C = { b: B }
+    export type A = { b: B }
+                ~
+!!! warning TS377137: `effect-v4-tests/cycleAFirst#A` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleAFirst.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type Z = { c: C }
+                ~
+!!! warning TS377137: `effect-v4-tests/cycleAFirst#Z` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleAFirst.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type SelfA = { b: SelfB; payload: E }
+                ~~~~~
+!!! warning TS377137: `effect-v4-tests/cycleAFirst#SelfA` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleAFirst.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type SelfB = { a: SelfA }
+                ~~~~~
+!!! warning TS377137: `effect-v4-tests/cycleAFirst#SelfB` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleAFirst.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/cycleZFirst.ts (4 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    type B = { c: C; payload: E }
+    type C = { b: B }
+    export type Z = { c: C }
+                ~
+!!! warning TS377137: `effect-v4-tests/cycleZFirst#Z` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleZFirst.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type A = { b: B }
+                ~
+!!! warning TS377137: `effect-v4-tests/cycleZFirst#A` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleZFirst.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type SelfB = { a: SelfA }
+                ~~~~~
+!!! warning TS377137: `effect-v4-tests/cycleZFirst#SelfB` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleZFirst.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export type SelfA = { b: SelfB; payload: E }
+                ~~~~~
+!!! warning TS377137: `effect-v4-tests/cycleZFirst#SelfA` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cycleZFirst.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/conditionalReturns.ts (3 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    declare function makeObject<T>(): { value: T extends string ? number : E }
+    export const anonymousConditional = makeObject<number>()
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/conditionalReturns#anonymousConditional` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/conditionalReturns.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    declare function makeCallable<T>(): () => T extends string ? number : E
+    export const callableConditional = makeCallable<number>()
+                 ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/conditionalReturns#callableConditional` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/conditionalReturns.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    declare function makeNested<T>(): { f: () => { value: T extends string ? number : E } }
+    export const nestedConditional = makeNested<number>()
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/conditionalReturns#nestedConditional` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/conditionalReturns.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/conditionalMembers.ts (3 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // Instantiated conditional members report the compiler's selected branch.
+    /** @stability experimental */
+    interface E { value: string }
+    interface Contravariant<in T> { f: (x: T) => void }
+    interface ContravariantHolder<T> { value: T extends Contravariant<string> ? number : E }
+    export declare const contravariant: ContravariantHolder<Contravariant<"x">>
+                         ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/conditionalMembers#contravariant` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/conditionalMembers.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    interface Invariant<in out T> { f: (x: T) => T }
+    interface InvariantHolder<T> { value: T extends Invariant<string> ? number : E }
+    export declare const invariant: InvariantHolder<Invariant<"x">>
+                         ~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/conditionalMembers#invariant` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/conditionalMembers.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    interface ArrayHolder<T> { value: T extends Contravariant<string>[] ? number : E }
+    export declare const arrayWrapped: ArrayHolder<Contravariant<"x">[]>
+                         ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/conditionalMembers#arrayWrapped` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/conditionalMembers.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    interface StructuralHolder<T> { value: T extends { value: string } ? number : E }
+    export declare const structural: StructuralHolder<{ value: string }>
+    
+
+==== /.src/indexedRepresented.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    interface I { value: E }
+    type Read<T> = T["value" & keyof T]
+    declare function make<T>(): () => Read<T>
+    export const x = make<I>()
+                 ~
+!!! warning TS377137: `effect-v4-tests/indexedRepresented#x` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/indexedRepresented.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    x()
+    
+
+==== /.src/indexedLazy.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    interface I { value: E }
+    type Read<T> = T["value" & keyof T]
+    declare function make<T>(): () => Read<T>
+    export const x = make<I>()
+                 ~
+!!! warning TS377137: `effect-v4-tests/indexedLazy#x` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/indexedLazy.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/shallowNamed.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // A nested named reference is a shallow dependency, even once materialized.
+    /** @stability experimental */
+    interface E { value: string }
+    interface Hidden<T> { value: E }
+    declare const h: Hidden<string>
+    h.value
+    export interface X { hidden: Hidden<string> }
+    
+
+==== /.src/shallowTagged.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    interface Hidden<T> { /** @stability experimental */ value: string }
+    declare const h: Hidden<string>
+    h.value
+    export interface X { hidden: Hidden<string> }
+    
+
+==== /.src/relatedOverload.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // The related location points at the tagged overload signature.
+    interface Callable {
+      /** @stability experimental */
+      (value: string): string;
+      (value: number): number;
+    }
+    export interface Public { call: Callable }
+                     ~~~~~~
+!!! warning TS377137: `effect-v4-tests/relatedOverload#Public` exposes `call signature`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/relatedOverload.ts(6,3): `call signature` is declared experimental here. effect(apiStabilityLeak)
+    

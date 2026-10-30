@@ -27,8 +27,6 @@ export function direct(e: Reportable) {}
 				primeApiStabilityChecker(t, c)
 			}
 			sf := files["/.src/test.ts"]
-			// Repeat with opposite root orders so neither shared surfaces nor an
-			// analysis-local result can erase a directly exposed dependency.
 			for _, order := range [][]string{
 				{"augmented", "Expanded", "direct", "Ordinary"},
 				{"Ordinary", "direct", "Expanded", "augmented"},
@@ -47,8 +45,6 @@ export function direct(e: Reportable) {}
 						t.Errorf("%s minimum=%v incomplete=%v deps=%v, want %v", name, used.minimum, used.incomplete, apiStabilityDependencyNames(used), want)
 					}
 					if name == "Expanded" {
-						// Also inspect its represented type after the compiler has
-						// flattened the inherited member table.
 						typ := c.GetDeclaredTypeOfSymbol(symbol)
 						c.GetPropertiesOfType(typ)
 						used = tp.ApiStabilityUsedByType(typ)

@@ -18,7 +18,7 @@ pub(crate) static EFFECT_DIAGNOSTICS_COMMENT: LazyLock<Completion> = LazyLock::n
 // go: internal/completions/effect_diagnostics_comment.go:23 commentAtRegex 7f18371138f86adf
 // commentAtRegex matches `//`, `/*`, or `/**` followed by optional whitespace and `@` at end of string.
 //
-// Rust: RE2's `\s` is `[\t\n\f\r ]` (docs/PORTING.md, "Types"). A byte regex, as Go's matches the bytes of a
+// Rust: RE2's `\s` is `[\t\n\f\r ]` (porting/PORTING.md, "Types"). A byte regex, as Go's matches the bytes of a
 // string sliced at any byte offset.
 pub(crate) static COMMENT_AT_REGEX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(//|/\*\*?)[\t\n\f\r ]*(@)[\t\n\f\r ]*$").unwrap());

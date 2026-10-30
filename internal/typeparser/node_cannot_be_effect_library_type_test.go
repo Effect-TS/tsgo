@@ -93,15 +93,7 @@ export const effect = Effect.void`
 	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
 	defer done()
 
-	initializers := map[string]*ast.Node{}
-	for _, statement := range sf.Statements.Nodes {
-		if statement.Kind != ast.KindVariableStatement {
-			continue
-		}
-		for _, declaration := range statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
-			initializers[declaration.Name().Text()] = declaration.Initializer()
-		}
-	}
+	initializers := exportedInitializers(sf)
 	for name, expected := range map[string]bool{
 		"trueLiteral":        true,
 		"falseLiteral":       true,
@@ -124,8 +116,6 @@ export const effect = Effect.void`
 	}
 }
 
-// atLocationParser pairs an AtLocation parser with the parser it applies to
-// the type of a node; each reports its result and whether it is non-nil.
 type atLocationParser struct {
 	name       string
 	atLocation func(node *ast.Node) (any, bool)
@@ -168,10 +158,6 @@ func exportedInitializers(sf *ast.SourceFile) map[string]*ast.Node {
 	return initializers
 }
 
-// checkAtLocationParsers asserts that every AtLocation parser matches its
-// parser applied to GetTypeAtLocation, that the parsers named in expected
-// (and only those) succeed, and that a node ruled out by every parser that
-// skips it is never typed.
 func checkAtLocationParsers(t *testing.T, tp *TypeParser, sf *ast.SourceFile, expected map[string][]string) {
 	t.Helper()
 	initializers := exportedInitializers(sf)
@@ -248,13 +234,13 @@ export const arrow = () => Effect.succeed(1)
 export const number = 1`)
 	defer done()
 
+	v3StreamAlsoParsesAsEffect := []string{"Effect", "EffectTypeId", "Stream", "Yieldable"}
 	checkAtLocationParsers(t, tp, sf, map[string][]string{
-		// v3 Streams carry the Effect variance struct, so the two overlap.
-		"effect": {"Effect", "EffectTypeId", "StrictEffect", "Stream", "Yieldable"},
+		"effect": append([]string{"StrictEffect"}, v3StreamAlsoParsesAsEffect...),
 		"layer":  {"Layer"},
-		"stream": {"Stream", "Effect", "EffectTypeId", "Yieldable"},
+		"stream": v3StreamAlsoParsesAsEffect,
 		"schema": {"Schema"},
-		"tag":    {"ContextTag", "Effect", "EffectTypeId", "Stream", "Yieldable"},
+		"tag":    append([]string{"ContextTag"}, v3StreamAlsoParsesAsEffect...),
 		"object": nil,
 		"arrow":  nil,
 		"number": nil,

@@ -1,0 +1,83 @@
+=== Quick Fix Inventory ===
+
+[D1] (36:18-36:28) TS377137: `effect-v4-tests/members#PublicPeer` exposes `E`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D2] (43:22-43:37) TS377137: `effect-v4-tests/members#genericArgument` exposes `E`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D3] (44:18-44:30) TS377137: `effect-v4-tests/members#MergedPublic` exposes `E`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D4] (7:18-7:25) TS377137: `effect-v4-tests/internalReferenced#Visible` exposes `E`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D5] (3:18-3:29) TS377137: `effect-v4-tests/schemaPublic#Annotations` exposes `Encoding`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D6] (6:18-6:26) TS377137: `effect-v4-tests/schemaPublic#Expanded` exposes `Encoding`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D7] (20:18-20:21) TS377137: `effect-v4-tests/augmentPublic#Api` exposes `Encoding`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D8] (21:22-21:25) TS377137: `effect-v4-tests/augmentPublic#api` exposes `Encoding`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default

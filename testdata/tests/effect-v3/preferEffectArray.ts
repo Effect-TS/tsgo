@@ -50,6 +50,15 @@ function constrained<T extends readonly number[]>(values: T) {
   values["map"](n => n + 1)
   return values.map(n => n + 1)
 }
+function constrainedReference<T extends readonly number[]>(values: T) {
+  return values["map"]
+}
+function constrainedCustom<T extends { map: (f: (n: number) => number) => number[] }>(values: T) {
+  return values["map"]
+}
+function constrainedMixed<T extends readonly number[] | { map: (f: (n: number) => number) => number[] }>(values: T) {
+  return values["map"]
+}
 declare const union: number[] | readonly string[]
 union.map(value => String(value))
 declare const optional: readonly number[] | undefined
@@ -57,6 +66,9 @@ optional?.map(n => n + 1)
 optional?.["filter"](n => n > 1)
 xs.map?.(n => n + 1)
 xs["map"](n => n + 1)
+xs.m\u0061p(n => n + 1)
+xs["m\u0061p"](n => n + 1)
+xs[`map`](n => n + 1)
 const bracket = xs["find"]
 readonlyTuple["map"](value => String(value))
 ;(xs).map(n => n + 1)
@@ -70,6 +82,9 @@ new Inherited().map(n => n + 1)
 const alias = xs.map
 alias.call(xs, n => n + 1)
 const { map: destructured } = xs
+type Remapped = { [K in keyof number[] as K extends "filter" ? "map" : never]: number[][K] }
+declare const remapped: Remapped
+remapped.map
 destructured.call(xs, n => n + 1)
 export const insideEffect = Effect.gen(function*() {
   return xs.filter(n => n > 1)
@@ -123,6 +138,9 @@ namespace ShadowedTypes {
 }
 xs.map = native_map
 xs["filter"] = native_filter
+declare const partial: Partial<Pick<number[], "map">>
+delete (partial.map)
+partial.map
 ;({ value: xs.map } = { value: native_map })
 type MapType = typeof xs.map
 type BracketType = typeof xs["filter"]

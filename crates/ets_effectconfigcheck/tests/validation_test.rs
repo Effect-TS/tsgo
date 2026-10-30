@@ -30,7 +30,7 @@ impl ParseConfigHost for ParseHost {
 }
 
 // go test: internal/effectconfigcheck/validation_test.go:24 newHost 491665c7ddc49098
-// Rust: the host is leaked (tsrs takes `&'static dyn ParseConfigHost`; docs/TSRS_API.md, "Gaps"). The test package
+// Rust: the host is leaked (tsrs takes `&'static dyn ParseConfigHost`; porting/TSRS_API.md, "Gaps"). The test package
 // imports etscheckerhooks, whose `init` registers the callbacks: `ets_etscheckerhooks::init()` here.
 fn new_host(files: &[(&str, &str)]) -> &'static ParseHost {
     ets_etscheckerhooks::init();

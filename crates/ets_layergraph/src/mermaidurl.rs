@@ -56,7 +56,7 @@ fn base64_raw_url_encode(data: &[u8]) -> String {
 //
 // Rust: Go's `compress/zlib` at `BestCompression` is `flate2`'s zlib encoder at `Compression::best()`; the two
 // deflate implementations choose different (equally valid) encodings, so the encoded fragment differs from Go's
-// while it decodes to the same payload (docs/DIVERGENCES.md). Go's JSON and zlib errors cannot happen (writes go to memory).
+// while it decodes to the same payload (porting/DIVERGENCES.md). Go's JSON and zlib errors cannot happen (writes go to memory).
 pub fn encode_mermaid_url(base_url: &str, diagram: &str) -> String {
     let mut json = String::from("{\"code\":");
     go_json_string(diagram, &mut json);

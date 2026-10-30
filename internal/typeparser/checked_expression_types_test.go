@@ -31,7 +31,6 @@ func TestCheckedExpressionTypeRemembersOnlyCheckedSourceFiles(t *testing.T) {
 		t.Fatal("expected the checked first file to be remembered")
 	}
 
-	// a negative answer is not remembered, the file is asked again once checked
 	if tp.checkedExpressionType(second) != nil {
 		t.Fatal("expected no checked type for the unchecked second file")
 	}

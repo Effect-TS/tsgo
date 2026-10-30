@@ -1,0 +1,213 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:100-9:115) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D2] (13:79-13:89) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D3] (17:75-17:85) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D4] (20:26-20:36) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D5] (4:15-4:22) TS6133: 'mapBoth' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (9:53-9:61) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D7] (9:76-9:86) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/forms.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number, string>
+
+// MUST TRIGGER: across chained .pipe(...) calls, other steps are kept on both sides
+// -> source.pipe(Effect.tap(() => Effect.void)).pipe(Effect.mapBoth({ ... }), Effect.asVoid)
+export const crossPipe = source.pipe(Effect.tap(() => Effect.void)).pipe(Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: e => e.length
+}), Effect.asVoid)
+
+// MUST TRIGGER: the first .pipe(...) is emptied and collapses to its subject
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const emptiedPipe = source.pipe(Effect.mapError((e) => e.length)).pipe(Effect.map((n) => n + 1))
+
+// MUST TRIGGER: reverse order keeps the callbacks in their original order
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const reverseOrder = source.pipe(Effect.mapError((e) => e.length), Effect.map((n) => n + 1))
+
+// MUST TRIGGER: nested data-first -> Effect.mapBoth(source, { onFailure: ..., onSuccess: ... })
+export const dataFirst = Effect.map(Effect.mapError(source, (e) => e.length), (n) => n + 1)
+
+=== [D2] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/forms.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number, string>
+
+// MUST TRIGGER: across chained .pipe(...) calls, other steps are kept on both sides
+// -> source.pipe(Effect.tap(() => Effect.void)).pipe(Effect.mapBoth({ ... }), Effect.asVoid)
+export const crossPipe = source.pipe(Effect.tap(() => Effect.void), Effect.map((n) => n + 1)).pipe(Effect.mapError((e) => e.length), Effect.asVoid)
+
+// MUST TRIGGER: the first .pipe(...) is emptied and collapses to its subject
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const emptiedPipe = source.pipe(Effect.mapBoth({
+    onFailure: e => e.length,
+    onSuccess: n => n + 1
+}))
+
+// MUST TRIGGER: reverse order keeps the callbacks in their original order
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const reverseOrder = source.pipe(Effect.mapError((e) => e.length), Effect.map((n) => n + 1))
+
+// MUST TRIGGER: nested data-first -> Effect.mapBoth(source, { onFailure: ..., onSuccess: ... })
+export const dataFirst = Effect.map(Effect.mapError(source, (e) => e.length), (n) => n + 1)
+
+=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/forms.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number, string>
+
+// MUST TRIGGER: across chained .pipe(...) calls, other steps are kept on both sides
+// -> source.pipe(Effect.tap(() => Effect.void)).pipe(Effect.mapBoth({ ... }), Effect.asVoid)
+export const crossPipe = source.pipe(Effect.tap(() => Effect.void), Effect.map((n) => n + 1)).pipe(Effect.mapError((e) => e.length), Effect.asVoid)
+
+// MUST TRIGGER: the first .pipe(...) is emptied and collapses to its subject
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const emptiedPipe = source.pipe(Effect.mapError((e) => e.length)).pipe(Effect.map((n) => n + 1))
+
+// MUST TRIGGER: reverse order keeps the callbacks in their original order
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const reverseOrder = source.pipe(Effect.mapBoth({
+    onFailure: e => e.length,
+    onSuccess: n => n + 1
+}))
+
+// MUST TRIGGER: nested data-first -> Effect.mapBoth(source, { onFailure: ..., onSuccess: ... })
+export const dataFirst = Effect.map(Effect.mapError(source, (e) => e.length), (n) => n + 1)
+
+=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/forms.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number, string>
+
+// MUST TRIGGER: across chained .pipe(...) calls, other steps are kept on both sides
+// -> source.pipe(Effect.tap(() => Effect.void)).pipe(Effect.mapBoth({ ... }), Effect.asVoid)
+export const crossPipe = source.pipe(Effect.tap(() => Effect.void), Effect.map((n) => n + 1)).pipe(Effect.mapError((e) => e.length), Effect.asVoid)
+
+// MUST TRIGGER: the first .pipe(...) is emptied and collapses to its subject
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const emptiedPipe = source.pipe(Effect.mapError((e) => e.length)).pipe(Effect.map((n) => n + 1))
+
+// MUST TRIGGER: reverse order keeps the callbacks in their original order
+// -> source.pipe(Effect.mapBoth({ onFailure: ..., onSuccess: ... }))
+export const reverseOrder = source.pipe(Effect.mapError((e) => e.length), Effect.map((n) => n + 1))
+
+// MUST TRIGGER: nested data-first -> Effect.mapBoth(source, { onFailure: ..., onSuccess: ... })
+export const dataFirst = Effect.mapBoth(source, {
+    onFailure: e => e.length,
+    onSuccess: n => n + 1
+})
+
+=== [D6] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/namedImportTarget.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import type { Effect } from "effect"
+import { map, mapBoth, mapError } from "effect/Effect"
+
+declare const source: Effect.Effect<number, string>
+
+// MUST TRIGGER: the named mapBoth import is the fix target -> source.pipe(mapBoth({ ... }))
+export const value = source.pipe(mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: e => e.length
+}))
+
+=== [D7] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/namespaceImport.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import * as E from "effect/Effect"
+
+declare const source: E.Effect<number, string>
+
+// MUST TRIGGER: namespace import, surrounding steps are kept
+// -> source.pipe(E.tap(() => E.void), E.mapBoth({ ... }), E.asVoid)
+export const value = source.pipe(E.tap(() => E.void), E.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: e => e.length
+}), E.asVoid)
+

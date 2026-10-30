@@ -1,0 +1,15 @@
+==== /.src/issue362_remedaChunk.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 15:15 - 15:31
+Node: chunk(items, 2)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: string[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: chunk
+      args: [2]
+      outType: [string, string][] | [string] | [string, string]

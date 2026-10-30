@@ -1,0 +1,60 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/flatMapToTap_malformedCallbacks.ts(10,34): warning TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap_malformedCallbacks.ts(13,70): error TS2739: Type 'Promise<Effect<number, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], [Symbol.iterator], toJSON, [NodeInspectSymbol], pipe
+/.src/flatMapToTap_malformedCallbacks.ts(16,61): error TS2345: Argument of type '(n: number) => Generator<never, Effect<number, never, never>, unknown>' is not assignable to parameter of type '(a: number) => Effect<unknown, unknown, unknown>'.
+/.src/flatMapToTap_malformedCallbacks.ts(19,57): error TS2345: Argument of type '(n: any, extra: any) => Effect<any, never, never>' is not assignable to parameter of type '(a: any) => Effect<any, never, never>'.
+/.src/flatMapToTap_malformedCallbacks.ts(19,58): error TS7006: Parameter 'n' implicitly has an 'any' type.
+/.src/flatMapToTap_malformedCallbacks.ts(19,61): error TS7006: Parameter 'extra' implicitly has an 'any' type.
+/.src/flatMapToTap_malformedCallbacks.ts(25,73): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Effect<unknown, unknown, unknown>'.
+
+
+==== /.src/flatMapToTap_malformedCallbacks.ts (7 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics flatMapToTap:warning
+    import { Effect } from "effect"
+    
+    declare const source: Effect.Effect<number>
+    declare const inner: unknown
+    declare const loose: any
+    
+    // MUST TRIGGER: the well-formed callback
+    export const valid = source.pipe(Effect.flatMap((n) => Effect.as(Effect.log(n), n)))
+                                     ~~~~~~~~~~~~~~
+!!! warning TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    
+    // MUST NOT TRIGGER: async callback
+    export const asyncCallback = source.pipe(Effect.flatMap(async (n) => Effect.as(Effect.log(n), n)))
+                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2739: Type 'Promise<Effect<number, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], [Symbol.iterator], toJSON, [NodeInspectSymbol], pipe
+!!! related TS6502 /node_modules/effect/dist/Effect.d.ts(2676,23): The expected type comes from the return type of this signature.
+    
+    // MUST NOT TRIGGER: generator callback
+    export const generatorCallback = source.pipe(Effect.flatMap(function*(n) { return Effect.as(Effect.log(n), n) }))
+                                                                ~~~~~~~~
+!!! error TS2345: Argument of type '(n: number) => Generator<never, Effect<number, never, never>, unknown>' is not assignable to parameter of type '(a: number) => Effect<unknown, unknown, unknown>'.
+    
+    // MUST NOT TRIGGER: callback with a second parameter
+    export const twoParameters = source.pipe(Effect.flatMap((n, extra) => Effect.as(Effect.log(n), n)))
+                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(n: any, extra: any) => Effect<any, never, never>' is not assignable to parameter of type '(a: any) => Effect<any, never, never>'.
+                                                             ~
+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
+                                                                ~~~~~
+!!! error TS7006: Parameter 'extra' implicitly has an 'any' type.
+    
+    // MUST NOT TRIGGER: generic callback
+    export const genericCallback = source.pipe(Effect.flatMap(<A>(n: A) => Effect.as(Effect.log(n), n)))
+    
+    // MUST NOT TRIGGER: the inner value is not an Effect
+    export const unknownInner = source.pipe(Effect.flatMap((n) => Effect.as(inner, n)))
+                                                                            ~~~~~
+!!! error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Effect<unknown, unknown, unknown>'.
+    
+    // MUST NOT TRIGGER: the inner value is any
+    export const looseInner = source.pipe(Effect.flatMap((n) => loose.pipe(Effect.as(n))))
+    
+    // MUST NOT TRIGGER: the outer value is any
+    export const looseOuter = loose.pipe(Effect.flatMap((n: number) => Effect.as(Effect.log(n), n)))
+    

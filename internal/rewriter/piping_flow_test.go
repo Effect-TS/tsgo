@@ -111,7 +111,7 @@ export const value = `
 			t.Parallel()
 			source := prefix + test.source
 			fixture := newPipingFlowRewriteFixture(t, source)
-			sf, flow, tracker, converters := fixture.sf, fixture.flow, fixture.tracker, fixture.converters
+			sf, flow, tracker := fixture.sf, fixture.flow, fixture.tracker
 			if test.kind != "" && (flow.Transformations().Len() == 0 || flow.Transformations().At(flow.Transformations().Len()-1).Kind() != test.kind) {
 				t.Fatalf("expected terminal transformation kind %s", test.kind)
 			}
@@ -125,19 +125,16 @@ export const value = `
 			if !test.remove && len(edits) != 0 {
 				t.Fatalf("unsupported removal produced %d edits", len(edits))
 			}
-			var changes []core.TextChange
 			for _, edit := range edits {
 				if test.deletionsOnly && edit.NewText != "" {
 					t.Fatalf("pipe removal inserted text %q", edit.NewText)
 				}
-				span := lsconv.FromLSPRangeToOriginal(converters, sf, edit.Range)
-				changes = append(changes, core.TextChange{TextRange: span, NewText: edit.NewText})
 			}
 			expected := source
 			if test.remove {
 				expected = prefix + test.expected
 			}
-			if got := core.ApplyBulkEdits(source, changes); got != expected {
+			if got := fixture.apply(t); got != expected {
 				t.Fatalf("replacement = %q, want %q", got, expected)
 			}
 		})
@@ -191,8 +188,6 @@ export const value = `
 	}
 }
 
-// pipingFlowRewriteFixture holds the longest piping flow at the initializer of a
-// source's last declaration, and a tracker to rewrite it.
 type pipingFlowRewriteFixture struct {
 	source     string
 	sf         *ast.SourceFile
@@ -233,7 +228,6 @@ func newPipingFlowRewriteFixture(t *testing.T, source string) *pipingFlowRewrite
 	return &pipingFlowRewriteFixture{source: source, sf: sf, flow: flow, tracker: tracker, converters: converters}
 }
 
-// apply returns the source with the tracker's edits applied.
 func (f *pipingFlowRewriteFixture) apply(t *testing.T) string {
 	t.Helper()
 	var changes []core.TextChange

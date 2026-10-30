@@ -1,0 +1,102 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:34-9:48) TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
+  Fix 0: "Disable flatMapIdentityToFlatten for this line"
+  Fix 1: "Disable flatMapIdentityToFlatten for entire file"
+  Fix 2: "Replace with Effect.flatten"
+
+[D2] (18:74-18:79) TS2739: Type 'Promise<Effect<string, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], [Symbol.iterator], toJSON, [NodeInspectSymbol], pipe
+  (no quick fixes)
+
+[D3] (24:57-24:101) TS2345: Argument of type '(inner_0: Effect.Effect<string, never, never>) => [Effect.Effect<string, never, never>]' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
+  Type '[Effect<string, never, never>]' is not assignable to type 'Effect<unknown, unknown, unknown>'.
+  (no quick fixes)
+
+[D4] (30:61-30:101) TS2345: Argument of type '(inner?: Effect.Effect<string>) => Effect.Effect<string, never, never> | undefined' is not assignable to parameter of type '(a: Effect<string, never, never> | undefined) => Effect<string, never, never>'.
+  Type 'Effect<string, never, never> | undefined' is not assignable to type 'Effect<string, never, never>'.
+    Type 'undefined' is not assignable to type 'Effect<string, never, never>'.
+  (no quick fixes)
+
+[D5] (33:70-33:76) TS2322: Type 'void' is not assignable to type 'Effect<unknown, unknown, unknown>'.
+  (no quick fixes)
+
+[D6] (36:59-36:75) TS2345: Argument of type '<Elem, Err, Done>() => Channel<Elem, Err, Done, Elem, Err, Done, never>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
+  Type 'Channel<unknown, unknown, unknown, unknown, unknown, unknown, never>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], [Symbol.iterator], toJSON, [NodeInspectSymbol]
+  (no quick fixes)
+
+[D7] (39:48-39:56) TS2345: Argument of type '<A>(a: A) => A' is not assignable to parameter of type '(a: unknown) => Effect<unknown, unknown, unknown>'.
+  Type 'unknown' is not assignable to type 'Effect<unknown, unknown, unknown>'.
+  (no quick fixes)
+
+[D8] (46:67-46:72) TS2345: Argument of type '(inner: Effect<string, never, never>) => Promise<Effect<string, never, never>>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
+  Type 'Promise<Effect<string, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], [Symbol.iterator], toJSON, [NodeInspectSymbol], pipe
+  (no quick fixes)
+
+[D9] (49:71-49:79) TS2345: Argument of type '(inner: Effect<string, never, never>) => Generator<never, Effect<string, never, never>, unknown>' is not assignable to parameter of type '(a: Effect<string, never, never>) => Effect<unknown, unknown, unknown>'.
+  Type 'Generator<never, Effect<string, never, never>, unknown>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], toJSON, [NodeInspectSymbol], pipe
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapIdentityToFlatten for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapIdentityToFlatten for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.flatten" ===
+
+--- file:///.src/flatMapIdentityToFlatten_callbackShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics flatMapIdentityToFlatten:warning
+import { Channel, Effect, identity } from "effect"
+
+declare const source: Effect.Effect<Effect.Effect<string>>
+declare const fallback: Effect.Effect<string>
+
+// MUST TRIGGER: plain identity arrow
+export const valid = source.pipe(Effect.flatten)
+
+// MUST NOT TRIGGER: annotated parameter widening the error channel
+export const widened = source.pipe(Effect.flatMap((inner: Effect.Effect<string, unknown>) => inner))
+
+// MUST NOT TRIGGER: explicit type arguments on flatMap
+export const typeArguments = source.pipe(Effect.flatMap<Effect.Effect<string>, string, never, never>(identity))
+
+// MUST NOT TRIGGER: async callback
+export const asyncCallback = source.pipe(Effect.flatMap(async (inner) => inner))
+
+// MUST NOT TRIGGER: callback with a second parameter
+export const twoParameters = source.pipe(Effect.flatMap((inner, _extra?: number) => inner))
+
+// MUST NOT TRIGGER: rest parameter
+export const restParameter = source.pipe(Effect.flatMap((...inner: [Effect.Effect<string>]) => inner))
+
+// MUST NOT TRIGGER: parameter initializer
+export const initializer = source.pipe(Effect.flatMap((inner = fallback) => inner))
+
+// MUST NOT TRIGGER: optional parameter
+export const optionalParameter = source.pipe(Effect.flatMap((inner?: Effect.Effect<string>) => inner))
+
+// MUST NOT TRIGGER: destructured parameter
+export const destructured = source.pipe(Effect.flatMap(({ pipe }) => pipe()))
+
+// MUST NOT TRIGGER: Channel.identity is not the Function identity
+export const channelIdentity = source.pipe(Effect.flatMap(Channel.identity))
+
+// MUST NOT TRIGGER: data-last call with identity
+export const dataLastIdentity = Effect.flatMap(identity)(source)
+
+// MUST NOT TRIGGER: an annotated alias of identity with the exact type
+const exactAlias: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
+export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
+
+// MUST NOT TRIGGER: async function expression
+export const asyncFunctionExpression = source.pipe(Effect.flatMap(async function(inner) { return inner }))
+
+// MUST NOT TRIGGER: generator function expression
+export const generatorFunctionExpression = source.pipe(Effect.flatMap(function*(inner) { return inner }))
+
+// MUST NOT TRIGGER: function expression with a widening parameter annotation
+export const typedFunctionExpression = source.pipe(Effect.flatMap(function(inner: Effect.Effect<string, unknown>) { return inner }))
+

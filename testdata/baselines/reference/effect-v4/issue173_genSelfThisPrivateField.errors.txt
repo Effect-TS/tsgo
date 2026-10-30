@@ -1,0 +1,42 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "strict": true,
+        "plugins": [
+          {
+            "name": "@effect/language-service"
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/issue173_genSelfThisPrivateField.ts (0 errors) ====
+    import { Effect, Exit, Scope } from "effect"
+    
+    export class DirectYieldedThis {
+      readonly #scope: Scope.Closeable = Scope.makeUnsafe()
+    
+      run(): Effect.Effect<void> {
+        return Effect.gen({ self: this }, function* () {
+          yield* Scope.close(this.#scope, Exit.void)
+        })
+      }
+    }
+    
+    export class HoistedThisScope {
+      readonly #scope: Scope.Closeable = Scope.makeUnsafe()
+    
+      run(): Effect.Effect<void> {
+        return Effect.gen({ self: this }, function* () {
+          const scope = this.#scope
+          yield* Scope.close(scope, Exit.void)
+        })
+      }
+    }
+    

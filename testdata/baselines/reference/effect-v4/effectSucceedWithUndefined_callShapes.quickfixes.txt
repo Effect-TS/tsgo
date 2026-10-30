@@ -1,0 +1,188 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:54-6:68) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D2] (9:33-9:47) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D3] (12:57-12:71) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D4] (15:73-15:87) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D5] (18:78-18:92) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_callShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first argument -> Effect.andThen(Effect.void, Effect.undefined)
+export const dataFirst = Effect.andThen(Effect.void, Effect.undefined)
+
+// MUST TRIGGER: pipe subject -> pipe(Effect.undefined, Effect.as(1))
+export const pipeSubject = pipe(Effect.succeed(undefined), Effect.as(1))
+
+// MUST TRIGGER: inside an Effect.fn body -> Effect.undefined
+export const fn = Effect.fn(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: inside an Effect.fnUntraced body -> Effect.undefined
+export const fnUntraced = Effect.fnUntraced(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: point-free pipe as a data-first argument -> Effect.undefined
+export const pointFreeArgument = Effect.andThen(Effect.void, pipe(undefined, Effect.succeed))
+
+// MUST NOT TRIGGER: an undefined-typed parameter named `undefined` still shadows the global
+export const shadowedUndefinedType = (undefined: undefined) => Effect.succeed(undefined)
+
+
+=== [D2] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_callShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first argument -> Effect.andThen(Effect.void, Effect.undefined)
+export const dataFirst = Effect.andThen(Effect.void, Effect.succeed(undefined))
+
+// MUST TRIGGER: pipe subject -> pipe(Effect.undefined, Effect.as(1))
+export const pipeSubject = pipe(Effect.undefined, Effect.as(1))
+
+// MUST TRIGGER: inside an Effect.fn body -> Effect.undefined
+export const fn = Effect.fn(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: inside an Effect.fnUntraced body -> Effect.undefined
+export const fnUntraced = Effect.fnUntraced(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: point-free pipe as a data-first argument -> Effect.undefined
+export const pointFreeArgument = Effect.andThen(Effect.void, pipe(undefined, Effect.succeed))
+
+// MUST NOT TRIGGER: an undefined-typed parameter named `undefined` still shadows the global
+export const shadowedUndefinedType = (undefined: undefined) => Effect.succeed(undefined)
+
+
+=== [D3] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_callShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first argument -> Effect.andThen(Effect.void, Effect.undefined)
+export const dataFirst = Effect.andThen(Effect.void, Effect.succeed(undefined))
+
+// MUST TRIGGER: pipe subject -> pipe(Effect.undefined, Effect.as(1))
+export const pipeSubject = pipe(Effect.succeed(undefined), Effect.as(1))
+
+// MUST TRIGGER: inside an Effect.fn body -> Effect.undefined
+export const fn = Effect.fn(function*() { return yield* Effect.undefined })
+
+// MUST TRIGGER: inside an Effect.fnUntraced body -> Effect.undefined
+export const fnUntraced = Effect.fnUntraced(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: point-free pipe as a data-first argument -> Effect.undefined
+export const pointFreeArgument = Effect.andThen(Effect.void, pipe(undefined, Effect.succeed))
+
+// MUST NOT TRIGGER: an undefined-typed parameter named `undefined` still shadows the global
+export const shadowedUndefinedType = (undefined: undefined) => Effect.succeed(undefined)
+
+
+=== [D4] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_callShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first argument -> Effect.andThen(Effect.void, Effect.undefined)
+export const dataFirst = Effect.andThen(Effect.void, Effect.succeed(undefined))
+
+// MUST TRIGGER: pipe subject -> pipe(Effect.undefined, Effect.as(1))
+export const pipeSubject = pipe(Effect.succeed(undefined), Effect.as(1))
+
+// MUST TRIGGER: inside an Effect.fn body -> Effect.undefined
+export const fn = Effect.fn(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: inside an Effect.fnUntraced body -> Effect.undefined
+export const fnUntraced = Effect.fnUntraced(function*() { return yield* Effect.undefined })
+
+// MUST TRIGGER: point-free pipe as a data-first argument -> Effect.undefined
+export const pointFreeArgument = Effect.andThen(Effect.void, pipe(undefined, Effect.succeed))
+
+// MUST NOT TRIGGER: an undefined-typed parameter named `undefined` still shadows the global
+export const shadowedUndefinedType = (undefined: undefined) => Effect.succeed(undefined)
+
+
+=== [D5] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_callShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first argument -> Effect.andThen(Effect.void, Effect.undefined)
+export const dataFirst = Effect.andThen(Effect.void, Effect.succeed(undefined))
+
+// MUST TRIGGER: pipe subject -> pipe(Effect.undefined, Effect.as(1))
+export const pipeSubject = pipe(Effect.succeed(undefined), Effect.as(1))
+
+// MUST TRIGGER: inside an Effect.fn body -> Effect.undefined
+export const fn = Effect.fn(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: inside an Effect.fnUntraced body -> Effect.undefined
+export const fnUntraced = Effect.fnUntraced(function*() { return yield* Effect.succeed(undefined) })
+
+// MUST TRIGGER: point-free pipe as a data-first argument -> Effect.undefined
+export const pointFreeArgument = Effect.andThen(Effect.void, Effect.undefined)
+
+// MUST NOT TRIGGER: an undefined-typed parameter named `undefined` still shadows the global
+export const shadowedUndefinedType = (undefined: undefined) => Effect.succeed(undefined)
+

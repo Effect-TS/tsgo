@@ -793,7 +793,7 @@ impl AnyValue for JsonAny {
 }
 
 /// Rust-only: `json.Unmarshal(data, &decoded)` with `decoded any`. The error text of a syntax error is the decoder's
-/// (docs/DIVERGENCES.md); callers print only that an error occurred.
+/// (porting/DIVERGENCES.md); callers print only that an error occurred.
 pub(crate) fn decode_any(data: &str) -> Result<JsonAny, String> {
     serde_json::from_str::<serde_json::Value>(data)
         .map(JsonAny::from_value)

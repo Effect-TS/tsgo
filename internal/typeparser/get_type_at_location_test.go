@@ -54,8 +54,6 @@ export function read(local) { return local.n + value }
 export const cast = /** @type {Local} */ ({ n: value })
 `
 
-// getTypeAtLocationUnhoisted is GetTypeAtLocation with the guards inside the
-// cached computation, as before they were hoisted.
 func getTypeAtLocationUnhoisted(tp *TypeParser, store *denseNodeStore[*checker.Type], node *ast.Node) *checker.Type {
 	return CachedNode(store, node, func() *checker.Type {
 		if !isTypeAtLocationCandidate(node) {
@@ -94,38 +92,34 @@ func TestGetTypeAtLocationHoistedGuardsMatchUnhoisted(t *testing.T) {
 			var nodes, typed, rejected int
 			guards := map[string]int{}
 			for i, sf := range sourceFiles {
-				// The first file is compared before any file is checked. Asked
-				// about an unchecked file, the checker can build an equal but new
-				// type on each evaluation, so there the types are compared printed.
-				checked := i > 0
+				fileChecked := i > 0
 				if i == 1 {
 					for _, other := range sourceFiles {
 						tp.checker.GetDiagnostics(t.Context(), other)
 					}
 				}
-				same := func(a, b *checker.Type) bool {
+				sameType := func(a, b *checker.Type) bool {
 					if a == b {
 						return true
 					}
-					return !checked && a != nil && b != nil && tp.checker.TypeToString(a) == tp.checker.TypeToString(b)
+					return !fileChecked && a != nil && b != nil && tp.checker.TypeToString(a) == tp.checker.TypeToString(b)
 				}
+				unhoistedFirst := i%2 == 0
 				var visit ast.Visitor
 				visit = func(node *ast.Node) bool {
 					nodes++
-					// even files ask the unhoisted ordering first, odd files the hoisted one
 					var first, second *checker.Type
-					if i%2 == 0 {
+					if unhoistedFirst {
 						first = getTypeAtLocationUnhoisted(tp, &unhoisted, node)
 						second = tp.GetTypeAtLocation(node)
 					} else {
 						first = tp.GetTypeAtLocation(node)
 						second = getTypeAtLocationUnhoisted(tp, &unhoisted, node)
 					}
-					if !same(first, second) {
+					if !sameType(first, second) {
 						t.Errorf("%s: %v at %d: %v, then %v", sf.FileName(), node.Kind, node.Pos(), first, second)
 					}
-					// repeated queries answer from the caches
-					if again := tp.GetTypeAtLocation(node); again != tp.GetTypeAtLocation(node) || !same(again, first) {
+					if again := tp.GetTypeAtLocation(node); again != tp.GetTypeAtLocation(node) || !sameType(again, first) {
 						t.Errorf("%s: %v at %d: repeated query got %v, want %v", sf.FileName(), node.Kind, node.Pos(), again, first)
 					}
 					if first != nil {
@@ -160,10 +154,9 @@ func TestGetTypeAtLocationHoistedGuardsMatchUnhoisted(t *testing.T) {
 			if typed == 0 || rejected == 0 {
 				t.Fatal("fixtures do not exercise the guards")
 			}
-			// Type-only heritage elements parse as type references with some
-			// providers, so that guard is not required to fire.
 			if tc.version == "" {
-				for _, guard := range []string{"jsx tag name", "jsx attribute name", "import clause", "tagged template", "meta property call"} {
+				guardsFiredByEveryProvider := []string{"jsx tag name", "jsx attribute name", "import clause", "tagged template", "meta property call"}
+				for _, guard := range guardsFiredByEveryProvider {
 					if guards[guard] == 0 {
 						t.Errorf("fixtures do not exercise the %s guard", guard)
 					}
@@ -173,58 +166,7 @@ func TestGetTypeAtLocationHoistedGuardsMatchUnhoisted(t *testing.T) {
 	}
 }
 
-// Import clauses without a default binding declare no symbol; before the
-// KindImportClause guard, checker.GetTypeAtLocation panicked on them with a
-// nil symbol dereference (recovered silently, see issue #301 investigation).
-func TestGetTypeAtLocationImportClause(t *testing.T) {
-	t.Parallel()
-
-	sources := map[string]string{
-		"/.src/dep.ts": `
-export const A = 1
-export type T = string
-const d = { A }
-export default d
-`,
-		"/.src/main.ts": `
-import { A } from "./dep.js"
-import * as ns from "./dep.js"
-import type { T } from "./dep.js"
-import d from "./dep.js"
-export const use: T = String(A + ns.A + d.A)
-`,
-	}
-
-	_, tp, sourceFiles, done := compileAndGetCheckerAndSourceFilesInternal(t, sources)
-	defer done()
-
-	var clauses []*ast.Node
-	var visit func(node *ast.Node) bool
-	visit = func(node *ast.Node) bool {
-		if node.Kind == ast.KindImportClause {
-			clauses = append(clauses, node)
-		}
-		node.ForEachChild(visit)
-		return false
-	}
-	sourceFiles["/.src/main.ts"].AsNode().ForEachChild(visit)
-
-	if len(clauses) != 4 {
-		t.Fatalf("expected 4 import clauses, got %d", len(clauses))
-	}
-
-	for _, clause := range clauses {
-		if got := tp.GetTypeAtLocation(clause); got != nil {
-			t.Errorf("expected nil type for import clause %q, got %v", clause.Parent.Text(), got)
-		}
-	}
-}
-
-// Re-evaluating these expressions after the check gives a different type than
-// the check itself computed: the iterator's return literals were checked while
-// the enclosing generic call was still resolving, and the narrowed reference
-// was checked with its constraint substituted.
-const checkedTypeSource = `
+const reevaluationDiffersSource = `
 declare const dual: {
   <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
     arity: Parameters<DataFirst>["length"],
@@ -260,7 +202,7 @@ export const getRandomValues = <T extends ArrayBufferView | null>(array: T): T =
 func TestGetTypeAtLocationReturnsCheckedType(t *testing.T) {
 	t.Parallel()
 
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, checkedTypeSource)
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, reevaluationDiffersSource)
 	defer done()
 	c.GetDiagnostics(context.Background(), sf)
 
@@ -294,7 +236,7 @@ func TestGetTypeAtLocationReturnsCheckedType(t *testing.T) {
 func TestGetTypeAtLocationAddsNoDiagnosticsAfterCheck(t *testing.T) {
 	t.Parallel()
 
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, checkedTypeSource+`
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, reevaluationDiffersSource+`
 declare function takesString<T extends string>(x: T): T
 export const bad = takesString(1)
 export function inferred() { return takesString(2) }

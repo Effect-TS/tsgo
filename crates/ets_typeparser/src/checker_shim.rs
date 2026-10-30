@@ -1,5 +1,5 @@
 //! Rust-only: the effect-tsgo shim accessors and TypeScript-patch APIs the type parser calls that tsrs does not make
-//! public (`docs/TSRS_API.md`, "Gaps"). Each helper computes what the Go function computes, from public tsrs building
+//! public (`porting/TSRS_API.md`, "Gaps"). Each helper computes what the Go function computes, from public tsrs building
 //! blocks; none reimplements checker logic beyond the few lines of the Go function it stands for.
 
 use ets_shim::ast::{

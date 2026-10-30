@@ -1,0 +1,71 @@
+==== /.src/pipingFlows_dataFirstOverloads.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 66:31 - 69:3
+Node: reordered(box, {\n  onEmpty: () => "empty",\n  onValue: (value) => value\n})
+Node Kind: KindCallExpression
+
+Subject: box
+Subject Type: Box<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: reordered
+      args: [{\n  onEmpty: () => "empty",\n  onValue: (value) => value\n}]
+      outType: string | number
+
+=== Piping Flow ===
+Location: 70:27 - 70:41
+Node: moved(box, 0)
+Node Kind: KindCallExpression
+
+Subject: box
+Subject Type: Box<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: moved
+      args: [0]
+      outType: number
+
+=== Piping Flow ===
+Location: 71:28 - 71:54
+Node: mapped(object, "b", true)
+Node Kind: KindCallExpression
+
+Subject: object
+Subject Type: { readonly a: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: mapped
+      args: ["b", true]
+      outType: { a: number; b: boolean; }
+
+=== Piping Flow ===
+Location: 72:35 - 72:61
+Node: callableAlias("value", 1)
+Node Kind: KindCallExpression
+
+Subject: "value"
+Subject Type: "value"
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: callableAlias
+      args: [1]
+      outType: number
+
+=== Piping Flow ===
+Location: 73:40 - 73:71
+Node: inferredParameters("value", 1)
+Node Kind: KindCallExpression
+
+Subject: "value"
+Subject Type: "value"
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: inferredParameters
+      args: [1]
+      outType: number

@@ -1,0 +1,58 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/suspendFailToFailSync_thunkShapes.ts(11,25): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync_thunkShapes.ts(14,24): warning TS377163: `Effect.dieSync` builds this defect lazily directly instead of wrapping `Effect.die` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync_thunkShapes.ts(17,30): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+
+
+==== /.src/suspendFailToFailSync_thunkShapes.ts (3 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics suspendFailToFailSync:warning
+    import * as Effect from "effect/Effect"
+    
+    declare const error: Error
+    declare const defect: unknown
+    declare const args: [Error]
+    
+    // MUST TRIGGER: arrow thunk returning Effect.fail
+    export const failCall = Effect.suspend(() => Effect.fail(error))
+                            ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: defect variant -> Effect.dieSync(() => defect)
+    export const dieCall = Effect.suspend(() => Effect.die(defect))
+                           ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.dieSync` builds this defect lazily directly instead of wrapping `Effect.die` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: function expression thunk
+    export const functionThunk = Effect.suspend(function() {
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+      return Effect.fail(error)
+    })
+    
+    // MUST NOT TRIGGER: async thunk
+    export const asyncThunk = Effect.suspend((async () => Effect.fail(error)) as any)
+    
+    // MUST NOT TRIGGER: generator thunk
+    export const generatorThunk = Effect.suspend(function*() {
+      return Effect.fail(error)
+    } as any)
+    
+    // MUST NOT TRIGGER: generic thunk
+    export const typeParameterThunk = Effect.suspend(<T>() => Effect.fail(error))
+    
+    // MUST NOT TRIGGER: spread argument to Effect.fail
+    export const spreadArgument = Effect.suspend(() => Effect.fail(...args))
+    
+    // MUST NOT TRIGGER: empty return
+    export const emptyReturn = Effect.suspend((() => {
+      return
+    }) as any)
+    
+    // MUST NOT TRIGGER: disabled by a next-line directive
+    // @effect-diagnostics-next-line suspendFailToFailSync:off
+    export const disabledNextLine = Effect.suspend(() => Effect.fail(error))
+    

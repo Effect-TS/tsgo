@@ -1,0 +1,56 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/failCauseToConstructor_shapes.ts(11,57): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor_shapes.ts(16,16): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor_shapes.ts(19,33): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor_shapes.ts(22,24): warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor_shapes.ts(25,60): error TS2322: Type 'Promise<Cause<Error>>' is not assignable to type 'Cause<unknown>'.
+
+
+==== /.src/failCauseToConstructor_shapes.ts (5 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics failCauseToConstructor:warning
+    import { Cause, Effect, pipe } from "effect"
+    
+    declare const error: Error
+    declare const defect: unknown
+    declare const wrap: (e: Error) => Error
+    
+    // MUST TRIGGER: Cause.fail and Effect.failCause at the end of a longer flow -> Effect.fail
+    export const longerPipe = pipe(error, wrap, Cause.fail, Effect.failCause)
+                                                            ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: trailing Effect.fn pipeline steps -> Effect.fail
+    export const effectFnTrailing = Effect.fn(function*() {
+      return yield* Effect.succeed(error)
+    }, Cause.fail, Effect.failCause)
+                   ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: explicit type argument on the lazy inner constructor -> Effect.failSync
+    export const lazyTypeArgument = Effect.failCauseSync(() => Cause.fail<Error | string>(error))
+                                    ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: lazy defect -> Effect.dieSync(() => defect)
+    export const lazyDie = Effect.failCauseSync(() => Cause.die(defect))
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST NOT TRIGGER: async thunk
+    export const asyncThunk = Effect.failCauseSync(async () => Cause.fail(error))
+                                                               ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Promise<Cause<Error>>' is not assignable to type 'Cause<unknown>'.
+!!! related TS6502 /node_modules/effect/dist/dts/Function.d.ts(252,18): The expected type comes from the return type of this signature.
+    
+    // MUST NOT TRIGGER: generator thunk
+    export const generatorThunk = Effect.failCauseSync(function*() {
+      return Cause.fail(error)
+    } as any)
+    
+    // MUST NOT TRIGGER: thunk with a parameter
+    export const parameterThunk = Effect.failCauseSync(((_?: unknown) => Cause.fail(error)) as () => Cause.Cause<Error>)
+    

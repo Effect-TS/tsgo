@@ -193,97 +193,130 @@
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D53] (53:7-53:10) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D54] (55:11-55:14) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D55] (56:12-56:20) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D56] (57:4-57:7) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D57] (58:4-58:9) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D58] (59:7-59:14) TS6133: 'bracket' is declared but its value is never read.
+[D53] (52:10-52:30) TS6133: 'constrainedReference' is declared but its value is never read.
   (no quick fixes)
 
-[D59] (59:20-59:26) TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D54] (53:17-53:22) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D60] (60:15-60:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D61] (61:7-61:10) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D62] (62:17-62:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D63] (64:13-64:20) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D64] (65:7-65:16) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D65] (66:18-66:25) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D66] (68:17-68:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D67] (69:18-69:21) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D68] (74:13-74:19) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
-  Fix 0: "Disable preferEffectArray for this line"
-  Fix 1: "Disable preferEffectArray for entire file"
-
-[D69] (91:18-91:24) TS2551: Property 'number' does not exist on type 'typeof import("/node_modules/effect/dist/Order")'. Did you mean 'Number'?
+[D55] (55:10-55:27) TS6133: 'constrainedCustom' is declared but its value is never read.
   (no quick fixes)
 
-[D70] (103:10-103:11) TS6133: 'f' is declared but its value is never read.
+[D56] (58:10-58:26) TS6133: 'constrainedMixed' is declared but its value is never read.
   (no quick fixes)
 
-[D71] (111:10-111:25) TS6133: 'shadowedGlobals' is declared but its value is never read.
+[D57] (62:7-62:10) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D58] (64:11-64:14) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D59] (65:12-65:20) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D60] (66:4-66:7) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D61] (67:4-67:9) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D62] (68:4-68:12) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D63] (69:4-69:14) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D64] (70:4-70:9) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D65] (71:7-71:14) TS6133: 'bracket' is declared but its value is never read.
   (no quick fixes)
 
-[D72] (112:29-112:34) TS6133: 'value' is declared but its value is never read.
+[D66] (71:20-71:26) TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D67] (72:15-72:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D68] (73:7-73:10) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D69] (74:17-74:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D70] (76:13-76:20) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D71] (77:7-77:16) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D72] (78:18-78:25) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D73] (80:17-80:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D74] (81:18-81:21) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D75] (86:10-86:13) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D76] (89:13-89:19) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D77] (106:18-106:24) TS2551: Property 'number' does not exist on type 'typeof import("/node_modules/effect/dist/Order")'. Did you mean 'Number'?
   (no quick fixes)
 
-[D73] (115:11-115:24) TS6133: 'ShadowedTypes' is declared but its value is never read.
+[D78] (118:10-118:11) TS6133: 'f' is declared but its value is never read.
   (no quick fixes)
 
-[D74] (126:6-126:13) TS6196: 'MapType' is declared but never used.
+[D79] (126:10-126:25) TS6133: 'shadowedGlobals' is declared but its value is never read.
   (no quick fixes)
 
-[D75] (127:6-127:17) TS6196: 'BracketType' is declared but never used.
+[D80] (127:29-127:34) TS6133: 'value' is declared but its value is never read.
   (no quick fixes)
 
-[D76] (128:10-128:22) TS6133: 'typePosition' is declared but its value is never read.
+[D81] (130:11-130:24) TS6133: 'ShadowedTypes' is declared but its value is never read.
   (no quick fixes)
 
-[D77] (128:23-128:46) TS6196: 'T' is declared but never used.
+[D82] (142:9-142:12) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D83] (144:6-144:13) TS6196: 'MapType' is declared but never used.
   (no quick fixes)
 
-[D78] (4:13-4:20) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+[D84] (145:6-145:17) TS6196: 'BracketType' is declared but never used.
+  (no quick fixes)
+
+[D85] (146:10-146:22) TS6133: 'typePosition' is declared but its value is never read.
+  (no quick fixes)
+
+[D86] (146:23-146:46) TS6196: 'T' is declared but never used.
+  (no quick fixes)
+
+[D87] (4:13-4:20) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
@@ -511,34 +544,22 @@ skipped by default
 === [D52] Fix 1: "Disable preferEffectArray for entire file" ===
 skipped by default
 
-=== [D53] Fix 0: "Disable preferEffectArray for this line" ===
-skipped by default
-
-=== [D53] Fix 1: "Disable preferEffectArray for entire file" ===
-skipped by default
-
 === [D54] Fix 0: "Disable preferEffectArray for this line" ===
 skipped by default
 
 === [D54] Fix 1: "Disable preferEffectArray for entire file" ===
 skipped by default
 
-=== [D55] Fix 0: "Disable preferEffectArray for this line" ===
-skipped by default
-
-=== [D55] Fix 1: "Disable preferEffectArray for entire file" ===
-skipped by default
-
-=== [D56] Fix 0: "Disable preferEffectArray for this line" ===
-skipped by default
-
-=== [D56] Fix 1: "Disable preferEffectArray for entire file" ===
-skipped by default
-
 === [D57] Fix 0: "Disable preferEffectArray for this line" ===
 skipped by default
 
 === [D57] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D58] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D58] Fix 1: "Disable preferEffectArray for entire file" ===
 skipped by default
 
 === [D59] Fix 0: "Disable preferEffectArray for this line" ===
@@ -577,12 +598,6 @@ skipped by default
 === [D64] Fix 1: "Disable preferEffectArray for entire file" ===
 skipped by default
 
-=== [D65] Fix 0: "Disable preferEffectArray for this line" ===
-skipped by default
-
-=== [D65] Fix 1: "Disable preferEffectArray for entire file" ===
-skipped by default
-
 === [D66] Fix 0: "Disable preferEffectArray for this line" ===
 skipped by default
 
@@ -601,8 +616,62 @@ skipped by default
 === [D68] Fix 1: "Disable preferEffectArray for entire file" ===
 skipped by default
 
-=== [D78] Fix 0: "Disable preferEffectArray for this line" ===
+=== [D69] Fix 0: "Disable preferEffectArray for this line" ===
 skipped by default
 
-=== [D78] Fix 1: "Disable preferEffectArray for entire file" ===
+=== [D69] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D70] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D70] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D71] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D71] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D72] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D72] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D73] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D73] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D74] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D74] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D75] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D75] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D76] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D76] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D82] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D82] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D87] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D87] Fix 1: "Disable preferEffectArray for entire file" ===
 skipped by default

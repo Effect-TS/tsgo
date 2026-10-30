@@ -6,7 +6,6 @@ import (
 
 func TestFnFunctionStar_NotEffectModule(t *testing.T) {
 	t.Parallel()
-	// Accessing a non-Effect identifier should return nil
 	source := `import * as Foo from "some-lib"
 const x = Foo.fn`
 	items := fnFunctionStarItems(t, source, len(source))
@@ -17,14 +16,12 @@ const x = Foo.fn`
 
 func TestFnFunctionStar_NamespaceImport_InVarDecl(t *testing.T) {
 	t.Parallel()
-	// Effect.fn| inside a variable declaration should produce 3 items (named + generic + untraced)
 	source := `import * as Effect from "effect/Effect"
 const myFn = Effect.fn`
 	items := fnFunctionStarItems(t, source, len(source))
 	if len(items) != 3 {
 		t.Fatalf("expected 3 items, got %d", len(items))
 	}
-	// First item should be the named variant with "myFn"
 	if items[0].Label != `fn("myFn")` {
 		t.Errorf("item[0].Label = %q, want %q", items[0].Label, `fn("myFn")`)
 	}
@@ -38,7 +35,6 @@ const myFn = Effect.fn`
 
 func TestFnFunctionStar_NamedImport_InVarDecl(t *testing.T) {
 	t.Parallel()
-	// import { Effect } from "effect" — should also work
 	source := `import { Effect } from "effect"
 const myFn = Effect.fn`
 	items := fnFunctionStarItems(t, source, len(source))
@@ -52,7 +48,6 @@ const myFn = Effect.fn`
 
 func TestFnFunctionStar_NotInVarDecl(t *testing.T) {
 	t.Parallel()
-	// Effect.fn| not inside a variable declaration — should produce 2 items (no named variant)
 	source := `import * as Effect from "effect/Effect"
 Effect.fn`
 	items := fnFunctionStarItems(t, source, len(source))
@@ -69,7 +64,6 @@ Effect.fn`
 
 func TestFnFunctionStar_AliasedImport(t *testing.T) {
 	t.Parallel()
-	// Aliased namespace import: import * as Fx from "effect/Effect" — Fx.fn| should work
 	source := `import * as Fx from "effect/Effect"
 const myFn = Fx.fn`
 	items := fnFunctionStarItems(t, source, len(source))
@@ -83,7 +77,6 @@ const myFn = Fx.fn`
 
 func TestFnFunctionStar_CursorAfterDot(t *testing.T) {
 	t.Parallel()
-	// Cursor right after the dot (no partial text typed)
 	source := `import * as Effect from "effect/Effect"
 const myFn = Effect.`
 	items := fnFunctionStarItems(t, source, len(source))
@@ -94,7 +87,6 @@ const myFn = Effect.`
 
 func TestFnFunctionStar_SnippetInsertText(t *testing.T) {
 	t.Parallel()
-	// Verify the insert text contains proper snippet placeholders
 	source := `import * as Effect from "effect/Effect"
 const myFn = Effect.fn`
 	items := fnFunctionStarItems(t, source, len(source))
@@ -102,21 +94,18 @@ const myFn = Effect.fn`
 		t.Fatalf("expected 3 items, got %d", len(items))
 	}
 
-	// Check insert text for named variant
 	namedInsert := items[0].TextEdit.TextEdit.NewText
 	expected := `fn("myFn")(function*(${1}){${0}})`
 	if namedInsert != expected {
 		t.Errorf("named insert text = %q, want %q", namedInsert, expected)
 	}
 
-	// Check insert text for generic variant
 	genericInsert := items[1].TextEdit.TextEdit.NewText
 	expected = "fn(function*(${1}){${0}})"
 	if genericInsert != expected {
 		t.Errorf("generic insert text = %q, want %q", genericInsert, expected)
 	}
 
-	// Check insert text for untraced variant
 	untracedInsert := items[2].TextEdit.TextEdit.NewText
 	expected = "fnUntraced(function*(${1}){${0}})"
 	if untracedInsert != expected {

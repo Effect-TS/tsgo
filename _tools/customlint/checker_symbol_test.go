@@ -1,7 +1,7 @@
 package customlint
 
 import (
-	"strings"
+	"fmt"
 	"testing"
 
 	"golang.org/x/tools/go/analysis/analysistest"
@@ -20,39 +20,39 @@ func TestForwardingSelector(t *testing.T) {
 		name string
 		body string
 	}{
-		{"forwarding", "return parser.checker.GetSymbolAtLocation(input)"},
-		{"earlier call", `parser.checker.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"
-return parser.checker.GetSymbolAtLocation(input)`},
-		{"earlier return", `if input != nil { return parser.checker.GetSymbolAtLocation(input) } // want "use TypeParser.GetSymbolAtLocation"
-return parser.checker.GetSymbolAtLocation(input)`},
-		{"nested call", `return parser.checker.GetSymbolAtLocation(parser.checker.GetSymbolAtLocation(input)) // want "use TypeParser.GetSymbolAtLocation" "use TypeParser.GetSymbolAtLocation"`},
-		{"different argument", `return parser.checker.GetSymbolAtLocation(nil) // want "use TypeParser.GetSymbolAtLocation"`},
-		{"different field", `return parser.other.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"`},
+		{"forwarding", "return parser.checker.%[1]s(input%[2]s)"},
+		{"earlier call", `parser.checker.%[1]s(input%[2]s) // want "use TypeParser.%[1]s"
+return parser.checker.%[1]s(input%[2]s)`},
+		{"earlier return", `if input != nil { return parser.checker.%[1]s(input%[2]s) } // want "use TypeParser.%[1]s"
+return parser.checker.%[1]s(input%[2]s)`},
+		{"nested call", `return parser.checker.%[1]s(parser.checker.%[1]s(input%[2]s)%[2]s) // want "use TypeParser.%[1]s" "use TypeParser.%[1]s"`},
+		{"different argument", `return parser.checker.%[1]s(nil%[2]s) // want "use TypeParser.%[1]s"`},
+		{"different field", `return parser.other.%[1]s(input%[2]s) // want "use TypeParser.%[1]s"`},
 		{"different receiver", `other := parser
-return other.checker.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"`},
+return other.checker.%[1]s(input%[2]s) // want "use TypeParser.%[1]s"`},
 		{"checker alias", `c := parser.checker
-return c.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"`},
+return c.%[1]s(input%[2]s) // want "use TypeParser.%[1]s"`},
 		{"parameter alias", `otherInput := input
-return parser.checker.GetSymbolAtLocation(otherInput) // want "use TypeParser.GetSymbolAtLocation"`},
-		{"shadowed parameter", `if input := input; input != nil { parser.checker.GetSymbolAtLocation(input) } // want "use TypeParser.GetSymbolAtLocation"
-return parser.checker.GetSymbolAtLocation(input)`},
-		{"method value", `lookup := parser.checker.GetSymbolAtLocation // want "use TypeParser.GetSymbolAtLocation"
-return lookup(input)`},
-		{"closure", `return func() *checker.Node { return parser.checker.GetSymbolAtLocation(input) }() // want "use TypeParser.GetSymbolAtLocation"`},
-		{"earlier closure", `func() { parser.checker.GetSymbolAtLocation(input) }() // want "use TypeParser.GetSymbolAtLocation"
-return parser.checker.GetSymbolAtLocation(input)`},
-		{"shadowed receiver", `if parser := parser; input != nil { parser.checker.GetSymbolAtLocation(input) } // want "use TypeParser.GetSymbolAtLocation"
-return parser.checker.GetSymbolAtLocation(input)`},
+return parser.checker.%[1]s(otherInput%[2]s) // want "use TypeParser.%[1]s"`},
+		{"shadowed parameter", `if input := input; input != nil { parser.checker.%[1]s(input%[2]s) } // want "use TypeParser.%[1]s"
+return parser.checker.%[1]s(input%[2]s)`},
+		{"method value", `lookup := parser.checker.%[1]s // want "use TypeParser.%[1]s"
+return lookup(input%[2]s)`},
+		{"closure", `return func() *checker.Node { return parser.checker.%[1]s(input%[2]s) }() // want "use TypeParser.%[1]s"`},
+		{"earlier closure", `func() { parser.checker.%[1]s(input%[2]s) }() // want "use TypeParser.%[1]s"
+return parser.checker.%[1]s(input%[2]s)`},
+		{"shadowed receiver", `if parser := parser; input != nil { parser.checker.%[1]s(input%[2]s) } // want "use TypeParser.%[1]s"
+return parser.checker.%[1]s(input%[2]s)`},
 	}
 	for methodName, forwardingMethod := range checkerLocationMethods {
+		extraArguments := ""
 		if methodName == "GetContextualType" {
-			continue
+			extraArguments = ", flags"
 		}
 		for _, receiver := range []string{"*TypeParser", "TypeParser"} {
 			for _, tc := range cases {
 				t.Run(methodName+"/"+receiver+"/"+tc.name, func(t *testing.T) {
-					body := strings.ReplaceAll(tc.body, "GetSymbolAtLocation", methodName)
-					runForwardingFixture(t, receiver, forwardingMethod, body)
+					runForwardingFixture(t, receiver, forwardingMethod, fmt.Sprintf(tc.body, methodName, extraArguments))
 				})
 			}
 		}
@@ -110,36 +110,24 @@ func (parser ` + receiver + `) ` + method + `(` + parameters + `) *checker.Node 
 	analysistest.Run(t, dir, checkerLocationAnalyzer, typeParserPackage)
 }
 
-func TestContextualTypeForwardingSelector(t *testing.T) {
+func TestContextualTypeForwardingFlags(t *testing.T) {
 	cases := []struct {
-		name string
-		body string
+		name            string
+		body            string
+		extraParameters []string
 	}{
-		{"forwarding", `return parser.checker.GetContextualType(input, flags)`},
-		{"different node", `return parser.checker.GetContextualType(nil, flags) // want "use TypeParser.GetContextualType"`},
-		{"different flags", `return parser.checker.GetContextualType(input, 0) // want "use TypeParser.GetContextualType"`},
+		{"different flags", `return parser.checker.GetContextualType(input, 0) // want "use TypeParser.GetContextualType"`, nil},
 		{"aliased flags", `otherFlags := flags
-return parser.checker.GetContextualType(input, otherFlags) // want "use TypeParser.GetContextualType"`},
+return parser.checker.GetContextualType(input, otherFlags) // want "use TypeParser.GetContextualType"`, nil},
 		{"shadowed flags", `if flags := flags; input != nil { return parser.checker.GetContextualType(input, flags) } // want "use TypeParser.GetContextualType"
-return parser.checker.GetContextualType(input, flags)`},
-		{"different checker", `return parser.other.GetContextualType(input, flags) // want "use TypeParser.GetContextualType"`},
-		{"earlier call", `parser.checker.GetContextualType(input, flags) // want "use TypeParser.GetContextualType"
-return parser.checker.GetContextualType(input, flags)`},
-		{"method value", `lookup := parser.checker.GetContextualType // want "use TypeParser.GetContextualType"
-return lookup(input, flags)`},
-		{"closure", `return func() *checker.Node { return parser.checker.GetContextualType(input, flags) }() // want "use TypeParser.GetContextualType"`},
+return parser.checker.GetContextualType(input, flags)`, nil},
+		{"extra parameter", `return parser.checker.GetContextualType(input, flags) // want "use TypeParser.GetContextualType"`, []string{"unused int"}},
 	}
 	for _, receiver := range []string{"*TypeParser", "TypeParser"} {
 		for _, tc := range cases {
 			t.Run(receiver+"/"+tc.name, func(t *testing.T) {
-				runForwardingFixture(t, receiver, "GetContextualType", tc.body)
+				runForwardingFixture(t, receiver, "GetContextualType", tc.body, tc.extraParameters...)
 			})
 		}
 	}
-}
-
-func TestContextualTypeForwardingArity(t *testing.T) {
-	runForwardingFixture(t, "*TypeParser", "GetContextualType",
-		`return parser.checker.GetContextualType(input, flags) // want "use TypeParser.GetContextualType"`,
-		"unused int")
 }

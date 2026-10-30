@@ -1,0 +1,44 @@
+// @filename: exact.ts
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+// Each check line fails to compile unless the value keeps exactly the given type,
+// so a fix that changes the inferred error type does not compile.
+type Exact<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false
+
+declare const error: Error
+declare const tag: "A" | "B"
+
+// MUST TRIGGER: a single literal widens to string in both forms -> Effect.failSync(() => "not found")
+export const singleLiteral = Effect.suspend(() => Effect.fail("not found"))
+export const singleLiteralCheck: Exact<typeof singleLiteral, Effect.Effect<never, string>> = true
+
+// MUST TRIGGER: the inner type argument is carried over -> Effect.failSync<Error | string>(() => error)
+export const innerTypeArgument = Effect.suspend(() => Effect.fail<Error | string>(error))
+export const innerTypeArgumentCheck: Exact<typeof innerTypeArgument, Effect.Effect<never, Error | string>> = true
+
+// MUST TRIGGER: a bare object literal is parenthesized -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteral = Effect.suspend(() => Effect.fail({ _tag: "Oops" }))
+export const objectLiteralCheck: Exact<typeof objectLiteral, Effect.Effect<never, { _tag: string }>> = true
+
+// MUST TRIGGER: a union-typed binding -> Effect.failSync(() => tag)
+export const unionBinding = Effect.suspend(() => Effect.fail(tag))
+export const unionBindingCheck: Exact<typeof unionBinding, Effect.Effect<never, "A" | "B">> = true
+
+// MUST TRIGGER: suspend and fail as pipe steps -> pipe(() => tag, Effect.failSync)
+export const pipeSteps = pipe(() => pipe(tag, Effect.fail), Effect.suspend)
+export const pipeStepsCheck: Exact<typeof pipeSteps, Effect.Effect<never, "A" | "B">> = true
+
+// @filename: namedImportsOnly.ts
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import { fail, suspend } from "effect/Effect"
+
+declare const error: Error
+
+// MUST TRIGGER (report only): without an Effect module binding the fallback receiver would be unbound
+export const value = suspend(() => fail(error))

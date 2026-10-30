@@ -24,7 +24,7 @@ git -C tsrs diff --stat $OLD $NEW -- crates/
 - Note whether tsrs moved its TypeScript snapshot (tsrs's `Cargo.toml`, `[workspace.metadata.typescript]`) and its
   toolchain (`rust-toolchain.toml`).
 - List public API changes in the crates `ets_shim` re-exports: renamed or removed `pub` items, changed signatures,
-  visibility changes (`pub(crate)` -> `pub` may close a gap in `docs/TSRS_API.md`; the reverse breaks us).
+  visibility changes (`pub(crate)` -> `pub` may close a gap in `porting/TSRS_API.md`; the reverse breaks us).
 
 ### 2. Bump and rebase the patches
 
@@ -44,12 +44,12 @@ git -C tsrs diff --stat $OLD $NEW -- crates/
 
 ### 3. Adapt the Effect crates
 
-- `cargo build --all-targets` and fix every break by following `docs/TSRS_API.md`: update the mapping row, then the
+- `cargo build --all-targets` and fix every break by following `porting/TSRS_API.md`: update the mapping row, then the
   call sites. Changes in Effect crates must stay faithful to the Go: a tsrs rename changes the call, not the logic.
-- Revisit `docs/TSRS_API.md`, "Gaps": a gap the new tsrs closes means the Rust-only helper or visibility patch can go
+- Revisit `porting/TSRS_API.md`, "Gaps": a gap the new tsrs closes means the Rust-only helper or visibility patch can go
   (switch to the public API and delete the helper and its row).
 - If tsrs moved its TypeScript snapshot: the Go comparison build moves too (the `typescript` entry the tsrs
-  component depends on). Recheck every `typescript` row of `docs/DIVERGENCES.md`; remove the ones that disappeared,
+  component depends on). Recheck every `typescript` row of `porting/DIVERGENCES.md`; remove the ones that disappeared,
   and prove any new difference before recording it.
 
 ### 4. Check and land
@@ -89,7 +89,7 @@ In this order, keeping each step buildable:
    compared with the Rust one has the same behavior; `repoctl check` enforces the same file names). For each changed
    or new Go patch that has (or now needs) a tsrs counterpart, make the same change in
    `_patches/tsrs/<same number and name>.patch`; for a removed Go patch, remove its tsrs and override-folder
-   counterparts. Update `docs/TSRS_API.md`, "tsrs patches".
+   counterparts. Update `porting/TSRS_API.md`, "tsrs patches".
 2. **Shim API changed** (`_tools/gen_shims` config or providers): update the `ets_shim` generator config to match. A
    change to `_tools/gen_shims/providers/typescript/` is also mirrored into the self-contained
    `providers/typescript-<gitHead>/` copies where it applies (the beta one).

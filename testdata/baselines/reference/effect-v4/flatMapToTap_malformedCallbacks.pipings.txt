@@ -1,0 +1,249 @@
+==== /.src/flatMapToTap_malformedCallbacks.ts (16 flows) ====
+
+=== Piping Flow ===
+Location: 10:21 - 10:85
+Node: source.pipe(Effect.flatMap((n) => Effect.as(Effect.log(n), n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.as(Effect.log(n), n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:55 - 10:83
+Node: Effect.as(Effect.log(n), n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:29 - 13:99
+Node: source.pipe(Effect.flatMap(async (n) => Effect.as(Effect.log(n), n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [async (n) => Effect.as(Effect.log(n), n)]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 13:69 - 13:97
+Node: Effect.as(Effect.log(n), n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 16:33 - 16:114
+Node: source.pipe(Effect.flatMap(function*(n) { return Effect.as(Effect.log(n), n) }))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function*(n) { return Effect.as(Effect.log(n), n) }]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 16:82 - 16:110
+Node: Effect.as(Effect.log(n), n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 19:29 - 19:100
+Node: source.pipe(Effect.flatMap((n, extra) => Effect.as(Effect.log(n), n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n, extra) => Effect.as(Effect.log(n), n)]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 19:70 - 19:98
+Node: Effect.as(Effect.log(n), n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: any
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [n]
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 22:31 - 22:101
+Node: source.pipe(Effect.flatMap(<A>(n: A) => Effect.as(Effect.log(n), n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [<A>(n: A) => Effect.as(Effect.log(n), n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 22:71 - 22:99
+Node: Effect.as(Effect.log(n), n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: A
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [n]
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 25:28 - 25:84
+Node: source.pipe(Effect.flatMap((n) => Effect.as(inner, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.as(inner, n)]
+      outType: Effect<number, unknown, unknown>
+
+=== Piping Flow ===
+Location: 25:62 - 25:82
+Node: Effect.as(inner, n)
+Node Kind: KindCallExpression
+
+Subject: inner
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [n]
+      outType: Effect<number, unknown, unknown>
+
+=== Piping Flow ===
+Location: 28:26 - 28:87
+Node: source.pipe(Effect.flatMap((n) => loose.pipe(Effect.as(n))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => loose.pipe(Effect.as(n))]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 28:60 - 28:85
+Node: loose.pipe(Effect.as(n))
+Node Kind: KindCallExpression
+
+Subject: loose
+Subject Type: any
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.as
+      args: [n]
+      outType: 
+
+=== Piping Flow ===
+Location: 31:26 - 31:97
+Node: loose.pipe(Effect.flatMap((n: number) => Effect.as(Effect.log(n), n)))
+Node Kind: KindCallExpression
+
+Subject: loose
+Subject Type: any
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n: number) => Effect.as(Effect.log(n), n)]
+      outType: 
+
+=== Piping Flow ===
+Location: 31:67 - 31:95
+Node: Effect.as(Effect.log(n), n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [n]
+      outType: Effect<number, never, never>

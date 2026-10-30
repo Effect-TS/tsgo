@@ -1,38 +1,6 @@
 package typeparser
 
-import (
-	"strings"
-	"testing"
-	"testing/fstest"
-
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/bundled"
-	"github.com/microsoft/TypeScript/tsc/shim/compiler"
-	"github.com/microsoft/TypeScript/tsc/shim/core"
-	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
-	"github.com/microsoft/TypeScript/tsc/shim/tspath"
-	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
-)
-
-func findNativeObjectAccess(t testing.TB, sf *ast.SourceFile, text string) *ast.Node {
-	t.Helper()
-	var found *ast.Node
-	var walk ast.Visitor
-	walk = func(node *ast.Node) bool {
-		if (node.Kind == ast.KindPropertyAccessExpression || node.Kind == ast.KindElementAccessExpression) &&
-			strings.TrimSpace(sf.Text()[node.Pos():node.End()]) == text {
-			found = node
-			return false
-		}
-		node.ForEachChild(walk)
-		return false
-	}
-	walk(sf.AsNode())
-	if found == nil {
-		t.Fatalf("member access %q not found", text)
-	}
-	return found
-}
+import "testing"
 
 func TestNativeObjectMethodReference(t *testing.T) {
 	t.Parallel()
@@ -159,7 +127,7 @@ alias;
 		{"arrays.entries", "entries", true, false},
 		{"map.keys", "keys", true, false},
 	} {
-		node := findNativeObjectAccess(t, sf, tc.access)
+		node := findMemberAccess(t, sf, tc.access)
 		query, otherNamespace := tp.IsNativeObjectMethodReference, tp.IsNativeObjectConstructorMethodReference
 		if tc.constructor {
 			query, otherNamespace = otherNamespace, query
@@ -179,12 +147,12 @@ alias;
 	}
 	if tp.IsNativeObjectMethodReference(nil, "hasOwnProperty") ||
 		tp.IsNativeObjectConstructorMethodReference(findIdentifierByText(t, sf, "alias", 1), "keys") ||
-		tp.IsNativeObjectConstructorMethodReference(findNativeObjectAccess(t, sf, "Native.keys"), "") {
+		tp.IsNativeObjectConstructorMethodReference(findMemberAccess(t, sf, "Native.keys"), "") {
 		t.Error("unsupported reference matched a native Object method")
 	}
-	if !tp.IsNativeArrayMethodReference(findNativeObjectAccess(t, sf, "arrays.keys"), "keys") ||
-		tp.IsNativeArrayMethodReference(findNativeObjectAccess(t, sf, "Native.keys"), "keys") ||
-		tp.IsNativeArrayConstructorMethodReference(findNativeObjectAccess(t, sf, "Native.keys"), "keys") {
+	if !tp.IsNativeArrayMethodReference(findMemberAccess(t, sf, "arrays.keys"), "keys") ||
+		tp.IsNativeArrayMethodReference(findMemberAccess(t, sf, "Native.keys"), "keys") ||
+		tp.IsNativeArrayConstructorMethodReference(findMemberAccess(t, sf, "Native.keys"), "keys") {
 		t.Error("Object recognition changed Array classification")
 	}
 }
@@ -204,13 +172,13 @@ Object.prototype.hasOwnProperty;
 Object.prototype.isPrototypeOf;
 `)
 	defer done()
-	if tp.IsNativeObjectConstructorMethodReference(findNativeObjectAccess(t, sf, "Object.keys"), "keys") ||
-		!tp.IsNativeObjectConstructorMethodReference(findNativeObjectAccess(t, sf, "Object.values"), "values") ||
-		!tp.IsNativeObjectConstructorMethodReference(findNativeObjectAccess(t, sf, "Object.hasOwn"), "hasOwn") {
+	if tp.IsNativeObjectConstructorMethodReference(findMemberAccess(t, sf, "Object.keys"), "keys") ||
+		!tp.IsNativeObjectConstructorMethodReference(findMemberAccess(t, sf, "Object.values"), "values") ||
+		!tp.IsNativeObjectConstructorMethodReference(findMemberAccess(t, sf, "Object.hasOwn"), "hasOwn") {
 		t.Error("constructor augmentation affected the wrong members")
 	}
-	if tp.IsNativeObjectMethodReference(findNativeObjectAccess(t, sf, "Object.prototype.hasOwnProperty"), "hasOwnProperty") ||
-		!tp.IsNativeObjectMethodReference(findNativeObjectAccess(t, sf, "Object.prototype.isPrototypeOf"), "isPrototypeOf") {
+	if tp.IsNativeObjectMethodReference(findMemberAccess(t, sf, "Object.prototype.hasOwnProperty"), "hasOwnProperty") ||
+		!tp.IsNativeObjectMethodReference(findMemberAccess(t, sf, "Object.prototype.isPrototypeOf"), "isPrototypeOf") {
 		t.Error("instance augmentation affected the wrong members")
 	}
 }
@@ -223,7 +191,7 @@ declare global { interface Object extends Pick<ObjectConstructor, "keys"> {} }
 Object.keys;
 `)
 	defer done()
-	node := findNativeObjectAccess(t, sf, "Object.keys")
+	node := findMemberAccess(t, sf, "Object.keys")
 	if !tp.IsNativeObjectConstructorMethodReference(node, "keys") || tp.IsNativeObjectMethodReference(node, "keys") {
 		t.Error("inherited constructor roots changed Object.keys namespace")
 	}
@@ -238,22 +206,10 @@ declare const Object: ObjectConstructor;
 Object.keys;
 Object.prototype.hasOwnProperty;
 `
-	fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
-		"/.src/test.ts": &fstest.MapFile{Data: []byte(source)},
-	}, tspath.CaseSensitive))
-	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{
-			NoLib: core.TSTrue, Target: core.ScriptTargetESNext, Strict: core.TSTrue,
-		}, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
-		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
-		SingleThreaded: core.TSTrue,
-	})
-	c, done := program.GetTypeChecker(t.Context())
+	tp, sf, done := compileNoLibSource(t, source)
 	defer done()
-	tp := NewTypeParser(program, c)
-	sf := program.GetSourceFile("/.src/test.ts")
-	if tp.IsNativeObjectConstructorMethodReference(findNativeObjectAccess(t, sf, "Object.keys"), "keys") ||
-		tp.IsNativeObjectMethodReference(findNativeObjectAccess(t, sf, "Object.prototype.hasOwnProperty"), "hasOwnProperty") {
+	if tp.IsNativeObjectConstructorMethodReference(findMemberAccess(t, sf, "Object.keys"), "keys") ||
+		tp.IsNativeObjectMethodReference(findMemberAccess(t, sf, "Object.prototype.hasOwnProperty"), "hasOwnProperty") {
 		t.Error("noLib user declarations matched native Object members")
 	}
 	if len(tp.links.nativeObjectRegistry.instance) != 0 || len(tp.links.nativeObjectRegistry.constructor) != 0 {
@@ -277,7 +233,7 @@ custom.keys;
 	}
 	second := NewTypeParser(c.Program(), c)
 	for _, access := range []string{"Object.keys", "custom.keys"} {
-		node := findNativeObjectAccess(t, files["/.src/first.ts"], access)
+		node := findMemberAccess(t, files["/.src/first.ts"], access)
 		want := access == "Object.keys"
 		if got := tp.IsNativeObjectConstructorMethodReference(node, "keys"); got != want {
 			t.Fatalf("first parser %s = %v, want %v", access, got, want)
@@ -296,16 +252,16 @@ custom.keys;
 		}
 	}
 	registry := tp.links.nativeObjectRegistry
-	if !second.IsNativeObjectConstructorMethodReference(findNativeObjectAccess(t, files["/.src/second.ts"], "Object.keys"), "keys") || second.links.nativeObjectRegistry != registry {
+	if !second.IsNativeObjectConstructorMethodReference(findMemberAccess(t, files["/.src/second.ts"], "Object.keys"), "keys") || second.links.nativeObjectRegistry != registry {
 		t.Fatal("second source file did not reuse the canonical registry")
 	}
 	_, other, otherFile, otherDone := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer otherDone()
-	firstSymbol := tp.GetSymbolAtLocation(findNativeObjectAccess(t, files["/.src/first.ts"], "Object.keys"))
+	firstSymbol := tp.GetSymbolAtLocation(findMemberAccess(t, files["/.src/first.ts"], "Object.keys"))
 	if other.links == tp.links || other.links.nativeObjectRegistry != nil || other.links.nativeObjectMember.TryGet(firstSymbol) != nil {
 		t.Fatal("separate checker inherited native Object cache entries")
 	}
-	otherNode := findNativeObjectAccess(t, otherFile, "Object.keys")
+	otherNode := findMemberAccess(t, otherFile, "Object.keys")
 	if !other.IsNativeObjectConstructorMethodReference(otherNode, "keys") || other.links.nativeObjectRegistry == registry || other.GetSymbolAtLocation(otherNode) == firstSymbol {
 		t.Fatal("separate checker did not build its own native Object cache")
 	}

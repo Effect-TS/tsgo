@@ -8,15 +8,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-// apiStabilityRecursiveAlias is the self-expanding alias the safety probes
-// use: any speculative resolution of an application trips the checker's depth
-// guard, so a guard that approves it would add TS2589.
 const apiStabilityRecursiveAlias = "type Deep<T> = T extends string ? Deep<T> : T\n"
 
-// TestApiStabilitySafetyCompoundOperands pins that anonymous compound
-// conditional operands whose raw structure mentions a substituted parameter are
-// refused without asking the compiler relation. The guard performs no checker
-// instantiation, adds no global diagnostic, and leaves no symbol surface.
 func TestApiStabilitySafetyCompoundOperands(t *testing.T) {
 	t.Parallel()
 
@@ -83,10 +76,6 @@ export declare const x: Select<F>`,
 	}
 }
 
-// TestApiStabilitySafetyDeferredCompoundStaysSafe pins that an anonymous
-// operand that mentions an unbound parameter keeps the conditional deferred:
-// no relation is asked, no checker instantiation happens, and no diagnostic or
-// dependency is fabricated.
 func TestApiStabilitySafetyDeferredCompoundStaysSafe(t *testing.T) {
 	t.Parallel()
 
@@ -111,10 +100,6 @@ export interface X<T> { v: Select<T> }`,
 	}
 }
 
-// TestApiStabilitySafetyStructuralConditionalStaysSelectable pins that a
-// concrete structural conditional with no substituted parameters is still
-// resolved through the compiler relation, keeping the structural leak surfaces
-// covered and complete.
 func TestApiStabilitySafetyStructuralConditionalStaysSelectable(t *testing.T) {
 	t.Parallel()
 
@@ -138,12 +123,6 @@ export declare const x: Holder<{ value: string }>`,
 	}
 }
 
-// TestApiStabilitySafetyTypeLiteralComputedMembers pins the production crash
-// fix on the type-literal provenance walk: computed property and method names
-// are paired by declaration identity with their concrete represented member,
-// so an erased experimental alias written in a computed member annotation is
-// still reported for well-known symbol, string-literal computed property and
-// computed method positions, and no computed name is ever asked for its text.
 func TestApiStabilitySafetyTypeLiteralComputedMembers(t *testing.T) {
 	t.Parallel()
 
@@ -182,11 +161,6 @@ export declare const x: {
 	}
 }
 
-// TestApiStabilitySafetyComputedNameDisplayAndSort pins that display and sort
-// names of computed declarations never evaluate the computed expression:
-// well-known symbols and literal computed names render their own spelling,
-// checker-internal late-bound names never leak, and every computed declaration
-// sorts without panicking.
 func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 	t.Parallel()
 
@@ -239,8 +213,6 @@ func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 		t.Fatalf("expected %d computed members, saw %d", len(wantByKey), seen)
 	}
 
-	// Declaration-only findings (a signature or an unresolved member) must also
-	// render and sort without touching the computed expression.
 	alias := files["/.src/test.ts"].Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].AsVariableDeclaration()
 	wantInOrder := []string{"[Symbol.iterator]", "[Symbol.toStringTag]", "computed", "42"}
 	memberNodes := alias.Type.Members()
@@ -258,10 +230,6 @@ func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 	}
 }
 
-// TestApiStabilitySafetyMaterializedReferenceSkipsGuard pins the
-// materialization-first guard path: when the checker already resolved a
-// reference's member table, signatures and index infos, collecting its concrete
-// surface must not consume any safety work.
 func TestApiStabilitySafetyMaterializedReferenceSkipsGuard(t *testing.T) {
 	t.Parallel()
 
@@ -287,9 +255,6 @@ func TestApiStabilitySafetyMaterializedReferenceSkipsGuard(t *testing.T) {
 	}
 }
 
-// TestApiStabilitySafetySafeVerdictIsReused pins the per-analysis completed
-// Safe memo: a second identical guard request must reuse the verdict without
-// consuming more shared safety budget.
 func TestApiStabilitySafetySafeVerdictIsReused(t *testing.T) {
 	t.Parallel()
 
@@ -321,10 +286,6 @@ func TestApiStabilitySafetySafeVerdictIsReused(t *testing.T) {
 	}
 }
 
-// TestApiStabilitySafetyPostBudgetRefusalIsCheap pins the exhaustion refusal:
-// once the shared budget is exhausted a guard request is refused without
-// allocating scan state or consuming more budget, and no Safe verdict is
-// published.
 func TestApiStabilitySafetyPostBudgetRefusalIsCheap(t *testing.T) {
 	t.Parallel()
 
@@ -351,13 +312,6 @@ func TestApiStabilitySafetyPostBudgetRefusalIsCheap(t *testing.T) {
 	}
 }
 
-// TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion pins
-// that an exhausted analysis does not re-walk a blocked surface when no
-// analysis read advanced the materialization epoch since it was collected and
-// no earlier settle round advanced any surface: such a result provably cannot
-// advance, stays blocked, and the recollection consumes no budget. A later
-// read or settle advancement forces the recollection
-// (TestApiStabilitySettleRecollectsMaterializedMember).
 func TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion(t *testing.T) {
 	t.Parallel()
 
@@ -383,9 +337,6 @@ func TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion(t *test
 	}
 }
 
-// TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe pins that successful
-// raw type-name symbol lookups are cached by AST identity within one analysis
-// and that the cache stores only the symbol lookup.
 func TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe(t *testing.T) {
 	t.Parallel()
 

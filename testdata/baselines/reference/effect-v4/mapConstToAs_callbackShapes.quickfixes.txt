@@ -1,0 +1,239 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:36-11:46) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D2] (14:43-14:53) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D3] (17:38-17:48) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D4] (20:41-20:51) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs_callbackShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number>
+declare const ambient: string
+declare let ambientLet: string
+const enum Flag { On = 1 }
+
+// MUST TRIGGER: string literal body
+export const literal = source.pipe(Effect.as("saved"))
+
+// MUST TRIGGER: negative bigint literal
+export const negativeBigint = source.pipe(Effect.map(() => -1n))
+
+// MUST TRIGGER: const enum member
+export const constEnum = source.pipe(Effect.map(() => Flag.On))
+
+// MUST TRIGGER: ambient const binding
+export const ambientConst = source.pipe(Effect.map(() => ambient))
+
+// MUST NOT TRIGGER: ambient mutable binding
+export const ambientMutable = source.pipe(Effect.map(() => ambientLet))
+
+// MUST NOT TRIGGER: ambient const declared after the call
+export const ambientLater = source.pipe(Effect.map(() => laterAmbient))
+
+// MUST NOT TRIGGER: explicit type arguments on the map
+export const typeArguments = source.pipe(Effect.map<number, string>(() => "saved"))
+
+// MUST NOT TRIGGER: rest parameter
+export const restParameter = source.pipe(Effect.map((..._args: Array<number>) => "saved"))
+
+// MUST NOT TRIGGER: async callback
+export const asyncCallback = source.pipe(Effect.map(async () => "saved"))
+
+// MUST NOT TRIGGER: unary plus is not a negative literal
+export const notNegative = source.pipe(Effect.map(() => +1))
+
+// MUST NOT TRIGGER: function expression with a return type annotation
+export const annotatedFunction = source.pipe(Effect.map(function(): number { return 1 }))
+
+declare const laterAmbient: string
+
+
+=== [D2] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs_callbackShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number>
+declare const ambient: string
+declare let ambientLet: string
+const enum Flag { On = 1 }
+
+// MUST TRIGGER: string literal body
+export const literal = source.pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: negative bigint literal
+export const negativeBigint = source.pipe(Effect.as(-1n))
+
+// MUST TRIGGER: const enum member
+export const constEnum = source.pipe(Effect.map(() => Flag.On))
+
+// MUST TRIGGER: ambient const binding
+export const ambientConst = source.pipe(Effect.map(() => ambient))
+
+// MUST NOT TRIGGER: ambient mutable binding
+export const ambientMutable = source.pipe(Effect.map(() => ambientLet))
+
+// MUST NOT TRIGGER: ambient const declared after the call
+export const ambientLater = source.pipe(Effect.map(() => laterAmbient))
+
+// MUST NOT TRIGGER: explicit type arguments on the map
+export const typeArguments = source.pipe(Effect.map<number, string>(() => "saved"))
+
+// MUST NOT TRIGGER: rest parameter
+export const restParameter = source.pipe(Effect.map((..._args: Array<number>) => "saved"))
+
+// MUST NOT TRIGGER: async callback
+export const asyncCallback = source.pipe(Effect.map(async () => "saved"))
+
+// MUST NOT TRIGGER: unary plus is not a negative literal
+export const notNegative = source.pipe(Effect.map(() => +1))
+
+// MUST NOT TRIGGER: function expression with a return type annotation
+export const annotatedFunction = source.pipe(Effect.map(function(): number { return 1 }))
+
+declare const laterAmbient: string
+
+
+=== [D3] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs_callbackShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number>
+declare const ambient: string
+declare let ambientLet: string
+const enum Flag { On = 1 }
+
+// MUST TRIGGER: string literal body
+export const literal = source.pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: negative bigint literal
+export const negativeBigint = source.pipe(Effect.map(() => -1n))
+
+// MUST TRIGGER: const enum member
+export const constEnum = source.pipe(Effect.as(Flag.On))
+
+// MUST TRIGGER: ambient const binding
+export const ambientConst = source.pipe(Effect.map(() => ambient))
+
+// MUST NOT TRIGGER: ambient mutable binding
+export const ambientMutable = source.pipe(Effect.map(() => ambientLet))
+
+// MUST NOT TRIGGER: ambient const declared after the call
+export const ambientLater = source.pipe(Effect.map(() => laterAmbient))
+
+// MUST NOT TRIGGER: explicit type arguments on the map
+export const typeArguments = source.pipe(Effect.map<number, string>(() => "saved"))
+
+// MUST NOT TRIGGER: rest parameter
+export const restParameter = source.pipe(Effect.map((..._args: Array<number>) => "saved"))
+
+// MUST NOT TRIGGER: async callback
+export const asyncCallback = source.pipe(Effect.map(async () => "saved"))
+
+// MUST NOT TRIGGER: unary plus is not a negative literal
+export const notNegative = source.pipe(Effect.map(() => +1))
+
+// MUST NOT TRIGGER: function expression with a return type annotation
+export const annotatedFunction = source.pipe(Effect.map(function(): number { return 1 }))
+
+declare const laterAmbient: string
+
+
+=== [D4] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs_callbackShapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number>
+declare const ambient: string
+declare let ambientLet: string
+const enum Flag { On = 1 }
+
+// MUST TRIGGER: string literal body
+export const literal = source.pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: negative bigint literal
+export const negativeBigint = source.pipe(Effect.map(() => -1n))
+
+// MUST TRIGGER: const enum member
+export const constEnum = source.pipe(Effect.map(() => Flag.On))
+
+// MUST TRIGGER: ambient const binding
+export const ambientConst = source.pipe(Effect.as(ambient))
+
+// MUST NOT TRIGGER: ambient mutable binding
+export const ambientMutable = source.pipe(Effect.map(() => ambientLet))
+
+// MUST NOT TRIGGER: ambient const declared after the call
+export const ambientLater = source.pipe(Effect.map(() => laterAmbient))
+
+// MUST NOT TRIGGER: explicit type arguments on the map
+export const typeArguments = source.pipe(Effect.map<number, string>(() => "saved"))
+
+// MUST NOT TRIGGER: rest parameter
+export const restParameter = source.pipe(Effect.map((..._args: Array<number>) => "saved"))
+
+// MUST NOT TRIGGER: async callback
+export const asyncCallback = source.pipe(Effect.map(async () => "saved"))
+
+// MUST NOT TRIGGER: unary plus is not a negative literal
+export const notNegative = source.pipe(Effect.map(() => +1))
+
+// MUST NOT TRIGGER: function expression with a return type annotation
+export const annotatedFunction = source.pipe(Effect.map(function(): number { return 1 }))
+
+declare const laterAmbient: string
+

@@ -1,0 +1,73 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:34-10:48) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+[D2] (13:70-13:97) TS2739: Type 'Promise<Effect<number, never, never>>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], [Symbol.iterator], toJSON, [NodeInspectSymbol], pipe
+  (no quick fixes)
+
+[D3] (16:61-16:69) TS2345: Argument of type '(n: number) => Generator<never, Effect<number, never, never>, unknown>' is not assignable to parameter of type '(a: number) => Effect<unknown, unknown, unknown>'.
+  Type 'Generator<never, Effect<number, never, never>, unknown>' is missing the following properties from type 'Effect<unknown, unknown, unknown>': [TypeId], toJSON, [NodeInspectSymbol], pipe
+  (no quick fixes)
+
+[D4] (19:57-19:98) TS2345: Argument of type '(n: any, extra: any) => Effect<any, never, never>' is not assignable to parameter of type '(a: any) => Effect<any, never, never>'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+  (no quick fixes)
+
+[D5] (19:58-19:59) TS7006: Parameter 'n' implicitly has an 'any' type.
+  (no quick fixes)
+
+[D6] (19:61-19:66) TS6133: 'extra' is declared but its value is never read.
+  (no quick fixes)
+
+[D7] (19:61-19:66) TS7006: Parameter 'extra' implicitly has an 'any' type.
+  (no quick fixes)
+
+[D8] (25:73-25:78) TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Effect<unknown, unknown, unknown>'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_malformedCallbacks.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics flatMapToTap:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number>
+declare const inner: unknown
+declare const loose: any
+
+// MUST TRIGGER: the well-formed callback
+export const valid = source.pipe(Effect.tap((n) => Effect.log(n)))
+
+// MUST NOT TRIGGER: async callback
+export const asyncCallback = source.pipe(Effect.flatMap(async (n) => Effect.as(Effect.log(n), n)))
+
+// MUST NOT TRIGGER: generator callback
+export const generatorCallback = source.pipe(Effect.flatMap(function*(n) { return Effect.as(Effect.log(n), n) }))
+
+// MUST NOT TRIGGER: callback with a second parameter
+export const twoParameters = source.pipe(Effect.flatMap((n, extra) => Effect.as(Effect.log(n), n)))
+
+// MUST NOT TRIGGER: generic callback
+export const genericCallback = source.pipe(Effect.flatMap(<A>(n: A) => Effect.as(Effect.log(n), n)))
+
+// MUST NOT TRIGGER: the inner value is not an Effect
+export const unknownInner = source.pipe(Effect.flatMap((n) => Effect.as(inner, n)))
+
+// MUST NOT TRIGGER: the inner value is any
+export const looseInner = source.pipe(Effect.flatMap((n) => loose.pipe(Effect.as(n))))
+
+// MUST NOT TRIGGER: the outer value is any
+export const looseOuter = loose.pipe(Effect.flatMap((n: number) => Effect.as(Effect.log(n), n)))
+

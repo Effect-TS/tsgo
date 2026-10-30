@@ -8,11 +8,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
-// apiStabilityAnalysisDiff names the fields of two analyses that differ,
-// treating a nil and an empty map or slice as equal. Only one side may hold a
-// non-empty collection, so it compares a used analysis against a fresh one. A
-// field of a kind it does not know fails the test, so a new field forces a
-// decision about reset.
 func apiStabilityAnalysisDiff(t *testing.T, got, want *apiStabilityAnalysis) []string {
 	t.Helper()
 	var diff []string
@@ -71,8 +66,6 @@ declare global { interface Error extends Reportable {} }
 export function augmented(e: Error) {}
 `
 
-// TestApiStabilityResetMatchesFreshAnalysis proves a reset analysis is
-// indistinguishable from a new one after a query that fills its tables.
 func TestApiStabilityResetMatchesFreshAnalysis(t *testing.T) {
 	t.Parallel()
 
@@ -104,9 +97,6 @@ func TestApiStabilityResetMatchesFreshAnalysis(t *testing.T) {
 	}
 }
 
-// TestApiStabilityResetHidesPreviousExport proves no state of one export
-// reaches the next one: an exhausted budget and a stale result stored for the
-// next root are both discarded by Reset.
 func TestApiStabilityResetHidesPreviousExport(t *testing.T) {
 	t.Parallel()
 
@@ -136,10 +126,6 @@ func TestApiStabilityResetHidesPreviousExport(t *testing.T) {
 	}
 }
 
-// TestApiStabilityResetSharedHitIsNotRepublished proves a later export reuses
-// a published surface after a reset: the composed result is the same, the hit
-// is recorded for settlement, it is not queued for publication again, and the
-// snapshot keeps the findings it was published with.
 func TestApiStabilityResetSharedHitIsNotRepublished(t *testing.T) {
 	t.Parallel()
 

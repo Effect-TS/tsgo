@@ -61,7 +61,7 @@ pub(crate) fn run(f: impl FnOnce(&T) + Send + 'static) {
 /// Rust-only: Go's `(*rule.Context, done)` pair. The rule context borrows a type parser, which borrows the checker,
 /// so it cannot be returned: `with_rule_ctx` lends it to a closure (one type parser for the value's lifetime, as Go's
 /// context holds one), and dropping the value is Go's `done()`, which also frees the program as Go's GC does
-/// (`docs/TSRS_API.md`, "The API path", step 6).
+/// (`porting/TSRS_API.md`, "The API path", step 6).
 pub(crate) struct ApiStabilityCompiled {
     pub(crate) program: &'static Program,
     pub(crate) source_file: P<SourceFile>,
