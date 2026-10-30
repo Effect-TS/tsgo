@@ -6,6 +6,8 @@ mod baseline;
 pub mod baseline_results;
 mod document_symbols_baseline;
 mod document_symbols_runner;
+#[cfg(test)]
+mod effect_in_failure_ts2589_test;
 mod harness;
 mod quickfix_baseline;
 mod quickfix_runner;
