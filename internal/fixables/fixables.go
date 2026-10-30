@@ -77,6 +77,7 @@ var All = []fixable.Fixable{
 	PreferTypedSchemaDecoderFix,
 	AcquireReleaseDisposableFix,
 	RunOfExitToRunExitFix,
+	YieldInCallArgumentFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

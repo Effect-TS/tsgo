@@ -125,7 +125,7 @@ fn run_type_union_to_schema_union_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
 // alias at pos: when the alias starts its line, the const gets its own line with
 // the alias indentation; when other code precedes the alias on its line (an
 // inline block body, a previous statement, a comment), the const stays inline.
-fn type_union_to_schema_union_insertion_suffix(sf: P<SourceFile>, pos: u32) -> String {
+pub(crate) fn type_union_to_schema_union_insertion_suffix(sf: P<SourceFile>, pos: u32) -> String {
     let line_start = format::get_line_start_position_for_position(pos, sf);
     let line_prefix = &sf.text()[line_start as usize..pos as usize];
     if !line_prefix.trim_start_matches([' ', '\t']).is_empty() {

@@ -1,0 +1,127 @@
+==== /.src/yieldInCallArgument_directives.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 9:34 - 12:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER: the file directive enables the rule as a warning\n  return transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER: the file directive enables the rule as a warning\n  return transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 11:9 - 11:32
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 14:27 - 21:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the next-line directive turns the rule off for this line only\n  // @effect-diagnostics-next-line yieldInCallArgument:off\n  const a = transform(yield* load)\n  // MUST TRIGGER: the next-line directive covered only the previous line\n  const b = transform(yield* load)\n  return a + b\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the next-line directive turns the rule off for this line only\n  // @effect-diagnostics-next-line yieldInCallArgument:off\n  const a = transform(yield* load)\n  // MUST TRIGGER: the next-line directive covered only the previous line\n  const b = transform(yield* load)\n  return a + b\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 17:12 - 17:35
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 19:12 - 19:35
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 24:29 - 27:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (error): the section directive raises the severity to error\n  return transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (error): the section directive raises the severity to error\n  return transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 26:9 - 26:32
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 30:26 - 33:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the section directive turns the rule off for the rest of the file\n  return transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the section directive turns the rule off for the rest of the file\n  return transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 32:9 - 32:32
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
