@@ -1,0 +1,32 @@
+[package]
+name = "ets_tsrs_lint"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Rust-only: the effect-tsgo tsrs-lint executable (registers the Effect rules, then runs tsrs's headless linter)"
+
+[lints]
+workspace = true
+
+# Rust-only glue, not a port of a Go package: like the patched tsgolint (`_patches/tsgolint/001-effect-rules.patch`,
+# `repoctl codegen tsgolint`), it adapts the Effect rules to the linter's rule interface and registers them
+# (`tsrs_lint::registry::register_external_rules`, added by _patches/tsrs/170-lint-effect-rules.patch), then runs
+# tsrs's headless linter (`tsrs_lint::main`, exposed by its `effect-main` feature). Effect crates still reach tsrs only
+# through ets_shim.
+[dependencies]
+ets_etsoxlintrunner.workspace = true
+ets_rules.workspace = true
+ets_shim.workspace = true
+rustc-hash.workspace = true
+tsrs_lint = { path = "../../tsrs/crates/tsrs_lint", optional = true }
+
+[features]
+# tsrs-lint links mimalloc, whose build needs CMake. It is opt-in so that `cargo check/clippy/test --workspace` work
+# without CMake: `cargo build -p ets_tsrs_lint --features cli`.
+cli = ["dep:tsrs_lint", "tsrs_lint/effect-main"]
+
+[[bin]]
+name = "tsrs-lint"
+path = "src/main.rs"

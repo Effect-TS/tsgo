@@ -32,6 +32,7 @@ ets_etscore = { path = "crates/ets_etscore" }
 ets_etsdiagnostics = { path = "crates/ets_etsdiagnostics" }
 ets_etsexecutehooks = { path = "crates/ets_etsexecutehooks" }
 ets_etsgoapi = { path = "crates/ets_etsgoapi" }
+ets_etsoxlintrunner = { path = "crates/ets_etsoxlintrunner" }
 ets_etslshooks = { path = "crates/ets_etslshooks" }
 ets_etstesthooks = { path = "crates/ets_etstesthooks" }
 ets_fixable = { path = "crates/ets_fixable" }

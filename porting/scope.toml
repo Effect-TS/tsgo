@@ -15,14 +15,12 @@ include = [
   "etsexecutehooks",
   "etsgoapi",
   "etslshooks",
+  "etsoxlintrunner",
   "etstesthooks",
   "internal/...",
 ]
 
 exclude = [
-  # Runner for the oxlint/tsgolint integration only; the Rust port targets the TypeScript-Go (tsrs) compiler and
-  # language server.
-  "etsoxlintrunner",
   # Generated wrappers re-exporting the compiler's internal packages to Effect code; tsrs is used directly instead.
   "shim/...",
   # Compiler checkouts (TypeScript's tsc/ subtree, legacy typescript-go): what tsrs itself ports.
