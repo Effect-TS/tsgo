@@ -1,4 +1,4 @@
-==== /.src/scopeInLayerEffect.ts (4 layer exports) ====
+==== /.src/scopeInLayerEffect.ts (7 layer exports) ====
 
 === shouldNotReport ===
 
@@ -134,4 +134,103 @@ flowchart TD
  * - MyService provided at ln 55 col 13 by `aliasedLayer`
  * 
  * - Scope required at ln 55 col 13 by `aliasedLayer`
+ */
+
+=== pipeableLayer ===
+
+--- output ---
+flowchart TD
+  1["Effect.gen#40;function*#40;#41; #123;<br/>  yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;<br/>  return #123; a: 1 #125;<br/>#125;#41;.pipe#40;Layer.effect#40;MyService#41;#41;<br/>provides: MyService<br/>requires: Scope"]
+
+--- nested ---
+flowchart TB
+  subgraph 1 ["`pipeableLayer<br/><small>_ln 63 col 13_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_requires [Requires]
+        1_requires_0["Scope"]
+      end
+      style 1_requires stroke:none
+      subgraph 1_provides [Provides]
+        1_provides_0["MyService"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["pipeableLayer"]
+
+--- quickinfo ---
+/**
+ * - MyService provided at ln 63 col 13 by `pipeableLayer`
+ * 
+ * - Scope required at ln 63 col 13 by `pipeableLayer`
+ */
+
+=== curriedLayer ===
+
+--- output ---
+flowchart TD
+  0["Layer.effect#40;MyService#41;#40;<br/>  Effect.gen#40;function*#40;#41; #123;<br/>    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;<br/>    return #123; a: 1 #125;<br/>  #125;#41;<br/>#41;<br/>provides: MyService<br/>requires: Scope"]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`curriedLayer<br/><small>_ln 68 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["Scope"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["MyService"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["curriedLayer"]
+
+--- quickinfo ---
+/**
+ * - MyService provided at ln 68 col 13 by `curriedLayer`
+ * 
+ * - Scope required at ln 68 col 13 by `curriedLayer`
+ */
+
+=== pipeableScopedShouldNotReport ===
+
+--- output ---
+flowchart TD
+  1["Effect.gen#40;function*#40;#41; #123;<br/>  yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;<br/>  return #123; a: 1 #125;<br/>#125;#41;.pipe#40;Layer.scoped#40;MyService#41;#41;<br/>provides: MyService<br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 1 ["`pipeableScopedShouldNotReport<br/><small>_ln 75 col 13_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["MyService"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["pipeableScopedShouldNotReport"]
+
+--- quickinfo ---
+/**
+ * - MyService provided at ln 75 col 13 by `pipeableScopedShouldNotReport`
  */

@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
 use ets_shim::checker::Type;
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::{EffectMajorVersion, TypeParser};
+use ets_typeparser::{EffectMajorVersion, PipingFlowTransformation, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_LAYER_CONSTRUCTION_LEAVES_SCOPE_IN_THE_REQUIREMENT_SET_THE_SCOPED_API_REMOVES_SCOPE_FROM_THE_RESULTING_REQUIREMENTS_EFFECT_SCOPE_IN_LAYER_EFFECT;
@@ -44,8 +44,8 @@ pub struct ScopeInLayerEffectMatch {
     pub callee: Option<P<Node>>, // The Layer constructor callee; nil for class declaration matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:45 AnalyzeScopeInLayerEffect 547d72b07019e0a5
-// AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
+// go: internal/rules/scope_in_layer_effect.go:45 AnalyzeScopeInLayerEffect 021db9acf6569d2f
+// AnalyzeScopeInLayerEffect finds all Layer.effect*() steps and class declarations
 // with Default layer properties where Scope is in the layer's requirements.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -60,7 +60,18 @@ pub fn analyze_scope_in_layer_effect(
 
     let mut matches = Vec::new();
 
-    // Stack-based traversal
+    // Pattern 1: Layer.effect*() steps, whether data-last, pipeable or curried
+    let flows = tp.piping_flows(sf, false);
+    for (_, flow) in ets_readonly::new(flows.as_deref()).all() {
+        for (index, _) in flow.transformations().all() {
+            let transformation = flow.transformations().at(index);
+            if let Some(m) = match_layer_effect_transformation(tp, sf, transformation) {
+                matches.push(m);
+            }
+        }
+    }
+
+    // Pattern 2: Class declarations with Default layer property
     let mut node_to_visit: Vec<P<Node>> = Vec::new();
     sf.as_node().for_each_child(&mut |child| {
         node_to_visit.push(child);
@@ -68,15 +79,6 @@ pub fn analyze_scope_in_layer_effect(
     });
 
     while let Some(node) = node_to_visit.pop() {
-        // Pattern 1: Layer.effect*() calls
-        if node.kind() == Kind::CallExpression
-            && let Some(m) = match_layer_effect_call(tp, sf, node)
-        {
-            matches.push(m);
-            continue; // skip children
-        }
-
-        // Pattern 2: Class declarations with Default layer property
         if node.kind() == Kind::ClassDeclaration
             && let Some(m) = match_class_with_default_layer(tp, sf, node)
         {
@@ -84,7 +86,6 @@ pub fn analyze_scope_in_layer_effect(
             continue; // skip children
         }
 
-        // Enqueue children
         node.for_each_child(&mut |child| {
             node_to_visit.push(child);
             false
@@ -94,49 +95,58 @@ pub fn analyze_scope_in_layer_effect(
     matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:89 matchLayerEffectCall 9baa360a8f04d61f
-// matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
-pub(crate) fn match_layer_effect_call(
+// go: internal/rules/scope_in_layer_effect.go:90 matchLayerEffectTransformation 12baf0896a5f5d70
+// matchLayerEffectTransformation checks if a piping flow step applies one of the
+// Layer.effect* constructors and produces a layer with Scope in RIn.
+//
+// Rust: the callee is never nil, so Go's nil check is dropped.
+pub(crate) fn match_layer_effect_transformation(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
-    node: P<Node>,
+    transformation: &PipingFlowTransformation,
 ) -> Option<ScopeInLayerEffectMatch> {
-    if node.kind() != Kind::CallExpression {
+    let callee = transformation.callee();
+    let parent = callee.parent()?;
+    if !ets_shim::ast::is_call_expression(parent)
+        || parent.as_call_expression().expression() != callee
+    {
         return None;
     }
-    let call = node.as_call_expression();
-    let expression = call.expression();
 
     // Verify this references one of the Layer.effect* constructors from the
     // "effect" package. Symbol resolution also recognizes named imports and
     // stable local aliases whose source spelling does not reveal the API name.
-    let mut method_name = "";
-    for candidate in ["effect", "effectDiscard", "effectContext"] {
-        if tp.is_node_reference_to_effect_layer_module_api(expression, candidate) {
-            method_name = candidate;
-            break;
-        }
-    }
-    if method_name.is_empty() {
+    if !["effect", "effectDiscard", "effectContext"]
+        .into_iter()
+        .any(|candidate| tp.is_node_reference_to_effect_layer_module_api(callee, candidate))
+    {
         return None;
     }
 
-    // Parse the return type of the call as a Layer type
-    let layer = tp.layer_type_at_location(node)?;
-
-    // Check if RIn contains a Scope type
+    let out_type = transformation.out_type(tp);
+    let layer = tp.layer_type(out_type)?;
     if !has_scope(tp, layer.r_in()) {
         return None;
     }
 
+    // Report the call that produces the layer: the outermost application of
+    // a curried Layer.effect(tag)(effect), or the constructor call itself.
+    let mut call = parent;
+    while let Some(outer) = call.parent()
+        && ets_shim::ast::is_call_expression(outer)
+        && outer.as_call_expression().expression() == call
+    {
+        call = outer;
+    }
+
     Some(ScopeInLayerEffectMatch {
         source_file: sf,
-        location: ets_shim::scanner::get_error_range_for_node(sf, node),
-        callee: Some(expression),
+        location: ets_shim::scanner::get_error_range_for_node(sf, call),
+        callee: Some(callee),
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:131 matchClassWithDefaultLayer 55b7f0099c3e491f
+// go: internal/rules/scope_in_layer_effect.go:125 matchClassWithDefaultLayer 55b7f0099c3e491f
 // matchClassWithDefaultLayer checks if a class declaration has a Default layer property with Scope in RIn.
 pub(crate) fn match_class_with_default_layer(
     tp: &mut TypeParser<'_>,
@@ -179,7 +189,7 @@ pub(crate) fn match_class_with_default_layer(
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:184 hasScope aa2faccd65c6e6a1
+// go: internal/rules/scope_in_layer_effect.go:178 hasScope aa2faccd65c6e6a1
 // hasScope checks if any union member of the given type is a Scope type.
 pub(crate) fn has_scope(tp: &mut TypeParser<'_>, t: P<Type>) -> bool {
     let members = tp.unroll_union_members(t).unwrap_or_default();

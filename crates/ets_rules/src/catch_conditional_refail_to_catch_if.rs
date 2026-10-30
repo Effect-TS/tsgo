@@ -6,7 +6,7 @@ use ets_shim::P;
 use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile, Symbol};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::{EffectMajorVersion, ResultDispatch, TypeParser};
+use ets_typeparser::{EffectMajorVersion, PipingFlow, ResultDispatch, TypeParser};
 
 use crate::*;
 
@@ -61,7 +61,7 @@ pub(crate) struct ConditionalRefailCatchMethods {
     preferred_method_name: &'static str,
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:61 AnalyzeCatchConditionalRefailToCatchIf 2e4d64dabb4494d5
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:61 AnalyzeCatchConditionalRefailToCatchIf 56e896e622b9bebc
 // AnalyzeCatchConditionalRefailToCatchIf finds exact Effect.catch and
 // Effect.catchCause transformations whose handler is a single two-way
 // conditional with one untouched-parameter re-fail branch.
@@ -90,11 +90,7 @@ pub fn analyze_catch_conditional_refail_to_catch_if(
                 continue;
             };
 
-            let input_type = if index > 0 {
-                flow.transformations().at(index - 1).out_type(tp)
-            } else {
-                flow.subject().out_type(tp)
-            };
+            let input_type = PipingFlow::transformation_input_type(Some(flow), tp, index);
             if tp.strict_effect_type(input_type).is_none() {
                 continue;
             }
@@ -118,7 +114,7 @@ pub fn analyze_catch_conditional_refail_to_catch_if(
     matches
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:107 conditionalRefailMethods 86c58a8643924a89
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:103 conditionalRefailMethods 86c58a8643924a89
 pub(crate) fn conditional_refail_methods(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,
@@ -140,7 +136,7 @@ pub(crate) fn conditional_refail_methods(
     }
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:126 analyzeConditionalRefailHandler 368d80b3bfc3553d
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:122 analyzeConditionalRefailHandler 368d80b3bfc3553d
 pub(crate) fn analyze_conditional_refail_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
@@ -238,7 +234,7 @@ pub(crate) fn analyze_conditional_refail_handler(
     Some(methods.preferred_method_name)
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:196 isConditionalRefailExpression 6df58588a22b4e95
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:192 isConditionalRefailExpression 6df58588a22b4e95
 pub(crate) fn is_conditional_refail_expression(
     tp: &mut TypeParser<'_>,
     expression: Option<P<Node>>,
@@ -268,7 +264,7 @@ pub(crate) fn is_conditional_refail_expression(
     tp.checker().get_symbol_if_same_reference(actual_symbol, parameter_symbol).is_some()
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:214 isConditionalRefailPredicate 3917a5a0da49e28a
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:210 isConditionalRefailPredicate 3917a5a0da49e28a
 pub(crate) fn is_conditional_refail_predicate(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
@@ -330,7 +326,7 @@ pub(crate) fn is_conditional_refail_predicate(
     }
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:249 conditionalRefailNodeContainsParameter 33ffd582f93abe37
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:245 conditionalRefailNodeContainsParameter 33ffd582f93abe37
 pub(crate) fn conditional_refail_node_contains_parameter(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

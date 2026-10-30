@@ -6,11 +6,18 @@ Effect version: 4.0.2
 /.src/lazyPromiseInEffectSync.ts(11,45): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
 /.src/lazyPromiseInEffectSync.ts(14,26): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/lazyPromiseInEffectSync.ts(17,29): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/lazyPromiseInEffectSync.ts(23,31): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/lazyPromiseInEffectSync.ts(23,75): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/lazyPromiseInEffectSync.ts(23,87): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/lazyPromiseInEffectSync.ts(26,30): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/lazyPromiseInEffectSync.ts(26,35): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/lazyPromiseInEffectSync.ts(29,35): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/lazyPromiseInEffectSync.ts(29,76): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
 
 
-==== /.src/lazyPromiseInEffectSync.ts (5 errors) ====
+==== /.src/lazyPromiseInEffectSync.ts (12 errors) ====
     // @effect-diagnostics lazyPromiseInEffectSync:warning
-    import { Effect } from "effect"
+    import { Effect, pipe } from "effect"
     
     declare const promiseValue: Promise<number>
     declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
@@ -39,4 +46,30 @@ Effect version: 4.0.2
     
     // Should NOT trigger - already using the async constructor
     export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
+    
+    // Should trigger - Effect.sync nested inside a pipeline callback
+    export const fromNestedSync = Effect.succeed(1).pipe(Effect.flatMap(() => Effect.sync(() => promiseValue)))
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+                                                                              ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+                                                                                          ~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+    
+    // Should trigger - point-free Effect.sync applied to a Promise thunk
+    export const fromPointFree = pipe(() => Promise.resolve(1), Effect.sync)
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+    
+    // Should trigger - point-free Effect.sync after an earlier step
+    export const fromPointFreeChain = pipe(1, (n) => () => Promise.resolve(n), Effect.sync)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+                                                                               ~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+    
+    // Should NOT trigger - point-free Effect.sync applied to a sync thunk
+    export const fromPointFreeValue = pipe(() => 1, Effect.sync)
     
