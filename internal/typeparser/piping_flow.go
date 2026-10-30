@@ -747,9 +747,10 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 					}
 
 					dataFirstResult.callee.ForEachChild(enqueueChild)
+					// The other arguments are values, not steps: each one roots its own flow.
 					for _, arg := range dataFirstResult.args {
 						if arg != nil {
-							arg.ForEachChild(enqueueChild)
+							enqueueChild(arg)
 						}
 					}
 					continue
@@ -782,8 +783,9 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 					}
 
 					callee.ForEachChild(enqueueChild)
+					// The optional arguments are values, not steps: each one roots its own flow.
 					for _, arg := range optionalsResult.args {
-						arg.ForEachChild(enqueueChild)
+						enqueueChild(arg)
 					}
 					continue
 				}

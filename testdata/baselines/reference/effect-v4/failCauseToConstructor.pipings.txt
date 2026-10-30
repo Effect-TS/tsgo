@@ -1,4 +1,4 @@
-==== /.src/failCauseToConstructor.ts (73 flows) ====
+==== /.src/failCauseToConstructor.ts (75 flows) ====
 
 === Piping Flow ===
 Location: 23:23 - 23:70
@@ -677,6 +677,20 @@ Transformations (3):
       outType: Effect<never, AppError, never>
 
 === Piping Flow ===
+Location: 117:74 - 117:92
+Node: Cause.die(defect)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+
+=== Piping Flow ===
 Location: 118:28 - 118:108
 Node: Effect.failCauseSync(() => Cause.combine(Cause.fail(error), Cause.die(defect)))
 Node Kind: KindCallExpression
@@ -707,6 +721,20 @@ Transformations (2):
       callee: Cause.combine
       args: [Cause.die(defect)]
       outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 118:88 - 118:106
+Node: Cause.die(defect)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
 
 === Piping Flow ===
 Location: 121:27 - 121:94
