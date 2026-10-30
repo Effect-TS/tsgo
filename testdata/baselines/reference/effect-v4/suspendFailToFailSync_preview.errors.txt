@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/suspendFailToFailSync_preview.ts(10,47): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+
+
+==== /.src/suspendFailToFailSync_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics suspendFailToFailSync:warning
+    import { Data, Effect } from "effect"
+    
+    class ValidationError extends Data.TaggedError("ValidationError")<{
+      readonly input: string
+    }> {}
+    
+    export const rejectInput = (input: string) => Effect.suspend(() => Effect.fail(new ValidationError({ input })))
+                                                  ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    

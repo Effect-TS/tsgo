@@ -113,6 +113,7 @@
         "schemaStructWithTag": "suggestion",
         "schemaSyncInEffect": "suggestion",
         "scopeInLayerEffect": "warning",
+        "suspendFailToFailSync": "suggestion",
         "syncToSucceed": "suggestion",
         "timeoutCatchTagToTimeoutOrElse": "suggestion",
         "tryCatchInEffectGen": "suggestion",
@@ -211,6 +212,7 @@
         "schemaStructWithTag": "error",
         "schemaSyncInEffect": "error",
         "scopeInLayerEffect": "error",
+        "suspendFailToFailSync": "error",
         "syncToSucceed": "error",
         "timeoutCatchTagToTimeoutOrElse": "error",
         "tryCatchInEffectGen": "error",
@@ -374,6 +376,7 @@
         "schemaUnionOfLiterals": "warning",
         "serviceNotAsClass": "warning",
         "strictBooleanExpressions": "warning",
+        "suspendFailToFailSync": "warning",
         "syncToSucceed": "warning",
         "timeoutCatchTagToTimeoutOrElse": "warning",
         "typeUnionToSchemaUnion": "warning",
@@ -3536,6 +3539,30 @@
             "start": 64,
             "end": 69,
             "text": "Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "suspendFailToFailSync",
+      "group": "style",
+      "description": "Suggests Effect.failSync/dieSync instead of Effect.suspend wrapping a single Effect.fail/die",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377163
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass ValidationError extends Data.TaggedError(\"ValidationError\")\u003c{\n  readonly input: string\n}\u003e {}\n\nexport const rejectInput = (input: string) =\u003e Effect.suspend(() =\u003e Effect.fail(new ValidationError({ input })))\n",
+        "diagnostics": [
+          {
+            "start": 185,
+            "end": 199,
+            "text": "`Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)"
           }
         ]
       }

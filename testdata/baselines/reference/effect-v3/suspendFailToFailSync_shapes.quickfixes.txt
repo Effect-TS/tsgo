@@ -1,0 +1,1713 @@
+=== Quick Fix Inventory ===
+
+[D1] (19:29-19:43) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D2] (22:29-22:43) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D3] (25:35-25:49) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D4] (28:60-28:74) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D5] (31:66-31:80) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D6] (34:71-34:85) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D7] (40:3-40:17) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D8] (46:57-46:64) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D9] (50:93-50:107) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D10] (53:30-53:44) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D11] (57:34-57:48) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D12] (60:30-60:44) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D13] (65:38-65:52) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D14] (68:38-68:52) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D15] (71:37-71:51) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+
+[D16] (82:55-82:69) TS377163: `Effect.dieSync` builds this defect lazily directly instead of wrapping `Effect.die` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.dieSync"
+
+[D17] (83:28-83:42) TS377163: `Effect.dieSync` builds this defect lazily directly instead of wrapping `Effect.die` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.dieSync"
+
+[D18] (84:34-84:48) TS377163: `Effect.dieSync` builds this defect lazily directly instead of wrapping `Effect.die` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.dieSync"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.failSync(() => error)
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D2] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.failSync(() => error)
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D3] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.failSync(() => error)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D4] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => error, Effect.failSync)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D5] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => error, Effect.failSync)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D6] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error, Effect.failSync)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D7] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => error,
+  Effect.failSync,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D8] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => error, Effect.failSync)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D9] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => error, Effect.failSync<PipeableError | string>)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D10] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.failSync(() => String(code))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D11] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.failSync(() => pipe(code, String))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D12] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.failSync(() => {
+  return error
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D13] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.failSync(() => error)
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D14] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D14] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.failSync(() => ({ _tag: "Oops" }))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D15] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Replace with Effect.dieSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => defect, Effect.dieSync)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D17] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Replace with Effect.dieSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.dieSync(() => defect)
+export const callDieMethodPipe = Effect.suspend(() => error.pipe(Effect.die))
+
+
+=== [D18] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D18] Fix 2: "Replace with Effect.dieSync" ===
+
+--- file:///.src/suspendFailToFailSync_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import * as Effect from "effect/Effect"
+import { fail, suspend } from "effect/Effect"
+import { pipe } from "effect/Function"
+import type { Pipeable } from "effect/Pipeable"
+
+interface PipeableError extends Pipeable {
+  readonly _tag: "PipeableError"
+}
+
+declare const error: PipeableError
+declare const defect: unknown
+declare const code: number
+declare const cond: boolean
+
+// MUST TRIGGER: suspend as a call, fail as a call -> Effect.failSync(() => error)
+export const callFailCall = Effect.suspend(() => Effect.fail(error))
+
+// MUST TRIGGER: suspend as a call, fail as a Function.pipe step -> Effect.failSync(() => error)
+export const callFailPipe = Effect.suspend(() => pipe(error, Effect.fail))
+
+// MUST TRIGGER: suspend as a call, fail as a .pipe step -> Effect.failSync(() => error)
+export const callFailMethodPipe = Effect.suspend(() => error.pipe(Effect.fail))
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a call -> pipe(() => error, Effect.failSync)
+export const pipeFailCall = pipe(() => Effect.fail(error), Effect.suspend)
+
+// MUST TRIGGER: suspend and fail as Function.pipe steps -> pipe(() => error, Effect.failSync)
+export const pipeFailPipe = pipe(() => pipe(error, Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: suspend as a Function.pipe step, fail as a .pipe step -> pipe(() => error, Effect.failSync)
+export const pipeFailMethodPipe = pipe(() => error.pipe(Effect.fail), Effect.suspend)
+
+// MUST TRIGGER: the steps after the suspend are kept
+// -> pipe(() => error, Effect.failSync, Effect.catchAll(() => Effect.succeed(0)))
+export const pipeSuspendThenCatch = pipe(
+  () => Effect.fail(error),
+  Effect.suspend,
+  Effect.catchAll(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: named imports in a pipe fall back to the file's Effect binding
+// -> pipe(() => error, Effect.failSync)
+export const pipeNamedImports = pipe(() => fail(error), suspend)
+
+// MUST TRIGGER: an explicit type argument on the fail is carried over to the pipe step
+// -> pipe(() => error, Effect.failSync<PipeableError | string>)
+export const pipeInnerTypeArgument = pipe(() => Effect.fail<PipeableError | string>(error), Effect.suspend)
+
+// MUST TRIGGER: the error value is computed by a call -> Effect.failSync(() => String(code))
+export const computedValue = Effect.suspend(() => Effect.fail(String(code)))
+
+// MUST TRIGGER: the error value is computed by an earlier pipe step, which stays in the thunk
+// -> Effect.failSync(() => pipe(code, String))
+export const computedPipeValue = Effect.suspend(() => pipe(code, String, Effect.fail))
+
+// MUST TRIGGER: block body with a piped fail -> Effect.failSync(() => { return error })
+export const blockFailPipe = Effect.suspend(() => {
+  return pipe(error, Effect.fail)
+})
+
+// MUST TRIGGER: parenthesized piped fail -> Effect.failSync(() => error)
+export const parenthesizedFailPipe = Effect.suspend(() => (pipe(error, Effect.fail)))
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteralFailPipe = Effect.suspend(() => pipe({ _tag: "Oops" }, Effect.fail))
+
+// MUST TRIGGER (report only): pipe widens the literal union to string, a failSync thunk would keep it
+export const literalUnionFailPipe = Effect.suspend(() => pipe(cond ? "A" : "B", Effect.fail))
+
+// MUST NOT TRIGGER: the fail is not the last step of the returned flow
+export const failThenMapError = Effect.suspend(() => pipe(error, Effect.fail, Effect.mapError(() => "mapped")))
+export const failThenMethodPipe = Effect.suspend(() => error.pipe(Effect.fail, Effect.mapError(() => "mapped")))
+
+// MUST NOT TRIGGER: explicit type arguments on a suspend pipe step pin the error channel
+export const pipeOuterTypeArguments = pipe(() => Effect.fail(error), Effect.suspend<never, PipeableError | string, never>)
+
+// MUST TRIGGER: defect variants
+// -> pipe(() => defect, Effect.dieSync) / Effect.dieSync(() => defect) / Effect.dieSync(() => error)
+export const pipeDie = pipe(() => Effect.die(defect), Effect.suspend)
+export const callDiePipe = Effect.suspend(() => pipe(defect, Effect.die))
+export const callDieMethodPipe = Effect.dieSync(() => error)
+

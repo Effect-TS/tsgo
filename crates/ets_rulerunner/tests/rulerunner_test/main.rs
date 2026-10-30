@@ -15,6 +15,7 @@ mod prefer_effect_array_test;
 mod prefer_effect_record_test;
 mod prefer_effect_string_test;
 mod provide_merge_all_to_array_test;
+mod suspend_fail_to_fail_sync_test;
 mod type_union_to_schema_union_test;
 
 use std::sync::Arc;

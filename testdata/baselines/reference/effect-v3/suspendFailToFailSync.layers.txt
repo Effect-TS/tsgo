@@ -1,0 +1,24 @@
+==== /.src/suspendFailToFailSync.ts (1 layer exports) ====
+
+=== layerSuspend ===
+
+--- output ---
+flowchart TD
+  0["Layer.suspend#40;#40;#41; =#gt; Layer.effectDiscard#40;Effect.fail#40;error#41;#41;#41;<br/>provides: <br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`layerSuspend<br/><small>_ln 176 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["layerSuspend"]
+
+--- quickinfo ---
+
