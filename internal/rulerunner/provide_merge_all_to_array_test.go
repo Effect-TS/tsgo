@@ -44,9 +44,9 @@ func TestProvideMergeAllToArrayLifecycle(t *testing.T) {
 		preset   string
 		want     []string
 	}{
-		{name: "default suggestion", source: prelude + provide, useRule: true, want: []string{at(2, base)}},
-		{name: "recommended preset", source: prelude + provide, preset: "recommended", want: []string{at(2, base)}},
-		{name: "strict preset", source: prelude + provide, preset: "strict", want: []string{at(1, base)}},
+		{name: "default off", source: prelude + provide, useRule: true},
+		{name: "recommended preset", source: prelude + provide, preset: "recommended"},
+		{name: "strict preset", source: prelude + provide, preset: "strict"},
 		{name: "style preset", source: prelude + provide, preset: "style", want: []string{at(0, base)}},
 		{name: "effect-native preset", source: prelude + provide, preset: "effect-native"},
 		{name: "warning", source: prelude + provide, severity: etscore.SeverityWarning, want: []string{at(0, base)}},

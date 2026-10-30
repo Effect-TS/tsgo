@@ -19,9 +19,10 @@ Effect version: 4.0.2
 /.src/provideMergeAllToArray.ts(102,60): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 /.src/provideMergeAllToArray.ts(106,59): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 /.src/provideMergeAllToArray.ts(110,41): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
+/.src/provideMergeAllToArray.ts(151,18): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 
 
-==== /.src/provideMergeAllToArray.ts (18 errors) ====
+==== /.src/provideMergeAllToArray.ts (19 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics provideMergeAllToArray:warning
     import { Context, Effect, Layer, pipe } from "effect"
@@ -209,10 +210,12 @@ Effect version: 4.0.2
     // MUST NOT TRIGGER: Layer.merge is not Layer.mergeAll
     export const binaryMerge = program.pipe(Effect.provide(Layer.merge(ALayer, BLayer)), Effect.provide(CLayer))
     
-    // MUST NOT TRIGGER: the layers depend on each other; layerMergeAllWithDependencies reports this call
-    // and turning it into an array would hide that problem
+    // MUST TRIGGER: the layers depend on each other; layerMergeAllWithDependencies also reports this call
+    // quickfix: Effect.provide([DLayer, CRequiresDLayer])
     export const interdependentLayers = Effect.void.pipe(
       Effect.provide(Layer.mergeAll(DLayer, CRequiresDLayer))
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
     )
     
     // MUST NOT TRIGGER: unrelated APIs with the same method names

@@ -36,9 +36,9 @@ func TestProvideMergeAllToArrayFixesCompile(t *testing.T) {
 // @filename: /repro.ts
 `
 			// The v3 fixture has no options cases: v3 Effect.provide takes no options.
-			mainMatches := 18
+			mainMatches := 19
 			if version == bundledeffect.EffectV3 {
-				mainMatches = 16
+				mainMatches = 17
 			}
 			cases := []struct {
 				name     string

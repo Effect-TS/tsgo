@@ -6,10 +6,9 @@ Effect version: 3.19.19
 /.src/strictEffectProvide.ts(24,3): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 /.src/strictEffectProvide.ts(25,3): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 /.src/strictEffectProvide.ts(31,3): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
-/.src/strictEffectProvide.ts(31,18): suggestion TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 
 
-==== /.src/strictEffectProvide.ts (6 errors) ====
+==== /.src/strictEffectProvide.ts (5 errors) ====
     // @effect-v3
     // @effect-diagnostics strictEffectProvide:warning
     import * as Effect from "effect/Effect"
@@ -51,8 +50,6 @@ Effect version: 3.19.19
       Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
     )
     
     // Should NOT report: providing a plain service (not a layer)

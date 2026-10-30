@@ -7,7 +7,7 @@ Suggests passing an array of layers to Effect.provide instead of wrapping them i
 | Property | Value |
 | --- | --- |
 | Category | Style |
-| Default severity | `suggestion` |
+| Default severity | `off` |
 | Fixable | Yes |
 | Effect versions | v3, v4 |
 | Diagnostic codes | `TS377161` |

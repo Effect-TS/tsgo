@@ -23,7 +23,7 @@ var ProvideMergeAllToArrayFix = fixable.Fixable{
 func runProvideMergeAllToArrayFix(ctx *fixable.Context) []ls.CodeAction {
 	sf := ctx.SourceFile
 	text := sf.Text()
-	for _, match := range rules.AnalyzeProvideMergeAllToArray(ctx.TypeParser, ctx.Checker, sf) {
+	for _, match := range rules.AnalyzeProvideMergeAllToArray(ctx.TypeParser, sf) {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}

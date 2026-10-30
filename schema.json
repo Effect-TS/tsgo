@@ -2888,7 +2888,7 @@
         },
         "provideMergeAllToArray": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "suggestion",
+          "default": "off",
           "description": "Suggests passing an array of layers to Effect.provide instead of wrapping them in Layer.mergeAll"
         },
         "raceFirstWithSleepToTimeout": {

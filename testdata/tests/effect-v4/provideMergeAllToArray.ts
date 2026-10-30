@@ -145,8 +145,8 @@ export const layerProvideMerge = CRequiresDLayer.pipe(Layer.provideMerge(Layer.m
 // MUST NOT TRIGGER: Layer.merge is not Layer.mergeAll
 export const binaryMerge = program.pipe(Effect.provide(Layer.merge(ALayer, BLayer)), Effect.provide(CLayer))
 
-// MUST NOT TRIGGER: the layers depend on each other; layerMergeAllWithDependencies reports this call
-// and turning it into an array would hide that problem
+// MUST TRIGGER: the layers depend on each other; layerMergeAllWithDependencies also reports this call
+// quickfix: Effect.provide([DLayer, CRequiresDLayer])
 export const interdependentLayers = Effect.void.pipe(
   Effect.provide(Layer.mergeAll(DLayer, CRequiresDLayer))
 )

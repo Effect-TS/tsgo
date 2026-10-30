@@ -29,21 +29,19 @@ export const explicitProvideTypeArguments = program.pipe(Effect.provide<A, never
 export const noArguments = program.pipe(Effect.provide(Layer.mergeAll()))
 export const dependentLayers = Effect.void.pipe(Effect.provide(Layer.mergeAll(ALayer, CRequiresALayer)))
 `
-	want := []string{"effectFn", "effectFnUntraced", "unapplied"}
+	want := []string{"effectFn", "effectFnUntraced", "dependentLayers"}
 	exportName := regexp.MustCompile(`export const (\w+)`)
 
 	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV3, bundledeffect.EffectV4} {
 		t.Run(string(version), func(t *testing.T) {
 			t.Parallel()
-			// Only provideMergeAllToArray runs, so the dependentLayers skip does
-			// not rely on layerMergeAllWithDependencies being enabled.
 			preview := evaluatePreview(t, version, source, &rules.ProvideMergeAllToArray)
 			var got []string
 			for _, diagnostic := range preview.Diagnostics {
 				if !strings.Contains(diagnostic.Text, "Effect.provide accepts an array of layers and merges them itself") {
 					t.Fatalf("unexpected diagnostic text %q", diagnostic.Text)
 				}
-				if span := preview.SourceText[diagnostic.Start:diagnostic.End]; span != "Layer.mergeAll(ALayer, BLayer)" {
+				if span := preview.SourceText[diagnostic.Start:diagnostic.End]; !strings.HasPrefix(span, "Layer.mergeAll(ALayer, ") {
 					t.Fatalf("diagnostic span %q does not cover the Layer.mergeAll call", span)
 				}
 				lineStart := strings.LastIndex(preview.SourceText[:diagnostic.Start], "\n") + 1
