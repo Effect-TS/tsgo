@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/runProvidedContextToRunWith_preview.ts(9,23): warning TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+
+
+==== /.src/runProvidedContextToRunWith_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics runProvidedContextToRunWith:warning
+    import { Context, Effect } from "effect"
+    
+    declare const program: Effect.Effect<string, never, "Config">
+    declare const services: Context.Context<"Config">
+    
+    export const result = Effect.runPromise(Effect.provideContext(program, services))
+                          ~~~~~~~~~~~~~~~~~
+!!! warning TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+    

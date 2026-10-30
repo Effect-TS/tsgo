@@ -1,0 +1,33 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/runProvidedContextToRunWith_directives.ts(8,23): warning TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+/.src/runProvidedContextToRunWith_directives.ts(15,30): warning TS377166: `Effect.runSync` of `Effect.provideContext` re-implements `Effect.runSyncWith`. Use `Effect.runSyncWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+
+
+==== /.src/runProvidedContextToRunWith_directives.ts (2 errors) ====
+    // @effect-diagnostics runProvidedContextToRunWith:warning
+    import { Context, Effect } from "effect"
+    
+    declare const program: Effect.Effect<string, never, "Config">
+    declare const services: Context.Context<"Config">
+    
+    // MUST TRIGGER - raised to a warning by the file directive
+    export const raised = Effect.runPromise(Effect.provideContext(program, services))
+                          ~~~~~~~~~~~~~~~~~
+!!! warning TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+    
+    // MUST NOT TRIGGER - disabled for the next line only
+    // @effect-diagnostics-next-line runProvidedContextToRunWith:off
+    export const disabledNextLine = Effect.runPromise(Effect.provideContext(program, services))
+    
+    // MUST TRIGGER - the next-line directive does not reach this run
+    export const afterNextLine = Effect.runSync(Effect.provideContext(program, services))
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377166: `Effect.runSync` of `Effect.provideContext` re-implements `Effect.runSyncWith`. Use `Effect.runSyncWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+    
+    // @effect-diagnostics runProvidedContextToRunWith:off
+    
+    // MUST NOT TRIGGER - disabled for the rest of the file
+    export const disabled = Effect.runPromise(Effect.provideContext(program, services))
+    

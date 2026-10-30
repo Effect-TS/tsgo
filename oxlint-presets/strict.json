@@ -81,6 +81,7 @@
     "effecttsgo/return-effect-in-gen": "error",
     "effecttsgo/run-effect-inside-effect": "error",
     "effecttsgo/run-of-exit-to-run-exit": "error",
+    "effecttsgo/run-provided-context-to-run-with": "error",
     "effecttsgo/schema-class-missing-brand": "error",
     "effecttsgo/schema-class-object-literal": "error",
     "effecttsgo/schema-literal-non-finite": "error",

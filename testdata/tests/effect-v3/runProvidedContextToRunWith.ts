@@ -1,0 +1,36 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics runProvidedContextToRunWith:suggestion
+import { Context, Effect, pipe } from "effect"
+
+// Effect v3 has neither Effect.provideContext/Effect.setContext nor the
+// run*With runners, so the rule is v4-only and nothing here may trigger.
+
+class Config extends Context.Tag("Config")<Config, { readonly apiUrl: string }>() {}
+
+const services = Context.make(Config, { apiUrl: "https://api.example.com" })
+
+const program = Effect.gen(function*() {
+  const config = yield* Config
+  return `Connecting to ${config.apiUrl}`
+})
+
+// MUST NOT TRIGGER - v3 provides a Context through Effect.provide; there is no
+// Effect.runPromiseWith to suggest
+export const dataFirstProvide = Effect.runPromise(Effect.provide(program, services))
+export const methodPipeProvide = Effect.runFork(program.pipe(Effect.provide(services)))
+export const functionPipeProvide = Effect.runSync(pipe(program, Effect.provide(services)))
+export const runnerAsPipeStep = program.pipe(Effect.provide(services), Effect.runPromise)
+
+// MUST NOT TRIGGER - evaluation-order shapes: a reassigned or computed context
+let currentServices = services
+const switchServices = () => {
+  currentServices = Context.make(Config, { apiUrl: "https://switched.example.com" })
+  return program
+}
+declare const loadServices: () => Context.Context<Config>
+export const reassignedContext = Effect.runSync(Effect.provide(switchServices(), currentServices))
+export const computedContext = Effect.runPromise(program.pipe(Effect.provide(loadServices())))
+
+// MUST NOT TRIGGER - a constructor over an existing context; v3 has no run*With
+export const mergedFromBinding = Effect.runSync(Effect.provide(switchServices(), Context.merge(services, Context.empty())))

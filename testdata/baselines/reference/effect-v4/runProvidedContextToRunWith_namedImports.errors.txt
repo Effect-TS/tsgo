@@ -1,0 +1,33 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/runProvidedContextToRunWith_namedImports.ts(13,33): suggestion TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+/.src/runProvidedContextToRunWith_namedImports.ts(17,40): suggestion TS377166: `Effect.runFork` of `Effect.provideContext` re-implements `Effect.runForkWith`. Use `Effect.runForkWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+
+
+==== /.src/runProvidedContextToRunWith_namedImports.ts (2 errors) ====
+    import type { Effect } from "effect"
+    import { Context } from "effect"
+    import { provideContext, runFork, runForkWith, runPromise } from "effect/Effect"
+    
+    // Only named imports and a type-only Effect import: the fix must never introduce
+    // an `Effect.` reference that has no value binding.
+    
+    declare const program: Effect.Effect<string, never, "Config">
+    declare const services: Context.Context<"Config">
+    
+    // MUST TRIGGER - no fix (report only): no value binding in scope reaches
+    // Effect.runPromiseWith (the Effect import is type-only)
+    export const noValueReference = runPromise(provideContext(program, services))
+                                    ~~~~~~~~~~
+!!! suggestion TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+    
+    // MUST TRIGGER - the fix uses the runForkWith named import that is in scope
+    // fix: runForkWith(services)(program)
+    export const namedReplacementInScope = runFork(provideContext(program, services))
+                                           ~~~~~~~
+!!! suggestion TS377166: `Effect.runFork` of `Effect.provideContext` re-implements `Effect.runForkWith`. Use `Effect.runForkWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+    
+    // MUST NOT TRIGGER - already the *With form through a named import
+    export const alreadyNamedWith = runForkWith(services)(program)
+    

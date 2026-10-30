@@ -1,0 +1,19 @@
+==== /.src/runProvidedContextToRunWith_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 9:22 - 9:82
+Node: Effect.runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, "Config">
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>

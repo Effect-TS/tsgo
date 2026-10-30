@@ -81,6 +81,7 @@
     "effecttsgo/return-effect-in-gen": "warn",
     "effecttsgo/run-effect-inside-effect": "warn",
     "effecttsgo/run-of-exit-to-run-exit": "warn",
+    "effecttsgo/run-provided-context-to-run-with": "warn",
     "effecttsgo/schema-class-missing-brand": "warn",
     "effecttsgo/schema-class-object-literal": "warn",
     "effecttsgo/schema-literal-non-finite": "error",

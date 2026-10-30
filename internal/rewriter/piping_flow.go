@@ -419,7 +419,8 @@ func cloneNodeList(t *Tracker, list *ast.NodeList) *ast.NodeList {
 
 // CollapsePipingFlowTransformations replaces an inclusive range of adjacent
 // steps with one operator at the last step. Nested applications are rewritten
-// together so removing an input step cannot overlap the replacement edit.
+// together so removing an input step cannot overlap the replacement edit. A
+// last step with optional arguments keeps them after the input.
 func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, flow *typeparser.PipingFlow, start, end int, replacement PipingFlowTransformationReplacement) bool {
 	if t == nil || sourceFile == nil || flow == nil || start < 0 || end < start || end >= flow.Transformations().Len() || replacement.Callee == nil {
 		return false
@@ -484,6 +485,15 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 		if input == nil {
 			return node
 		}
+		if index == end {
+			// The last step applies its input as an argument, so parentheses
+			// around a collapsed input step are dropped with that step.
+			if inner := ast.SkipParentheses(input); inner != input {
+				if innerIndex, collapsed := steps[inner]; collapsed && innerIndex < end {
+					input = inner
+				}
+			}
+		}
 		subject := visitor.VisitNode(input)
 		if index < end {
 			return subject
@@ -494,6 +504,13 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 			arguments = append([]*ast.Node{subject}, arguments...)
 		case typeparser.TransformationKindDataLast:
 			arguments = append(arguments, subject)
+		case typeparser.TransformationKindCallWithOptionals:
+			// The optional arguments stay after the input, as in ReplacePipingFlowTransformation.
+			applied := []*ast.Node{subject}
+			for _, argument := range node.AsCallExpression().Arguments.Nodes[1:] {
+				applied = append(applied, visitor.VisitNode(argument))
+			}
+			return t.NewCallExpression(t.pipingFlowOperator(replacement), nil, nil, t.NewNodeList(applied), ast.NodeFlagsNone)
 		default:
 			return t.NewCallExpression(t.pipingFlowOperator(replacement), nil, nil, t.NewNodeList([]*ast.Node{subject}), ast.NodeFlagsNone)
 		}
