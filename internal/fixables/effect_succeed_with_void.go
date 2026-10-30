@@ -19,28 +19,35 @@ var EffectSucceedWithVoidFix = fixable.Fixable{
 }
 
 func runEffectSucceedWithVoidFix(ctx *fixable.Context) []ls.CodeAction {
+	return runEffectSucceedConstantFix(ctx, rules.AnalyzeEffectSucceedWithVoid(ctx.TypeParser, ctx.Checker, ctx.SourceFile), "void")
+}
 
-	c := ctx.Checker
-
+// runEffectSucceedConstantFix replaces the constant subject and the Effect.succeed step of a
+// match with Effect.<memberName>, keeping any later steps. The fix is offered only when the
+// step can be dropped without losing a side effect and a reference to the constant resolves
+// at the call site.
+func runEffectSucceedConstantFix(ctx *fixable.Context, matches []rules.EffectSucceedConstantMatch, memberName string) []ls.CodeAction {
 	sf := ctx.SourceFile
-
-	matches := rules.AnalyzeEffectSucceedWithVoid(ctx.TypeParser, c, sf)
+	member := effectModuleMember(ctx, memberName)
 	for _, match := range matches {
 		diagRange := match.Location
-		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {
+		if !match.Rewritable || (!diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange)) {
+			continue
+		}
+		reference := resolveModuleMember(ctx, match.Flow.Node(), typeparser.FindEffectModuleReference(sf), member)
+		if reference == nil {
 			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{
-			Description: "Replace with Effect.void",
+			Description: "Replace with Effect." + memberName,
 			Run: func(tracker *rewriter.Tracker) {
-				replacementNode := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("void")...)
+				replacementNode := reference.expression(tracker, member)
 				ast.SetParentInChildren(replacementNode)
-				tracker.ReplaceNode(sf, match.CallNode, replacementNode, nil)
+				tracker.ReplacePipingFlowPrefix(sf, match.Flow, 1, replacementNode)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		continue
 	}
 
 	return nil

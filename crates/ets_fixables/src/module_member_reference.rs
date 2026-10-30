@@ -142,7 +142,7 @@ pub(crate) fn import_binding_name(
     Some(name)
 }
 
-// go: internal/fixables/module_member_reference.go:106 typeHasMember 3750c26412dd23cd
+// go: internal/fixables/module_member_reference.go:106 typeHasMember a56dd1633ca84926
 pub(crate) fn type_has_member(
     ctx: &mut Context<'_, '_>,
     t: Option<P<Type>>,
@@ -155,14 +155,22 @@ pub(crate) fn type_has_member(
     let Some(property) = property else {
         return false;
     };
-    let Some(declaration) = property.value_declaration() else {
+    let mut declaration = property.value_declaration();
+    if declaration.is_none()
+        && property.flags().intersects(SymbolFlags::Alias)
+        && property.declarations().len() == 1
+    {
+        // Aliased exports such as `export { undefined_ as undefined }` are declared by their export specifier.
+        declaration = Some(property.declarations()[0]);
+    }
+    let Some(declaration) = declaration else {
         return false;
     };
     declaration.name().is_some_and(|name| (member.is_member)(&mut ctx.type_parser, name))
 }
 
 impl ModuleMemberReference {
-    // go: internal/fixables/module_member_reference.go:119 moduleMemberReference.expression 62cc0fa23fcc2f21
+    // go: internal/fixables/module_member_reference.go:123 moduleMemberReference.expression 62cc0fa23fcc2f21
     // expression builds the reference: module.member, or the direct binding.
     pub(crate) fn expression(&self, tracker: &Tracker, member: &ModuleMember) -> P<Node> {
         if self.via_module {

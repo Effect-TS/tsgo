@@ -1,0 +1,57 @@
+==== /.src/effectSucceedWithUndefined_scopedEffect.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 7:24 - 7:43
+Node: succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 11:18 - 11:37
+Node: succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 17:28 - 17:47
+Node: succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 21:34 - 21:53
+Node: succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>

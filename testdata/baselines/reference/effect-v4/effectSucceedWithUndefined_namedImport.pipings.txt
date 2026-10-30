@@ -1,0 +1,57 @@
+==== /.src/effectSucceedWithUndefined_namedImport.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 8:27 - 8:46
+Node: succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 11:29 - 11:55
+Node: renamedSucceed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: renamedSucceed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 15:32 - 15:56
+Node: succeedAlias(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeedAlias
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 18:48 - 18:59
+Node: succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<number, never, never>

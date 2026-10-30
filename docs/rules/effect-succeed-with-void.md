@@ -19,9 +19,9 @@ Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succee
 ```ts
 import { Effect } from "effect"
 
-export const preview = Effect.succeed(undefined)
+export const preview = Effect.succeed<void>(void 0)
 /**
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^ effecttsgo(effect-succeed-with-void): `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`.
+                       ^^^^^^^^^^^^^^ effecttsgo(effect-succeed-with-void): `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`.
 */
 ```
 

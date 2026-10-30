@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:28-8:35) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+
+[D2] (11:30-11:44) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+
+[D3] (15:33-15:45) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default

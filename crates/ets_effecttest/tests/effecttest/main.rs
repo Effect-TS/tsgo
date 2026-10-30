@@ -8,6 +8,7 @@ mod completion_test;
 mod document_symbols_runner_test;
 mod effect_fn_pipeables_test;
 mod effect_sleep_zero_to_yield_now_test;
+mod effect_succeed_with_undefined_test;
 mod fail_cause_to_constructor_test;
 mod feature_flags_test;
 mod flat_map_identity_to_flatten_test;
@@ -102,6 +103,7 @@ fn main() {
     trials.extend(fail_cause_to_constructor_test::tests());
     trials.extend(type_union_to_schema_union_test::tests());
     trials.extend(provide_merge_all_to_array_test::tests());
+    trials.extend(effect_succeed_with_undefined_test::tests());
 
     let conclusion = libtest_mimic::run(&args, trials);
     if !args.list {

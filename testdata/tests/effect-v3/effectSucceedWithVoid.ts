@@ -1,5 +1,5 @@
 // @effect-v3
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 // Should trigger: Effect.succeed(undefined)
 export const shouldTriggerUndefined = Effect.succeed(undefined)
@@ -19,6 +19,21 @@ export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefi
 // Should trigger with a fallback fix: the API reference is hidden behind a const alias.
 const succeedAlias = Effect.succeed
 export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// Should trigger: explicit undefined type argument, v3 has no Effect.undefined -> Effect.void
+export const shouldTriggerExplicitUndefined = Effect.succeed<undefined>(undefined)
+
+// Should trigger: explicit void type argument -> Effect.void
+export const shouldTriggerExplicitVoid = Effect.succeed<void>(void 0)
+
+// Should trigger: pipe form, the later steps are kept -> pipe(Effect.void, Effect.as(1))
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed, Effect.as(1))
+
+// Should NOT trigger: explicit wider type argument, Effect.void would change Effect<number | undefined>
+export const shouldNotTriggerExplicitUnion = Effect.succeed<number | undefined>(undefined)
+
+// Should NOT trigger: a parameter named `undefined` shadows the global, this is Effect<number>
+export const shouldNotTriggerShadowedUndefined = (undefined: number) => Effect.succeed(undefined)
 
 // Should NOT trigger: Effect.succeed with actual value
 export const shouldNotTriggerNumber = Effect.succeed(1)

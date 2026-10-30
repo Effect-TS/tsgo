@@ -2341,6 +2341,9 @@
         "effecttsgo/effect-sleep-zero-to-yield-now": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/effect-succeed-with-undefined": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/effect-succeed-with-void": {
           "$ref": "#/definitions/RuleNoConfig"
         },

@@ -1,0 +1,703 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:30-9:39) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D2] (12:32-12:55) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D3] (15:33-15:55) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D4] (18:38-18:49) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D5] (21:33-21:56) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D6] (24:36-24:47) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D7] (27:28-27:40) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D8] (31:33-31:52) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D9] (35:36-35:55) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D10] (39:31-39:58) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+
+[D11] (43:31-43:50) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+
+[D12] (46:31-46:54) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.undefined
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D2] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = E.undefined
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D3] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = E.undefined
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D4] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = E.undefined
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D5] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = E.undefined
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D6] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = E.undefined
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D7] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = E.undefined
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D8] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = E.undefined
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D9] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = E.undefined
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
+
+=== [D10] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithUndefined:suggestion
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { succeed as namedSucceed } from "effect/Effect"
+
+// MUST TRIGGER: renamed module import -> E.undefined
+export const renamedEffect = E.succeed(undefined)
+
+// MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+export const effectNamespace = EffectNamespace.succeed(undefined)
+
+// MUST TRIGGER: barrel namespace import -> E.undefined
+export const packageNamespace = Package.Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized receiver -> E.undefined
+export const parenthesizedReceiver = (E).succeed(undefined)
+
+// MUST TRIGGER: asserted receiver -> E.undefined
+export const assertedReceiver = (E as typeof E).succeed(undefined)
+
+// MUST TRIGGER: parenthesized callee -> E.undefined
+export const parenthesizedCallee = (E.succeed)(undefined)
+
+// MUST TRIGGER: named import of succeed -> E.undefined
+export const namedImport = namedSucceed(undefined)
+
+// MUST TRIGGER: const alias of a named import -> E.undefined
+const renamedSucceedAlias = namedSucceed
+export const namedImportAlias = renamedSucceedAlias(undefined)
+
+// MUST TRIGGER: const alias of the module -> E.undefined
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.succeed(undefined)
+
+// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().succeed(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+export const namespaceVoid0 = E.undefined
+
+// MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+
