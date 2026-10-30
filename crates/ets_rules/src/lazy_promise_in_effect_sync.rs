@@ -3,12 +3,12 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node};
+use ets_shim::ast::Diagnostic;
 use ets_shim::checker::{SignatureKind, Type};
 use ets_shim::diagnostics as tsdiag;
-use ets_typeparser::TypeParser;
+use ets_typeparser::{PipingFlow, TypeParser};
 
-// go: internal/rules/lazy_promise_in_effect_sync.go:13 LazyPromiseInEffectSync e9f564e8a4def0e1
+// go: internal/rules/lazy_promise_in_effect_sync.go:13 LazyPromiseInEffectSync 35ce48fbf604e822
 pub static LAZY_PROMISE_IN_EFFECT_SYNC: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "lazyPromiseInEffectSync",
@@ -22,42 +22,41 @@ pub static LAZY_PROMISE_IN_EFFECT_SYNC: LazyLock<Rule> = LazyLock::new(|| {
     replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
-
-        // Rust: Go's recursive `walk` closure is a nested function.
-        fn walk(ctx: &mut Context<'_, '_>, node: P<Node>, diags: &mut Vec<P<Diagnostic>>) -> bool {
-            if node.kind() == Kind::CallExpression {
-                let call = node.as_call_expression();
-                let args = call.arguments().nodes();
-                if !args.is_empty()
-                    && ctx.type_parser.is_node_reference_to_effect_module_api(call.expression(), "sync")
+        let flows = ctx.type_parser.piping_flows(ctx.source_file, false);
+        for (_, flow) in ets_readonly::new(flows.as_deref()).all() {
+            for (index, _) in flow.transformations().all() {
+                // Effect.sync(thunk) and the point-free pipe(thunk, Effect.sync)
+                // both apply Effect.sync to the step input without extra arguments.
+                let transformation = flow.transformations().at(index);
+                if transformation.args().len() != 0
+                    || !ctx.type_parser.is_node_reference_to_effect_module_api(transformation.callee(), "sync")
                 {
-                    let lazy_arg = args[0];
-                    let lazy_arg_type = ctx.type_parser.get_type_at_location(lazy_arg);
-                    if let Some(lazy_arg_type) = lazy_arg_type
-                        && thunk_returns_promise(ctx.type_parser, lazy_arg_type)
-                    {
-                        diags.push(ctx.new_diagnostic(
-                            ctx.source_file,
-                            ets_shim::scanner::get_error_range_for_node(ctx.source_file, lazy_arg),
-                            &tsdiag::THIS_EFFECT_SYNC_THUNK_RETURNS_A_PROMISE_USE_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_TO_REPRESENT_ASYNC_WORK_EFFECT_LAZY_PROMISE_IN_EFFECT_SYNC,
-                            &[],
-                            &[],
-                        ));
-                    }
+                    continue;
                 }
+                let lazy_arg_type = PipingFlow::transformation_input_type(Some(flow), ctx.type_parser, index);
+                let Some(lazy_arg_type) = lazy_arg_type else {
+                    continue;
+                };
+                if !thunk_returns_promise(ctx.type_parser, lazy_arg_type) {
+                    continue;
+                }
+                let location = PipingFlow::transformation_input_node(Some(flow), index)
+                    .unwrap_or_else(|| transformation.callee());
+                diags.push(ctx.new_diagnostic(
+                    ctx.source_file,
+                    ets_shim::scanner::get_error_range_for_node(ctx.source_file, location),
+                    &tsdiag::THIS_EFFECT_SYNC_THUNK_RETURNS_A_PROMISE_USE_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_TO_REPRESENT_ASYNC_WORK_EFFECT_LAZY_PROMISE_IN_EFFECT_SYNC,
+                    &[],
+                    &[],
+                ));
             }
-
-            node.for_each_child(&mut |child| walk(ctx, child, diags));
-            false
         }
-
-        walk(ctx, ctx.source_file.as_node(), &mut diags);
         diags
     },
 }
 });
 
-// go: internal/rules/lazy_promise_in_effect_sync.go:55 thunkReturnsPromise b09f1edf3ea700a2
+// go: internal/rules/lazy_promise_in_effect_sync.go:52 thunkReturnsPromise b09f1edf3ea700a2
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn thunk_returns_promise(tp: &mut TypeParser<'_>, lazy_arg_type: P<Type>) -> bool {

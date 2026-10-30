@@ -59,3 +59,20 @@ export const aliasedLayer = layerEffect(
     return { a: 1 }
   })
 )
+
+export const pipeableLayer = Effect.gen(function*() {
+  yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+  return { a: 1 }
+}).pipe(Layer.effect(MyService))
+
+export const curriedLayer = Layer.effect(MyService)(
+  Effect.gen(function*() {
+    yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+    return { a: 1 }
+  })
+)
+
+export const pipeableScopedShouldNotReport = Effect.gen(function*() {
+  yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+  return { a: 1 }
+}).pipe(Layer.scoped(MyService))

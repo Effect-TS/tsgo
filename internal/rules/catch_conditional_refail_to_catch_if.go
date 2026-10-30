@@ -78,11 +78,7 @@ func AnalyzeCatchConditionalRefailToCatchIf(tp *typeparser.TypeParser, c *checke
 				continue
 			}
 
-			inputType := flow.Subject().OutType()
-			if index > 0 {
-				inputType = flow.Transformations().At(index - 1).OutType()
-			}
-			if tp.StrictEffectType(inputType) == nil {
+			if tp.StrictEffectType(flow.TransformationInputType(index)) == nil {
 				continue
 			}
 
