@@ -1,7 +1,6 @@
-# Effect Language Service (TypeScript-Go)
+# Effect Language Service (TSRS, TypeScript-Go and Oxlint)
 
-A wrapper around [TypeScript-Go](https://github.com/microsoft/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes.
-This project targets **Effect V4** (codename: "smol") primarily and also Effect V3.
+A wrapper for both [TSRS](https://github.com/oxc-project/tsrs) and [TypeScript-Go](https://github.com/microsoft/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes.
 
 <!-- supported-components:start -->
 ## Supported Package Versions
@@ -18,7 +17,7 @@ The following target package versions are supported by `@effect/tsgo@0.63.0`:
 
 ## Installation
 
-The setup of the TSGO version of the LSP can be performed via the command line interface:
+The setup of the LSP (both tsgo and tsrs) can be performed via the command line interface:
 
 ```bash
 # Interactive and guided setup for human friends
