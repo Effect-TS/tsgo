@@ -51,6 +51,7 @@
     "effecttsgo/prefer-succeed-some-or-none": "warn",
     "effecttsgo/prefer-typed-schema-decoder": "warn",
     "effecttsgo/provide-layer-succeed-to-provide-service": "warn",
+    "effecttsgo/provide-merge-all-to-array": "warn",
     "effecttsgo/race-first-with-sleep-to-timeout": "warn",
     "effecttsgo/redundant-map-error": "warn",
     "effecttsgo/redundant-or-die": "warn",

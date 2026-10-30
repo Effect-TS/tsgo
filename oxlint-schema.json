@@ -2560,6 +2560,9 @@
         "effecttsgo/provide-layer-succeed-to-provide-service": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/provide-merge-all-to-array": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/race-first-with-sleep-to-timeout": {
           "$ref": "#/definitions/RuleNoConfig"
         },

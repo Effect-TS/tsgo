@@ -62,6 +62,7 @@ var All = []fixable.Fixable{
 	MissingEffectErrorCatchFix,
 	MultipleEffectProvideFix,
 	ProvideLayerSucceedToProvideServiceFix,
+	ProvideMergeAllToArrayFix,
 	SchemaStructWithTagFix,
 	SchemaNumberFix,
 	RedundantSchemaTagIdentifierRemoveIdentifierFix,

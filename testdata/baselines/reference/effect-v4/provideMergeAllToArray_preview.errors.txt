@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/provideMergeAllToArray_preview.ts(13,49): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
+
+
+==== /.src/provideMergeAllToArray_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics provideMergeAllToArray:warning
+    import { Context, Effect, Layer } from "effect"
+    
+    class Db extends Context.Service<Db, { readonly query: (sql: string) => Effect.Effect<string> }>()("Db") {}
+    class Logger extends Context.Service<Logger, { readonly log: (line: string) => Effect.Effect<void> }>()("Logger") {}
+    
+    declare const DbLayer: Layer.Layer<Db>
+    declare const LoggerLayer: Layer.Layer<Logger>
+    declare const program: Effect.Effect<void, never, Db | Logger>
+    
+    // MUST TRIGGER: Effect.provide already merges an array of layers
+    export const main = program.pipe(Effect.provide(Layer.mergeAll(DbLayer, LoggerLayer)))
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
+    

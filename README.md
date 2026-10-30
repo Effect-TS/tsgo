@@ -1,7 +1,6 @@
-# Effect Language Service (TypeScript-Go)
+# Effect Language Service (TSRS, TypeScript-Go and Oxlint)
 
-A wrapper around [TypeScript-Go](https://github.com/microsoft/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes.
-This project targets **Effect V4** (codename: "smol") primarily and also Effect V3.
+A wrapper for both [TSRS](https://github.com/oxc-project/tsrs) and [TypeScript-Go](https://github.com/microsoft/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes.
 
 <!-- supported-components:start -->
 ## Supported Package Versions
@@ -18,7 +17,7 @@ The following target package versions are supported by `@effect/tsgo@0.63.0`:
 
 ## Installation
 
-The setup of the TSGO version of the LSP can be performed via the command line interface:
+The setup of the LSP (both tsgo and tsrs) can be performed via the command line interface:
 
 ```bash
 # Interactive and guided setup for human friends
@@ -200,6 +199,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-succeed-some-or-none.md"><code>preferSucceedSomeOrNone</code></a></td><td>Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-typed-schema-decoder.md"><code>preferTypedSchemaDecoder</code></a></td><td>Suggests typed Schema decoders when the input is assignable to the schema&#39;s Encoded type</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/provide-layer-succeed-to-provide-service.md"><code>provideLayerSucceedToProvideService</code></a></td><td>Suggests providing inline Layer.succeed and Layer.effect services directly</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/provide-merge-all-to-array.md"><code>provideMergeAllToArray</code></a></td><td>Suggests passing an array of layers to Effect.provide instead of wrapping them in Layer.mergeAll</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/race-first-with-sleep-to-timeout.md"><code>raceFirstWithSleepToTimeout</code></a></td><td>Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-map-error.md"><code>redundantMapError</code></a></td><td>Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-or-die.md"><code>redundantOrDie</code></a></td><td>Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator</td></tr>

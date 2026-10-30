@@ -1,0 +1,569 @@
+==== /.src/provideMergeAllToArray.ts (40 flows) ====
+
+=== Piping Flow ===
+Location: 9:16 - 9:66
+Node: Context.Service<A, { readonly a: number }>()("A")
+Node Kind: KindCallExpression
+
+Subject: "A"
+Subject Type: "A"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<A, { readonly a: number }>()
+      args: (constant)
+      outType: ServiceClass<A, "A", { readonly a: number; }>
+
+=== Piping Flow ===
+Location: 10:16 - 10:66
+Node: Context.Service<B, { readonly b: number }>()("B")
+Node Kind: KindCallExpression
+
+Subject: "B"
+Subject Type: "B"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<B, { readonly b: number }>()
+      args: (constant)
+      outType: ServiceClass<B, "B", { readonly b: number; }>
+
+=== Piping Flow ===
+Location: 11:16 - 11:66
+Node: Context.Service<C, { readonly c: number }>()("C")
+Node Kind: KindCallExpression
+
+Subject: "C"
+Subject Type: "C"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<C, { readonly c: number }>()
+      args: (constant)
+      outType: ServiceClass<C, "C", { readonly c: number; }>
+
+=== Piping Flow ===
+Location: 12:16 - 12:66
+Node: Context.Service<D, { readonly d: number }>()("D")
+Node Kind: KindCallExpression
+
+Subject: "D"
+Subject Type: "D"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<D, { readonly d: number }>()
+      args: (constant)
+      outType: ServiceClass<D, "D", { readonly d: number; }>
+
+=== Piping Flow ===
+Location: 33:24 - 33:93
+Node: program.pipe(Effect.provide(Layer.mergeAll(ALayer, BLayer, CLayer)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 37:25 - 37:89
+Node: Effect.provide(program, Layer.mergeAll(ALayer, BLayer, CLayer))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 40:28 - 40:98
+Node: pipe(program, Effect.provide(Layer.mergeAll(ALayer, BLayer, CLayer)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 43:23 - 43:87
+Node: Effect.provide(Layer.mergeAll(ALayer, BLayer, CLayer))(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 47:35 - 49:2
+Node: program.pipe(\n  Effect.provide(Layer.mergeAll(ALayer, BLayer, CLayer), { local: true })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer), { local: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 52:36 - 54:3
+Node: Effect.provide(program, Layer.mergeAll(ALayer, BLayer, CLayer), {\n  local: false\n})
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer), {\n  local: false\n}]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 57:32 - 57:92
+Node: program.pipe(E.provide(L.mergeAll(ALayer, BLayer, CLayer)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: E.provide
+      args: [L.mergeAll(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 60:30 - 60:95
+Node: program.pipe(provideEffect(mergeLayers(ALayer, BLayer, CLayer)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: provideEffect
+      args: [mergeLayers(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 63:31 - 63:87
+Node: program.pipe(provide(mergeAll(ALayer, BLayer, CLayer)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: provide
+      args: [mergeAll(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 67:27 - 67:90
+Node: Effect.succeed(1).pipe(Effect.provide(Layer.mergeAll(ALayer)))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 67:66 - 67:88
+Node: Layer.mergeAll(ALayer)
+Node Kind: KindCallExpression
+
+Subject: ALayer
+Subject Type: Layer<A, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Layer.mergeAll
+      args: (constant)
+      outType: Layer<A, never, never>
+
+=== Piping Flow ===
+Location: 71:34 - 73:2
+Node: program.pipe(\n  Effect.provide(Layer.mergeAll(ALayer, Layer.succeed(B, { b: 1 }), CLayer))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, Layer.succeed(B, { b: 1 }), CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 72:40 - 72:67
+Node: Layer.succeed(B, { b: 1 })
+Node Kind: KindCallExpression
+
+Subject: { b: 1 }
+Subject Type: { b: number; }
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [B]
+      outType: Layer<B, never, never>
+
+=== Piping Flow ===
+Location: 78:30 - 78:115
+Node: program.pipe(Effect.provide(Layer.mergeAll(ALayer, Layer.mergeAll(BLayer, CLayer))))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, Layer.mergeAll(BLayer, CLayer))]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 81:25 - 89:2
+Node: program.pipe(\n  Effect.provide(\n    Layer.mergeAll(\n      ALayer, // the A service\n      BLayer,\n      /* the C service */ CLayer,\n    )\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(\n      ALayer, // the A service\n      BLayer,\n      /* the C service */ CLayer,\n    )]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 93:27 - 93:93
+Node: program.pipe(Effect.provide(Layer.mergeAll(ALayer, ...BCLayers)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, ...BCLayers)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 97:27 - 97:95
+Node: program.pipe(Effect.provide(Layer.mergeAll(ALayer, ...moreLayers)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, ...moreLayers)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 102:31 - 102:90
+Node: program.pipe(Effect.provide(Layer.mergeAll(...ABCLayers)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(...ABCLayers)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 106:29 - 106:100
+Node: program.pipe(Effect.provide((Layer.mergeAll(ALayer, BLayer, CLayer))))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [(Layer.mergeAll(ALayer, BLayer, CLayer))]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 109:25 - 111:3
+Node: Effect.gen(function*() {\n  return yield* Effect.provide(program, Layer.mergeAll(ALayer, BLayer, CLayer))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Effect.provide(program, Layer.mergeAll(ALayer, BLayer, CLayer))\n}
+Subject Type: () => Generator<Effect<void, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 110:16 - 110:80
+Node: Effect.provide(program, Layer.mergeAll(ALayer, BLayer, CLayer))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 114:28 - 114:83
+Node: program.pipe(Effect.provide([ALayer, BLayer, CLayer]))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [[ALayer, BLayer, CLayer]]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 118:32 - 118:71
+Node: program.pipe(Effect.provide(AppLayer))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [AppLayer]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 119:37 - 119:71
+Node: Effect.provide(program, AppLayer)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [AppLayer]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 122:31 - 124:2
+Node: program.pipe(\n  Effect.provide(Layer.mergeAll(ALayer, BLayer, CRequiresDLayer).pipe(Layer.provide(DLayer)))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CRequiresDLayer).pipe(Layer.provide(DLayer))]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 123:18 - 123:93
+Node: Layer.mergeAll(ALayer, BLayer, CRequiresDLayer).pipe(Layer.provide(DLayer))
+Node Kind: KindCallExpression
+
+Subject: Layer.mergeAll(ALayer, BLayer, CRequiresDLayer)
+Subject Type: Layer<A | B | C, never, D>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [DLayer]
+      outType: Layer<A | B | C, never, never>
+
+=== Piping Flow ===
+Location: 127:33 - 129:2
+Node: program.pipe(\n  Effect.provide(Layer.provide(Layer.mergeAll(ALayer, BLayer, CRequiresDLayer), DLayer))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.provide(Layer.mergeAll(ALayer, BLayer, CRequiresDLayer), DLayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 128:18 - 128:88
+Node: Layer.provide(Layer.mergeAll(ALayer, BLayer, CRequiresDLayer), DLayer)
+Node Kind: KindCallExpression
+
+Subject: Layer.mergeAll(ALayer, BLayer, CRequiresDLayer)
+Subject Type: Layer<A | B | C, never, D>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Layer.provide
+      args: [DLayer]
+      outType: Layer<A | B | C, never, never>
+
+=== Piping Flow ===
+Location: 132:28 - 134:2
+Node: program.pipe(\n  Effect.provide(Layer.mergeAll(ALayer, BLayer, CLayer) as Layer.Layer<A | B | C>)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(ALayer, BLayer, CLayer) as Layer.Layer<A | B | C>]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 137:35 - 139:2
+Node: program.pipe(\n  Effect.provide(condition ? Layer.mergeAll(ALayer, BLayer, CLayer) : Layer.mergeAll(CLayer, BLayer, ALayer))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [condition ? Layer.mergeAll(ALayer, BLayer, CLayer) : Layer.mergeAll(CLayer, BLayer, ALayer)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 142:28 - 142:96
+Node: CRequiresDLayer.pipe(Layer.provide(Layer.mergeAll(DLayer, ALayer)))
+Node Kind: KindCallExpression
+
+Subject: CRequiresDLayer
+Subject Type: Layer<C, never, D>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [Layer.mergeAll(DLayer, ALayer)]
+      outType: Layer<C, never, never>
+
+=== Piping Flow ===
+Location: 143:33 - 143:106
+Node: CRequiresDLayer.pipe(Layer.provideMerge(Layer.mergeAll(DLayer, ALayer)))
+Node Kind: KindCallExpression
+
+Subject: CRequiresDLayer
+Subject Type: Layer<C, never, D>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provideMerge
+      args: [Layer.mergeAll(DLayer, ALayer)]
+      outType: Layer<A | C | D, never, never>
+
+=== Piping Flow ===
+Location: 146:27 - 146:109
+Node: program.pipe(Effect.provide(Layer.merge(ALayer, BLayer)), Effect.provide(CLayer))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, A | B | C>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.merge(ALayer, BLayer)]
+      outType: Effect<void, never, C>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [CLayer]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 146:56 - 146:83
+Node: Layer.merge(ALayer, BLayer)
+Node Kind: KindCallExpression
+
+Subject: ALayer
+Subject Type: Layer<A, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Layer.merge
+      args: [BLayer]
+      outType: Layer<A | B, never, never>
+
+=== Piping Flow ===
+Location: 150:36 - 152:2
+Node: Effect.void.pipe(\n  Effect.provide(Layer.mergeAll(DLayer, CRequiresDLayer))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(DLayer, CRequiresDLayer)]
+      outType: Effect<void, never, D>
+
+=== Piping Flow ===
+Location: 159:29 - 159:83
+Node: unrelated.provide(unrelated.mergeAll(ALayer, BLayer))
+Node Kind: KindCallExpression
+
+Subject: unrelated.mergeAll(ALayer, BLayer)
+Subject Type: readonly unknown[]
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.provide
+      args: (constant)
+      outType: unknown
