@@ -18,7 +18,7 @@ pub static PROVIDE_MERGE_ALL_TO_ARRAY_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_provide_merge_all_to_array_fix,
 });
 
-// go: internal/fixables/provide_merge_all_to_array.go:23 runProvideMergeAllToArrayFix 22d1d48fb97f23bd
+// go: internal/fixables/provide_merge_all_to_array.go:23 runProvideMergeAllToArrayFix a18610d4b75cf6c6
 fn run_provide_merge_all_to_array_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let text = sf.text();

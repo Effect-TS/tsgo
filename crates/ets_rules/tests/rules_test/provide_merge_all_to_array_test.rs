@@ -5,7 +5,7 @@ use regex::Regex;
 
 use crate::*;
 
-// go test: internal/rules/provide_merge_all_to_array_test.go:13 TestProvideMergeAllToArrayShapes 940c4eb05ced2d1b
+// go test: internal/rules/provide_merge_all_to_array_test.go:13 TestProvideMergeAllToArrayShapes 165bcd85903880c8
 #[test]
 fn test_provide_merge_all_to_array_shapes() {
     run_on_checker_stack(|t| {
@@ -27,14 +27,12 @@ export const explicitProvideTypeArguments = program.pipe(Effect.provide<A, never
 export const noArguments = program.pipe(Effect.provide(Layer.mergeAll()))
 export const dependentLayers = Effect.void.pipe(Effect.provide(Layer.mergeAll(ALayer, CRequiresALayer)))
 "#;
-        let want = ["effectFn", "effectFnUntraced", "unapplied"];
+        let want = ["effectFn", "effectFnUntraced", "dependentLayers"];
         let export_name = Regex::new(r"export const ([0-9A-Za-z_]+)").expect("valid regexp");
 
         for version in [EffectVersion::V3, EffectVersion::V4] {
             t.run(version.as_str(), |t| {
                 t.parallel();
-                // Only provideMergeAllToArray runs, so the dependentLayers skip does
-                // not rely on layerMergeAllWithDependencies being enabled.
                 let preview =
                     evaluate_preview(t, version, source, &ets_rules::PROVIDE_MERGE_ALL_TO_ARRAY);
                 let mut got: Vec<String> = Vec::new();
@@ -46,7 +44,7 @@ export const dependentLayers = Effect.void.pipe(Effect.provide(Layer.mergeAll(AL
                     }
                     let span =
                         &preview.source_text[diagnostic.start as usize..diagnostic.end as usize];
-                    if span != "Layer.mergeAll(ALayer, BLayer)" {
+                    if !span.starts_with("Layer.mergeAll(ALayer, ") {
                         t.fatal(format!(
                             "diagnostic span {span:?} does not cover the Layer.mergeAll call"
                         ));

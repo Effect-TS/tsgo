@@ -26,7 +26,7 @@ struct Case {
     want: Vec<String>,
 }
 
-// go test: internal/rulerunner/provide_merge_all_to_array_test.go:22 TestProvideMergeAllToArrayLifecycle 1f1f6d7af1784d69
+// go test: internal/rulerunner/provide_merge_all_to_array_test.go:22 TestProvideMergeAllToArrayLifecycle 321353194aebae3f
 #[test]
 fn test_provide_merge_all_to_array_lifecycle() {
     on_checker_stack(|| {
@@ -56,24 +56,21 @@ fn test_provide_merge_all_to_array_lifecycle() {
             const NEXT_LINE: &str = "// @effect-diagnostics-next-line provideMergeAllToArray:off\n";
             let cases = [
                 Case {
-                    name: "default suggestion",
+                    name: "default off",
                     source: source.clone(),
                     use_rule: true,
-                    want: vec![at(2, base)],
                     ..Default::default()
                 },
                 Case {
                     name: "recommended preset",
                     source: source.clone(),
                     preset: "recommended",
-                    want: vec![at(2, base)],
                     ..Default::default()
                 },
                 Case {
                     name: "strict preset",
                     source: source.clone(),
                     preset: "strict",
-                    want: vec![at(1, base)],
                     ..Default::default()
                 },
                 Case {

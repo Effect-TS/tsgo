@@ -18,7 +18,7 @@ struct Case {
     fixes: i32,
 }
 
-// go test: internal/effecttest/provide_merge_all_to_array_test.go:17 TestProvideMergeAllToArrayFixesCompile 511cb7f4fa06fe9e
+// go test: internal/effecttest/provide_merge_all_to_array_test.go:17 TestProvideMergeAllToArrayFixesCompile 45b47b8df0af5487
 fn test_provide_merge_all_to_array_fixes_compile(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -42,9 +42,9 @@ fn test_provide_merge_all_to_array_fixes_compile(t: &T) {
 // @filename: /repro.ts
 "#;
             // The v3 fixture has no options cases: v3 Effect.provide takes no options.
-            let mut main_matches = 18;
+            let mut main_matches = 19;
             if version == EffectVersion::V3 {
-                main_matches = 16;
+                main_matches = 17;
             }
             let cases = [
                 Case {
