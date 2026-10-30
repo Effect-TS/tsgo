@@ -1,0 +1,25 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:23-6:33) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+  Fix 2: "Add a catch handler (object form)"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add a catch handler (object form)" ===
+
+--- file:///.src/effectTryWithoutCatch_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectTryWithoutCatch:warning
+import { Effect } from "effect"
+
+declare const text: string
+export const parsed = Effect.try({ try: () => JSON.parse(text), catch: (cause) => cause })
+
