@@ -134,6 +134,38 @@ func subjectInCallPosition(tracker *rewriter.Tracker, sf *ast.SourceFile, positi
 	return clone
 }
 
+// pipeReceiverParentheses reports how expression can become the receiver of a
+// `.pipe(...)` call that replaces position. The receiver of a member access
+// binds tighter than any operator, so every expression that is not a
+// left-hand-side expression needs parentheses, as do object, function and
+// class expressions, an argument-less `new X` and optional chains.
+//
+// Like subjectInCallPosition, it reports false when the replacement would newly
+// begin an expression statement with a token that continues the previous
+// statement when that one has no semicolon.
+func pipeReceiverParentheses(sf *ast.SourceFile, position *ast.Node, expression *ast.Node) (parenthesize bool, ok bool) {
+	parenthesize = pipeReceiverNeedsParentheses(expression)
+	leading := ast.KindOpenParenToken
+	if !parenthesize {
+		leading = leadingTokenKind(expression)
+	}
+	if continuesPreviousStatement(leading) && leading != leadingTokenKind(position) &&
+		startsExpressionStatement(sf, position) {
+		return false, false
+	}
+	return parenthesize, true
+}
+
+func pipeReceiverNeedsParentheses(expression *ast.Node) bool {
+	switch expression.Kind {
+	case ast.KindObjectLiteralExpression, ast.KindFunctionExpression, ast.KindClassExpression:
+		return true
+	case ast.KindNewExpression:
+		return expression.AsNewExpression().Arguments == nil
+	}
+	return expression.Flags&ast.NodeFlagsOptionalChain != 0 || !ast.IsLeftHandSideExpression(expression)
+}
+
 // startsExpressionStatement reports whether node begins the expression
 // statement that contains it.
 func startsExpressionStatement(sf *ast.SourceFile, node *ast.Node) bool {

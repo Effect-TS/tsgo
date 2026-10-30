@@ -130,6 +130,7 @@ mod unnecessary_pipe;
 mod unnecessary_pipe_chain;
 mod unnecessary_typeof_type;
 mod unsafe_effect_type_assertion;
+mod use_span_unused_span_to_with_span;
 pub use async_function::*;
 pub use catch_to_ignore::*;
 pub use catch_to_or_else_succeed::*;
@@ -275,6 +276,7 @@ pub use unnecessary_pipe::*;
 pub use unnecessary_pipe_chain::*;
 pub use unnecessary_typeof_type::*;
 pub use unsafe_effect_type_assertion::*;
+pub use use_span_unused_span_to_with_span::*;
 
 #[cfg(test)]
 mod all_order_test;

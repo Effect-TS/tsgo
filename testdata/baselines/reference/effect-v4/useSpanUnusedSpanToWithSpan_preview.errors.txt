@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/useSpanUnusedSpanToWithSpan_preview.ts(8,40): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
+
+
+==== /.src/useSpanUnusedSpanToWithSpan_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics useSpanUnusedSpanToWithSpan:warning
+    import { Effect } from "effect"
+    
+    declare const fetchUser: (id: string) => Effect.Effect<{ name: string }>
+    
+    export const getUser = (id: string) => Effect.useSpan("fetch-user", (_span) => fetchUser(id))
+                                           ~~~~~~~~~~~~~~
+!!! warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
+    

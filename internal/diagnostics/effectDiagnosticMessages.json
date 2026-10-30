@@ -646,5 +646,9 @@
     "`Effect.{0}` builds this {1} lazily directly instead of wrapping `Effect.{2}` in `Effect.suspend`. effect(suspendFailToFailSync)": {
         "category": "Suggestion",
         "code": 377163
+    },
+    "This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)": {
+        "category": "Suggestion",
+        "code": 377172
     }
 }
