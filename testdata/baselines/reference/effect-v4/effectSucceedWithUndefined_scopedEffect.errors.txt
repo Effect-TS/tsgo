@@ -1,0 +1,42 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectSucceedWithUndefined_scopedEffect.ts(7,25): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_scopedEffect.ts(11,19): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_scopedEffect.ts(17,29): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_scopedEffect.ts(21,35): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+
+
+==== /.src/effectSucceedWithUndefined_scopedEffect.ts (4 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectSucceedWithUndefined:suggestion
+    import { Effect } from "effect"
+    import { succeed } from "effect/Effect"
+    
+    // MUST TRIGGER: the Effect import is in scope -> Effect.undefined
+    export const topLevel = succeed(undefined)
+                            ~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER, diagnostic only: NO replacement quickfix, the parameter `Effect` shadows the Effect import
+    export function shadowedByParameter(Effect: number) {
+      return [Effect, succeed(undefined)] as const
+                      ~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    }
+    
+    // MUST TRIGGER, diagnostic only: NO replacement quickfix, the local `Effect` shadows the Effect import
+    export const shadowedByLocal = () => {
+      const Effect = { undefined: 1 }
+      return [Effect.undefined, succeed(undefined)] as const
+                                ~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    }
+    
+    // MUST TRIGGER: the shadowing local is in a sibling scope, Effect.undefined resolves to the import here
+    export const siblingScope = () => succeed(undefined)
+                                      ~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    void Effect
+    

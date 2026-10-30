@@ -1,0 +1,95 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectSucceedWithUndefined_aliases.ts(9,30): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(12,32): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(15,33): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(18,38): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(21,33): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(24,36): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(27,28): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(31,33): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(35,36): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(39,31): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(43,31): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_aliases.ts(46,31): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+
+
+==== /.src/effectSucceedWithUndefined_aliases.ts (12 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectSucceedWithUndefined:suggestion
+    import { Effect as E } from "effect"
+    import * as EffectNamespace from "effect/Effect"
+    import * as Package from "effect"
+    import { succeed as namedSucceed } from "effect/Effect"
+    
+    // MUST TRIGGER: renamed module import -> E.undefined
+    export const renamedEffect = E.succeed(undefined)
+                                 ~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: namespace import of effect/Effect -> E.undefined (the fix uses the file's Effect reference)
+    export const effectNamespace = EffectNamespace.succeed(undefined)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: barrel namespace import -> E.undefined
+    export const packageNamespace = Package.Effect.succeed(undefined)
+                                    ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: parenthesized receiver -> E.undefined
+    export const parenthesizedReceiver = (E).succeed(undefined)
+                                         ~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: asserted receiver -> E.undefined
+    export const assertedReceiver = (E as typeof E).succeed(undefined)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: parenthesized callee -> E.undefined
+    export const parenthesizedCallee = (E.succeed)(undefined)
+                                       ~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: named import of succeed -> E.undefined
+    export const namedImport = namedSucceed(undefined)
+                               ~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: const alias of a named import -> E.undefined
+    const renamedSucceedAlias = namedSucceed
+    export const namedImportAlias = renamedSucceedAlias(undefined)
+                                    ~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: const alias of the module -> E.undefined
+    const moduleAlias = E
+    export const constantModuleAlias = moduleAlias.succeed(undefined)
+                                       ~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: the getter receiver is dropped with the callee -> E.undefined
+    const effectGetter = { get module() { console.log("evaluated"); return E } }
+    export const getterReceiver = effectGetter.module.succeed(undefined)
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: the called receiver is dropped with the callee -> E.undefined
+    const getEffect = () => { console.log("evaluated"); return E }
+    export const calledReceiver = getEffect().succeed(undefined)
+                                  ~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: `void 0` is also Effect<undefined> -> E.undefined
+    export const namespaceVoid0 = EffectNamespace.succeed(void 0)
+                                  ~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST NOT TRIGGER: explicit void type argument belongs to effectSucceedWithVoid, which is off in this file
+    export const namespaceExplicitVoid = EffectNamespace.succeed<void>(undefined)
+    
+    // MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<string>
+    export const shadowedUndefined = (undefined: string) => E.succeed(undefined)
+    

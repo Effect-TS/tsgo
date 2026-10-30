@@ -2521,6 +2521,11 @@
           "default": "suggestion",
           "description": "Suggests Effect.yieldNow for cooperative yielding instead of sleeping for zero duration"
         },
+        "effectSucceedWithUndefined": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.undefined instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
+        },
         "effectSucceedWithVoid": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

@@ -56,6 +56,7 @@
         "effectMapFlatten": "suggestion",
         "effectMapVoid": "suggestion",
         "effectSleepZeroToYieldNow": "suggestion",
+        "effectSucceedWithUndefined": "suggestion",
         "effectSucceedWithVoid": "suggestion",
         "errorPayloadShadowsName": "suggestion",
         "experimentalApiUsage": "warning",
@@ -153,6 +154,7 @@
         "effectMapFlatten": "error",
         "effectMapVoid": "error",
         "effectSleepZeroToYieldNow": "error",
+        "effectSucceedWithUndefined": "error",
         "effectSucceedWithVoid": "error",
         "errorPayloadShadowsName": "error",
         "experimentalApiUsage": "error",
@@ -333,6 +335,7 @@
         "effectMapFlatten": "warning",
         "effectMapVoid": "warning",
         "effectSleepZeroToYieldNow": "warning",
+        "effectSucceedWithUndefined": "warning",
         "effectSucceedWithVoid": "warning",
         "failCauseToConstructor": "warning",
         "flatMapConditionalToFilterOrFail": "warning",
@@ -2585,6 +2588,29 @@
       }
     },
     {
+      "name": "effectSucceedWithUndefined",
+      "group": "style",
+      "description": "Suggests using Effect.undefined instead of Effect.succeed(undefined) or Effect.succeed(void 0)",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377162
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed(undefined)\n",
+        "diagnostics": [
+          {
+            "start": 56,
+            "end": 70,
+            "text": "`Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)"
+          }
+        ]
+      }
+    },
+    {
       "name": "effectSucceedWithVoid",
       "group": "style",
       "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)",
@@ -2598,11 +2624,11 @@
         377016
       ],
       "preview": {
-        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed(undefined)\n",
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed\u003cvoid\u003e(void 0)\n",
         "diagnostics": [
           {
             "start": 56,
-            "end": 81,
+            "end": 70,
             "text": "`Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)"
           }
         ]

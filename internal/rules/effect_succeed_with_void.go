@@ -29,12 +29,13 @@ var EffectSucceedWithVoid = rule.Rule{
 	},
 }
 
-// EffectSucceedWithVoidMatch holds the AST nodes needed by both the diagnostic rule
-// and the quick-fix for the effectSucceedWithVoid pattern.
-type EffectSucceedWithVoidMatch struct {
-	SourceFile *ast.SourceFile // The source file where the diagnostic should be reported
-	Location   core.TextRange  // The pre-computed error range for this match
-	CallNode   *ast.Node       // The Effect.succeed(...) call expression (replacement target)
+// EffectSucceedConstantMatch holds the nodes needed by the effectSucceedWithVoid and
+// effectSucceedWithUndefined diagnostics and their quick-fixes.
+type EffectSucceedConstantMatch struct {
+	SourceFile *ast.SourceFile        // The source file where the diagnostic should be reported
+	Location   core.TextRange         // The pre-computed error range for this match
+	Flow       *typeparser.PipingFlow // The flow whose subject and first step are replaced
+	Member     string                 // The Effect constant that replaces them: "void" or "undefined"
 }
 
 // isVoidExpression checks if a node is `undefined`, `void 0`, or a parenthesized version of either.
@@ -58,37 +59,85 @@ func isVoidExpression(node *ast.Node) bool {
 	return false
 }
 
-// AnalyzeEffectSucceedWithVoid finds all Effect.succeed(undefined) and Effect.succeed(void 0) calls
-// that can be replaced with Effect.void.
-func AnalyzeEffectSucceedWithVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectSucceedWithVoidMatch {
-	var matches []EffectSucceedWithVoidMatch
+// AnalyzeEffectSucceedWithVoid finds Effect.succeed(undefined) and Effect.succeed(void 0)
+// steps that Effect.void replaces.
+func AnalyzeEffectSucceedWithVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectSucceedConstantMatch {
+	return filterEffectSucceedConstantMatches(analyzeEffectSucceedConstant(tp, sf), "void")
+}
 
-	var walk ast.Visitor
-	walk = func(n *ast.Node) bool {
-		if n == nil {
-			return false
+func filterEffectSucceedConstantMatches(matches []EffectSucceedConstantMatch, member string) []EffectSucceedConstantMatch {
+	var result []EffectSucceedConstantMatch
+	for _, match := range matches {
+		if match.Member == member {
+			result = append(result, match)
 		}
+	}
+	return result
+}
 
-		if n.Kind == ast.KindCallExpression {
-			call := n.AsCallExpression()
-			if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
-				arg := call.Arguments.Nodes[0]
-				if isVoidExpression(arg) {
-					if call.Expression != nil && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
-						matches = append(matches, EffectSucceedWithVoidMatch{
-							SourceFile: sf,
-							Location:   scanner.GetErrorRangeForNode(sf, n),
-							CallNode:   n,
-						})
-					}
-				}
-			}
-		}
-
-		n.ForEachChild(walk)
-		return false
+// analyzeEffectSucceedConstant finds piping flows whose subject is the constant `undefined`
+// or `void 0`, possibly parenthesized, and whose first step is Effect.succeed. The step's
+// success type picks the replacement: void gets Effect.void, undefined gets Effect.undefined
+// in Effect v4 and Effect.void in v3, which has no Effect.undefined. Any other success type,
+// such as an explicit <number | undefined>, is left alone.
+func analyzeEffectSucceedConstant(tp *typeparser.TypeParser, sf *ast.SourceFile) []EffectSucceedConstantMatch {
+	if tp == nil || sf == nil {
+		return nil
 	}
 
-	walk(sf.AsNode())
+	var matches []EffectSucceedConstantMatch
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		var member string
+		if !flow.MatchesPrefix(
+			func(subject typeparser.PipingFlowSubject) bool { return isUndefinedConstant(tp, subject.Node()) },
+			func(transformation typeparser.PipingFlowTransformation) bool {
+				if transformation.Callee() == nil || transformation.Args().Len() != 0 ||
+					!tp.IsNodeReferenceToEffectModuleApi(unwrapZeroDurationExpression(transformation.Callee()), "succeed") {
+					return false
+				}
+				member = effectSucceedConstantMember(tp, tp.StrictEffectType(transformation.OutType()))
+				return member != ""
+			},
+		) {
+			continue
+		}
+
+		callee := flow.Transformations().At(0).Callee()
+		matches = append(matches, EffectSucceedConstantMatch{
+			SourceFile: sf,
+			Location:   scanner.GetErrorRangeForNode(sf, callee),
+			Flow:       flow,
+			Member:     member,
+		})
+	}
 	return matches
+}
+
+// isUndefinedConstant checks if a node is `undefined` or `void 0`, possibly parenthesized,
+// where `undefined` must resolve to the global.
+func isUndefinedConstant(tp *typeparser.TypeParser, node *ast.Node) bool {
+	if node == nil || !isVoidExpression(node) {
+		return false
+	}
+	node = ast.SkipParentheses(node)
+	// The stability check accepts `undefined` only when it is the global.
+	return node.Kind != ast.KindIdentifier || tp.IsExpressionValueStableAtLocation(node, node)
+}
+
+// effectSucceedConstantMember returns the Effect constant with the same type as an
+// Effect.succeed result, or "" when there is none.
+func effectSucceedConstantMember(tp *typeparser.TypeParser, effect *typeparser.Effect) string {
+	if effect == nil || effect.A() == nil {
+		return ""
+	}
+	switch {
+	case effect.A().Flags()&checker.TypeFlagsVoid != 0:
+		return "void"
+	case effect.A().Flags()&checker.TypeFlagsUndefined != 0:
+		if tp.SupportedEffectVersion() == typeparser.EffectMajorV4 {
+			return "undefined"
+		}
+		return "void"
+	}
+	return ""
 }

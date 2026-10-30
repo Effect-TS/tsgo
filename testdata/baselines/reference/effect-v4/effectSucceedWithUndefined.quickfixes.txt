@@ -1,0 +1,2397 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:39-4:53) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D2] (7:52-7:66) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D3] (10:58-10:72) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D4] (13:59-13:73) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D5] (16:79-16:93) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D6] (19:64-19:78) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D7] (23:24-23:38) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D8] (29:3-29:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+[D9] (29:24-29:38) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D10] (33:42-33:56) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D11] (37:44-37:56) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D12] (40:35-40:49) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D13] (43:48-43:62) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D14] (46:64-46:78) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D15] (49:50-49:64) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D16] (52:58-52:72) TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+  Fix 0: "Disable effectSucceedWithUndefined for this line"
+  Fix 1: "Disable effectSucceedWithUndefined for entire file"
+  Fix 2: "Replace with Effect.undefined"
+
+[D17] (77:57-77:71) TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
+  Fix 0: "Disable effectSucceedWithVoid for this line"
+  Fix 1: "Disable effectSucceedWithVoid for entire file"
+  Fix 2: "Replace with Effect.void"
+
+[D18] (108:37-108:48) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.undefined
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D2] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.undefined
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D3] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.undefined
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D4] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.undefined
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D5] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.undefined
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D6] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.undefined
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D7] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.undefined
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D8] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D9] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.undefined)
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D10] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.undefined.pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D11] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = Effect.undefined
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D12] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.undefined
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D13] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.undefined
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D14] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D14] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.undefined
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D15] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D15] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = Effect.undefined
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D16] Fix 0: "Disable effectSucceedWithUndefined for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable effectSucceedWithUndefined for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Replace with Effect.undefined" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe(Effect.undefined, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D17] Fix 0: "Disable effectSucceedWithVoid for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable effectSucceedWithVoid for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Replace with Effect.void" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.void
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.sync(() => undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+
+
+=== [D18] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D18] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/effectSucceedWithUndefined.ts ---
+import { Effect, Exit, Option, pipe, Stream } from "effect"
+
+// MUST TRIGGER: Effect.succeed(undefined) -> Effect.undefined
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// MUST TRIGGER: parenthesized argument -> Effect.undefined
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// MUST TRIGGER: double parenthesized argument -> Effect.undefined
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// MUST TRIGGER: explicit type argument that is exactly `undefined` keeps the same type
+export const shouldTriggerExplicitUndefinedTypeArgument = Effect.succeed<undefined>(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; the annotation only widens the binding
+export const shouldTriggerAnnotatedUnion: Effect.Effect<number | undefined> = Effect.succeed(undefined)
+
+// MUST TRIGGER: the call itself is still Effect<undefined>; Effect.undefined is assignable to Effect<void>
+export const shouldTriggerAnnotatedVoid: Effect.Effect<void> = Effect.succeed(undefined)
+
+// MUST TRIGGER: inside a generator
+export const shouldTriggerInGen = Effect.gen(function*() {
+  const value = yield* Effect.succeed(undefined)
+  return value
+})
+
+// MUST TRIGGER: returned from a flatMap callback
+export const shouldTriggerInCallback = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.succeed(undefined))
+)
+
+// MUST TRIGGER: as the receiver of a pipe chain
+export const shouldTriggerPipeReceiver = Effect.succeed(undefined).pipe(Effect.as(1))
+
+// MUST TRIGGER with a fallback fix: the API reference is hidden behind a const alias -> Effect.undefined
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
+// MUST TRIGGER: `void 0` is also Effect<undefined> -> Effect.undefined
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// MUST TRIGGER: parenthesized `void 0` -> Effect.undefined
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// MUST TRIGGER: explicit `undefined` type argument with `void 0` -> Effect.undefined
+export const shouldTriggerExplicitUndefinedTypeArgumentVoid0 = Effect.succeed<undefined>(void 0)
+
+// MUST TRIGGER: pipe form -> Effect.undefined
+export const shouldTriggerPipe = pipe(undefined, Effect.succeed)
+
+// MUST TRIGGER: pipe form with parenthesized `void 0`, the later steps are kept -> pipe(Effect.undefined, Effect.as(1))
+export const shouldTriggerPipeWithSteps = pipe((void 0), Effect.succeed, Effect.as(1))
+
+// MUST NOT TRIGGER: `void undefined` is neither the `undefined` literal nor `void 0`
+export const shouldNotTriggerVoidUndefined = Effect.succeed(void undefined)
+
+// MUST NOT TRIGGER: already using Effect.undefined
+export const shouldNotTriggerAlreadyUndefined = Effect.undefined
+
+// MUST NOT TRIGGER: already using Effect.void
+export const shouldNotTriggerAlreadyVoid = Effect.void
+
+// MUST NOT TRIGGER: null is not undefined
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// MUST NOT TRIGGER: the string "undefined"
+export const shouldNotTriggerUndefinedString = Effect.succeed("undefined")
+
+// MUST NOT TRIGGER: actual values
+export const shouldNotTriggerNumber = Effect.succeed(1)
+export const shouldNotTriggerObject = Effect.succeed({ value: undefined })
+
+// MUST NOT TRIGGER: explicit wider type argument, Effect.undefined would narrow Effect<number | undefined>
+export const shouldNotTriggerExplicitUnionTypeArgument = Effect.succeed<number | undefined>(undefined)
+
+// MUST NOT TRIGGER effectSucceedWithUndefined: explicit void type argument belongs to effectSucceedWithVoid -> Effect.void
+export const shouldNotTriggerExplicitVoidTypeArgument = Effect.succeed<void>(undefined)
+
+// MUST NOT TRIGGER: pipe form starting from a value that is not a constant
+export const shouldNotTriggerPipeValue = pipe(1, Effect.succeed)
+
+// MUST NOT TRIGGER: Effect.succeed is not the first step of the flow
+export const shouldNotTriggerLaterStep = pipe(undefined, (value) => value, Effect.succeed)
+
+// MUST NOT TRIGGER: a parameter named `undefined` shadows the global, this is Effect<number>
+export function shouldNotTriggerShadowedUndefined(undefined: number) {
+  return Effect.succeed(undefined)
+}
+
+// MUST NOT TRIGGER: a variable holding undefined is not the `undefined` literal
+const undefinedValue = undefined
+export const shouldNotTriggerUndefinedVariable = Effect.succeed(undefinedValue)
+
+// MUST NOT TRIGGER: an optional value may be undefined at runtime only
+declare const maybeNumber: number | undefined
+export const shouldNotTriggerOptionalValue = Effect.succeed(maybeNumber)
+
+// MUST NOT TRIGGER: property access to undefined is not the `undefined` literal
+export const shouldNotTriggerGlobalThisUndefined = Effect.succeed(globalThis.undefined)
+
+// MUST NOT TRIGGER: casts change the success type
+export const shouldNotTriggerCast = Effect.succeed(undefined as unknown as number)
+
+// MUST NOT TRIGGER: non-null assertion makes this Effect<never>
+export const shouldNotTriggerNonNull = Effect.succeed(undefined!)
+
+// MUST NOT TRIGGER: lazy constructor, not Effect.succeed
+export const shouldNotTriggerSync = Effect.succeed(undefined)
+
+// MUST NOT TRIGGER: succeed of other modules
+export const shouldNotTriggerExitSucceed = Exit.succeed(undefined)
+export const shouldNotTriggerStreamSucceed = Stream.succeed(undefined)
+export const shouldNotTriggerOptionSome = Option.some(undefined)
+
+// MUST NOT TRIGGER: a user-defined `succeed` that is not Effect.succeed
+const Fake = { succeed: <A>(value: A) => value }
+export const shouldNotTriggerFakeSucceed = Fake.succeed(undefined)
+

@@ -15,33 +15,33 @@ Transformations (1):
       outType: Effect<string, Error, never>
 
 === Piping Flow ===
-Location: 9:11 - 10:28
-Node: Effect.sleep("5 seconds")
+Location: 9:11 - 12:4
+Node: Effect.sleep("5 seconds").pipe(\n    Effect.andThen(Effect.fail(new Error("request timed out")))\n  )
 Node Kind: KindCallExpression
 
 Subject: "5 seconds"
 Subject Type: "5 seconds"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.sleep
       args: (constant)
       outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [Effect.fail(new Error("request timed out"))]
+      outType: Effect<never, Error, never>
 
 === Piping Flow ===
-Location: 10:34 - 11:64
-Node: Effect.andThen(Effect.fail(new Error("request timed out")))
+Location: 11:20 - 11:63
+Node: Effect.fail(new Error("request timed out"))
 Node Kind: KindCallExpression
 
 Subject: new Error("request timed out")
 Subject Type: Error
 
-Transformations (2):
+Transformations (1):
   [0] kind: call
       callee: Effect.fail
       args: (constant)
       outType: Effect<never, Error, never>
-  [1] kind: call
-      callee: Effect.andThen
-      args: (constant)
-      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<never, E | Error, R>

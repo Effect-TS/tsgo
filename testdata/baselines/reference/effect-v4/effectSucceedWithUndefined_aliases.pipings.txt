@@ -1,0 +1,225 @@
+==== /.src/effectSucceedWithUndefined_aliases.ts (16 flows) ====
+
+=== Piping Flow ===
+Location: 9:29 - 9:50
+Node: E.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: E.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 12:31 - 12:66
+Node: EffectNamespace.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectNamespace.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 15:32 - 15:66
+Node: Package.Effect.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Package.Effect.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 18:37 - 18:60
+Node: (E).succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: (E).succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 21:32 - 21:67
+Node: (E as typeof E).succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: (E as typeof E).succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 24:35 - 24:58
+Node: (E.succeed)(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: (E.succeed)
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 27:27 - 27:51
+Node: namedSucceed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: namedSucceed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 31:32 - 31:63
+Node: renamedSucceedAlias(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: renamedSucceedAlias
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 35:35 - 35:66
+Node: moduleAlias.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: moduleAlias.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 38:38 - 38:63
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 39:30 - 39:69
+Node: effectGetter.module.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: effectGetter.module.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 42:26 - 42:51
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 43:30 - 43:61
+Node: getEffect().succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: getEffect().succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 46:30 - 46:62
+Node: EffectNamespace.succeed(void 0)
+Node Kind: KindCallExpression
+
+Subject: void 0
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectNamespace.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 49:37 - 49:78
+Node: EffectNamespace.succeed<void>(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectNamespace.succeed
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 52:56 - 52:77
+Node: E.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: E.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

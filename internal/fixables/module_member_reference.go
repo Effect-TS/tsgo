@@ -112,6 +112,10 @@ func typeHasMember(ctx *fixable.Context, t *checker.Type, member moduleMember) b
 		return false
 	}
 	declaration := ast.TSGetSymbolValueDeclaration(property)
+	if declaration == nil && ast.TSGetSymbolFlags(property)&ast.SymbolFlagsAlias != 0 && len(ast.TSGetSymbolDeclarations(property)) == 1 {
+		// Aliased exports such as `export { undefined_ as undefined }` are declared by their export specifier.
+		declaration = ast.TSGetSymbolDeclarations(property)[0]
+	}
 	return declaration != nil && declaration.Name() != nil && member.isMember(declaration.Name())
 }
 

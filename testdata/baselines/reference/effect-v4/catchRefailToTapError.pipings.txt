@@ -1,4 +1,4 @@
-==== /.src/catchRefailToTapError.ts (98 flows) ====
+==== /.src/catchRefailToTapError.ts (99 flows) ====
 
 === Piping Flow ===
 Location: 14:22 - 14:105
@@ -152,6 +152,20 @@ Transformations (1):
   [0] kind: dataFirst
       callee: Effect.andThen
       args: [Effect.fail(error)]
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 17:77 - 17:96
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
       outType: Effect<never, Error, never>
 
 === Piping Flow ===

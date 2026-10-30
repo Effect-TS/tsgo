@@ -1,0 +1,34 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectSucceedWithUndefined_namedImport.ts(8,28): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_namedImport.ts(11,30): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_namedImport.ts(15,33): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+
+
+==== /.src/effectSucceedWithUndefined_namedImport.ts (3 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectSucceedWithUndefined:suggestion
+    import type { Effect } from "effect"
+    import { succeed, succeed as renamedSucceed } from "effect/Effect"
+    
+    // MUST TRIGGER, diagnostic only: NO replacement quickfix, no value binding reaches Effect.undefined
+    // (the file imports only `succeed`, and the `Effect` import is type-only)
+    export const namedImport = succeed(undefined)
+                               ~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER, diagnostic only: NO replacement quickfix, the renamed import does not reach Effect.undefined either
+    export const renamedImport = renamedSucceed(undefined)
+                                 ~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER, diagnostic only: NO replacement quickfix, a const alias of the named import
+    const succeedAlias = succeed
+    export const namedImportAlias = succeedAlias(undefined)
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST NOT TRIGGER: the type-only import is still usable in types
+    export const annotated: Effect.Effect<number> = succeed(1)
+    

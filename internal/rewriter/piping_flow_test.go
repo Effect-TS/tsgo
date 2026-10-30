@@ -8,6 +8,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/bundled"
 	"github.com/microsoft/TypeScript/tsc/shim/compiler"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -109,36 +110,11 @@ export const value = `
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 			source := prefix + test.source
-			files := map[string]any{"/test.ts": &fstest.MapFile{Data: []byte(source)}}
-			if err := bundledeffect.MountEffect(bundledeffect.EffectV4, files); err != nil {
-				t.Fatal(err)
-			}
-			fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseSensitive))
-			options := &core.CompilerOptions{
-				Target: core.ScriptTargetESNext, Module: core.ModuleKindNodeNext, ModuleResolution: core.ModuleResolutionKindNodeNext,
-				Strict: core.TSTrue, SkipLibCheck: core.TSTrue,
-			}
-			program := compiler.NewProgram(compiler.ProgramOptions{
-				Config:         tsoptions.NewParsedCommandLine(options, []tspath.RootedFilePath{"/test.ts"}, nil, "/", tspath.CaseSensitive),
-				Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
-				SingleThreaded: core.TSTrue,
-			})
-			ctx := context.Background()
-			c, done := program.GetTypeChecker(ctx)
-			defer done()
-			sf := program.GetSourceFile("/test.ts")
-			declaration := sf.Statements.Nodes[len(sf.Statements.Nodes)-1].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].AsVariableDeclaration()
-			flow := typeparser.NewTypeParser(program, c).LongestPipingFlowAt(declaration.Initializer, true)
-			if flow == nil {
-				t.Fatal("expected a parsed flow")
-			}
+			fixture := newPipingFlowRewriteFixture(t, source)
+			sf, flow, tracker, converters := fixture.sf, fixture.flow, fixture.tracker, fixture.converters
 			if test.kind != "" && (flow.Transformations().Len() == 0 || flow.Transformations().At(flow.Transformations().Len()-1).Kind() != test.kind) {
 				t.Fatalf("expected terminal transformation kind %s", test.kind)
 			}
-			converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(tspath.RootedFilePath) *lsconv.LSPLineMap {
-				return lsconv.ComputeLSPLineStarts(source)
-			})
-			tracker := rewriter.NewTracker(change.NewTracker(ctx, options, lsutil.GetDefaultFormatCodeSettings(), converters))
 			if got := tracker.RemoveTrailingPipingFlowTransformation(sf, flow); got != test.remove {
 				t.Fatalf("removal = %v, want %v", got, test.remove)
 			}
@@ -166,4 +142,104 @@ export const value = `
 			}
 		})
 	}
+}
+
+func TestReplacePipingFlowPrefix(t *testing.T) {
+	t.Parallel()
+	const prefix = `import { Effect, pipe } from "effect"
+declare const source: Effect.Effect<number>
+declare const other: Effect.Effect<number>
+declare function unary(self: Effect.Effect<number>): Effect.Effect<number>
+declare function dataLast(n: number, self: Effect.Effect<number>): Effect.Effect<number>
+declare function dataLast(n: number): (self: Effect.Effect<number>) => Effect.Effect<number>
+declare function withOptions(self: Effect.Effect<number>, options?: { readonly n: number }): Effect.Effect<number>
+export const value = `
+	for _, test := range []struct {
+		name, source, expected string
+		kind                   typeparser.TransformationKind
+		count                  int
+		replace                bool
+	}{
+		{name: "unary call", source: `unary(source)`, expected: `other`, kind: typeparser.TransformationKindCall, count: 1, replace: true},
+		{name: "data-first call", source: `Effect.as(source, 1)`, expected: `other`, kind: typeparser.TransformationKindDataFirst, count: 1, replace: true},
+		{name: "data-last call", source: `dataLast(1, source)`, expected: `other`, kind: typeparser.TransformationKindDataLast, count: 1, replace: true},
+		{name: "call with optionals", source: `withOptions(source, { n: 1 })`, expected: `other`, kind: typeparser.TransformationKindCallWithOptionals, count: 1, replace: true},
+		{name: "pipe prefix", source: `pipe(source, Effect.as(1), Effect.as(2))`, expected: `pipe(other, Effect.as(2))`, kind: typeparser.TransformationKindPipe, count: 1, replace: true},
+		{name: "whole pipe", source: `pipe(source, Effect.as(1), Effect.as(2))`, expected: `other`, kind: typeparser.TransformationKindPipe, count: 2, replace: true},
+		{name: "method pipe prefix", source: `source.pipe(Effect.as(1), Effect.as(2))`, expected: `other.pipe(Effect.as(2))`, kind: typeparser.TransformationKindPipeable, count: 1, replace: true},
+		{name: "unsupported Effect fn", source: `Effect.fn(function*() { return 1 }, Effect.as(0))`, kind: typeparser.TransformationKindEffectFn, count: 1},
+		{name: "count out of range", source: `unary(source)`, kind: typeparser.TransformationKindCall, count: 2},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			source := prefix + test.source
+			fixture := newPipingFlowRewriteFixture(t, source)
+			if fixture.flow.Transformations().At(0).Kind() != test.kind {
+				t.Fatalf("expected first transformation kind %s, got %s", test.kind, fixture.flow.Transformations().At(0).Kind())
+			}
+			if got := fixture.tracker.ReplacePipingFlowPrefix(fixture.sf, fixture.flow, test.count, fixture.tracker.NewIdentifier("other")); got != test.replace {
+				t.Fatalf("replacement = %v, want %v", got, test.replace)
+			}
+			expected := source
+			if test.replace {
+				expected = prefix + test.expected
+			}
+			if got := fixture.apply(t); got != expected {
+				t.Fatalf("result = %q, want %q", got, expected)
+			}
+		})
+	}
+}
+
+// pipingFlowRewriteFixture holds the longest piping flow at the initializer of a
+// source's last declaration, and a tracker to rewrite it.
+type pipingFlowRewriteFixture struct {
+	source     string
+	sf         *ast.SourceFile
+	flow       *typeparser.PipingFlow
+	tracker    *rewriter.Tracker
+	converters *lsconv.Converters
+}
+
+func newPipingFlowRewriteFixture(t *testing.T, source string) *pipingFlowRewriteFixture {
+	t.Helper()
+	files := map[string]any{"/test.ts": &fstest.MapFile{Data: []byte(source)}}
+	if err := bundledeffect.MountEffect(bundledeffect.EffectV4, files); err != nil {
+		t.Fatal(err)
+	}
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseSensitive))
+	options := &core.CompilerOptions{
+		Target: core.ScriptTargetESNext, Module: core.ModuleKindNodeNext, ModuleResolution: core.ModuleResolutionKindNodeNext,
+		Strict: core.TSTrue, SkipLibCheck: core.TSTrue,
+	}
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config:         tsoptions.NewParsedCommandLine(options, []tspath.RootedFilePath{"/test.ts"}, nil, "/", tspath.CaseSensitive),
+		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+		SingleThreaded: core.TSTrue,
+	})
+	ctx := context.Background()
+	c, done := program.GetTypeChecker(ctx)
+	t.Cleanup(done)
+	sf := program.GetSourceFile("/test.ts")
+	declaration := sf.Statements.Nodes[len(sf.Statements.Nodes)-1].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].AsVariableDeclaration()
+	flow := typeparser.NewTypeParser(program, c).LongestPipingFlowAt(declaration.Initializer, true)
+	if flow == nil {
+		t.Fatal("expected a parsed flow")
+	}
+	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(tspath.RootedFilePath) *lsconv.LSPLineMap {
+		return lsconv.ComputeLSPLineStarts(source)
+	})
+	tracker := rewriter.NewTracker(change.NewTracker(ctx, options, lsutil.GetDefaultFormatCodeSettings(), converters))
+	return &pipingFlowRewriteFixture{source: source, sf: sf, flow: flow, tracker: tracker, converters: converters}
+}
+
+// apply returns the source with the tracker's edits applied.
+func (f *pipingFlowRewriteFixture) apply(t *testing.T) string {
+	t.Helper()
+	var changes []core.TextChange
+	for _, edit := range f.tracker.GetChanges()[f.sf.FileName()] {
+		span := lsconv.FromLSPRangeToOriginal(f.converters, f.sf, edit.Range)
+		changes = append(changes, core.TextChange{TextRange: span, NewText: edit.NewText})
+	}
+	return core.ApplyBulkEdits(f.source, changes)
 }

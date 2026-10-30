@@ -31,6 +31,7 @@
     "effecttsgo/effect-map-flatten": "warn",
     "effecttsgo/effect-map-void": "warn",
     "effecttsgo/effect-sleep-zero-to-yield-now": "warn",
+    "effecttsgo/effect-succeed-with-undefined": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
     "effecttsgo/error-payload-shadows-name": "warn",
     "effecttsgo/experimental-api-usage": "warn",

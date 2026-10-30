@@ -51,18 +51,22 @@ Transformations (1):
       outType: Effect<string, Error, never>
 
 === Piping Flow ===
-Location: 20:18 - 20:43
-Node: Effect.sleep("2 seconds")
+Location: 19:8 - 20:78
+Node: Effect.flatMap(Effect.sleep("2 seconds"), () => Effect.succeed("fallback"))
 Node Kind: KindCallExpression
 
 Subject: "2 seconds"
 Subject Type: "2 seconds"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.sleep
       args: (constant)
       outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [() => Effect.succeed("fallback")]
+      outType: Effect<string, never, never>
 
 === Piping Flow ===
 Location: 20:50 - 20:77
@@ -161,17 +165,21 @@ Transformations (1):
       outType: Effect<string, Error, never>
 
 === Piping Flow ===
-Location: 37:16 - 37:42
-Node: Effect.succeed("fallback")
+Location: 36:8 - 37:56
+Node: Effect.delay(Effect.succeed("fallback"), "5 seconds")
 Node Kind: KindCallExpression
 
 Subject: "fallback"
 Subject Type: "fallback"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.succeed
       args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: dataFirst
+      callee: Effect.delay
+      args: ["5 seconds"]
       outType: Effect<string, never, never>
 
 === Piping Flow ===
@@ -239,17 +247,21 @@ Transformations (2):
       outType: Effect<void | string, never, never>
 
 === Piping Flow ===
-Location: 50:16 - 50:42
-Node: Effect.succeed("fallback")
+Location: 49:28 - 50:56
+Node: Effect.delay(Effect.succeed("fallback"), "2 seconds")
 Node Kind: KindCallExpression
 
 Subject: "fallback"
 Subject Type: "fallback"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.succeed
       args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: dataFirst
+      callee: Effect.delay
+      args: ["2 seconds"]
       outType: Effect<string, never, never>
 
 === Piping Flow ===
@@ -267,36 +279,36 @@ Transformations (1):
       outType: Effect<string, string | Error, never>
 
 === Piping Flow ===
-Location: 55:8 - 56:27
-Node: Effect.sleep("1 second")
+Location: 55:8 - 56:72
+Node: Effect.sleep("1 second").pipe(Effect.andThen(Effect.fail("timeout")))
 Node Kind: KindCallExpression
 
 Subject: "1 second"
 Subject Type: "1 second"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.sleep
       args: (constant)
       outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [Effect.fail("timeout")]
+      outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 56:33 - 56:71
-Node: Effect.andThen(Effect.fail("timeout"))
+Location: 56:48 - 56:70
+Node: Effect.fail("timeout")
 Node Kind: KindCallExpression
 
 Subject: "timeout"
 Subject Type: "timeout"
 
-Transformations (2):
+Transformations (1):
   [0] kind: call
       callee: Effect.fail
       args: (constant)
       outType: Effect<never, string, never>
-  [1] kind: call
-      callee: Effect.andThen
-      args: (constant)
-      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<never, string | E, R>
 
 === Piping Flow ===
 Location: 58:23 - 61:3
@@ -345,6 +357,20 @@ Transformations (1):
       outType: Effect<void | string, Error, never>
 
 === Piping Flow ===
+Location: 64:50 - 64:75
+Node: Effect.sleep("1 second")
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
 Location: 69:29 - 72:2
 Node: Effect.raceFirst(\n  work.pipe(Effect.flatMap(() => Effect.sleep("1 second"))),\n  other\n)
 Node Kind: KindCallExpression
@@ -391,32 +417,22 @@ Transformations (1):
       outType: Effect<void | string, Error, never>
 
 === Piping Flow ===
-Location: 76:8 - 77:27
-Node: Effect.sleep("1 second")
+Location: 76:8 - 77:71
+Node: Effect.sleep("1 second").pipe(Effect.tap(() => Effect.log("awake")))
 Node Kind: KindCallExpression
 
 Subject: "1 second"
 Subject Type: "1 second"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.sleep
       args: (constant)
       outType: Effect<void, never, never>
-
-=== Piping Flow ===
-Location: 77:33 - 77:70
-Node: Effect.tap(() => Effect.log("awake"))
-Node Kind: KindCallExpression
-
-Subject: () => Effect.log("awake")
-Subject Type: () => Effect<void, never, never>
-
-Transformations (1):
-  [0] kind: call
+  [1] kind: pipeable
       callee: Effect.tap
-      args: (constant)
-      outType: <E, R>(self: Effect<void, E, R>) => Effect<void, E, R>
+      args: [() => Effect.log("awake")]
+      outType: Effect<void, never, never>
 
 === Piping Flow ===
 Location: 77:49 - 77:69

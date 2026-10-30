@@ -1,4 +1,4 @@
-==== /.src/effectSucceedWithVoid.ts (10 flows) ====
+==== /.src/effectSucceedWithVoid.ts (15 flows) ====
 
 === Piping Flow ===
 Location: 5:38 - 5:64
@@ -85,7 +85,81 @@ Transformations (1):
       outType: Effect<undefined, never, never>
 
 === Piping Flow ===
-Location: 24:38 - 24:56
+Location: 24:46 - 24:83
+Node: Effect.succeed<undefined>(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 27:41 - 27:70
+Node: Effect.succeed<void>(void 0)
+Node Kind: KindCallExpression
+
+Subject: void 0
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:33 - 30:79
+Node: pipe(undefined, Effect.succeed, Effect.as(1))
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+  [1] kind: pipe
+      callee: Effect.as
+      args: [1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 33:45 - 33:91
+Node: Effect.succeed<number | undefined>(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number | undefined, never, never>
+
+=== Piping Flow ===
+Location: 36:72 - 36:98
+Node: Effect.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 39:38 - 39:56
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -99,7 +173,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 27:38 - 27:62
+Location: 42:38 - 42:62
 Node: Effect.succeed("hello")
 Node Kind: KindCallExpression
 
@@ -113,7 +187,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 30:36 - 30:57
+Location: 45:36 - 45:57
 Node: Effect.succeed(null)
 Node Kind: KindCallExpression
 
@@ -127,7 +201,7 @@ Transformations (1):
       outType: Effect<null, never, never>
 
 === Piping Flow ===
-Location: 33:38 - 33:69
+Location: 48:38 - 48:69
 Node: Effect.succeed({ foo: "bar" })
 Node Kind: KindCallExpression
 

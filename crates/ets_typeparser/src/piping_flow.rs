@@ -853,7 +853,7 @@ impl TypeParser<'_> {
         None
     }
 
-    // go: internal/typeparser/piping_flow.go:613 TypeParser.PipingFlows a33345a2478b8ffb
+    // go: internal/typeparser/piping_flow.go:613 TypeParser.PipingFlows c3d24c068fd97aba
     // PipingFlows returns all piping flows found in a source file, sorted by source position.
     // Each source transformation occurrence belongs to at most one returned flow.
     //
@@ -1001,8 +1001,9 @@ impl TypeParser<'_> {
                         }
 
                         enqueue_children(&mut queue, data_first_result.callee);
+                        // The other arguments are values, not steps: each one roots its own flow.
                         for &arg in &data_first_result.args {
-                            enqueue_children(&mut queue, arg);
+                            queue.push(WorkItem { node: arg, parent_flow: None });
                         }
                         continue;
                     }
@@ -1038,8 +1039,9 @@ impl TypeParser<'_> {
                         }
 
                         enqueue_children(&mut queue, callee);
+                        // The optional arguments are values, not steps: each one roots its own flow.
                         for &arg in &optionals_result.args {
-                            enqueue_children(&mut queue, arg);
+                            queue.push(WorkItem { node: arg, parent_flow: None });
                         }
                         continue;
                     }
@@ -1118,7 +1120,7 @@ impl TypeParser<'_> {
         })
     }
 
-    // go: internal/typeparser/piping_flow.go:863 TypeParser.LongestPipingFlowAt 2e84bc6a64f6d80f
+    // go: internal/typeparser/piping_flow.go:865 TypeParser.LongestPipingFlowAt 2e84bc6a64f6d80f
     // LongestPipingFlowAt returns the longest normalized piping flow rooted at node.
     // Unlike PipingFlows, which discovers complete flows across a source file, this
     // method can start at an expression nested inside another flow without returning
@@ -1211,7 +1213,7 @@ impl TypeParser<'_> {
         })
     }
 
-    // go: internal/typeparser/piping_flow.go:947 TypeParser.pipingFlowSubjectAt 292214e8d471e9d3
+    // go: internal/typeparser/piping_flow.go:949 TypeParser.pipingFlowSubjectAt 292214e8d471e9d3
     pub(crate) fn piping_flow_subject_at(
         &mut self,
         node: P<Node>,
@@ -1232,7 +1234,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/piping_flow.go:963 TypeParser.buildPipeTransformations d4bae32887740224
+    // go: internal/typeparser/piping_flow.go:965 TypeParser.buildPipeTransformations d4bae32887740224
     // buildPipeTransformations builds PipingFlowTransformation slices from pipe call arguments.
     #[expect(
         clippy::unused_self,
@@ -1280,7 +1282,7 @@ impl TypeParser<'_> {
         transformations
     }
 
-    // go: internal/typeparser/piping_flow.go:1005 TypeParser.buildEffectFnTransformations 2a27058e0df45ca0
+    // go: internal/typeparser/piping_flow.go:1007 TypeParser.buildEffectFnTransformations 2a27058e0df45ca0
     // buildEffectFnTransformations builds PipingFlowTransformation slices from Effect.fn trailing arguments.
     // It also returns the subject type (from the first transformation's input parameter type).
     #[expect(
@@ -1331,7 +1333,7 @@ impl TypeParser<'_> {
         (transformations, subject_type)
     }
 
-    // go: internal/typeparser/piping_flow.go:1046 TypeParser.effectFnSubjectType cc1619dbecdc1047
+    // go: internal/typeparser/piping_flow.go:1048 TypeParser.effectFnSubjectType cc1619dbecdc1047
     // effectFnSubjectType is the first parameter type of the contextual signature
     // of the first trailing transformation.
     //
@@ -1360,7 +1362,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/piping_flow.go:1066 callTypeArguments 9918c7ce636290a7
+// go: internal/typeparser/piping_flow.go:1068 callTypeArguments 9918c7ce636290a7
 pub(crate) fn call_type_arguments(node: P<Node>) -> Option<P<NodeList>> {
     // Parenthesized call arguments (e.g. pipe(x, (Effect.as<...>(v)))) keep the
     // type arguments of the wrapped call.
@@ -1371,7 +1373,7 @@ pub(crate) fn call_type_arguments(node: P<Node>) -> Option<P<NodeList>> {
     node.as_call_expression().type_arguments()
 }
 
-// go: internal/typeparser/piping_flow.go:1076 pipingFlowTypeArguments 14420671cde7b020
+// go: internal/typeparser/piping_flow.go:1078 pipingFlowTypeArguments 14420671cde7b020
 pub(crate) fn piping_flow_type_arguments(node: P<Node>, callee: P<Node>) -> Option<P<NodeList>> {
     if let Some(type_arguments) = call_type_arguments(node) {
         return Some(type_arguments);
