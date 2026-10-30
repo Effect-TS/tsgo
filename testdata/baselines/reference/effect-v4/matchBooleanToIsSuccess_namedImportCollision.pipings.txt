@@ -1,0 +1,15 @@
+==== /.src/matchBooleanToIsSuccess_namedImportCollision.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:21 - 8:88
+Node: match(saveUser, { onFailure: () => false, onSuccess: () => true })
+Node Kind: KindCallExpression
+
+Subject: saveUser
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: match
+      args: [{ onFailure: () => false, onSuccess: () => true }]
+      outType: Effect<boolean, never, never>

@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/matchBooleanToIsSuccess_namedImportNoTarget.ts(8,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+
+
+==== /.src/matchBooleanToIsSuccess_namedImportNoTarget.ts (1 errors) ====
+    import { match } from "effect/Effect"
+    import type { Effect } from "effect/Effect"
+    
+    declare const saveUser: Effect<void, Error>
+    const isSuccess = 1
+    
+    // MUST TRIGGER: reported, but nothing reaches Effect.isSuccess without shadowing -> no quick fix
+    export const saved = match(saveUser, { onFailure: () => false, onSuccess: () => true })
+                         ~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+    export const flag = isSuccess
+    

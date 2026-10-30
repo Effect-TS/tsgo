@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/matchBooleanToIsSuccess_namedImport.ts(9,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_namedImport.ts(12,23): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+
+
+==== /.src/matchBooleanToIsSuccess_namedImport.ts (2 errors) ====
+    import { isFailure, match } from "effect/Effect"
+    import type { Effect } from "effect/Effect"
+    
+    declare const saveUser: Effect<void, Error>
+    
+    export const already = isFailure(saveUser)
+    
+    // MUST TRIGGER: named import of match, isSuccess not imported yet -> isSuccess added to the same import
+    export const saved = match(saveUser, { onFailure: () => false, onSuccess: () => true })
+                         ~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+    
+    // MUST TRIGGER: named import of match, isFailure already imported -> reuses isFailure
+    export const failed = match(saveUser, { onFailure: () => true, onSuccess: () => false })
+                          ~~~~~
+!!! suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+    

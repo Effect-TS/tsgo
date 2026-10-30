@@ -1,0 +1,99 @@
+==== /.src/matchBooleanToIsSuccess_fn.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 14:2
+Node: Effect.fn(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n)
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.match
+      args: [{\n    onFailure: () => false,\n    onSuccess: () => true\n  }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 17:28 - 25:2
+Node: Effect.fn("trySaveNamed")(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("trySaveNamed")(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n)
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.match
+      args: [{\n    onFailure: () => false,\n    onSuccess: () => true\n  }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 28:26 - 36:2
+Node: Effect.fnUntraced(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: () => true,\n    onSuccess: () => false\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fnUntraced(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: () => true,\n    onSuccess: () => false\n  })\n)
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: effectFnUntraced
+      callee: Effect.match
+      args: [{\n    onFailure: () => true,\n    onSuccess: () => false\n  }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 39:25 - 44:3
+Node: Effect.fn(function*() {\n  return yield* Effect.match(saveUser, {\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Effect.match(saveUser, {\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n}
+Subject Type: () => Generator<YieldWrap<Effect<boolean, never, never>>, boolean, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: () => Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 40:16 - 43:5
+Node: Effect.match(saveUser, {\n    onFailure: () => false,\n    onSuccess: () => true\n  })
+Node Kind: KindCallExpression
+
+Subject: saveUser
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{\n    onFailure: () => false,\n    onSuccess: () => true\n  }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 47:28 - 55:2
+Node: Effect.fn(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.matchCause({\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.matchCause({\n    onFailure: () => false,\n    onSuccess: () => true\n  })\n)
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.matchCause
+      args: [{\n    onFailure: () => false,\n    onSuccess: () => true\n  }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 58:30 - 66:2
+Node: Effect.fn(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: (error) => error.message.length === 0,\n    onSuccess: () => true\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  function*() {\n    return yield* saveUser\n  },\n  Effect.match({\n    onFailure: (error) => error.message.length === 0,\n    onSuccess: () => true\n  })\n)
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.match
+      args: [{\n    onFailure: (error) => error.message.length === 0,\n    onSuccess: () => true\n  }]
+      outType: Effect<boolean, never, never>
