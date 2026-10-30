@@ -24,6 +24,7 @@ mod provide_merge_all_to_array_test;
 mod quickfix_runner_test;
 mod refactor_runner_test;
 mod runner_test;
+mod suspend_fail_to_fail_sync_test;
 mod type_union_to_schema_union_test;
 
 use std::panic::{AssertUnwindSafe, catch_unwind};
@@ -101,6 +102,7 @@ fn main() {
     trials.extend(map_map_error_to_map_both_test::tests());
     trials.extend(manual_metric_tap_to_track_test::tests());
     trials.extend(fail_cause_to_constructor_test::tests());
+    trials.extend(suspend_fail_to_fail_sync_test::tests());
     trials.extend(type_union_to_schema_union_test::tests());
     trials.extend(provide_merge_all_to_array_test::tests());
     trials.extend(effect_succeed_with_undefined_test::tests());

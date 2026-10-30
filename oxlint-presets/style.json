@@ -63,6 +63,7 @@
     "effecttsgo/schema-union-of-literals": "warn",
     "effecttsgo/service-not-as-class": "warn",
     "effecttsgo/strict-boolean-expressions": "warn",
+    "effecttsgo/suspend-fail-to-fail-sync": "warn",
     "effecttsgo/sync-to-succeed": "warn",
     "effecttsgo/timeout-catch-tag-to-timeout-or-else": "warn",
     "effecttsgo/type-union-to-schema-union": "warn",

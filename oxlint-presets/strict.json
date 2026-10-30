@@ -89,6 +89,7 @@
     "effecttsgo/schema-struct-with-tag": "error",
     "effecttsgo/schema-sync-in-effect": "error",
     "effecttsgo/scope-in-layer-effect": "error",
+    "effecttsgo/suspend-fail-to-fail-sync": "error",
     "effecttsgo/sync-to-succeed": "error",
     "effecttsgo/timeout-catch-tag-to-timeout-or-else": "error",
     "effecttsgo/try-catch-in-effect-gen": "error",

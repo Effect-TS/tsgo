@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:47-10:61) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/suspendFailToFailSync_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import { Data, Effect } from "effect"
+
+class ValidationError extends Data.TaggedError("ValidationError")<{
+  readonly input: string
+}> {}
+
+export const rejectInput = (input: string) => Effect.failSync(() => new ValidationError({ input }))
+

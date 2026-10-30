@@ -642,5 +642,9 @@
     "`Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)": {
         "category": "Suggestion",
         "code": 377162
+    },
+    "`Effect.{0}` builds this {1} lazily directly instead of wrapping `Effect.{2}` in `Effect.suspend`. effect(suspendFailToFailSync)": {
+        "category": "Suggestion",
+        "code": 377163
     }
 }

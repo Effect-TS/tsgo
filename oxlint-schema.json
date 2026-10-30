@@ -2626,6 +2626,9 @@
         "effecttsgo/strict-effect-provide": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/suspend-fail-to-fail-sync": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/sync-to-succeed": {
           "$ref": "#/definitions/RuleNoConfig"
         },

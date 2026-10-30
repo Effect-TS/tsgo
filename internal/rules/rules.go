@@ -125,6 +125,7 @@ var All = []rule.Rule{
 	MapConstToAs,
 	ManualMetricTapToTrack,
 	FailCauseToConstructor,
+	SuspendFailToFailSync,
 	FlatMapToMap,
 	FlatMapToTap,
 	FlatMapIgnoredParamToAndThen,

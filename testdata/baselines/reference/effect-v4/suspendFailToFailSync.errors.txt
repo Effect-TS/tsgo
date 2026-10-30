@@ -1,0 +1,229 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/suspendFailToFailSync.ts(25,47): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(28,31): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(31,29): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(34,26): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(40,35): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(45,30): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(49,34): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(52,32): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(55,30): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(59,29): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(64,30): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(68,29): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(71,30): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(75,17): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(78,17): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(82,24): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(86,27): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(91,44): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(125,26): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+/.src/suspendFailToFailSync.ts(131,57): warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+
+
+==== /.src/suspendFailToFailSync.ts (20 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics suspendFailToFailSync:warning
+    import { Cause, Data, Effect, Exit, Layer, pipe, Stream } from "effect"
+    import * as Fx from "effect/Effect"
+    import { fail, suspend } from "effect/Effect"
+    
+    class ValidationError extends Data.TaggedError("ValidationError")<{
+      readonly input: string
+    }> {}
+    
+    class AppError {
+      readonly _tag = "AppError"
+    }
+    
+    declare const error: AppError
+    declare const defect: unknown
+    declare const cause: Cause.Cause<AppError>
+    declare const cond: boolean
+    declare const makeError: () => AppError
+    declare const makeFailure: () => Effect.Effect<never, AppError>
+    declare const log: (message: string) => void
+    
+    // MUST TRIGGER: issue example -> Effect.failSync(() => new ValidationError({ input }))
+    export const rejectInput = (input: string) => Effect.suspend(() => Effect.fail(new ValidationError({ input })))
+                                                  ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: identifier error value -> Effect.failSync(() => error)
+    export const failIdentifier = Effect.suspend(() => Effect.fail(error))
+                                  ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: side-effecting error constructor stays lazy -> Effect.failSync(() => makeError())
+    export const failComputed = Effect.suspend(() => Effect.fail(makeError()))
+                                ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: block-bodied arrow with a single return -> Effect.failSync(() => error)
+    export const blockBody = Effect.suspend(() => {
+                             ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+      return Effect.fail(error)
+    })
+    
+    // MUST TRIGGER: function-expression thunk keeps its form
+    // -> Effect.failSync(function() { return new Error("boom") })
+    export const functionExpression = Effect.suspend(function() {
+                                      ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+      return Effect.fail(new Error("boom"))
+    })
+    
+    // MUST TRIGGER: parenthesized inner call -> Effect.failSync(() => error)
+    export const parenthesized = Effect.suspend(() => (Effect.fail(error)))
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: explicit type argument on the inner fail is carried over
+    // -> Effect.failSync<AppError | string>(() => error)
+    export const innerTypeArgument = Effect.suspend(() => Effect.fail<AppError | string>(error))
+                                     ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: namespace import of effect/Effect keeps its qualifier -> Fx.failSync(() => error)
+    export const namespaceImport = Fx.suspend(() => Fx.fail(error))
+                                   ~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: mixed bindings that resolve to the same APIs -> Effect.failSync(() => error)
+    export const mixedBindings = Effect.suspend(() => Fx.fail(error))
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: named imports resolve to the same APIs (the fix falls back to the
+    // file's Effect module binding -> Effect.failSync(() => error))
+    export const namedImports = suspend(() => fail(error))
+                                ~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: const alias of Effect.suspend keeps its identity
+    // (the fix falls back to the file's Effect module binding -> Effect.failSync(() => error))
+    const suspendAlias = Effect.suspend
+    export const aliasedCallee = suspendAlias(() => Effect.fail(error))
+                                 ~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: report only, no fix. Effect.fail widens the literal union to string,
+    // while a failSync thunk keeps "A" | "B", so the rewrite would change the error type
+    export const literalUnion = Effect.suspend(() => Effect.fail(cond ? "A" : "B"))
+                                ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: a single literal widens to string in both forms -> Effect.failSync(() => "not found")
+    export const singleLiteral = Effect.suspend(() => Effect.fail("not found"))
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST TRIGGER: inside generators and pipelines
+    export const inGen = Effect.gen(function*() {
+      return yield* Effect.suspend(() => Effect.fail(error))
+                    ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    })
+    export const inFn = Effect.fn("inFn")(function*(input: string) {
+      return yield* Effect.suspend(() => Effect.fail(new ValidationError({ input })))
+                    ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    })
+    export const inPipe = pipe(
+      Effect.succeed(1),
+      Effect.flatMap(() => Effect.suspend(() => Effect.fail(error)))
+                           ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    )
+    
+    // MUST TRIGGER: the suspended effect is itself piped afterwards -> Effect.failSync(() => error).pipe(...)
+    export const pipedAfter = Effect.suspend(() => Effect.fail(error)).pipe(
+                              ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+      Effect.catch(() => Effect.succeed(0))
+    )
+    
+    // MUST TRIGGER: only the inner suspend; the outer thunk returns a suspend, not a fail
+    export const nested = Effect.suspend(() => Effect.suspend(() => Effect.fail(error)))
+                                               ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST NOT TRIGGER: v4 has no Effect.dieSync to suggest
+    export const rejectAsDefect = (input: string) => Effect.suspend(() => Effect.die(new Error(`bad input: ${input}`)))
+    export const dieIdentifier = Effect.suspend(() => Effect.die(defect))
+    
+    // MUST NOT TRIGGER: already the direct APIs
+    export const directFailSync = Effect.failSync(() => error)
+    export const directFail = Effect.fail(error)
+    
+    // MUST NOT TRIGGER: the thunk does real conditional or lazy work
+    export const conditional = (input: string) =>
+      Effect.suspend(() => input.length === 0 ? Effect.fail(new ValidationError({ input })) : Effect.succeed(input))
+    export const ifStatement = (input: string) =>
+      Effect.suspend(() => {
+        if (input.length === 0) {
+          return Effect.fail(new ValidationError({ input }))
+        }
+        return Effect.succeed(input)
+      })
+    export const priorStatement = Effect.suspend(() => {
+      log("failing")
+      return Effect.fail(error)
+    })
+    export const localBinding = Effect.suspend(() => {
+      const e = makeError()
+      return Effect.fail(e)
+    })
+    
+    // MUST NOT TRIGGER: the failure is transformed before being returned
+    export const transformed = Effect.suspend(() => Effect.fail(error).pipe(Effect.mapError((e) => e._tag)))
+    export const delayed = Effect.suspend(() => Effect.fail(error).pipe(Effect.delay("1 second")))
+    
+    // MUST TRIGGER: the thunk returns Effect.fail as a Function.pipe step -> Effect.failSync(() => error)
+    export const pipedBody = Effect.suspend(() => pipe(error, Effect.fail))
+                             ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    // MUST NOT TRIGGER: the thunk body is not a flow ending in Effect.fail
+    export const pointFree = Effect.suspend(makeFailure)
+    export const forwarded = Effect.suspend(() => makeFailure())
+    
+    // MUST TRIGGER: Effect.suspend as a Function.pipe step -> pipe(() => error, Effect.failSync)
+    export const outerPipe = pipe(() => Effect.fail(error), Effect.suspend)
+                                                            ~~~~~~~~~~~~~~
+!!! warning TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+    
+    // MUST NOT TRIGGER: other failure constructors are out of scope for this rule
+    export const failCause = Effect.suspend(() => Effect.failCause(cause))
+    
+    // MUST NOT TRIGGER: explicit type arguments on suspend pin the error channel,
+    // which Effect.failSync(() => error) would narrow
+    export const outerTypeArguments = Effect.suspend<never, AppError | string, never>(() => Effect.fail(error))
+    
+    // MUST NOT TRIGGER: a return type annotation on the thunk pins the error channel
+    export const annotatedThunk = Effect.suspend((): Effect.Effect<never, AppError | string> => Effect.fail(error))
+    
+    // MUST NOT TRIGGER: a type assertion on the body changes the inferred error type
+    export const asserted = Effect.suspend(() => Effect.fail(error) as Effect.Effect<never, AppError | string>)
+    
+    // MUST NOT TRIGGER: the thunk declares a parameter, so it is not a plain LazyArg thunk
+    export const withParameter = Effect.suspend((_?: unknown) => Effect.fail(error))
+    
+    // MUST NOT TRIGGER: Exit.fail is an Effect but not Effect.fail
+    export const exitFail = Effect.suspend(() => Exit.fail(error))
+    
+    // MUST NOT TRIGGER: suspend of other modules (Stream, Layer) is not Effect.suspend
+    export const streamSuspend = Stream.suspend(() => Stream.fail(error))
+    export const layerSuspend = Layer.suspend(() => Layer.effectDiscard(Effect.fail(error)))
+    
+    // MUST NOT TRIGGER: user-defined APIs with the same names
+    const Local = {
+      suspend: <A, E>(thunk: () => Effect.Effect<A, E>) => Effect.suspend(thunk),
+      fail: <E>(e: E) => Effect.fail(e)
+    }
+    export const localSuspend = Local.suspend(() => Effect.fail(error))
+    export const localFail = Effect.suspend(() => Local.fail(error))
+    

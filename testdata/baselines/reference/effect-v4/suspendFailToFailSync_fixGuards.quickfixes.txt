@@ -1,0 +1,147 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:17) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D2] (17:30-17:44) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D3] (20:29-20:43) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D4] (23:27-23:41) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+
+[D5] (10:50-10:57) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+
+[D6] (9:64-9:71) TS377163: `Effect.failSync` builds this error lazily directly instead of wrapping `Effect.fail` in `Effect.suspend`. effect(suspendFailToFailSync)
+  Fix 0: "Disable suspendFailToFailSync for this line"
+  Fix 1: "Disable suspendFailToFailSync for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/shapes.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import { Effect, pipe } from "effect"
+
+declare const error: Error
+declare const cond: boolean
+declare const tag: "A" | "B"
+
+// MUST TRIGGER: the suspended effect is a Function.pipe subject -> pipe(Effect.failSync(() => error), ...)
+export const pipeSubject = pipe(
+  Effect.failSync(() => error),
+  Effect.catch(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteral = Effect.suspend(() => Effect.fail({ _tag: "Oops" }))
+
+// MUST TRIGGER: a union-typed binding is inferred the same in both forms -> Effect.failSync(() => tag)
+export const unionBinding = Effect.suspend(() => Effect.fail(tag))
+
+// MUST TRIGGER (report only): Effect.fail widens "B" to string, a failSync thunk would keep it
+export const mixedUnion = Effect.suspend(() => Effect.fail(cond ? error : "B"))
+
+=== [D2] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/shapes.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import { Effect, pipe } from "effect"
+
+declare const error: Error
+declare const cond: boolean
+declare const tag: "A" | "B"
+
+// MUST TRIGGER: the suspended effect is a Function.pipe subject -> pipe(Effect.failSync(() => error), ...)
+export const pipeSubject = pipe(
+  Effect.suspend(() => Effect.fail(error)),
+  Effect.catch(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteral = Effect.failSync(() => ({ _tag: "Oops" }))
+
+// MUST TRIGGER: a union-typed binding is inferred the same in both forms -> Effect.failSync(() => tag)
+export const unionBinding = Effect.suspend(() => Effect.fail(tag))
+
+// MUST TRIGGER (report only): Effect.fail widens "B" to string, a failSync thunk would keep it
+export const mixedUnion = Effect.suspend(() => Effect.fail(cond ? error : "B"))
+
+=== [D3] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/shapes.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics suspendFailToFailSync:warning
+import { Effect, pipe } from "effect"
+
+declare const error: Error
+declare const cond: boolean
+declare const tag: "A" | "B"
+
+// MUST TRIGGER: the suspended effect is a Function.pipe subject -> pipe(Effect.failSync(() => error), ...)
+export const pipeSubject = pipe(
+  Effect.suspend(() => Effect.fail(error)),
+  Effect.catch(() => Effect.succeed(0))
+)
+
+// MUST TRIGGER: an object literal stays an expression body -> Effect.failSync(() => ({ _tag: "Oops" }))
+export const objectLiteral = Effect.suspend(() => Effect.fail({ _tag: "Oops" }))
+
+// MUST TRIGGER: a union-typed binding is inferred the same in both forms -> Effect.failSync(() => tag)
+export const unionBinding = Effect.failSync(() => tag)
+
+// MUST TRIGGER (report only): Effect.fail widens "B" to string, a failSync thunk would keep it
+export const mixedUnion = Effect.suspend(() => Effect.fail(cond ? error : "B"))
+
+=== [D4] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable suspendFailToFailSync for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable suspendFailToFailSync for entire file" ===
+skipped by default

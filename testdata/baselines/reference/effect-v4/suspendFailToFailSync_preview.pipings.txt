@@ -1,0 +1,43 @@
+==== /.src/suspendFailToFailSync_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:30 - 6:66
+Node: Data.TaggedError("ValidationError")
+Node Kind: KindCallExpression
+
+Subject: "ValidationError"
+Subject Type: "ValidationError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ValidationError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 10:46 - 10:112
+Node: Effect.suspend(() => Effect.fail(new ValidationError({ input })))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail(new ValidationError({ input }))
+Subject Type: () => Effect<never, ValidationError, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<never, ValidationError, never>
+
+=== Piping Flow ===
+Location: 10:67 - 10:111
+Node: Effect.fail(new ValidationError({ input }))
+Node Kind: KindCallExpression
+
+Subject: new ValidationError({ input })
+Subject Type: ValidationError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, ValidationError, never>
