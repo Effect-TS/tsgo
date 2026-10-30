@@ -1,0 +1,28 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:23-9:40) TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runPromiseWith"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.runPromiseWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics runProvidedContextToRunWith:warning
+import { Context, Effect } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+
+export const result = Effect.runPromiseWith(services)(program)
+

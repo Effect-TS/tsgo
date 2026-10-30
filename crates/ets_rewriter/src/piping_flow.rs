@@ -567,10 +567,11 @@ pub(crate) fn clone_node_list(f: &NodeFactory, list: Option<P<NodeList>>) -> Opt
 }
 
 impl Tracker {
-    // go: internal/rewriter/piping_flow.go:423 Tracker.CollapsePipingFlowTransformations ccedb96f40529b25
+    // go: internal/rewriter/piping_flow.go:424 Tracker.CollapsePipingFlowTransformations 02acf06b46fe674a
     // CollapsePipingFlowTransformations replaces an inclusive range of adjacent
     // steps with one operator at the last step. Nested applications are rewritten
-    // together so removing an input step cannot overlap the replacement edit.
+    // together so removing an input step cannot overlap the replacement edit. A
+    // last step with optional arguments keeps them after the input.
     //
     // Rust: tsrs's visitor callback is a `'static` closure, so it captures what Go's closure reads from the flow
     // (each step's kind and input node) instead of the flow, and the factory instead of the tracker.
@@ -664,9 +665,20 @@ impl Tracker {
                 }
                 return Some(piping_flow_operator(f, replacement));
             }
-            let Some(input) = inputs[index as usize] else {
+            let Some(mut input) = inputs[index as usize] else {
                 return Some(node);
             };
+            if index == end {
+                // The last step applies its input as an argument, so parentheses
+                // around a collapsed input step are dropped with that step.
+                let inner = ast::skip_parentheses(input);
+                if inner != input
+                    && let Some(&inner_index) = steps.get(&inner)
+                    && inner_index < end
+                {
+                    input = inner;
+                }
+            }
             let subject = visitor.visit_node(Some(input));
             if index < end {
                 return subject;
@@ -677,6 +689,25 @@ impl Tracker {
             match step_kind {
                 TransformationKind::DataFirst => arguments.insert(0, subject),
                 TransformationKind::DataLast => arguments.push(subject),
+                TransformationKind::CallWithOptionals => {
+                    // The optional arguments stay after the input, as in ReplacePipingFlowTransformation.
+                    let mut applied = vec![subject];
+                    for &argument in &node.as_call_expression().arguments().nodes()[1..] {
+                        // Rust: a visited argument of a kept call is never removed.
+                        applied.push(
+                            visitor
+                                .visit_node(Some(argument))
+                                .expect("an optional argument is kept"),
+                        );
+                    }
+                    return Some(f.new_call_expression(
+                        piping_flow_operator(f, replacement),
+                        None,
+                        None,
+                        f.new_node_list(applied),
+                        NodeFlags::None,
+                    ));
+                }
                 _ => {
                     return Some(f.new_call_expression(
                         piping_flow_operator(f, replacement),
@@ -707,7 +738,7 @@ impl Tracker {
     }
 }
 
-// go: internal/rewriter/piping_flow.go:508 isPipingFlowArgument e95d8061c1653ef2
+// go: internal/rewriter/piping_flow.go:525 isPipingFlowArgument e95d8061c1653ef2
 pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     matches!(
         kind,
@@ -718,7 +749,7 @@ pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     )
 }
 
-// go: internal/rewriter/piping_flow.go:516 nodeWithin baedec3b3d887301
+// go: internal/rewriter/piping_flow.go:533 nodeWithin baedec3b3d887301
 pub(crate) fn node_within(node: Option<P<Node>>, ancestor: P<Node>) -> bool {
     let mut node = node;
     while let Some(n) = node {

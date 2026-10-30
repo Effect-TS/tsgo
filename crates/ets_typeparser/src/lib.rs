@@ -27,6 +27,8 @@ mod checker_shim;
 mod constant_evaluation;
 mod context_tag;
 mod context_type;
+#[cfg(test)]
+mod context_type_test;
 mod could_be_strict_effect;
 #[cfg(test)]
 mod could_be_strict_effect_test;
@@ -179,6 +181,7 @@ pub(crate) use checker_shim::*;
 pub use checker_shim::{
     get_resolved_type_from_type_node, get_symbol_if_same_reference, get_symbol_of_declaration,
 };
+pub use context_type::*;
 pub use data_first_signature::*;
 pub use discover::*;
 pub use effect_context::*;

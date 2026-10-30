@@ -1,0 +1,51 @@
+==== /.src/runProvidedContextToRunWith_namedImports.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 10:21 - 10:43
+Node: Context.Tag("Config")
+Node Kind: KindCallExpression
+
+Subject: "Config"
+Subject Type: "Config"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Config", Shape>
+
+=== Piping Flow ===
+Location: 17:25 - 17:64
+Node: runPromise(provide(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: provide
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 20:31 - 20:73
+Node: runFork(provide(program, loadServices()))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: provide
+      args: [loadServices()]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: runFork
+      args: (constant)
+      outType: RuntimeFiber<string, never>

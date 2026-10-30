@@ -1,0 +1,1283 @@
+==== /.src/runProvidedContextToRunWith.ts (75 flows) ====
+
+=== Piping Flow ===
+Location: 8:15 - 8:49
+Node: Context.Service<Config>("Config")
+Node Kind: KindCallExpression
+
+Subject: "Config"
+Subject Type: "Config"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service
+      args: (constant)
+      outType: Service<Config, Config>
+
+=== Piping Flow ===
+Location: 14:16 - 17:3
+Node: Effect.gen(function*() {\n  const config = yield* Config\n  return `Connecting to ${config.apiUrl}`\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const config = yield* Config\n  return `Connecting to ${config.apiUrl}`\n}
+Subject Type: () => Generator<Effect<Config, never, Config>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Config>
+
+=== Piping Flow ===
+Location: 30:32 - 30:92
+Node: Effect.runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 34:39 - 34:111
+Node: Effect.runPromise(Effect.provideContext(program, services), { signal })
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: callWithOptionals
+      callee: Effect.runPromise
+      args: [{ signal }]
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 38:36 - 38:100
+Node: Effect.runPromiseExit(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromiseExit
+      args: (constant)
+      outType: Promise<Exit<string, never>>
+
+=== Piping Flow ===
+Location: 42:29 - 42:86
+Node: Effect.runSync(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 46:33 - 46:94
+Node: Effect.runSyncExit(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSyncExit
+      args: (constant)
+      outType: Exit<string, never>
+
+=== Piping Flow ===
+Location: 50:36 - 50:120
+Node: Effect.runFork(Effect.provideContext(program, services), { uninterruptible: true })
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: callWithOptionals
+      callee: Effect.runFork
+      args: [{ uninterruptible: true }]
+      outType: Fiber<string, never>
+
+=== Piping Flow ===
+Location: 55:33 - 57:3
+Node: Effect.runCallback(Effect.provideContext(program, services), {\n  onExit: (exit) => console.log(exit)\n})
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: callWithOptionals
+      callee: Effect.runCallback
+      args: [{\n  onExit: (exit) => console.log(exit)\n}]
+      outType: (interruptor?: number | undefined) => void
+
+=== Piping Flow ===
+Location: 56:20 - 56:38
+Node: console.log(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 61:30 - 61:92
+Node: Effect.runFork(program.pipe(Effect.provideContext(services)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runFork
+      args: (constant)
+      outType: Fiber<string, never>
+
+=== Piping Flow ===
+Location: 65:34 - 68:3
+Node: Effect.runPromise(program.pipe(\n  Effect.map((message) => message.length),\n  Effect.provideContext(services)\n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(message) => message.length]
+      outType: Effect<number, never, Config>
+  [1] kind: pipeable
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 72:36 - 76:3
+Node: Effect.runPromise(pipe(\n  program,\n  Effect.map((message) => message.length),\n  Effect.provideContext(services)\n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [(message) => message.length]
+      outType: Effect<number, never, Config>
+  [1] kind: pipe
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 80:31 - 80:91
+Node: Effect.runPromise(Effect.provideContext(services)(program))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 84:29 - 84:91
+Node: Effect.runPromise((Effect.provideContext(program, services)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 88:35 - 88:91
+Node: Effect.runPromise(Effect.setContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.setContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 92:36 - 92:94
+Node: Effect.runSync(program.pipe(Effect.setContext(services)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.setContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 96:38 - 96:103
+Node: program.pipe(Effect.provideContext(services), Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 100:40 - 105:2
+Node: pipe(\n  program,\n  Effect.map((message) => message.length),\n  Effect.provideContext(services),\n  Effect.runFork\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [(message) => message.length]
+      outType: Effect<number, never, Config>
+  [1] kind: pipe
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<number, never, never>
+  [2] kind: pipe
+      callee: Effect.runFork
+      args: (constant)
+      outType: Fiber<number, never>
+
+=== Piping Flow ===
+Location: 109:29 - 109:123
+Node: Effect.runPromise(Effect.provideContext(program, Context.make(Config, { apiUrl: "inline" })))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [Context.make(Config, { apiUrl: "inline" })]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 113:28 - 115:2
+Node: Effect.runPromise(\n  Effect.provideContext(program, Context.add(Context.empty(), Config, { apiUrl: "added" }))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [Context.add(Context.empty(), Config, { apiUrl: "added" })]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 114:33 - 114:91
+Node: Context.add(Context.empty(), Config, { apiUrl: "added" })
+Node Kind: KindCallExpression
+
+Subject: Context.empty()
+Subject Type: Context<never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Context.add
+      args: [Config, { apiUrl: "added" }]
+      outType: Context<Config>
+
+=== Piping Flow ===
+Location: 119:115 - 120:57
+Node: Effect.runFork(Effect.provideContext(effect, context))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<void, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [context]
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.runFork
+      args: (constant)
+      outType: Fiber<void, never>
+
+=== Piping Flow ===
+Location: 125:116 - 126:57
+Node: Effect.runFork(Effect.provideContext(effect, context))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<void, never, XR>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [context]
+      outType: Effect<void, never, Exclude<XR, XR>>
+  [1] kind: call
+      callee: Effect.runFork
+      args: (constant)
+      outType: Fiber<void, never>
+
+=== Piping Flow ===
+Location: 132:29 - 132:93
+Node: Effect.runPromise(Effect.provideContext(program, widerContext))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [widerContext]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 136:30 - 136:82
+Node: Fx.runPromise(Fx.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Fx.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Fx.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 141:29 - 141:82
+Node: runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 146:28 - 146:84
+Node: runPromiseNamed(provideContextNamed(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: provideContextNamed
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: runPromiseNamed
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 151:59 - 151:115
+Node: runPromiseNamed(provideContextNamed(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: provideContextNamed
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: runPromiseNamed
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 168:33 - 168:106
+Node: Effect.runSync(Effect.provideContext(switchServices(), currentServices))
+Node Kind: KindCallExpression
+
+Subject: switchServices()
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [currentServices]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 173:31 - 173:102
+Node: Effect.runPromise(program.pipe(Effect.provideContext(loadServices())))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provideContext
+      args: [loadServices()]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 178:31 - 178:98
+Node: Effect.runPromise(Effect.provideContext(program, holder.services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [holder.services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 182:38 - 182:104
+Node: Effect.runPromise(Effect.provideContext(loadServices())(program))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.provideContext
+      args: [loadServices()]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 186:41 - 186:112
+Node: program.pipe(Effect.provideContext(loadServices()), Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provideContext
+      args: [loadServices()]
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 192:19 - 192:55
+Node: Context.makeUnsafe<Config>(backing)
+Node Kind: KindCallExpression
+
+Subject: backing
+Subject Type: Map<string, unknown>
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.makeUnsafe
+      args: (constant)
+      outType: Context<Config>
+
+=== Piping Flow ===
+Location: 200:33 - 200:120
+Node: Effect.runSync(Effect.provideContext(refreshServices(), Context.mergeAll(unsafeBase)))
+Node Kind: KindCallExpression
+
+Subject: refreshServices()
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [Context.mergeAll(unsafeBase)]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 200:89 - 200:118
+Node: Context.mergeAll(unsafeBase)
+Node Kind: KindCallExpression
+
+Subject: unsafeBase
+Subject Type: Context<Config>
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.mergeAll
+      args: (constant)
+      outType: Context<Config>
+
+=== Piping Flow ===
+Location: 203:30 - 205:2
+Node: Effect.runSync(\n  Effect.provideContext(refreshServices(), Context.add(unsafeBase, Config, { apiUrl: "added" }))\n)
+Node Kind: KindCallExpression
+
+Subject: refreshServices()
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [Context.add(unsafeBase, Config, { apiUrl: "added" })]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 204:43 - 204:96
+Node: Context.add(unsafeBase, Config, { apiUrl: "added" })
+Node Kind: KindCallExpression
+
+Subject: unsafeBase
+Subject Type: Context<Config>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Context.add
+      args: [Config, { apiUrl: "added" }]
+      outType: Context<Config>
+
+=== Piping Flow ===
+Location: 210:35 - 210:104
+Node: Effect.runSync(Effect.provideContext(refreshServices(), unsafeBase))
+Node Kind: KindCallExpression
+
+Subject: refreshServices()
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [unsafeBase]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 214:27 - 216:2
+Node: Effect.runSync(\n  Effect.provideContext(refreshServices(), Context.merge(Context.empty(), Context.make(Config, { apiUrl: "merged" })))\n)
+Node Kind: KindCallExpression
+
+Subject: refreshServices()
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [Context.merge(Context.empty(), Context.make(Config, { apiUrl: "merged" }))]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 215:43 - 215:118
+Node: Context.merge(Context.empty(), Context.make(Config, { apiUrl: "merged" }))
+Node Kind: KindCallExpression
+
+Subject: Context.empty()
+Subject Type: Context<never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Context.merge
+      args: [Context.make(Config, { apiUrl: "merged" })]
+      outType: Context<Config>
+
+=== Piping Flow ===
+Location: 223:34 - 223:75
+Node: Effect.runPromiseWith(services)(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromiseWith(services)
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 224:31 - 224:69
+Node: Effect.runForkWith(services)(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runForkWith(services)
+      args: (constant)
+      outType: Fiber<string, never>
+
+=== Piping Flow ===
+Location: 225:38 - 225:84
+Node: program.pipe(Effect.runPromiseWith(services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.runPromiseWith
+      args: [services]
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 230:36 - 230:115
+Node: Effect.runPromiseWith(services)(Effect.provideContext(program, extraServices))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [extraServices]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromiseWith(services)
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 233:27 - 233:64
+Node: Effect.runPromise(Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 240:39 - 243:3
+Node: Effect.runPromise(program.pipe(\n  Effect.provideContext(services),\n  Effect.map((message) => message.length)\n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(message) => message.length]
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 246:51 - 250:3
+Node: Effect.runPromise(pipe(\n  program,\n  Effect.provideContext(services),\n  Effect.asVoid\n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: pipe
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 253:31 - 255:2
+Node: Effect.runPromise(\n  Effect.map(Effect.provideContext(program, services), (message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (3):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(message) => message.length]
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 258:33 - 258:113
+Node: program.pipe(Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 261:24 - 261:65
+Node: Effect.provideContext(program, services)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 262:34 - 262:69
+Node: Effect.runPromise(providedProgram)
+Node Kind: KindCallExpression
+
+Subject: providedProgram
+Subject Type: Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 265:22 - 265:63
+Node: Effect.provideContext(program, services)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 266:27 - 266:86
+Node: Effect.forkChild(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.forkChild
+      args: (constant)
+      outType: Effect<Fiber<string, never>, never, never>
+
+=== Piping Flow ===
+Location: 273:34 - 273:87
+Node: Effect.runPromise(Effect.provide(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 276:19 - 276:82
+Node: Layer.succeed(Config, { apiUrl: "https://layer.example.com" })
+Node Kind: KindCallExpression
+
+Subject: { apiUrl: "https://layer.example.com" }
+Subject Type: { apiUrl: string; }
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [Config]
+      outType: Layer<Config, never, never>
+
+=== Piping Flow ===
+Location: 277:32 - 277:87
+Node: Effect.runPromise(Effect.provide(program, ConfigLive))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [ConfigLive]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 280:30 - 280:111
+Node: Effect.runPromise(Effect.provideService(program, Config, { apiUrl: "service" }))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [Config, { apiUrl: "service" }]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 283:29 - 285:2
+Node: Effect.runPromise(\n  Effect.updateContext(program, (current: Context.Context<never>) => Context.merge(current, services))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.updateContext
+      args: [(current: Context.Context<never>) => Context.merge(current, services)]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 284:69 - 284:102
+Node: Context.merge(current, services)
+Node Kind: KindCallExpression
+
+Subject: current
+Subject Type: Context<never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Context.merge
+      args: [services]
+      outType: Context<Config>
+
+=== Piping Flow ===
+Location: 289:26 - 289:92
+Node: Effect.runPromise(Effect.provideContext(program, untypedContext))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [untypedContext]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 298:63 - 299:85
+Node: Effect.flatMap(contextEffect, (context) => Effect.provideContext(effect, context))
+Node Kind: KindCallExpression
+
+Subject: contextEffect
+Subject Type: Effect<Context<Config>, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(context) => Effect.provideContext(effect, context)]
+      outType: Effect<A, E, never>
+
+=== Piping Flow ===
+Location: 299:45 - 299:84
+Node: Effect.provideContext(effect, context)
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<A, E, Config>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [context]
+      outType: Effect<A, E, never>
+
+=== Piping Flow ===
+Location: 300:34 - 300:70
+Node: Effect.runPromise(provide(program))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: call
+      callee: provide
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 303:68 - 303:108
+Node: Effect.provideContext(effect, services)
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<A, E, Config>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<A, E, never>
+
+=== Piping Flow ===
+Location: 304:33 - 304:74
+Node: Effect.runPromise(withServices(program))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: call
+      callee: withServices
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 307:60 - 307:83
+Node: Effect.runFork(effect)
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<A, E, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runFork
+      args: (constant)
+      outType: Fiber<A, E>
+
+=== Piping Flow ===
+Location: 308:33 - 308:88
+Node: runForkLocal(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: runForkLocal
+      args: (constant)
+      outType: Fiber<string, never>
+
+=== Piping Flow ===
+Location: 311:16 - 311:49
+Node: ManagedRuntime.make(Layer.empty)
+Node Kind: KindCallExpression
+
+Subject: Layer.empty
+Subject Type: Layer<never, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: ManagedRuntime.make
+      args: (constant)
+      outType: ManagedRuntime<never, never>
+
+=== Piping Flow ===
+Location: 312:33 - 312:94
+Node: runtime.runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: runtime.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 316:99 - 317:43
+Node: Effect.provideContext(effect, context)
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<A, E, Config>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [context]
+      outType: Effect<A, E, never>
+
+=== Piping Flow ===
+Location: 318:53 - 318:79
+Node: Effect.runPromise(effect)
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<A, E, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<A>
+
+=== Piping Flow ===
+Location: 320:35 - 320:100
+Node: Effect.runPromise(LocalEffect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: LocalEffect.provideContext(program, services)
+Subject Type: Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 321:31 - 321:96
+Node: LocalEffect.runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Config>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: LocalEffect.runPromise
+      args: (constant)
+      outType: Promise<string>

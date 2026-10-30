@@ -1,0 +1,73 @@
+==== /.src/runProvidedContextToRunWith_directives.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 8:22 - 8:82
+Node: Effect.runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, "Config">
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 12:32 - 12:92
+Node: Effect.runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, "Config">
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 15:29 - 15:86
+Node: Effect.runSync(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, "Config">
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 20:24 - 20:84
+Node: Effect.runPromise(Effect.provideContext(program, services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, "Config">
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.provideContext
+      args: [services]
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>

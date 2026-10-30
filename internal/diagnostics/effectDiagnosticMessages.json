@@ -499,6 +499,10 @@
         "category": "Suggestion",
         "code": 377123
     },
+    "`Effect.{0}` of `Effect.{1}` re-implements `Effect.{2}`. Use `Effect.{2}(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)": {
+        "category": "Suggestion",
+        "code": 377166
+    },
     "`Effect.{0}` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)": {
         "category": "Suggestion",
         "code": 377124

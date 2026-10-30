@@ -1,0 +1,49 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:33-13:43) TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+
+[D2] (17:40-17:47) TS377166: `Effect.runFork` of `Effect.provideContext` re-implements `Effect.runForkWith`. Use `Effect.runForkWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runForkWith"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.runForkWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_namedImports.ts ---
+import type { Effect } from "effect"
+import { Context } from "effect"
+import { provideContext, runFork, runForkWith, runPromise } from "effect/Effect"
+
+// Only named imports and a type-only Effect import: the fix must never introduce
+// an `Effect.` reference that has no value binding.
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+
+// MUST TRIGGER - no fix (report only): no value binding in scope reaches
+// Effect.runPromiseWith (the Effect import is type-only)
+export const noValueReference = runPromise(provideContext(program, services))
+
+// MUST TRIGGER - the fix uses the runForkWith named import that is in scope
+// fix: runForkWith(services)(program)
+export const namedReplacementInScope = runForkWith(services)(program)
+
+// MUST NOT TRIGGER - already the *With form through a named import
+export const alreadyNamedWith = runForkWith(services)(program)
+
