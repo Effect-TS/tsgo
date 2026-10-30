@@ -1,0 +1,33 @@
+==== /.src/emptyCallbackToNever_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 3:22 - 5:2
+Node: Effect.log("worker started").pipe(\n  Effect.andThen(Effect.callback<never>(() => {}))\n)
+Node Kind: KindCallExpression
+
+Subject: "worker started"
+Subject Type: "worker started"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [Effect.callback<never>(() => {})]
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 4:18 - 4:50
+Node: Effect.callback<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>

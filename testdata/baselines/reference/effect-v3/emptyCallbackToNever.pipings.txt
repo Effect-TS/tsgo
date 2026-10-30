@@ -1,0 +1,89 @@
+==== /.src/emptyCallbackToNever.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 12:28 - 12:58
+Node: Effect.async<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.async
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 15:34 - 15:69
+Node: Effect.async<never>(function() {})
+Node Kind: KindCallExpression
+
+Subject: function() {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.async
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 18:24 - 18:47
+Node: Effect.async(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.async
+      args: (constant)
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 21:22 - 23:2
+Node: Effect.log("worker started").pipe(\n  Effect.andThen(Effect.async<never>(() => {}))\n)
+Node Kind: KindCallExpression
+
+Subject: "worker started"
+Subject Type: "worker started"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [Effect.async<never>(() => {})]
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 22:18 - 22:47
+Node: Effect.async<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.async
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 26:27 - 26:107
+Node: Effect.asyncEffect<never, never, never, never, never, never>(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.asyncEffect
+      args: (constant)
+      outType: Effect<never, never, never>

@@ -1,0 +1,937 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:58-6:73) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D2] (9:40-9:55) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D3] (12:66-12:81) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D4] (16:10-16:25) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D5] (24:18-24:33) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D6] (28:45-28:60) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D7] (31:50-31:72) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D8] (36:3-36:25) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D9] (41:38-41:53) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D10] (44:47-44:62) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D11] (47:30-47:45) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D12] (65:80-65:87) TS6133: 'aborted' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.never)
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D2] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.never)(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D3] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.never))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D4] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.never
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D5] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.never)
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D6] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = Effect.never
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D7] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = Effect.never
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D8] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(Effect.never, Effect.onInterrupt(() => Effect.log("stopped")))
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D9] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.never
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D10] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.never
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.callback<never>((..._args) => {})
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+
+
+=== [D11] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect, pipe } from "effect"
+
+// MUST TRIGGER: data-first value argument
+export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+
+// MUST TRIGGER: argument of a data-last step
+export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+
+// MUST TRIGGER: argument of a step inside pipe(...)
+export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+
+// MUST TRIGGER: inside an Effect.fn body
+export const effectFn = Effect.fn("effectFn")(function*() {
+  yield* Effect.callback<never>(() => {})
+})
+
+// MUST TRIGGER: argument of an Effect.fn pipeable step
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*() {
+    yield* Effect.log("x")
+  },
+  Effect.andThen(Effect.callback<never>(() => {}))
+)
+
+// MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+export const pipedRegister = pipe(() => {}, Effect.callback)
+
+// MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+
+// MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+export const pipedRegisterWithSteps = pipe(
+  () => {},
+  Effect.callback<never>,
+  Effect.onInterrupt(() => Effect.log("stopped"))
+)
+
+// MUST TRIGGER: two explicit `never` type arguments
+export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+
+// MUST TRIGGER: parenthesized `never` type argument
+export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+
+// MUST TRIGGER: rest parameter without a default
+export const restParameter = Effect.never
+
+// MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+
+// MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+const stringCallback = Effect.callback<string>
+export const aliasedNonNeverInstantiation = stringCallback(() => {})
+
+// MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+
+// MUST NOT TRIGGER: non-empty register piped into Effect.callback
+export const pipedNonEmptyRegister = pipe(() => {
+  console.log("parked")
+}, Effect.callback)
+
+// MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+
+// MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+type Never = never
+export const neverTypeAlias = Effect.callback<Never>(() => {})
+

@@ -26,6 +26,7 @@
     "effecttsgo/effect-sleep-zero-to-yield-now": "warn",
     "effecttsgo/effect-succeed-with-undefined": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
+    "effecttsgo/empty-callback-to-never": "warn",
     "effecttsgo/fail-cause-to-constructor": "warn",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-identity-to-flatten": "warn",

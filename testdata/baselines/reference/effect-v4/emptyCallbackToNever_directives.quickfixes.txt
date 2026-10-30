@@ -1,0 +1,114 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:29-6:44) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D2] (13:30-13:45) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D3] (17:32-17:47) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_directives.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:error
+import { Effect } from "effect"
+
+// MUST TRIGGER: the file-level directive reports at error severity
+export const fileSeverity = Effect.never
+
+// MUST NOT TRIGGER: the next-line directive disables this call only
+// @effect-diagnostics-next-line emptyCallbackToNever:off
+export const nextLineOff = Effect.callback<never>(() => {})
+
+// MUST TRIGGER: the next-line directive does not reach this call
+export const afterNextLine = Effect.callback<never>(() => {})
+
+// @effect-diagnostics emptyCallbackToNever:suggestion
+// MUST TRIGGER: a section directive lowers the severity to suggestion for the rest of the file
+export const sectionSeverity = Effect.callback<never>(() => {})
+
+// @effect-diagnostics emptyCallbackToNever:off
+// MUST NOT TRIGGER: a section directive turns the rule off for the rest of the file
+export const sectionOff = Effect.callback<never>(() => {})
+
+
+=== [D2] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_directives.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:error
+import { Effect } from "effect"
+
+// MUST TRIGGER: the file-level directive reports at error severity
+export const fileSeverity = Effect.callback<never>(() => {})
+
+// MUST NOT TRIGGER: the next-line directive disables this call only
+// @effect-diagnostics-next-line emptyCallbackToNever:off
+export const nextLineOff = Effect.callback<never>(() => {})
+
+// MUST TRIGGER: the next-line directive does not reach this call
+export const afterNextLine = Effect.never
+
+// @effect-diagnostics emptyCallbackToNever:suggestion
+// MUST TRIGGER: a section directive lowers the severity to suggestion for the rest of the file
+export const sectionSeverity = Effect.callback<never>(() => {})
+
+// @effect-diagnostics emptyCallbackToNever:off
+// MUST NOT TRIGGER: a section directive turns the rule off for the rest of the file
+export const sectionOff = Effect.callback<never>(() => {})
+
+
+=== [D3] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_directives.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:error
+import { Effect } from "effect"
+
+// MUST TRIGGER: the file-level directive reports at error severity
+export const fileSeverity = Effect.callback<never>(() => {})
+
+// MUST NOT TRIGGER: the next-line directive disables this call only
+// @effect-diagnostics-next-line emptyCallbackToNever:off
+export const nextLineOff = Effect.callback<never>(() => {})
+
+// MUST TRIGGER: the next-line directive does not reach this call
+export const afterNextLine = Effect.callback<never>(() => {})
+
+// @effect-diagnostics emptyCallbackToNever:suggestion
+// MUST TRIGGER: a section directive lowers the severity to suggestion for the rest of the file
+export const sectionSeverity = Effect.never
+
+// @effect-diagnostics emptyCallbackToNever:off
+// MUST NOT TRIGGER: a section directive turns the rule off for the rest of the file
+export const sectionOff = Effect.callback<never>(() => {})
+

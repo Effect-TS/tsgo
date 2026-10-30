@@ -1,0 +1,24 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:18-4:33) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_preview.ts ---
+import { Effect } from "effect"
+
+export const daemon = Effect.log("worker started").pipe(
+  Effect.andThen(Effect.never)
+)
+

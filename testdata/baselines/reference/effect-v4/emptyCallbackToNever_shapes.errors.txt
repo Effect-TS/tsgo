@@ -1,0 +1,109 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/emptyCallbackToNever_shapes.ts(6,58): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(9,40): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(12,66): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(16,10): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(24,18): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(28,45): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(31,50): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(36,3): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(41,38): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(44,47): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+/.src/emptyCallbackToNever_shapes.ts(47,30): warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+
+
+==== /.src/emptyCallbackToNever_shapes.ts (11 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics emptyCallbackToNever:warning
+    import { Effect, pipe } from "effect"
+    
+    // MUST TRIGGER: data-first value argument
+    export const dataFirst = Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+                                                             ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST TRIGGER: argument of a data-last step
+    export const dataLast = Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+                                           ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST TRIGGER: argument of a step inside pipe(...)
+    export const pipeFunction = pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+                                                                     ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST TRIGGER: inside an Effect.fn body
+    export const effectFn = Effect.fn("effectFn")(function*() {
+      yield* Effect.callback<never>(() => {})
+             ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    })
+    
+    // MUST TRIGGER: argument of an Effect.fn pipeable step
+    export const effectFnStep = Effect.fn("effectFnStep")(
+      function*() {
+        yield* Effect.log("x")
+      },
+      Effect.andThen(Effect.callback<never>(() => {}))
+                     ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    )
+    
+    // MUST TRIGGER: register piped into a bare Effect.callback step (fix: Effect.never)
+    export const pipedRegister = pipe(() => {}, Effect.callback)
+                                                ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST TRIGGER: register piped into an Effect.callback<never> instantiation
+    export const pipedRegisterNever = pipe(() => {}, Effect.callback<never>)
+                                                     ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST TRIGGER: register piped into Effect.callback with later steps (fix keeps them)
+    export const pipedRegisterWithSteps = pipe(
+      () => {},
+      Effect.callback<never>,
+      ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+      Effect.onInterrupt(() => Effect.log("stopped"))
+    )
+    
+    // MUST TRIGGER: two explicit `never` type arguments
+    export const twoNeverTypeArguments = Effect.callback<never, never>(() => {})
+                                         ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST TRIGGER: parenthesized `never` type argument
+    export const parenthesizedNeverTypeArgument = Effect.callback<(never)>(() => {})
+                                                  ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST TRIGGER: rest parameter without a default
+    export const restParameter = Effect.callback<never>((..._args) => {})
+                                 ~~~~~~~~~~~~~~~
+!!! warning TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    
+    // MUST NOT TRIGGER: parenthesized instantiation with a non-`never` type argument
+    export const parenthesizedNonNeverInstantiation = (Effect.callback<string>)(() => {})
+    
+    // MUST NOT TRIGGER: alias of an instantiation with a non-`never` type argument
+    const stringCallback = Effect.callback<string>
+    export const aliasedNonNeverInstantiation = stringCallback(() => {})
+    
+    // MUST NOT TRIGGER: register piped into an instantiation with a non-`never` type argument
+    export const pipedNonNeverInstantiation = pipe(() => {}, Effect.callback<string>)
+    
+    // MUST NOT TRIGGER: non-empty register piped into Effect.callback
+    export const pipedNonEmptyRegister = pipe(() => {
+      console.log("parked")
+    }, Effect.callback)
+    
+    // MUST NOT TRIGGER: a destructured parameter default is evaluated on every registration
+    export const destructuredParameterDefault = Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+    
+    // MUST NOT TRIGGER: a `never` alias is not the `never` keyword
+    type Never = never
+    export const neverTypeAlias = Effect.callback<Never>(() => {})
+    
