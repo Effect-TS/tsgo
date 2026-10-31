@@ -1,15 +1,16 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/runEffectInsideEffect_flows.ts(8,3): suggestion TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_flows.ts(13,28): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_flows.ts(18,14): suggestion TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_flows.ts(23,31): suggestion TS377025: `Effect.runFork` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runFork`. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_flows.ts(29,21): suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_flows.ts(9,3): suggestion TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_flows.ts(14,28): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_flows.ts(19,14): suggestion TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_flows.ts(24,31): suggestion TS377025: `Effect.runFork` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runFork`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_flows.ts(30,21): suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
 
 
 ==== /.src/runEffectInsideEffect_flows.ts (5 errors) ====
     // @effect-v3
+    // @effect-diagnostics discardedRunPromiseToRunFork:off
     import { Effect, pipe } from "effect"
     
     const task = Effect.succeed(1)

@@ -220,7 +220,7 @@ func writeEffectV4Project(t *testing.T, source string) string {
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true,
-    "plugins": [{ "name": "@effect/language-service" }]
+    "plugins": [{ "name": "@effect/language-service", "diagnosticSeverity": { "discardedRunPromiseToRunFork": "off" } }]
   },
   "files": ["main.ts"]
 }`)}

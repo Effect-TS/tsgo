@@ -1,23 +1,23 @@
 === Quick Fix Inventory ===
 
-[D1] (7:3-7:20) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D1] (8:3-8:20) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (12:28-12:42) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D2] (13:28-13:42) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D3] (17:14-17:31) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D3] (18:14-18:31) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D4] (22:31-22:45) TS377074: `Effect.runFork` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runForkWith`. effect(runEffectInsideEffect)
+[D4] (23:31-23:45) TS377074: `Effect.runFork` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runForkWith`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use the current services to run the Effect"
 
-[D5] (28:21-28:38) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+[D5] (29:21-29:38) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use the current services to run the Effect"
@@ -51,6 +51,7 @@ skipped by default
 === [D4] Fix 2: "Use the current services to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect_flows.ts ---
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect, pipe } from "effect"
 
 const task = Effect.succeed(1)
@@ -100,6 +101,7 @@ skipped by default
 === [D5] Fix 2: "Use the current services to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect_flows.ts ---
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect, pipe } from "effect"
 
 const task = Effect.succeed(1)

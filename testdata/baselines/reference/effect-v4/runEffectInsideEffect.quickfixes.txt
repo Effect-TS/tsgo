@@ -1,10 +1,10 @@
 === Quick Fix Inventory ===
 
-[D1] (14:21-14:35) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D1] (15:21-15:35) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (22:5-22:22) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+[D2] (23:5-23:22) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use the current services to run the Effect"
@@ -26,6 +26,7 @@ skipped by default
 === [D2] Fix 2: "Use the current services to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect.ts ---
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Data, Effect } from "effect"
 
 class DebuggerError extends Data.TaggedError("DebuggerError")<{

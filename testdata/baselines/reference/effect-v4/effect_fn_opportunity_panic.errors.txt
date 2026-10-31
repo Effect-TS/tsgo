@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/effect_fn_opportunity_panic.ts(4,33): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
-/.src/effect_fn_opportunity_panic.ts(11,33): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
-/.src/effect_fn_opportunity_panic.ts(61,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
-/.src/effect_fn_opportunity_panic.ts(83,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
+/.src/effect_fn_opportunity_panic.ts(5,33): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/effect_fn_opportunity_panic.ts(12,33): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/effect_fn_opportunity_panic.ts(62,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
+/.src/effect_fn_opportunity_panic.ts(84,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -25,6 +25,7 @@ Effect version: 4.0.2
     
 
 ==== /.src/effect_fn_opportunity_panic.ts (4 errors) ====
+    // @effect-diagnostics discardedRunPromiseToRunFork:off
     import { Data, Effect, flow, Layer, Schema, Context } from "effect"
     import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
     

@@ -39,6 +39,8 @@ const (
 	moduleDescriptorPlatformNode
 	moduleDescriptorPlatformBun
 	moduleDescriptorPlatformBrowser
+	moduleDescriptorRuntime
+	moduleDescriptorManagedRuntime
 	moduleDescriptorCount
 )
 

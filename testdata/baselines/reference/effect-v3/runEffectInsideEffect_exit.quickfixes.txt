@@ -1,29 +1,29 @@
 === Quick Fix Inventory ===
 
-[D1] (7:3-7:17) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D1] (8:3-8:17) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (8:3-8:21) TS377024: `Effect.runSyncExit` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D2] (9:3-9:21) TS377024: `Effect.runSyncExit` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D3] (15:5-15:22) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
-  Fix 0: "Disable runEffectInsideEffect for this line"
-  Fix 1: "Disable runEffectInsideEffect for entire file"
-  Fix 2: "Use a runtime to run the Effect"
-
-[D4] (16:5-16:26) TS377025: `Effect.runPromiseExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromiseExit`. effect(runEffectInsideEffect)
+[D3] (16:5-16:22) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
 
-[D5] (17:5-17:19) TS377025: `Effect.runSync` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSync`. effect(runEffectInsideEffect)
+[D4] (17:5-17:26) TS377025: `Effect.runPromiseExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromiseExit`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
 
-[D6] (18:5-18:23) TS377025: `Effect.runSyncExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSyncExit`. effect(runEffectInsideEffect)
+[D5] (18:5-18:19) TS377025: `Effect.runSync` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSync`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use a runtime to run the Effect"
+
+[D6] (19:5-19:23) TS377025: `Effect.runSyncExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSyncExit`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
@@ -52,6 +52,7 @@ skipped by default
 
 --- file:///.src/runEffectInsideEffect_exit.ts ---
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect } from "effect"
 
 const child = Effect.succeed(1)
@@ -85,6 +86,7 @@ skipped by default
 
 --- file:///.src/runEffectInsideEffect_exit.ts ---
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect } from "effect"
 
 const child = Effect.succeed(1)
@@ -118,6 +120,7 @@ skipped by default
 
 --- file:///.src/runEffectInsideEffect_exit.ts ---
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect } from "effect"
 
 const child = Effect.succeed(1)
@@ -151,6 +154,7 @@ skipped by default
 
 --- file:///.src/runEffectInsideEffect_exit.ts ---
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect } from "effect"
 
 const child = Effect.succeed(1)

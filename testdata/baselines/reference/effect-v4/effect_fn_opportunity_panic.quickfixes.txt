@@ -1,19 +1,19 @@
 === Quick Fix Inventory ===
 
-[D1] (4:33-4:37) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+[D1] (5:33-5:37) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D2] (11:33-11:37) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+[D2] (12:33-12:37) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D3] (61:7-61:14) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
+[D3] (62:7-62:14) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"JsonPlaceholder.getTodo\")"
 
-[D4] (83:7-83:14) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
+[D4] (84:7-84:14) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"JsonPlaceholder.getUser\")"
@@ -41,6 +41,7 @@ skipped by default
 === [D3] Fix 2: "Convert to Effect.fn(\"JsonPlaceholder.getTodo\")" ===
 
 --- file:///.src/effect_fn_opportunity_panic.ts ---
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Data, Effect, flow, Layer, Schema, Context } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 
@@ -180,6 +181,7 @@ skipped by default
 === [D4] Fix 2: "Convert to Effect.fn(\"JsonPlaceholder.getUser\")" ===
 
 --- file:///.src/effect_fn_opportunity_panic.ts ---
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Data, Effect, flow, Layer, Schema, Context } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 

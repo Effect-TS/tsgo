@@ -98,6 +98,7 @@ mod lazy_expression;
 mod lazy_expression_test;
 #[cfg(test)]
 mod location_independent_type_parser_test;
+mod managed_runtime;
 mod metric_api;
 #[cfg(test)]
 mod metric_api_test;
@@ -141,9 +142,11 @@ mod promise_type;
 mod readonly_results_test;
 mod reconstruct;
 mod result_dispatch;
+mod returned_function_call;
 mod returning_dispatch;
 #[cfg(test)]
 mod returning_dispatch_test;
+mod runtime_api;
 mod schema_type;
 mod scope_type;
 mod service_type;

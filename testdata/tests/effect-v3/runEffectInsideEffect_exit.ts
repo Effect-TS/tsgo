@@ -1,4 +1,5 @@
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect } from "effect"
 
 const child = Effect.succeed(1)

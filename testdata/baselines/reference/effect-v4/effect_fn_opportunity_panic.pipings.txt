@@ -1,7 +1,7 @@
 ==== /.src/effect_fn_opportunity_panic.ts (28 flows) ====
 
 === Piping Flow ===
-Location: 4:19 - 9:3
+Location: 5:19 - 10:3
 Node: Schema.Class<Todo>("Todo")({\n  userId: Schema.Finite,\n  id: Schema.Finite,\n  title: Schema.String,\n  completed: Schema.Boolean\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Class<Todo, Struct<{ readonly userId: Finite; readonly id: Finite; readonly title: String; readonly completed: Boolean; }>, {}>
 
 === Piping Flow ===
-Location: 11:19 - 15:3
+Location: 12:19 - 16:3
 Node: Schema.Class<User>("User")({\n  id: Schema.Finite,\n  name: Schema.String,\n  email: Schema.String\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Class<User, Struct<{ readonly id: Finite; readonly name: String; readonly email: String; }>, {}>
 
 === Piping Flow ===
-Location: 17:27 - 17:60
+Location: 18:27 - 18:60
 Node: Data.TaggedError("RequestError")
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "RequestError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 22:33 - 22:72
+Location: 23:33 - 23:72
 Node: Data.TaggedError("InvalidStatusError")
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "InvalidStatusError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 27:26 - 27:58
+Location: 28:26 - 28:58
 Node: Data.TaggedError("DecodeError")
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "DecodeError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 34:24 - 36:18
+Location: 35:24 - 37:18
 Node: Context.Service<ApiConfig, {\n  readonly baseUrl: string\n}>()("ApiConfig")
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: ServiceClass<ApiConfig, "ApiConfig", { readonly baseUrl: string; }>
 
 === Piping Flow ===
-Location: 38:22 - 40:3
+Location: 39:22 - 41:3
 Node: Layer.succeed(ApiConfig)({\n  baseUrl: "https://jsonplaceholder.typicode.com"\n})
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Layer<ApiConfig, never, never>
 
 === Piping Flow ===
-Location: 42:30 - 45:24
+Location: 43:30 - 46:24
 Node: Context.Service<JsonPlaceholder, {\n  readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>\n  readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>\n}>()("JsonPlaceholder")
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: ServiceClass<JsonPlaceholder, "JsonPlaceholder", { readonly getTodo: (id: number) => Effect<Todo, JsonPlaceholderError, never>; readonly getUser: (id: number) => Effect<User, JsonPlaceholderError, never>; }>
 
 === Piping Flow ===
-Location: 47:28 - 107:76
+Location: 48:28 - 108:76
 Node: Layer.effect(JsonPlaceholder)(\n  Effect.gen(function* () {\n    const config = yield* ApiConfig\n    const client = (yield* HttpClient.HttpClient).pipe(\n      HttpClient.mapRequest(\n        flow(\n          HttpClientRequest.prependUrl(config.baseUrl),\n          HttpClientRequest.acceptJson\n        )\n      ),\n      HttpClient.filterStatusOk\n    )\n\n    return {\n      getTodo: (id: number) => {\n        const path = `/todos/${id}`\n        const url = new URL(path, config.baseUrl).toString()\n\n        return client.get(path).pipe(\n          Effect.flatMap(HttpClientResponse.schemaBodyJson(Todo)),\n          Effect.mapError((cause) => {\n            if (cause._tag === "HttpClientError") {\n              if (cause.reason._tag === "StatusCodeError") {\n                return new InvalidStatusError({\n                  url,\n                  status: cause.reason.response.status\n                })\n              }\n\n              return new RequestError({ url, cause })\n            }\n\n            return new DecodeError({ url, cause })\n          })\n        )\n      },\n      getUser: (id: number) => {\n        const path = `/users/${id}`\n        const url = new URL(path, config.baseUrl).toString()\n\n        return client.get(path).pipe(\n          Effect.flatMap(HttpClientResponse.schemaBodyJson(User)),\n          Effect.mapError((cause) => {\n            if (cause._tag === "HttpClientError") {\n              if (cause.reason._tag === "StatusCodeError") {\n                return new InvalidStatusError({\n                  url,\n                  status: cause.reason.response.status\n                })\n              }\n\n              return new RequestError({ url, cause })\n            }\n\n            return new DecodeError({ url, cause })\n          })\n        )\n      }\n    }\n  })\n).pipe(Layer.provide(Layer.mergeAll(ApiConfigLive, FetchHttpClient.layer)))
 Node Kind: KindCallExpression
 
@@ -135,7 +135,7 @@ Transformations (3):
       outType: Layer<JsonPlaceholder, never, never>
 
 === Piping Flow ===
-Location: 50:19 - 58:6
+Location: 51:19 - 59:6
 Node: (yield* HttpClient.HttpClient).pipe(\n      HttpClient.mapRequest(\n        flow(\n          HttpClientRequest.prependUrl(config.baseUrl),\n          HttpClientRequest.acceptJson\n        )\n      ),\n      HttpClient.filterStatusOk\n    )
 Node Kind: KindCallExpression
 
@@ -153,7 +153,7 @@ Transformations (2):
       outType: With<HttpClientError, never>
 
 === Piping Flow ===
-Location: 52:14 - 53:55
+Location: 53:14 - 54:55
 Node: HttpClientRequest.prependUrl(config.baseUrl)
 Node Kind: KindCallExpression
 
@@ -167,7 +167,7 @@ Transformations (1):
       outType: (self: HttpClientRequest) => HttpClientRequest
 
 === Piping Flow ===
-Location: 65:15 - 81:10
+Location: 66:15 - 82:10
 Node: client.get(path).pipe(\n          Effect.flatMap(HttpClientResponse.schemaBodyJson(Todo)),\n          Effect.mapError((cause) => {\n            if (cause._tag === "HttpClientError") {\n              if (cause.reason._tag === "StatusCodeError") {\n                return new InvalidStatusError({\n                  url,\n                  status: cause.reason.response.status\n                })\n              }\n\n              return new RequestError({ url, cause })\n            }\n\n            return new DecodeError({ url, cause })\n          })\n        )
 Node Kind: KindCallExpression
 
@@ -189,7 +189,7 @@ Transformations (3):
       outType: Effect<Todo, DecodeError | InvalidStatusError | RequestError, never>
 
 === Piping Flow ===
-Location: 66:26 - 66:65
+Location: 67:26 - 67:65
 Node: HttpClientResponse.schemaBodyJson(Todo)
 Node Kind: KindCallExpression
 
@@ -203,7 +203,7 @@ Transformations (1):
       outType: <E>(self: HttpIncomingMessage<E>) => Effect<Todo, E | SchemaError, never>
 
 === Piping Flow ===
-Location: 87:15 - 103:10
+Location: 88:15 - 104:10
 Node: client.get(path).pipe(\n          Effect.flatMap(HttpClientResponse.schemaBodyJson(User)),\n          Effect.mapError((cause) => {\n            if (cause._tag === "HttpClientError") {\n              if (cause.reason._tag === "StatusCodeError") {\n                return new InvalidStatusError({\n                  url,\n                  status: cause.reason.response.status\n                })\n              }\n\n              return new RequestError({ url, cause })\n            }\n\n            return new DecodeError({ url, cause })\n          })\n        )
 Node Kind: KindCallExpression
 
@@ -225,7 +225,7 @@ Transformations (3):
       outType: Effect<User, DecodeError | InvalidStatusError | RequestError, never>
 
 === Piping Flow ===
-Location: 88:26 - 88:65
+Location: 89:26 - 89:65
 Node: HttpClientResponse.schemaBodyJson(User)
 Node Kind: KindCallExpression
 
@@ -239,7 +239,7 @@ Transformations (1):
       outType: <E>(self: HttpIncomingMessage<E>) => Effect<User, E | SchemaError, never>
 
 === Piping Flow ===
-Location: 109:16 - 126:2
+Location: 110:16 - 127:2
 Node: Effect.gen(function* () {\n  const api = yield* JsonPlaceholder\n  const [todo, user] = yield* Effect.all([api.getTodo(1), api.getUser(1)])\n\n  yield* Effect.log(`Todo #${todo.id}: ${todo.title}`)\n  yield* Effect.log(`Assigned to: ${user.name} <${user.email}>`)\n  yield* Effect.log(`Completed: ${todo.completed}`)\n}).pipe(\n  Effect.provide(JsonPlaceholderLive),\n  Effect.catchTags({\n    RequestError: (error) =>\n      Effect.log(`Request failed for ${error.url}: ${String(error.cause)}`),\n    InvalidStatusError: (error) =>\n      Effect.log(`Request to ${error.url} returned status ${error.status}`),\n    DecodeError: (error) =>\n      Effect.log(`Could not decode JSON from ${error.url}: ${String(error.cause)}`)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -261,7 +261,7 @@ Transformations (3):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 111:30 - 111:75
+Location: 112:30 - 112:75
 Node: Effect.all([api.getTodo(1), api.getUser(1)])
 Node Kind: KindCallExpression
 
@@ -275,7 +275,7 @@ Transformations (1):
       outType: Effect<[Todo, User], JsonPlaceholderError, never>
 
 === Piping Flow ===
-Location: 111:43 - 111:57
+Location: 112:43 - 112:57
 Node: api.getTodo(1)
 Node Kind: KindCallExpression
 
@@ -289,7 +289,7 @@ Transformations (1):
       outType: Effect<Todo, JsonPlaceholderError, never>
 
 === Piping Flow ===
-Location: 111:58 - 111:73
+Location: 112:58 - 112:73
 Node: api.getUser(1)
 Node Kind: KindCallExpression
 
@@ -303,7 +303,7 @@ Transformations (1):
       outType: Effect<User, JsonPlaceholderError, never>
 
 === Piping Flow ===
-Location: 113:9 - 113:55
+Location: 114:9 - 114:55
 Node: Effect.log(`Todo #${todo.id}: ${todo.title}`)
 Node Kind: KindCallExpression
 
@@ -317,7 +317,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 114:9 - 114:65
+Location: 115:9 - 115:65
 Node: Effect.log(`Assigned to: ${user.name} <${user.email}>`)
 Node Kind: KindCallExpression
 
@@ -331,7 +331,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 115:9 - 115:52
+Location: 116:9 - 116:52
 Node: Effect.log(`Completed: ${todo.completed}`)
 Node Kind: KindCallExpression
 
@@ -345,7 +345,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 119:29 - 120:76
+Location: 120:29 - 121:76
 Node: Effect.log(`Request failed for ${error.url}: ${String(error.cause)}`)
 Node Kind: KindCallExpression
 
@@ -359,7 +359,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 120:54 - 120:73
+Location: 121:54 - 121:73
 Node: String(error.cause)
 Node Kind: KindCallExpression
 
@@ -373,7 +373,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 121:35 - 122:76
+Location: 122:35 - 123:76
 Node: Effect.log(`Request to ${error.url} returned status ${error.status}`)
 Node Kind: KindCallExpression
 
@@ -387,7 +387,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 123:28 - 124:84
+Location: 124:28 - 125:84
 Node: Effect.log(`Could not decode JSON from ${error.url}: ${String(error.cause)}`)
 Node Kind: KindCallExpression
 
@@ -401,7 +401,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 124:62 - 124:81
+Location: 125:62 - 125:81
 Node: String(error.cause)
 Node Kind: KindCallExpression
 
@@ -415,7 +415,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 126:2 - 128:32
+Location: 127:2 - 129:32
 Node: program.pipe(Effect.runPromise)
 Node Kind: KindCallExpression
 

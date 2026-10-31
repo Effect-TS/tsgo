@@ -1,4 +1,5 @@
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Data, Effect } from "effect"
 
 class DebuggerError extends Data.TaggedError("DebuggerError")<{

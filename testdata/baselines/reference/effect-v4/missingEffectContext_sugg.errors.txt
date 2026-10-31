@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/missingEffectContext_sugg.ts(42,5): error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
-/.src/missingEffectContext_sugg.ts(42,5): error TS377004: This Effect requires a service that is missing from the expected Effect context: `DbConnection | FileSystem`. effect(missingEffectContext)
+/.src/missingEffectContext_sugg.ts(43,5): error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
+/.src/missingEffectContext_sugg.ts(43,5): error TS377004: This Effect requires a service that is missing from the expected Effect context: `DbConnection | FileSystem`. effect(missingEffectContext)
 
 
 ==== /.src/missingEffectContext_sugg.ts (2 errors) ====
+    // @effect-diagnostics discardedRunPromiseToRunFork:off
     import { Effect, Layer, Context, Data } from "effect"
     
     export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -52,7 +53,7 @@ Effect version: 4.0.2
 !!! error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
         ~~~~~~~~~~~~~~~~~
 !!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `DbConnection | FileSystem`. effect(missingEffectContext)
-!!! related TS377059 /.src/missingEffectContext_sugg.ts(40,5): Adjusting this layer composition could provide the missing service. effect(missingEffectContext)
-!!! related TS377060 /.src/missingEffectContext_sugg.ts(12,10): This layer provides the missing service FileSystem. effect(missingEffectContext)
+!!! related TS377059 /.src/missingEffectContext_sugg.ts(41,5): Adjusting this layer composition could provide the missing service. effect(missingEffectContext)
+!!! related TS377060 /.src/missingEffectContext_sugg.ts(13,10): This layer provides the missing service FileSystem. effect(missingEffectContext)
     )
     

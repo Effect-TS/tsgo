@@ -413,7 +413,7 @@ export const result = operation("value", 1)
         {
             t.fatal("expected signatures with no source declaration site");
         }
-        if !matches_pipeable_signature(
+        if !matches_pipeable_signature_exported(
             &mut tp,
             Some(synthetic_data_first),
             Some(synthetic_pipeable),
@@ -425,7 +425,7 @@ export const result = operation("value", 1)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:318 TestPipeableSignatureShapeDoesNotInstantiateTypes 9a3bebf0ab064059
+// go test: internal/typeparser/data_first_signature_test.go:318 TestPipeableSignatureShapeDoesNotInstantiateTypes 0d1054291f598b6e
 #[test]
 fn test_pipeable_signature_shape_does_not_instantiate_types() {
     run(|t| {
@@ -458,10 +458,10 @@ export const result = operation(box, String)
         let Some(pipeable) = pipeable else {
             t.fatal("expected data-first and pipeable signatures");
         };
-        if !pipeable_signature_shapes_match(&mut tp, Some(resolved), Some(pipeable), 0) {
+        if !pipeable_signature_shapes_match(&mut tp, Some(resolved), Some(pipeable), 0, false) {
             t.fatal("expected signatures to be alpha-equivalent");
         }
-        if !matches_pipeable_signature(&mut tp, Some(resolved), Some(pipeable), 0, None) {
+        if !matches_pipeable_signature_exported(&mut tp, Some(resolved), Some(pipeable), 0, None) {
             t.fatal("expected full matcher to recognize the signatures");
         }
         let before = tp.checker.total_instantiation_count;
@@ -471,13 +471,20 @@ export const result = operation(box, String)
                 raw_signature(Some(resolved)),
                 raw_signature(Some(pipeable)),
                 0,
+                false,
             ) {
                 t.fatal("expected repeated raw type comparison to match");
             }
-            if !pipeable_signature_shapes_match(&mut tp, Some(resolved), Some(pipeable), 0) {
+            if !pipeable_signature_shapes_match(&mut tp, Some(resolved), Some(pipeable), 0, false) {
                 t.fatal("expected cached signature comparison to match");
             }
-            if !matches_pipeable_signature(&mut tp, Some(resolved), Some(pipeable), 0, None) {
+            if !matches_pipeable_signature_exported(
+                &mut tp,
+                Some(resolved),
+                Some(pipeable),
+                0,
+                None,
+            ) {
                 t.fatal("expected repeated full signature comparison to match");
             }
         }

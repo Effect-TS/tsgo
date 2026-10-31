@@ -60,6 +60,7 @@ export const program = Effect.gen(function*() {
 
 // @filename: main.ts
 // @effect-diagnostics strictEffectProvide:warning
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { BrowserRuntime } from "@effect/platform-browser"
 import { BunRuntime } from "@effect/platform-bun"
 import { NodeRuntime } from "@effect/platform-node"
