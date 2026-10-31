@@ -9,7 +9,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
     EffectMajorVersion, LazyExpressionFlags, PipingFlow, PipingFlowSubject,
-    PipingFlowTransformation, TransformationKind, TypeParser,
+    PipingFlowTransformation, TypeParser,
 };
 
 use crate::*;
@@ -86,7 +86,7 @@ pub fn analyze_result_match_to_from_result(
     matches
 }
 
-// go: internal/rules/result_match_to_from_result.go:75 analyzeResultMatchStep 169b68d2c9e20211
+// go: internal/rules/result_match_to_from_result.go:75 analyzeResultMatchStep 12f8797ee19a53b2
 // analyzeResultMatchStep matches a Result.match step whose handlers only lift
 // the failure with Effect.fail and the success with Effect.succeed.
 //
@@ -97,21 +97,18 @@ pub(crate) fn analyze_result_match_step(
     sf: P<SourceFile>,
     transformation: &PipingFlowTransformation,
 ) -> Option<ResultMatchToFromResultMatch> {
-    match transformation.kind() {
-        TransformationKind::Pipe
-        | TransformationKind::Pipeable
-        | TransformationKind::DataFirst
-        | TransformationKind::DataLast
-        | TransformationKind::Call => {}
-        _ => return None,
-    }
-
     let callee = transformation.callee();
     if transformation.args().len() != 1 || !has_no_type_arguments(transformation) {
         return None;
     }
-    let (on_failure, on_success) = result_match_handlers(Some(*transformation.args().at(0)))?;
-    if !tp.is_node_reference_to_effect_result_module_api(callee, "match")
+    let handlers = ast::skip_parentheses(*transformation.args().at(0));
+    let on_failure = ets_typeparser::object_literal_property_initializer(handlers, "onFailure");
+    let on_success = ets_typeparser::object_literal_property_initializer(handlers, "onSuccess");
+    let (Some(on_failure), Some(on_success)) = (on_failure, on_success) else {
+        return None;
+    };
+    if handlers.as_object_literal_expression().properties.nodes().len() != 2
+        || !tp.is_node_reference_to_effect_result_module_api(callee, "match")
         || !is_effect_lift_handler(tp, on_success, "succeed")
         || !is_effect_lift_handler(tp, on_failure, "fail")
     {
@@ -127,56 +124,12 @@ pub(crate) fn analyze_result_match_step(
     })
 }
 
-// go: internal/rules/result_match_to_from_result.go:105 resultMatchHandlers 855832a8b0c4cc79
-//
-// Rust: Go's `(onFailure, onSuccess, ok)` is an `Option` of the first two.
-pub(crate) fn result_match_handlers(node: Option<P<Node>>) -> Option<(P<Node>, P<Node>)> {
-    let node = ast::skip_parentheses(node?);
-    if node.kind() != Kind::ObjectLiteralExpression {
-        return None;
-    }
-    let object = node.as_object_literal_expression();
-    if object.properties.nodes().len() != 2 {
-        return None;
-    }
-
-    let mut on_failure: Option<P<Node>> = None;
-    let mut on_success: Option<P<Node>> = None;
-    for &property_node in object.properties.nodes() {
-        if property_node.kind() != Kind::PropertyAssignment {
-            return None;
-        }
-        let name = property_node.name()?;
-        if name.kind() != Kind::Identifier {
-            return None;
-        }
-        let initializer = property_node.initializer()?;
-        match ets_shim::scanner::get_text_of_node(name).as_str() {
-            "onFailure" => {
-                if on_failure.is_some() {
-                    return None;
-                }
-                on_failure = Some(initializer);
-            }
-            "onSuccess" => {
-                if on_success.is_some() {
-                    return None;
-                }
-                on_success = Some(initializer);
-            }
-            _ => return None,
-        }
-    }
-
-    Some((on_failure?, on_success?))
-}
-
-// go: internal/rules/result_match_to_from_result.go:142 hasNoTypeArguments 1f39635fff140d67
+// go: internal/rules/result_match_to_from_result.go:97 hasNoTypeArguments 1f39635fff140d67
 pub(crate) fn has_no_type_arguments(transformation: &PipingFlowTransformation) -> bool {
     transformation.type_arguments().is_none_or(|arguments| arguments.nodes().is_empty())
 }
 
-// go: internal/rules/result_match_to_from_result.go:148 isEffectLiftStep 331913a366849bad
+// go: internal/rules/result_match_to_from_result.go:103 isEffectLiftStep 331913a366849bad
 // isEffectLiftStep reports whether a step applies Effect.<api> to its input
 // without extra or type arguments.
 //
@@ -191,7 +144,7 @@ pub(crate) fn is_effect_lift_step(
     }
 }
 
-// go: internal/rules/result_match_to_from_result.go:158 isEffectLiftHandler cb9f7bbbb858d191
+// go: internal/rules/result_match_to_from_result.go:113 isEffectLiftHandler cb9f7bbbb858d191
 // isEffectLiftHandler reports whether a Result.match handler passes its
 // argument unchanged to Effect.<api>: either the API itself, or a function of
 // one parameter whose returned flow only applies Effect.<api> to it.
@@ -232,7 +185,7 @@ pub(crate) fn is_effect_lift_handler(
     PipingFlow::matches_exactly(flow.as_ref(), tp, &is_parameter, &[&is_effect_lift_step(api)])
 }
 
-// go: internal/rules/result_match_to_from_result.go:182 analyzeResultGuardConditional d8e19988545e31a6
+// go: internal/rules/result_match_to_from_result.go:137 analyzeResultGuardConditional 8811d0eb3ad87132
 // analyzeResultGuardConditional matches a flow that applies Result.isSuccess or
 // Result.isFailure to an identifier and is the condition of a conditional
 // whose branches lift that identifier's .success with Effect.succeed and its
@@ -247,7 +200,7 @@ pub(crate) fn analyze_result_guard_conditional(
 ) -> Option<ResultMatchToFromResultMatch> {
     let is_failure = Cell::new(false);
     let is_guard = |tp: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| -> bool {
-        if transformation.args().len() != 0 || !has_no_type_arguments(transformation) {
+        if transformation.args().len() != 0 {
             return false;
         }
         if tp.is_node_reference_to_effect_result_module_api(transformation.callee(), "isSuccess") {
@@ -266,12 +219,7 @@ pub(crate) fn analyze_result_guard_conditional(
     }
 
     // The conditional is not a call chain, so it is read from the syntax tree.
-    let mut condition = flow.node();
-    while let Some(parent) = condition.parent()
-        && parent.kind() == Kind::ParenthesizedExpression
-    {
-        condition = parent;
-    }
+    let condition = flow.node();
     let parent = condition.parent()?;
     if parent.kind() != Kind::ConditionalExpression
         || parent.as_conditional_expression().condition() != condition
@@ -304,7 +252,7 @@ pub(crate) fn analyze_result_guard_conditional(
     })
 }
 
-// go: internal/rules/result_match_to_from_result.go:232 isResultMemberLift 391e2f4c0b3de763
+// go: internal/rules/result_match_to_from_result.go:184 isResultMemberLift 391e2f4c0b3de763
 // isResultMemberLift reports whether node is a flow that only applies
 // Effect.<api> to resultNode.<property>.
 //

@@ -18,7 +18,7 @@ pub static RESULT_MATCH_TO_FROM_RESULT_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_result_match_to_from_result_fix,
 });
 
-// go: internal/fixables/result_match_to_from_result.go:23 runResultMatchToFromResultFix 9c8436c9f3bd87f9
+// go: internal/fixables/result_match_to_from_result.go:23 runResultMatchToFromResultFix 9b4734df628cc889
 fn run_result_match_to_from_result_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_result_match_to_from_result(&mut ctx.type_parser, Some(sf)) {
@@ -46,6 +46,8 @@ fn run_result_match_to_from_result_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
                     return;
                 }
 
+                // A guard conditional is not a flow: the edit replaces the
+                // ConditionalExpression around the guard flow, which no flow edit reaches.
                 let replacement = tracker.new_call_expression(
                     callee,
                     None,
