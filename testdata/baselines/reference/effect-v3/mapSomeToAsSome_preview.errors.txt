@@ -1,12 +1,13 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/mapSomeToAsSome_preview.ts(8,3): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
-/.src/mapSomeToAsSome_preview.ts(12,3): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
-/.src/mapSomeToAsSome_preview.ts(15,26): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome_preview.ts(9,3): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome_preview.ts(13,3): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome_preview.ts(16,26): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 
 
 ==== /.src/mapSomeToAsSome_preview.ts (3 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics mapSomeToAsSome:warning
     import { Effect, Option } from "effect"

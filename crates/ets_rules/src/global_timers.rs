@@ -56,7 +56,7 @@ pub static GLOBAL_TIMERS_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_timers.go:52 runGlobalTimers a9b08edc4458b291
+// go: internal/rules/global_timers.go:52 runGlobalTimers 7368c9fd46e80920
 pub(crate) fn run_global_timers(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

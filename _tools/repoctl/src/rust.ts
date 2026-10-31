@@ -49,6 +49,21 @@ export const generateRustShims = Effect.fnUntraced(function*(repositoryRoot: str
   ], false, { GOWORK: "off" })
 })
 
+// Clippy with warnings denied, over the workspace and its tests: rustc warnings (unused imports, needless borrows)
+// fail here, before a test run that would otherwise pass with them.
+const runClippy = Effect.fnUntraced(function*(repositoryRoot: string) {
+  yield* Console.log("Running Clippy")
+  yield* runCommand("cargo", repositoryRoot, [
+    "clippy",
+    "--workspace",
+    "--all-targets",
+    "--locked",
+    "--",
+    "-D",
+    "warnings"
+  ])
+})
+
 // `repoctl tsrs check`: the release build still mirrors tsrs's release workflow (tsrsRelease.ts), then cargo.
 export const runRustChecks = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* requireTsrsCheckout(repositoryRoot)
@@ -57,11 +72,12 @@ export const runRustChecks = Effect.fnUntraced(function*(repositoryRoot: string)
   yield* runCommand("cargo", repositoryRoot, ["check", "--workspace", "--all-targets", "--locked"])
 })
 
-// `repoctl tsrs test`: the crate and unit tests, including the baseline runner (ets_effecttest: every case of
-// testdata/tests against testdata/baselines/reference; any mismatch fails, as in the Go runner; it prints a summary of
-// the baselines), then the tsrs binary.
+// `repoctl tsrs test`: Clippy (warnings denied), then the crate and unit tests, including the baseline runner
+// (ets_effecttest: every case of testdata/tests against testdata/baselines/reference; any mismatch fails, as in the Go
+// runner; it prints a summary of the baselines), then the tsrs binary.
 export const runRustTests = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* requireTsrsCheckout(repositoryRoot)
+  yield* runClippy(repositoryRoot)
   yield* Console.log("Running Rust tests")
   yield* runCommand("cargo", repositoryRoot, ["test", "--workspace", "--locked"])
   yield* runRustBinarySmokeTest(repositoryRoot)
@@ -128,14 +144,5 @@ export const runRustLint = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* requireTsrsCheckout(repositoryRoot)
   yield* Console.log("Checking Rust formatting")
   yield* runCommand("cargo", repositoryRoot, ["fmt", "--check"])
-  yield* Console.log("Running Clippy")
-  yield* runCommand("cargo", repositoryRoot, [
-    "clippy",
-    "--workspace",
-    "--all-targets",
-    "--locked",
-    "--",
-    "-D",
-    "warnings"
-  ])
+  yield* runClippy(repositoryRoot)
 })

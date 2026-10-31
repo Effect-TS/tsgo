@@ -249,6 +249,7 @@ func effectFnPipeArgumentText(arg *ast.Node, text string) string {
 		if node.Kind == ast.KindIdentifier {
 			identifiers[node.Text()] = true
 		}
+		//ets:ast-walk collects identifier names in a pipe argument to pick a fresh parameter name
 		node.ForEachChild(visit)
 		return false
 	}

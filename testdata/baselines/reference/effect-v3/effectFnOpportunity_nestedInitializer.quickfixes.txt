@@ -1,13 +1,13 @@
 === Quick Fix Inventory ===
 
-[D1] (10:3-10:9) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(value) { ... })`. effect(effectFnOpportunity)
+[D1] (11:3-11:9) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"decode\")"
 
-[D2] (22:3-22:7) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(path) { ... })`. effect(effectFnOpportunity)
+[D2] (23:3-23:7) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(path) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -25,6 +25,7 @@ skipped by default
 === [D1] Fix 2: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 declare const define: <A>(options: {
@@ -56,6 +57,7 @@ export const make = <A>(value: A): Definition<A> => ({
 === [D1] Fix 3: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 declare const define: <A>(options: {
@@ -87,6 +89,7 @@ export const make = <A>(value: A): Definition<A> => ({
 === [D1] Fix 4: "Convert to Effect.fn(\"decode\")" ===
 
 --- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 declare const define: <A>(options: {
@@ -124,6 +127,7 @@ skipped by default
 === [D2] Fix 2: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 declare const define: <A>(options: {
@@ -155,6 +159,7 @@ export const make = <A>(value: A): Definition<A> => ({
 === [D2] Fix 3: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 declare const define: <A>(options: {
@@ -186,6 +191,7 @@ export const make = <A>(value: A): Definition<A> => ({
 === [D2] Fix 4: "Convert to Effect.fn(\"read\")" ===
 
 --- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 declare const define: <A>(options: {

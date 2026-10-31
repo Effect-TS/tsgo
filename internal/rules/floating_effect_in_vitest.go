@@ -84,6 +84,7 @@ var FloatingEffectInVitest = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds vitest test and hook calls, which take a name plus callbacks or rest args
 			node.ForEachChild(walk)
 			return false
 		}

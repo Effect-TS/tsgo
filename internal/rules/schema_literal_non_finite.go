@@ -56,6 +56,7 @@ var SchemaLiteralNonFinite = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds Schema.Literal, Literals and tag calls to check their literal arguments
 			node.ForEachChild(walk)
 			return false
 		}

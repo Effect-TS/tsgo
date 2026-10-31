@@ -1,7 +1,7 @@
 ==== /.src/effectFnOpportunity_hoistedDeclaration.ts (18 flows) ====
 
 === Piping Flow ===
-Location: 4:23 - 4:33
+Location: 5:23 - 5:33
 Node: helper(1)
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 7:9 - 9:5
+Location: 8:9 - 10:5
 Node: Effect.gen(function* () {\n    return yield* Effect.succeed(n)\n  })
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 8:18 - 8:36
+Location: 9:18 - 9:36
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 16:9 - 19:5
+Location: 17:9 - 20:5
 Node: Effect.gen(function* () {\n    const value = yield* Effect.succeed(n)\n    return value + 1\n  })
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 17:25 - 17:43
+Location: 18:25 - 18:43
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 24:17 - 24:26
+Location: 25:17 - 25:26
 Node: local(n)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 28:11 - 31:7
+Location: 29:11 - 32:7
 Node: Effect.gen(function* () {\n      const result = yield* Effect.succeed(value)\n      return result + 1\n    })
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 29:28 - 29:50
+Location: 30:28 - 30:50
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 36:29 - 36:41
+Location: 37:29 - 37:41
 Node: captured(1)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 40:9 - 43:5
+Location: 41:9 - 44:5
 Node: Effect.gen(function* () {\n    const value = yield* Effect.succeed(n)\n    return value + 1\n  })
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 41:25 - 41:43
+Location: 42:25 - 42:43
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 47:28 - 47:39
+Location: 48:28 - 48:39
 Node: regular(1)
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 55:9 - 55:27
+Location: 56:9 - 56:27
 Node: Effect.succeed(e)
 Node Kind: KindCallExpression
 
@@ -183,7 +183,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 63:9 - 66:5
+Location: 64:9 - 67:5
 Node: Effect.gen(function* () {\n    const value = yield* Effect.succeed(n)\n    return value + 1\n  })
 Node Kind: KindCallExpression
 
@@ -197,7 +197,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 64:25 - 64:43
+Location: 65:25 - 65:43
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -211,7 +211,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 74:9 - 77:5
+Location: 75:9 - 78:5
 Node: Effect.gen(function* () {\n    const value = yield* Effect.succeed(n)\n    return value + 1\n  })
 Node Kind: KindCallExpression
 
@@ -225,7 +225,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 75:25 - 75:43
+Location: 76:25 - 76:43
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -239,7 +239,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 81:28 - 81:37
+Location: 82:28 - 82:37
 Node: later(1)
 Node Kind: KindCallExpression
 

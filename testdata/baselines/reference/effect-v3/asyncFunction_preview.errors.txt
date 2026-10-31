@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/asyncFunction_preview.ts(4,24): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction_preview.ts(5,24): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
 
 
 ==== /.src/asyncFunction_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics asyncFunction:warning
     

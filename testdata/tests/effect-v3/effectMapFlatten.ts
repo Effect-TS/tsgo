@@ -1,3 +1,4 @@
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 // Should trigger: pipeable style

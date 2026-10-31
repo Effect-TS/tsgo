@@ -1,7 +1,7 @@
 ==== /.src/processEnvInEffect.ts (3 flows) ====
 
 === Piping Flow ===
-Location: 6:24 - 8:3
+Location: 7:24 - 9:3
 Node: Effect.gen(function*() {\n  return process.env.SECRET\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<string | undefined, never, never>
 
 === Piping Flow ===
-Location: 11:23 - 13:3
+Location: 12:23 - 14:3
 Node: Effect.fn("envInFn")(function*() {\n  return process.env["API_KEY"]\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: () => Effect<string | undefined, never, never>
 
 === Piping Flow ===
-Location: 22:32 - 25:3
+Location: 23:32 - 26:3
 Node: Effect.gen(function*() {\n  const fn = () => process.env.NODE_ENV\n  return fn\n})
 Node Kind: KindCallExpression
 

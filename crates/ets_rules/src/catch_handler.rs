@@ -6,7 +6,7 @@ use ets_typeparser::{
 
 use crate::prefer_succeed_some_or_none::is_option_none_call;
 
-// go: internal/rules/catch_handler.go:11 catchHandlerIgnoresError 0e06c2826155fdb7
+// go: internal/rules/catch_handler.go:11 catchHandlerIgnoresError 378a622d08553fbc
 // Restrict callbacks to arrows so the caught error cannot be observed through
 // a function's arguments object. An unused plain parameter can be removed.
 pub(crate) fn catch_handler_ignores_error(
@@ -67,7 +67,7 @@ pub(crate) fn catch_handler_ignores_error(
         && arrow.type_().is_none_or(|type_node| !uses_parameter(tp, symbol, type_node))
 }
 
-// go: internal/rules/catch_handler.go:48 catchHandlerReturnsSucceedNone e385e74113256572
+// go: internal/rules/catch_handler.go:49 catchHandlerReturnsSucceedNone e385e74113256572
 // catchHandlerReturnsSucceedNone reports whether a catch handler's complete
 // returned flow is Effect.succeedNone or Effect.succeed(Option.none()).
 pub(crate) fn catch_handler_returns_succeed_none(

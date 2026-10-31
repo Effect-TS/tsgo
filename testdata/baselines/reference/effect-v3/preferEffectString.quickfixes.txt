@@ -1,203 +1,203 @@
 === Quick Fix Inventory ===
 
-[D1] (6:7-6:9) TS377150: Consider effect/String.at instead of native String.at. Returns Option, with None replacing undefined. effect(preferEffectString)
+[D1] (7:7-7:9) TS377150: Consider effect/String.at instead of native String.at. Returns Option, with None replacing undefined. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D2] (7:7-7:13) TS377150: Consider effect/String.charAt instead of native String.charAt. Returns Option, with None replacing the empty string for an out-of-range index. effect(preferEffectString)
+[D2] (8:7-8:13) TS377150: Consider effect/String.charAt instead of native String.charAt. Returns Option, with None replacing the empty string for an out-of-range index. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D3] (8:7-8:17) TS377150: Consider effect/String.charCodeAt instead of native String.charCodeAt. Returns Option<number>, with None replacing NaN. effect(preferEffectString)
+[D3] (9:7-9:17) TS377150: Consider effect/String.charCodeAt instead of native String.charCodeAt. Returns Option<number>, with None replacing NaN. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D4] (9:7-9:18) TS377150: Consider effect/String.codePointAt instead of native String.codePointAt. Returns Option<number>, with None replacing undefined. effect(preferEffectString)
+[D4] (10:7-10:18) TS377150: Consider effect/String.codePointAt instead of native String.codePointAt. Returns Option<number>, with None replacing undefined. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D5] (10:7-10:13) TS377150: Consider effect/String.concat instead of native String.concat. Accepts exactly one string argument; native concat accepts any number of arguments and converts non-strings. effect(preferEffectString)
+[D5] (11:7-11:13) TS377150: Consider effect/String.concat instead of native String.concat. Accepts exactly one string argument; native concat accepts any number of arguments and converts non-strings. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D6] (11:7-11:15) TS377150: Consider effect/String.endsWith instead of native String.endsWith. Same runtime behavior. effect(preferEffectString)
+[D6] (12:7-12:15) TS377150: Consider effect/String.endsWith instead of native String.endsWith. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D7] (12:7-12:15) TS377150: Consider effect/String.includes instead of native String.includes. Same runtime behavior. effect(preferEffectString)
+[D7] (13:7-13:15) TS377150: Consider effect/String.includes instead of native String.includes. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D8] (13:7-13:14) TS377150: Consider effect/String.indexOf instead of native String.indexOf. Returns Option<number>, with None replacing -1; there is no position parameter. effect(preferEffectString)
+[D8] (14:7-14:14) TS377150: Consider effect/String.indexOf instead of native String.indexOf. Returns Option<number>, with None replacing -1; there is no position parameter. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D9] (14:7-14:18) TS377150: Consider effect/String.lastIndexOf instead of native String.lastIndexOf. Returns Option<number>, with None replacing -1; there is no position parameter. effect(preferEffectString)
+[D9] (15:7-15:18) TS377150: Consider effect/String.lastIndexOf instead of native String.lastIndexOf. Returns Option<number>, with None replacing -1; there is no position parameter. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D10] (15:7-15:20) TS377150: Consider effect/String.localeCompare instead of native String.localeCompare. Returns an Ordering of -1, 0, or 1; Effect v4 types locales as Array<string>, so a single locale string needs an array. effect(preferEffectString)
+[D10] (16:7-16:20) TS377150: Consider effect/String.localeCompare instead of native String.localeCompare. Returns an Ordering of -1, 0, or 1; Effect v4 types locales as Array<string>, so a single locale string needs an array. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D11] (16:7-16:12) TS377150: Consider effect/String.match instead of native String.match. Returns Option, with None replacing null. effect(preferEffectString)
+[D11] (17:7-17:12) TS377150: Consider effect/String.match instead of native String.match. Returns Option, with None replacing null. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D12] (17:7-17:15) TS377150: Consider effect/String.matchAll instead of native String.matchAll. Requires a RegExp; string patterns are not accepted. effect(preferEffectString)
+[D12] (18:7-18:15) TS377150: Consider effect/String.matchAll instead of native String.matchAll. Requires a RegExp; string patterns are not accepted. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D13] (18:7-18:16) TS377150: Consider effect/String.normalize instead of native String.normalize. Same runtime behavior. effect(preferEffectString)
+[D13] (19:7-19:16) TS377150: Consider effect/String.normalize instead of native String.normalize. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D14] (19:7-19:13) TS377150: Consider effect/String.padEnd instead of native String.padEnd. Same runtime behavior. effect(preferEffectString)
+[D14] (20:7-20:13) TS377150: Consider effect/String.padEnd instead of native String.padEnd. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D15] (20:7-20:15) TS377150: Consider effect/String.padStart instead of native String.padStart. Same runtime behavior. effect(preferEffectString)
+[D15] (21:7-21:15) TS377150: Consider effect/String.padStart instead of native String.padStart. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D16] (21:7-21:13) TS377150: Consider effect/String.repeat instead of native String.repeat. In Effect v4, a negative count returns an empty string instead of throwing RangeError. effect(preferEffectString)
+[D16] (22:7-22:13) TS377150: Consider effect/String.repeat instead of native String.repeat. In Effect v4, a negative count returns an empty string instead of throwing RangeError. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D17] (22:7-22:14) TS377150: Consider effect/String.replace instead of native String.replace. Requires a string replacement; replacer callbacks are not accepted. effect(preferEffectString)
+[D17] (23:7-23:14) TS377150: Consider effect/String.replace instead of native String.replace. Requires a string replacement; replacer callbacks are not accepted. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D18] (23:7-23:17) TS377150: Consider effect/String.replaceAll instead of native String.replaceAll. Requires a string replacement; replacer callbacks are not accepted. effect(preferEffectString)
+[D18] (24:7-24:17) TS377150: Consider effect/String.replaceAll instead of native String.replaceAll. Requires a string replacement; replacer callbacks are not accepted. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D19] (24:7-24:13) TS377150: Consider effect/String.search instead of native String.search. Returns Option<number>, with None replacing -1. effect(preferEffectString)
+[D19] (25:7-25:13) TS377150: Consider effect/String.search instead of native String.search. Returns Option<number>, with None replacing -1. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D20] (25:7-25:12) TS377150: Consider effect/String.slice instead of native String.slice. Same runtime behavior. effect(preferEffectString)
+[D20] (26:7-26:12) TS377150: Consider effect/String.slice instead of native String.slice. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D21] (26:7-26:12) TS377150: Consider effect/String.split instead of native String.split. Returns a NonEmptyArray, so splitting an empty string by "" returns [""] instead of []; there is no limit parameter. effect(preferEffectString)
+[D21] (27:7-27:12) TS377150: Consider effect/String.split instead of native String.split. Returns a NonEmptyArray, so splitting an empty string by "" returns [""] instead of []; there is no limit parameter. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D22] (27:7-27:17) TS377150: Consider effect/String.startsWith instead of native String.startsWith. Same runtime behavior. effect(preferEffectString)
+[D22] (28:7-28:17) TS377150: Consider effect/String.startsWith instead of native String.startsWith. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D23] (28:7-28:16) TS377150: Consider effect/String.substring instead of native String.substring. Same runtime behavior. effect(preferEffectString)
+[D23] (29:7-29:16) TS377150: Consider effect/String.substring instead of native String.substring. Same runtime behavior. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D24] (29:7-29:24) TS377150: Consider effect/String.toLocaleLowerCase instead of native String.toLocaleLowerCase. Same runtime behavior; Effect v4 types the locale as string or Array<string>, without Intl.Locale. effect(preferEffectString)
+[D24] (30:7-30:24) TS377150: Consider effect/String.toLocaleLowerCase instead of native String.toLocaleLowerCase. Same runtime behavior; Effect v4 types the locale as string or Array<string>, without Intl.Locale. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D25] (30:7-30:24) TS377150: Consider effect/String.toLocaleUpperCase instead of native String.toLocaleUpperCase. Same runtime behavior; Effect v4 types the locale as string or Array<string>, without Intl.Locale. effect(preferEffectString)
+[D25] (31:7-31:24) TS377150: Consider effect/String.toLocaleUpperCase instead of native String.toLocaleUpperCase. Same runtime behavior; Effect v4 types the locale as string or Array<string>, without Intl.Locale. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D26] (31:7-31:18) TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)
+[D26] (32:7-32:18) TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D27] (32:7-32:18) TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
+[D27] (33:7-33:18) TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D28] (33:7-33:11) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D28] (34:7-34:11) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D29] (34:7-34:16) TS377150: Consider effect/String.trimStart instead of native String.trimStart. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D29] (35:7-35:16) TS377150: Consider effect/String.trimStart instead of native String.trimStart. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D30] (35:7-35:14) TS377150: Consider effect/String.trimEnd instead of native String.trimEnd. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D30] (36:7-36:14) TS377150: Consider effect/String.trimEnd instead of native String.trimEnd. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D31] (36:7-36:15) TS6387: The signature '(): string' of 'value.trimLeft' is deprecated.
+[D31] (37:7-37:15) TS6387: The signature '(): string' of 'value.trimLeft' is deprecated.
   (no quick fixes)
 
-[D32] (36:7-36:15) TS377150: Consider effect/String.trimStart instead of native String.trimLeft. Deprecated alias of trimStart; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D32] (37:7-37:15) TS377150: Consider effect/String.trimStart instead of native String.trimLeft. Deprecated alias of trimStart; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D33] (37:7-37:16) TS6387: The signature '(): string' of 'value.trimRight' is deprecated.
+[D33] (38:7-38:16) TS6387: The signature '(): string' of 'value.trimRight' is deprecated.
   (no quick fixes)
 
-[D34] (37:7-37:16) TS377150: Consider effect/String.trimEnd instead of native String.trimRight. Deprecated alias of trimEnd; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D34] (38:7-38:16) TS377150: Consider effect/String.trimEnd instead of native String.trimRight. Deprecated alias of trimEnd; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D35] (39:7-39:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D35] (40:7-40:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D36] (40:7-40:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D36] (41:7-41:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D37] (41:7-41:16) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D37] (42:7-42:16) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D38] (42:9-42:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D38] (43:9-43:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D39] (43:7-43:11) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D39] (44:7-44:11) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D40] (45:11-45:15) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D40] (46:11-46:15) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D41] (46:12-46:18) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D41] (47:12-47:18) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D42] (48:9-48:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D42] (49:9-49:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D43] (50:10-50:14) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D43] (51:10-51:14) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D44] (52:9-52:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D44] (53:9-53:13) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D45] (54:7-54:11) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D45] (55:7-55:11) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D46] (55:10-55:21) TS6133: 'constrained' is declared but its value is never read.
+[D46] (56:10-56:21) TS6133: 'constrained' is declared but its value is never read.
   (no quick fixes)
 
-[D47] (55:69-55:73) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+[D47] (56:69-56:73) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
-[D48] (62:7-62:15) TS6133: 'uncalled' is declared but its value is never read.
+[D48] (63:7-63:15) TS6133: 'uncalled' is declared but its value is never read.
   (no quick fixes)
 
-[D49] (65:7-65:13) TS6387: The signature '(from: number, length?: number | undefined): string' of 'value.substr' is deprecated.
+[D49] (66:7-66:13) TS6387: The signature '(from: number, length?: number | undefined): string' of 'value.substr' is deprecated.
   (no quick fixes)
 
-[D50] (67:7-67:13) TS6387: The signature '(name: string): string' of 'value.anchor' is deprecated.
+[D50] (68:7-68:13) TS6387: The signature '(name: string): string' of 'value.anchor' is deprecated.
   (no quick fixes)
 
-[D51] (82:7-82:16) TS6196: 'Inherited' is declared but never used.
+[D51] (83:7-83:16) TS6196: 'Inherited' is declared but never used.
   (no quick fixes)
 
-[D52] (86:9-86:13) TS6133: 'trim' is declared but its value is never read.
+[D52] (87:9-87:13) TS6133: 'trim' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===

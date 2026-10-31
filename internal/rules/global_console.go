@@ -74,6 +74,7 @@ func runGlobalConsole(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			}
 		}
 
+		//ets:ast-walk finds console.* calls, whose rest parameter keeps them out of flow steps
 		node.ForEachChild(walk)
 		return false
 	}

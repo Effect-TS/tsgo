@@ -95,6 +95,7 @@ func runGlobalTimers(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			}
 		}
 
+		//ets:ast-walk finds setTimeout/setInterval-style calls, whose rest parameter keeps them out of flows
 		node.ForEachChild(walk)
 		return false
 	}

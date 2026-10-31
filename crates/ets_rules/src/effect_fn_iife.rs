@@ -80,7 +80,7 @@ pub struct EffectFnIifeResult {
     pub trace_expression: Option<P<Node>>,
 }
 
-// go: internal/rules/effect_fn_iife.go:64 AnalyzeEffectFnIife 528dc13d3cd036b3
+// go: internal/rules/effect_fn_iife.go:64 AnalyzeEffectFnIife c6d632b543e0af96
 // AnalyzeEffectFnIife finds all Effect.fn or Effect.fnUntraced calls that are
 // immediately invoked (IIFE pattern) in the given source file.
 //
@@ -115,7 +115,7 @@ pub fn analyze_effect_fn_iife(
     matches
 }
 
-// go: internal/rules/effect_fn_iife.go:90 parseEffectFnIife 80958b783b6fa31d
+// go: internal/rules/effect_fn_iife.go:91 parseEffectFnIife 80958b783b6fa31d
 pub(crate) fn parse_effect_fn_iife(
     tp: &mut TypeParser<'_>,
     node: P<Node>,

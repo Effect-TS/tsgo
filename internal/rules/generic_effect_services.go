@@ -32,6 +32,7 @@ var GenericEffectServices = rule.Rule{
 			nodeToVisit = append(nodeToVisit, child)
 			return false
 		}
+		//ets:ast-walk finds generic class declarations that extend a service tag
 		ctx.SourceFile.AsNode().ForEachChild(pushChild)
 
 		for len(nodeToVisit) > 0 {
@@ -53,6 +54,7 @@ var GenericEffectServices = rule.Rule{
 			}
 
 			// Enqueue children for further traversal
+			//ets:ast-walk finds generic class declarations that extend a service tag
 			node.ForEachChild(pushChild)
 		}
 
