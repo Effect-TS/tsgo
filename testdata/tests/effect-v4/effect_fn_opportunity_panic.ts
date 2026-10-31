@@ -15,6 +15,7 @@
 }
 
 // @filename: effect_fn_opportunity_panic.ts
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Data, Effect, flow, Layer, Schema, Context } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 

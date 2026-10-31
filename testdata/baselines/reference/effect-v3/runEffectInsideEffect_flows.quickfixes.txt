@@ -1,27 +1,23 @@
 === Quick Fix Inventory ===
 
-[D1] (8:3-8:20) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D1] (9:3-9:20) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (8:3-8:20) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
-  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
-  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
-
-[D3] (13:28-13:42) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D2] (14:28-14:42) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D4] (18:14-18:31) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D3] (19:14-19:31) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D5] (23:31-23:45) TS377025: `Effect.runFork` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runFork`. effect(runEffectInsideEffect)
+[D4] (24:31-24:45) TS377025: `Effect.runFork` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runFork`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
 
-[D6] (29:21-29:38) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+[D5] (30:21-30:38) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
@@ -34,10 +30,10 @@ skipped by default
 === [D1] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
 
-=== [D2] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+=== [D2] Fix 0: "Disable runEffectInsideEffect for this line" ===
 skipped by default
 
-=== [D2] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+=== [D2] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
 
 === [D3] Fix 0: "Disable runEffectInsideEffect for this line" ===
@@ -52,16 +48,11 @@ skipped by default
 === [D4] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
 
-=== [D5] Fix 0: "Disable runEffectInsideEffect for this line" ===
-skipped by default
-
-=== [D5] Fix 1: "Disable runEffectInsideEffect for entire file" ===
-skipped by default
-
-=== [D5] Fix 2: "Use a runtime to run the Effect" ===
+=== [D4] Fix 2: "Use a runtime to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect_flows.ts ---
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect, pipe } from "effect"
 
 const task = Effect.succeed(1)
@@ -102,16 +93,17 @@ export const inMapCallback = Effect.succeed(1).pipe(
 export const atEntryPoint = task.pipe(Effect.runPromise)
 
 
-=== [D6] Fix 0: "Disable runEffectInsideEffect for this line" ===
+=== [D5] Fix 0: "Disable runEffectInsideEffect for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+=== [D5] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Use a runtime to run the Effect" ===
+=== [D5] Fix 2: "Use a runtime to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect_flows.ts ---
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect, pipe } from "effect"
 
 const task = Effect.succeed(1)

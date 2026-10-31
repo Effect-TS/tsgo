@@ -1,18 +1,13 @@
 === Quick Fix Inventory ===
 
-[D1] (15:21-15:35) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D1] (16:21-16:35) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (23:5-23:22) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+[D2] (24:5-24:22) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
-
-[D3] (23:5-23:22) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
-  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
-  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
-  Fix 2: "Replace with Effect.runFork"
 
 === Quick Fix Application Results ===
 
@@ -32,6 +27,7 @@ skipped by default
 
 --- file:///.src/runEffectInsideEffect.ts ---
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Data, Effect } from "effect"
 
 class DebuggerError extends Data.TaggedError("DebuggerError")<{
@@ -56,43 +52,6 @@ const effectRuntime = yield* Effect.runtime<never>();
       catch: (e) => new DebuggerError({ cause: e })
     })
     Runtime.runPromise(effectRuntime)(check)
-    //        ^- no runPromise, use a runtime instead
-  }
-})
-
-
-=== [D3] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
-skipped by default
-
-=== [D3] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
-skipped by default
-
-=== [D3] Fix 2: "Replace with Effect.runFork" ===
-
---- file:///.src/runEffectInsideEffect.ts ---
-// @effect-v3
-import { Data, Effect } from "effect"
-
-class DebuggerError extends Data.TaggedError("DebuggerError")<{
-  cause: unknown
-}> {}
-
-export const program = Effect.gen(function*() {
-  const response = yield* Effect.tryPromise({
-    try: () => fetch("http://localhost:9229"),
-    catch: (e) => new DebuggerError({ cause: e })
-  })
-  const data = yield* Effect.promise(() => response.json())
-
-  const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
-  //                        ^- do not runSync in here
-
-  websocket.onmessage = (event) => {
-    const check = Effect.tryPromise({
-      try: () => fetch(event.data as string),
-      catch: (e) => new DebuggerError({ cause: e })
-    })
-    Effect.runFork(check)
     //        ^- no runPromise, use a runtime instead
   }
 })

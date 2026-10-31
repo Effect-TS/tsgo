@@ -1,7 +1,7 @@
 ==== /.src/missingEffectContext_pipe.ts (1 flows) ====
 
 === Piping Flow ===
-Location: 7:6 - 10:69
+Location: 8:6 - 11:69
 Node: pipe(ServiceA, Effect.flatMap(() => Effect.void), Effect.runPromise)
 Node Kind: KindCallExpression
 

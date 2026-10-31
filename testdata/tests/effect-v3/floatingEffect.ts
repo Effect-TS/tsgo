@@ -1,4 +1,5 @@
 // @effect-v3
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import * as Effect from "effect/Effect"
 
 const noError = Effect.succeed(1)

@@ -29,6 +29,10 @@ func runDiscardedRunPromiseToRunForkFix(ctx *fixable.Context) []ls.CodeAction {
 
 		// The result is discarded, so renaming the runner in place keeps the
 		// receiver, the arguments and any surrounding void untouched.
+		// ReplacePipingFlowTransformation would rebuild the call and reprint
+		// its arguments, losing their comments, and could not rebuild a
+		// ManagedRuntime receiver or a curried factory call that flows keep
+		// as the step's callee.
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with " + match.ReplacementName,
 			Run: func(tracker *rewriter.Tracker) {

@@ -1,7 +1,7 @@
 // @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics discardedRunPromiseToRunFork:warning
-import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, pipe, Runtime } from "effect"
 import * as Eff from "effect/Effect"
 import { runPromise } from "effect/Effect"
 
@@ -184,3 +184,12 @@ const localRuntime = {
 void localRuntime.runPromise(work)
 declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
 void runPromiseLike(work)
+
+// MUST TRIGGER: the pipe and pipeable spellings of a runner are the same flow step
+program.pipe(Effect.runPromise)
+void pipe(program, Effect.runPromise)
+void program.pipe(Runtime.runPromise(services))
+void program.pipe(runtime.runPromise)
+
+// MUST NOT TRIGGER: the Promise of a piped runner is used
+export const pipedUsed = program.pipe(Effect.runPromise)

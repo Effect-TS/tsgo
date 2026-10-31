@@ -1,12 +1,12 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/runEffectInsideEffect.ts(14,21): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect.ts(22,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect.ts(22,5): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/runEffectInsideEffect.ts(15,21): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect.ts(23,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
 
 
-==== /.src/runEffectInsideEffect.ts (3 errors) ====
+==== /.src/runEffectInsideEffect.ts (2 errors) ====
+    // @effect-diagnostics discardedRunPromiseToRunFork:off
     import { Data, Effect } from "effect"
     
     class DebuggerError extends Data.TaggedError("DebuggerError")<{
@@ -33,8 +33,6 @@ Effect version: 4.0.2
         Effect.runPromise(check)
         ~~~~~~~~~~~~~~~~~
 !!! suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
-        ~~~~~~~~~~~~~~~~~
-!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
         //        ^- no runPromise, use the current services instead
       }
     })

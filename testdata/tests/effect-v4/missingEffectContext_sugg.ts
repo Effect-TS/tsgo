@@ -1,3 +1,4 @@
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect, Layer, Context, Data } from "effect"
 
 export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {

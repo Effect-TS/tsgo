@@ -1,3 +1,4 @@
+// @effect-diagnostics discardedRunPromiseToRunFork:off
 import { Effect, pipe } from "effect"
 
 const task = Effect.succeed(1)

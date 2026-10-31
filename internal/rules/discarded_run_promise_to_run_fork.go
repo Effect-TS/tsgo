@@ -55,8 +55,9 @@ type DiscardedRunPromiseToRunForkMatch struct {
 }
 
 // AnalyzeDiscardedRunPromiseToRunFork finds piping flows ending in a
-// runPromise run whose resulting Promise is discarded. A runner that is not
-// the flow's last step is consumed by the next step.
+// runPromise run whose resulting Promise is discarded, in any spelling of the
+// step. A runner that is not the flow's last step is consumed by the next
+// step.
 func AnalyzeDiscardedRunPromiseToRunFork(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []DiscardedRunPromiseToRunForkMatch {
 	if tp == nil || sf == nil {
 		return nil
@@ -69,11 +70,6 @@ func AnalyzeDiscardedRunPromiseToRunFork(tp *typeparser.TypeParser, _ *checker.C
 			continue
 		}
 		last := transformations.At(transformations.Len() - 1)
-		switch last.Kind() {
-		case typeparser.TransformationKindCall, typeparser.TransformationKindCallWithOptionals, typeparser.TransformationKindDataLast:
-		default:
-			continue
-		}
 		if last.Callee() == nil || !isDiscardedExpression(flow.Node()) {
 			continue
 		}
@@ -127,9 +123,9 @@ var (
 	}
 )
 
-// discardedRunPromiseRunner classifies the runner of the last flow step and
+// discardedRunPromiseRunner classifies the runner of the flow's last step and
 // returns the node the diagnostic is reported on.
-func discardedRunPromiseRunner(tp *typeparser.TypeParser, call *ast.Node, transformation typeparser.PipingFlowTransformation) (DiscardedRunPromiseToRunForkMatch, *ast.Node, bool) {
+func discardedRunPromiseRunner(tp *typeparser.TypeParser, flowNode *ast.Node, transformation typeparser.PipingFlowTransformation) (DiscardedRunPromiseToRunForkMatch, *ast.Node, bool) {
 	callee := ast.SkipParentheses(transformation.Callee())
 	newMatch := func(runnerNode *ast.Node, runner discardedRunner, renameable bool) (DiscardedRunPromiseToRunForkMatch, *ast.Node, bool) {
 		match := DiscardedRunPromiseToRunForkMatch{
@@ -150,20 +146,24 @@ func discardedRunPromiseRunner(tp *typeparser.TypeParser, call *ast.Node, transf
 		return match, runnerNode, true
 	}
 
-	kind := transformation.Kind()
-	isApplied := kind == typeparser.TransformationKindCall || kind == typeparser.TransformationKindCallWithOptionals
 	switch {
-	case isApplied && tp.IsNodeReferenceToEffectModuleApi(callee, "runPromise"):
+	case tp.IsNodeReferenceToEffectModuleApi(callee, "runPromise"):
 		return newMatch(callee, effectRunPromiseRunner, true)
-	case isApplied && tp.IsNodeReferenceToEffectManagedRuntimeMember(callee, "runPromise"):
+	case tp.IsNodeReferenceToEffectManagedRuntimeMember(callee, "runPromise"):
 		return newMatch(callee, managedRuntimeRunPromiseRunner, true)
-	case kind == typeparser.TransformationKindDataLast && tp.IsNodeReferenceToEffectRuntimeModuleApi(callee, "runPromise"):
-		return newMatch(callee, runtimeRunPromiseRunner, true)
-	case !isApplied:
-		return DiscardedRunPromiseToRunForkMatch{}, nil, false
 	}
 
-	// Curried: the step's callee is the factory call, as in
+	// The factory with its context or runtime as the step's argument, as in
+	// effect.pipe(Effect.runPromiseWith(context)) or the data-first
+	// Runtime.runPromise(runtime, effect). Without that argument the step only
+	// builds the runner.
+	if transformation.Args().Len() == 1 {
+		if runner, ok := discardedRunPromiseFactory(tp, callee); ok {
+			return newMatch(callee, runner, true)
+		}
+	}
+
+	// Curried: flows keep the factory call as the step's callee, as in
 	// Effect.runPromiseWith(context)(effect).
 	if callee.Kind == ast.KindCallExpression {
 		if factory := callee.AsCallExpression(); factory.Arguments != nil && len(factory.Arguments.Nodes) == 1 {
@@ -175,8 +175,14 @@ func discardedRunPromiseRunner(tp *typeparser.TypeParser, call *ast.Node, transf
 	}
 
 	// Hoisted: the callee is a binding of the factory call's result, so there
-	// is no runner name to rename in place.
-	if owner := tp.ReturnedFunctionCallOwner(call); owner != nil {
+	// is no runner name to rename in place. Flows do not expose the call of a
+	// pipe or pipeable step, so only the applied spellings, whose call is the
+	// flow node, are resolved.
+	kind := transformation.Kind()
+	if kind != typeparser.TransformationKindCall && kind != typeparser.TransformationKindCallWithOptionals {
+		return DiscardedRunPromiseToRunForkMatch{}, nil, false
+	}
+	if owner := tp.ReturnedFunctionCallOwner(flowNode); owner != nil {
 		if runner, ok := discardedRunPromiseFactory(tp, owner); ok {
 			return newMatch(callee, runner, false)
 		}

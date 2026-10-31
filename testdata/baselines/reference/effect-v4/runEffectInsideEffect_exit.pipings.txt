@@ -1,7 +1,7 @@
 ==== /.src/runEffectInsideEffect_exit.ts (9 flows) ====
 
 === Piping Flow ===
-Location: 3:14 - 3:32
+Location: 4:14 - 4:32
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 5:25 - 9:3
+Location: 6:25 - 10:3
 Node: Effect.gen(function*() {\n  Effect.runSync(child)\n  Effect.runSyncExit(child)\n  yield* Effect.void\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 5:50 - 6:24
+Location: 6:50 - 7:24
 Node: Effect.runSync(child)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 6:24 - 7:28
+Location: 7:24 - 8:28
 Node: Effect.runSyncExit(child)
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Exit<number, never>
 
 === Piping Flow ===
-Location: 11:22 - 19:3
+Location: 12:22 - 20:3
 Node: Effect.gen(function*() {\n  yield* Effect.void\n  setTimeout(() => {\n    Effect.runPromise(child)\n    Effect.runPromiseExit(child)\n    Effect.runSync(child)\n    Effect.runSyncExit(child)\n  }, 0)\n})
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 13:21 - 14:29
+Location: 14:21 - 15:29
 Node: Effect.runPromise(child)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Promise<number>
 
 === Piping Flow ===
-Location: 14:29 - 15:33
+Location: 15:29 - 16:33
 Node: Effect.runPromiseExit(child)
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Promise<Exit<number, never>>
 
 === Piping Flow ===
-Location: 15:33 - 16:26
+Location: 16:33 - 17:26
 Node: Effect.runSync(child)
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 16:26 - 17:30
+Location: 17:26 - 18:30
 Node: Effect.runSyncExit(child)
 Node Kind: KindCallExpression
 

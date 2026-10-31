@@ -25,13 +25,17 @@ Effect version: 3.19.19
 /.src/discardedRunPromiseToRunFork.ts(107,6): warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 /.src/discardedRunPromiseToRunFork.ts(111,6): warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 /.src/discardedRunPromiseToRunFork.ts(115,6): warning TS377179: The Promise returned by `runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(189,14): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(190,20): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(191,19): warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(192,19): warning TS377179: The Promise returned by `runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 
 
-==== /.src/discardedRunPromiseToRunFork.ts (24 errors) ====
+==== /.src/discardedRunPromiseToRunFork.ts (28 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics discardedRunPromiseToRunFork:warning
-    import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+    import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, pipe, Runtime } from "effect"
     import * as Eff from "effect/Effect"
     import { runPromise } from "effect/Effect"
     
@@ -262,4 +266,21 @@ Effect version: 3.19.19
     void localRuntime.runPromise(work)
     declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
     void runPromiseLike(work)
+    
+    // MUST TRIGGER: the pipe and pipeable spellings of a runner are the same flow step
+    program.pipe(Effect.runPromise)
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    void pipe(program, Effect.runPromise)
+                       ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    void program.pipe(Runtime.runPromise(services))
+                      ~~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    void program.pipe(runtime.runPromise)
+                      ~~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST NOT TRIGGER: the Promise of a piped runner is used
+    export const pipedUsed = program.pipe(Effect.runPromise)
     

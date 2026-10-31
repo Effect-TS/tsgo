@@ -16,7 +16,7 @@ Transformations (1):
 ==== /.src/main.ts (26 flows) ====
 
 === Piping Flow ===
-Location: 8:47 - 11:58
+Location: 9:47 - 12:58
 Node: program.pipe(Effect.provide(AppLayer), Effect.runPromise)
 Node Kind: KindCallExpression
 
@@ -34,7 +34,7 @@ Transformations (2):
       outType: Promise<number>
 
 === Piping Flow ===
-Location: 11:58 - 12:71
+Location: 12:58 - 13:71
 Node: pipe(program, Effect.asVoid, Effect.provide(AppLayer), Effect.runFork)
 Node Kind: KindCallExpression
 
@@ -56,7 +56,7 @@ Transformations (3):
       outType: RuntimeFiber<void, never>
 
 === Piping Flow ===
-Location: 12:71 - 13:60
+Location: 13:71 - 14:60
 Node: program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
 Node Kind: KindCallExpression
 
@@ -74,7 +74,7 @@ Transformations (2):
       outType: void
 
 === Piping Flow ===
-Location: 13:60 - 14:92
+Location: 14:60 - 15:92
 Node: program.pipe(Effect.provide(AppLayer), BunRuntime.runMain({ disableErrorReporting: true }))
 Node Kind: KindCallExpression
 
@@ -92,7 +92,7 @@ Transformations (2):
       outType: void
 
 === Piping Flow ===
-Location: 14:92 - 17:58
+Location: 15:92 - 18:58
 Node: Effect.runPromise(program.pipe(Effect.provide(AppLayer)))
 Node Kind: KindCallExpression
 
@@ -110,7 +110,7 @@ Transformations (2):
       outType: Promise<number>
 
 === Piping Flow ===
-Location: 17:58 - 18:50
+Location: 18:58 - 19:50
 Node: Effect.runSync(Effect.provide(program, AppLayer))
 Node Kind: KindCallExpression
 
@@ -128,7 +128,7 @@ Transformations (2):
       outType: number
 
 === Piping Flow ===
-Location: 18:50 - 19:56
+Location: 19:50 - 20:56
 Node: Effect.runSyncExit((Effect.provide(program, AppLayer)))
 Node Kind: KindCallExpression
 
@@ -146,7 +146,7 @@ Transformations (2):
       outType: Exit<number, never>
 
 === Piping Flow ===
-Location: 19:56 - 20:57
+Location: 20:56 - 21:57
 Node: Effect.runPromiseExit(Effect.provide(AppLayer)(program))
 Node Kind: KindCallExpression
 
@@ -164,7 +164,7 @@ Transformations (2):
       outType: Promise<Exit<number, never>>
 
 === Piping Flow ===
-Location: 20:57 - 21:54
+Location: 21:57 - 22:54
 Node: Effect.runCallback(Effect.provide(program, AppLayer))
 Node Kind: KindCallExpression
 
@@ -182,7 +182,7 @@ Transformations (2):
       outType: Cancel<number, never>
 
 === Piping Flow ===
-Location: 21:54 - 22:100
+Location: 22:54 - 23:100
 Node: Effect.runPromise(program.pipe(Effect.provide(AppLayer)), { signal: new AbortController().signal })
 Node Kind: KindCallExpression
 
@@ -200,7 +200,7 @@ Transformations (2):
       outType: Promise<number>
 
 === Piping Flow ===
-Location: 22:100 - 23:55
+Location: 23:100 - 24:55
 Node: NodeRuntime.runMain(Effect.provide(program, AppLayer))
 Node Kind: KindCallExpression
 
@@ -218,7 +218,7 @@ Transformations (2):
       outType: void
 
 === Piping Flow ===
-Location: 23:55 - 24:92
+Location: 24:55 - 25:92
 Node: BunRuntime.runMain(program.pipe(Effect.provide(AppLayer)), { disableErrorReporting: true })
 Node Kind: KindCallExpression
 
@@ -236,7 +236,7 @@ Transformations (2):
       outType: void
 
 === Piping Flow ===
-Location: 24:92 - 25:63
+Location: 25:92 - 26:63
 Node: BrowserRuntime.runMain(program.pipe(Effect.provide(AppLayer)))
 Node Kind: KindCallExpression
 
@@ -254,7 +254,7 @@ Transformations (2):
       outType: void
 
 === Piping Flow ===
-Location: 25:63 - 26:45
+Location: 26:63 - 27:45
 Node: startMain(Effect.provide(program, AppLayer))
 Node Kind: KindCallExpression
 
@@ -272,7 +272,7 @@ Transformations (2):
       outType: void
 
 === Piping Flow ===
-Location: 29:23 - 29:62
+Location: 30:23 - 30:62
 Node: program.pipe(Effect.provide(AppLayer))
 Node Kind: KindCallExpression
 
@@ -286,7 +286,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 30:17 - 30:51
+Location: 31:17 - 31:51
 Node: Effect.provide(program, AppLayer)
 Node Kind: KindCallExpression
 
@@ -300,7 +300,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 30:51 - 31:28
+Location: 31:51 - 32:28
 Node: Effect.runPromise(provided)
 Node Kind: KindCallExpression
 
@@ -314,7 +314,7 @@ Transformations (1):
       outType: Promise<number>
 
 === Piping Flow ===
-Location: 31:28 - 34:73
+Location: 32:28 - 35:73
 Node: Effect.runPromise(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
 Node Kind: KindCallExpression
 
@@ -336,7 +336,7 @@ Transformations (3):
       outType: Promise<void>
 
 === Piping Flow ===
-Location: 34:73 - 35:75
+Location: 35:73 - 36:75
 Node: program.pipe(Effect.provide(AppLayer), Effect.asVoid, NodeRuntime.runMain)
 Node Kind: KindCallExpression
 
@@ -358,7 +358,7 @@ Transformations (3):
       outType: void
 
 === Piping Flow ===
-Location: 38:24 - 38:77
+Location: 39:24 - 39:77
 Node: Effect.sync(() => Effect.provide(program, AppLayer))
 Node Kind: KindCallExpression
 
@@ -370,48 +370,6 @@ Transformations (1):
       callee: Effect.sync
       args: (constant)
       outType: Effect<Effect<number, never, never>, never, never>
-
-=== Piping Flow ===
-Location: 38:42 - 38:76
-Node: Effect.provide(program, AppLayer)
-Node Kind: KindCallExpression
-
-Subject: program
-Subject Type: Effect<number, never, MyService1 | MyService2>
-
-Transformations (1):
-  [0] kind: dataFirst
-      callee: Effect.provide
-      args: [AppLayer]
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 38:77 - 39:77
-Node: Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
-Node Kind: KindCallExpression
-
-Subject: () => Effect.provide(program, AppLayer)
-Subject Type: () => Effect<number, never, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.runPromise(Effect.void).then
-      args: (constant)
-      outType: Promise<Effect<number, never, never>>
-
-=== Piping Flow ===
-Location: 38:77 - 39:31
-Node: Effect.runPromise(Effect.void)
-Node Kind: KindCallExpression
-
-Subject: Effect.void
-Subject Type: Effect<void, never, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.runPromise
-      args: (constant)
-      outType: Promise<void>
 
 === Piping Flow ===
 Location: 39:42 - 39:76
@@ -428,7 +386,49 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 43:24 - 43:86
+Location: 39:77 - 40:77
+Node: Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.provide(program, AppLayer)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise(Effect.void).then
+      args: (constant)
+      outType: Promise<Effect<number, never, never>>
+
+=== Piping Flow ===
+Location: 39:77 - 40:31
+Node: Effect.runPromise(Effect.void)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 40:42 - 40:76
+Node: Effect.provide(program, AppLayer)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, MyService1 | MyService2>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [AppLayer]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 44:24 - 44:86
 Node: program.pipe(Effect.provide(AppLayer), FakeEffect.runPromise)
 Node Kind: KindCallExpression
 
@@ -446,7 +446,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 44:24 - 44:81
+Location: 45:24 - 45:81
 Node: FakeEffect.runPromise(Effect.provide(program, AppLayer))
 Node Kind: KindCallExpression
 

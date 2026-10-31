@@ -1,4 +1,4 @@
-==== /.src/discardedRunPromiseToRunFork.ts (73 flows) ====
+==== /.src/discardedRunPromiseToRunFork.ts (78 flows) ====
 
 === Piping Flow ===
 Location: 23:59 - 26:27
@@ -745,20 +745,6 @@ Transformations (1):
       outType: Promise<void>
 
 === Piping Flow ===
-Location: 146:5 - 146:15
-Node: run(work)
-Node Kind: KindCallExpression
-
-Subject: work
-Subject Type: Effect<void, Error, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: run
-      args: (constant)
-      outType: Promise<void>
-
-=== Piping Flow ===
 Location: 146:5 - 146:31
 Node: run(work).catch(() => {})
 Node Kind: KindCallExpression
@@ -769,6 +755,20 @@ Subject Type: () => void
 Transformations (1):
   [0] kind: call
       callee: run(work).catch
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 146:5 - 146:15
+Node: run(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: run
       args: (constant)
       outType: Promise<void>
 
@@ -1045,3 +1045,73 @@ Transformations (1):
       callee: runPromiseLike
       args: (constant)
       outType: Promise<void>
+
+=== Piping Flow ===
+Location: 186:26 - 189:32
+Node: program.pipe(Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 190:5 - 190:38
+Node: pipe(program, Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 191:5 - 191:48
+Node: program.pipe(Runtime.runPromise(services))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Runtime.runPromise
+      args: [services]
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 192:5 - 192:38
+Node: program.pipe(runtime.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: runtime.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 195:25 - 195:57
+Node: program.pipe(Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>

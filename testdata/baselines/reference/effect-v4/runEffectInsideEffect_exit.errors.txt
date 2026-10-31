@@ -1,16 +1,16 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/runEffectInsideEffect_exit.ts(6,3): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_exit.ts(7,3): suggestion TS377024: `Effect.runSyncExit` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_exit.ts(14,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_exit.ts(14,5): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
-/.src/runEffectInsideEffect_exit.ts(15,5): suggestion TS377074: `Effect.runPromiseExit` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseExitWith`. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_exit.ts(16,5): suggestion TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect_exit.ts(17,5): suggestion TS377074: `Effect.runSyncExit` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncExitWith`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(7,3): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(8,3): suggestion TS377024: `Effect.runSyncExit` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(15,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(16,5): suggestion TS377074: `Effect.runPromiseExit` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseExitWith`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(17,5): suggestion TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(18,5): suggestion TS377074: `Effect.runSyncExit` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncExitWith`. effect(runEffectInsideEffect)
 
 
-==== /.src/runEffectInsideEffect_exit.ts (7 errors) ====
+==== /.src/runEffectInsideEffect_exit.ts (6 errors) ====
+    // @effect-diagnostics discardedRunPromiseToRunFork:off
     import { Effect } from "effect"
     
     const child = Effect.succeed(1)
@@ -31,8 +31,6 @@ Effect version: 4.0.2
         Effect.runPromise(child)
         ~~~~~~~~~~~~~~~~~
 !!! suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
-        ~~~~~~~~~~~~~~~~~
-!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
         Effect.runPromiseExit(child)
         ~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377074: `Effect.runPromiseExit` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseExitWith`. effect(runEffectInsideEffect)

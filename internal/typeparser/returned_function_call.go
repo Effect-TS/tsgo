@@ -4,12 +4,13 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
-// ReturnedFunctionCallOwner returns the name of the variable whose declared
-// type returns the function that call invokes, as for run(work) after
-// const run = Effect.runPromiseWith(context). It follows the resolved
-// signature's declaration out of the enclosing function types, so it returns
-// nil when the called function is not declared as another function's return
-// type.
+// ReturnedFunctionCallOwner returns the name of the variable declaration whose
+// declared type returns the function that call invokes. For run(work) after
+// const run = Effect.runPromiseWith(context), that is the name of Effect's own
+// runPromiseWith declaration, not the local run binding. It follows the
+// resolved signature's declaration out of the enclosing function types, so it
+// returns nil when the called function is not declared as another function's
+// return type.
 func (tp *TypeParser) ReturnedFunctionCallOwner(call *ast.Node) *ast.Node {
 	if tp == nil || tp.checker == nil || call == nil || call.Kind != ast.KindCallExpression {
 		return nil
