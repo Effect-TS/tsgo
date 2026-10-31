@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/emptySchemaStruct_preview.ts(5,22): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+
+
+==== /.src/emptySchemaStruct_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics emptySchemaStruct:warning
+    import { Schema } from "effect"
+    
+    export const Empty = Schema.Struct({})
+                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+    export const decoded = Schema.decodeUnknownSync(Empty)(42)
+    

@@ -1,50 +1,70 @@
 === Quick Fix Inventory ===
 
-[D1] (5:7-5:8) TS6133: 'a' is declared but its value is never read.
+[D1] (3:23-3:40) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D2] (6:26-6:43) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D3] (5:7-5:8) TS6133: 'a' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (5:10-5:28) TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
+[D4] (5:10-5:28) TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
   Fix 0: "Disable unnecessaryTypeofType for this line"
   Fix 1: "Disable unnecessaryTypeofType for entire file"
   Fix 2: "Replace with 'UserId'"
 
-[D3] (6:7-6:8) TS6133: 'b' is declared but its value is never read.
+[D5] (6:7-6:8) TS6133: 'b' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (6:10-6:36) TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
+[D6] (6:10-6:36) TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
   Fix 0: "Disable unnecessaryTypeofType for this line"
   Fix 1: "Disable unnecessaryTypeofType for entire file"
   Fix 2: "Replace with 'UsersRepo.User'"
 
-[D5] (7:7-7:29) TS6133: 'namespaceImportTrigger' is declared but its value is never read.
+[D7] (7:7-7:29) TS6133: 'namespaceImportTrigger' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (7:31-7:65) TS377090: This `typeof ... .Type` query can be replaced with `Schemas.UsersRepo.User`. effect(unnecessaryTypeofType)
+[D8] (7:31-7:65) TS377090: This `typeof ... .Type` query can be replaced with `Schemas.UsersRepo.User`. effect(unnecessaryTypeofType)
   Fix 0: "Disable unnecessaryTypeofType for this line"
   Fix 1: "Disable unnecessaryTypeofType for entire file"
   Fix 2: "Replace with 'Schemas.UsersRepo.User'"
 
-[D7] (8:7-8:34) TS6133: 'shouldNotTriggerMissingType' is declared but its value is never read.
+[D9] (8:7-8:34) TS6133: 'shouldNotTriggerMissingType' is declared but its value is never read.
   (no quick fixes)
 
-[D8] (9:7-9:37) TS6133: 'shouldNotTriggerMismatchedType' is declared but its value is never read.
+[D10] (9:7-9:37) TS6133: 'shouldNotTriggerMismatchedType' is declared but its value is never read.
   (no quick fixes)
 
-[D9] (11:7-11:8) TS6133: 'c' is declared but its value is never read.
+[D11] (11:7-11:8) TS6133: 'c' is declared but its value is never read.
   (no quick fixes)
 
-[D10] (12:7-12:8) TS6133: 'd' is declared but its value is never read.
+[D12] (12:7-12:8) TS6133: 'd' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
 
-=== [D2] Fix 0: "Disable unnecessaryTypeofType for this line" ===
+=== [D1] Fix 0: "Disable emptySchemaStruct for this line" ===
 skipped by default
 
-=== [D2] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
+=== [D1] Fix 1: "Disable emptySchemaStruct for entire file" ===
 skipped by default
 
-=== [D2] Fix 2: "Replace with 'UserId'" ===
+=== [D2] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable unnecessaryTypeofType for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with 'UserId'" ===
 
 --- file:///.src/test.ts ---
 // @effect-diagnostics unnecessaryTypeofType:warning
@@ -61,13 +81,13 @@ const c: UserId = {}
 const d: UsersRepo.User = { id: 1 }
 
 
-=== [D4] Fix 0: "Disable unnecessaryTypeofType for this line" ===
+=== [D6] Fix 0: "Disable unnecessaryTypeofType for this line" ===
 skipped by default
 
-=== [D4] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
+=== [D6] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
 skipped by default
 
-=== [D4] Fix 2: "Replace with 'UsersRepo.User'" ===
+=== [D6] Fix 2: "Replace with 'UsersRepo.User'" ===
 
 --- file:///.src/test.ts ---
 // @effect-diagnostics unnecessaryTypeofType:warning
@@ -84,13 +104,13 @@ const c: UserId = {}
 const d: UsersRepo.User = { id: 1 }
 
 
-=== [D6] Fix 0: "Disable unnecessaryTypeofType for this line" ===
+=== [D8] Fix 0: "Disable unnecessaryTypeofType for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
+=== [D8] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Replace with 'Schemas.UsersRepo.User'" ===
+=== [D8] Fix 2: "Replace with 'Schemas.UsersRepo.User'" ===
 
 --- file:///.src/test.ts ---
 // @effect-diagnostics unnecessaryTypeofType:warning

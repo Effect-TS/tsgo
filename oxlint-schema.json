@@ -2350,6 +2350,9 @@
         "effecttsgo/effect-try-without-catch": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/empty-schema-struct": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/error-payload-shadows-name": {
           "$ref": "#/definitions/RuleNoConfig"
         },

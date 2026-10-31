@@ -1,0 +1,143 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:22-9:39) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D2] (12:49-12:66) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D3] (17:28-17:45) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D4] (20:28-22:3) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D5] (25:30-25:49) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D6] (28:28-28:40) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D7] (31:28-31:38) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D8] (34:30-34:46) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D9] (38:27-38:41) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D10] (41:26-41:43) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D11] (46:13-46:30) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D12] (50:52-50:69) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D13] (54:10-54:27) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D14] (106:30-106:47) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default

@@ -1,0 +1,411 @@
+==== /.src/emptySchemaStruct_tool.ts (29 flows) ====
+
+=== Piping Flow ===
+Location: 10:23 - 13:3
+Node: Tool.make("GetTime", {\n  parameters: Schema.Struct({}),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetTime"
+Subject Type: "GetTime"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  parameters: Schema.Struct({}),\n  success: Schema.String\n}]
+      outType: Tool<"GetTime", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 11:14 - 11:32
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 16:23 - 22:3
+Node: Tool.make("GetDate", {\n  description: "Returns the current date",\n  parameters: Schema.Struct({\n    // no parameters yet\n  }),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetDate"
+Subject Type: "GetDate"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  description: "Returns the current date",\n  parameters: Schema.Struct({\n    // no parameters yet\n  }),\n  success: Schema.String\n}]
+      outType: Tool<"GetDate", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 18:14 - 20:5
+Node: Schema.Struct({\n    // no parameters yet\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    // no parameters yet\n  }
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 25:23 - 28:3
+Node: Tool.make("GetZone", {\n  parameters: (Schema.Struct({})),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetZone"
+Subject Type: "GetZone"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  parameters: (Schema.Struct({})),\n  success: Schema.String\n}]
+      outType: Tool<"GetZone", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 26:16 - 26:33
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 31:25 - 34:3
+Node: AiTool.make("GetUptime", {\n  parameters: Schema.Struct({}),\n  success: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: "GetUptime"
+Subject Type: "GetUptime"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: AiTool.make
+      args: [{\n  parameters: Schema.Struct({}),\n  success: Schema.Number\n}]
+      outType: Tool<"GetUptime", { readonly parameters: Struct<{}>; readonly success: Number; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 32:14 - 32:32
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 37:27 - 40:3
+Node: Tool.dynamic("DynamicTime", {\n  parameters: Schema.Struct({}),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "DynamicTime"
+Subject Type: "DynamicTime"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.dynamic
+      args: [{\n  parameters: Schema.Struct({}),\n  success: Schema.String\n}]
+      outType: Dynamic<"DynamicTime", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 38:14 - 38:32
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 43:21 - 48:2
+Node: Toolkit.make(\n  Tool.make("GetVersion", {\n    parameters: Schema.Struct({}),\n    success: Schema.String\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "GetVersion"
+Subject Type: "GetVersion"
+
+Transformations (2):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n    parameters: Schema.Struct({}),\n    success: Schema.String\n  }]
+      outType: Tool<"GetVersion", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+  [1] kind: call
+      callee: Toolkit.make
+      args: (constant)
+      outType: Toolkit<{ readonly GetVersion: Tool<"GetVersion", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>; }>
+
+=== Piping Flow ===
+Location: 45:16 - 45:34
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 52:23 - 55:3
+Node: makeTool("GetHost", {\n  parameters: Schema.Struct({}),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetHost"
+Subject Type: "GetHost"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: makeTool
+      args: [{\n  parameters: Schema.Struct({}),\n  success: Schema.String\n}]
+      outType: Tool<"GetHost", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 53:14 - 53:32
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 59:17 - 59:35
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 60:25 - 63:3
+Node: Tool.make("GetLocale", {\n  parameters: NoParams,\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetLocale"
+Subject Type: "GetLocale"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  parameters: NoParams,\n  success: Schema.String\n}]
+      outType: Tool<"GetLocale", { readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 66:19 - 69:3
+Node: Tool.make("Ack", {\n  parameters: Schema.Struct({ id: Schema.String }),\n  success: Schema.Struct({})\n})
+Node Kind: KindCallExpression
+
+Subject: "Ack"
+Subject Type: "Ack"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  parameters: Schema.Struct({ id: Schema.String }),\n  success: Schema.Struct({})\n}]
+      outType: Tool<"Ack", { readonly parameters: Struct<{ readonly id: String; }>; readonly success: Struct<{}>; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 67:14 - 67:51
+Node: Schema.Struct({ id: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { id: Schema.String }
+Subject Type: { id: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: String; }>
+
+=== Piping Flow ===
+Location: 68:11 - 68:29
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 72:22 - 75:3
+Node: Tool.make("Search", {\n  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "Search"
+Subject Type: "Search"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),\n  success: Schema.String\n}]
+      outType: Tool<"Search", { readonly parameters: Struct<{ readonly query: String; readonly filters: Struct<{}>; }>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 73:14 - 73:82
+Node: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) })
+Node Kind: KindCallExpression
+
+Subject: { query: Schema.String, filters: Schema.Struct({}) }
+Subject Type: { query: String; filters: Struct<{}>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly query: String; readonly filters: Struct<{}>; }>
+
+=== Piping Flow ===
+Location: 73:61 - 73:79
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 78:28 - 84:3
+Node: Tool.providerDefined({\n  id: "acme.time",\n  customName: "AcmeTime",\n  providerName: "time",\n  parameters: Schema.Struct({}),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  id: "acme.time",\n  customName: "AcmeTime",\n  providerName: "time",\n  parameters: Schema.Struct({}),\n  success: Schema.String\n}
+Subject Type: { id: "acme.time"; customName: "AcmeTime"; providerName: string; parameters: Struct<{}>; success: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Tool.providerDefined
+      args: (constant)
+      outType: <Mode extends FailureMode | undefined = undefined>(args: void) => ProviderDefined<"acme.time", "AcmeTime", { readonly args: Void; readonly parameters: Struct<{}>; readonly success: String; readonly failure: Never; readonly failureMode: Mode extends undefined ? "error" : Mode; }, false>
+
+=== Piping Flow ===
+Location: 82:14 - 82:32
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 91:14 - 91:32
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 95:34 - 98:3
+Node: Tool.make("GetTimeEmptyParams", {\n  parameters: Tool.EmptyParams,\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetTimeEmptyParams"
+Subject Type: "GetTimeEmptyParams"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  parameters: Tool.EmptyParams,\n  success: Schema.String\n}]
+      outType: Tool<"GetTimeEmptyParams", { readonly parameters: EmptyParams; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 101:30 - 103:3
+Node: Tool.make("GetTimeDefault", {\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetTimeDefault"
+Subject Type: "GetTimeDefault"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  success: Schema.String\n}]
+      outType: Tool<"GetTimeDefault", { readonly parameters: EmptyParams; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 106:26 - 109:3
+Node: Tool.make("GetWeather", {\n  parameters: Schema.Struct({ city: Schema.String }),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "GetWeather"
+Subject Type: "GetWeather"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Tool.make
+      args: [{\n  parameters: Schema.Struct({ city: Schema.String }),\n  success: Schema.String\n}]
+      outType: Tool<"GetWeather", { readonly parameters: Struct<{ readonly city: String; }>; readonly success: String; readonly failure: Never; readonly failureMode: "error"; }, never>
+
+=== Piping Flow ===
+Location: 107:14 - 107:53
+Node: Schema.Struct({ city: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { city: Schema.String }
+Subject Type: { city: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly city: String; }>

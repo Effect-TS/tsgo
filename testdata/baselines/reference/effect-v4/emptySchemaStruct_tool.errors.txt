@@ -1,0 +1,154 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/emptySchemaStruct_tool.ts(11,15): warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(18,15): warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(26,16): warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(32,15): warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(38,15): warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(45,17): warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(53,15): warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(59,18): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(68,12): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(73,62): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(82,15): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+/.src/emptySchemaStruct_tool.ts(91,15): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+
+
+==== /.src/emptySchemaStruct_tool.ts (12 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics emptySchemaStruct:warning
+    import { Schema } from "effect"
+    import { Tool as AiTool, Toolkit } from "effect/ai"
+    import { Tool } from "effect/ai"
+    import { make as makeTool } from "effect/ai/Tool"
+    
+    // MUST TRIGGER (tool message, fix to Tool.EmptyParams): Schema.Struct({}) as Tool.make
+    // parameters, the documented replacement that omitted parameters default to
+    export const GetTime = Tool.make("GetTime", {
+      parameters: Schema.Struct({}),
+                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (tool message, fix to Tool.EmptyParams): the parameters come first and the call is multi-line
+    export const GetDate = Tool.make("GetDate", {
+      description: "Returns the current date",
+      parameters: Schema.Struct({
+                  ~~~~~~~~~~~~~~~
+        // no parameters yet
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+      }),
+    ~~~~
+!!! warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (tool message, fix to Tool.EmptyParams): parenthesised parameters value
+    export const GetZone = Tool.make("GetZone", {
+      parameters: (Schema.Struct({})),
+                   ~~~~~~~~~~~~~~~~~
+!!! warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (tool message, fix to AiTool.EmptyParams): Tool imported under another name
+    export const GetUptime = AiTool.make("GetUptime", {
+      parameters: Schema.Struct({}),
+                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+      success: Schema.Number
+    })
+    
+    // MUST TRIGGER (tool message, fix to Tool.EmptyParams): Tool.dynamic parameters
+    export const DynamicTime = Tool.dynamic("DynamicTime", {
+      parameters: Schema.Struct({}),
+                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (tool message, fix to Tool.EmptyParams): tool defined inline in a toolkit
+    export const Tools = Toolkit.make(
+      Tool.make("GetVersion", {
+        parameters: Schema.Struct({}),
+                    ~~~~~~~~~~~~~~~~~
+!!! warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+        success: Schema.String
+      })
+    )
+    
+    // MUST TRIGGER (tool message, no fix): the callee is a named import, so there is no
+    // Tool namespace to build Tool.EmptyParams from
+    export const GetHost = makeTool("GetHost", {
+      parameters: Schema.Struct({}),
+                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (general message, no fix): the struct is declared outside the tool, the
+    // parameters property only references it
+    const NoParams = Schema.Struct({})
+                     ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+    export const GetLocale = Tool.make("GetLocale", {
+      parameters: NoParams,
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (general message, no fix): an empty success schema is not a tool parameters position
+    export const Ack = Tool.make("Ack", {
+      parameters: Schema.Struct({ id: Schema.String }),
+      success: Schema.Struct({})
+               ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+    })
+    
+    // MUST TRIGGER (general message, no fix): an empty struct nested inside non-empty parameters
+    export const Search = Tool.make("Search", {
+      parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),
+                                                                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (general message, no fix): provider-defined tools are out of scope for Tool.EmptyParams
+    export const ProviderTool = Tool.providerDefined({
+      id: "acme.time",
+      customName: "AcmeTime",
+      providerName: "time",
+      parameters: Schema.Struct({}),
+                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+      success: Schema.String
+    })
+    
+    // MUST TRIGGER (general message, no fix): a local object whose method is named like Tool.make
+    const LocalTool = {
+      make: <A>(name: string, options: A) => ({ name, options })
+    }
+    export const localTool = LocalTool.make("Local", {
+      parameters: Schema.Struct({})
+                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+    })
+    
+    // MUST NOT TRIGGER: the recommended empty parameters schema
+    export const GetTimeEmptyParams = Tool.make("GetTimeEmptyParams", {
+      parameters: Tool.EmptyParams,
+      success: Schema.String
+    })
+    
+    // MUST NOT TRIGGER: omitted parameters default to Tool.EmptyParams
+    export const GetTimeDefault = Tool.make("GetTimeDefault", {
+      success: Schema.String
+    })
+    
+    // MUST NOT TRIGGER: non-empty parameters
+    export const GetWeather = Tool.make("GetWeather", {
+      parameters: Schema.Struct({ city: Schema.String }),
+      success: Schema.String
+    })
+    

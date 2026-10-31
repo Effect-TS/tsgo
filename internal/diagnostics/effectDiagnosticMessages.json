@@ -650,5 +650,13 @@
     "Effect.{0} is called without a `catch` handler, so failures surface as the generic `{1}`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)": {
         "category": "Warning",
         "code": 377169
+    },
+    "`Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for \"any object\", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)": {
+        "category": "Warning",
+        "code": 377176
+    },
+    "`Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)": {
+        "category": "Warning",
+        "code": 377177
     }
 }

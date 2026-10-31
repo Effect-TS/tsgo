@@ -34,25 +34,33 @@
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D10] (22:3-22:8) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+[D10] (21:47-21:64) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D11] (22:3-22:8) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
   Fix 0: "Disable schemaOpaqueInstanceMember for this line"
   Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
 
-[D11] (25:43-25:50) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+[D12] (25:43-25:50) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D12] (26:3-26:18) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+[D13] (25:54-25:66) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D14] (26:3-26:18) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
   Fix 0: "Disable schemaOpaqueInstanceMember for this line"
   Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
 
-[D13] (30:7-30:16) TS6196: 'Unrelated' is declared but never used.
+[D15] (30:7-30:16) TS6196: 'Unrelated' is declared but never used.
   (no quick fixes)
 
-[D14] (34:7-34:17) TS6196: 'WrongShape' is declared but never used.
+[D16] (34:7-34:17) TS6196: 'WrongShape' is declared but never used.
   (no quick fixes)
 
-[D15] (34:34-34:44) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+[D17] (34:34-34:44) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
@@ -100,26 +108,38 @@ skipped by default
 === [D9] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
 skipped by default
 
-=== [D10] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+=== [D10] Fix 0: "Disable emptySchemaStruct for this line" ===
 skipped by default
 
-=== [D10] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+=== [D10] Fix 1: "Disable emptySchemaStruct for entire file" ===
 skipped by default
 
-=== [D11] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+=== [D11] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
 skipped by default
 
-=== [D11] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+=== [D11] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
 skipped by default
 
-=== [D12] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+=== [D12] Fix 0: "Disable schemaClassMissingBrand for this line" ===
 skipped by default
 
-=== [D12] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+=== [D12] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
 skipped by default
 
-=== [D15] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+=== [D13] Fix 0: "Disable emptySchemaStruct for this line" ===
 skipped by default
 
-=== [D15] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+=== [D13] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
 skipped by default
