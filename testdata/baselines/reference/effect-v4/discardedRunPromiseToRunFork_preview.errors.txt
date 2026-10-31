@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/discardedRunPromiseToRunFork_preview.ts(10,6): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+
+
+==== /.src/discardedRunPromiseToRunFork_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics discardedRunPromiseToRunFork:warning
+    import { Effect } from "effect"
+    
+    const program = Effect.log("server started").pipe(
+      Effect.andThen(Effect.fail(new Error("bind failed")))
+    )
+    
+    void Effect.runPromise(program)
+         ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    

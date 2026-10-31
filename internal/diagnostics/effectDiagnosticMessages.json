@@ -650,5 +650,9 @@
     "Effect.{0} is called without a `catch` handler, so failures surface as the generic `{1}`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)": {
         "category": "Warning",
         "code": 377169
+    },
+    "The Promise returned by `{0}` is discarded, so any failure or defect becomes an unhandled rejection. Use `{1}` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)": {
+        "category": "Warning",
+        "code": 377179
     }
 }

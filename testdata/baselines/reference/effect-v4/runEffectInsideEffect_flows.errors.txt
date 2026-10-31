@@ -2,13 +2,14 @@
 Effect version: 4.0.2
 
 /.src/runEffectInsideEffect_flows.ts(7,3): suggestion TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_flows.ts(7,3): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 /.src/runEffectInsideEffect_flows.ts(12,28): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect_flows.ts(17,14): suggestion TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect_flows.ts(22,31): suggestion TS377074: `Effect.runFork` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runForkWith`. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect_flows.ts(28,21): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
 
 
-==== /.src/runEffectInsideEffect_flows.ts (5 errors) ====
+==== /.src/runEffectInsideEffect_flows.ts (6 errors) ====
     import { Effect, pipe } from "effect"
     
     const task = Effect.succeed(1)
@@ -18,6 +19,8 @@ Effect version: 4.0.2
       Effect.runPromise(task, {})
       ~~~~~~~~~~~~~~~~~
 !!! suggestion TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+      ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
     })
     
     export const inPipeMethod = Effect.gen(function*() {

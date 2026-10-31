@@ -342,7 +342,7 @@ export const result = operation(box, String)
 	if resolved == nil || pipeable == nil {
 		t.Fatal("expected data-first and pipeable signatures")
 	}
-	if !pipeableSignatureShapesMatch(tp, resolved, pipeable, 0) {
+	if !pipeableSignatureShapesMatch(tp, resolved, pipeable, 0, false) {
 		t.Fatal("expected signatures to be alpha-equivalent")
 	}
 	if !MatchesPipeableSignature(tp, resolved, pipeable, 0, nil) {
@@ -350,10 +350,10 @@ export const result = operation(box, String)
 	}
 	before := c.TotalInstantiationCount
 	for range 100 {
-		if !comparePipeableSignatureTypes(tp, rawSignature(resolved), rawSignature(pipeable), 0) {
+		if !comparePipeableSignatureTypes(tp, rawSignature(resolved), rawSignature(pipeable), 0, false) {
 			t.Fatal("expected repeated raw type comparison to match")
 		}
-		if !pipeableSignatureShapesMatch(tp, resolved, pipeable, 0) {
+		if !pipeableSignatureShapesMatch(tp, resolved, pipeable, 0, false) {
 			t.Fatal("expected cached signature comparison to match")
 		}
 		if !MatchesPipeableSignature(tp, resolved, pipeable, 0, nil) {

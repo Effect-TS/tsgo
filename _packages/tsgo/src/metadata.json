@@ -46,6 +46,7 @@
         "catchToOrElseSucceed": "suggestion",
         "catchUnfailableEffect": "suggestion",
         "classSelfMismatch": "error",
+        "discardedRunPromiseToRunFork": "warning",
         "duplicatePackage": "warning",
         "effectFnIife": "warning",
         "effectFnImplicitAny": "error",
@@ -145,6 +146,7 @@
         "catchToOrElseSucceed": "error",
         "catchUnfailableEffect": "error",
         "classSelfMismatch": "error",
+        "discardedRunPromiseToRunFork": "error",
         "duplicatePackage": "error",
         "effectFnIife": "error",
         "effectFnImplicitAny": "error",
@@ -231,6 +233,7 @@
       "diagnosticSeverity": {
         "anyUnknownInErrorContext": "warning",
         "classSelfMismatch": "warning",
+        "discardedRunPromiseToRunFork": "warning",
         "duplicatePackage": "warning",
         "effectFnImplicitAny": "warning",
         "errorPayloadShadowsName": "warning",
@@ -452,6 +455,30 @@
             "start": 154,
             "end": 169,
             "text": "The `Self` type parameter for this class should be `InvalidContextTag`. effect(classSelfMismatch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "discardedRunPromiseToRunFork",
+      "group": "correctness",
+      "description": "Detects discarded Promises from Effect runPromise runners that should use runFork",
+      "defaultSeverity": "warning",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377179
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nconst program = Effect.log(\"server started\").pipe(\n  Effect.andThen(Effect.fail(new Error(\"bind failed\")))\n)\n\nvoid Effect.runPromise(program)\n",
+        "diagnostics": [
+          {
+            "start": 148,
+            "end": 165,
+            "text": "The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)"
           }
         ]
       }

@@ -2308,6 +2308,9 @@
         "effecttsgo/deterministic-keys": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/discarded-run-promise-to-run-fork": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/duplicate-package": {
           "$ref": "#/definitions/RuleNoConfig"
         },

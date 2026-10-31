@@ -119,13 +119,19 @@ func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExp
 					continue
 				}
 			}
-			if !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex) {
-				continue
+			// The optional tail only applies when the call stops at the subject,
+			// leaving the trailing optional parameters to the returned function.
+			optionalTail := false
+			if !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex, false) {
+				if subjectIndex != len(call.Arguments.Nodes)-1 || !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex, true) {
+					continue
+				}
+				optionalTail = true
 			}
 			if witness.get() == nil {
 				break
 			}
-			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness.get()) {
+			if !matchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness.get(), optionalTail) {
 				continue
 			}
 
@@ -153,6 +159,10 @@ func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExp
 // dataFirst with the parameter at subjectIndex moved into a returned unary function.
 // When witness is nil, parameter types from dataFirst are used for comparison.
 func MatchesPipeableSignature(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness) bool {
+	return matchesPipeableSignature(tp, dataFirst, candidate, subjectIndex, witness, false)
+}
+
+func matchesPipeableSignature(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness, optionalTail bool) bool {
 	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
@@ -178,9 +188,16 @@ func MatchesPipeableSignature(tp *TypeParser, dataFirst *checker.Signature, cand
 		}
 	}
 
+	tail := 0
+	if optionalTail {
+		if tail = optionalTailLength(rawSignature(dataFirst), subjectIndex); tail == 0 {
+			return false
+		}
+		argumentTypes = argumentTypes[:min(len(argumentTypes), subjectIndex)]
+	}
 	return argumentTypesMatchParameters(c, argumentTypes, candidate) &&
-		candidateAcceptsSubject(c, candidate, subjectType) &&
-		pipeableSignatureShapesMatch(tp, dataFirst, candidate, subjectIndex)
+		candidateAcceptsSubject(c, candidate, subjectType, tail) &&
+		pipeableSignatureShapesMatch(tp, dataFirst, candidate, subjectIndex, optionalTail)
 }
 
 func argumentTypesMatchParameters(c *checker.Checker, args []*checker.Type, sig *checker.Signature) bool {
@@ -207,7 +224,9 @@ func argumentTypesMatchParameters(c *checker.Checker, args []*checker.Type, sig 
 	return true
 }
 
-func candidateAcceptsSubject(c *checker.Checker, candidate *checker.Signature, subjectType *checker.Type) bool {
+// candidateAcceptsSubject reports whether a function returned by candidate
+// takes subjectType as its first parameter, followed by exactly tail more.
+func candidateAcceptsSubject(c *checker.Checker, candidate *checker.Signature, subjectType *checker.Type, tail int) bool {
 	if c == nil || candidate == nil || subjectType == nil {
 		return false
 	}
@@ -216,7 +235,7 @@ func candidateAcceptsSubject(c *checker.Checker, candidate *checker.Signature, s
 		return false
 	}
 	for _, returned := range c.GetSignaturesOfType(candidateReturn, checker.SignatureKindCall) {
-		if returned == nil || len(returned.Parameters()) != 1 || returned.HasRestParameter() {
+		if returned == nil || len(returned.Parameters()) != 1+tail || returned.HasRestParameter() {
 			continue
 		}
 		parameterType := c.GetTypeOfSymbol(returned.Parameters()[0])

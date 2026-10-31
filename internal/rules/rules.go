@@ -150,4 +150,5 @@ var All = []rule.Rule{
 	AcquireReleaseDisposable,
 	RaceFirstWithSleepToTimeout,
 	RunOfExitToRunExit,
+	DiscardedRunPromiseToRunFork,
 }

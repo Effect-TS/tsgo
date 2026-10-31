@@ -1,50 +1,168 @@
 === Quick Fix Inventory ===
 
-[D1] (29:37-29:61) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D1] (17:1-17:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D2] (22:1-22:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D3] (29:37-29:61) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D2] (30:18-30:51) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D4] (30:18-30:51) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D3] (34:32-34:56) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D5] (31:1-31:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D6] (34:1-34:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D7] (34:32-34:56) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D4] (35:14-35:38) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D8] (35:14-35:38) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D5] (38:43-38:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D9] (38:43-38:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D6] (39:43-39:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D10] (39:43-39:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D7] (43:38-43:62) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D11] (43:38-43:62) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D8] (44:47-44:80) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D12] (44:47-44:80) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D1] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D1] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D2] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D1] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/main.ts ---
+// @effect-diagnostics strictEffectProvide:warning
+import { BrowserRuntime } from "@effect/platform-browser"
+import { BunRuntime } from "@effect/platform-bun"
+import { NodeRuntime } from "@effect/platform-node"
+import { runMain as startMain } from "@effect/platform-node/NodeRuntime"
+import { Effect } from "effect"
+import { pipe } from "effect/Function"
+import { AppLayer, program } from "./services"
+
+// Should NOT report: the runner is the next step of the pipe
+program.pipe(Effect.provide(AppLayer), Effect.runPromise)
+pipe(program, Effect.asVoid, Effect.provide(AppLayer), Effect.runFork)
+program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
+program.pipe(Effect.provide(AppLayer), BunRuntime.runMain({ disableErrorReporting: true }))
+
+// Should NOT report: the provided Effect is the runner's argument
+Effect.runFork(program.pipe(Effect.provide(AppLayer)))
+Effect.runSync(Effect.provide(program, AppLayer))
+Effect.runSyncExit((Effect.provide(program, AppLayer)))
+Effect.runPromiseExit(Effect.provide(AppLayer)(program))
+Effect.runCallback(Effect.provide(program, AppLayer))
+Effect.runPromise(program.pipe(Effect.provide(AppLayer)), { signal: new AbortController().signal })
+NodeRuntime.runMain(Effect.provide(program, AppLayer))
+BunRuntime.runMain(program.pipe(Effect.provide(AppLayer)), { disableErrorReporting: true })
+BrowserRuntime.runMain(program.pipe(Effect.provide(AppLayer)))
+startMain(Effect.provide(program, AppLayer))
+
+// Should report: the provided Effect is bound to a variable first
+export const handler = program.pipe(Effect.provide(AppLayer))
+const provided = Effect.provide(program, AppLayer)
+Effect.runPromise(provided)
+
+// Should report: another step follows the provide before the runner
+Effect.runPromise(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
+program.pipe(Effect.provide(AppLayer), Effect.asVoid, NodeRuntime.runMain)
+
+// Should report: the provided Effect is not run
+export const inEffect = Effect.sync(() => Effect.provide(program, AppLayer))
+Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
+
+// Should report: a similarly named local function is not a runner
+const FakeEffect = { runPromise: <A>(value: A) => value }
+export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPromise)
+export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
+
+
+=== [D2] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D2] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D2] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/main.ts ---
+// @effect-diagnostics strictEffectProvide:warning
+import { BrowserRuntime } from "@effect/platform-browser"
+import { BunRuntime } from "@effect/platform-bun"
+import { NodeRuntime } from "@effect/platform-node"
+import { runMain as startMain } from "@effect/platform-node/NodeRuntime"
+import { Effect } from "effect"
+import { pipe } from "effect/Function"
+import { AppLayer, program } from "./services"
+
+// Should NOT report: the runner is the next step of the pipe
+program.pipe(Effect.provide(AppLayer), Effect.runPromise)
+pipe(program, Effect.asVoid, Effect.provide(AppLayer), Effect.runFork)
+program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
+program.pipe(Effect.provide(AppLayer), BunRuntime.runMain({ disableErrorReporting: true }))
+
+// Should NOT report: the provided Effect is the runner's argument
+Effect.runPromise(program.pipe(Effect.provide(AppLayer)))
+Effect.runSync(Effect.provide(program, AppLayer))
+Effect.runSyncExit((Effect.provide(program, AppLayer)))
+Effect.runPromiseExit(Effect.provide(AppLayer)(program))
+Effect.runCallback(Effect.provide(program, AppLayer))
+Effect.runFork(program.pipe(Effect.provide(AppLayer)), { signal: new AbortController().signal })
+NodeRuntime.runMain(Effect.provide(program, AppLayer))
+BunRuntime.runMain(program.pipe(Effect.provide(AppLayer)), { disableErrorReporting: true })
+BrowserRuntime.runMain(program.pipe(Effect.provide(AppLayer)))
+startMain(Effect.provide(program, AppLayer))
+
+// Should report: the provided Effect is bound to a variable first
+export const handler = program.pipe(Effect.provide(AppLayer))
+const provided = Effect.provide(program, AppLayer)
+Effect.runPromise(provided)
+
+// Should report: another step follows the provide before the runner
+Effect.runPromise(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
+program.pipe(Effect.provide(AppLayer), Effect.asVoid, NodeRuntime.runMain)
+
+// Should report: the provided Effect is not run
+export const inEffect = Effect.sync(() => Effect.provide(program, AppLayer))
+Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
+
+// Should report: a similarly named local function is not a runner
+const FakeEffect = { runPromise: <A>(value: A) => value }
+export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPromise)
+export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
+
 
 === [D3] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
@@ -58,17 +176,115 @@ skipped by default
 === [D4] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D5] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D5] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D5] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D5] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D6] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D5] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/main.ts ---
+// @effect-diagnostics strictEffectProvide:warning
+import { BrowserRuntime } from "@effect/platform-browser"
+import { BunRuntime } from "@effect/platform-bun"
+import { NodeRuntime } from "@effect/platform-node"
+import { runMain as startMain } from "@effect/platform-node/NodeRuntime"
+import { Effect } from "effect"
+import { pipe } from "effect/Function"
+import { AppLayer, program } from "./services"
+
+// Should NOT report: the runner is the next step of the pipe
+program.pipe(Effect.provide(AppLayer), Effect.runPromise)
+pipe(program, Effect.asVoid, Effect.provide(AppLayer), Effect.runFork)
+program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
+program.pipe(Effect.provide(AppLayer), BunRuntime.runMain({ disableErrorReporting: true }))
+
+// Should NOT report: the provided Effect is the runner's argument
+Effect.runPromise(program.pipe(Effect.provide(AppLayer)))
+Effect.runSync(Effect.provide(program, AppLayer))
+Effect.runSyncExit((Effect.provide(program, AppLayer)))
+Effect.runPromiseExit(Effect.provide(AppLayer)(program))
+Effect.runCallback(Effect.provide(program, AppLayer))
+Effect.runPromise(program.pipe(Effect.provide(AppLayer)), { signal: new AbortController().signal })
+NodeRuntime.runMain(Effect.provide(program, AppLayer))
+BunRuntime.runMain(program.pipe(Effect.provide(AppLayer)), { disableErrorReporting: true })
+BrowserRuntime.runMain(program.pipe(Effect.provide(AppLayer)))
+startMain(Effect.provide(program, AppLayer))
+
+// Should report: the provided Effect is bound to a variable first
+export const handler = program.pipe(Effect.provide(AppLayer))
+const provided = Effect.provide(program, AppLayer)
+Effect.runFork(provided)
+
+// Should report: another step follows the provide before the runner
+Effect.runPromise(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
+program.pipe(Effect.provide(AppLayer), Effect.asVoid, NodeRuntime.runMain)
+
+// Should report: the provided Effect is not run
+export const inEffect = Effect.sync(() => Effect.provide(program, AppLayer))
+Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
+
+// Should report: a similarly named local function is not a runner
+const FakeEffect = { runPromise: <A>(value: A) => value }
+export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPromise)
+export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
+
+
+=== [D6] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D6] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/main.ts ---
+// @effect-diagnostics strictEffectProvide:warning
+import { BrowserRuntime } from "@effect/platform-browser"
+import { BunRuntime } from "@effect/platform-bun"
+import { NodeRuntime } from "@effect/platform-node"
+import { runMain as startMain } from "@effect/platform-node/NodeRuntime"
+import { Effect } from "effect"
+import { pipe } from "effect/Function"
+import { AppLayer, program } from "./services"
+
+// Should NOT report: the runner is the next step of the pipe
+program.pipe(Effect.provide(AppLayer), Effect.runPromise)
+pipe(program, Effect.asVoid, Effect.provide(AppLayer), Effect.runFork)
+program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
+program.pipe(Effect.provide(AppLayer), BunRuntime.runMain({ disableErrorReporting: true }))
+
+// Should NOT report: the provided Effect is the runner's argument
+Effect.runPromise(program.pipe(Effect.provide(AppLayer)))
+Effect.runSync(Effect.provide(program, AppLayer))
+Effect.runSyncExit((Effect.provide(program, AppLayer)))
+Effect.runPromiseExit(Effect.provide(AppLayer)(program))
+Effect.runCallback(Effect.provide(program, AppLayer))
+Effect.runPromise(program.pipe(Effect.provide(AppLayer)), { signal: new AbortController().signal })
+NodeRuntime.runMain(Effect.provide(program, AppLayer))
+BunRuntime.runMain(program.pipe(Effect.provide(AppLayer)), { disableErrorReporting: true })
+BrowserRuntime.runMain(program.pipe(Effect.provide(AppLayer)))
+startMain(Effect.provide(program, AppLayer))
+
+// Should report: the provided Effect is bound to a variable first
+export const handler = program.pipe(Effect.provide(AppLayer))
+const provided = Effect.provide(program, AppLayer)
+Effect.runPromise(provided)
+
+// Should report: another step follows the provide before the runner
+Effect.runFork(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
+program.pipe(Effect.provide(AppLayer), Effect.asVoid, NodeRuntime.runMain)
+
+// Should report: the provided Effect is not run
+export const inEffect = Effect.sync(() => Effect.provide(program, AppLayer))
+Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
+
+// Should report: a similarly named local function is not a runner
+const FakeEffect = { runPromise: <A>(value: A) => value }
+export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPromise)
+export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
+
 
 === [D7] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
@@ -80,4 +296,28 @@ skipped by default
 skipped by default
 
 === [D8] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default

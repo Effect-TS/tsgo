@@ -11,23 +11,33 @@
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D4] (11:9-11:19) TS6133: 'thisIsFine' is declared but its value is never read.
+[D4] (10:1-10:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D5] (11:9-11:19) TS6133: 'thisIsFine' is declared but its value is never read.
   (no quick fixes)
 
-[D5] (12:3-12:15) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+[D6] (12:3-12:15) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
   Fix 2: "Add yield* statement"
 
-[D6] (15:19-18:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+[D7] (15:1-15:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D8] (15:19-18:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D7] (25:7-25:11) TS6133: 'main' is declared but its value is never read.
+[D9] (25:7-25:11) TS6133: 'main' is declared but its value is never read.
   (no quick fixes)
 
-[D8] (25:14-28:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+[D10] (25:14-28:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
@@ -46,13 +56,52 @@ skipped by default
 === [D3] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
 
-=== [D5] Fix 0: "Disable floatingEffect for this line" ===
+=== [D4] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D5] Fix 1: "Disable floatingEffect for entire file" ===
+=== [D4] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D5] Fix 2: "Add yield* statement" ===
+=== [D4] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/floatingEffect.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const noError = Effect.succeed(1)
+
+Effect.succeed("floating")
+
+Effect.never
+
+Effect.runFork(Effect.gen(function*() {
+  const thisIsFine = Effect.succeed(1)
+  Effect.never
+}))
+
+Effect.runPromise(Effect.gen(function*() {
+  yield* Effect.succeed(1).pipe(Effect.fork)
+  // ^- This is fine, returns a fiber runtime
+}))
+
+export function constructorFunction(this: { boot: Effect.Effect<void> }) {
+  this.boot = Effect.void
+  // ^- This is fine, its another way to perform an assignment
+}
+
+const main = Effect.gen(function*() {
+  yield* Effect.exit(Effect.void)
+  // ^- This is fine, returns an exit
+})
+
+
+=== [D6] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Add yield* statement" ===
 
 --- file:///.src/floatingEffect.ts ---
 // @effect-v3
@@ -85,13 +134,52 @@ const main = Effect.gen(function*() {
 })
 
 
-=== [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+=== [D7] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+=== [D7] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Remove the Effect.gen, and keep the body" ===
+=== [D7] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/floatingEffect.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const noError = Effect.succeed(1)
+
+Effect.succeed("floating")
+
+Effect.never
+
+Effect.runPromise(Effect.gen(function*() {
+  const thisIsFine = Effect.succeed(1)
+  Effect.never
+}))
+
+Effect.runFork(Effect.gen(function*() {
+  yield* Effect.succeed(1).pipe(Effect.fork)
+  // ^- This is fine, returns a fiber runtime
+}))
+
+export function constructorFunction(this: { boot: Effect.Effect<void> }) {
+  this.boot = Effect.void
+  // ^- This is fine, its another way to perform an assignment
+}
+
+const main = Effect.gen(function*() {
+  yield* Effect.exit(Effect.void)
+  // ^- This is fine, returns an exit
+})
+
+
+=== [D8] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/floatingEffect.ts ---
 // @effect-v3
@@ -121,13 +209,13 @@ const main = Effect.gen(function*() {
 })
 
 
-=== [D8] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+=== [D10] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default
 
-=== [D8] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+=== [D10] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
 skipped by default
 
-=== [D8] Fix 2: "Remove the Effect.gen, and keep the body" ===
+=== [D10] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/floatingEffect.ts ---
 // @effect-v3

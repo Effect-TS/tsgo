@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:6-10:23) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Effect } from "effect"
+
+const program = Effect.log("server started").pipe(
+  Effect.andThen(Effect.fail(new Error("bind failed")))
+)
+
+void Effect.runFork(program)
+

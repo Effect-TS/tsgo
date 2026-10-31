@@ -1,0 +1,4083 @@
+=== Quick Fix Inventory ===
+
+[D1] (26:1-26:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D2] (29:6-29:23) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D3] (32:6-32:23) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D4] (35:6-35:23) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D5] (40:6-40:23) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D6] (50:10-50:27) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D7] (55:1-55:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+
+[D8] (58:3-58:20) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D9] (59:7-59:24) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D10] (62:28-62:45) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D11] (65:31-65:48) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D12] (69:3-69:20) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D13] (73:37-73:54) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D14] (77:3-77:20) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D15] (82:15-82:32) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D16] (88:5-88:22) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D17] (93:1-93:14) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D18] (96:1-96:15) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D19] (99:1-99:11) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+
+[D20] (103:1-103:16) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+
+[D21] (106:1-106:19) TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Runtime.runFork"
+
+[D22] (107:6-107:24) TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Runtime.runFork"
+
+[D23] (111:6-111:9) TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+
+[D24] (115:6-115:24) TS377179: The Promise returned by `runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with runFork"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runFork(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D2] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runFork(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D3] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runFork(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D4] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runFork(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D5] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runFork(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D6] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runFork(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D7] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runFork(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D9] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runFork(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D10] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runFork(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D11] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runFork(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D12] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runFork(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D13] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runFork(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D14] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D14] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runFork(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D15] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D15] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runFork(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D16] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runFork(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D17] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runFork(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D18] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D18] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runFork(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D19] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D21] Fix 2: "Replace with Runtime.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runFork(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D22] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D22] Fix 2: "Replace with Runtime.runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runFork(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runPromise(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+
+
+=== [D23] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D24] Fix 2: "Replace with runFork" ===
+
+--- file:///.src/discardedRunPromiseToRunFork.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+import * as Eff from "effect/Effect"
+import { runPromise } from "effect/Effect"
+
+declare class EmitError extends Error {
+  readonly _tag: "EmitError"
+}
+interface Port {
+  postMessage(message: unknown): void
+}
+declare const port: Port
+declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+declare const work: Effect.Effect<void, Error>
+declare const program: Effect.Effect<number, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+declare const seen: Deferred.Deferred<void>
+declare const onStatement: (cb: (sql: string) => void) => void
+declare const flag: boolean
+declare const consume: (promise: Promise<unknown>) => void
+
+// MUST TRIGGER: bare expression statement, the returned Promise floats
+Effect.runPromise(program)
+
+// MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+void Effect.runPromise(program)
+
+// MUST TRIGGER: a typed failure discarded at an entry point
+void Effect.runPromise(reply(port, { kind: "pong" }))
+
+// MUST TRIGGER: the recovery path is itself fallible
+void Effect.runPromise(
+  work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+)
+
+// MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+void Effect.runPromise(
+  Effect.matchCauseEffect(work, {
+    onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+    onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+  })
+)
+
+// MUST TRIGGER: a synchronous callback with nowhere to await
+onStatement((sql) => {
+  if (sql.includes("DELETE")) {
+    void Effect.runPromise(Deferred.succeed(seen, void 0))
+  }
+})
+
+// MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+Effect.runPromise(program, { signal })
+
+// MUST TRIGGER: parentheses around the discarded call are transparent
+;(Effect.runPromise(program))
+void (Effect.runPromise(program))
+
+// MUST TRIGGER: non-final operand of a comma expression
+export const commaFirst = (Effect.runPromise(program), 1)
+
+// MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+port.postMessage("starting"), Effect.runPromise(program)
+
+// MUST TRIGGER: statement inside a block-bodied arrow function
+export const blockArrow = () => {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+export const voidArrow = () => void Effect.runPromise(program)
+
+// MUST TRIGGER: an async function does not await the Promise just by being async
+export async function asyncMain() {
+  Effect.runPromise(program)
+}
+
+// MUST TRIGGER: `return void` still discards the Promise
+export function returnVoid(): void {
+  return void Effect.runPromise(program)
+}
+
+// MUST TRIGGER: class method body
+export class Server {
+  start() {
+    Effect.runPromise(program)
+  }
+}
+
+// MUST TRIGGER: Effect namespace alias
+Fx.runPromise(program)
+
+// MUST TRIGGER: star import of effect/Effect
+Eff.runPromise(program)
+
+// MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+runPromise(program)
+
+// MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+const runPromiseAlias = Effect.runPromise
+runPromiseAlias(program)
+
+// MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+Runtime.runPromise(services)(work)
+void Runtime.runPromise(services, work)
+
+// MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+const run = Runtime.runPromise(services)
+void run(work)
+
+// MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+const runtime = ManagedRuntime.make(Layer.empty)
+void runtime.runFork(work)
+
+// MUST NOT TRIGGER: awaited
+export async function awaited() {
+  await Effect.runPromise(program)
+  await Runtime.runPromise(services)(work)
+  await runtime.runPromise(work)
+}
+
+// MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+
+// MUST NOT TRIGGER: returned from a block body
+export function returned() {
+  return Effect.runPromise(program)
+}
+
+// MUST NOT TRIGGER: assigned
+export const assigned = Effect.runPromise(program)
+let reassigned: Promise<number>
+reassigned = Effect.runPromise(program)
+
+// MUST NOT TRIGGER: passed as an argument
+export const all = Promise.all([Effect.runPromise(program)])
+consume(Effect.runPromise(program))
+
+// MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+void Effect.runPromise(program).catch(() => {})
+Effect.runPromise(program).then(() => {}, () => {})
+Effect.runPromise(program).finally(() => {})
+void Runtime.runPromise(services)(work).catch(() => {})
+void run(work).catch(() => {})
+void runtime.runPromise(work).catch(() => {})
+
+// MUST NOT TRIGGER: final operand of a comma expression whose value is used
+export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+
+// MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+flag ? Effect.runPromise(program) : undefined
+flag && Effect.runPromise(program)
+
+// MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+Effect.runPromiseExit(program)
+void Runtime.runPromiseExit(services)(work)
+void runtime.runPromiseExit(work)
+
+// MUST NOT TRIGGER: already fire-and-forget through a Fiber
+Effect.runFork(program)
+Runtime.runFork(services)(work)
+runtime.runFork(work)
+
+// MUST NOT TRIGGER: other runners
+Effect.runCallback(program)
+void Effect.runSync(Effect.succeed(1))
+
+// MUST NOT TRIGGER: referencing the runner without calling it
+void Effect.runPromise
+
+// MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+void Runtime.runPromise(services)
+
+// MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+const LocalEffect = {
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+LocalEffect.runPromise(Effect.succeed(1))
+const localRuntime = {
+  runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+}
+void localRuntime.runPromise(work)
+declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+void runPromiseLike(work)
+

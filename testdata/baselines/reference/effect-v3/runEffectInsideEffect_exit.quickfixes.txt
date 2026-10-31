@@ -13,17 +13,22 @@
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
 
-[D4] (16:5-16:26) TS377025: `Effect.runPromiseExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromiseExit`. effect(runEffectInsideEffect)
+[D4] (15:5-15:22) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
+[D5] (16:5-16:26) TS377025: `Effect.runPromiseExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromiseExit`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
 
-[D5] (17:5-17:19) TS377025: `Effect.runSync` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSync`. effect(runEffectInsideEffect)
+[D6] (17:5-17:19) TS377025: `Effect.runSync` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSync`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
 
-[D6] (18:5-18:23) TS377025: `Effect.runSyncExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSyncExit`. effect(runEffectInsideEffect)
+[D7] (18:5-18:23) TS377025: `Effect.runSyncExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSyncExit`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
@@ -75,13 +80,13 @@ const effectRuntime = yield* Effect.runtime<never>();
 })
 
 
-=== [D4] Fix 0: "Disable runEffectInsideEffect for this line" ===
+=== [D4] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D4] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+=== [D4] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D4] Fix 2: "Use a runtime to run the Effect" ===
+=== [D4] Fix 2: "Replace with Effect.runFork" ===
 
 --- file:///.src/runEffectInsideEffect_exit.ts ---
 // @effect-v3
@@ -96,12 +101,10 @@ export const sameScope = Effect.gen(function*() {
 })
 
 export const nested = Effect.gen(function*() {
-const effectRuntime = yield* Effect.runtime<never>();
-
   yield* Effect.void
   setTimeout(() => {
-    Effect.runPromise(child)
-    Runtime.runPromiseExit(effectRuntime)(child)
+    Effect.runFork(child)
+    Effect.runPromiseExit(child)
     Effect.runSync(child)
     Effect.runSyncExit(child)
   }, 0)
@@ -134,8 +137,8 @@ const effectRuntime = yield* Effect.runtime<never>();
   yield* Effect.void
   setTimeout(() => {
     Effect.runPromise(child)
-    Effect.runPromiseExit(child)
-    Runtime.runSync(effectRuntime)(child)
+    Runtime.runPromiseExit(effectRuntime)(child)
+    Effect.runSync(child)
     Effect.runSyncExit(child)
   }, 0)
 })
@@ -148,6 +151,39 @@ skipped by default
 skipped by default
 
 === [D6] Fix 2: "Use a runtime to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_exit.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+const child = Effect.succeed(1)
+
+export const sameScope = Effect.gen(function*() {
+  Effect.runSync(child)
+  Effect.runSyncExit(child)
+  yield* Effect.void
+})
+
+export const nested = Effect.gen(function*() {
+const effectRuntime = yield* Effect.runtime<never>();
+
+  yield* Effect.void
+  setTimeout(() => {
+    Effect.runPromise(child)
+    Effect.runPromiseExit(child)
+    Runtime.runSync(effectRuntime)(child)
+    Effect.runSyncExit(child)
+  }, 0)
+})
+
+
+=== [D7] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Use a runtime to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect_exit.ts ---
 // @effect-v3

@@ -1,0 +1,47 @@
+==== /.src/discardedRunPromiseToRunFork_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:16 - 8:2
+Node: Effect.log("server started").pipe(\n  Effect.andThen(Effect.fail(new Error("bind failed")))\n)
+Node Kind: KindCallExpression
+
+Subject: "server started"
+Subject Type: "server started"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [Effect.fail(new Error("bind failed"))]
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 7:18 - 7:55
+Node: Effect.fail(new Error("bind failed"))
+Node Kind: KindCallExpression
+
+Subject: new Error("bind failed")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 10:5 - 10:32
+Node: Effect.runPromise(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<never>

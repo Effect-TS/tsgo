@@ -1,0 +1,309 @@
+==== /.src/discardedRunPromiseToRunFork_receivers.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 24:5 - 24:34
+Node: promiseOnly.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: promiseOnly.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 28:5 - 28:34
+Node: withoutFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: withoutFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 33:5 - 33:36
+Node: promiseRunner.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: promiseRunner.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 37:5 - 37:31
+Node: withFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: withFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 42:5 - 42:36
+Node: mixedRuntimes.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: mixedRuntimes.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 48:5 - 48:35
+Node: shadowedFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: shadowedFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 54:5 - 54:32
+Node: mixedFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: mixedFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 58:5 - 58:35
+Node: optionalFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: optionalFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 62:5 - 62:35
+Node: nullableFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: nullableFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 66:5 - 66:33
+Node: stringFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: stringFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 70:5 - 70:32
+Node: thunkFork.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: thunkFork.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 74:5 - 74:38
+Node: readonlyRuntime.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: readonlyRuntime.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 78:5 - 78:38
+Node: identityRuntime.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: identityRuntime.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 83:5 - 83:33
+Node: appRuntime.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: appRuntime.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 87:7 - 87:32
+Node: runtime.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: runtime.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 92:5 - 92:36
+Node: eitherRuntime.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: eitherRuntime.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 97:5 - 97:51
+Node: promiseRunners.runPromiseWith(services)(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: promiseRunners.runPromiseWith(services)
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 101:5 - 101:37
+Node: promiseRunners.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: promiseRunners.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 104:5 - 104:45
+Node: (Effect).runPromiseWith(services)(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: (Effect).runPromiseWith(services)
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 108:5 - 108:35
+Node: plainRuntime.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: plainRuntime.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 112:5 - 112:36
+Node: maybeRuntime?.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: maybeRuntime?.runPromise
+      args: (constant)
+      outType: Promise<void> | undefined
+
+=== Piping Flow ===
+Location: 116:5 - 116:37
+Node: serviceRuntime.runPromise(work)
+Node Kind: KindCallExpression
+
+Subject: work
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: serviceRuntime.runPromise
+      args: (constant)
+      outType: Promise<void>
