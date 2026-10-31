@@ -1,0 +1,113 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectTryWithoutCatch_shapes.ts(10,37): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(13,57): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(17,17): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(21,55): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(24,35): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(27,31): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(30,39): warning TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(34,30): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(38,30): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(42,27): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(52,62): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(55,26): warning TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_shapes.ts(63,30): error TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+
+
+==== /.src/effectTryWithoutCatch_shapes.ts (13 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectTryWithoutCatch:warning
+    import { type Cause, Data, Effect } from "effect"
+    
+    class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
+    
+    declare const url: string
+    
+    // MUST TRIGGER: subject of a data-first call
+    export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
+                                        ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: subject of a curried pipeable call
+    export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
+                                                            ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: inside an Effect.fnUntraced body
+    export const inFnUntraced = Effect.fnUntraced(function*() {
+      return yield* Effect.try(() => 1)
+                    ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    })
+    
+    // MUST TRIGGER: inside a non-generator Effect.fn body
+    export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
+                                                          ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: parenthesised thunk
+    export const parenthesisedThunk = Effect.try((() => 1))
+                                      ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: a comment before the thunk
+    export const leadingComment = Effect.try(/* thunk */ () => 1)
+                                  ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: one explicit type argument on tryPromise
+    export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
+                                          ~~~~~~~~~~~~~~~~~
+!!! warning TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: the annotation narrows the alias to the short form
+    const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownError> = Effect.try
+    export const narrowedAlias = narrowedTry(() => 1)
+                                 ~~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: a const chain through the narrowed alias
+    const narrowedAgain = narrowedTry
+    export const narrowedChain = narrowedAgain(() => 1)
+                                 ~~~~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: an alias annotated with the API's own type keeps the object form
+    const typedTry: typeof Effect.try = Effect.try
+    export const typedAlias = typedTry(() => 1)
+                              ~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST NOT TRIGGER: parenthesised object form
+    export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
+    
+    // MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
+    declare const args: [() => number]
+    export const spread = Effect.try(...args)
+    
+    // MUST TRIGGER: a data-first value argument
+    export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
+                                                                 ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST TRIGGER: a multi-line async thunk with comments
+    export const multiline = Effect.tryPromise(async (signal) => {
+                             ~~~~~~~~~~~~~~~~~
+!!! warning TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+      // keep this comment
+      const response = await fetch(url, { signal })
+      return response.status
+    })
+    
+    // MUST TRIGGER, as an error: a next-line directive overrides the severity
+    // @effect-diagnostics-next-line effectTryWithoutCatch:error
+    export const nextLineError = Effect.try(() => 1)
+                                 ~~~~~~~~~~
+!!! error TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST NOT TRIGGER: a next-line directive disables the rule for one line
+    // @effect-diagnostics-next-line effectTryWithoutCatch:off
+    export const nextLineOff = Effect.try(() => 1)
+    

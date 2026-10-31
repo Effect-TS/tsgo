@@ -44,7 +44,7 @@ pub struct SyncToSucceedMatch {
     pub constant_value: P<Node>,
 }
 
-// go: internal/rules/sync_to_succeed.go:51 AnalyzeSyncToSucceed f1ac573c0d21921c
+// go: internal/rules/sync_to_succeed.go:51 AnalyzeSyncToSucceed 3cd7bf97b3cc2ace
 // AnalyzeSyncToSucceed finds Effect.sync thunks whose result is already stable
 // when the Effect is constructed.
 //

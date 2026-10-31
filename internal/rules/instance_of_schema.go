@@ -51,6 +51,7 @@ func AnalyzeInstanceOfSchema(tp *typeparser.TypeParser, _ *checker.Checker, sf *
 		nodeToVisit = append(nodeToVisit, child)
 		return false
 	}
+	//ets:ast-walk finds instanceof expressions
 	sf.AsNode().ForEachChild(pushChild)
 
 	for len(nodeToVisit) > 0 {
@@ -72,6 +73,7 @@ func AnalyzeInstanceOfSchema(tp *typeparser.TypeParser, _ *checker.Checker, sf *
 		}
 
 		// Enqueue children
+		//ets:ast-walk finds instanceof expressions
 		node.ForEachChild(pushChild)
 	}
 

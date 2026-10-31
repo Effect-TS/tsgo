@@ -1,26 +1,26 @@
 === Quick Fix Inventory ===
 
-[D1] (6:30-6:47) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+[D1] (7:30-7:47) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
   Fix 0: "Disable runOfExitToRunExit for this line"
   Fix 1: "Disable runOfExitToRunExit for entire file"
   Fix 2: "Replace with Effect.runPromiseExit"
 
-[D2] (7:27-7:44) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+[D2] (8:27-8:44) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
   Fix 0: "Disable runOfExitToRunExit for this line"
   Fix 1: "Disable runOfExitToRunExit for entire file"
   Fix 2: "Replace with Effect.runPromiseExit"
 
-[D3] (8:29-8:46) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+[D3] (9:29-9:46) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
   Fix 0: "Disable runOfExitToRunExit for this line"
   Fix 1: "Disable runOfExitToRunExit for entire file"
   Fix 2: "Replace with Effect.runPromiseExit"
 
-[D4] (9:60-9:77) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+[D4] (10:60-10:77) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
   Fix 0: "Disable runOfExitToRunExit for this line"
   Fix 1: "Disable runOfExitToRunExit for entire file"
   Fix 2: "Replace with Effect.runPromiseExit"
 
-[D5] (12:30-12:40) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+[D5] (13:30-13:40) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
   Fix 0: "Disable runOfExitToRunExit for this line"
   Fix 1: "Disable runOfExitToRunExit for entire file"
   Fix 2: "Replace with Effect.runPromiseExit"
@@ -36,6 +36,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.runPromiseExit" ===
 
 --- file:///.src/runOfExitToRunExit.ts ---
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 declare const program: Effect.Effect<number, Error>
@@ -69,6 +70,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.runPromiseExit" ===
 
 --- file:///.src/runOfExitToRunExit.ts ---
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 declare const program: Effect.Effect<number, Error>
@@ -102,6 +104,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.runPromiseExit" ===
 
 --- file:///.src/runOfExitToRunExit.ts ---
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 declare const program: Effect.Effect<number, Error>
@@ -135,6 +138,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.runPromiseExit" ===
 
 --- file:///.src/runOfExitToRunExit.ts ---
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 declare const program: Effect.Effect<number, Error>
@@ -168,6 +172,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.runPromiseExit" ===
 
 --- file:///.src/runOfExitToRunExit.ts ---
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 declare const program: Effect.Effect<number, Error>

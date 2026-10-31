@@ -168,7 +168,7 @@ pub(crate) static STRING_METHOD_NAMES: LazyLock<FxHashSet<&'static str>> = LazyL
     names
 });
 
-// go: internal/rules/prefer_effect_string.go:69 runPreferEffectString 100ea1289cc96a57
+// go: internal/rules/prefer_effect_string.go:69 runPreferEffectString b78cedd2ee5e1909
 pub(crate) fn run_prefer_effect_string(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     let mut diagnostics = Vec::new();
     // Rust: Go's recursive `walk` closure is a nested function.

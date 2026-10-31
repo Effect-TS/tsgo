@@ -40,7 +40,7 @@ pub struct EffectDoNotationMatch {
     pub node: P<Node>,
 }
 
-// go: internal/rules/effect_do_notation.go:46 AnalyzeEffectDoNotation e5e346d34497354e
+// go: internal/rules/effect_do_notation.go:46 AnalyzeEffectDoNotation a3002bdf0b2d48eb
 // AnalyzeEffectDoNotation finds all references to Effect.Do-style helpers.
 //
 // Rust: Go's checker argument is unused and dropped.

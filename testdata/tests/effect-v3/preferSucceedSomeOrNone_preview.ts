@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferSucceedSomeOrNone:warning
 import { Effect, Option } from "effect"

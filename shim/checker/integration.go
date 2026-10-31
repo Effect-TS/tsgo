@@ -3,7 +3,7 @@ package checker
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/providershim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 
 	"unsafe"
 )
@@ -252,12 +252,15 @@ func GetResolvedBaseTypesOfTypeIfMaterialized(c *Checker, t *Type) ([]*Type, boo
 // has already resolved for a structured type. The boolean reports whether the
 // member surface was materialized at all: a deferred reference keeps false so
 // callers inspect the declaration instead of forcing member resolution, which
-// would instantiate index annotations and inherited members.
+// would instantiate index annotations and inherited members. Resolved class,
+// interface and reference types keep their members in a lazy member layout, so
+// the table is read through the checker's own accessor, which only instantiates
+// the member symbols of the already-resolved layout.
 func GetResolvedMembersOfTypeIfMaterialized(c *Checker, t *Type) (ast.SymbolTable, bool) {
 	if t == nil || t.Flags()&TypeFlagsObject == 0 || t.ObjectFlags()&ObjectFlagsMembersResolved == 0 {
 		return nil, false
 	}
-	return StructuredType_members(t.AsStructuredType()), true
+	return StructuredType_getMembers(t.AsStructuredType()), true
 }
 
 // GetResolvedSignaturesOfTypeIfMaterialized returns the call or construct

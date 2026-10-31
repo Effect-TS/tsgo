@@ -74,6 +74,7 @@ func AnalyzeUnnecessaryFailYieldableError(tp *typeparser.TypeParser, _ *checker.
 			}
 		}
 
+		//ets:ast-walk finds yield* expressions whose operand is Effect.fail(...)
 		n.ForEachChild(walk)
 		return false
 	}

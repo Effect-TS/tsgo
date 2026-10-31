@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/lsp/lsproto
+module github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto
 
 go 1.26
 

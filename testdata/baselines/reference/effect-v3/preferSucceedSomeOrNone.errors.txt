@@ -1,32 +1,33 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/preferSucceedSomeOrNone.ts(7,43): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(10,34): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(13,34): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(16,37): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(19,39): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(20,39): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(23,43): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(26,46): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(29,57): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(30,58): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(33,66): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(34,67): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(37,69): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(40,73): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(41,72): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(42,70): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(43,69): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(46,52): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
-/.src/preferSucceedSomeOrNone.ts(46,73): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(8,43): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(11,34): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(14,34): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(17,37): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(20,39): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(21,39): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(24,43): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(27,46): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(30,57): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(31,58): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(34,66): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(35,67): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(38,69): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(41,73): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(42,72): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(43,70): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(44,69): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
 /.src/preferSucceedSomeOrNone.ts(47,52): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
-/.src/preferSucceedSomeOrNone.ts(47,77): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
-/.src/preferSucceedSomeOrNone.ts(48,58): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
-/.src/preferSucceedSomeOrNone.ts(48,84): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(47,73): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(48,52): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/preferSucceedSomeOrNone.ts(48,77): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(49,58): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/preferSucceedSomeOrNone.ts(49,84): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
 
 
 ==== /.src/preferSucceedSomeOrNone.ts (23 errors) ====
+    // @effect-v3
     import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
     import { none as optionNone, some as optionSome } from "effect/Option"
     

@@ -46,7 +46,7 @@ pub struct SchemaStructWithTagMatch {
     pub other_properties: Vec<P<Node>>, // All property assignment nodes in the object literal except _tag
 }
 
-// go: internal/rules/schema_struct_with_tag.go:46 AnalyzeSchemaStructWithTag 6722a83bacc60016
+// go: internal/rules/schema_struct_with_tag.go:48 AnalyzeSchemaStructWithTag 96c7c9559dc20e63
 // AnalyzeSchemaStructWithTag finds all Schema.Struct({ _tag: Schema.Literal("..."), ... })
 // call expressions and returns match structs for each.
 //
@@ -81,7 +81,7 @@ pub fn analyze_schema_struct_with_tag(
     matches
 }
 
-// go: internal/rules/schema_struct_with_tag.go:75 analyzeSchemaStructWithTagNode 21703e96352d02cd
+// go: internal/rules/schema_struct_with_tag.go:77 analyzeSchemaStructWithTagNode 21703e96352d02cd
 // analyzeSchemaStructWithTagNode checks a call expression for Schema.Struct({ _tag: Schema.Literal("...") }).
 pub(crate) fn analyze_schema_struct_with_tag_node(
     tp: &mut TypeParser<'_>,

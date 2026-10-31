@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/jsnum
+module github.com/microsoft/TypeScript/tsc/shim/jsnum
 
 go 1.26
 

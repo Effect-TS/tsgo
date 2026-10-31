@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/spanmap
+module github.com/microsoft/TypeScript/tsc/shim/spanmap
 
 go 1.26
 

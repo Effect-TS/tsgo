@@ -72,7 +72,7 @@ pub struct FloatingEffectMatch {
     pub(crate) expr_type: P<Type>,
 }
 
-// go: internal/rules/floating_effect.go:61 AnalyzeFloatingEffect cf4dcbd0a8eb9f1c
+// go: internal/rules/floating_effect.go:61 AnalyzeFloatingEffect 97a7824d85703284
 // AnalyzeFloatingEffect finds Effect values used as standalone expression statements.
 //
 // Rust: Go's checker argument is the parser's checker; its callee ignores it, so it is dropped.
@@ -106,7 +106,7 @@ pub fn analyze_floating_effect(
     matches
 }
 
-// go: internal/rules/floating_effect.go:90 detectFloatingEffect 44a80d935048c27f
+// go: internal/rules/floating_effect.go:91 detectFloatingEffect 44a80d935048c27f
 // detectFloatingEffect checks if a node is an expression statement containing an Effect type
 // that is neither yielded nor assigned. Returns nil if the node should not be reported,
 // or a result with type info for selecting the appropriate diagnostic message.
@@ -159,7 +159,7 @@ pub(crate) fn detect_floating_effect(
     Some(FloatingEffectResult { is_strict, expr_type: t })
 }
 
-// go: internal/rules/floating_effect.go:142 isAssignmentExpression ad3ba8d34dd2ba22
+// go: internal/rules/floating_effect.go:143 isAssignmentExpression ad3ba8d34dd2ba22
 // isAssignmentExpression checks if an expression is an assignment (=, ??=, &&=, ||=).
 pub(crate) fn is_assignment_expression(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {

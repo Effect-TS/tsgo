@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/collections
+module github.com/microsoft/TypeScript/tsc/shim/collections
 
 go 1.26
 

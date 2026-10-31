@@ -51,7 +51,7 @@ pub struct RedundantSchemaTagIdentifierMatch {
     pub key_string_literal: P<Node>, // The redundant identifier string literal in the inner call
 }
 
-// go: internal/rules/redundant_schema_tag_identifier.go:44 AnalyzeRedundantSchemaTagIdentifier 77d151bfeb85eb33
+// go: internal/rules/redundant_schema_tag_identifier.go:46 AnalyzeRedundantSchemaTagIdentifier 8cbdb0c9ef86f401
 // AnalyzeRedundantSchemaTagIdentifier finds all class declarations where the identifier
 // string literal equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest.
 //
@@ -84,7 +84,7 @@ pub fn analyze_redundant_schema_tag_identifier(
     matches
 }
 
-// go: internal/rules/redundant_schema_tag_identifier.go:70 analyzeRedundantSchemaTagIdentifierNode bb45fbe1a9759892
+// go: internal/rules/redundant_schema_tag_identifier.go:72 analyzeRedundantSchemaTagIdentifierNode bb45fbe1a9759892
 //
 // Rust: Go's unused checker parameter is dropped; `(match, ok)` is an `Option`.
 pub(crate) fn analyze_redundant_schema_tag_identifier_node(

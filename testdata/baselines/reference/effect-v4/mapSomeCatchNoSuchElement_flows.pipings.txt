@@ -1,0 +1,311 @@
+==== /.src/mapSomeCatchNoSuchElement_flows.ts (17 flows) ====
+
+=== Piping Flow ===
+Location: 15:29 - 18:2
+Node: Effect.andThen(\n  Effect.log("start"),\n  Effect.catchTag(Effect.asSome(lookup), "NoSuchElementError", () => Effect.succeedNone)\n)
+Node Kind: KindCallExpression
+
+Subject: "start"
+Subject Type: "start"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [Effect.catchTag(Effect.asSome(lookup), "NoSuchElementError", () => Effect.succeedNone)]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 16:23 - 17:89
+Node: Effect.catchTag(Effect.asSome(lookup), "NoSuchElementError", () => Effect.succeedNone)
+Node Kind: KindCallExpression
+
+Subject: lookup
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [1] kind: dataFirst
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 19:32 - 22:2
+Node: Effect.zip(\n  Effect.succeed(1),\n  Effect.catchTag(Effect.asSome(lookup), "NoSuchElementError", () => Effect.succeed(Option.none()))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.zip
+      args: [Effect.catchTag(Effect.asSome(lookup), "NoSuchElementError", () => Effect.succeed(Option.none()))]
+      outType: Effect<[number, import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>], never, never>
+
+=== Piping Flow ===
+Location: 20:21 - 21:100
+Node: Effect.catchTag(Effect.asSome(lookup), "NoSuchElementError", () => Effect.succeed(Option.none()))
+Node Kind: KindCallExpression
+
+Subject: lookup
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [1] kind: dataFirst
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeed(Option.none())]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 21:69 - 21:99
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 25:34 - 28:2
+Node: Effect.map(\n  Effect.catchTag(Effect.asSome(/* subject */ lookup), "NoSuchElementError", () => Effect.succeedNone),\n  /* kept */ Option.isSome\n)
+Node Kind: KindCallExpression
+
+Subject: lookup
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [1] kind: dataFirst
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+  [2] kind: dataFirst
+      callee: Effect.map
+      args: [Option.isSome]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 31:34 - 34:2
+Node: lookupOrTimeout.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)\n)
+Node Kind: KindCallExpression
+
+Subject: lookupOrTimeout
+Subject Type: Effect<string, NoSuchElementError | NotFound | TimeoutError, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError | NotFound | TimeoutError, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, NotFound | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 37:31 - 40:2
+Node: tagUnion.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)\n)
+Node Kind: KindCallExpression
+
+Subject: tagUnion
+Subject Type: Effect<string, NoSuchElementError | { readonly _tag: "A" | "NoSuchElementError"; }, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError | { readonly _tag: "A" | "NoSuchElementError"; }, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, { readonly _tag: "A" | "NoSuchElementError"; }, never>
+
+=== Piping Flow ===
+Location: 43:35 - 45:85
+Node: lookup // subject\n  .pipe(/* wrap */ Effect.asSome)\n  .pipe(/* catch */ Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+Node Kind: KindCallExpression
+
+Subject: lookup
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 48:32 - 51:106
+Node: Effect.fn(function*() {\n  // body\n  return yield* lookup\n}, /* wrap */ Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone) /* catch */)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(function*() {\n  // body\n  return yield* lookup\n}, /* wrap */ Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone) /* catch */)
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (2):
+  [0] kind: effectFn
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [1] kind: effectFn
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 54:33 - 59:2
+Node: pipe(\n  lookup,\n  Effect.asSome,\n  /* catch */ Effect.catchTag("NoSuchElementError", () => Effect.succeedNone), // trailing\n  /* kept */ Effect.map(Option.isSome)\n)
+Node Kind: KindCallExpression
+
+Subject: lookup
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [1] kind: pipe
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+  [2] kind: pipe
+      callee: Effect.map
+      args: [Option.isSome]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 62:35 - 68:2
+Node: lookup.pipe(\n  Effect.tap(() => Effect.log("/* text */")),\n  Effect.tap(() => Effect.log(`// template ${1} /* tail */`)),\n  Effect.tap(() => Effect.log(/\/* regex *\//.source)),\n  Effect.asSome,\n  /* real */ Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)\n)
+Node Kind: KindCallExpression
+
+Subject: lookup
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (5):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [() => Effect.log("/* text */")]
+      outType: Effect<string, NoSuchElementError, never>
+  [1] kind: pipeable
+      callee: Effect.tap
+      args: [() => Effect.log(`// template ${1} /* tail */`)]
+      outType: Effect<string, NoSuchElementError, never>
+  [2] kind: pipeable
+      callee: Effect.tap
+      args: [() => Effect.log(/\/* regex *\//.source)]
+      outType: Effect<string, NoSuchElementError, never>
+  [3] kind: pipeable
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [4] kind: pipeable
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 63:19 - 63:44
+Node: Effect.log("/* text */")
+Node Kind: KindCallExpression
+
+Subject: "/* text */"
+Subject Type: "/* text */"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 64:19 - 64:61
+Node: Effect.log(`// template ${1} /* tail */`)
+Node Kind: KindCallExpression
+
+Subject: `// template ${1} /* tail */`
+Subject Type: "// template 1 /* tail */"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 65:19 - 65:54
+Node: Effect.log(/\/* regex *\//.source)
+Node Kind: KindCallExpression
+
+Subject: /\/* regex *\//.source
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 71:43 - 79:2
+Node: lookup.pipe(\n  Effect.tap((value) => {\n    return Effect.log(value)\n    // end of kept block\n  }),\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)\n  // end of pipe\n)
+Node Kind: KindCallExpression
+
+Subject: lookup
+Subject Type: Effect<string, NoSuchElementError, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [(value) => {\n    return Effect.log(value)\n    // end of kept block\n  }]
+      outType: Effect<string, NoSuchElementError, never>
+  [1] kind: pipeable
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, NoSuchElementError, never>
+  [2] kind: pipeable
+      callee: Effect.catchTag
+      args: ["NoSuchElementError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 73:11 - 73:29
+Node: Effect.log(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

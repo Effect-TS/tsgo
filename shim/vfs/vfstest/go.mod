@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/vfs/vfstest
+module github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest
 
 go 1.26
 

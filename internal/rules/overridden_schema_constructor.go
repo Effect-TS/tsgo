@@ -39,6 +39,8 @@ type OverriddenSchemaConstructorMatch struct {
 
 // AnalyzeOverriddenSchemaConstructor finds all class declarations extending Schema
 // that have an overridden constructor which is not an allowed passthrough pattern.
+//
+//ets:ast-walk finds class declarations extending Schema, which are not flow steps
 func AnalyzeOverriddenSchemaConstructor(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []OverriddenSchemaConstructorMatch {
 	var matches []OverriddenSchemaConstructorMatch
 

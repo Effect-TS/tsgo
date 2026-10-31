@@ -45,6 +45,7 @@ var PromiseInEffectSuccess = rule.Rule{
 					continue
 				}
 				stack = append(stack, stackEntry{node: node, visited: true})
+				//ets:ast-walk visits every expression to check its type for a Promise in the Effect success
 				node.ForEachChild(pushChild)
 				continue
 			}

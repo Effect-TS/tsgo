@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/bundled
+module github.com/microsoft/TypeScript/tsc/shim/bundled
 
 go 1.26
 

@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/catchIfTagToCatchTag.ts(16,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
-/.src/catchIfTagToCatchTag.ts(25,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+/.src/catchIfTagToCatchTag.ts(17,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+/.src/catchIfTagToCatchTag.ts(26,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
 
 
 ==== /.src/catchIfTagToCatchTag.ts (2 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics catchIfTagToCatchTag:suggestion
     import { Effect } from "effect"

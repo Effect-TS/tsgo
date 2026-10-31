@@ -68,6 +68,7 @@ func AnalyzeMissingReturnYieldStar(tp *typeparser.TypeParser, c *checker.Checker
 			}
 		}
 
+		//ets:ast-walk finds yield* expression statements inside Effect generators
 		n.ForEachChild(walk)
 		return false
 	}

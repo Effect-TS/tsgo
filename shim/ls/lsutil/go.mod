@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/ls/lsutil
+module github.com/microsoft/TypeScript/tsc/shim/ls/lsutil
 
 go 1.26
 

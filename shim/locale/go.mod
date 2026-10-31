@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/locale
+module github.com/microsoft/TypeScript/tsc/shim/locale
 
 go 1.26
 

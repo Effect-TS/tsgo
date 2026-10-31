@@ -1,0 +1,857 @@
+==== /.src/effectTryWithoutCatch.ts (60 flows) ====
+
+=== Piping Flow ===
+Location: 9:25 - 9:56
+Node: Data.TaggedError("ParseError")
+Node Kind: KindCallExpression
+
+Subject: "ParseError"
+Subject Type: "ParseError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ParseError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 10:25 - 10:56
+Node: Data.TaggedError("FetchError")
+Node Kind: KindCallExpression
+
+Subject: "FetchError"
+Subject Type: "FetchError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "FetchError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 17:24 - 17:59
+Node: Effect.try(() => JSON.parse(text))
+Node Kind: KindCallExpression
+
+Subject: () => JSON.parse(text)
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, UnknownException, never>
+
+=== Piping Flow ===
+Location: 17:41 - 17:58
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 20:31 - 20:67
+Node: Effect.tryPromise(() => fetch(url))
+Node Kind: KindCallExpression
+
+Subject: () => fetch(url)
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 20:55 - 20:66
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 23:32 - 23:86
+Node: Effect.tryPromise((signal) => fetch(url, { signal }))
+Node Kind: KindCallExpression
+
+Subject: (signal) => fetch(url, { signal })
+Subject Type: (signal: AbortSignal) => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 23:62 - 23:85
+Node: fetch(url, { signal })
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: fetch
+      args: [{ signal }]
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 26:31 - 29:3
+Node: Effect.tryPromise(async () => {\n  const response = await fetch(url)\n  return response.status\n})
+Node Kind: KindCallExpression
+
+Subject: async () => {\n  const response = await fetch(url)\n  return response.status\n}
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 27:25 - 27:36
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 32:37 - 34:3
+Node: Effect.try(function() {\n  return parseDocument(text)\n})
+Node Kind: KindCallExpression
+
+Subject: function() {\n  return parseDocument(text)\n}
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, UnknownException, never>
+
+=== Piping Flow ===
+Location: 33:9 - 33:29
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 37:24 - 37:44
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 38:28 - 38:50
+Node: Effect.try(parseText)
+Node Kind: KindCallExpression
+
+Subject: parseText
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, UnknownException, never>
+
+=== Piping Flow ===
+Location: 42:29 - 42:53
+Node: Effect.try(makeThunk())
+Node Kind: KindCallExpression
+
+Subject: makeThunk()
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 45:40 - 45:68
+Node: Effect.try<number>(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 48:21 - 51:3
+Node: Effect.gen(function*() {\n  const document = yield* Effect.try(() => parseDocument(text))\n  return document.title\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const document = yield* Effect.try(() => parseDocument(text))\n  return document.title\n}
+Subject Type: () => Generator<YieldWrap<Effect<{ readonly title: string; }, UnknownException, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, UnknownException, never>
+
+=== Piping Flow ===
+Location: 49:26 - 49:64
+Node: Effect.try(() => parseDocument(text))
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, UnknownException, never>
+
+=== Piping Flow ===
+Location: 49:43 - 49:63
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 54:20 - 56:3
+Node: Effect.fn("inFn")(function*(input: string) {\n  return yield* Effect.tryPromise(() => fetch(input))\n})
+Node Kind: KindCallExpression
+
+Subject: function*(input: string) {\n  return yield* Effect.tryPromise(() => fetch(input))\n}
+Subject Type: (input: string) => Generator<YieldWrap<Effect<Response, UnknownException, never>>, Response, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("inFn")
+      args: (constant)
+      outType: (input: string) => Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 55:16 - 55:54
+Node: Effect.tryPromise(() => fetch(input))
+Node Kind: KindCallExpression
+
+Subject: () => fetch(input)
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 55:40 - 55:53
+Node: fetch(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 59:22 - 62:2
+Node: pipe(\n  Effect.try(() => parseDocument(text)),\n  Effect.map((document) => document.title)\n)
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, UnknownException, never>
+  [1] kind: pipe
+      callee: Effect.map
+      args: [(document) => document.title]
+      outType: Effect<string, UnknownException, never>
+
+=== Piping Flow ===
+Location: 60:19 - 60:39
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 65:34 - 67:2
+Node: Effect.try(() => parseDocument(text)).pipe(\n  Effect.mapError((cause) => new ParseError({ cause }))\n)
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, UnknownException, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new ParseError({ cause })]
+      outType: Effect<{ readonly title: string; }, ParseError, never>
+
+=== Piping Flow ===
+Location: 65:51 - 65:71
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 70:30 - 70:63
+Node: Eff.tryPromise(() => fetch(url))
+Node Kind: KindCallExpression
+
+Subject: () => fetch(url)
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Eff.tryPromise
+      args: (constant)
+      outType: Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 70:51 - 70:62
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 73:24 - 73:59
+Node: attempt(() => parseDocument(text))
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: attempt
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, UnknownException, never>
+
+=== Piping Flow ===
+Location: 73:38 - 73:58
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 74:31 - 74:64
+Node: attemptPromise(() => fetch(url))
+Node Kind: KindCallExpression
+
+Subject: () => fetch(url)
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: attemptPromise
+      args: (constant)
+      outType: Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 74:52 - 74:63
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 78:26 - 78:63
+Node: effectTry(() => parseDocument(text))
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: effectTry
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, UnknownException, never>
+
+=== Piping Flow ===
+Location: 78:42 - 78:62
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 81:25 - 84:3
+Node: Effect.try({\n  try: () => JSON.parse(text),\n  catch: (cause) => new ParseError({ cause })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse(text),\n  catch: (cause) => new ParseError({ cause })\n}
+Subject Type: { try: () => any; catch: (cause: unknown) => ParseError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, ParseError, never>
+
+=== Piping Flow ===
+Location: 82:13 - 82:30
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 87:32 - 90:3
+Node: Effect.tryPromise({\n  try: (signal) => fetch(url, { signal }),\n  catch: (cause) => new FetchError({ cause })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: (signal) => fetch(url, { signal }),\n  catch: (cause) => new FetchError({ cause })\n}
+Subject Type: { try: (signal: AbortSignal) => Promise<Response>; catch: (cause: unknown) => FetchError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, FetchError, never>
+
+=== Piping Flow ===
+Location: 88:19 - 88:42
+Node: fetch(url, { signal })
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: fetch
+      args: [{ signal }]
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 93:37 - 96:3
+Node: Effect.try({\n  try: () => JSON.parse(text),\n  catch: (cause) => cause\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse(text),\n  catch: (cause) => cause\n}
+Subject Type: { try: () => any; catch: (cause: unknown) => unknown; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, unknown, never>
+
+=== Piping Flow ===
+Location: 94:13 - 94:30
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 100:23 - 100:43
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 101:34 - 101:83
+Node: Effect.try({ try: tryParse, catch: catchParse })
+Node Kind: KindCallExpression
+
+Subject: { try: tryParse, catch: catchParse }
+Subject Type: { try: () => { readonly title: string; }; catch: (cause: unknown) => ParseError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, ParseError, never>
+
+=== Piping Flow ===
+Location: 105:13 - 105:24
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 108:42 - 108:74
+Node: Effect.tryPromise(fetchOptions)
+Node Kind: KindCallExpression
+
+Subject: fetchOptions
+Subject Type: { try: () => Promise<Response>; catch: (cause: unknown) => FetchError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, FetchError, never>
+
+=== Piping Flow ===
+Location: 113:22 - 113:42
+Node: Effect.try(untyped)
+Node Kind: KindCallExpression
+
+Subject: untyped
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<unknown, unknown, never>
+
+=== Piping Flow ===
+Location: 116:22 - 118:2
+Node: Effect.succeed(text).pipe(\n  Effect.tryMap({ try: parseDocument, catch: (cause) => new ParseError({ cause }) })\n)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.tryMap
+      args: [{ try: parseDocument, catch: (cause) => new ParseError({ cause }) }]
+      outType: Effect<{ readonly title: string; }, ParseError, never>
+
+=== Piping Flow ===
+Location: 119:29 - 121:2
+Node: Effect.succeed(url).pipe(\n  Effect.tryMapPromise({ try: (input) => fetch(input), catch: (cause) => new FetchError({ cause }) })\n)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.tryMapPromise
+      args: [{ try: (input) => fetch(input), catch: (cause) => new FetchError({ cause }) }]
+      outType: Effect<Response, FetchError, never>
+
+=== Piping Flow ===
+Location: 120:41 - 120:54
+Node: fetch(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 124:20 - 124:59
+Node: Effect.sync(() => parseDocument(text))
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<{ readonly title: string; }, never, never>
+
+=== Piping Flow ===
+Location: 124:38 - 124:58
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 125:23 - 125:56
+Node: Effect.promise(() => fetch(url))
+Node Kind: KindCallExpression
+
+Subject: () => fetch(url)
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Response, never, never>
+
+=== Piping Flow ===
+Location: 125:44 - 125:55
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 128:25 - 128:63
+Node: Either.try(() => parseDocument(text))
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Either.try
+      args: (constant)
+      outType: Either<{ readonly title: string; }, unknown>
+
+=== Piping Flow ===
+Location: 128:42 - 128:62
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 136:26 - 136:70
+Node: pipe(() => parseDocument(text), Effect.try)
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<unknown, UnknownException, never>
+
+=== Piping Flow ===
+Location: 136:37 - 136:57
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 143:24 - 143:61
+Node: Local.try(() => parseDocument(text))
+Node Kind: KindCallExpression
+
+Subject: () => parseDocument(text)
+Subject Type: () => { readonly title: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Local.try
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 143:40 - 143:60
+Node: parseDocument(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: parseDocument
+      args: (constant)
+      outType: { readonly title: string; }
+
+=== Piping Flow ===
+Location: 144:31 - 144:66
+Node: Local.tryPromise(() => fetch(url))
+Node Kind: KindCallExpression
+
+Subject: () => fetch(url)
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Local.tryPromise
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 144:54 - 144:65
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>

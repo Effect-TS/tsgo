@@ -1,0 +1,131 @@
+=== Quick Fix Inventory ===
+
+[D1] (19:3-19:18) TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+  Fix 0: "Disable mapSomeCatchNoSuchElement for this line"
+  Fix 1: "Disable mapSomeCatchNoSuchElement for entire file"
+  Fix 2: "Replace with Effect.catchNoSuchElement"
+
+[D2] (25:3-25:18) TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+  Fix 0: "Disable mapSomeCatchNoSuchElement for this line"
+  Fix 1: "Disable mapSomeCatchNoSuchElement for entire file"
+  Fix 2: "Replace with Effect.catchNoSuchElement"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapSomeCatchNoSuchElement for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapSomeCatchNoSuchElement for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchNoSuchElement" ===
+
+--- file:///.src/mapSomeCatchNoSuchElement_errors.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeCatchNoSuchElement:warning
+import { Cause, Data, Effect } from "effect"
+
+class NotFound extends Data.TaggedError("NotFound")<{}> {}
+class CustomNoSuchElement extends Data.TaggedError("NoSuchElementError")<{}> {}
+
+declare const canonical: Effect.Effect<string, Cause.NoSuchElementError>
+declare const withOther: Effect.Effect<string, Cause.NoSuchElementError | NotFound>
+declare const custom: Effect.Effect<string, CustomNoSuchElement>
+declare const mixed: Effect.Effect<string, Cause.NoSuchElementError | CustomNoSuchElement>
+declare const structural: Effect.Effect<string, { readonly _tag: "NoSuchElementError" }>
+declare const broadTag: Effect.Effect<string, Cause.NoSuchElementError | { readonly _tag: string }>
+
+// MUST TRIGGER: the error channel is exactly Cause.NoSuchElementError
+export const exact = canonical.pipe(Effect.catchNoSuchElement)
+
+// MUST TRIGGER: unrelated tagged errors in the channel are preserved by catchNoSuchElement too
+export const otherTaggedError = withOther.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: a user error reusing the tag; catchTag matches it by _tag, but
+// catchNoSuchElement only catches the real Cause.NoSuchElementError (by type id)
+export const customError = custom.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: the channel mixes the real error with a lookalike carrying the same tag
+export const mixedLookalike = mixed.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: a structural error with the same tag is not Cause.NoSuchElementError
+export const structuralError = structural.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: a broad string tag could also match "NoSuchElementError"
+export const broad = broadTag.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+
+=== [D2] Fix 0: "Disable mapSomeCatchNoSuchElement for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapSomeCatchNoSuchElement for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.catchNoSuchElement" ===
+
+--- file:///.src/mapSomeCatchNoSuchElement_errors.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeCatchNoSuchElement:warning
+import { Cause, Data, Effect } from "effect"
+
+class NotFound extends Data.TaggedError("NotFound")<{}> {}
+class CustomNoSuchElement extends Data.TaggedError("NoSuchElementError")<{}> {}
+
+declare const canonical: Effect.Effect<string, Cause.NoSuchElementError>
+declare const withOther: Effect.Effect<string, Cause.NoSuchElementError | NotFound>
+declare const custom: Effect.Effect<string, CustomNoSuchElement>
+declare const mixed: Effect.Effect<string, Cause.NoSuchElementError | CustomNoSuchElement>
+declare const structural: Effect.Effect<string, { readonly _tag: "NoSuchElementError" }>
+declare const broadTag: Effect.Effect<string, Cause.NoSuchElementError | { readonly _tag: string }>
+
+// MUST TRIGGER: the error channel is exactly Cause.NoSuchElementError
+export const exact = canonical.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST TRIGGER: unrelated tagged errors in the channel are preserved by catchNoSuchElement too
+export const otherTaggedError = withOther.pipe(Effect.catchNoSuchElement)
+
+// MUST NOT TRIGGER: a user error reusing the tag; catchTag matches it by _tag, but
+// catchNoSuchElement only catches the real Cause.NoSuchElementError (by type id)
+export const customError = custom.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: the channel mixes the real error with a lookalike carrying the same tag
+export const mixedLookalike = mixed.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: a structural error with the same tag is not Cause.NoSuchElementError
+export const structuralError = structural.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: a broad string tag could also match "NoSuchElementError"
+export const broad = broadTag.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+

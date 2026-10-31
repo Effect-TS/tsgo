@@ -60,6 +60,7 @@ func runCryptoRandomUUID(ctx *rule.Context, checkInEffect bool) []*ast.Diagnosti
 			}
 		}
 
+		//ets:ast-walk finds zero-argument crypto.randomUUID() calls
 		node.ForEachChild(walk)
 		return false
 	}

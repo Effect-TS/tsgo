@@ -2,7 +2,6 @@ package ast
 
 import (
 	"iter"
-	"maps"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 )
@@ -25,8 +24,8 @@ func TSGetSymbolParent(symbol *ast.Symbol) *ast.Symbol { return symbol.Parent() 
 
 func TSGetSymbolExportSymbol(symbol *ast.Symbol) *ast.Symbol { return symbol.ExportSymbol() }
 
-func TSGetSymbolTableEntry(table ast.SymbolTable, name string) *ast.Symbol { return table[name] }
+func TSGetSymbolTableEntry(table ast.SymbolTable, name string) *ast.Symbol { return table.Get(name) }
 
 func TSGetSymbolTableEntries(table ast.SymbolTable) iter.Seq2[string, *ast.Symbol] {
-	return maps.All(table)
+	return table.All()
 }

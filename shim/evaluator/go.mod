@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/evaluator
+module github.com/microsoft/TypeScript/tsc/shim/evaluator
 
 go 1.26
 

@@ -1,7 +1,7 @@
 ==== /.src/flatMapIgnoredParamToAndThen.ts (17 flows) ====
 
 === Piping Flow ===
-Location: 4:14 - 4:32
+Location: 5:14 - 5:32
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 5:15 - 5:40
+Location: 6:15 - 6:40
 Node: Effect.succeed("second")
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 10:24 - 10:65
+Location: 11:24 - 11:65
 Node: first.pipe(Effect.flatMap(() => second))
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 13:21 - 13:63
+Location: 14:21 - 14:63
 Node: pipe(first, Effect.flatMap(() => second))
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 16:25 - 16:61
+Location: 17:25 - 17:61
 Node: Effect.flatMap(first, () => second)
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 19:24 - 19:60
+Location: 20:24 - 20:60
 Node: Effect.flatMap(() => second)(first)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 23:23 - 23:57
+Location: 24:23 - 24:57
 Node: first.pipe(flatMap(() => second))
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 26:25 - 26:72
+Location: 27:25 - 27:72
 Node: first.pipe(Effect.flatMap((_value) => second))
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 30:20 - 30:76
+Location: 31:20 - 31:76
 Node: first.pipe(Effect.flatMap(() => Effect.succeed("new")))
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 30:52 - 30:74
+Location: 31:52 - 31:74
 Node: Effect.succeed("new")
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 31:30 - 31:78
+Location: 32:30 - 32:78
 Node: first.pipe(Effect.flatMap(() => holder.second))
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 34:30 - 34:72
+Location: 35:30 - 35:72
 Node: first.pipe(Effect.flatMap(() => mutable))
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 35:28 - 35:68
+Location: 36:28 - 36:68
 Node: first.pipe(Effect.flatMap(() => later))
 Node Kind: KindCallExpression
 
@@ -183,7 +183,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 36:14 - 36:38
+Location: 37:14 - 37:38
 Node: Effect.succeed("later")
 Node Kind: KindCallExpression
 
@@ -197,7 +197,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 39:25 - 41:4
+Location: 40:25 - 42:4
 Node: first.pipe(Effect.flatMap(() => {\n  return second\n}))
 Node Kind: KindCallExpression
 
@@ -211,7 +211,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 45:9 - 45:50
+Location: 46:9 - 46:50
 Node: first.pipe(Effect.flatMap(() => second))
 Node Kind: KindCallExpression
 
@@ -225,7 +225,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 50:25 - 50:74
+Location: 51:25 - 51:74
 Node: first.pipe(Effect.flatMap(() => value as never))
 Node Kind: KindCallExpression
 

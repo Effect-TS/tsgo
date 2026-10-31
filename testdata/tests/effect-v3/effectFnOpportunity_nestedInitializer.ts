@@ -11,6 +11,7 @@
 }
 
 // @filename: effectFnOpportunity_nestedInitializer.ts
+// @effect-v3
 import { Effect } from "effect"
 
 declare const define: <A>(options: {

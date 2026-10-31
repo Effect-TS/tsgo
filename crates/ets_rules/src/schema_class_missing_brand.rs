@@ -13,7 +13,7 @@ use crate::*;
 static MESSAGE: &Message =
     &tsdiag::ADD_READONLY_BRAND_COLON_UNIQUE_SYMBOL_AS_THE_SECOND_TYPE_ARGUMENT_WITHOUT_A_BRAND_TYPE_SCRIPT_MAY_ACCEPT_STRUCTURALLY_COMPATIBLE_VALUES_WHERE_THIS_CLASS_INSTANCE_TYPE_IS_EXPECTED_EFFECT_SCHEMA_CLASS_MISSING_BRAND;
 
-// go: internal/rules/schema_class_missing_brand.go:11 SchemaClassMissingBrand 071aec44232c1ada
+// go: internal/rules/schema_class_missing_brand.go:11 SchemaClassMissingBrand 83382200ce722c7d
 pub static SCHEMA_CLASS_MISSING_BRAND: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "schemaClassMissingBrand",
     group: "correctness",
@@ -59,7 +59,7 @@ pub static SCHEMA_CLASS_MISSING_BRAND: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_class_missing_brand.go:46 schemaClassMissingBrandSelf edf5dda71032b452
+// go: internal/rules/schema_class_missing_brand.go:47 schemaClassMissingBrandSelf edf5dda71032b452
 pub(crate) fn schema_class_missing_brand_self(
     tp: &mut TypeParser<'_>,
     options: Option<&ResolvedEffectPluginOptions>,

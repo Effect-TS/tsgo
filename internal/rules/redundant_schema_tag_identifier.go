@@ -41,6 +41,8 @@ type RedundantSchemaTagIdentifierMatch struct {
 
 // AnalyzeRedundantSchemaTagIdentifier finds all class declarations where the identifier
 // string literal equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest.
+//
+//ets:ast-walk finds class declarations extending Schema tagged classes
 func AnalyzeRedundantSchemaTagIdentifier(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []RedundantSchemaTagIdentifierMatch {
 	var matches []RedundantSchemaTagIdentifierMatch
 

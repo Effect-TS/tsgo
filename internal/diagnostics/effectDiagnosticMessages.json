@@ -647,6 +647,14 @@
         "category": "Suggestion",
         "code": 377163
     },
+    "Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)": {
+        "category": "Suggestion",
+        "code": 377167
+    },
+    "Effect.{0} is called without a `catch` handler, so failures surface as the generic `{1}`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)": {
+        "category": "Warning",
+        "code": 377169
+    },
     "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)": {
         "category": "Suggestion",
         "code": 377165

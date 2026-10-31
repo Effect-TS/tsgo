@@ -1,16 +1,17 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/flatMapIgnoredParamToAndThen.ts(10,36): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
-/.src/flatMapIgnoredParamToAndThen.ts(13,34): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
-/.src/flatMapIgnoredParamToAndThen.ts(16,26): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
-/.src/flatMapIgnoredParamToAndThen.ts(19,25): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
-/.src/flatMapIgnoredParamToAndThen.ts(23,35): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
-/.src/flatMapIgnoredParamToAndThen.ts(39,37): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
-/.src/flatMapIgnoredParamToAndThen.ts(45,21): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+/.src/flatMapIgnoredParamToAndThen.ts(11,36): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+/.src/flatMapIgnoredParamToAndThen.ts(14,34): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+/.src/flatMapIgnoredParamToAndThen.ts(17,26): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+/.src/flatMapIgnoredParamToAndThen.ts(20,25): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+/.src/flatMapIgnoredParamToAndThen.ts(24,35): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+/.src/flatMapIgnoredParamToAndThen.ts(40,37): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+/.src/flatMapIgnoredParamToAndThen.ts(46,21): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
 
 
 ==== /.src/flatMapIgnoredParamToAndThen.ts (7 errors) ====
+    // @effect-v3
     import * as Fx from "effect/Effect"
     import { Effect, pipe } from "effect"
     

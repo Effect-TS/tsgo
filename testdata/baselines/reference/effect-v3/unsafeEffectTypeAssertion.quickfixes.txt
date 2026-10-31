@@ -1,36 +1,36 @@
 === Quick Fix Inventory ===
 
-[D1] (14:28-14:74) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D1] (15:28-15:74) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
   Fix 2: "Remove the unsafe assertion"
 
-[D2] (18:36-18:82) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D2] (19:36-19:82) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
   Fix 2: "Remove the unsafe assertion"
 
-[D3] (19:29-19:82) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D3] (20:29-20:82) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
   Fix 2: "Remove the unsafe assertion"
 
-[D4] (20:34-20:79) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D4] (21:34-21:79) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
   Fix 2: "Remove the unsafe assertion"
 
-[D5] (21:33-21:74) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D5] (22:33-22:74) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
   Fix 2: "Remove the unsafe assertion"
 
-[D6] (22:41-22:89) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D6] (23:41-23:89) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
   Fix 2: "Remove the unsafe assertion"
 
-[D7] (23:34-23:89) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D7] (24:34-24:89) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
   Fix 2: "Remove the unsafe assertion"
@@ -46,6 +46,7 @@ skipped by default
 === [D1] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion.ts ---
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 
@@ -81,6 +82,7 @@ skipped by default
 === [D2] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion.ts ---
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 
@@ -116,6 +118,7 @@ skipped by default
 === [D3] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion.ts ---
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 
@@ -151,6 +154,7 @@ skipped by default
 === [D4] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion.ts ---
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 
@@ -186,6 +190,7 @@ skipped by default
 === [D5] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion.ts ---
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 
@@ -221,6 +226,7 @@ skipped by default
 === [D6] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion.ts ---
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 
@@ -256,6 +262,7 @@ skipped by default
 === [D7] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion.ts ---
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 

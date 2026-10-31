@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/testutil/lsptestutil
+module github.com/microsoft/TypeScript/tsc/shim/testutil/lsptestutil
 
 go 1.26
 
