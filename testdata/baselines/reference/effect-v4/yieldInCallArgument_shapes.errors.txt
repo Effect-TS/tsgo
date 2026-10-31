@@ -12,16 +12,17 @@ Effect version: 4.0.2
 /.src/yieldInCallArgument_shapes.ts(65,23): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
 /.src/yieldInCallArgument_shapes.ts(71,28): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
 /.src/yieldInCallArgument_shapes.ts(79,15): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
-/.src/yieldInCallArgument_shapes.ts(87,13): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
-/.src/yieldInCallArgument_shapes.ts(97,31): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
-/.src/yieldInCallArgument_shapes.ts(102,23): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
-/.src/yieldInCallArgument_shapes.ts(108,13): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
-/.src/yieldInCallArgument_shapes.ts(114,21): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
-/.src/yieldInCallArgument_shapes.ts(121,29): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
-/.src/yieldInCallArgument_shapes.ts(129,31): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(83,15): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(90,13): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(100,31): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(105,23): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(111,13): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(117,21): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(124,29): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+/.src/yieldInCallArgument_shapes.ts(132,31): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
 
 
-==== /.src/yieldInCallArgument_shapes.ts (18 errors) ====
+==== /.src/yieldInCallArgument_shapes.ts (19 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics yieldInCallArgument:warning
     import { Effect, pipe } from "effect"
@@ -124,6 +125,11 @@ Effect version: 4.0.2
                   ~~~~~
 !!! warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
           break
+        default:
+          // MUST TRIGGER (fix): default clauses are statement lists
+          consume(yield* load)
+                  ~~~~~
+!!! warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
       }
     })
     

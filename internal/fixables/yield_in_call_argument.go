@@ -49,6 +49,9 @@ func runYieldInCallArgumentFix(ctx *fixable.Context) []ls.CodeAction {
 			)
 			ast.SetParentInChildren(statement)
 
+			// No flow edit inserts a statement or replaces a single argument, and
+			// new or multi-argument calls have no flow, so the fix edits nodes directly.
+
 			pos := scanner.GetTokenPosOfNode(match.Statement, sf, true)
 			tracker.InsertNodeAt(sf, core.TextPos(pos), statement, rewriter.NodeOptions{Suffix: typeUnionToSchemaUnionInsertionSuffix(sf, pos)})
 			tracker.ReplaceNode(sf, match.Argument, tracker.NewIdentifier(name), nil)
@@ -79,18 +82,9 @@ func yieldInCallArgumentMatchAt(matches []rules.YieldInCallArgumentMatch, span c
 // yieldInCallArgumentVerbs maps a leading verb of the yielded name to its past
 // participle, so `load` becomes `loaded` and `fetchUser` becomes `fetchedUser`.
 var yieldInCallArgumentVerbs = map[string]string{
-	"load":    "loaded",
-	"fetch":   "fetched",
-	"find":    "found",
-	"make":    "made",
-	"create":  "created",
-	"build":   "built",
-	"resolve": "resolved",
-	"acquire": "acquired",
-	"compute": "computed",
-	"parse":   "parsed",
-	"decode":  "decoded",
-	"request": "requested",
+	"load":  "loaded",
+	"fetch": "fetched",
+	"build": "built",
 }
 
 // yieldInCallArgumentName picks the hoisted const name from the yielded
@@ -99,7 +93,7 @@ var yieldInCallArgumentVerbs = map[string]string{
 // value with that name is visible at the statement.
 func yieldInCallArgumentName(c *checker.Checker, operand *ast.Node, statement *ast.Node) string {
 	base := "value"
-	operand = ast.SkipOuterExpressions(operand, ast.OEKParentheses|ast.OEKAssertions|ast.OEKSatisfies)
+	operand = ast.SkipOuterExpressions(operand, ast.OEKParentheses|ast.OEKAssertions)
 	segment := ""
 	switch operand.Kind {
 	case ast.KindIdentifier:

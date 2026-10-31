@@ -77,7 +77,7 @@ func AnalyzeYieldInCallArgument(tp *typeparser.TypeParser, sf *ast.SourceFile) [
 			}
 		}
 
-		//ets:ast-walk finds yield* expressions, which never become flow steps
+		//ets:ast-walk finds yield* call arguments; new expressions and multi-argument calls to a non-dual callee produce no flow step
 		node.ForEachChild(walk)
 		return false
 	}
@@ -104,15 +104,8 @@ func yieldInCallArgumentHoistAnchor(arg *ast.Node) *ast.Node {
 	child := arg
 	for p := child.Parent; p != nil; child, p = p, p.Parent {
 		switch p.Kind {
-		case ast.KindParenthesizedExpression, ast.KindAsExpression, ast.KindSatisfiesExpression,
-			ast.KindNonNullExpression, ast.KindTypeAssertionExpression,
-			ast.KindTypeOfExpression, ast.KindVoidExpression, ast.KindAwaitExpression, ast.KindYieldExpression:
+		case ast.KindParenthesizedExpression, ast.KindAsExpression, ast.KindNonNullExpression, ast.KindYieldExpression:
 			continue
-		case ast.KindPrefixUnaryExpression:
-			operator := p.AsPrefixUnaryExpression().Operator
-			if operator == ast.KindPlusPlusToken || operator == ast.KindMinusMinusToken {
-				return nil
-			}
 		case ast.KindCallExpression, ast.KindNewExpression:
 			if child == p.Expression() {
 				continue
@@ -191,7 +184,7 @@ func yieldInCallArgumentFinalizeAnchor(statement *ast.Node) *ast.Node {
 // yieldInCallArgumentIsSideEffectFree reports whether evaluating node cannot run
 // code: identifiers, literals and non-optional property accesses on them.
 func yieldInCallArgumentIsSideEffectFree(node *ast.Node) bool {
-	node = ast.SkipOuterExpressions(node, ast.OEKParentheses|ast.OEKAssertions|ast.OEKSatisfies)
+	node = ast.SkipParentheses(node)
 	switch node.Kind {
 	case ast.KindIdentifier,
 		ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindBigIntLiteral,
@@ -200,8 +193,7 @@ func yieldInCallArgumentIsSideEffectFree(node *ast.Node) bool {
 		return true
 	case ast.KindPrefixUnaryExpression:
 		prefix := node.AsPrefixUnaryExpression()
-		return prefix.Operator == ast.KindMinusToken &&
-			(prefix.Operand.Kind == ast.KindNumericLiteral || prefix.Operand.Kind == ast.KindBigIntLiteral)
+		return prefix.Operator == ast.KindMinusToken && prefix.Operand.Kind == ast.KindNumericLiteral
 	case ast.KindPropertyAccessExpression:
 		return node.Flags&ast.NodeFlagsOptionalChain == 0 && yieldInCallArgumentIsSideEffectFree(node.Expression())
 	}

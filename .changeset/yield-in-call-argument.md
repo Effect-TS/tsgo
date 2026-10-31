@@ -12,4 +12,4 @@ const loaded = yield* load
 const result = transform(loaded)
 ```
 
-The fix is offered only when nothing evaluated before the `yield*` has side effects (identifiers, literals and property accesses count as safe), and not in conditional or loop positions, optional calls or unbraced bodies. In those cases the diagnostic is still reported.
+The fix is offered only when nothing evaluated before the `yield*` has side effects (identifiers, literals and property accesses count as safe), and not in conditional positions or loop conditions, optional calls or unbraced bodies. In those cases the diagnostic is still reported.

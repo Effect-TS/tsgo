@@ -1,4 +1,4 @@
-==== /.src/yieldInCallArgument_shapes.ts (38 flows) ====
+==== /.src/yieldInCallArgument_shapes.ts (39 flows) ====
 
 === Piping Flow ===
 Location: 22:28 - 25:3
@@ -285,11 +285,11 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 76:26 - 83:3
-Node: Effect.gen(function*() {\n  switch (cond) {\n    case true:\n      // MUST TRIGGER (fix): case clauses are statement lists\n      consume(yield* load)\n      break\n  }\n})
+Location: 76:26 - 86:3
+Node: Effect.gen(function*() {\n  switch (cond) {\n    case true:\n      // MUST TRIGGER (fix): case clauses are statement lists\n      consume(yield* load)\n      break\n    default:\n      // MUST TRIGGER (fix): default clauses are statement lists\n      consume(yield* load)\n  }\n})
 Node Kind: KindCallExpression
 
-Subject: function*() {\n  switch (cond) {\n    case true:\n      // MUST TRIGGER (fix): case clauses are statement lists\n      consume(yield* load)\n      break\n  }\n}
+Subject: function*() {\n  switch (cond) {\n    case true:\n      // MUST TRIGGER (fix): case clauses are statement lists\n      consume(yield* load)\n      break\n    default:\n      // MUST TRIGGER (fix): default clauses are statement lists\n      consume(yield* load)\n  }\n}
 Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, void, any>
 
 Transformations (1):
@@ -313,21 +313,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 85:25 - 90:3
-Node: Effect.gen(function*() {\n  while (cond) {\n    // MUST TRIGGER (fix): a braced loop body is a statement list\n    consume(yield* load)\n  }\n})
-Node Kind: KindCallExpression
-
-Subject: function*() {\n  while (cond) {\n    // MUST TRIGGER (fix): a braced loop body is a statement list\n    consume(yield* load)\n  }\n}
-Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, void, any>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.gen
-      args: (constant)
-      outType: Effect<void, never, never>
-
-=== Piping Flow ===
-Location: 86:17 - 88:25
+Location: 82:13 - 84:27
 Node: consume(yield* load)
 Node Kind: KindCallExpression
 
@@ -341,7 +327,35 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 96:26 - 99:3
+Location: 88:25 - 93:3
+Node: Effect.gen(function*() {\n  while (cond) {\n    // MUST TRIGGER (fix): a braced loop body is a statement list\n    consume(yield* load)\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  while (cond) {\n    // MUST TRIGGER (fix): a braced loop body is a statement list\n    consume(yield* load)\n  }\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 89:17 - 91:25
+Node: consume(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: consume
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 99:26 - 102:3
 Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect\n  return makeFn({ tag: "a" })(yield* load)\n})
 Node Kind: KindCallExpression
 
@@ -355,7 +369,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 98:9 - 98:43
+Location: 101:9 - 101:43
 Node: makeFn({ tag: "a" })(yield* load)
 Node Kind: KindCallExpression
 
@@ -369,7 +383,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 101:30 - 104:3
+Location: 104:30 - 107:3
 Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined\n  return svc?.process(yield* load)\n})
 Node Kind: KindCallExpression
 
@@ -383,7 +397,7 @@ Transformations (1):
       outType: Effect<string | undefined, never, never>
 
 === Piping Flow ===
-Location: 103:9 - 103:35
+Location: 106:9 - 106:35
 Node: svc?.process(yield* load)
 Node Kind: KindCallExpression
 
@@ -397,7 +411,7 @@ Transformations (1):
       outType: string | undefined
 
 === Piping Flow ===
-Location: 106:33 - 111:3
+Location: 109:33 - 114:3
 Node: Effect.gen(function*() {\n  let n: number | undefined\n  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish\n  n ??= sum(yield* load)\n  return n\n})
 Node Kind: KindCallExpression
 
@@ -411,7 +425,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 109:8 - 109:25
+Location: 112:8 - 112:25
 Node: sum(yield* load)
 Node Kind: KindCallExpression
 
@@ -425,7 +439,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 113:30 - 118:3
+Location: 116:30 - 121:3
 Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position\n  let x = transform(yield* load)\n  x += "!"\n  return x\n})
 Node Kind: KindCallExpression
 
@@ -439,7 +453,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 115:10 - 115:33
+Location: 118:10 - 118:33
 Node: transform(yield* load)
 Node Kind: KindCallExpression
 
@@ -453,7 +467,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 120:30 - 123:3
+Location: 123:30 - 126:3
 Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): a throw statement is not an allowed position\n  throw new Error(transform(yield* load))\n})
 Node Kind: KindCallExpression
 
@@ -467,7 +481,7 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 122:19 - 122:41
+Location: 125:19 - 125:41
 Node: transform(yield* load)
 Node Kind: KindCallExpression
 
@@ -481,7 +495,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 126:43 - 126:53
+Location: 129:43 - 129:53
 Node: String(n)
 Node Kind: KindCallExpression
 
@@ -495,7 +509,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 130:13 - 130:43
+Location: 133:13 - 133:43
 Node: this.svc.process(yield* load)
 Node Kind: KindCallExpression
 
@@ -509,7 +523,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 140:26 - 143:3
+Location: 143:26 - 146:3
 Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*\n  return transform((yield* load) as number)\n})
 Node Kind: KindCallExpression
 
@@ -523,7 +537,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 142:9 - 142:44
+Location: 145:9 - 145:44
 Node: transform((yield* load) as number)
 Node Kind: KindCallExpression
 

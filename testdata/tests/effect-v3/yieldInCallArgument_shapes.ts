@@ -79,6 +79,9 @@ export const caseClause = Effect.gen(function*() {
       // MUST TRIGGER (fix): case clauses are statement lists
       consume(yield* load)
       break
+    default:
+      // MUST TRIGGER (fix): default clauses are statement lists
+      consume(yield* load)
   }
 })
 
