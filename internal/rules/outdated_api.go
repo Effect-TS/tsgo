@@ -83,6 +83,7 @@ func AnalyzeOutdatedApi(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.S
 			}
 		}
 
+		//ets:ast-walk finds property accesses to v3-only APIs, called or not
 		n.ForEachChild(walk)
 		return false
 	}

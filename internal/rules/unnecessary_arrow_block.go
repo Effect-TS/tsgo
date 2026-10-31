@@ -60,6 +60,7 @@ func AnalyzeUnnecessaryArrowBlock(_ *typeparser.TypeParser, _ *checker.Checker, 
 			}
 		}
 
+		//ets:ast-walk finds arrow functions whose block body only returns an expression
 		n.ForEachChild(walk)
 		return false
 	}

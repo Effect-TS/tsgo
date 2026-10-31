@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferEffectRecord:warning
 import * as R from "effect/Record"

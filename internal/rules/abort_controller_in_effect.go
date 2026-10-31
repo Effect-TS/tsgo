@@ -41,6 +41,7 @@ var AbortControllerInEffect = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds new AbortController() expressions
 			node.ForEachChild(walk)
 			return false
 		}

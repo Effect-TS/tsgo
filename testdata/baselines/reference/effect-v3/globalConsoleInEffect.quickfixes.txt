@@ -1,23 +1,28 @@
 === Quick Fix Inventory ===
 
-[D1] (6:3-6:23) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+[D1] (7:3-7:23) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 
-[D2] (11:3-11:26) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+[D2] (12:3-12:26) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 
-[D3] (16:3-16:25) TS377065: This Effect code uses `console.error`, logging in Effect code is represented through `Effect.logError or Logger`. effect(globalConsoleInEffect)
+[D3] (17:3-17:25) TS377065: This Effect code uses `console.error`, logging in Effect code is represented through `Effect.logError or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 
-[D4] (22:3-22:25) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+[D4] (23:3-23:25) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 
-[D5] (29:7-29:17) TS6133: '_regularFn' is declared but its value is never read.
+[D5] (30:7-30:17) TS6133: '_regularFn' is declared but its value is never read.
   (no quick fixes)
+
+[D6] (48:3-48:23) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+  Fix 2: "Add yield* statement"
 
 === Quick Fix Application Results ===
 
@@ -44,3 +49,63 @@ skipped by default
 
 === [D4] Fix 1: "Disable globalConsoleInEffect for entire file" ===
 skipped by default
+
+=== [D6] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Add yield* statement" ===
+
+--- file:///.src/globalConsoleInEffect.ts ---
+// @effect-v3
+// @effect-diagnostics globalConsoleInEffect:warning
+import { Console, Effect } from "effect"
+
+// Should trigger - console.log inside Effect.gen
+export const consoleLogInGen = Effect.gen(function*() {
+  console.log("hello")
+})
+
+// Should trigger - console.warn inside Effect.fn
+export const consoleWarnInFn = Effect.fn("consoleWarnInFn")(function*() {
+  console.warn("warning")
+})
+
+// Should trigger - console.error inside Effect.gen
+export const consoleErrorInGen = Effect.gen(function*() {
+  console.error("error")
+})
+
+// Should trigger - aliased console
+export const aliasedConsole = Effect.gen(function*() {
+  const myConsole = console
+  myConsole.log("hello")
+})
+
+// Should NOT trigger - console.log at module level
+console.log("module level")
+
+// Should NOT trigger - console.log in regular function
+const _regularFn = () => {
+  console.log("regular")
+}
+
+// Should NOT trigger - console.log inside nested arrow in generator
+export const nestedArrowInGen = Effect.gen(function*() {
+  const fn = () => console.log("nested")
+  return fn
+})
+
+// Should NOT trigger - console.table inside generator (no Effect equivalent)
+export const consoleTableInGen = Effect.gen(function*() {
+  console.table({ a: 1 })
+})
+
+// Should NOT trigger - console.log shadowed by Effect Console
+export const shadowedConsole = Effect.gen(function*() {
+  const console = yield* Console.Console
+  yield* console.log("hello")
+})
+

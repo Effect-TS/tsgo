@@ -2455,6 +2455,9 @@
         "effecttsgo/map-map-error-to-map-both": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/map-some-catch-no-such-element": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/map-some-to-as-some": {
           "$ref": "#/definitions/RuleNoConfig"
         },

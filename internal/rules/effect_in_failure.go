@@ -47,6 +47,7 @@ var EffectInFailure = rule.Rule{
 			// First visit: push self again (marked visited) then push children
 			if !entry.visited {
 				stack = append(stack, stackEntry{node: node, visited: true})
+				//ets:ast-walk checks the E channel of every expression's Effect type, not only flow steps
 				node.ForEachChild(pushChild)
 				continue
 			}

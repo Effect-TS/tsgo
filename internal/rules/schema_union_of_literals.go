@@ -43,6 +43,8 @@ type SchemaUnionOfLiteralsMatch struct {
 
 // AnalyzeSchemaUnionOfLiterals finds all Schema.Union(...) calls where every argument
 // is a Schema.Literal(...) call, returning matches with captured nodes for diagnostics and fixes.
+//
+//ets:ast-walk finds variadic Schema.Union(...) calls, which never become flow steps
 func AnalyzeSchemaUnionOfLiterals(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []SchemaUnionOfLiteralsMatch {
 	// V3-only rule
 	if tp.SupportedEffectVersion() != typeparser.EffectMajorV3 {

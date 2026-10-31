@@ -1,44 +1,38 @@
 === Quick Fix Inventory ===
 
-[D1] (5:25-5:61) TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+[D1] (6:25-6:61) TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof AddressId.Type'"
 
-[D2] (8:23-8:52) TS377104: Do not use `S.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+[D2] (9:23-9:52) TS377104: Do not use `S.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof Address.Type'"
 
-[D3] (10:6-10:19) TS6196: 'GoodTypeQuery' is declared but never used.
+[D3] (11:6-11:19) TS6196: 'GoodTypeQuery' is declared but never used.
   (no quick fixes)
 
-[D4] (10:22-10:41) TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
+[D4] (11:22-11:41) TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
   Fix 0: "Disable unnecessaryTypeofType for this line"
   Fix 1: "Disable unnecessaryTypeofType for entire file"
   Fix 2: "Replace with 'Address'"
 
-[D5] (11:6-11:20) TS6196: 'GoodSchemaType' is declared but never used.
+[D5] (12:6-12:20) TS6196: 'GoodSchemaType' is declared but never used.
   (no quick fixes)
 
-[D6] (11:30-11:34) TS2694: Namespace '"/node_modules/effect/dist/Schema"' has no exported member 'Type'.
+[D6] (12:30-12:34) TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Type'.
   (no quick fixes)
 
-[D7] (13:30-13:67) TS377104: Do not use `Schema.Schema.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
+[D7] (14:30-14:67) TS377104: Do not use `Schema.Schema.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof Address.Encoded'"
 
-[D8] (13:44-13:51) TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Encoded'.
-  (no quick fixes)
-
-[D9] (14:30-14:62) TS377104: Do not use `S.Schema.Context<typeof X>`. Use `typeof X.Context` instead. effect(preferSchemaTypeProperty)
+[D8] (15:30-15:62) TS377104: Do not use `S.Schema.Context<typeof X>`. Use `typeof X.Context` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof Address.Context'"
-
-[D10] (14:39-14:46) TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
-  (no quick fixes)
 
 === Quick Fix Application Results ===
 
@@ -51,6 +45,7 @@ skipped by default
 === [D1] Fix 2: "Replace with 'typeof AddressId.Type'" ===
 
 --- file:///.src/test.ts ---
+// @effect-v3
 // @effect-diagnostics preferSchemaTypeProperty:error
 import { Schema, Schema as S } from "effect"
 
@@ -76,6 +71,7 @@ skipped by default
 === [D2] Fix 2: "Replace with 'typeof Address.Type'" ===
 
 --- file:///.src/test.ts ---
+// @effect-v3
 // @effect-diagnostics preferSchemaTypeProperty:error
 import { Schema, Schema as S } from "effect"
 
@@ -101,6 +97,7 @@ skipped by default
 === [D4] Fix 2: "Replace with 'Address'" ===
 
 --- file:///.src/test.ts ---
+// @effect-v3
 // @effect-diagnostics preferSchemaTypeProperty:error
 import { Schema, Schema as S } from "effect"
 
@@ -126,6 +123,7 @@ skipped by default
 === [D7] Fix 2: "Replace with 'typeof Address.Encoded'" ===
 
 --- file:///.src/test.ts ---
+// @effect-v3
 // @effect-diagnostics preferSchemaTypeProperty:error
 import { Schema, Schema as S } from "effect"
 
@@ -142,15 +140,16 @@ export type AddressEncoded = typeof Address.Encoded
 export type AddressContext = S.Schema.Context<typeof Address>
 
 
-=== [D9] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+=== [D8] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
 skipped by default
 
-=== [D9] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+=== [D8] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
 skipped by default
 
-=== [D9] Fix 2: "Replace with 'typeof Address.Context'" ===
+=== [D8] Fix 2: "Replace with 'typeof Address.Context'" ===
 
 --- file:///.src/test.ts ---
+// @effect-v3
 // @effect-diagnostics preferSchemaTypeProperty:error
 import { Schema, Schema as S } from "effect"
 

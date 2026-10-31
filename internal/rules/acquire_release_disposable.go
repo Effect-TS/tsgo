@@ -73,6 +73,7 @@ func AnalyzeAcquireReleaseDisposable(tp *typeparser.TypeParser, c *checker.Check
 			matches = append(matches, match)
 		}
 
+		//ets:ast-walk finds two-argument Effect.acquireRelease(acquire, release) calls, which are not dual
 		node.ForEachChild(walk)
 		return false
 	}

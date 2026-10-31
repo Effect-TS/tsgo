@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalDateInEffect_preview.ts(6,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect_preview.ts(7,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
 
 
 ==== /.src/globalDateInEffect_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics globalDateInEffect:warning
     import { Effect } from "effect"

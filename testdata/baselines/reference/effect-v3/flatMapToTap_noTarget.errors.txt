@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/flatMapToTap_noTarget.ts(7,43): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap_noTarget.ts(8,43): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
 
 
 ==== /.src/flatMapToTap_noTarget.ts (1 errors) ====
+    // @effect-v3
     import type { Effect } from "effect"
     import { as as restore, flatMap as bind } from "effect/Effect"
     

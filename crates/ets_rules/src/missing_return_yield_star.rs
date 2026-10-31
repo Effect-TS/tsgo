@@ -44,7 +44,7 @@ pub struct MissingReturnYieldStarMatch {
     pub expr_stmt_node: P<Node>,    // The expression statement node (for quickfix replacement)
 }
 
-// go: internal/rules/missing_return_yield_star.go:44 AnalyzeMissingReturnYieldStar 302621945792df17
+// go: internal/rules/missing_return_yield_star.go:44 AnalyzeMissingReturnYieldStar 6bf6baf010e5642f
 // AnalyzeMissingReturnYieldStar finds all yield* expressions inside Effect generators
 // where the yielded Effect never succeeds, suggesting "return yield*" instead.
 //
@@ -95,7 +95,7 @@ pub fn analyze_missing_return_yield_star(
     matches
 }
 
-// go: internal/rules/missing_return_yield_star.go:80 shouldReportMissingReturnYieldStar b66b87094ce39c34
+// go: internal/rules/missing_return_yield_star.go:81 shouldReportMissingReturnYieldStar b66b87094ce39c34
 //
 // Rust: Go's checker argument is the parser's checker (never nil), so it is dropped.
 pub(crate) fn should_report_missing_return_yield_star(

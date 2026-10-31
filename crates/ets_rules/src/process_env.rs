@@ -39,7 +39,7 @@ pub static PROCESS_ENV_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_process_env(ctx, true) },
 });
 
-// go: internal/rules/process_env.go:36 runProcessEnv bf7e6aca34d8c83e
+// go: internal/rules/process_env.go:36 runProcessEnv f46b08818c2f1531
 pub(crate) fn run_process_env(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,
@@ -97,7 +97,7 @@ pub(crate) fn run_process_env(
     diags
 }
 
-// go: internal/rules/process_env.go:77 processEnvRoot 0b15de75dc119e11
+// go: internal/rules/process_env.go:78 processEnvRoot 0b15de75dc119e11
 pub(crate) fn process_env_root(node: Option<P<Node>>) -> Option<P<Node>> {
     let node = node?;
     if node.kind() != Kind::PropertyAccessExpression && node.kind() != Kind::ElementAccessExpression
@@ -111,7 +111,7 @@ pub(crate) fn process_env_root(node: Option<P<Node>>) -> Option<P<Node>> {
     access?.expression()
 }
 
-// go: internal/rules/process_env.go:91 isEnvPropertyAccess 19ceeff17045b993
+// go: internal/rules/process_env.go:92 isEnvPropertyAccess 19ceeff17045b993
 pub(crate) fn is_env_property_access(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

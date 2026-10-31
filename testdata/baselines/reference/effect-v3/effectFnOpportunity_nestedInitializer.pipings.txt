@@ -1,7 +1,7 @@
 ==== /.src/effectFnOpportunity_nestedInitializer.ts (5 flows) ====
 
 === Piping Flow ===
-Location: 8:29 - 15:3
+Location: 9:29 - 16:3
 Node: define({\n  name: "workspace",\n  decode: (value) =>\n    Effect.gen(function*() {\n      const text = yield* Effect.succeed(value)\n      return text.length\n    }),\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 10:21 - 14:7
+Location: 11:21 - 15:7
 Node: Effect.gen(function*() {\n      const text = yield* Effect.succeed(value)\n      return text.length\n    })
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 12:26 - 12:48
+Location: 13:26 - 13:48
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 22:18 - 26:7
+Location: 23:18 - 27:7
 Node: Effect.gen(function*() {\n      yield* Effect.log(path)\n      return value\n    })
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<A, never, never>
 
 === Piping Flow ===
-Location: 24:13 - 24:30
+Location: 25:13 - 25:30
 Node: Effect.log(path)
 Node Kind: KindCallExpression
 

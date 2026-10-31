@@ -1,49 +1,49 @@
 === Quick Fix Inventory ===
 
-[D1] (8:7-8:13) TS6133: 'Module' is declared but its value is never read.
+[D1] (9:7-9:13) TS6133: 'Module' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (10:37-10:41) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+[D2] (11:37-11:41) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
   Fix 0: "Disable flatMapToTap for this line"
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
 
-[D3] (12:37-12:41) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+[D3] (13:37-13:41) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
   Fix 0: "Disable flatMapToTap for this line"
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
 
-[D4] (13:45-13:67) TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
+[D4] (14:45-14:67) TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
   Fix 0: "Disable flatMapToTap for this line"
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
 
-[D5] (14:33-14:40) TS6133: 'Library' is declared but its value is never read.
+[D5] (15:33-15:40) TS6133: 'Library' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (14:65-14:69) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+[D6] (15:65-15:69) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
   Fix 0: "Disable flatMapToTap for this line"
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
 
-[D7] (15:30-15:37) TS6133: 'observe' is declared but its value is never read.
+[D7] (16:30-16:37) TS6133: 'observe' is declared but its value is never read.
   (no quick fixes)
 
-[D8] (15:62-15:66) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+[D8] (16:62-16:66) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
   Fix 0: "Disable flatMapToTap for this line"
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
 
-[D9] (16:32-16:39) TS6133: 'Library' is declared but its value is never read.
+[D9] (17:32-17:39) TS6133: 'Library' is declared but its value is never read.
   (no quick fixes)
 
-[D10] (16:49-16:56) TS6133: 'observe' is declared but its value is never read.
+[D10] (17:49-17:56) TS6133: 'observe' is declared but its value is never read.
   (no quick fixes)
 
-[D11] (16:66-16:73) TS6133: 'inspect' is declared but its value is never read.
+[D11] (17:66-17:73) TS6133: 'inspect' is declared but its value is never read.
   (no quick fixes)
 
-[D12] (16:98-16:102) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+[D12] (17:98-17:102) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
   Fix 0: "Disable flatMapToTap for this line"
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
@@ -59,6 +59,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.tap" ===
 
 --- file:///.src/flatMapToTap_aliases.ts ---
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
 import * as Library from "effect"
@@ -88,6 +89,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.tap" ===
 
 --- file:///.src/flatMapToTap_aliases.ts ---
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
 import * as Library from "effect"
@@ -117,6 +119,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.tap" ===
 
 --- file:///.src/flatMapToTap_aliases.ts ---
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
 import * as Library from "effect"
@@ -146,6 +149,7 @@ skipped by default
 === [D6] Fix 2: "Replace with Effect.tap" ===
 
 --- file:///.src/flatMapToTap_aliases.ts ---
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
 import * as Library from "effect"
@@ -175,6 +179,7 @@ skipped by default
 === [D8] Fix 2: "Replace with Effect.tap" ===
 
 --- file:///.src/flatMapToTap_aliases.ts ---
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
 import * as Library from "effect"
@@ -204,6 +209,7 @@ skipped by default
 === [D12] Fix 2: "Replace with Effect.tap" ===
 
 --- file:///.src/flatMapToTap_aliases.ts ---
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
 import * as Library from "effect"

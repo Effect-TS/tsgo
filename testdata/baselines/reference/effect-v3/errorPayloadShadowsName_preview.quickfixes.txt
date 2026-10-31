@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:79-5:83) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+[D1] (6:79-6:83) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
   Fix 0: "Disable errorPayloadShadowsName for this line"
   Fix 1: "Disable errorPayloadShadowsName for entire file"
 

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:39-6:48) TS377045: Identifier 'Preview' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+[D1] (7:39-7:48) TS377045: Identifier 'Preview' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
   Fix 0: "Disable redundantSchemaTagIdentifier for this line"
   Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
   Fix 2: "Remove redundant identifier 'Preview'"
@@ -16,6 +16,7 @@ skipped by default
 === [D1] Fix 2: "Remove redundant identifier 'Preview'" ===
 
 --- file:///.src/redundantSchemaTagIdentifier_preview.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics redundantSchemaTagIdentifier:warning
 import * as Schema from "effect/Schema"

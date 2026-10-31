@@ -59,6 +59,7 @@ func AnalyzeReturnEffectInGen(tp *typeparser.TypeParser, c *checker.Checker, sf 
 			}
 		}
 
+		//ets:ast-walk finds return statements inside Effect generators
 		n.ForEachChild(walk)
 		return false
 	}

@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferSchemaTaggedError:warning
 import { Data, Data as AliasedData, Schema } from "effect"

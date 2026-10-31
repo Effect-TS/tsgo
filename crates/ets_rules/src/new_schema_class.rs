@@ -49,7 +49,7 @@ pub struct NewSchemaClassMatch {
     pub arguments: Vec<P<Node>>,
 }
 
-// go: internal/rules/new_schema_class.go:48 AnalyzeNewSchemaClass 62e9a44848e82654
+// go: internal/rules/new_schema_class.go:48 AnalyzeNewSchemaClass 165d16c578171e1b
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), so it is dropped.
 pub fn analyze_new_schema_class(
@@ -99,7 +99,7 @@ pub fn analyze_new_schema_class(
     matches
 }
 
-// go: internal/rules/new_schema_class.go:87 isV4SchemaClassExpression 2c8bebd375b3fe57
+// go: internal/rules/new_schema_class.go:88 isV4SchemaClassExpression 2c8bebd375b3fe57
 //
 // Rust: the checker is the parser's.
 pub(crate) fn is_v4_schema_class_expression(

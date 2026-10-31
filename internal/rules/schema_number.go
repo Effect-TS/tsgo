@@ -62,6 +62,7 @@ func AnalyzeSchemaNumber(tp *typeparser.TypeParser, sf *ast.SourceFile) []Schema
 			}
 		}
 
+		//ets:ast-walk finds Schema.Number references, which are identifiers and property accesses
 		node.ForEachChild(walk)
 		return false
 	}

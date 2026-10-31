@@ -2,6 +2,7 @@
 {"compilerOptions":{"plugins":[{"name":"@effect/language-service","effectFn":["span","untraced","no-span","inferred-span","suggested-span"]}]}}
 
 // @filename: effectFnOpportunity_comments.ts
+// @effect-v3
 import { Effect } from "effect"
 
 export const f = (n: number) =>

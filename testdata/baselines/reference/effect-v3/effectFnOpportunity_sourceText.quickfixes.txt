@@ -1,33 +1,33 @@
 === Quick Fix Inventory ===
 
-[D1] (3:14-3:23) TS377047: This expression can be rewritten in the reusable function form `Effect.fn('custom-span')(function*<T>(value, n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+[D1] (4:14-4:23) TS377047: This expression can be rewritten in the reusable function form `Effect.fn('custom-span')(function*<T>(value, n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (with span from withSpan)"
   Fix 3: "Convert to Effect.fnUntraced"
   Fix 4: "Convert to Effect.fn (no span)"
 
-[D2] (21:17-21:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D2] (22:17-22:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"declaration\")"
 
-[D3] (28:14-28:21) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
+[D3] (29:14-29:21) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
   Fix 3: "Convert to Effect.fn(\"regular\")"
 
-[D4] (38:14-38:18) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D4] (39:14-39:18) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"bare\")"
 
-[D5] (44:14-44:20) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(// span expression
+[D5] (45:14-45:20) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(// span expression
     `span-${"name" /* inside span */}-${/[/][*]/.source}`)(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
@@ -46,6 +46,7 @@ skipped by default
 === [D1] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = Effect.fn('custom-span')(function*<T /* generic */>(
@@ -102,6 +103,7 @@ export const traced = (n: number) => Effect.gen(function*() {
 === [D1] Fix 3: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = Effect.fnUntraced(function*<T /* generic */>(
@@ -159,6 +161,7 @@ export const traced = (n: number) => Effect.gen(function*() {
 === [D1] Fix 4: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = Effect.fn(function*<T /* generic */>(
@@ -222,6 +225,7 @@ skipped by default
 === [D2] Fix 2: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -278,6 +282,7 @@ export const traced = (n: number) => Effect.gen(function*() {
 === [D2] Fix 3: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -334,6 +339,7 @@ export const traced = (n: number) => Effect.gen(function*() {
 === [D2] Fix 4: "Convert to Effect.fn(\"declaration\")" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -396,6 +402,7 @@ skipped by default
 === [D3] Fix 2: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -454,6 +461,7 @@ export const traced = (n: number) => Effect.gen(function*() {
 === [D3] Fix 3: "Convert to Effect.fn(\"regular\")" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -518,6 +526,7 @@ skipped by default
 === [D4] Fix 2: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -576,6 +585,7 @@ export const traced = (n: number) => Effect.gen(function*() {
 === [D4] Fix 3: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -634,6 +644,7 @@ export const traced = (n: number) => Effect.gen(function*() {
 === [D4] Fix 4: "Convert to Effect.fn(\"bare\")" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -698,6 +709,7 @@ skipped by default
 === [D5] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -752,6 +764,7 @@ export const traced = Effect.fn(`span-${"name" /* inside span */}-${/[/][*]/.sou
 === [D5] Fix 3: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(
@@ -809,6 +822,7 @@ export const traced = Effect.fnUntraced(function*(n: number) {
 === [D5] Fix 4: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_sourceText.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 export const signature = <T /* generic */>(

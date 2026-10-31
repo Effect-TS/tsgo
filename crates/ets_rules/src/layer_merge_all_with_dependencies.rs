@@ -55,7 +55,7 @@ pub struct LayerMergeAllWithDependenciesMatch {
     pub provided_types: String, // Formatted string of provided type names
 }
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:50 AnalyzeLayerMergeAllWithDependencies eb4a27c8432dec8b
+// go: internal/rules/layer_merge_all_with_dependencies.go:50 AnalyzeLayerMergeAllWithDependencies ebe6a1907e96c5a7
 // AnalyzeLayerMergeAllWithDependencies finds all Layer.mergeAll calls with
 // interdependencies where one layer provides a service required by another.
 //
@@ -91,7 +91,7 @@ pub fn analyze_layer_merge_all_with_dependencies(
     matches
 }
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:79 layerInfo 1fedd0140154b86f
+// go: internal/rules/layer_merge_all_with_dependencies.go:81 layerInfo 1fedd0140154b86f
 // layerInfo holds parsed layer information for a mergeAll argument.
 #[derive(Clone, Copy)]
 pub(crate) struct LayerInfo {
@@ -99,7 +99,7 @@ pub(crate) struct LayerInfo {
     pub(crate) requirements_type: P<Type>,
 }
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:85 analyzeLayerMergeAllCall 1ba042d3d387494b
+// go: internal/rules/layer_merge_all_with_dependencies.go:87 analyzeLayerMergeAllCall 1ba042d3d387494b
 // analyzeLayerMergeAllCall checks a call expression for Layer.mergeAll interdependencies.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go ranges over `actuallyProvidedMap` (a
