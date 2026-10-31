@@ -2531,6 +2531,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
         },
+        "effectTryWithoutCatch": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports Effect.try and Effect.tryPromise calls without a catch handler, whose failures surface as a generic unknown error"
+        },
         "errorPayloadShadowsName": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

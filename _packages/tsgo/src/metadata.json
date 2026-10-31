@@ -268,6 +268,7 @@
         "effectGenUsesAdapter": "warning",
         "effectInFailure": "warning",
         "effectInVoidSuccess": "warning",
+        "effectTryWithoutCatch": "warning",
         "globalErrorInEffectCatch": "warning",
         "globalErrorInEffectFailure": "warning",
         "layerMergeAllWithDependencies": "warning",
@@ -1147,6 +1148,30 @@
             "start": 54,
             "end": 61,
             "text": "There is a nested 'Effect\u003cvoid, never, never\u003e' in the 'void' success channel, beware that this could lead to nested Effect\u003cEffect\u003c...\u003e\u003e that won't be executed. effect(effectInVoidSuccess)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectTryWithoutCatch",
+      "group": "antipattern",
+      "description": "Reports Effect.try and Effect.tryPromise calls without a catch handler, whose failures surface as a generic unknown error",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377169
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const text: string\nexport const parsed = Effect.try(() =\u003e JSON.parse(text))\n",
+        "diagnostics": [
+          {
+            "start": 82,
+            "end": 92,
+            "text": "Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)"
           }
         ]
       }
