@@ -1,0 +1,30 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:5-13:20) TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+  Fix 0: "Disable mapSomeCatchNoSuchElement for this line"
+  Fix 1: "Disable mapSomeCatchNoSuchElement for entire file"
+  Fix 2: "Replace with Effect.catchNoSuchElement"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapSomeCatchNoSuchElement for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapSomeCatchNoSuchElement for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchNoSuchElement" ===
+
+--- file:///.src/mapSomeCatchNoSuchElement_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeCatchNoSuchElement:warning
+import { Effect, Option } from "effect"
+
+const users = new Map<string, { readonly name: string }>()
+
+const findUser = (id: string) => Effect.fromNullishOr(users.get(id))
+
+export const lookupUser = (id: string) =>
+  findUser(id).pipe(Effect.catchNoSuchElement)
+
