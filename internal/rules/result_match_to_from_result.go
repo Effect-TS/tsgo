@@ -59,7 +59,7 @@ func AnalyzeResultMatchToFromResult(tp *typeparser.TypeParser, c *checker.Checke
 	var matches []ResultMatchToFromResultMatch
 	for _, flow := range tp.PipingFlows(sf, true).All() {
 		for index := range flow.Transformations().All() {
-			if match, ok := analyzeResultMatchStep(tp, c, sf, flow.Transformations().At(index)); ok {
+			if match, ok := analyzeResultMatchStep(tp, sf, flow.Transformations().At(index)); ok {
 				matches = append(matches, match)
 			}
 		}
@@ -72,7 +72,7 @@ func AnalyzeResultMatchToFromResult(tp *typeparser.TypeParser, c *checker.Checke
 
 // analyzeResultMatchStep matches a Result.match step whose handlers only lift
 // the failure with Effect.fail and the success with Effect.succeed.
-func analyzeResultMatchStep(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, transformation typeparser.PipingFlowTransformation) (ResultMatchToFromResultMatch, bool) {
+func analyzeResultMatchStep(tp *typeparser.TypeParser, sf *ast.SourceFile, transformation typeparser.PipingFlowTransformation) (ResultMatchToFromResultMatch, bool) {
 	callee := transformation.Callee()
 	if callee == nil || transformation.Args().Len() != 1 || !hasNoTypeArguments(transformation) {
 		return ResultMatchToFromResultMatch{}, false
@@ -82,8 +82,8 @@ func analyzeResultMatchStep(tp *typeparser.TypeParser, c *checker.Checker, sf *a
 	onSuccess := typeparser.ObjectLiteralPropertyInitializer(handlers, "onSuccess")
 	if onFailure == nil || onSuccess == nil || len(handlers.AsObjectLiteralExpression().Properties.Nodes) != 2 ||
 		!tp.IsNodeReferenceToEffectResultModuleApi(callee, "match") ||
-		!isEffectLiftHandler(tp, c, onSuccess, "succeed") ||
-		!isEffectLiftHandler(tp, c, onFailure, "fail") {
+		!isEffectLiftHandler(tp, onSuccess, "succeed") ||
+		!isEffectLiftHandler(tp, onFailure, "fail") {
 		return ResultMatchToFromResultMatch{}, false
 	}
 
@@ -107,27 +107,11 @@ func isEffectLiftStep(tp *typeparser.TypeParser, api string) func(typeparser.Pip
 	}
 }
 
-// isEffectLiftHandler reports whether a Result.match handler passes its
-// argument unchanged to Effect.<api>: either the API itself, or a function of
-// one parameter whose returned flow only applies Effect.<api> to it.
-func isEffectLiftHandler(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, api string) bool {
-	node = ast.SkipParentheses(node)
-	if tp.IsNodeReferenceToEffectModuleApi(node, api) {
-		return true
-	}
-	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
-	if lazy == nil || lazy.Params().Len() != 1 || lazy.Expression() == nil || lazy.Params().At(0).Kind != ast.KindParameter {
-		return false
-	}
-	parameter := lazy.Params().At(0).AsParameterDeclaration()
-	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier ||
-		parameter.DotDotDotToken != nil || parameter.Initializer != nil {
-		return false
-	}
-	flow := tp.LongestPipingFlowAt(lazy.Expression(), false)
-	return flow != nil && flow.MatchesExactly(func(subject typeparser.PipingFlowSubject) bool {
-		return sameIdentifierReference(tp, c, parameter.Name(), ast.SkipParentheses(subject.Node()))
-	}, isEffectLiftStep(tp, api))
+// isEffectLiftHandler reports whether a Result.match handler is Effect.<api>,
+// directly or through an identity forwarder, without type arguments.
+func isEffectLiftHandler(tp *typeparser.TypeParser, node *ast.Node, api string) bool {
+	target, typeArguments, _ := tp.UnwrapIdentityForwarder(node)
+	return (typeArguments == nil || len(typeArguments.Nodes) == 0) && tp.IsNodeReferenceToEffectModuleApi(target, api)
 }
 
 // analyzeResultGuardConditional matches a flow that applies Result.isSuccess or
