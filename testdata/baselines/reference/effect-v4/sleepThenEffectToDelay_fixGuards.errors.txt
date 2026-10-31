@@ -30,9 +30,11 @@ Effect version: 4.0.2
 /.src/sleepThenEffectToDelay_fixGuards.ts(144,46): warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
 /.src/sleepThenEffectToDelay_fixGuards.ts(146,43): warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
 /.src/sleepThenEffectToDelay_fixGuards.ts(150,56): warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+/.src/sleepThenEffectToDelay_fixGuards.ts(156,49): warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+/.src/sleepThenEffectToDelay_fixGuards.ts(160,44): warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
 
 
-==== /.src/sleepThenEffectToDelay_fixGuards.ts (29 errors) ====
+==== /.src/sleepThenEffectToDelay_fixGuards.ts (31 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics sleepThenEffectToDelay:warning
     import { Duration, Effect, pipe } from "effect"
@@ -243,4 +245,16 @@ Effect version: 4.0.2
 !!! warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
       return sendRequest
     })
+    
+    // MUST TRIGGER, no fix: a property access may be bound to any function
+    const holder = { thunk: () => Effect.succeed(1) }
+    export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+                                                    ~~~~~~~~~~~~
+!!! warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+    
+    // MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+    let letThunk = () => Effect.succeed(1)
+    export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+                                               ~~~~~~~~~~~~
+!!! warning TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
     

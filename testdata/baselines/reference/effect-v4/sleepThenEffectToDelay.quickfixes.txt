@@ -359,6 +359,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D2] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -573,6 +580,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D3] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -789,6 +803,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D4] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1003,6 +1024,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D5] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -1219,6 +1247,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D6] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1433,6 +1468,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D7] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -1649,6 +1691,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D8] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1863,6 +1912,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D9] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -2079,6 +2135,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D10] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -2293,6 +2356,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D11] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -2521,6 +2591,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D14] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -2736,6 +2813,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D15] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -2948,6 +3032,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D16] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -3164,6 +3255,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D17] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -3377,6 +3475,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D18] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -3588,6 +3693,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D19] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -3804,6 +3916,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D20] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -4018,6 +4137,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D21] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -4234,6 +4360,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D22] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -4448,6 +4581,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D23] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -4664,6 +4804,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D24] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -4878,6 +5025,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D25] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -5094,6 +5248,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D26] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -5308,6 +5469,13 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 
 
 === [D27] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -5524,6 +5692,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D28] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -5739,6 +5914,13 @@ export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effe
   unrelated
 )
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+
 
 === [D29] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -5953,4 +6135,11 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
 

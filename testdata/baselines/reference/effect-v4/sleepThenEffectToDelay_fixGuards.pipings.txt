@@ -1,4 +1,4 @@
-==== /.src/sleepThenEffectToDelay_fixGuards.ts (43 flows) ====
+==== /.src/sleepThenEffectToDelay_fixGuards.ts (47 flows) ====
 
 === Piping Flow ===
 Location: 17:35 - 17:115
@@ -737,3 +737,67 @@ Transformations (2):
       callee: Effect.flatMap
       args: [function() {\n  return sendRequest\n}]
       outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 155:30 - 155:48
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 156:33 - 156:79
+Node: Effect.flatMap(Effect.sleep(0), holder.thunk)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [holder.thunk]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 159:21 - 159:39
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 160:28 - 160:70
+Node: Effect.flatMap(Effect.sleep(0), letThunk)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [letThunk]
+      outType: Effect<number, never, never>

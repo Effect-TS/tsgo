@@ -97,6 +97,14 @@
   Fix 1: "Disable sleepThenEffectToDelay for entire file"
   Fix 2: "Rewrite to Effect.delay"
 
+[D23] (99:49-99:61) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D24] (103:44-103:56) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -240,6 +248,14 @@ export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function
   return sendRequest
 })
 
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
 
 === [D8] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -345,6 +361,14 @@ export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(
 export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
   return sendRequest
 })
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
 
 
 === [D9] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -452,6 +476,14 @@ export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function
   return sendRequest
 })
 
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
 
 === [D10] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -558,6 +590,14 @@ export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function
   return sendRequest
 })
 
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
 
 === [D11] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -663,6 +703,14 @@ export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(
 export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
   return sendRequest
 })
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
 
 
 === [D12] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -787,6 +835,14 @@ export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(
 export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
   return sendRequest
 })
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
 
 
 === [D16] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -918,6 +974,14 @@ export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function
   return sendRequest
 })
 
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
 
 === [D21] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1024,6 +1088,14 @@ export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function
   return sendRequest
 })
 
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
 
 === [D22] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1128,3 +1200,23 @@ export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(
 // -> Effect.delay(sendRequest, 0)
 export const functionExpressionStable = Effect.delay(sendRequest, 0)
 
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D23] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default

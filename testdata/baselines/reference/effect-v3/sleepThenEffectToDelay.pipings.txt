@@ -1,4 +1,4 @@
-==== /.src/sleepThenEffectToDelay.ts (58 flows) ====
+==== /.src/sleepThenEffectToDelay.ts (60 flows) ====
 
 === Piping Flow ===
 Location: 8:27 - 8:60
@@ -986,4 +986,40 @@ Transformations (1):
   [0] kind: call
       callee: Effect.sleep
       args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 174:30 - 174:91
+Node: pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipe
+      callee: Effect.zipRight
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 177:34 - 177:110
+Node: Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.zipRight
+      args: [...([sendRequest] as const)]
       outType: Effect<void, never, never>

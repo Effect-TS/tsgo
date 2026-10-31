@@ -1,4 +1,4 @@
-==== /.src/sleepThenEffectToDelay.ts (75 flows) ====
+==== /.src/sleepThenEffectToDelay.ts (78 flows) ====
 
 === Piping Flow ===
 Location: 8:27 - 8:60
@@ -1260,4 +1260,62 @@ Transformations (1):
   [0] kind: call
       callee: Effect.sleep
       args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 207:30 - 207:90
+Node: pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipe
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 208:34 - 208:102
+Node: Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: pipeable
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: pipeable
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 211:34 - 211:109
+Node: Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [...([sendRequest] as const)]
       outType: Effect<void, never, never>

@@ -202,3 +202,10 @@ export const unrelatedAndThen = unrelated.andThen(Effect.sleep("1 second"), send
 export const shadowedEffect = ((Effect: typeof unrelated) => Effect.andThen(Effect.sleep("1 second"), sendRequest))(
   unrelated
 )
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.andThen(sendRequest))
+export const pipeableStageSleep = Duration.seconds(1).pipe(Effect.sleep, Effect.andThen(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.andThen(...([sendRequest] as const)))

@@ -169,3 +169,9 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))

@@ -297,6 +297,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D2] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -478,6 +484,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D3] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -661,6 +673,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D4] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -842,6 +860,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D5] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -1025,6 +1049,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D6] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1206,6 +1236,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D7] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -1389,6 +1425,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D8] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1570,6 +1612,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D9] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -1753,6 +1801,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D10] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -1934,6 +1988,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D11] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -2117,6 +2177,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D12] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -2298,6 +2364,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D13] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -2487,6 +2559,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D15] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -2668,6 +2746,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D16] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -2851,6 +2935,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D17] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -3029,6 +3119,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D18] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -3212,6 +3308,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D19] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -3393,6 +3495,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D20] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -3576,6 +3684,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D21] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -3757,6 +3871,12 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 
 
 === [D22] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
@@ -3940,6 +4060,12 @@ const unrelated = {
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
 
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
+
 
 === [D23] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
 skipped by default
@@ -4121,4 +4247,10 @@ const unrelated = {
 }
 export const unrelatedSleep = unrelated.sleep("1 second").pipe(Effect.zipRight(sendRequest))
 export const unrelatedZipRight = unrelated.zipRight(Effect.sleep("1 second"), sendRequest)
+
+// MUST NOT TRIGGER: Effect.sleep as a pipe stage is not a direct call to Effect.sleep
+export const pipeStageSleep = pipe("1 second", Effect.sleep, Effect.zipRight(sendRequest))
+
+// MUST NOT TRIGGER: a spread continuation is not a single argument, and could pass zipRight options
+export const spreadContinuation = Effect.sleep("1 second").pipe(Effect.zipRight(...([sendRequest] as const)))
 

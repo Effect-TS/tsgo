@@ -45,7 +45,7 @@ func runSleepThenEffectToDelayFix(ctx *fixable.Context) []ls.CodeAction {
 			Run: func(tracker *rewriter.Tracker) {
 				delayed, original := sleepThenEffectToDelayEffect(tracker, match, suspend)
 				switch match.Sequencer.Kind() {
-				case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast, typeparser.TransformationKindCall:
+				case typeparser.TransformationKindDataFirst, typeparser.TransformationKindCall:
 					if original != nil {
 						delayed = tracker.DeepCloneNode(original)
 					}
@@ -61,7 +61,9 @@ func runSleepThenEffectToDelayFix(ctx *fixable.Context) []ls.CodeAction {
 							return
 						}
 					}
-					tracker.ReplacePipingFlowPrefix(sf, match.Flow, match.SleepIndex+1, delayed)
+					if !tracker.ReplacePipingFlowPrefix(sf, match.Flow, match.SleepIndex+1, delayed) {
+						return
+					}
 					tracker.ReplacePipingFlowTransformation(sf, &match.Sequencer, rewriter.PipingFlowTransformationReplacement{
 						Callee:    delay(tracker),
 						Arguments: tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.Duration)}),

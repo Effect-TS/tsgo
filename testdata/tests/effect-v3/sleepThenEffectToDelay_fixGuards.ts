@@ -93,3 +93,11 @@ export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(
 export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
   return sendRequest
 })
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
