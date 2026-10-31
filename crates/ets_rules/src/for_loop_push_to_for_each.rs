@@ -397,7 +397,7 @@ pub(crate) fn contains_yield(node: P<Node>) -> bool {
     visit(node)
 }
 
-// go: internal/rules/for_loop_push_to_for_each.go:336 forLoopPushToForEachPointFreeCallee bd7a49d346aef735
+// go: internal/rules/for_loop_push_to_for_each.go:336 forLoopPushToForEachPointFreeCallee 206f684f0fa6a2f4
 // forLoopPushToForEachPointFreeCallee returns f when yielded is a flow applying
 // a single step f to the loop variable x, as in `f(x)`, `pipe(x, f)` or
 // `x.pipe(f)`, and f is a plain identifier with a single call signature taking
@@ -421,14 +421,12 @@ pub(crate) fn for_loop_push_to_for_each_point_free_callee(
                 && tp.get_symbol_at_location(node) == Some(binding_symbol)
         })
     };
+    // No arguments leaves only call, pipe and pipeable steps: every other kind
+    // keeps at least one argument besides the subject.
     let is_plain_callee = |tp: &mut TypeParser<'_>,
                            transformation: &PipingFlowTransformation|
      -> bool {
         let callee = transformation.callee();
-        match transformation.kind() {
-            TransformationKind::Call | TransformationKind::Pipe | TransformationKind::Pipeable => {}
-            _ => return false,
-        }
         callee.kind() == Kind::Identifier
             && transformation.args().len() == 0
             && transformation.type_arguments().is_none_or(|arguments| arguments.nodes().is_empty())

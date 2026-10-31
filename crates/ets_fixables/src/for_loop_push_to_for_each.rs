@@ -22,7 +22,7 @@ pub static FOR_LOOP_PUSH_TO_FOR_EACH_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_for_loop_push_to_for_each_fix,
 });
 
-// go: internal/fixables/for_loop_push_to_for_each.go:27 runForLoopPushToForEachFix 7d68d490a5878b86
+// go: internal/fixables/for_loop_push_to_for_each.go:27 runForLoopPushToForEachFix feef3ef531c528f6
 fn run_for_loop_push_to_for_each_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_for_loop_push_to_for_each_exported(&mut ctx.type_parser, sf) {
@@ -42,6 +42,8 @@ fn run_for_loop_push_to_for_each_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
             continue;
         };
 
+        // The fix deletes one statement and replaces another, the loop; the
+        // piping flow edits only rewrite steps inside a flow, so none applies.
         // The replacement is written as text: the printer drops the parentheses
         // of a synthesized single-identifier arrow parameter.
         let mut callee = reference.path.string();
@@ -105,7 +107,7 @@ fn run_for_loop_push_to_for_each_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
     Vec::new()
 }
 
-// go: internal/fixables/for_loop_push_to_for_each.go:87 forLoopPushToForEachNeedsSemicolon cc5f1eee77e78853
+// go: internal/fixables/for_loop_push_to_for_each.go:89 forLoopPushToForEachNeedsSemicolon cc5f1eee77e78853
 // forLoopPushToForEachNeedsSemicolon reports whether the declaration replacing
 // loop must end with a semicolon. A for statement delimits itself, while the
 // declaration relies on automatic semicolon insertion: it keeps the semicolon
@@ -127,7 +129,7 @@ pub(crate) fn for_loop_push_to_for_each_needs_semicolon(sf: P<SourceFile>, loop_
     b"([`+-/<".contains(&text.as_bytes()[next])
 }
 
-// go: internal/fixables/for_loop_push_to_for_each.go:103 forLoopPushToForEachNodeText e5253df3ccad30da
+// go: internal/fixables/for_loop_push_to_for_each.go:105 forLoopPushToForEachNodeText e5253df3ccad30da
 pub(crate) fn for_loop_push_to_for_each_node_text(
     sf: P<SourceFile>,
     node: Option<P<Node>>,
