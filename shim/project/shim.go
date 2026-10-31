@@ -47,7 +47,6 @@ type FileContent = project.FileContent
 type FileHandle = project.FileHandle
 type FileHandleSource = project.FileHandleSource
 type FileSource = project.FileSource
-type Handle = project.Handle
 type ID = project.ID
 type InferredProjectID = project.InferredProjectID
 type Kind = project.Kind

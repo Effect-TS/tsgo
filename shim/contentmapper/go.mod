@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/contentmapper
+module github.com/microsoft/TypeScript/tsc/providershim/contentmapper
 
 go 1.26
 

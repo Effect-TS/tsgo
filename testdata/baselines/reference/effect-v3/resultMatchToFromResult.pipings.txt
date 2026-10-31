@@ -1,0 +1,71 @@
+==== /.src/resultMatchToFromResult.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 10:27 - 10:98
+Node: Either.match(either, { onLeft: Effect.fail, onRight: Effect.succeed })
+Node Kind: KindCallExpression
+
+Subject: either
+Subject Type: Either<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Either.match
+      args: [{ onLeft: Effect.fail, onRight: Effect.succeed }]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 13:29 - 13:52
+Node: Either.isRight(either)
+Node Kind: KindCallExpression
+
+Subject: either
+Subject Type: Either<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Either.isRight
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 13:54 - 13:83
+Node: Effect.succeed(either.right)
+Node Kind: KindCallExpression
+
+Subject: either.right
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:85 - 13:110
+Node: Effect.fail(either.left)
+Node Kind: KindCallExpression
+
+Subject: either.left
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 16:25 - 16:102
+Node: Exit.match(exit, { onFailure: Effect.failCause, onSuccess: Effect.succeed })
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Exit.match
+      args: [{ onFailure: Effect.failCause, onSuccess: Effect.succeed }]
+      outType: Effect<number, never, never> | Effect<never, Error, never>

@@ -2199,10 +2199,6 @@ func NewNodeFactory(hooks ast.NodeFactoryHooks) *ast.NodeFactory
 func NewNodeVisitor(visit func(node *ast.Node) *ast.Node, factory *ast.NodeFactory, hooks ast.NodeVisitorHooks) *ast.NodeVisitor
 //go:linkname NewSymbol github.com/microsoft/TypeScript/tsc/internal/ast.NewSymbol
 func NewSymbol() *ast.Symbol
-//go:linkname NewSymbolTable github.com/microsoft/TypeScript/tsc/internal/ast.NewSymbolTable
-func NewSymbolTable() ast.SymbolTable
-//go:linkname NewSymbolTableWithCapacity github.com/microsoft/TypeScript/tsc/internal/ast.NewSymbolTableWithCapacity
-func NewSymbolTableWithCapacity(capacity int) ast.SymbolTable
 type NoSubstitutionTemplateLiteral = ast.NoSubstitutionTemplateLiteral
 type NoSubstitutionTemplateLiteralNode = ast.NoSubstitutionTemplateLiteralNode
 type Node = ast.Node
@@ -2579,7 +2575,6 @@ const SymbolFlagsMethodExcludes = ast.SymbolFlagsMethodExcludes
 const SymbolFlagsModule = ast.SymbolFlagsModule
 const SymbolFlagsModuleExports = ast.SymbolFlagsModuleExports
 const SymbolFlagsModuleMember = ast.SymbolFlagsModuleMember
-const SymbolFlagsNameProxy = ast.SymbolFlagsNameProxy
 const SymbolFlagsNamespace = ast.SymbolFlagsNamespace
 const SymbolFlagsNamespaceModule = ast.SymbolFlagsNamespaceModule
 const SymbolFlagsNamespaceModuleExcludes = ast.SymbolFlagsNamespaceModuleExcludes
@@ -2610,12 +2605,9 @@ const SymbolFlagsValueModuleExcludes = ast.SymbolFlagsValueModuleExcludes
 const SymbolFlagsVariable = ast.SymbolFlagsVariable
 type SymbolId = ast.SymbolId
 type SymbolIdGenerator = ast.SymbolIdGenerator
-type SymbolMap = ast.SymbolMap
 //go:linkname SymbolName github.com/microsoft/TypeScript/tsc/internal/ast.SymbolName
 func SymbolName(symbol *ast.Symbol) string
 type SymbolTable = ast.SymbolTable
-//go:linkname SymbolTableOf github.com/microsoft/TypeScript/tsc/internal/ast.SymbolTableOf
-func SymbolTableOf(name string, symbol *ast.Symbol) ast.SymbolTable
 type SymbolWithData = ast.SymbolWithData
 type SyntaxList = ast.SyntaxList
 type SyntaxListNode = ast.SyntaxListNode

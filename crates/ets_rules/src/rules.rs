@@ -4,7 +4,7 @@ use ets_rule::Rule;
 
 use crate::*;
 
-// go: internal/rules/rules.go:10 All 005a403737006369
+// go: internal/rules/rules.go:10 All 38ef61353b6ef216
 // All is the list of all diagnostic rules.
 // Add new rules here explicitly - no init() magic.
 //
@@ -139,6 +139,7 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*MAP_MAP_ERROR_TO_MAP_BOTH).clone(),
         (*FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL).clone(),
         (*OPTION_MATCH_TO_FROM_OPTION).clone(),
+        (*RESULT_MATCH_TO_FROM_RESULT).clone(),
         (*SYNC_TO_SUCCEED).clone(),
         (*EFFECT_SLEEP_ZERO_TO_YIELD_NOW).clone(),
         (*EXTENDS_NATIVE_ERROR).clone(),

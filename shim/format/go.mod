@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/format
+module github.com/microsoft/TypeScript/tsc/providershim/format
 
 go 1.26
 

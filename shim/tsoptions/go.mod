@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/tsoptions
+module github.com/microsoft/TypeScript/tsc/providershim/tsoptions
 
 go 1.26
 

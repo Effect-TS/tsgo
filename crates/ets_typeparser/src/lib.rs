@@ -141,6 +141,7 @@ mod promise_type;
 mod readonly_results_test;
 mod reconstruct;
 mod result_dispatch;
+mod result_type;
 mod returning_dispatch;
 #[cfg(test)]
 mod returning_dispatch_test;

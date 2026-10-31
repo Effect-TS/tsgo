@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/testutil/harnessutil
+module github.com/microsoft/TypeScript/tsc/providershim/testutil/harnessutil
 
 go 1.26
 

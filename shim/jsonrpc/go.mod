@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/jsonrpc
+module github.com/microsoft/TypeScript/tsc/providershim/jsonrpc
 
 go 1.26
 
