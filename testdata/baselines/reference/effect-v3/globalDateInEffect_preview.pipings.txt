@@ -1,7 +1,7 @@
 ==== /.src/globalDateInEffect_preview.ts (1 flows) ====
 
 === Piping Flow ===
-Location: 5:23 - 8:3
+Location: 6:23 - 9:3
 Node: Effect.gen(function*() {\n  const now = Date.now()\n  return now\n})
 Node Kind: KindCallExpression
 

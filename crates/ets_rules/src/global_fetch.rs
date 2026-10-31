@@ -35,7 +35,7 @@ pub static GLOBAL_FETCH_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_fetch.go:36 runGlobalFetch f3a33c72328e0ce5
+// go: internal/rules/global_fetch.go:36 runGlobalFetch 33ca45dae938d91e
 pub(crate) fn run_global_fetch(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

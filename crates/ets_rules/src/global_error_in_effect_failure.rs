@@ -8,7 +8,7 @@ use ets_shim::P;
 use ets_shim::ast::{self, Diagnostic, FindAncestorResult, Kind, Node};
 use ets_shim::diagnostics as tsdiag;
 
-// go: internal/rules/global_error_in_effect_failure.go:14 GlobalErrorInEffectFailure bf15cba89e7c03d3
+// go: internal/rules/global_error_in_effect_failure.go:14 GlobalErrorInEffectFailure 43e14671e2c19e79
 // GlobalErrorInEffectFailure detects when `new Error(...)` expressions appear inside an Effect
 // context where the failure channel (E type parameter) contains the global Error type.
 pub static GLOBAL_ERROR_IN_EFFECT_FAILURE: LazyLock<Rule> = LazyLock::new(|| {
@@ -42,7 +42,7 @@ pub static GLOBAL_ERROR_IN_EFFECT_FAILURE: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_error_in_effect_failure.go:47 checkGlobalErrorInEffectFailure 1a7a0fcb4f0a592e
+// go: internal/rules/global_error_in_effect_failure.go:48 checkGlobalErrorInEffectFailure 1a7a0fcb4f0a592e
 // checkGlobalErrorInEffectFailure checks a single new expression for the global-error-in-failure pattern.
 pub(crate) fn check_global_error_in_effect_failure(
     ctx: &mut Context<'_, '_>,

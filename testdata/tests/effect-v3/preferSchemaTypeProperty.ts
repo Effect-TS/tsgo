@@ -9,6 +9,7 @@
   }
 }
 // @filename: test.ts
+// @effect-v3
 // @effect-diagnostics preferSchemaTypeProperty:error
 import { Schema, Schema as S } from "effect"
 

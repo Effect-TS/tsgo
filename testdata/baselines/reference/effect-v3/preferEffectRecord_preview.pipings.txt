@@ -1,7 +1,7 @@
 ==== /.src/preferEffectRecord_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 6:22 - 6:45
+Location: 7:22 - 7:45
 Node: Object.entries(scores)
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: [string, number][]
 
 === Piping Flow ===
-Location: 7:25 - 7:50
+Location: 8:25 - 8:50
 Node: Record.toEntries(scores)
 Node Kind: KindCallExpression
 

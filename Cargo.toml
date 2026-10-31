@@ -65,6 +65,8 @@ similar = "3"
 tar = "0.4"
 
 [workspace.lints.rust]
+# Unused imports, variables and dead code fail `cargo build` and `cargo test`, not only Clippy.
+unused = { level = "deny", priority = -1 }
 non_upper_case_globals = "allow"
 non_camel_case_types = "allow"
 # Rust 1.99: forming raw pointers through intermediate references can strengthen aliasing assumptions accidentally.

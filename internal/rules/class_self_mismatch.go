@@ -45,6 +45,8 @@ type ClassSelfMismatchMatch struct {
 
 // AnalyzeClassSelfMismatch finds all class declarations where the Self type
 // parameter does not match the class name.
+//
+//ets:ast-walk finds class declarations, which are not flow steps
 func AnalyzeClassSelfMismatch(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ClassSelfMismatchMatch {
 	var matches []ClassSelfMismatchMatch
 

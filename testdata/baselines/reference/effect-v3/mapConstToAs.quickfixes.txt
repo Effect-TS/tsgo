@@ -1,135 +1,131 @@
 === Quick Fix Inventory ===
 
-[D1] (18:45-18:55) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D1] (19:45-19:55) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D2] (21:52-21:62) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D2] (22:52-22:62) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D3] (24:50-24:60) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D3] (25:50-25:60) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D4] (27:49-27:59) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D4] (28:49-28:59) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D5] (28:49-28:59) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D5] (29:49-29:59) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D6] (29:46-29:56) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D6] (30:46-30:56) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D7] (30:48-30:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D7] (31:48-31:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D8] (33:50-33:60) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D8] (34:50-34:60) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D9] (36:48-36:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D9] (37:48-37:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D10] (39:45-39:55) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D10] (40:45-40:55) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D11] (42:48-42:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D11] (43:48-43:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D12] (45:51-45:61) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D12] (46:51-46:61) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D13] (48:44-48:54) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D13] (49:44-49:54) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D14] (53:53-53:63) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D14] (54:53-54:63) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D15] (58:41-58:51) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D15] (59:41-59:51) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D16] (61:26-61:36) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D16] (62:26-62:36) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D17] (64:25-64:35) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D17] (65:25-65:35) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D18] (67:48-67:54) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D18] (68:48-68:54) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D19] (71:45-71:53) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D19] (72:45-72:53) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D20] (74:17-74:28) TS377091: Exported declaration 'nestedScope' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-  Fix 0: "Disable lazyEffect for this line"
-  Fix 1: "Disable lazyEffect for entire file"
-
-[D21] (75:28-75:38) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D20] (76:28-76:38) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D22] (81:3-81:13) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D21] (82:3-82:13) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D23] (134:48-134:58) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+[D22] (135:48-135:58) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D24] (135:43-135:53) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+[D23] (136:43-136:53) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D25] (136:49-136:59) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+[D24] (137:49-137:59) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D26] (173:76-173:86) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D25] (174:76-174:86) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D27] (176:53-176:63) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D26] (177:53-177:63) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
@@ -145,6 +141,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -334,6 +331,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -523,6 +521,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -712,6 +711,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -901,6 +901,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -1090,6 +1091,7 @@ skipped by default
 === [D6] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -1279,6 +1281,7 @@ skipped by default
 === [D7] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -1468,6 +1471,7 @@ skipped by default
 === [D8] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -1657,6 +1661,7 @@ skipped by default
 === [D9] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -1846,6 +1851,7 @@ skipped by default
 === [D10] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -2035,6 +2041,7 @@ skipped by default
 === [D11] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -2224,6 +2231,7 @@ skipped by default
 === [D12] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -2413,6 +2421,7 @@ skipped by default
 === [D13] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -2600,6 +2609,7 @@ skipped by default
 === [D14] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -2787,6 +2797,7 @@ skipped by default
 === [D15] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -2976,6 +2987,7 @@ skipped by default
 === [D16] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -3165,6 +3177,7 @@ skipped by default
 === [D17] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -3354,6 +3367,7 @@ skipped by default
 === [D18] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -3543,6 +3557,7 @@ skipped by default
 === [D19] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -3723,21 +3738,16 @@ export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "s
 void mutable
 
 
-=== [D20] Fix 0: "Disable lazyEffect for this line" ===
+=== [D20] Fix 0: "Disable mapConstToAs for this line" ===
 skipped by default
 
-=== [D20] Fix 1: "Disable lazyEffect for entire file" ===
+=== [D20] Fix 1: "Disable mapConstToAs for entire file" ===
 skipped by default
 
-=== [D21] Fix 0: "Disable mapConstToAs for this line" ===
-skipped by default
-
-=== [D21] Fix 1: "Disable mapConstToAs for entire file" ===
-skipped by default
-
-=== [D21] Fix 2: "Replace with Effect.as" ===
+=== [D20] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -3918,15 +3928,16 @@ export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "s
 void mutable
 
 
-=== [D22] Fix 0: "Disable mapConstToAs for this line" ===
+=== [D21] Fix 0: "Disable mapConstToAs for this line" ===
 skipped by default
 
-=== [D22] Fix 1: "Disable mapConstToAs for entire file" ===
+=== [D21] Fix 1: "Disable mapConstToAs for entire file" ===
 skipped by default
 
-=== [D22] Fix 2: "Replace with Effect.as" ===
+=== [D21] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -4107,15 +4118,16 @@ export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "s
 void mutable
 
 
-=== [D23] Fix 0: "Disable effectMapVoid for this line" ===
+=== [D22] Fix 0: "Disable effectMapVoid for this line" ===
 skipped by default
 
-=== [D23] Fix 1: "Disable effectMapVoid for entire file" ===
+=== [D22] Fix 1: "Disable effectMapVoid for entire file" ===
 skipped by default
 
-=== [D23] Fix 2: "Replace with Effect.asVoid" ===
+=== [D22] Fix 2: "Replace with Effect.asVoid" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -4296,15 +4308,16 @@ export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "s
 void mutable
 
 
-=== [D24] Fix 0: "Disable effectMapVoid for this line" ===
+=== [D23] Fix 0: "Disable effectMapVoid for this line" ===
 skipped by default
 
-=== [D24] Fix 1: "Disable effectMapVoid for entire file" ===
+=== [D23] Fix 1: "Disable effectMapVoid for entire file" ===
 skipped by default
 
-=== [D24] Fix 2: "Replace with Effect.asVoid" ===
+=== [D23] Fix 2: "Replace with Effect.asVoid" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -4485,15 +4498,16 @@ export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "s
 void mutable
 
 
-=== [D25] Fix 0: "Disable effectMapVoid for this line" ===
+=== [D24] Fix 0: "Disable effectMapVoid for this line" ===
 skipped by default
 
-=== [D25] Fix 1: "Disable effectMapVoid for entire file" ===
+=== [D24] Fix 1: "Disable effectMapVoid for entire file" ===
 skipped by default
 
-=== [D25] Fix 2: "Replace with Effect.asVoid" ===
+=== [D24] Fix 2: "Replace with Effect.asVoid" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -4674,15 +4688,16 @@ export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "s
 void mutable
 
 
-=== [D26] Fix 0: "Disable mapConstToAs for this line" ===
+=== [D25] Fix 0: "Disable mapConstToAs for this line" ===
 skipped by default
 
-=== [D26] Fix 1: "Disable mapConstToAs for entire file" ===
+=== [D25] Fix 1: "Disable mapConstToAs for entire file" ===
 skipped by default
 
-=== [D26] Fix 2: "Replace with Effect.as" ===
+=== [D25] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 
@@ -4863,15 +4878,16 @@ export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "s
 void mutable
 
 
-=== [D27] Fix 0: "Disable mapConstToAs for this line" ===
+=== [D26] Fix 0: "Disable mapConstToAs for this line" ===
 skipped by default
 
-=== [D27] Fix 1: "Disable mapConstToAs for entire file" ===
+=== [D26] Fix 1: "Disable mapConstToAs for entire file" ===
 skipped by default
 
-=== [D27] Fix 2: "Replace with Effect.as" ===
+=== [D26] Fix 2: "Replace with Effect.as" ===
 
 --- file:///.src/mapConstToAs.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, Option, pipe, Stream } from "effect"
 

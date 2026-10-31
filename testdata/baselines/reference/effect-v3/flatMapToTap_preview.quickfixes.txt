@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (12:3-12:17) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+[D1] (13:3-13:17) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
   Fix 0: "Disable flatMapToTap for this line"
   Fix 1: "Disable flatMapToTap for entire file"
   Fix 2: "Replace with Effect.tap"
@@ -16,6 +16,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.tap" ===
 
 --- file:///.src/flatMapToTap_preview.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 interface User {

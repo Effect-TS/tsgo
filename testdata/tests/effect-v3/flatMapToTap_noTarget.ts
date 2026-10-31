@@ -1,3 +1,4 @@
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind } from "effect/Effect"
 

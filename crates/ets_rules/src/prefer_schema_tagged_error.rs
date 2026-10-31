@@ -39,7 +39,7 @@ pub struct PreferSchemaTaggedErrorMatch {
     pub location: TextRange,
 }
 
-// go: internal/rules/prefer_schema_tagged_error.go:35 AnalyzePreferSchemaTaggedError dd49f4b3158265af
+// go: internal/rules/prefer_schema_tagged_error.go:35 AnalyzePreferSchemaTaggedError 5ac25019dbcf2321
 pub fn analyze_prefer_schema_tagged_error(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

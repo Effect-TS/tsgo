@@ -53,7 +53,7 @@ pub(crate) struct DeclarationStabilityInfo {
     pub(crate) declaration: Option<P<Node>>,
 }
 
-// go: internal/rules/stability_api_usage.go:45 runStabilityApiUsage d59d2b26f6fc948d
+// go: internal/rules/stability_api_usage.go:45 runStabilityApiUsage 447658b63971c6d6
 //
 // Rust: Go's closures (`readSymbol`, `readSignature`, `report`, `walk`) are nested functions that take what they
 // capture (the rule context and a `StabilityApiUsageState` for `wanted`, the allow-list and the diagnostics).
@@ -237,7 +237,7 @@ pub(crate) fn run_stability_api_usage(
     state.diagnostics
 }
 
-// go: internal/rules/stability_api_usage.go:167 symbolHasDeclaration c4c536bffebebe70
+// go: internal/rules/stability_api_usage.go:168 symbolHasDeclaration c4c536bffebebe70
 pub(crate) fn symbol_has_declaration(
     symbol: Option<P<Symbol>>,
     declaration: Option<P<Node>>,
@@ -248,7 +248,7 @@ pub(crate) fn symbol_has_declaration(
     symbol.declarations().contains(&declaration)
 }
 
-// go: internal/rules/stability_api_usage.go:176 stabilitySymbolIsModuleExport 7ac02950fc521693
+// go: internal/rules/stability_api_usage.go:177 stabilitySymbolIsModuleExport 7ac02950fc521693
 // stabilitySymbolIsModuleExport reports whether symbol is exported from the
 // module under its own name.
 pub(crate) fn stability_symbol_is_module_export(
@@ -262,7 +262,7 @@ pub(crate) fn stability_symbol_is_module_export(
     c.try_get_member_in_module_exports_and_properties(symbol.name(), module_symbol) == Some(symbol)
 }
 
-// go: internal/rules/stability_api_usage.go:188 stabilityOwningExportSymbol f4d62c22c03bb158
+// go: internal/rules/stability_api_usage.go:189 stabilityOwningExportSymbol f4d62c22c03bb158
 // stabilityOwningExportSymbol walks out from a selected declaration to the
 // nearest enclosing declaration that is exported from the module. A call or
 // construct signature of a dual export has its own `__call` symbol, so the
@@ -305,7 +305,7 @@ pub(crate) struct StabilityApiAllowlist {
     entries: Vec<String>,
 }
 
-// go: internal/rules/stability_api_usage.go:206 newStabilityApiAllowlist c0e5d29a07d4f7e1
+// go: internal/rules/stability_api_usage.go:207 newStabilityApiAllowlist c0e5d29a07d4f7e1
 // Decisions belong to one rule invocation: per-file overrides can change the
 // allow-list, and the tagged declaration distinguishes overloads and reexports.
 pub(crate) fn new_stability_api_allowlist(
@@ -325,7 +325,7 @@ pub(crate) fn new_stability_api_allowlist(
 }
 
 impl StabilityApiAllowlist {
-    // go: internal/rules/stability_api_usage.go:206 newStabilityApiAllowlist c0e5d29a07d4f7e1
+    // go: internal/rules/stability_api_usage.go:207 newStabilityApiAllowlist c0e5d29a07d4f7e1
     // Rust: the body of the closure Go returns.
     pub(crate) fn call(
         &mut self,
@@ -341,7 +341,7 @@ impl StabilityApiAllowlist {
         (result.allowed, result.name)
     }
 
-    // go: internal/rules/stability_api_usage.go:206 newStabilityApiAllowlist c0e5d29a07d4f7e1
+    // go: internal/rules/stability_api_usage.go:207 newStabilityApiAllowlist c0e5d29a07d4f7e1
     // Rust: the closure's body after the cache lookup; `call` stores what it returns, as Go's deferred store.
     fn decide(
         &mut self,
@@ -436,7 +436,7 @@ impl StabilityApiAllowlist {
     }
 }
 
-// go: internal/rules/stability_api_usage.go:288 stabilityApiModuleName 9d6b132dd52d7c15
+// go: internal/rules/stability_api_usage.go:289 stabilityApiModuleName 9d6b132dd52d7c15
 // This is a declaration path, not a reconstructed public import specifier.
 pub(crate) fn stability_api_module_name(
     package_name: &str,
@@ -477,7 +477,7 @@ pub(crate) fn stability_api_module_name(
     format!("{package_name}/{relative}")
 }
 
-// go: internal/rules/stability_api_usage.go:320 resolveStabilityAlias b90d0c21d92d0f8c
+// go: internal/rules/stability_api_usage.go:321 resolveStabilityAlias b90d0c21d92d0f8c
 // Synthetic default aliases have no alias declaration and cannot be resolved.
 pub(crate) fn resolve_stability_alias(
     c: &mut Checker,

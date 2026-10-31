@@ -46,6 +46,7 @@ func AnalyzeExtendsNativeError(tp *typeparser.TypeParser, c *checker.Checker, sf
 		nodeToVisit = append(nodeToVisit, child)
 		return false
 	}
+	//ets:ast-walk finds class declarations that may extend the native Error, not flow steps
 	sf.AsNode().ForEachChild(pushChild)
 
 	for len(nodeToVisit) > 0 {
@@ -58,6 +59,7 @@ func AnalyzeExtendsNativeError(tp *typeparser.TypeParser, c *checker.Checker, sf
 			}
 		}
 
+		//ets:ast-walk finds class declarations that may extend the native Error, not flow steps
 		node.ForEachChild(pushChild)
 	}
 

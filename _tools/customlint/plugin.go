@@ -14,7 +14,7 @@ func init() {
 type plugin struct{}
 
 func (*plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
-	return []*analysis.Analyzer{checkerLocationAnalyzer, symbolAccessAnalyzer, typeAtLocationAnalyzer}, nil
+	return []*analysis.Analyzer{astWalkAnalyzer, checkerLocationAnalyzer, symbolAccessAnalyzer, typeAtLocationAnalyzer}, nil
 }
 
 func (*plugin) GetLoadMode() string {

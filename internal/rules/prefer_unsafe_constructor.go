@@ -68,6 +68,7 @@ func AnalyzePreferUnsafeConstructor(tp *typeparser.TypeParser, c *checker.Checke
 			}
 		}
 
+		//ets:ast-walk finds Effect.runSync calls whose argument is a direct constructor call
 		n.ForEachChild(walk)
 		return false
 	}

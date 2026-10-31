@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferEffectString:warning
 import * as Str from "effect/String"

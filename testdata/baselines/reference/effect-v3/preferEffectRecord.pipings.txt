@@ -1,7 +1,7 @@
 ==== /.src/preferEffectRecord.ts (57 flows) ====
 
 === Piping Flow ===
-Location: 8:61 - 8:76
+Location: 9:61 - 9:76
 Node: Symbol.for("b")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: symbol
 
 === Piping Flow ===
-Location: 8:81 - 9:18
+Location: 9:81 - 10:18
 Node: Object.keys(data)
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 11:35 - 12:20
+Location: 12:35 - 13:20
 Node: Object.values(data)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: (string | number)[]
 
 === Piping Flow ===
-Location: 13:35 - 14:21
+Location: 14:35 - 15:21
 Node: Object.entries(data)
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: [string, string | number][]
 
 === Piping Flow ===
-Location: 15:37 - 16:26
+Location: 16:37 - 17:26
 Node: Object.fromEntries(pairs)
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: { [k: string]: number; }
 
 === Piping Flow ===
-Location: 19:35 - 20:25
+Location: 20:35 - 21:25
 Node: data.hasOwnProperty("a")
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 23:38 - 24:21
+Location: 24:38 - 25:21
 Node: Object["keys"](data)
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 24:21 - 25:23
+Location: 25:21 - 26:23
 Node: Object[`values`](data)
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: (string | number)[]
 
 === Piping Flow ===
-Location: 25:23 - 26:23
+Location: 26:23 - 27:23
 Node: Object.k\u0065ys(data)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 26:23 - 27:29
+Location: 27:23 - 28:29
 Node: Object["entr\u0069es"](data)
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: [string, string | number][]
 
 === Piping Flow ===
-Location: 27:29 - 28:23
+Location: 28:29 - 29:23
 Node: Object.entries?.(data)
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: [string, string | number][]
 
 === Piping Flow ===
-Location: 30:43 - 31:34
+Location: 31:43 - 32:34
 Node: optional?.["hasOwnProperty"]("a")
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: boolean | undefined
 
 === Piping Flow ===
-Location: 32:65 - 33:36
+Location: 33:65 - 34:36
 Node: optionalConstructor?.["keys"](data)
 Node Kind: KindCallExpression
 
@@ -183,7 +183,7 @@ Transformations (1):
       outType: string[] | undefined
 
 === Piping Flow ===
-Location: 34:22 - 35:21
+Location: 35:22 - 36:21
 Node: Native.entries(data)
 Node Kind: KindCallExpression
 
@@ -197,7 +197,7 @@ Transformations (1):
       outType: [string, string | number][]
 
 === Piping Flow ===
-Location: 35:21 - 36:24
+Location: 36:21 - 37:24
 Node: NativeObject.keys(data)
 Node Kind: KindCallExpression
 
@@ -211,7 +211,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 38:70 - 38:91
+Location: 39:70 - 39:91
 Node: native["keys"](data)
 Node Kind: KindCallExpression
 
@@ -225,7 +225,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 40:66 - 40:92
+Location: 41:66 - 41:92
 Node: value.hasOwnProperty("a")
 Node Kind: KindCallExpression
 
@@ -239,7 +239,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 41:19 - 42:36
+Location: 42:19 - 43:36
 Node: new Inherited().hasOwnProperty("a")
 Node Kind: KindCallExpression
 
@@ -253,7 +253,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 43:57 - 44:21
+Location: 44:57 - 45:21
 Node: picked.entries(data)
 Node Kind: KindCallExpression
 
@@ -267,7 +267,7 @@ Transformations (1):
       outType: [string, string | number][]
 
 === Piping Flow ===
-Location: 46:33 - 47:20
+Location: 47:33 - 48:20
 Node: remapped.keys(data)
 Node Kind: KindCallExpression
 
@@ -281,7 +281,7 @@ Transformations (1):
       outType: (string | number)[]
 
 === Piping Flow ===
-Location: 47:20 - 48:20
+Location: 48:20 - 49:20
 Node: Object.keys([1, 2])
 Node Kind: KindCallExpression
 
@@ -295,7 +295,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 48:20 - 49:20
+Location: 49:20 - 50:20
 Node: Object.values("ab")
 Node Kind: KindCallExpression
 
@@ -309,7 +309,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 49:20 - 50:31
+Location: 50:20 - 51:31
 Node: Object.fromEntries([[1, "a"]])
 Node Kind: KindCallExpression
 
@@ -323,7 +323,7 @@ Transformations (1):
       outType: { [k: string]: string; }
 
 === Piping Flow ===
-Location: 52:2 - 52:25
+Location: 53:2 - 53:25
 Node: [1].hasOwnProperty("0")
 Node Kind: KindCallExpression
 
@@ -337,7 +337,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 52:25 - 53:25
+Location: 53:25 - 54:25
 Node: "ab".hasOwnProperty("0")
 Node Kind: KindCallExpression
 
@@ -351,7 +351,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 54:23 - 54:79
+Location: 55:23 - 55:79
 Node: Effect.gen(function*() { return Object.entries(data) })
 Node Kind: KindCallExpression
 
@@ -365,7 +365,7 @@ Transformations (1):
       outType: Effect<[string, string | number][], never, never>
 
 === Piping Flow ===
-Location: 54:55 - 54:76
+Location: 55:55 - 55:76
 Node: Object.entries(data)
 Node Kind: KindCallExpression
 
@@ -379,7 +379,7 @@ Transformations (1):
       outType: [string, string | number][]
 
 === Piping Flow ===
-Location: 56:36 - 56:49
+Location: 57:36 - 57:49
 Node: R.keys(data)
 Node Kind: KindCallExpression
 
@@ -393,7 +393,7 @@ Transformations (1):
       outType: ("a" | "b")[]
 
 === Piping Flow ===
-Location: 57:58 - 57:76
+Location: 58:58 - 58:76
 Node: R.toEntries(data)
 Node Kind: KindCallExpression
 
@@ -407,7 +407,7 @@ Transformations (1):
       outType: ["a" | "b", string | number][]
 
 === Piping Flow ===
-Location: 57:76 - 58:15
+Location: 58:76 - 59:15
 Node: R.values(data)
 Node Kind: KindCallExpression
 
@@ -421,7 +421,7 @@ Transformations (1):
       outType: (string | number)[]
 
 === Piping Flow ===
-Location: 58:15 - 59:21
+Location: 59:15 - 60:21
 Node: R.fromEntries(pairs)
 Node Kind: KindCallExpression
 
@@ -435,7 +435,7 @@ Transformations (1):
       outType: Record<string | symbol, number>
 
 === Piping Flow ===
-Location: 59:21 - 60:17
+Location: 60:21 - 61:17
 Node: R.has(data, "a")
 Node Kind: KindCallExpression
 
@@ -449,7 +449,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 60:17 - 61:24
+Location: 61:17 - 62:24
 Node: EffectRecord.keys(data)
 Node Kind: KindCallExpression
 
@@ -463,7 +463,7 @@ Transformations (1):
       outType: ("a" | "b")[]
 
 === Piping Flow ===
-Location: 61:24 - 62:26
+Location: 62:24 - 63:26
 Node: EffectRecord.values(data)
 Node Kind: KindCallExpression
 
@@ -477,7 +477,7 @@ Transformations (1):
       outType: (string | number)[]
 
 === Piping Flow ===
-Location: 62:26 - 63:29
+Location: 63:26 - 64:29
 Node: EffectRecord.toEntries(data)
 Node Kind: KindCallExpression
 
@@ -491,7 +491,7 @@ Transformations (1):
       outType: ["a" | "b", string | number][]
 
 === Piping Flow ===
-Location: 63:29 - 64:32
+Location: 64:29 - 65:32
 Node: EffectRecord.fromEntries(pairs)
 Node Kind: KindCallExpression
 
@@ -505,7 +505,7 @@ Transformations (1):
       outType: Record<string | symbol, number>
 
 === Piping Flow ===
-Location: 64:32 - 65:28
+Location: 65:32 - 66:28
 Node: EffectRecord.has(data, "b")
 Node Kind: KindCallExpression
 
@@ -519,7 +519,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 65:28 - 67:12
+Location: 66:28 - 68:12
 Node: R.keys([1])
 Node Kind: KindCallExpression
 
@@ -533,7 +533,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 67:12 - 69:13
+Location: 68:12 - 70:13
 Node: R.keys("ab")
 Node Kind: KindCallExpression
 
@@ -547,7 +547,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 69:13 - 71:14
+Location: 70:13 - 72:14
 Node: R.values([1])
 Node Kind: KindCallExpression
 
@@ -561,7 +561,7 @@ Transformations (1):
       outType: (number | (() => string) | { (): string; (locales: string | string[], options?: (NumberFormatOptions & DateTimeFormatOptions) | undefined): string; } | (() => number | undefined) | ((...items: number[]) => number) | { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; } | ((separator?: string | undefined) => string) | (() => number[]) | (() => number | undefined) | ((start?: number | undefined, end?: number | undefined) => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount?: number | undefined): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; } | ((...items: number[]) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number) | ((value: number, start?: number | undefined, end?: number | undefined) => number[]) | ((target: number, start: number, end?: number | undefined) => number[]) | (() => ArrayIterator<number>) | (() => ArrayIterator<[number, number]>) | (() => ArrayIterator<number>) | (() => ArrayIterator<number>) | { [x: number]: boolean | undefined; length?: boolean | undefined; toString?: boolean | undefined; toLocaleString?: boolean | undefined; pop?: boolean | undefined; push?: boolean | undefined; concat?: boolean | undefined; join?: boolean | undefined; reverse?: boolean | undefined; shift?: boolean | undefined; slice?: boolean | undefined; sort?: boolean | undefined; splice?: boolean | undefined; unshift?: boolean | undefined; indexOf?: boolean | undefined; lastIndexOf?: boolean | undefined; every?: boolean | undefined; some?: boolean | undefined; forEach?: boolean | undefined; map?: boolean | undefined; filter?: boolean | undefined; reduce?: boolean | undefined; reduceRight?: boolean | undefined; find?: boolean | undefined; findIndex?: boolean | undefined; fill?: boolean | undefined; copyWithin?: boolean | undefined; [Symbol.iterator]?: boolean | undefined; entries?: boolean | undefined; keys?: boolean | undefined; values?: boolean | undefined; readonly [Symbol.unscopables]?: boolean | undefined; includes?: boolean | undefined; flatMap?: boolean | undefined; flat?: boolean | undefined; at?: boolean | undefined; findLast?: boolean | undefined; findLastIndex?: boolean | undefined; toReversed?: boolean | undefined; toSorted?: boolean | undefined; toSpliced?: boolean | undefined; with?: boolean | undefined; } | ((searchElement: number, fromIndex?: number | undefined) => boolean) | (<U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]) | (<A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[]) | ((index: number) => number | undefined) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => number) | (() => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; } | ((index: number, value: number) => number[]))[]
 
 === Piping Flow ===
-Location: 71:14 - 73:17
+Location: 72:14 - 74:17
 Node: R.toEntries([1])
 Node Kind: KindCallExpression
 
@@ -575,7 +575,7 @@ Transformations (1):
       outType: [string, number | (() => string) | { (): string; (locales: string | string[], options?: (NumberFormatOptions & DateTimeFormatOptions) | undefined): string; } | (() => number | undefined) | ((...items: number[]) => number) | { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; } | ((separator?: string | undefined) => string) | (() => number[]) | (() => number | undefined) | ((start?: number | undefined, end?: number | undefined) => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount?: number | undefined): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; } | ((...items: number[]) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number) | ((value: number, start?: number | undefined, end?: number | undefined) => number[]) | ((target: number, start: number, end?: number | undefined) => number[]) | (() => ArrayIterator<number>) | (() => ArrayIterator<[number, number]>) | (() => ArrayIterator<number>) | (() => ArrayIterator<number>) | { [x: number]: boolean | undefined; length?: boolean | undefined; toString?: boolean | undefined; toLocaleString?: boolean | undefined; pop?: boolean | undefined; push?: boolean | undefined; concat?: boolean | undefined; join?: boolean | undefined; reverse?: boolean | undefined; shift?: boolean | undefined; slice?: boolean | undefined; sort?: boolean | undefined; splice?: boolean | undefined; unshift?: boolean | undefined; indexOf?: boolean | undefined; lastIndexOf?: boolean | undefined; every?: boolean | undefined; some?: boolean | undefined; forEach?: boolean | undefined; map?: boolean | undefined; filter?: boolean | undefined; reduce?: boolean | undefined; reduceRight?: boolean | undefined; find?: boolean | undefined; findIndex?: boolean | undefined; fill?: boolean | undefined; copyWithin?: boolean | undefined; [Symbol.iterator]?: boolean | undefined; entries?: boolean | undefined; keys?: boolean | undefined; values?: boolean | undefined; readonly [Symbol.unscopables]?: boolean | undefined; includes?: boolean | undefined; flatMap?: boolean | undefined; flat?: boolean | undefined; at?: boolean | undefined; findLast?: boolean | undefined; findLastIndex?: boolean | undefined; toReversed?: boolean | undefined; toSorted?: boolean | undefined; toSpliced?: boolean | undefined; with?: boolean | undefined; } | ((searchElement: number, fromIndex?: number | undefined) => boolean) | (<U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]) | (<A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[]) | ((index: number) => number | undefined) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => number) | (() => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; } | ((index: number, value: number) => number[])][]
 
 === Piping Flow ===
-Location: 73:17 - 75:26
+Location: 74:17 - 76:26
 Node: R.fromEntries([[1, "a"]])
 Node Kind: KindCallExpression
 
@@ -589,7 +589,7 @@ Transformations (1):
       outType: Record<string | symbol, any>
 
 === Piping Flow ===
-Location: 76:35 - 78:26
+Location: 77:35 - 79:26
 Node: R.has(data, arbitraryKey)
 Node Kind: KindCallExpression
 
@@ -603,7 +603,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 78:26 - 80:15
+Location: 79:26 - 81:15
 Node: R.has(data, 1)
 Node Kind: KindCallExpression
 
@@ -617,7 +617,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 80:15 - 82:16
+Location: 81:15 - 83:16
 Node: R.has([1], "0")
 Node Kind: KindCallExpression
 
@@ -631,7 +631,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 82:16 - 83:17
+Location: 83:16 - 84:17
 Node: nativeKeys(data)
 Node Kind: KindCallExpression
 
@@ -645,7 +645,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 84:38 - 85:19
+Location: 85:38 - 86:19
 Node: destructured(data)
 Node Kind: KindCallExpression
 
@@ -659,7 +659,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 87:30 - 88:22
+Location: 88:30 - 89:22
 Node: Object[dynamic](data)
 Node Kind: KindCallExpression
 
@@ -673,7 +673,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 89:94 - 90:18
+Location: 90:94 - 91:18
 Node: custom.keys(data)
 Node Kind: KindCallExpression
 
@@ -687,7 +687,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 90:18 - 91:27
+Location: 91:18 - 92:27
 Node: custom.hasOwnProperty("a")
 Node Kind: KindCallExpression
 
@@ -701,7 +701,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 92:70 - 92:88
+Location: 93:70 - 93:88
 Node: Object.keys(data)
 Node Kind: KindCallExpression
 
@@ -715,7 +715,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 93:78 - 94:35
+Location: 94:78 - 95:35
 Node: new Override().hasOwnProperty("a")
 Node Kind: KindCallExpression
 
@@ -729,7 +729,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 95:48 - 95:74
+Location: 96:48 - 96:74
 Node: super.hasOwnProperty("a")
 Node Kind: KindCallExpression
 
@@ -743,7 +743,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 96:70 - 97:17
+Location: 97:70 - 98:17
 Node: mixed.keys(data)
 Node Kind: KindCallExpression
 
@@ -757,7 +757,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 98:84 - 99:34
+Location: 99:84 - 100:34
 Node: mixedInstance.hasOwnProperty("a")
 Node Kind: KindCallExpression
 
@@ -771,7 +771,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 100:82 - 101:24
+Location: 101:82 - 102:24
 Node: intersection.keys(data)
 Node Kind: KindCallExpression
 
@@ -785,7 +785,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 102:70 - 103:23
+Location: 103:70 - 104:23
 Node: conflicting.keys(data)
 Node Kind: KindCallExpression
 

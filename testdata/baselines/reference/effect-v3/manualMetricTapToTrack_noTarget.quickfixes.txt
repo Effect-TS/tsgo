@@ -1,33 +1,5 @@
 === Quick Fix Inventory ===
-
-[D1] (14:44-14:47) TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
-  Fix 0: "Disable manualMetricTapToTrack for this line"
-  Fix 1: "Disable manualMetricTapToTrack for entire file"
-
-[D2] (17:30-17:38) TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
-  Fix 0: "Disable manualMetricTapToTrack for this line"
-  Fix 1: "Disable manualMetricTapToTrack for entire file"
-
-[D3] (20:50-20:53) TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
-  Fix 0: "Disable manualMetricTapToTrack for this line"
-  Fix 1: "Disable manualMetricTapToTrack for entire file"
+(no diagnostics)
 
 === Quick Fix Application Results ===
-
-=== [D1] Fix 0: "Disable manualMetricTapToTrack for this line" ===
-skipped by default
-
-=== [D1] Fix 1: "Disable manualMetricTapToTrack for entire file" ===
-skipped by default
-
-=== [D2] Fix 0: "Disable manualMetricTapToTrack for this line" ===
-skipped by default
-
-=== [D2] Fix 1: "Disable manualMetricTapToTrack for entire file" ===
-skipped by default
-
-=== [D3] Fix 0: "Disable manualMetricTapToTrack for this line" ===
-skipped by default
-
-=== [D3] Fix 1: "Disable manualMetricTapToTrack for entire file" ===
-skipped by default
+(no quick fixes to apply)

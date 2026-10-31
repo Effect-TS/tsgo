@@ -37,7 +37,7 @@ pub static CRYPTO_RANDOM_UUID_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule 
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_crypto_random_uuid(ctx, true) },
 });
 
-// go: internal/rules/crypto_random_uuid.go:36 runCryptoRandomUUID eb4e51d4a85bc7c7
+// go: internal/rules/crypto_random_uuid.go:36 runCryptoRandomUUID b09d4c170c6e8c8a
 pub(crate) fn run_crypto_random_uuid(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,
