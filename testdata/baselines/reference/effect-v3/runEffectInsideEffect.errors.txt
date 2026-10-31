@@ -3,9 +3,10 @@ Effect version: 3.19.19
 
 /.src/runEffectInsideEffect.ts(15,21): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect.ts(23,5): suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect.ts(23,5): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 
 
-==== /.src/runEffectInsideEffect.ts (2 errors) ====
+==== /.src/runEffectInsideEffect.ts (3 errors) ====
     // @effect-v3
     import { Data, Effect } from "effect"
     
@@ -33,6 +34,8 @@ Effect version: 3.19.19
         Effect.runPromise(check)
         ~~~~~~~~~~~~~~~~~
 !!! suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+        ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
         //        ^- no runPromise, use a runtime instead
       }
     })

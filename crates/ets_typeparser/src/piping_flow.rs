@@ -799,7 +799,7 @@ impl TypeParser<'_> {
             }
             let parameters = data_first.parameters();
             for subject_index in [0, parameters.len() as i64 - 1] {
-                if matches_pipeable_signature(
+                if matches_pipeable_signature_exported(
                     self,
                     Some(data_first),
                     Some(pipeable),

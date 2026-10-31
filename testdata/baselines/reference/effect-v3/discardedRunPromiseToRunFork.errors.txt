@@ -1,0 +1,265 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/discardedRunPromiseToRunFork.ts(26,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(29,6): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(32,6): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(35,6): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(40,6): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(50,10): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(55,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(58,3): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(59,7): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(62,28): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(65,31): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(69,3): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(73,37): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(77,3): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(82,15): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(88,5): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(93,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(96,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(99,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(103,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(106,1): warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(107,6): warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(111,6): warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+/.src/discardedRunPromiseToRunFork.ts(115,6): warning TS377179: The Promise returned by `runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+
+
+==== /.src/discardedRunPromiseToRunFork.ts (24 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics discardedRunPromiseToRunFork:warning
+    import { Cause, Deferred, Effect, Effect as Fx, Layer, ManagedRuntime, Runtime } from "effect"
+    import * as Eff from "effect/Effect"
+    import { runPromise } from "effect/Effect"
+    
+    declare class EmitError extends Error {
+      readonly _tag: "EmitError"
+    }
+    interface Port {
+      postMessage(message: unknown): void
+    }
+    declare const port: Port
+    declare const reply: (port: Port, message: unknown) => Effect.Effect<void, EmitError>
+    declare const work: Effect.Effect<void, Error>
+    declare const program: Effect.Effect<number, Error>
+    declare const services: Runtime.Runtime<never>
+    declare const signal: AbortSignal
+    declare const seen: Deferred.Deferred<void>
+    declare const onStatement: (cb: (sql: string) => void) => void
+    declare const flag: boolean
+    declare const consume: (promise: Promise<unknown>) => void
+    
+    // MUST TRIGGER: bare expression statement, the returned Promise floats
+    Effect.runPromise(program)
+    ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: `void` makes the discard explicit, the rejection is still unhandled
+    void Effect.runPromise(program)
+         ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: a typed failure discarded at an entry point
+    void Effect.runPromise(reply(port, { kind: "pong" }))
+         ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: the recovery path is itself fallible
+    void Effect.runPromise(
+         ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+      work.pipe(Effect.catchAllCause((cause) => reply(port, { kind: "error", detail: Cause.pretty(cause) })))
+    )
+    
+    // MUST TRIGGER: the error channel is `never` but defects still reject the Promise
+    void Effect.runPromise(
+         ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+      Effect.matchCauseEffect(work, {
+        onFailure: (cause) => Effect.sync(() => port.postMessage({ kind: "error", detail: Cause.pretty(cause) })),
+        onSuccess: () => Effect.sync(() => port.postMessage({ kind: "done" }))
+      })
+    )
+    
+    // MUST TRIGGER: a synchronous callback with nowhere to await
+    onStatement((sql) => {
+      if (sql.includes("DELETE")) {
+        void Effect.runPromise(Deferred.succeed(seen, void 0))
+             ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+      }
+    })
+    
+    // MUST TRIGGER: with options (no quick fix: v3 runFork options do not accept `signal`)
+    Effect.runPromise(program, { signal })
+    ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: parentheses around the discarded call are transparent
+    ;(Effect.runPromise(program))
+      ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    void (Effect.runPromise(program))
+          ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: non-final operand of a comma expression
+    export const commaFirst = (Effect.runPromise(program), 1)
+                               ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: final operand of a comma expression that is itself a discarded statement
+    port.postMessage("starting"), Effect.runPromise(program)
+                                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: statement inside a block-bodied arrow function
+    export const blockArrow = () => {
+      Effect.runPromise(program)
+      ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    }
+    
+    // MUST TRIGGER: `void` inside a concise arrow body, the arrow returns undefined, not the Promise
+    export const voidArrow = () => void Effect.runPromise(program)
+                                        ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: an async function does not await the Promise just by being async
+    export async function asyncMain() {
+      Effect.runPromise(program)
+      ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    }
+    
+    // MUST TRIGGER: `return void` still discards the Promise
+    export function returnVoid(): void {
+      return void Effect.runPromise(program)
+                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    }
+    
+    // MUST TRIGGER: class method body
+    export class Server {
+      start() {
+        Effect.runPromise(program)
+        ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+      }
+    }
+    
+    // MUST TRIGGER: Effect namespace alias
+    Fx.runPromise(program)
+    ~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: star import of effect/Effect
+    Eff.runPromise(program)
+    ~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: named import of runPromise (no quick fix: a bare identifier cannot be renamed in place)
+    runPromise(program)
+    ~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: local alias of Effect.runPromise (no quick fix)
+    const runPromiseAlias = Effect.runPromise
+    runPromiseAlias(program)
+    ~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: Runtime.runPromise(runtime)(...), the v3 counterpart of Effect.runPromiseWith
+    Runtime.runPromise(services)(work)
+    ~~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    void Runtime.runPromise(services, work)
+         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: hoisted Runtime.runPromise(runtime) runner, the call site is a bare identifier (no quick fix)
+    const run = Runtime.runPromise(services)
+    void run(work)
+         ~~~
+!!! warning TS377179: The Promise returned by `Runtime.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Runtime.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST TRIGGER: ManagedRuntime receiver, the fix renames the member to runFork
+    const runtime = ManagedRuntime.make(Layer.empty)
+    void runtime.runPromise(work)
+         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+    
+    // MUST NOT TRIGGER: awaited
+    export async function awaited() {
+      await Effect.runPromise(program)
+      await Runtime.runPromise(services)(work)
+      await runtime.runPromise(work)
+    }
+    
+    // MUST NOT TRIGGER: returned from an arrow body, the caller owns the Promise
+    export const handler = (e: Effect.Effect<void, Error>) => Effect.runPromise(e)
+    
+    // MUST NOT TRIGGER: returned from a block body
+    export function returned() {
+      return Effect.runPromise(program)
+    }
+    
+    // MUST NOT TRIGGER: assigned
+    export const assigned = Effect.runPromise(program)
+    let reassigned: Promise<number>
+    reassigned = Effect.runPromise(program)
+    
+    // MUST NOT TRIGGER: passed as an argument
+    export const all = Promise.all([Effect.runPromise(program)])
+    consume(Effect.runPromise(program))
+    
+    // MUST NOT TRIGGER: the rejection is consumed by .catch / .then / .finally
+    void Effect.runPromise(program).catch(() => {})
+    Effect.runPromise(program).then(() => {}, () => {})
+    Effect.runPromise(program).finally(() => {})
+    void Runtime.runPromise(services)(work).catch(() => {})
+    void run(work).catch(() => {})
+    void runtime.runPromise(work).catch(() => {})
+    
+    // MUST NOT TRIGGER: final operand of a comma expression whose value is used
+    export const commaLast = (port.postMessage("starting"), Effect.runPromise(program))
+    
+    // MUST NOT TRIGGER: conditional and logical operands are outside the first iteration's discard positions
+    flag ? Effect.runPromise(program) : undefined
+    flag && Effect.runPromise(program)
+    
+    // MUST NOT TRIGGER: Exit runners never reject, a discarded Exit Promise is a different problem
+    Effect.runPromiseExit(program)
+    void Runtime.runPromiseExit(services)(work)
+    void runtime.runPromiseExit(work)
+    
+    // MUST NOT TRIGGER: already fire-and-forget through a Fiber
+    Effect.runFork(program)
+    Runtime.runFork(services)(work)
+    runtime.runFork(work)
+    
+    // MUST NOT TRIGGER: other runners
+    Effect.runCallback(program)
+    void Effect.runSync(Effect.succeed(1))
+    
+    // MUST NOT TRIGGER: referencing the runner without calling it
+    void Effect.runPromise
+    
+    // MUST NOT TRIGGER: the curried Runtime.runPromise(runtime) call itself returns a function, not a Promise
+    void Runtime.runPromise(services)
+    
+    // MUST NOT TRIGGER: look-alike APIs that are not Effect's runners
+    const LocalEffect = {
+      runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+    }
+    LocalEffect.runPromise(Effect.succeed(1))
+    const localRuntime = {
+      runPromise: (_: Effect.Effect<void, Error>) => Promise.resolve()
+    }
+    void localRuntime.runPromise(work)
+    declare const runPromiseLike: (effect: Effect.Effect<void, Error>) => Promise<void>
+    void runPromiseLike(work)
+    

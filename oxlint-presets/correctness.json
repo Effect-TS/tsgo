@@ -8,6 +8,7 @@
   "rules": {
     "effecttsgo/any-unknown-in-error-context": "warn",
     "effecttsgo/class-self-mismatch": "warn",
+    "effecttsgo/discarded-run-promise-to-run-fork": "warn",
     "effecttsgo/duplicate-package": "warn",
     "effecttsgo/effect-fn-implicit-any": "warn",
     "effecttsgo/error-payload-shadows-name": "warn",

@@ -1,0 +1,33 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics discardedRunPromiseToRunFork:warning
+import { Effect, Runtime } from "effect"
+
+declare const work: Effect.Effect<void, Error>
+declare const services: Runtime.Runtime<never>
+declare const signal: AbortSignal
+
+// Piping-flow normalization of Runtime's (runtime, effect, options?) dual API,
+// whose pipeable form is (runtime) => (effect, options?). These results are
+// assigned, so the rule must not report them; the .pipings baseline pins how
+// each call is normalized.
+
+// MUST NOT TRIGGER (assigned). Flow: a single dataLast step, callee
+// Runtime.runPromise, args [services], subject work
+export const dataFirst = Runtime.runPromise(services, work)
+
+// MUST NOT TRIGGER (assigned). Flow: none, the call supplies the optional tail
+// that the pipeable form only accepts on the returned function
+export const dataFirstWithOptions = Runtime.runPromise(services, work, { signal })
+
+// MUST NOT TRIGGER (assigned). Flow: a single call step whose callee is the
+// factory call Runtime.runPromise(services), not decomposed
+export const curried = Runtime.runPromise(services)(work)
+
+// MUST NOT TRIGGER (assigned). Flow: a single callWithOptionals step whose
+// callee is the factory call Runtime.runPromise(services)
+export const curriedWithOptions = Runtime.runPromise(services)(work, { signal })
+
+// MUST NOT TRIGGER (not a Promise runner). Flow: a single dataLast step, callee
+// Runtime.runFork, args [services], subject work
+export const forkDataFirst = Runtime.runFork(services, work)

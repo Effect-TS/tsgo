@@ -63,7 +63,7 @@ pub(crate) fn check_missing_pipeable_signatures(ctx: &mut Context<'_, '_>) -> Ve
                     if candidate == data_first {
                         continue;
                     }
-                    if ets_typeparser::matches_pipeable_signature(
+                    if ets_typeparser::matches_pipeable_signature_exported(
                         ctx.type_parser,
                         Some(data_first),
                         Some(candidate),

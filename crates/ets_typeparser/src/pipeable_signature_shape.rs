@@ -13,22 +13,23 @@ pub(crate) const PIPEABLE_SHAPE_MAX_DEPTH: i64 = 64;
 pub(crate) const PIPEABLE_SHAPE_MAX_WORK: i64 = 4096;
 pub(crate) const PIPEABLE_SHAPE_MAX_UNION_SEARCH: i64 = 128;
 
-// go: internal/typeparser/pipeable_signature_shape.go:18 pipeableSignatureShapeCacheKey 9359e5f5dfc392c1
+// go: internal/typeparser/pipeable_signature_shape.go:18 pipeableSignatureShapeCacheKey 104eddedddbbc831
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub(crate) struct PipeableSignatureShapeCacheKey {
     data_first: P<Signature>,
     candidate: P<Signature>,
     subject_index: i64,
+    optional_tail: bool,
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:24 pipeableTypePair dde1dfa590ca7595
+// go: internal/typeparser/pipeable_signature_shape.go:25 pipeableTypePair dde1dfa590ca7595
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub(crate) struct PipeableTypePair {
     left: P<Type>,
     right: P<Type>,
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:29 rawSignature 51a04715268b67a4
+// go: internal/typeparser/pipeable_signature_shape.go:30 rawSignature 51a04715268b67a4
 pub(crate) fn raw_signature(signature: Option<P<Signature>>) -> Option<P<Signature>> {
     let mut signature = signature;
     while let Some(s) = signature
@@ -39,29 +40,64 @@ pub(crate) fn raw_signature(signature: Option<P<Signature>>) -> Option<P<Signatu
     signature
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:36 pipeableSignatureShapesMatch 47663c39ad557404
+// go: internal/typeparser/pipeable_signature_shape.go:42 pipeableSignatureShapesMatch 9a6d4f6d81037857
+// pipeableSignatureShapesMatch reports whether candidate is the pipeable form
+// of dataFirst with the parameter at subjectIndex moved into a returned
+// function. With optionalTail, the optional data-first parameters after the
+// subject move into the returned function too, as in (x, self, options?)
+// paired with (x) => (self, options?).
+//
 // Rust: Go reads the links from the checker (`c.EffectLinks`), which are the parser's links.
 pub(crate) fn pipeable_signature_shapes_match(
     tp: &mut TypeParser<'_>,
     data_first: Option<P<Signature>>,
     candidate: Option<P<Signature>>,
     subject_index: i64,
+    optional_tail: bool,
 ) -> bool {
     let data_first = raw_signature(data_first);
     let candidate = raw_signature(candidate);
     let (Some(data_first), Some(candidate)) = (data_first, candidate) else {
         return false;
     };
-    let key = PipeableSignatureShapeCacheKey { data_first, candidate, subject_index };
+    let key =
+        PipeableSignatureShapeCacheKey { data_first, candidate, subject_index, optional_tail };
     cached(
         tp,
         |l| &mut l.pipeable_signature_shape,
         key,
-        |tp| compare_pipeable_signature_types(tp, Some(data_first), Some(candidate), subject_index),
+        |tp| {
+            compare_pipeable_signature_types(
+                tp,
+                Some(data_first),
+                Some(candidate),
+                subject_index,
+                optional_tail,
+            )
+        },
     )
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:56 signatureTypeMatcher 23cc24fdceb9944d
+// go: internal/typeparser/pipeable_signature_shape.go:61 optionalTailLength 907ecba6856f8615
+// optionalTailLength returns the number of data-first parameters after
+// subjectIndex when there is at least one, all of them are optional and none
+// is a rest parameter; otherwise it returns 0.
+pub(crate) fn optional_tail_length(data_first: Option<P<Signature>>, subject_index: i64) -> i64 {
+    let Some(data_first) = data_first else {
+        return 0;
+    };
+    if data_first.has_rest_parameter() || data_first.min_argument_count() as i64 > subject_index + 1
+    {
+        return 0;
+    }
+    let tail = data_first.parameters().len() as i64 - subject_index - 1;
+    if tail > 0 {
+        return tail;
+    }
+    0
+}
+
+// go: internal/typeparser/pipeable_signature_shape.go:75 signatureTypeMatcher 23cc24fdceb9944d
 // signatureTypeMatcher zips existing, uninstantiated compiler type graphs. It
 // never asks the checker to relate two signatures and never creates a mapper.
 // Generic binders are paired by structural occurrence rather than declaration
@@ -79,12 +115,13 @@ pub(crate) struct SignatureTypeMatcher {
     union_search: Rc<Cell<i64>>,
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:67 comparePipeableSignatureTypes 15702b927add8dad
+// go: internal/typeparser/pipeable_signature_shape.go:86 comparePipeableSignatureTypes 518160540e4d4226
 pub(crate) fn compare_pipeable_signature_types(
     tp: &mut TypeParser<'_>,
     data_first: Option<P<Signature>>,
     candidate: Option<P<Signature>>,
     subject_index: i64,
+    optional_tail: bool,
 ) -> bool {
     let (Some(data_first), Some(candidate)) = (data_first, candidate) else {
         return false;
@@ -93,9 +130,16 @@ pub(crate) fn compare_pipeable_signature_types(
     if subject_index < 0 || subject_index >= left_parameters.len() as i64 {
         return false;
     }
+    let mut tail = 0;
+    if optional_tail {
+        tail = optional_tail_length(Some(data_first), subject_index) as usize;
+        if tail == 0 {
+            return false;
+        }
+    }
     let subject_index = subject_index as usize;
     let right_parameters = candidate.parameters();
-    if right_parameters.len() != left_parameters.len() - 1 {
+    if right_parameters.len() != left_parameters.len() - 1 - tail {
         return false;
     }
 
@@ -108,7 +152,7 @@ pub(crate) fn compare_pipeable_signature_types(
         return false;
     }
     let returned = returned_signatures[0];
-    if returned.parameters().len() != 1 || returned.has_rest_parameter() {
+    if returned.parameters().len() != 1 + tail || returned.has_rest_parameter() {
         return false;
     }
 
@@ -129,7 +173,9 @@ pub(crate) fn compare_pipeable_signature_types(
     }
 
     let mut right_index = 0;
-    for (left_index, &left_parameter) in left_parameters.iter().enumerate() {
+    for (left_index, &left_parameter) in
+        left_parameters[..left_parameters.len() - tail].iter().enumerate()
+    {
         if left_index == subject_index {
             continue;
         }
@@ -155,6 +201,21 @@ pub(crate) fn compare_pipeable_signature_types(
     ) {
         return false;
     }
+    if returned.min_argument_count() > 1 {
+        return false;
+    }
+    for (i, &left_parameter) in left_parameters[left_parameters.len() - tail..].iter().enumerate() {
+        if !m.compare_parameter(
+            tp,
+            Some(left_parameter),
+            false,
+            Some(returned.parameters()[1 + i]),
+            false,
+            0,
+        ) {
+            return false;
+        }
+    }
     let left_return = tp.checker.get_return_type_of_signature_exported(data_first);
     let right_return = tp.checker.get_return_type_of_signature_exported(returned);
     if !m.compare_type(tp, Some(left_return), Some(right_return), 0) {
@@ -164,7 +225,7 @@ pub(crate) fn compare_pipeable_signature_types(
 }
 
 impl SignatureTypeMatcher {
-    // go: internal/typeparser/pipeable_signature_shape.go:139 signatureTypeMatcher.registerBinders c8c70191e2866b64
+    // go: internal/typeparser/pipeable_signature_shape.go:172 signatureTypeMatcher.registerBinders c8c70191e2866b64
     pub(crate) fn register_binders(&mut self, types: &[P<Type>], left: bool) {
         for &t in types {
             if !t.flags().intersects(TypeFlags::TypeParameter) {
@@ -178,7 +239,7 @@ impl SignatureTypeMatcher {
         }
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:152 signatureTypeMatcher.compareParameter 23dc484ee23042a5
+    // go: internal/typeparser/pipeable_signature_shape.go:185 signatureTypeMatcher.compareParameter 23dc484ee23042a5
     pub(crate) fn compare_parameter(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -202,13 +263,13 @@ impl SignatureTypeMatcher {
     }
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:159 symbolIsOptional 43bfa655f3c6ce02
+// go: internal/typeparser/pipeable_signature_shape.go:192 symbolIsOptional 43bfa655f3c6ce02
 pub(crate) fn symbol_is_optional(symbol: Option<P<Symbol>>) -> bool {
     symbol.is_some_and(|symbol| symbol.flags().intersects(SymbolFlags::Optional))
 }
 
 impl SignatureTypeMatcher {
-    // go: internal/typeparser/pipeable_signature_shape.go:163 signatureTypeMatcher.compareType eb6bfb5ce46f07af
+    // go: internal/typeparser/pipeable_signature_shape.go:196 signatureTypeMatcher.compareType eb6bfb5ce46f07af
     pub(crate) fn compare_type(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -380,7 +441,7 @@ impl SignatureTypeMatcher {
         }
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:251 signatureTypeMatcher.compareTypeParameter 47b410bcf3b8cd0a
+    // go: internal/typeparser/pipeable_signature_shape.go:284 signatureTypeMatcher.compareTypeParameter 47b410bcf3b8cd0a
     pub(crate) fn compare_type_parameter(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -406,7 +467,7 @@ impl SignatureTypeMatcher {
         left == right || same_symbol_reference(tp.checker, left.symbol(), right.symbol())
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:271 signatureTypeMatcher.compareObject 03324aa11b07c530
+    // go: internal/typeparser/pipeable_signature_shape.go:304 signatureTypeMatcher.compareObject 03324aa11b07c530
     pub(crate) fn compare_object(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -463,7 +524,7 @@ impl SignatureTypeMatcher {
         self.compare_anonymous_object(tp, left, right, depth + 1)
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:303 signatureTypeMatcher.compareMappedType bf32692ed1114380
+    // go: internal/typeparser/pipeable_signature_shape.go:336 signatureTypeMatcher.compareMappedType bf32692ed1114380
     pub(crate) fn compare_mapped_type(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -498,7 +559,7 @@ impl SignatureTypeMatcher {
             }
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:329 signatureTypeMatcher.compareAnonymousObject 2af1a88d532311a1
+    // go: internal/typeparser/pipeable_signature_shape.go:362 signatureTypeMatcher.compareAnonymousObject 2af1a88d532311a1
     pub(crate) fn compare_anonymous_object(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -584,7 +645,7 @@ impl SignatureTypeMatcher {
         true
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:383 signatureTypeMatcher.compareSignature ca0fe42b4aa7b47a
+    // go: internal/typeparser/pipeable_signature_shape.go:416 signatureTypeMatcher.compareSignature ca0fe42b4aa7b47a
     pub(crate) fn compare_signature(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -640,7 +701,7 @@ impl SignatureTypeMatcher {
         self.compare_type(tp, Some(left_return), Some(right_return), depth + 1)
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:413 signatureTypeMatcher.compareTypeList 8c063421b7a47227
+    // go: internal/typeparser/pipeable_signature_shape.go:446 signatureTypeMatcher.compareTypeList 8c063421b7a47227
     pub(crate) fn compare_type_list(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -659,7 +720,7 @@ impl SignatureTypeMatcher {
         true
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:425 signatureTypeMatcher.compareUnion e7bf39568966648c
+    // go: internal/typeparser/pipeable_signature_shape.go:458 signatureTypeMatcher.compareUnion e7bf39568966648c
     pub(crate) fn compare_union(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -673,7 +734,7 @@ impl SignatureTypeMatcher {
         self.compare_union_at(tp, left, right, &vec![false; right.len()], 0, depth + 1)
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:432 signatureTypeMatcher.compareUnionAt 327181aeb877706a
+    // go: internal/typeparser/pipeable_signature_shape.go:465 signatureTypeMatcher.compareUnionAt 327181aeb877706a
     pub(crate) fn compare_union_at(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -709,7 +770,7 @@ impl SignatureTypeMatcher {
     }
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:458 signatureTypeMatcher.clone 6142736005478c4a
+// go: internal/typeparser/pipeable_signature_shape.go:491 signatureTypeMatcher.clone 6142736005478c4a
 // Rust: Go copies the struct (its `*int` counters stay shared) and clones each map.
 impl Clone for SignatureTypeMatcher {
     fn clone(&self) -> Self {
@@ -726,7 +787,7 @@ impl Clone for SignatureTypeMatcher {
 }
 
 impl SignatureTypeMatcher {
-    // go: internal/typeparser/pipeable_signature_shape.go:468 signatureTypeMatcher.commit 479bc28db51098d4
+    // go: internal/typeparser/pipeable_signature_shape.go:501 signatureTypeMatcher.commit 479bc28db51098d4
     pub(crate) fn commit(&mut self, branch: SignatureTypeMatcher) {
         self.left_to_right = branch.left_to_right;
         self.right_to_left = branch.right_to_left;
@@ -734,7 +795,7 @@ impl SignatureTypeMatcher {
         self.right_binders = branch.right_binders;
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:475 signatureTypeMatcher.validateBinders 08d543180f40e9af
+    // go: internal/typeparser/pipeable_signature_shape.go:508 signatureTypeMatcher.validateBinders 08d543180f40e9af
     pub(crate) fn validate_binders(&mut self, tp: &mut TypeParser<'_>) -> bool {
         if self.left_binders.len() != self.right_binders.len()
             || self.left_to_right.len() != self.left_binders.len()
@@ -763,7 +824,7 @@ impl SignatureTypeMatcher {
         true
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:495 signatureTypeMatcher.compareOptionalType 49b35c450d67e6f5
+    // go: internal/typeparser/pipeable_signature_shape.go:528 signatureTypeMatcher.compareOptionalType 49b35c450d67e6f5
     pub(crate) fn compare_optional_type(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -773,7 +834,7 @@ impl SignatureTypeMatcher {
         self.compare_optional_type_at(tp, left, right, 0)
     }
 
-    // go: internal/typeparser/pipeable_signature_shape.go:499 signatureTypeMatcher.compareOptionalTypeAt 1629d1827c0d2487
+    // go: internal/typeparser/pipeable_signature_shape.go:532 signatureTypeMatcher.compareOptionalTypeAt 1629d1827c0d2487
     pub(crate) fn compare_optional_type_at(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -788,7 +849,7 @@ impl SignatureTypeMatcher {
     }
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:506 sameOptionalSymbol 3c934e5c82765a47
+// go: internal/typeparser/pipeable_signature_shape.go:539 sameOptionalSymbol 3c934e5c82765a47
 // Rust: Go's checker argument is `tp.checker`.
 pub(crate) fn same_optional_symbol(
     tp: &mut TypeParser<'_>,
@@ -801,7 +862,7 @@ pub(crate) fn same_optional_symbol(
     same_symbol_reference(tp.checker, left, right)
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:513 noInferBaseType 7a5798d14505ea63
+// go: internal/typeparser/pipeable_signature_shape.go:546 noInferBaseType 7a5798d14505ea63
 pub(crate) fn no_infer_base_type(tp: &mut TypeParser<'_>, t: Option<P<Type>>) -> Option<P<Type>> {
     let t = t?;
     if is_no_infer_type(t) {
@@ -820,7 +881,7 @@ pub(crate) fn no_infer_base_type(tp: &mut TypeParser<'_>, t: Option<P<Type>>) ->
     None
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:535 isNoInferAliasDeclaration 306c6a0200eb9781
+// go: internal/typeparser/pipeable_signature_shape.go:568 isNoInferAliasDeclaration 306c6a0200eb9781
 // Effect supported NoInfer before it became a TypeScript intrinsic with the
 // standard tuple/indexed-access encoding. Recognize only those two exact
 // declarations so an unrelated alias named NoInfer is not made transparent.
@@ -871,7 +932,7 @@ pub(crate) fn is_no_infer_alias_declaration(
         && is_type_parameter_type_node(tp, Some(conditional.check_type), binder)
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:568 isTypeParameterTypeNode f3c297dd656e5b8d
+// go: internal/typeparser/pipeable_signature_shape.go:601 isTypeParameterTypeNode f3c297dd656e5b8d
 pub(crate) fn is_type_parameter_type_node(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
@@ -891,7 +952,7 @@ pub(crate) fn is_type_parameter_type_node(
     same_symbol_reference(tp.checker, symbol, binder)
 }
 
-// go: internal/typeparser/pipeable_signature_shape.go:576 isNumericLiteralTypeNode 824dc65cf8141862
+// go: internal/typeparser/pipeable_signature_shape.go:609 isNumericLiteralTypeNode 824dc65cf8141862
 pub(crate) fn is_numeric_literal_type_node(node: Option<P<Node>>, value: &str) -> bool {
     let Some(node) = node else {
         return false;

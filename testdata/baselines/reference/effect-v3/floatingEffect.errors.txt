@@ -3,12 +3,14 @@ Effect version: 3.19.19
 
 /.src/floatingEffect.ts(6,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/floatingEffect.ts(8,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect.ts(10,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 /.src/floatingEffect.ts(12,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect.ts(15,1): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 /.src/floatingEffect.ts(15,19): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/floatingEffect.ts(25,14): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
 
-==== /.src/floatingEffect.ts (5 errors) ====
+==== /.src/floatingEffect.ts (7 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
     
@@ -23,6 +25,8 @@ Effect version: 3.19.19
 !!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     Effect.runPromise(Effect.gen(function*() {
+    ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
       const thisIsFine = Effect.succeed(1)
       Effect.never
       ~~~~~~~~~~~~
@@ -30,6 +34,8 @@ Effect version: 3.19.19
     }))
     
     Effect.runPromise(Effect.gen(function*() {
+    ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
                       ~~~~~~~~~~~~~~~~~~~~~~~~
       yield* Effect.succeed(1).pipe(Effect.fork)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

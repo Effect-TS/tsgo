@@ -19,6 +19,7 @@ type pipeableSignatureShapeCacheKey struct {
 	dataFirst    *checker.Signature
 	candidate    *checker.Signature
 	subjectIndex int
+	optionalTail bool
 }
 
 type pipeableTypePair struct {
@@ -33,20 +34,38 @@ func rawSignature(signature *checker.Signature) *checker.Signature {
 	return signature
 }
 
-func pipeableSignatureShapesMatch(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+// pipeableSignatureShapesMatch reports whether candidate is the pipeable form
+// of dataFirst with the parameter at subjectIndex moved into a returned
+// function. With optionalTail, the optional data-first parameters after the
+// subject move into the returned function too, as in (x, self, options?)
+// paired with (x) => (self, options?).
+func pipeableSignatureShapesMatch(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, optionalTail bool) bool {
 	dataFirst = rawSignature(dataFirst)
 	candidate = rawSignature(candidate)
 	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
 	c := tp.checker
-	key := pipeableSignatureShapeCacheKey{dataFirst: dataFirst, candidate: candidate, subjectIndex: subjectIndex}
+	key := pipeableSignatureShapeCacheKey{dataFirst: dataFirst, candidate: candidate, subjectIndex: subjectIndex, optionalTail: optionalTail}
 	if links, ok := c.EffectLinks.(*EffectLinks); ok && links != nil {
 		return Cached(&links.PipeableSignatureShape, key, func() bool {
-			return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex)
+			return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex, optionalTail)
 		})
 	}
-	return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex)
+	return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex, optionalTail)
+}
+
+// optionalTailLength returns the number of data-first parameters after
+// subjectIndex when there is at least one, all of them are optional and none
+// is a rest parameter; otherwise it returns 0.
+func optionalTailLength(dataFirst *checker.Signature, subjectIndex int) int {
+	if dataFirst == nil || dataFirst.HasRestParameter() || dataFirst.MinArgumentCount() > subjectIndex+1 {
+		return 0
+	}
+	if tail := len(dataFirst.Parameters()) - subjectIndex - 1; tail > 0 {
+		return tail
+	}
+	return 0
 }
 
 // signatureTypeMatcher zips existing, uninstantiated compiler type graphs. It
@@ -64,7 +83,7 @@ type signatureTypeMatcher struct {
 	unionSearch  *int
 }
 
-func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, optionalTail bool) bool {
 	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
@@ -73,8 +92,14 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 	if subjectIndex < 0 || subjectIndex >= len(leftParameters) {
 		return false
 	}
+	tail := 0
+	if optionalTail {
+		if tail = optionalTailLength(dataFirst, subjectIndex); tail == 0 {
+			return false
+		}
+	}
 	rightParameters := candidate.Parameters()
-	if len(rightParameters) != len(leftParameters)-1 {
+	if len(rightParameters) != len(leftParameters)-1-tail {
 		return false
 	}
 
@@ -89,7 +114,7 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 		return false
 	}
 	returned := returnedSignatures[0]
-	if len(returned.Parameters()) != 1 || returned.HasRestParameter() {
+	if len(returned.Parameters()) != 1+tail || returned.HasRestParameter() {
 		return false
 	}
 
@@ -112,7 +137,7 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 	}
 
 	rightIndex := 0
-	for leftIndex, leftParameter := range leftParameters {
+	for leftIndex, leftParameter := range leftParameters[:len(leftParameters)-tail] {
 		if leftIndex == subjectIndex {
 			continue
 		}
@@ -129,6 +154,14 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 	}
 	if !m.compareParameter(leftParameters[subjectIndex], false, returned.Parameters()[0], false, 0) {
 		return false
+	}
+	if returned.MinArgumentCount() > 1 {
+		return false
+	}
+	for i, leftParameter := range leftParameters[len(leftParameters)-tail:] {
+		if !m.compareParameter(leftParameter, false, returned.Parameters()[1+i], false, 0) {
+			return false
+		}
 	}
 	if !m.compareType(c.GetReturnTypeOfSignature(dataFirst), c.GetReturnTypeOfSignature(returned), 0) {
 		return false

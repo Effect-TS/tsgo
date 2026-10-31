@@ -9,6 +9,11 @@
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"
 
+[D3] (23:5-23:22) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
+  Fix 2: "Replace with Effect.runFork"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable runEffectInsideEffect for this line" ===
@@ -51,6 +56,43 @@ const effectRuntime = yield* Effect.runtime<never>();
       catch: (e) => new DebuggerError({ cause: e })
     })
     Runtime.runPromise(effectRuntime)(check)
+    //        ^- no runPromise, use a runtime instead
+  }
+})
+
+
+=== [D3] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.runFork" ===
+
+--- file:///.src/runEffectInsideEffect.ts ---
+// @effect-v3
+import { Data, Effect } from "effect"
+
+class DebuggerError extends Data.TaggedError("DebuggerError")<{
+  cause: unknown
+}> {}
+
+export const program = Effect.gen(function*() {
+  const response = yield* Effect.tryPromise({
+    try: () => fetch("http://localhost:9229"),
+    catch: (e) => new DebuggerError({ cause: e })
+  })
+  const data = yield* Effect.promise(() => response.json())
+
+  const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
+  //                        ^- do not runSync in here
+
+  websocket.onmessage = (event) => {
+    const check = Effect.tryPromise({
+      try: () => fetch(event.data as string),
+      catch: (e) => new DebuggerError({ cause: e })
+    })
+    Effect.runFork(check)
     //        ^- no runPromise, use a runtime instead
   }
 })

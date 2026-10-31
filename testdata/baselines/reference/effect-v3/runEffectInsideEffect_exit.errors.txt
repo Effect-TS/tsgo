@@ -4,12 +4,13 @@ Effect version: 3.19.19
 /.src/runEffectInsideEffect_exit.ts(7,3): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect_exit.ts(8,3): suggestion TS377024: `Effect.runSyncExit` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect_exit.ts(15,5): suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(15,5): warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
 /.src/runEffectInsideEffect_exit.ts(16,5): suggestion TS377025: `Effect.runPromiseExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromiseExit`. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect_exit.ts(17,5): suggestion TS377025: `Effect.runSync` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSync`. effect(runEffectInsideEffect)
 /.src/runEffectInsideEffect_exit.ts(18,5): suggestion TS377025: `Effect.runSyncExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runSyncExit`. effect(runEffectInsideEffect)
 
 
-==== /.src/runEffectInsideEffect_exit.ts (6 errors) ====
+==== /.src/runEffectInsideEffect_exit.ts (7 errors) ====
     // @effect-v3
     import { Effect } from "effect"
     
@@ -31,6 +32,8 @@ Effect version: 3.19.19
         Effect.runPromise(child)
         ~~~~~~~~~~~~~~~~~
 !!! suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+        ~~~~~~~~~~~~~~~~~
+!!! warning TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
         Effect.runPromiseExit(child)
         ~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377025: `Effect.runPromiseExit` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromiseExit`. effect(runEffectInsideEffect)
