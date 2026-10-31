@@ -58,6 +58,7 @@
         "effectSleepZeroToYieldNow": "suggestion",
         "effectSucceedWithUndefined": "suggestion",
         "effectSucceedWithVoid": "suggestion",
+        "emptySchemaStruct": "warning",
         "errorPayloadShadowsName": "suggestion",
         "experimentalApiUsage": "warning",
         "failCauseToConstructor": "suggestion",
@@ -158,6 +159,7 @@
         "effectSleepZeroToYieldNow": "error",
         "effectSucceedWithUndefined": "error",
         "effectSucceedWithVoid": "error",
+        "emptySchemaStruct": "error",
         "errorPayloadShadowsName": "error",
         "experimentalApiUsage": "error",
         "failCauseToConstructor": "error",
@@ -235,6 +237,7 @@
         "classSelfMismatch": "warning",
         "duplicatePackage": "warning",
         "effectFnImplicitAny": "warning",
+        "emptySchemaStruct": "warning",
         "errorPayloadShadowsName": "warning",
         "experimentalApiUsage": "warning",
         "floatingEffect": "warning",
@@ -497,6 +500,31 @@
             "start": 78,
             "end": 83,
             "text": "Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "emptySchemaStruct",
+      "group": "correctness",
+      "description": "Detects Schema.Struct({}), which accepts any non-null value without validation",
+      "defaultSeverity": "warning",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377176,
+        377177
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nexport const Empty = Schema.Struct({})\nexport const decoded = Schema.decodeUnknownSync(Empty)(42)\n",
+        "diagnostics": [
+          {
+            "start": 54,
+            "end": 71,
+            "text": "`Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for \"any object\", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)"
           }
         ]
       }

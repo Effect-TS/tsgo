@@ -1,0 +1,811 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:15-11:32) TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+  Fix 2: "Replace with Tool.EmptyParams"
+
+[D2] (18:15-20:5) TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+  Fix 2: "Replace with Tool.EmptyParams"
+
+[D3] (26:16-26:33) TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+  Fix 2: "Replace with Tool.EmptyParams"
+
+[D4] (32:15-32:32) TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+  Fix 2: "Replace with AiTool.EmptyParams"
+
+[D5] (38:15-38:32) TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+  Fix 2: "Replace with Tool.EmptyParams"
+
+[D6] (45:17-45:34) TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+  Fix 2: "Replace with Tool.EmptyParams"
+
+[D7] (53:15-53:32) TS377177: `Schema.Struct({})` as tool parameters breaks structured-output schema generation for some providers. Use `Tool.EmptyParams` instead. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D8] (59:18-59:35) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D9] (68:12-68:29) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D10] (73:62-73:79) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D11] (82:15-82:32) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+[D12] (91:15-91:32) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+  Fix 0: "Disable emptySchemaStruct for this line"
+  Fix 1: "Disable emptySchemaStruct for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Tool.EmptyParams" ===
+
+--- file:///.src/emptySchemaStruct_tool.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptySchemaStruct:warning
+import { Schema } from "effect"
+import { Tool as AiTool, Toolkit } from "effect/ai"
+import { Tool } from "effect/ai"
+import { make as makeTool } from "effect/ai/Tool"
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Schema.Struct({}) as Tool.make
+// parameters, the documented replacement that omitted parameters default to
+export const GetTime = Tool.make("GetTime", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): the parameters come first and the call is multi-line
+export const GetDate = Tool.make("GetDate", {
+  description: "Returns the current date",
+  parameters: Schema.Struct({
+    // no parameters yet
+  }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): parenthesised parameters value
+export const GetZone = Tool.make("GetZone", {
+  parameters: (Schema.Struct({})),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to AiTool.EmptyParams): Tool imported under another name
+export const GetUptime = AiTool.make("GetUptime", {
+  parameters: Schema.Struct({}),
+  success: Schema.Number
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Tool.dynamic parameters
+export const DynamicTime = Tool.dynamic("DynamicTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): tool defined inline in a toolkit
+export const Tools = Toolkit.make(
+  Tool.make("GetVersion", {
+    parameters: Schema.Struct({}),
+    success: Schema.String
+  })
+)
+
+// MUST TRIGGER (tool message, no fix): the callee is a named import, so there is no
+// Tool namespace to build Tool.EmptyParams from
+export const GetHost = makeTool("GetHost", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): the struct is declared outside the tool, the
+// parameters property only references it
+const NoParams = Schema.Struct({})
+export const GetLocale = Tool.make("GetLocale", {
+  parameters: NoParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): an empty success schema is not a tool parameters position
+export const Ack = Tool.make("Ack", {
+  parameters: Schema.Struct({ id: Schema.String }),
+  success: Schema.Struct({})
+})
+
+// MUST TRIGGER (general message, no fix): an empty struct nested inside non-empty parameters
+export const Search = Tool.make("Search", {
+  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): provider-defined tools are out of scope for Tool.EmptyParams
+export const ProviderTool = Tool.providerDefined({
+  id: "acme.time",
+  customName: "AcmeTime",
+  providerName: "time",
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): a local object whose method is named like Tool.make
+const LocalTool = {
+  make: <A>(name: string, options: A) => ({ name, options })
+}
+export const localTool = LocalTool.make("Local", {
+  parameters: Schema.Struct({})
+})
+
+// MUST NOT TRIGGER: the recommended empty parameters schema
+export const GetTimeEmptyParams = Tool.make("GetTimeEmptyParams", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: omitted parameters default to Tool.EmptyParams
+export const GetTimeDefault = Tool.make("GetTimeDefault", {
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: non-empty parameters
+export const GetWeather = Tool.make("GetWeather", {
+  parameters: Schema.Struct({ city: Schema.String }),
+  success: Schema.String
+})
+
+
+=== [D2] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Tool.EmptyParams" ===
+
+--- file:///.src/emptySchemaStruct_tool.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptySchemaStruct:warning
+import { Schema } from "effect"
+import { Tool as AiTool, Toolkit } from "effect/ai"
+import { Tool } from "effect/ai"
+import { make as makeTool } from "effect/ai/Tool"
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Schema.Struct({}) as Tool.make
+// parameters, the documented replacement that omitted parameters default to
+export const GetTime = Tool.make("GetTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): the parameters come first and the call is multi-line
+export const GetDate = Tool.make("GetDate", {
+  description: "Returns the current date",
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): parenthesised parameters value
+export const GetZone = Tool.make("GetZone", {
+  parameters: (Schema.Struct({})),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to AiTool.EmptyParams): Tool imported under another name
+export const GetUptime = AiTool.make("GetUptime", {
+  parameters: Schema.Struct({}),
+  success: Schema.Number
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Tool.dynamic parameters
+export const DynamicTime = Tool.dynamic("DynamicTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): tool defined inline in a toolkit
+export const Tools = Toolkit.make(
+  Tool.make("GetVersion", {
+    parameters: Schema.Struct({}),
+    success: Schema.String
+  })
+)
+
+// MUST TRIGGER (tool message, no fix): the callee is a named import, so there is no
+// Tool namespace to build Tool.EmptyParams from
+export const GetHost = makeTool("GetHost", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): the struct is declared outside the tool, the
+// parameters property only references it
+const NoParams = Schema.Struct({})
+export const GetLocale = Tool.make("GetLocale", {
+  parameters: NoParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): an empty success schema is not a tool parameters position
+export const Ack = Tool.make("Ack", {
+  parameters: Schema.Struct({ id: Schema.String }),
+  success: Schema.Struct({})
+})
+
+// MUST TRIGGER (general message, no fix): an empty struct nested inside non-empty parameters
+export const Search = Tool.make("Search", {
+  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): provider-defined tools are out of scope for Tool.EmptyParams
+export const ProviderTool = Tool.providerDefined({
+  id: "acme.time",
+  customName: "AcmeTime",
+  providerName: "time",
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): a local object whose method is named like Tool.make
+const LocalTool = {
+  make: <A>(name: string, options: A) => ({ name, options })
+}
+export const localTool = LocalTool.make("Local", {
+  parameters: Schema.Struct({})
+})
+
+// MUST NOT TRIGGER: the recommended empty parameters schema
+export const GetTimeEmptyParams = Tool.make("GetTimeEmptyParams", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: omitted parameters default to Tool.EmptyParams
+export const GetTimeDefault = Tool.make("GetTimeDefault", {
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: non-empty parameters
+export const GetWeather = Tool.make("GetWeather", {
+  parameters: Schema.Struct({ city: Schema.String }),
+  success: Schema.String
+})
+
+
+=== [D3] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Tool.EmptyParams" ===
+
+--- file:///.src/emptySchemaStruct_tool.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptySchemaStruct:warning
+import { Schema } from "effect"
+import { Tool as AiTool, Toolkit } from "effect/ai"
+import { Tool } from "effect/ai"
+import { make as makeTool } from "effect/ai/Tool"
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Schema.Struct({}) as Tool.make
+// parameters, the documented replacement that omitted parameters default to
+export const GetTime = Tool.make("GetTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): the parameters come first and the call is multi-line
+export const GetDate = Tool.make("GetDate", {
+  description: "Returns the current date",
+  parameters: Schema.Struct({
+    // no parameters yet
+  }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): parenthesised parameters value
+export const GetZone = Tool.make("GetZone", {
+  parameters: (Tool.EmptyParams),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to AiTool.EmptyParams): Tool imported under another name
+export const GetUptime = AiTool.make("GetUptime", {
+  parameters: Schema.Struct({}),
+  success: Schema.Number
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Tool.dynamic parameters
+export const DynamicTime = Tool.dynamic("DynamicTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): tool defined inline in a toolkit
+export const Tools = Toolkit.make(
+  Tool.make("GetVersion", {
+    parameters: Schema.Struct({}),
+    success: Schema.String
+  })
+)
+
+// MUST TRIGGER (tool message, no fix): the callee is a named import, so there is no
+// Tool namespace to build Tool.EmptyParams from
+export const GetHost = makeTool("GetHost", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): the struct is declared outside the tool, the
+// parameters property only references it
+const NoParams = Schema.Struct({})
+export const GetLocale = Tool.make("GetLocale", {
+  parameters: NoParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): an empty success schema is not a tool parameters position
+export const Ack = Tool.make("Ack", {
+  parameters: Schema.Struct({ id: Schema.String }),
+  success: Schema.Struct({})
+})
+
+// MUST TRIGGER (general message, no fix): an empty struct nested inside non-empty parameters
+export const Search = Tool.make("Search", {
+  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): provider-defined tools are out of scope for Tool.EmptyParams
+export const ProviderTool = Tool.providerDefined({
+  id: "acme.time",
+  customName: "AcmeTime",
+  providerName: "time",
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): a local object whose method is named like Tool.make
+const LocalTool = {
+  make: <A>(name: string, options: A) => ({ name, options })
+}
+export const localTool = LocalTool.make("Local", {
+  parameters: Schema.Struct({})
+})
+
+// MUST NOT TRIGGER: the recommended empty parameters schema
+export const GetTimeEmptyParams = Tool.make("GetTimeEmptyParams", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: omitted parameters default to Tool.EmptyParams
+export const GetTimeDefault = Tool.make("GetTimeDefault", {
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: non-empty parameters
+export const GetWeather = Tool.make("GetWeather", {
+  parameters: Schema.Struct({ city: Schema.String }),
+  success: Schema.String
+})
+
+
+=== [D4] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with AiTool.EmptyParams" ===
+
+--- file:///.src/emptySchemaStruct_tool.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptySchemaStruct:warning
+import { Schema } from "effect"
+import { Tool as AiTool, Toolkit } from "effect/ai"
+import { Tool } from "effect/ai"
+import { make as makeTool } from "effect/ai/Tool"
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Schema.Struct({}) as Tool.make
+// parameters, the documented replacement that omitted parameters default to
+export const GetTime = Tool.make("GetTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): the parameters come first and the call is multi-line
+export const GetDate = Tool.make("GetDate", {
+  description: "Returns the current date",
+  parameters: Schema.Struct({
+    // no parameters yet
+  }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): parenthesised parameters value
+export const GetZone = Tool.make("GetZone", {
+  parameters: (Schema.Struct({})),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to AiTool.EmptyParams): Tool imported under another name
+export const GetUptime = AiTool.make("GetUptime", {
+  parameters: AiTool.EmptyParams,
+  success: Schema.Number
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Tool.dynamic parameters
+export const DynamicTime = Tool.dynamic("DynamicTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): tool defined inline in a toolkit
+export const Tools = Toolkit.make(
+  Tool.make("GetVersion", {
+    parameters: Schema.Struct({}),
+    success: Schema.String
+  })
+)
+
+// MUST TRIGGER (tool message, no fix): the callee is a named import, so there is no
+// Tool namespace to build Tool.EmptyParams from
+export const GetHost = makeTool("GetHost", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): the struct is declared outside the tool, the
+// parameters property only references it
+const NoParams = Schema.Struct({})
+export const GetLocale = Tool.make("GetLocale", {
+  parameters: NoParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): an empty success schema is not a tool parameters position
+export const Ack = Tool.make("Ack", {
+  parameters: Schema.Struct({ id: Schema.String }),
+  success: Schema.Struct({})
+})
+
+// MUST TRIGGER (general message, no fix): an empty struct nested inside non-empty parameters
+export const Search = Tool.make("Search", {
+  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): provider-defined tools are out of scope for Tool.EmptyParams
+export const ProviderTool = Tool.providerDefined({
+  id: "acme.time",
+  customName: "AcmeTime",
+  providerName: "time",
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): a local object whose method is named like Tool.make
+const LocalTool = {
+  make: <A>(name: string, options: A) => ({ name, options })
+}
+export const localTool = LocalTool.make("Local", {
+  parameters: Schema.Struct({})
+})
+
+// MUST NOT TRIGGER: the recommended empty parameters schema
+export const GetTimeEmptyParams = Tool.make("GetTimeEmptyParams", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: omitted parameters default to Tool.EmptyParams
+export const GetTimeDefault = Tool.make("GetTimeDefault", {
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: non-empty parameters
+export const GetWeather = Tool.make("GetWeather", {
+  parameters: Schema.Struct({ city: Schema.String }),
+  success: Schema.String
+})
+
+
+=== [D5] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Tool.EmptyParams" ===
+
+--- file:///.src/emptySchemaStruct_tool.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptySchemaStruct:warning
+import { Schema } from "effect"
+import { Tool as AiTool, Toolkit } from "effect/ai"
+import { Tool } from "effect/ai"
+import { make as makeTool } from "effect/ai/Tool"
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Schema.Struct({}) as Tool.make
+// parameters, the documented replacement that omitted parameters default to
+export const GetTime = Tool.make("GetTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): the parameters come first and the call is multi-line
+export const GetDate = Tool.make("GetDate", {
+  description: "Returns the current date",
+  parameters: Schema.Struct({
+    // no parameters yet
+  }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): parenthesised parameters value
+export const GetZone = Tool.make("GetZone", {
+  parameters: (Schema.Struct({})),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to AiTool.EmptyParams): Tool imported under another name
+export const GetUptime = AiTool.make("GetUptime", {
+  parameters: Schema.Struct({}),
+  success: Schema.Number
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Tool.dynamic parameters
+export const DynamicTime = Tool.dynamic("DynamicTime", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): tool defined inline in a toolkit
+export const Tools = Toolkit.make(
+  Tool.make("GetVersion", {
+    parameters: Schema.Struct({}),
+    success: Schema.String
+  })
+)
+
+// MUST TRIGGER (tool message, no fix): the callee is a named import, so there is no
+// Tool namespace to build Tool.EmptyParams from
+export const GetHost = makeTool("GetHost", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): the struct is declared outside the tool, the
+// parameters property only references it
+const NoParams = Schema.Struct({})
+export const GetLocale = Tool.make("GetLocale", {
+  parameters: NoParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): an empty success schema is not a tool parameters position
+export const Ack = Tool.make("Ack", {
+  parameters: Schema.Struct({ id: Schema.String }),
+  success: Schema.Struct({})
+})
+
+// MUST TRIGGER (general message, no fix): an empty struct nested inside non-empty parameters
+export const Search = Tool.make("Search", {
+  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): provider-defined tools are out of scope for Tool.EmptyParams
+export const ProviderTool = Tool.providerDefined({
+  id: "acme.time",
+  customName: "AcmeTime",
+  providerName: "time",
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): a local object whose method is named like Tool.make
+const LocalTool = {
+  make: <A>(name: string, options: A) => ({ name, options })
+}
+export const localTool = LocalTool.make("Local", {
+  parameters: Schema.Struct({})
+})
+
+// MUST NOT TRIGGER: the recommended empty parameters schema
+export const GetTimeEmptyParams = Tool.make("GetTimeEmptyParams", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: omitted parameters default to Tool.EmptyParams
+export const GetTimeDefault = Tool.make("GetTimeDefault", {
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: non-empty parameters
+export const GetWeather = Tool.make("GetWeather", {
+  parameters: Schema.Struct({ city: Schema.String }),
+  success: Schema.String
+})
+
+
+=== [D6] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Tool.EmptyParams" ===
+
+--- file:///.src/emptySchemaStruct_tool.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptySchemaStruct:warning
+import { Schema } from "effect"
+import { Tool as AiTool, Toolkit } from "effect/ai"
+import { Tool } from "effect/ai"
+import { make as makeTool } from "effect/ai/Tool"
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Schema.Struct({}) as Tool.make
+// parameters, the documented replacement that omitted parameters default to
+export const GetTime = Tool.make("GetTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): the parameters come first and the call is multi-line
+export const GetDate = Tool.make("GetDate", {
+  description: "Returns the current date",
+  parameters: Schema.Struct({
+    // no parameters yet
+  }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): parenthesised parameters value
+export const GetZone = Tool.make("GetZone", {
+  parameters: (Schema.Struct({})),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to AiTool.EmptyParams): Tool imported under another name
+export const GetUptime = AiTool.make("GetUptime", {
+  parameters: Schema.Struct({}),
+  success: Schema.Number
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): Tool.dynamic parameters
+export const DynamicTime = Tool.dynamic("DynamicTime", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (tool message, fix to Tool.EmptyParams): tool defined inline in a toolkit
+export const Tools = Toolkit.make(
+  Tool.make("GetVersion", {
+    parameters: Tool.EmptyParams,
+    success: Schema.String
+  })
+)
+
+// MUST TRIGGER (tool message, no fix): the callee is a named import, so there is no
+// Tool namespace to build Tool.EmptyParams from
+export const GetHost = makeTool("GetHost", {
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): the struct is declared outside the tool, the
+// parameters property only references it
+const NoParams = Schema.Struct({})
+export const GetLocale = Tool.make("GetLocale", {
+  parameters: NoParams,
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): an empty success schema is not a tool parameters position
+export const Ack = Tool.make("Ack", {
+  parameters: Schema.Struct({ id: Schema.String }),
+  success: Schema.Struct({})
+})
+
+// MUST TRIGGER (general message, no fix): an empty struct nested inside non-empty parameters
+export const Search = Tool.make("Search", {
+  parameters: Schema.Struct({ query: Schema.String, filters: Schema.Struct({}) }),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): provider-defined tools are out of scope for Tool.EmptyParams
+export const ProviderTool = Tool.providerDefined({
+  id: "acme.time",
+  customName: "AcmeTime",
+  providerName: "time",
+  parameters: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (general message, no fix): a local object whose method is named like Tool.make
+const LocalTool = {
+  make: <A>(name: string, options: A) => ({ name, options })
+}
+export const localTool = LocalTool.make("Local", {
+  parameters: Schema.Struct({})
+})
+
+// MUST NOT TRIGGER: the recommended empty parameters schema
+export const GetTimeEmptyParams = Tool.make("GetTimeEmptyParams", {
+  parameters: Tool.EmptyParams,
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: omitted parameters default to Tool.EmptyParams
+export const GetTimeDefault = Tool.make("GetTimeDefault", {
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: non-empty parameters
+export const GetWeather = Tool.make("GetWeather", {
+  parameters: Schema.Struct({ city: Schema.String }),
+  success: Schema.String
+})
+
+
+=== [D7] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable emptySchemaStruct for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable emptySchemaStruct for entire file" ===
+skipped by default

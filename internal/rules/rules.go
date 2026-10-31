@@ -86,6 +86,7 @@ var All = []rule.Rule{
 	MissingLayerContext,
 	LayerMergeAllWithDependencies,
 	SchemaStructWithTag,
+	EmptySchemaStruct,
 	SchemaSync,
 	SchemaSyncInEffect,
 	SchemaNumber,

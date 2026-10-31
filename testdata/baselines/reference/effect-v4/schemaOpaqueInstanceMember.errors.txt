@@ -47,7 +47,7 @@ Effect version: 4.0.2
       }
     }
     
-    class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({})) {
+    class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({ a: Schema.String })) {
                                        ~~~~~~~
 !!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       field = true
@@ -55,7 +55,7 @@ Effect version: 4.0.2
 !!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
     }
     
-    const Expression = class extends S.Opaque<Invalid>()(S.Struct({})) {
+    const Expression = class extends S.Opaque<Invalid>()(S.Struct({ a: S.String })) {
                                               ~~~~~~~
 !!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       expressionField = true

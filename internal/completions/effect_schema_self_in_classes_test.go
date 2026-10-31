@@ -223,7 +223,7 @@ func TestEffectSchemaSelfInClasses_AcceptedSnippet(t *testing.T) {
 			}
 			placeholder := ""
 			if expected.api == "Opaque" {
-				placeholder = "Schema.Struct({})"
+				placeholder = "Schema.Struct({ a: Schema.String })"
 			}
 			snippet := strings.ReplaceAll(item.TextEdit.TextEdit.NewText, "${0}", placeholder)
 			editRange := item.TextEdit.TextEdit.Range

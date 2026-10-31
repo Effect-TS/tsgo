@@ -3,6 +3,7 @@
 // Rust: `checker_shim` holds the Rust-only stand-ins for the shim accessors tsrs keeps private (the others are made
 // public by _patches/tsrs/120-checker-typeparser-visibility.patch).
 
+mod ai_tool_api;
 mod api_stability;
 mod api_stability_checker_shim;
 mod api_stability_inheritance;

@@ -50,7 +50,7 @@ Effect version: 4.0.2
       extends Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")({
                      ~~~~~~~~~~~~
 !!! error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
-        payload: Schema.Struct({}),
+        payload: Schema.Struct({ a: Schema.String }),
         success: Schema.Void,
         error: Schema.Never
       })
@@ -61,7 +61,7 @@ Effect version: 4.0.2
       extends Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")({
                      ~~~~~~~~~~~~
 !!! error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
-        payload: Schema.Struct({}),
+        payload: Schema.Struct({ a: Schema.String }),
         success: Schema.Void,
         error: Schema.Never
       })

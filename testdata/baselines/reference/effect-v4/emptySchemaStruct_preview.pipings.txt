@@ -1,0 +1,29 @@
+==== /.src/emptySchemaStruct_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 5:39
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 6:23 - 6:59
+Node: Schema.decodeUnknownSync(Empty)(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Empty)
+      args: (constant)
+      outType: {}

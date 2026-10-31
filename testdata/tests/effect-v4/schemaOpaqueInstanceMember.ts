@@ -18,11 +18,11 @@ class Invalid extends Schema.Opaque<Invalid>()(Schema.Struct({ value: Schema.Str
   }
 }
 
-class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({})) {
+class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({ a: Schema.String })) {
   field = true
 }
 
-const Expression = class extends S.Opaque<Invalid>()(S.Struct({})) {
+const Expression = class extends S.Opaque<Invalid>()(S.Struct({ a: S.String })) {
   expressionField = true
 }
 

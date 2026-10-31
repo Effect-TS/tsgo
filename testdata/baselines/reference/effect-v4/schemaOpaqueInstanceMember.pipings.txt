@@ -37,40 +37,40 @@ Transformations (2):
       outType: Opaque<Invalid, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
 
 === Piping Flow ===
-Location: 21:22 - 21:65
-Node: SchemaOpaque<Aliased>()(Schema.Struct({}))
+Location: 21:22 - 21:83
+Node: SchemaOpaque<Aliased>()(Schema.Struct({ a: Schema.String }))
 Node Kind: KindCallExpression
 
-Subject: {}
-Subject Type: {}
+Subject: { a: Schema.String }
+Subject Type: { a: String; }
 
 Transformations (2):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{}>
+      outType: Struct<{ readonly a: String; }>
   [1] kind: call
       callee: SchemaOpaque<Aliased>()
       args: (constant)
-      outType: Opaque<Aliased, Struct<{}>, {}> & Omit<Struct<{}>, keyof Top>
+      outType: Opaque<Aliased, Struct<{ readonly a: String; }>, {}> & Omit<Struct<{ readonly a: String; }>, keyof Top>
 
 === Piping Flow ===
-Location: 25:33 - 25:67
-Node: S.Opaque<Invalid>()(S.Struct({}))
+Location: 25:33 - 25:80
+Node: S.Opaque<Invalid>()(S.Struct({ a: S.String }))
 Node Kind: KindCallExpression
 
-Subject: {}
-Subject Type: {}
+Subject: { a: S.String }
+Subject Type: { a: String; }
 
 Transformations (2):
   [0] kind: call
       callee: S.Struct
       args: (constant)
-      outType: Struct<{}>
+      outType: Struct<{ readonly a: String; }>
   [1] kind: call
       callee: S.Opaque<Invalid>()
       args: (constant)
-      outType: Opaque<Invalid, Struct<{}>, {}> & Omit<Struct<{}>, keyof Top>
+      outType: Opaque<Invalid, Struct<{ readonly a: String; }>, {}> & Omit<Struct<{ readonly a: String; }>, keyof Top>
 
 === Piping Flow ===
 Location: 30:24 - 30:48
