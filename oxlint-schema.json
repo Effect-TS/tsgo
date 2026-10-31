@@ -2383,6 +2383,9 @@
         "effecttsgo/floating-effect-in-vitest": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/for-loop-push-to-for-each": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/generic-effect-services": {
           "$ref": "#/definitions/RuleNoConfig"
         },

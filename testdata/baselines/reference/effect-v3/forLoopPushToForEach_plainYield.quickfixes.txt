@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:38-10:46) TS2345: Argument of type '() => Generator<Effect.Effect<string, never, never>, unknown[], unknown>' is not assignable to parameter of type '(resume: Adapter) => Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
+  Type 'Generator<Effect<string, never, never>, unknown[], unknown>' is not assignable to type 'Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
+    The types returned by 'next(...)' are incompatible between these types.
+      Type 'IteratorResult<Effect<string, never, never>, unknown[]>' is not assignable to type 'IteratorResult<YieldWrap<Effect<any, any, any>>, unknown[]>'.
+        Type 'IteratorYieldResult<Effect<string, never, never>>' is not assignable to type 'IteratorResult<YieldWrap<Effect<any, any, any>>, unknown[]>'.
+          Type 'IteratorYieldResult<Effect<string, never, never>>' is not assignable to type 'IteratorYieldResult<YieldWrap<Effect<any, any, any>>>'.
+            Type 'Effect<string, never, never>' is missing the following properties from type 'YieldWrap<Effect<any, any, any>>': #private, [YieldWrapTypeId]
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

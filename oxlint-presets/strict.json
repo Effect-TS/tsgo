@@ -43,6 +43,7 @@
     "effecttsgo/flat-map-to-tap": "error",
     "effecttsgo/floating-effect": "error",
     "effecttsgo/floating-effect-in-vitest": "error",
+    "effecttsgo/for-loop-push-to-for-each": "error",
     "effecttsgo/generic-effect-services": "error",
     "effecttsgo/global-error-in-effect-catch": "error",
     "effecttsgo/global-error-in-effect-failure": "error",

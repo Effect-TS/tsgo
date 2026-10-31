@@ -1,0 +1,27 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/forLoopPushToForEach_moduleAlias.ts(11,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+
+
+==== /.src/forLoopPushToForEach_moduleAlias.ts (1 errors) ====
+    // @effect-v4
+    import * as Fx from "effect/Effect"
+    
+    declare const items: ReadonlyArray<number>
+    declare const processItem: (item: number) => Fx.Effect<string>
+    
+    // MUST TRIGGER: the fix references forEach through the file's Effect module alias.
+    // fix: const results = yield* Fx.forEach(items, processItem)
+    export const moduleAlias = Fx.gen(function*() {
+      const results = []
+      for (const item of items) {
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        results.push(yield* processItem(item))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }
+    ~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      return results
+    })
+    

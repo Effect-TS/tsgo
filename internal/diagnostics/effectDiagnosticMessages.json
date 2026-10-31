@@ -654,5 +654,9 @@
     "Effect.{0} is called without a `catch` handler, so failures surface as the generic `{1}`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)": {
         "category": "Warning",
         "code": 377169
+    },
+    "`Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)": {
+        "category": "Suggestion",
+        "code": 377170
     }
 }

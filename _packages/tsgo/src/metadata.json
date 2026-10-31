@@ -68,6 +68,7 @@
         "flatMapToTap": "suggestion",
         "floatingEffect": "error",
         "floatingEffectInVitest": "error",
+        "forLoopPushToForEach": "suggestion",
         "genericEffectServices": "warning",
         "globalErrorInEffectCatch": "warning",
         "globalErrorInEffectFailure": "warning",
@@ -168,6 +169,7 @@
         "flatMapToTap": "error",
         "floatingEffect": "error",
         "floatingEffectInVitest": "error",
+        "forLoopPushToForEach": "error",
         "genericEffectServices": "error",
         "globalErrorInEffectCatch": "error",
         "globalErrorInEffectFailure": "error",
@@ -348,6 +350,7 @@
         "flatMapIgnoredParamToAndThen": "warning",
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
+        "forLoopPushToForEach": "warning",
         "manualMetricTapToTrack": "warning",
         "mapConstToAs": "warning",
         "mapMapErrorToMapBoth": "warning",
@@ -2805,6 +2808,30 @@
             "start": 282,
             "end": 296,
             "text": "`Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "forLoopPushToForEach",
+      "group": "style",
+      "description": "Suggests Effect.forEach instead of a for-of loop that pushes yielded Effect results into an accumulator",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377170
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const items: ReadonlyArray\u003cnumber\u003e\ndeclare const processItem: (item: number) =\u003e Effect.Effect\u003cstring\u003e\n\nexport const program = Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  return results\n})\n",
+        "diagnostics": [
+          {
+            "start": 215,
+            "end": 289,
+            "text": "`Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)"
           }
         ]
       }
