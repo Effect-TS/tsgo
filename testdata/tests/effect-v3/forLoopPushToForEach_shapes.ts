@@ -14,6 +14,12 @@ function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> 
   return Effect.map(effect, String)
 }
 
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
 // applies one plain callee to the loop variable)
@@ -82,6 +88,22 @@ export const readOnlyUses = Effect.gen(function*() {
   return { results, first: results[0], size: results.length }
 })
 
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
 // ---------------------------------------------------------------------------
@@ -107,6 +129,38 @@ export const sortInCallbackAfterwards = Effect.gen(function*() {
   const results: Array<string> = []
   for (const item of items) results.push(yield* processItem(item))
   return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
 })
 
 // ---------------------------------------------------------------------------

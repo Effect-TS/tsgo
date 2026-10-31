@@ -39,6 +39,8 @@ func runForLoopPushToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 
+		// The fix deletes one statement and replaces another, the loop; the
+		// piping flow edits only rewrite steps inside a flow, so none applies.
 		// The replacement is written as text: the printer drops the parentheses
 		// of a synthesized single-identifier arrow parameter.
 		callee := reference.path.String()

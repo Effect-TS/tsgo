@@ -1,18 +1,24 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/forLoopPushToForEach_shapes.ts(26,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(36,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(46,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(56,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(68,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(78,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(92,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(100,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(108,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(32,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(42,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(52,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(62,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(74,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(84,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(95,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(103,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(114,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(122,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(130,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(137,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(145,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(153,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(161,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
 
 
-==== /.src/forLoopPushToForEach_shapes.ts (9 errors) ====
+==== /.src/forLoopPushToForEach_shapes.ts (15 errors) ====
     // @effect-v3
     import { Effect, pipe } from "effect"
     
@@ -28,6 +34,12 @@ Effect version: 3.19.19
     function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> {
       return Effect.map(effect, String)
     }
+    
+    function processGeneric<A>(item: A): Effect.Effect<string> {
+      return Effect.succeed(String(item))
+    }
+    
+    declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
     
     // ---------------------------------------------------------------------------
     // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
@@ -119,6 +131,26 @@ Effect version: 3.19.19
       return { results, first: results[0], size: results.length }
     })
     
+    // MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+    // fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+    export const typeArgumentCallee = Effect.gen(function*() {
+      const results = []
+      for (const item of items) results.push(yield* processGeneric<number>(item))
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      return results
+    })
+    
+    // MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+    // fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+    export const selfAppliedCallee = Effect.gen(function*() {
+      const results = []
+      for (const fn of selfApplying) results.push(yield* fn(fn))
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      return results
+    })
+    
     // ---------------------------------------------------------------------------
     // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
     // ---------------------------------------------------------------------------
@@ -150,6 +182,46 @@ Effect version: 3.19.19
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
       return () => results.sort()
+    })
+    
+    // MUST TRIGGER (no fix): pop after the loop.
+    export const popAfterwards = Effect.gen(function*() {
+      const results: Array<string> = []
+      for (const item of items) results.push(yield* processItem(item))
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      results.pop()
+      return results
+    })
+    
+    // MUST TRIGGER (no fix): reverse after the loop.
+    export const reverseAfterwards = Effect.gen(function*() {
+      const results: Array<string> = []
+      for (const item of items) results.push(yield* processItem(item))
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      results.reverse()
+      return results
+    })
+    
+    // MUST TRIGGER (no fix): fill after the loop.
+    export const fillAfterwards = Effect.gen(function*() {
+      const results: Array<string> = []
+      for (const item of items) results.push(yield* processItem(item))
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      results.fill("")
+      return results
+    })
+    
+    // MUST TRIGGER (no fix): copyWithin after the loop.
+    export const copyWithinAfterwards = Effect.gen(function*() {
+      const results: Array<string> = []
+      for (const item of items) results.push(yield* processItem(item))
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      results.copyWithin(0, 1)
+      return results
     })
     
     // ---------------------------------------------------------------------------

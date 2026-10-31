@@ -2,11 +2,11 @@
 Effect version: 3.19.19
 
 /.src/forLoopPushToForEach_plainYield.ts(10,38): error TS2345: Argument of type '() => Generator<Effect.Effect<string, never, never>, unknown[], unknown>' is not assignable to parameter of type '(resume: Adapter) => Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
-/.src/forLoopPushToForEach_plainYield.ts(12,38): error TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
 
 
-==== /.src/forLoopPushToForEach_plainYield.ts (2 errors) ====
+==== /.src/forLoopPushToForEach_plainYield.ts (1 errors) ====
     // @effect-v3
+    // @effect-diagnostics missingStarInYieldEffectGen:off
     import { Effect } from "effect"
     
     declare const items: ReadonlyArray<number>
@@ -14,15 +14,11 @@ Effect version: 3.19.19
     
     // MUST NOT TRIGGER: plain yield instead of yield*. Kept apart from the shapes
     // fixture because a plain yield of an Effect does not type-check.
-    // MUST NOT TRIGGER: plain yield instead of yield*.
     export const plainYield = Effect.gen(function*() {
                                          ~~~~~~~~
 !!! error TS2345: Argument of type '() => Generator<Effect.Effect<string, never, never>, unknown[], unknown>' is not assignable to parameter of type '(resume: Adapter) => Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
       const out: Array<unknown> = []
       for (const item of items) out.push(yield processItem(item))
-                                         ~~~~~
-!!! error TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
-!!! related TS377007 /.src/forLoopPushToForEach_plainYield.ts(10,38): Inside this Effect generator. effect(missingStarInYieldEffectGen)
       return out
     })
     

@@ -344,13 +344,10 @@ func forLoopPushToForEachPointFreeCallee(tp *typeparser.TypeParser, c *checker.C
 	isBinding := func(subject typeparser.PipingFlowSubject) bool {
 		return subject.Node() != nil && subject.Node().Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(subject.Node()) == bindingSymbol
 	}
+	// No arguments leaves only call, pipe and pipeable steps: every other kind
+	// keeps at least one argument besides the subject.
 	isPlainCallee := func(transformation typeparser.PipingFlowTransformation) bool {
 		callee := transformation.Callee()
-		switch transformation.Kind() {
-		case typeparser.TransformationKindCall, typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
-		default:
-			return false
-		}
 		return callee != nil && callee.Kind == ast.KindIdentifier && transformation.Args().Len() == 0 &&
 			(transformation.TypeArguments() == nil || len(transformation.TypeArguments().Nodes) == 0) &&
 			tp.GetSymbolAtLocation(callee) != bindingSymbol

@@ -1,44 +1,70 @@
 === Quick Fix Inventory ===
 
-[D1] (26:3-28:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D1] (32:3-34:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D2] (36:3-38:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D2] (42:3-44:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D3] (46:3-48:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D3] (52:3-54:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D4] (56:3-56:65) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D4] (62:3-62:65) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D5] (68:3-70:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D5] (74:3-76:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D6] (78:3-80:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D6] (84:3-86:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D7] (92:3-92:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D7] (95:3-95:78) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+  Fix 0: "Disable forLoopPushToForEach for this line"
+  Fix 1: "Disable forLoopPushToForEach for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D8] (103:3-103:61) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+  Fix 0: "Disable forLoopPushToForEach for this line"
+  Fix 1: "Disable forLoopPushToForEach for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D9] (114:3-114:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
 
-[D8] (100:3-100:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D10] (122:3-122:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
 
-[D9] (108:3-108:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D11] (130:3-130:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+  Fix 0: "Disable forLoopPushToForEach for this line"
+  Fix 1: "Disable forLoopPushToForEach for entire file"
+
+[D12] (137:3-137:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+  Fix 0: "Disable forLoopPushToForEach for this line"
+  Fix 1: "Disable forLoopPushToForEach for entire file"
+
+[D13] (145:3-145:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+  Fix 0: "Disable forLoopPushToForEach for this line"
+  Fix 1: "Disable forLoopPushToForEach for entire file"
+
+[D14] (153:3-153:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+  Fix 0: "Disable forLoopPushToForEach for this line"
+  Fix 1: "Disable forLoopPushToForEach for entire file"
+
+[D15] (161:3-161:67) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
 
@@ -68,6 +94,12 @@ function processDeclared(item: number): Effect.Effect<string> {
 function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> {
   return Effect.map(effect, String)
 }
+
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
 
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
@@ -134,6 +166,22 @@ export const readOnlyUses = Effect.gen(function*() {
   return { results, first: results[0], size: results.length }
 })
 
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
 // ---------------------------------------------------------------------------
@@ -159,6 +207,38 @@ export const sortInCallbackAfterwards = Effect.gen(function*() {
   const results: Array<string> = []
   for (const item of items) results.push(yield* processItem(item))
   return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
 })
 
 // ---------------------------------------------------------------------------
@@ -254,6 +334,12 @@ function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> 
   return Effect.map(effect, String)
 }
 
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
 // applies one plain callee to the loop variable)
@@ -319,6 +405,22 @@ export const readOnlyUses = Effect.gen(function*() {
   return { results, first: results[0], size: results.length }
 })
 
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
 // ---------------------------------------------------------------------------
@@ -344,6 +446,38 @@ export const sortInCallbackAfterwards = Effect.gen(function*() {
   const results: Array<string> = []
   for (const item of items) results.push(yield* processItem(item))
   return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
 })
 
 // ---------------------------------------------------------------------------
@@ -439,6 +573,12 @@ function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> 
   return Effect.map(effect, String)
 }
 
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
 // applies one plain callee to the loop variable)
@@ -504,6 +644,22 @@ export const readOnlyUses = Effect.gen(function*() {
   return { results, first: results[0], size: results.length }
 })
 
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
 // ---------------------------------------------------------------------------
@@ -529,6 +685,38 @@ export const sortInCallbackAfterwards = Effect.gen(function*() {
   const results: Array<string> = []
   for (const item of items) results.push(yield* processItem(item))
   return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
 })
 
 // ---------------------------------------------------------------------------
@@ -624,6 +812,12 @@ function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> 
   return Effect.map(effect, String)
 }
 
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
 // applies one plain callee to the loop variable)
@@ -691,6 +885,22 @@ export const readOnlyUses = Effect.gen(function*() {
   return { results, first: results[0], size: results.length }
 })
 
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
 // ---------------------------------------------------------------------------
@@ -716,6 +926,38 @@ export const sortInCallbackAfterwards = Effect.gen(function*() {
   const results: Array<string> = []
   for (const item of items) results.push(yield* processItem(item))
   return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
 })
 
 // ---------------------------------------------------------------------------
@@ -811,6 +1053,12 @@ function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> 
   return Effect.map(effect, String)
 }
 
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
 // applies one plain callee to the loop variable)
@@ -876,6 +1124,22 @@ export const readOnlyUses = Effect.gen(function*() {
   return { results, first: results[0], size: results.length }
 })
 
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
 // ---------------------------------------------------------------------------
@@ -901,6 +1165,38 @@ export const sortInCallbackAfterwards = Effect.gen(function*() {
   const results: Array<string> = []
   for (const item of items) results.push(yield* processItem(item))
   return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
 })
 
 // ---------------------------------------------------------------------------
@@ -996,6 +1292,12 @@ function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> 
   return Effect.map(effect, String)
 }
 
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
 // applies one plain callee to the loop variable)
@@ -1061,6 +1363,22 @@ export const readOnlyUses = Effect.gen(function*() {
   return { results, first: results[0], size: results.length }
 })
 
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
 // ---------------------------------------------------------------------------
 // MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
 // ---------------------------------------------------------------------------
@@ -1086,6 +1404,38 @@ export const sortInCallbackAfterwards = Effect.gen(function*() {
   const results: Array<string> = []
   for (const item of items) results.push(yield* processItem(item))
   return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
 })
 
 // ---------------------------------------------------------------------------
@@ -1162,14 +1512,520 @@ skipped by default
 === [D7] Fix 1: "Disable forLoopPushToForEach for entire file" ===
 skipped by default
 
+=== [D7] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/forLoopPushToForEach_shapes.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+declare const items: ReadonlyArray<number>
+declare const effects: ReadonlyArray<Effect.Effect<number>>
+declare const processItem: (item: number) => Effect.Effect<string>
+declare const report: (values: ReadonlyArray<string>) => void
+
+function processDeclared(item: number): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> {
+  return Effect.map(effect, String)
+}
+
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
+// applies one plain callee to the loop variable)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: pipe function call applying the callee to the loop variable.
+// fix: const results = yield* Effect.forEach(items, processDeclared)
+export const pipeCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* pipe(item, processDeclared))
+  }
+  return results
+})
+
+// MUST TRIGGER: method pipe on the loop variable.
+// fix: const results = yield* Effect.forEach(effects, describeDeclared)
+export const methodPipeCallee = Effect.gen(function*() {
+  const results = []
+  for (const effect of effects) {
+    results.push(yield* effect.pipe(describeDeclared))
+  }
+  return results
+})
+
+// MUST TRIGGER: the loop variable is parenthesized.
+// fix: const results = yield* Effect.forEach(items, processDeclared)
+export const parenthesizedArgument = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processDeclared((item)))
+  }
+  return results
+})
+
+// MUST TRIGGER: the yield is parenthesized.
+// fix: const out = yield* Effect.forEach(items, processItem)
+export const parenthesizedYield = Effect.gen(function*() {
+  const out = []
+  for (const item of items) out.push((yield* processItem(item)))
+  return out
+})
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, with a fix that keeps an arrow
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: an optional call is not passed point-free.
+// fix: const results = yield* Effect.forEach(items, (item) => processDeclared?.(item))
+export const optionalCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processDeclared?.(item))
+  }
+  return results
+})
+
+// MUST TRIGGER: the accumulator is only read and passed along after the loop.
+// fix: const results = yield* Effect.forEach(items, processItem)
+export const readOnlyUses = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processItem(item))
+  }
+  report(results)
+  return { results, first: results[0], size: results.length }
+})
+
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = []
+  for (const fn of selfApplying) results.push(yield* fn(fn))
+  return results
+})
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER (no fix): length write after the loop.
+export const lengthWriteAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.length = 0
+  return results
+})
+
+// MUST TRIGGER (no fix): delete after the loop.
+export const deleteAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  delete results[0]
+  return results
+})
+
+// MUST TRIGGER (no fix): sort in a callback after the loop.
+export const sortInCallbackAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
+})
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER: push is passed to pipe unbound instead of called on the
+// accumulator.
+export const pipedPush = Effect.gen(function*() {
+  const out: Array<string> = []
+  for (const item of items) pipe(yield* processItem(item), out.push)
+  return out
+})
+
+// MUST NOT TRIGGER: optional call of push.
+export const optionalPushCall = Effect.gen(function*() {
+  const out: Array<string> = []
+  for (const item of items) out.push?.(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator is asserted.
+export const assertedAccumulator = Effect.gen(function*() {
+  const out = [] as Array<string>
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator literal has a hole.
+export const holeAccumulator = Effect.gen(function*() {
+  const out: Array<string | undefined> = [,]
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator is declared together with another variable.
+export const sharedDeclaration = Effect.gen(function*() {
+  const count = 1, out: Array<string> = []
+  for (const item of items) out.push(yield* processItem(item + count))
+  return out
+})
+
+// MUST NOT TRIGGER: a function declared in between captures the accumulator.
+export const nestedFunctionInBetween = Effect.gen(function*() {
+  const out: Array<string> = []
+  const read = () => out.length
+  for (const item of items) out.push(yield* processItem(item))
+  return [out, read]
+})
+
+// MUST NOT TRIGGER: the loop is a statement of a switch case, not of a block.
+export const switchCase = Effect.gen(function*() {
+  switch (items.length) {
+    case 1:
+      const out = []
+      for (const item of items) out.push(yield* processItem(item))
+      return out
+  }
+  return []
+})
+
+// MUST NOT TRIGGER: the next-line directive turns the rule off for this loop.
+export const nextLineOff = Effect.gen(function*() {
+  const out = []
+  // @effect-diagnostics-next-line forLoopPushToForEach:off
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+
 === [D8] Fix 0: "Disable forLoopPushToForEach for this line" ===
 skipped by default
 
 === [D8] Fix 1: "Disable forLoopPushToForEach for entire file" ===
 skipped by default
 
+=== [D8] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/forLoopPushToForEach_shapes.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+declare const items: ReadonlyArray<number>
+declare const effects: ReadonlyArray<Effect.Effect<number>>
+declare const processItem: (item: number) => Effect.Effect<string>
+declare const report: (values: ReadonlyArray<string>) => void
+
+function processDeclared(item: number): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> {
+  return Effect.map(effect, String)
+}
+
+function processGeneric<A>(item: A): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+declare const selfApplying: ReadonlyArray<(self: unknown) => Effect.Effect<string>>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
+// applies one plain callee to the loop variable)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: pipe function call applying the callee to the loop variable.
+// fix: const results = yield* Effect.forEach(items, processDeclared)
+export const pipeCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* pipe(item, processDeclared))
+  }
+  return results
+})
+
+// MUST TRIGGER: method pipe on the loop variable.
+// fix: const results = yield* Effect.forEach(effects, describeDeclared)
+export const methodPipeCallee = Effect.gen(function*() {
+  const results = []
+  for (const effect of effects) {
+    results.push(yield* effect.pipe(describeDeclared))
+  }
+  return results
+})
+
+// MUST TRIGGER: the loop variable is parenthesized.
+// fix: const results = yield* Effect.forEach(items, processDeclared)
+export const parenthesizedArgument = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processDeclared((item)))
+  }
+  return results
+})
+
+// MUST TRIGGER: the yield is parenthesized.
+// fix: const out = yield* Effect.forEach(items, processItem)
+export const parenthesizedYield = Effect.gen(function*() {
+  const out = []
+  for (const item of items) out.push((yield* processItem(item)))
+  return out
+})
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, with a fix that keeps an arrow
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: an optional call is not passed point-free.
+// fix: const results = yield* Effect.forEach(items, (item) => processDeclared?.(item))
+export const optionalCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processDeclared?.(item))
+  }
+  return results
+})
+
+// MUST TRIGGER: the accumulator is only read and passed along after the loop.
+// fix: const results = yield* Effect.forEach(items, processItem)
+export const readOnlyUses = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processItem(item))
+  }
+  report(results)
+  return { results, first: results[0], size: results.length }
+})
+
+// MUST TRIGGER: explicit type arguments on the callee keep the arrow.
+// fix: const results = yield* Effect.forEach(items, (item) => processGeneric<number>(item))
+export const typeArgumentCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) results.push(yield* processGeneric<number>(item))
+  return results
+})
+
+// MUST TRIGGER: the loop variable applied to itself keeps the arrow.
+// fix: const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+export const selfAppliedCallee = Effect.gen(function*() {
+  const results = yield* Effect.forEach(selfApplying, (fn) => fn(fn))
+  return results
+})
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER (no fix): length write after the loop.
+export const lengthWriteAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.length = 0
+  return results
+})
+
+// MUST TRIGGER (no fix): delete after the loop.
+export const deleteAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  delete results[0]
+  return results
+})
+
+// MUST TRIGGER (no fix): sort in a callback after the loop.
+export const sortInCallbackAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  return () => results.sort()
+})
+
+// MUST TRIGGER (no fix): pop after the loop.
+export const popAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.pop()
+  return results
+})
+
+// MUST TRIGGER (no fix): reverse after the loop.
+export const reverseAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.reverse()
+  return results
+})
+
+// MUST TRIGGER (no fix): fill after the loop.
+export const fillAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.fill("")
+  return results
+})
+
+// MUST TRIGGER (no fix): copyWithin after the loop.
+export const copyWithinAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.copyWithin(0, 1)
+  return results
+})
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER: push is passed to pipe unbound instead of called on the
+// accumulator.
+export const pipedPush = Effect.gen(function*() {
+  const out: Array<string> = []
+  for (const item of items) pipe(yield* processItem(item), out.push)
+  return out
+})
+
+// MUST NOT TRIGGER: optional call of push.
+export const optionalPushCall = Effect.gen(function*() {
+  const out: Array<string> = []
+  for (const item of items) out.push?.(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator is asserted.
+export const assertedAccumulator = Effect.gen(function*() {
+  const out = [] as Array<string>
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator literal has a hole.
+export const holeAccumulator = Effect.gen(function*() {
+  const out: Array<string | undefined> = [,]
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator is declared together with another variable.
+export const sharedDeclaration = Effect.gen(function*() {
+  const count = 1, out: Array<string> = []
+  for (const item of items) out.push(yield* processItem(item + count))
+  return out
+})
+
+// MUST NOT TRIGGER: a function declared in between captures the accumulator.
+export const nestedFunctionInBetween = Effect.gen(function*() {
+  const out: Array<string> = []
+  const read = () => out.length
+  for (const item of items) out.push(yield* processItem(item))
+  return [out, read]
+})
+
+// MUST NOT TRIGGER: the loop is a statement of a switch case, not of a block.
+export const switchCase = Effect.gen(function*() {
+  switch (items.length) {
+    case 1:
+      const out = []
+      for (const item of items) out.push(yield* processItem(item))
+      return out
+  }
+  return []
+})
+
+// MUST NOT TRIGGER: the next-line directive turns the rule off for this loop.
+export const nextLineOff = Effect.gen(function*() {
+  const out = []
+  // @effect-diagnostics-next-line forLoopPushToForEach:off
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+
 === [D9] Fix 0: "Disable forLoopPushToForEach for this line" ===
 skipped by default
 
 === [D9] Fix 1: "Disable forLoopPushToForEach for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable forLoopPushToForEach for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable forLoopPushToForEach for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable forLoopPushToForEach for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable forLoopPushToForEach for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable forLoopPushToForEach for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable forLoopPushToForEach for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable forLoopPushToForEach for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable forLoopPushToForEach for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable forLoopPushToForEach for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable forLoopPushToForEach for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable forLoopPushToForEach for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable forLoopPushToForEach for entire file" ===
 skipped by default
