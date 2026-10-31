@@ -18,7 +18,7 @@ pub static EMPTY_SCHEMA_STRUCT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable
     run: run_empty_schema_struct_fix,
 });
 
-// go: internal/fixables/empty_schema_struct.go:23 runEmptySchemaStructFix 79362792c14012ad
+// go: internal/fixables/empty_schema_struct.go:23 runEmptySchemaStructFix 0f9b2a937abe063c
 fn run_empty_schema_struct_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_empty_schema_struct(&mut ctx.type_parser, sf) {
@@ -30,7 +30,7 @@ fn run_empty_schema_struct_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         let (true, Some(tool_namespace)) = (m.in_tool_parameters, m.tool_namespace) else {
             continue;
         };
-        let call = m.call;
+        let flow = m.flow;
 
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with ".to_string()
@@ -43,7 +43,8 @@ fn run_empty_schema_struct_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
                     tracker.new_identifier("EmptyParams"),
                     NodeFlags::None,
                 );
-                tracker.replace_node(sf, Some(call), Some(empty_params), None);
+                // The only edit: a refused prefix leaves no changes and no action
+                tracker.replace_piping_flow_prefix(Some(sf), Some(&flow), 1, Some(empty_params));
             }),
         }) {
             return vec![action];
