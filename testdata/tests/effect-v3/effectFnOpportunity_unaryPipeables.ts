@@ -11,6 +11,7 @@
 }
 
 // @filename: effectFnOpportunity_unaryPipeables.ts
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 5: ignore must only receive the Effect, not name/attributes.

@@ -43,6 +43,7 @@ import {
   portStatus,
   portTodo
 } from "./port.ts"
+import { runPipings } from "./pipings.ts"
 import { runRustChecks, runRustLint, runRustTests } from "./rust.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
 import { runTests } from "./tests.ts"
@@ -123,6 +124,23 @@ const test = Command.make("test", {}, () => runTests(repositoryRoot)).pipe(
 const check = Command.make("check", {}, () => runChecks(repositoryRoot)).pipe(
   Command.withDescription(
     "Check Go packages, the Rust port bookkeeping (`repoctl tsrs port-check`) and the CLI package"
+  )
+)
+
+const pipings = Command.make("pipings", {
+  file: Argument.String("file").pipe(
+    Argument.withDescription("TypeScript snippet to analyze, or - for standard input; // @filename: units work as in fixtures")
+  ),
+  effect: Flag.Literals("effect", ["v4", "v3"]).pipe(
+    Flag.withDefault("v4"),
+    Flag.withDescription("Effect version the snippet is checked against")
+  ),
+  errors: Flag.Boolean("errors").pipe(
+    Flag.withDescription("Also print the diagnostics, in the .errors.txt baseline format")
+  )
+}, (options) => runPipings(repositoryRoot, options)).pipe(
+  Command.withDescription(
+    "Print the piping flows the parser finds in a snippet, in the .pipings.txt baseline format (docs/agents/piping-flows.md)"
   )
 )
 
@@ -519,7 +537,7 @@ const tsrsLintCommand = Command.make("lint", {}, () => runRustLint(repositoryRoo
 )
 
 const tsrsTestCommand = Command.make("test", {}, () => runRustTests(repositoryRoot)).pipe(
-  Command.withDescription("Run the Rust workspace tests, then build the tsrs binary and run its --version smoke test")
+  Command.withDescription("Run Clippy (warnings denied) and the Rust workspace tests, then build the tsrs binary and run its --version smoke test")
 )
 
 const tsrs = Command.make("tsrs").pipe(
@@ -557,6 +575,7 @@ Command.make("repoctl").pipe(
     matrix,
     packages,
     perf,
+    pipings,
     test,
     tsrs,
     upstream

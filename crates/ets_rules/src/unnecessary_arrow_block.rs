@@ -43,7 +43,7 @@ pub struct UnnecessaryArrowBlockMatch {
     pub returned_expression: P<Node>,
 }
 
-// go: internal/rules/unnecessary_arrow_block.go:48 AnalyzeUnnecessaryArrowBlock 77d4f6ca19cddcf4
+// go: internal/rules/unnecessary_arrow_block.go:48 AnalyzeUnnecessaryArrowBlock 583693267fa23662
 //
 // Rust: Go ignores the parser and checker; the parser is kept so every Analyze* has the same shape.
 pub fn analyze_unnecessary_arrow_block(
@@ -68,7 +68,7 @@ pub fn analyze_unnecessary_arrow_block(
     matches
 }
 
-// go: internal/rules/unnecessary_arrow_block.go:71 analyzeUnnecessaryArrowBlockNode 6336a9cc5e8ea697
+// go: internal/rules/unnecessary_arrow_block.go:72 analyzeUnnecessaryArrowBlockNode 6336a9cc5e8ea697
 pub(crate) fn analyze_unnecessary_arrow_block_node(
     sf: P<SourceFile>,
     n: P<Node>,

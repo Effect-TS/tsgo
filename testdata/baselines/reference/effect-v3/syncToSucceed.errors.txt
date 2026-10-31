@@ -1,19 +1,20 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/syncToSucceed.ts(8,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/syncToSucceed.ts(9,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(10,31): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(11,28): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(12,33): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(13,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(16,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(17,26): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(22,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/syncToSucceed.ts(46,14): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(10,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(11,31): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(12,28): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(13,33): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(14,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(17,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(18,26): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(23,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(47,14): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 
 
 ==== /.src/syncToSucceed.ts (10 errors) ====
+    // @effect-v3
     import { Effect } from "effect"
     
     const constant = "constant"

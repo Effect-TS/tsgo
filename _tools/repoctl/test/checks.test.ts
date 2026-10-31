@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
-import { checkOverrideFolders } from "../src/checks.ts"
+import { checkEffectV3FixtureMarkers, checkOverrideFolders } from "../src/checks.ts"
 import type { Upstream } from "../src/upstream.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
@@ -82,6 +82,41 @@ test("requires a patch override folder to mirror the provider's folder patch for
       assert.match(error.message, new RegExp(`${mirror} must mirror _patches/typescript patch for patch`))
       assert.match(error.message, new RegExp(`Missing from ${mirror}: 003-c\\.patch`))
       assert.match(error.message, /Not in _patches\/typescript: 004-d\.patch/)
+      return true
+    })
+  }))
+
+const withFixtures = async(files: Record<string, string>, run: (check: () => Promise<void>) => Promise<void>) => {
+  const repository = mkdtempSync(join(tmpdir(), "repoctl-v3-markers-"))
+  const check = () =>
+    Effect.runPromise(checkEffectV3FixtureMarkers(repository).pipe(Effect.provide(NodeServices.layer)))
+  try {
+    mkdirSync(join(repository, "testdata/tests/effect-v3/node_modules"), { recursive: true })
+    for (const [name, content] of Object.entries(files)) {
+      writeFileSync(join(repository, "testdata/tests/effect-v3", name), content)
+    }
+    await run(check)
+  } finally {
+    rmSync(repository, { recursive: true, force: true })
+  }
+}
+
+test("accepts v3 fixtures that carry the @effect-v3 marker on any line", () =>
+  withFixtures({
+    "first.ts": "// @effect-v3\nimport { Effect } from \"effect\"\n",
+    "multi.ts": "// @filename: a.ts\n// @effect-v3\nexport const a = 1\n",
+    "package.json": "{}"
+  }, (check) => check()))
+
+test("lists every v3 fixture without the @effect-v3 marker", () =>
+  withFixtures({
+    "marked.ts": "// @effect-v3\n",
+    "unmarked.ts": "import { Effect } from \"effect\"\n",
+    "indented.ts": "  // @effect-v3\n"
+  }, async(check) => {
+    await assert.rejects(check(), (error: Error) => {
+      assert.match(error.message, /2 fixture\(s\) under testdata\/tests\/effect-v3 lack/)
+      assert.match(error.message, /testdata\/tests\/effect-v3\/indented\.ts\n {2}testdata\/tests\/effect-v3\/unmarked\.ts$/)
       return true
     })
   }))

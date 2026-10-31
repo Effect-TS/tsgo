@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectFnOpportunity_hoistedDeclaration.ts(7,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_hoistedDeclaration.ts(62,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_hoistedDeclaration.ts(73,10): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_hoistedDeclaration.ts(8,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_hoistedDeclaration.ts(63,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_hoistedDeclaration.ts(74,10): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -20,6 +20,7 @@ Effect version: 3.19.19
     
 
 ==== /.src/effectFnOpportunity_hoistedDeclaration.ts (3 errors) ====
+    // @effect-v3
     import { Effect } from "effect"
     
     // Issue #758, point 4: no opportunity or conversion for this hoisted helper.

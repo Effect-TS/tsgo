@@ -259,6 +259,7 @@ func conditionalRefailNodeContainsParameter(tp *typeparser.TypeParser, c *checke
 				return true
 			}
 		}
+		//ets:ast-walk scans the predicate for references to the caught error parameter
 		current.ForEachChild(visit)
 		return found
 	}

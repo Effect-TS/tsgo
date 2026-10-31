@@ -52,7 +52,7 @@ pub struct UnsafeEffectTypeAssertionMatch {
     pub channels: Vec<UnsafeEffectTypeAssertionChannel>,
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:51 AnalyzeUnsafeEffectTypeAssertion 0a3580f37aabafc8
+// go: internal/rules/unsafe_effect_type_assertion.go:52 AnalyzeUnsafeEffectTypeAssertion 8bc26250bbaef648
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and checker are never nil.
 pub fn analyze_unsafe_effect_type_assertion(
@@ -148,12 +148,12 @@ pub fn analyze_unsafe_effect_type_assertion(
     matches
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:133 isAnyType c8a188e72b87a725
+// go: internal/rules/unsafe_effect_type_assertion.go:134 isAnyType c8a188e72b87a725
 pub(crate) fn is_any_type(t: Option<P<Type>>) -> bool {
     t.is_some_and(|t| t.flags().intersects(TypeFlags::Any))
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:137 unsafeEffectTypeAssertionRelatedInformation 8fa0f1b20fb7c26e
+// go: internal/rules/unsafe_effect_type_assertion.go:138 unsafeEffectTypeAssertionRelatedInformation 8fa0f1b20fb7c26e
 pub(crate) fn unsafe_effect_type_assertion_related_information(
     ctx: Option<&Context<'_, '_>>,
     m: &UnsafeEffectTypeAssertionMatch,

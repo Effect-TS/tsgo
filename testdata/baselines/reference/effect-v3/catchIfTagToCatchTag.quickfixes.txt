@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (16:3-16:17) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+[D1] (17:3-17:17) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
   Fix 0: "Disable catchIfTagToCatchTag for this line"
   Fix 1: "Disable catchIfTagToCatchTag for entire file"
   Fix 2: "Replace with Effect.catchTag"
 
-[D2] (25:3-25:15) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+[D2] (26:3-26:15) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
   Fix 0: "Disable catchIfTagToCatchTag for this line"
   Fix 1: "Disable catchIfTagToCatchTag for entire file"
   Fix 2: "Replace with Effect.catchTag"
@@ -21,6 +21,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.catchTag" ===
 
 --- file:///.src/catchIfTagToCatchTag.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics catchIfTagToCatchTag:suggestion
 import { Effect } from "effect"
@@ -55,6 +56,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.catchTag" ===
 
 --- file:///.src/catchIfTagToCatchTag.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics catchIfTagToCatchTag:suggestion
 import { Effect } from "effect"

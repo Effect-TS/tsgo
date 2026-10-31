@@ -38,6 +38,7 @@ var UnknownInEffectCatch = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds Effect.try/tryPromise/tryMap calls to check their catch callback
 			n.ForEachChild(walk)
 			return false
 		}

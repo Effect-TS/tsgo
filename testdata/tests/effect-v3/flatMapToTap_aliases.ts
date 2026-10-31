@@ -1,3 +1,4 @@
+// @effect-v3
 import type { Effect } from "effect"
 import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
 import * as Library from "effect"

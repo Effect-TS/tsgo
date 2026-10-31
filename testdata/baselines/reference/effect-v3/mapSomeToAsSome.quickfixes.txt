@@ -1,41 +1,41 @@
 === Quick Fix Inventory ===
 
-[D1] (15:61-15:70) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D1] (16:61-16:70) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D2] (19:3-19:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D2] (20:3-20:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D3] (24:3-24:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D3] (25:3-25:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D4] (28:39-28:49) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D4] (29:39-29:49) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D5] (33:3-33:9) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D5] (34:3-34:9) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D6] (38:3-38:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D6] (39:3-39:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D7] (83:3-83:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D7] (84:3-84:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D8] (90:3-90:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D8] (91:3-91:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
@@ -51,6 +51,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,
@@ -155,6 +156,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,
@@ -259,6 +261,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,
@@ -363,6 +366,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,
@@ -467,6 +471,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,
@@ -571,6 +576,7 @@ skipped by default
 === [D6] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,
@@ -675,6 +681,7 @@ skipped by default
 === [D7] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,
@@ -777,6 +784,7 @@ skipped by default
 === [D8] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
+// @effect-v3
 import {
   Effect,
   Effect as Fx,

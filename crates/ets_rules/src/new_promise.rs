@@ -6,7 +6,7 @@ use ets_shim::P;
 use ets_shim::ast::{Diagnostic, Kind, Node, Symbol, SymbolFlags};
 use ets_shim::diagnostics as tsdiag;
 
-// go: internal/rules/new_promise.go:11 NewPromise ad533d5e220de3b7
+// go: internal/rules/new_promise.go:11 NewPromise 6579e055f5c29c51
 pub static NEW_PROMISE: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "newPromise",

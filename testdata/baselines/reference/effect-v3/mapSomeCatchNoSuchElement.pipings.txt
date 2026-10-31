@@ -1,7 +1,7 @@
 ==== /.src/mapSomeCatchNoSuchElement.ts (11 flows) ====
 
 === Piping Flow ===
-Location: 9:24 - 12:2
+Location: 10:24 - 13:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementException", () => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -19,7 +19,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<string> | import("/node_modules/effect/dist/dts/Option").Option<never>, never, never>
 
 === Piping Flow ===
-Location: 13:25 - 16:2
+Location: 14:25 - 17:2
 Node: lookup.pipe(\n  Effect.map(Option.some),\n  Effect.catchTag("NoSuchElementException", () => Effect.succeed(Option.none()))\n)
 Node Kind: KindCallExpression
 
@@ -37,7 +37,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<string> | import("/node_modules/effect/dist/dts/Option").Option<never>, never, never>
 
 === Piping Flow ===
-Location: 15:50 - 15:80
+Location: 16:50 - 16:80
 Node: Effect.succeed(Option.none())
 Node Kind: KindCallExpression
 
@@ -51,7 +51,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 19:25 - 22:2
+Location: 20:25 - 23:2
 Node: tagged.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -69,7 +69,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<string> | import("/node_modules/effect/dist/dts/Option").Option<never>, never, never>
 
 === Piping Flow ===
-Location: 25:30 - 28:2
+Location: 26:30 - 29:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementException", (): Effect.Effect<Option.Option<string | number>> => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -87,7 +87,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<string> | import("/node_modules/effect/dist/dts/Option").Option<string | number>, never, never>
 
 === Piping Flow ===
-Location: 29:29 - 32:2
+Location: 30:29 - 33:2
 Node: lookup.pipe(\n  Effect.map((value): Option.Option<string | number> => Option.some(value)),\n  Effect.catchTag("NoSuchElementException", () => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -105,7 +105,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<never> | import("/node_modules/effect/dist/dts/Option").Option<string | number>, never, never>
 
 === Piping Flow ===
-Location: 30:56 - 30:75
+Location: 31:56 - 31:75
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -119,7 +119,7 @@ Transformations (1):
       outType: Option<string>
 
 === Piping Flow ===
-Location: 35:26 - 38:2
+Location: 36:26 - 39:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementException", (): Effect.Effect<Option.Option<any>> => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -137,7 +137,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<any> | import("/node_modules/effect/dist/dts/Option").Option<string>, never, never>
 
 === Piping Flow ===
-Location: 39:25 - 42:2
+Location: 40:25 - 43:2
 Node: lookup.pipe(\n  Effect.map((value): Option.Option<any> => Option.some(value)),\n  Effect.catchTag("NoSuchElementException", () => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<any> | import("/node_modules/effect/dist/dts/Option").Option<never>, never, never>
 
 === Piping Flow ===
-Location: 40:44 - 40:63
+Location: 41:44 - 41:63
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: Option<string>
 
 === Piping Flow ===
-Location: 43:24 - 46:2
+Location: 44:24 - 47:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementException", (): Effect.Effect<Option.Option<never>, any> => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 

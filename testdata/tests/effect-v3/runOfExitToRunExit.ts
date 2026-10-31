@@ -1,3 +1,4 @@
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 declare const program: Effect.Effect<number, Error>

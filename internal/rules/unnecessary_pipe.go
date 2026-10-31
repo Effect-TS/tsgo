@@ -62,6 +62,7 @@ func AnalyzeUnnecessaryPipe(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 			}
 		}
 
+		//ets:ast-walk finds empty pipe()/.pipe() calls, which add no flow step
 		n.ForEachChild(walk)
 		return false
 	}

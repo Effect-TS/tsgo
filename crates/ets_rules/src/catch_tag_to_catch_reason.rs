@@ -357,7 +357,7 @@ pub(crate) fn catch_tag_re_fail_parameter(
     None
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:319 validateCatchTagParameterUses 07dc90c3f048afdc
+// go: internal/rules/catch_tag_to_catch_reason.go:319 validateCatchTagParameterUses 84d1c31cf7f6c690
 //
 // Rust: Go's `(uses, valid)` result is `Some(uses)` when valid.
 pub(crate) fn validate_catch_tag_parameter_uses(
@@ -415,7 +415,7 @@ pub(crate) fn validate_catch_tag_parameter_uses(
     if valid { Some(branch_uses) } else { None }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:361 catchReasonRecoveryBranchIndex f8e06d3875c7560a
+// go: internal/rules/catch_tag_to_catch_reason.go:362 catchReasonRecoveryBranchIndex f8e06d3875c7560a
 pub(crate) fn catch_reason_recovery_branch_index(
     node: P<Node>,
     branches: &[CatchTagToCatchReasonBranch],
@@ -431,7 +431,7 @@ pub(crate) fn catch_reason_recovery_branch_index(
     -1
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:371 uniqueCatchReasonParameterName ee0886775d3e2d0a
+// go: internal/rules/catch_tag_to_catch_reason.go:372 uniqueCatchReasonParameterName ee0886775d3e2d0a
 pub(crate) fn unique_catch_reason_parameter_name(
     tp: &mut TypeParser<'_>,
     location: P<Node>,
@@ -454,12 +454,12 @@ pub(crate) fn unique_catch_reason_parameter_name(
     }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:387 isEffectExpression b7a91be637846585
+// go: internal/rules/catch_tag_to_catch_reason.go:388 isEffectExpression b7a91be637846585
 pub(crate) fn is_effect_expression(tp: &mut TypeParser<'_>, expression: Option<P<Node>>) -> bool {
     tp.effect_type_at_location(expression).is_some()
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:391 catchTagsPropertyName d37709e4bd52b4db
+// go: internal/rules/catch_tag_to_catch_reason.go:392 catchTagsPropertyName d37709e4bd52b4db
 pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> {
     let name = name?;
     match name.kind() {
@@ -469,7 +469,7 @@ pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> 
     }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:405 sameCatchReasonSymbol 8011d80abd7bf5f0
+// go: internal/rules/catch_tag_to_catch_reason.go:406 sameCatchReasonSymbol 8011d80abd7bf5f0
 pub(crate) fn same_catch_reason_symbol(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapSomeCatchNoSuchElement:warning
 import { Cause, Effect, Option } from "effect"

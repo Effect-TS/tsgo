@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalDateInEffect.ts(6,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
-/.src/globalDateInEffect.ts(12,15): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
-/.src/globalDateInEffect.ts(18,16): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
-/.src/globalDateInEffect.ts(25,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(7,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(13,15): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(19,16): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(26,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
 
 
 ==== /.src/globalDateInEffect.ts (4 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalDateInEffect:warning
     import { Effect } from "effect"
     
