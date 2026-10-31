@@ -647,6 +647,14 @@
         "category": "Suggestion",
         "code": 377163
     },
+    "Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)": {
+        "category": "Suggestion",
+        "code": 377167
+    },
+    "Effect.{0} is called without a `catch` handler, so failures surface as the generic `{1}`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)": {
+        "category": "Warning",
+        "code": 377169
+    },
     "This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)": {
         "category": "Suggestion",
         "code": 377172

@@ -49,7 +49,7 @@ pub struct UseSpanUnusedSpanToWithSpanMatch {
     pub body: Option<P<Node>>,
 }
 
-// go: internal/rules/use_span_unused_span_to_with_span.go:49 AnalyzeUseSpanUnusedSpanToWithSpan bb1c56b6a3cc6de2
+// go: internal/rules/use_span_unused_span_to_with_span.go:49 AnalyzeUseSpanUnusedSpanToWithSpan 1c700c4ae0767a44
 //
 // Rust: Go's checker argument is unused and dropped.
 pub fn analyze_use_span_unused_span_to_with_span(
@@ -76,7 +76,7 @@ pub fn analyze_use_span_unused_span_to_with_span(
     matches
 }
 
-// go: internal/rules/use_span_unused_span_to_with_span.go:65 analyzeUseSpanCall 7a0df952cef35297
+// go: internal/rules/use_span_unused_span_to_with_span.go:66 analyzeUseSpanCall 7a0df952cef35297
 //
 // Rust: tsrs's call expression and arguments are never nil, so Go's nil checks drop.
 pub(crate) fn analyze_use_span_call(
@@ -152,7 +152,7 @@ pub(crate) fn analyze_use_span_call(
     Some(m)
 }
 
-// go: internal/rules/use_span_unused_span_to_with_span.go:133 useSpanRewriteParts c0288e5c8cb88b1b
+// go: internal/rules/use_span_unused_span_to_with_span.go:134 useSpanRewriteParts c0288e5c8cb88b1b
 // useSpanRewriteParts returns the Effect module receiver and the callback's
 // returned expression when the call can be rewritten to Effect.withSpan, or nil
 // for both when moving the expression out of the callback could change what
@@ -190,7 +190,7 @@ pub(crate) fn use_span_rewrite_parts(
     (Some(receiver), Some(body))
 }
 
-// go: internal/rules/use_span_unused_span_to_with_span.go:158 readsArguments c9f88dd3103cf22a
+// go: internal/rules/use_span_unused_span_to_with_span.go:159 readsArguments 42e45ebfcbcd475a
 // readsArguments reports whether body reads an `arguments` object outside
 // nested functions that bind their own: the callback's own for a function
 // expression, the enclosing function's for an arrow function.

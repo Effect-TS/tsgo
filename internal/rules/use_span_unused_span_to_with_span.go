@@ -55,6 +55,7 @@ func AnalyzeUseSpanUnusedSpanToWithSpan(tp *typeparser.TypeParser, _ *checker.Ch
 				matches = append(matches, match)
 			}
 		}
+		//ets:ast-walk finds Effect.useSpan calls, which are overloaded and not dual, so they never become flow steps
 		node.ForEachChild(walk)
 		return false
 	}
@@ -180,6 +181,7 @@ func readsArguments(body *ast.Node) bool {
 			}
 			return false
 		}
+		//ets:ast-walk finds `arguments` identifier reads, which are not calls
 		return node.ForEachChild(visit)
 	}
 	return visit(body)

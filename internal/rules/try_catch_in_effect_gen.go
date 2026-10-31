@@ -36,6 +36,7 @@ var TryCatchInEffectGen = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds try/catch statements, which are not flow steps
 			n.ForEachChild(walk)
 			return false
 		}

@@ -11,6 +11,7 @@
     "effecttsgo/effect-gen-uses-adapter": "warn",
     "effecttsgo/effect-in-failure": "warn",
     "effecttsgo/effect-in-void-success": "warn",
+    "effecttsgo/effect-try-without-catch": "warn",
     "effecttsgo/global-error-in-effect-catch": "warn",
     "effecttsgo/global-error-in-effect-failure": "warn",
     "effecttsgo/layer-merge-all-with-dependencies": "warn",

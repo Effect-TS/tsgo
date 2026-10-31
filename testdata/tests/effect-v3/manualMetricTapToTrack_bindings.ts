@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics manualMetricTapToTrack:warning
 // Effect v3 has no Effect.trackSuccesses / trackErrors / trackDefects, so the rule never fires here.

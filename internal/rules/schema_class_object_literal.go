@@ -72,6 +72,7 @@ var SchemaClassObjectLiteral = rule.Rule{
 					))
 				}
 			}
+			//ets:ast-walk finds object literals contextually typed as a Schema class instance
 			node.ForEachChild(walk)
 			return false
 		}

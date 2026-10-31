@@ -64,7 +64,7 @@ pub(crate) static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
     ])
 });
 
-// go: internal/rules/prefer_schema_type_property.go:52 AnalyzePreferSchemaTypeProperty e47a2083e298fe9c
+// go: internal/rules/prefer_schema_type_property.go:52 AnalyzePreferSchemaTypeProperty e7c41852f6919645
 pub fn analyze_prefer_schema_type_property(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -92,7 +92,7 @@ pub fn analyze_prefer_schema_type_property(
     matches
 }
 
-// go: internal/rules/prefer_schema_type_property.go:72 analyzePreferSchemaTypePropertyNode 1a8eefa661bba717
+// go: internal/rules/prefer_schema_type_property.go:73 analyzePreferSchemaTypePropertyNode 1a8eefa661bba717
 pub(crate) fn analyze_prefer_schema_type_property_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

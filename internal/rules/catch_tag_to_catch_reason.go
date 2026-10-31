@@ -351,6 +351,7 @@ func validateCatchTagParameterUses(
 			valid = false
 			return true
 		}
+		//ets:ast-walk scans the handler body for references to the caught reason parameter
 		node.ForEachChild(walkBody)
 		return false
 	}

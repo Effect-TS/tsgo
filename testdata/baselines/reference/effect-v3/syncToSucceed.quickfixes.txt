@@ -1,51 +1,51 @@
 === Quick Fix Inventory ===
 
-[D1] (8:30-8:41) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D1] (9:30-9:41) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D2] (9:30-9:41) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D2] (10:30-10:41) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D3] (10:31-10:42) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D3] (11:31-11:42) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D4] (11:28-11:39) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D4] (12:28-12:39) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D5] (12:33-12:44) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D5] (13:33-13:44) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D6] (13:32-13:43) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D6] (14:32-14:43) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D7] (16:32-16:43) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D7] (17:32-17:43) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D8] (17:26-17:37) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D8] (18:26-18:37) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D9] (22:30-22:39) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D9] (23:30-23:39) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D10] (46:14-46:25) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D10] (47:14-47:25) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
@@ -61,6 +61,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -124,6 +125,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -187,6 +189,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -250,6 +253,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -313,6 +317,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -376,6 +381,7 @@ skipped by default
 === [D6] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -439,6 +445,7 @@ skipped by default
 === [D7] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -502,6 +509,7 @@ skipped by default
 === [D8] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -563,6 +571,7 @@ skipped by default
 === [D9] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
@@ -626,6 +635,7 @@ skipped by default
 === [D10] Fix 2: "Replace with Effect.succeed" ===
 
 --- file:///.src/syncToSucceed.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"
