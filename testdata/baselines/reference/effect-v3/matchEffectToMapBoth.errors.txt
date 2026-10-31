@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/matchEffectToMapBoth.ts(8,42): suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
-/.src/matchEffectToMapBoth.ts(13,37): suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+/.src/matchEffectToMapBoth.ts(9,42): suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+/.src/matchEffectToMapBoth.ts(14,37): suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
 
 
 ==== /.src/matchEffectToMapBoth.ts (2 errors) ====
+    // @effect-v3
     // @effect-diagnostics matchEffectToMapBoth:suggestion
     // @effect-diagnostics-in-tsgo false
     import { Effect } from "effect"

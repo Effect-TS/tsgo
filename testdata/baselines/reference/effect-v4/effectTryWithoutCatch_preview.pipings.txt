@@ -1,0 +1,29 @@
+==== /.src/effectTryWithoutCatch_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:22 - 6:57
+Node: Effect.try(() => JSON.parse(text))
+Node Kind: KindCallExpression
+
+Subject: () => JSON.parse(text)
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, UnknownError, never>
+
+=== Piping Flow ===
+Location: 6:39 - 6:56
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any

@@ -77,6 +77,7 @@ func AnalyzeYieldInCallArgument(tp *typeparser.TypeParser, sf *ast.SourceFile) [
 			}
 		}
 
+		//ets:ast-walk finds yield* expressions, which never become flow steps
 		node.ForEachChild(walk)
 		return false
 	}

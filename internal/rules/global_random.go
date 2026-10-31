@@ -57,6 +57,7 @@ func runGlobalRandom(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			}
 		}
 
+		//ets:ast-walk finds zero-argument Math.random() calls
 		node.ForEachChild(walk)
 		return false
 	}

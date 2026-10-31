@@ -2,6 +2,7 @@
 { "name": "@effect/platform-node", "version": "0.94.0", "types": "index.d.ts" }
 
 // @filename: /node_modules/@effect/platform-node/index.d.ts
+// @effect-v3
 export * as NodeRuntime from "./NodeRuntime.js"
 
 // @filename: /node_modules/@effect/platform-node/NodeRuntime.d.ts

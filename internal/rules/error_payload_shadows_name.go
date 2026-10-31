@@ -61,6 +61,7 @@ func AnalyzeErrorPayloadShadowsName(tp *typeparser.TypeParser, sf *ast.SourceFil
 				}
 			}
 		}
+		//ets:ast-walk finds error class declarations and their payload fields, which are not flow steps
 		node.ForEachChild(walk)
 		return false
 	}

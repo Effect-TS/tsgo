@@ -11,7 +11,7 @@ use ets_typeparser::{EffectFnCallResult, TypeParser};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::PARAMETER_0_IMPLICITLY_HAS_TYPE_ANY_IN_EFFECT_FN_EFFECT_FN_UNTRACED_OR_EFFECT_FN_UNTRACED_EAGER_NO_PARAMETER_TYPE_IS_AVAILABLE_FROM_AN_EXPLICIT_ANNOTATION_OR_CONTEXTUAL_FUNCTION_TYPE_EFFECT_EFFECT_FN_IMPLICIT_ANY;
 
-// go: internal/rules/effect_fn_implicit_any.go:16 EffectFnImplicitAny 9d347675f9888d18
+// go: internal/rules/effect_fn_implicit_any.go:16 EffectFnImplicitAny ecefbc7fe16182be
 // EffectFnImplicitAny mirrors TypeScript's noImplicitAny behavior for
 // Effect.fn-family callbacks, which are otherwise
 // contextually typed by the helper's internal any[] fallback.
@@ -56,7 +56,7 @@ pub static EFFECT_FN_IMPLICIT_ANY: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_fn_implicit_any.go:55 checkEffectFnImplicitAny 184400d9d3a65c50
+// go: internal/rules/effect_fn_implicit_any.go:56 checkEffectFnImplicitAny 184400d9d3a65c50
 pub(crate) fn check_effect_fn_implicit_any(
     ctx: &mut Context<'_, '_>,
     result: Option<&EffectFnCallResult>,
@@ -73,7 +73,7 @@ pub(crate) fn check_effect_fn_implicit_any(
     check_effect_fn_implicit_any_parameters(ctx, result.call(), parameters.nodes())
 }
 
-// go: internal/rules/effect_fn_implicit_any.go:63 checkEffectFnImplicitAnyBody 190fdd908947f763
+// go: internal/rules/effect_fn_implicit_any.go:64 checkEffectFnImplicitAnyBody 190fdd908947f763
 pub(crate) fn check_effect_fn_implicit_any_body(
     ctx: &mut Context<'_, '_>,
     call_node: P<Node>,
@@ -100,7 +100,7 @@ pub(crate) fn check_effect_fn_implicit_any_body(
     }
 }
 
-// go: internal/rules/effect_fn_implicit_any.go:86 checkEffectFnImplicitAnyParameters b4f5df1d83e70309
+// go: internal/rules/effect_fn_implicit_any.go:87 checkEffectFnImplicitAnyParameters b4f5df1d83e70309
 pub(crate) fn check_effect_fn_implicit_any_parameters(
     ctx: &mut Context<'_, '_>,
     call_node: P<Node>,
@@ -134,7 +134,7 @@ pub(crate) fn check_effect_fn_implicit_any_parameters(
     diags
 }
 
-// go: internal/rules/effect_fn_implicit_any.go:114 hasOuterContextualFunctionType 70112d73265631e9
+// go: internal/rules/effect_fn_implicit_any.go:115 hasOuterContextualFunctionType 70112d73265631e9
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn has_outer_contextual_function_type(

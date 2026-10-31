@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics classSelfMismatch:warning
 import * as Effect from "effect/Effect"

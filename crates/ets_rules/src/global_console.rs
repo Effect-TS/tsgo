@@ -47,7 +47,7 @@ pub static GLOBAL_CONSOLE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_console.go:45 runGlobalConsole ee3016e8dcddc76c
+// go: internal/rules/global_console.go:45 runGlobalConsole 813c191c677a1412
 pub(crate) fn run_global_console(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

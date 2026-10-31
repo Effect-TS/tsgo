@@ -68,7 +68,7 @@ pub struct PreferUnsafeConstructorMatch {
     pub unsafe_callee_text: String, // The callee text with the name replaced (e.g. Scope.makeUnsafe)
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:56 AnalyzePreferUnsafeConstructor b6fa777b7cb1b465
+// go: internal/rules/prefer_unsafe_constructor.go:56 AnalyzePreferUnsafeConstructor f27e62efd838f5c2
 // AnalyzePreferUnsafeConstructor finds Effect.runSync calls whose single argument is a
 // direct call to an effect-package constructor with a matching `<name>Unsafe` sibling export.
 //
@@ -100,7 +100,7 @@ pub fn analyze_prefer_unsafe_constructor(
     matches
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:81 analyzePreferUnsafeConstructorNode dc0d973c6645b1ac
+// go: internal/rules/prefer_unsafe_constructor.go:82 analyzePreferUnsafeConstructorNode dc0d973c6645b1ac
 // analyzePreferUnsafeConstructorNode checks a single call expression for the
 // Effect.runSync(<effect constructor>()) pattern with a matching *Unsafe sibling.
 //
@@ -217,7 +217,7 @@ pub(crate) fn analyze_prefer_unsafe_constructor_node(
     None
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:200 unsafeSiblingMatchesCall 0b166b980c642a72
+// go: internal/rules/prefer_unsafe_constructor.go:201 unsafeSiblingMatchesCall 0b166b980c642a72
 // unsafeSiblingMatchesCall reports whether some call signature of the sibling symbol is
 // applicable to the constructor call's exact argument list and produces a value usable
 // where the runSync result flows, so the rewrite stays well typed.
@@ -271,7 +271,7 @@ pub(crate) fn unsafe_sibling_matches_call(
     false
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:244 signatureAcceptsArguments 8eea3e87e37e40b2
+// go: internal/rules/prefer_unsafe_constructor.go:245 signatureAcceptsArguments 8eea3e87e37e40b2
 // signatureAcceptsArguments reports whether the signature is applicable to the exact
 // argument list of the constructor call: compatible arity and every argument type
 // accepted by its parameter (falling back to the constraint for type parameters).
@@ -306,7 +306,7 @@ pub(crate) fn signature_accepts_arguments(
     true
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:271 typeAcceptsArgumentValue 9f45878e381de9e5
+// go: internal/rules/prefer_unsafe_constructor.go:272 typeAcceptsArgumentValue 9f45878e381de9e5
 // typeAcceptsArgumentValue reports whether a value of argType can be passed where
 // paramType is expected, treating unconstrained type parameters as accepting anything.
 pub(crate) fn type_accepts_argument_value(
@@ -322,7 +322,7 @@ pub(crate) fn type_accepts_argument_value(
     c.is_type_assignable_to(arg_type, param_type)
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:282 returnsMutuallyAssignable 8a9304aa907e79cd
+// go: internal/rules/prefer_unsafe_constructor.go:283 returnsMutuallyAssignable 8a9304aa907e79cd
 // returnsMutuallyAssignable reports whether a concrete sibling return type and the
 // Effect success type denote the same value type: assignable in both directions, so
 // the rewrite cannot narrow or widen the expression's inferred type.
@@ -337,7 +337,7 @@ pub(crate) fn returns_mutually_assignable(
     c.is_type_assignable_to(ret, success_type) && c.is_type_assignable_to(success_type, ret)
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:291 resolveAliasedSymbol c41f366fc52c3d7c
+// go: internal/rules/prefer_unsafe_constructor.go:292 resolveAliasedSymbol c41f366fc52c3d7c
 // resolveAliasedSymbol follows import/export aliases to the original symbol.
 pub(crate) fn resolve_aliased_symbol(c: &mut Checker, sym: Option<P<Symbol>>) -> Option<P<Symbol>> {
     let mut sym = sym;

@@ -1,7 +1,7 @@
 ==== /.src/globalFetchInEffect_preview.ts (3 flows) ====
 
 === Piping Flow ===
-Location: 5:23 - 7:3
+Location: 6:23 - 8:3
 Node: Effect.gen(function*() {\n  return yield* Effect.promise(() => fetch("https://example.com"))\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<Response, never, never>
 
 === Piping Flow ===
-Location: 6:16 - 6:67
+Location: 7:16 - 7:67
 Node: Effect.promise(() => fetch("https://example.com"))
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<Response, never, never>
 
 === Piping Flow ===
-Location: 6:37 - 6:66
+Location: 7:37 - 7:66
 Node: fetch("https://example.com")
 Node Kind: KindCallExpression
 

@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/asyncFunction.ts(5,23): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
-/.src/asyncFunction.ts(11,27): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
-/.src/asyncFunction.ts(18,9): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
-/.src/asyncFunction.ts(26,25): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction.ts(6,23): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction.ts(12,27): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction.ts(19,9): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction.ts(27,25): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
 
 
 ==== /.src/asyncFunction.ts (4 errors) ====
+    // @effect-v3
     // @effect-diagnostics asyncFunction:warning
     import { Effect } from "effect"
     

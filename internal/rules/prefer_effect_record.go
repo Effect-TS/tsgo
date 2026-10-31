@@ -101,6 +101,7 @@ func runPreferEffectRecord(ctx *rule.Context) []*ast.Diagnostic {
 				}
 			}
 		}
+		//ets:ast-walk finds native Object method property and element accesses, called or not
 		node.ForEachChild(walk)
 		return false
 	}

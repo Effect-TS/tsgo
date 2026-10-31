@@ -57,7 +57,7 @@ pub struct EffectFnOpportunityMatch {
     pub result: Arc<EffectFnOpportunityResult>,
 }
 
-// go: internal/rules/effect_fn_opportunity.go:51 AnalyzeEffectFnOpportunity 9ecdc4c24df36462
+// go: internal/rules/effect_fn_opportunity.go:51 AnalyzeEffectFnOpportunity a0be695cc2d3c735
 // AnalyzeEffectFnOpportunity finds all functions that can be converted to Effect.fn
 // in the given source file.
 //
@@ -95,7 +95,7 @@ pub fn analyze_effect_fn_opportunity(
     matches
 }
 
-// go: internal/rules/effect_fn_opportunity.go:85 firstAvailableFixName 48fb76ba60435f7a
+// go: internal/rules/effect_fn_opportunity.go:86 firstAvailableFixName 48fb76ba60435f7a
 // firstAvailableFixName determines which fix variant would be first (highest priority)
 // for the given match, matching the reference implementation's fix ordering.
 // Returns empty string when no fix variant passes the config filter.
@@ -130,7 +130,7 @@ pub(crate) fn first_available_fix_name(
     ""
 }
 
-// go: internal/rules/effect_fn_opportunity.go:111 buildExpectedSignature 9da6522720d35809
+// go: internal/rules/effect_fn_opportunity.go:112 buildExpectedSignature 9da6522720d35809
 // buildExpectedSignature constructs the human-readable expected signature string
 // for the diagnostic message. The format matches the reference implementation:
 // it shows how the function would look after conversion with the highest-priority fix.
@@ -229,7 +229,7 @@ pub(crate) fn build_expected_signature(
     }
 }
 
-// go: internal/rules/effect_fn_opportunity.go:176 getTypeParamString 8438e67d3a1e9574
+// go: internal/rules/effect_fn_opportunity.go:177 getTypeParamString 8438e67d3a1e9574
 // getTypeParamString extracts type parameter names from a function node and returns
 // a string like "<T, U>" or "" if there are no type parameters.
 pub(crate) fn get_type_param_string(fn_node: P<Node>) -> String {
@@ -257,7 +257,7 @@ pub(crate) fn get_type_param_string(fn_node: P<Node>) -> String {
     "<".to_string() + &names.join(", ") + ">"
 }
 
-// go: internal/rules/effect_fn_opportunity.go:202 getParamNamesString 82837551850b542d
+// go: internal/rules/effect_fn_opportunity.go:203 getParamNamesString 82837551850b542d
 // getParamNamesString extracts parameter names from a function node and returns
 // a string like "x, y" or "" if there are no parameters.
 // For destructuring patterns, uses "_" as a placeholder.

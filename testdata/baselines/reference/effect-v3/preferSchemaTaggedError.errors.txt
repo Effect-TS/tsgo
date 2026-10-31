@@ -1,24 +1,25 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/preferSchemaTaggedError.ts(8,7): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(9,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(9,7): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
 /.src/preferSchemaTaggedError.ts(10,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
 /.src/preferSchemaTaggedError.ts(11,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
 /.src/preferSchemaTaggedError.ts(12,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
 /.src/preferSchemaTaggedError.ts(13,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(16,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(19,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(21,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(23,11): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(29,9): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(34,16): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(38,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(14,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(17,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(20,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(22,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(24,11): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(30,9): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(35,16): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
 /.src/preferSchemaTaggedError.ts(39,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
-/.src/preferSchemaTaggedError.ts(78,30): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(40,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(79,30): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
 
 
 ==== /.src/preferSchemaTaggedError.ts (15 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics preferSchemaTaggedError:warning
     import { Data, Data as AliasedData, Schema } from "effect"

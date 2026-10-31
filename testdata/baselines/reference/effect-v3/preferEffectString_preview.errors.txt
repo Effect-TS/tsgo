@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/preferEffectString_preview.ts(6,29): warning TS377150: Consider effect/String.indexOf instead of native String.indexOf. Returns Option<number>, with None replacing -1; there is no position parameter. effect(preferEffectString)
+/.src/preferEffectString_preview.ts(7,29): warning TS377150: Consider effect/String.indexOf instead of native String.indexOf. Returns Option<number>, with None replacing -1; there is no position parameter. effect(preferEffectString)
 
 
 ==== /.src/preferEffectString_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectString:warning
     import * as Str from "effect/String"

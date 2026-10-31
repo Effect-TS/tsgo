@@ -112,6 +112,12 @@ func parseRefactorComment(content string) refactorCommentResult {
 // RunEffectRefactorTest executes a single Effect refactor baseline test case.
 // It creates a fourslash test instance, collects refactor inventory and application
 // results for the selection specified by a "// refactor:" comment, and generates a *.refactors.txt baseline.
+//
+// TODO: version only picks the baseline folder. The fourslash harness takes the
+// Effect version from a `// @effect-v3` marker in the fixture
+// (etstesthooks/init.go), so a v3 fixture without one runs against Effect v4.
+// `repoctl check` requires the marker on every testdata/tests/effect-v3 fixture
+// until the runner passes version to the harness itself.
 func RunEffectRefactorTest(t *testing.T, version bundledeffect.EffectVersion, testFile string) {
 	AcquireProgram()
 	defer ReleaseProgram()

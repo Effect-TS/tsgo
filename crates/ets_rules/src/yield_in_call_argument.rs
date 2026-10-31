@@ -48,7 +48,7 @@ pub struct YieldInCallArgumentMatch {
     pub statement: Option<P<Node>>,
 }
 
-// go: internal/rules/yield_in_call_argument.go:53 AnalyzeYieldInCallArgument 9d4dc0414a476fc1
+// go: internal/rules/yield_in_call_argument.go:53 AnalyzeYieldInCallArgument 9e258d2ba0b0a880
 pub fn analyze_yield_in_call_argument(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -95,7 +95,7 @@ pub fn analyze_yield_in_call_argument(
     matches
 }
 
-// go: internal/rules/yield_in_call_argument.go:90 yieldInCallArgumentIsArgument fe135d442815a810
+// go: internal/rules/yield_in_call_argument.go:91 yieldInCallArgumentIsArgument fe135d442815a810
 // yieldInCallArgumentIsArgument reports whether node is one of the arguments of
 // its parent call or new expression.
 pub(crate) fn yield_in_call_argument_is_argument(node: P<Node>) -> bool {
@@ -108,7 +108,7 @@ pub(crate) fn yield_in_call_argument_is_argument(node: P<Node>) -> bool {
     parent.arguments().contains(&node)
 }
 
-// go: internal/rules/yield_in_call_argument.go:102 yieldInCallArgumentHoistAnchor 2da1e74334dbee6a
+// go: internal/rules/yield_in_call_argument.go:103 yieldInCallArgumentHoistAnchor 2da1e74334dbee6a
 // yieldInCallArgumentHoistAnchor returns the statement before which the yield*
 // argument can be hoisted without changing what runs before the effect, or nil.
 // It climbs from the argument through an allowlist of parent kinds; everything
@@ -217,7 +217,7 @@ pub(crate) fn yield_in_call_argument_hoist_anchor(arg: P<Node>) -> Option<P<Node
     None
 }
 
-// go: internal/rules/yield_in_call_argument.go:179 yieldInCallArgumentFinalizeAnchor 6655bd2c7ae49357
+// go: internal/rules/yield_in_call_argument.go:180 yieldInCallArgumentFinalizeAnchor 6655bd2c7ae49357
 // yieldInCallArgumentFinalizeAnchor accepts a statement only when it sits in a
 // statement list, so a const can be inserted right before it.
 pub(crate) fn yield_in_call_argument_finalize_anchor(statement: P<Node>) -> Option<P<Node>> {
@@ -228,7 +228,7 @@ pub(crate) fn yield_in_call_argument_finalize_anchor(statement: P<Node>) -> Opti
     }
 }
 
-// go: internal/rules/yield_in_call_argument.go:192 yieldInCallArgumentIsSideEffectFree 7e61e7d4974416e4
+// go: internal/rules/yield_in_call_argument.go:193 yieldInCallArgumentIsSideEffectFree 7e61e7d4974416e4
 // yieldInCallArgumentIsSideEffectFree reports whether evaluating node cannot run
 // code: identifiers, literals and non-optional property accesses on them.
 pub(crate) fn yield_in_call_argument_is_side_effect_free(node: P<Node>) -> bool {

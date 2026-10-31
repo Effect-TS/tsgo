@@ -52,6 +52,7 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			return false
 		}
 		if node.Kind != ast.KindCallExpression && node.Kind != ast.KindNewExpression {
+			//ets:ast-walk finds new Date(...) expressions and zero-argument Date.now() calls
 			node.ForEachChild(walk)
 			return false
 		}
@@ -85,6 +86,7 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			}
 		}
 
+		//ets:ast-walk finds new Date(...) expressions and zero-argument Date.now() calls
 		node.ForEachChild(walk)
 		return false
 	}
