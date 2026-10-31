@@ -44,6 +44,7 @@ var All = []rule.Rule{
 	EffectInVoidSuccess,
 	EffectInFailure,
 	UnknownInEffectCatch,
+	EffectTryWithoutCatch,
 	GlobalErrorInEffectCatch,
 	GlobalErrorInEffectFailure,
 	AbortControllerInEffect,

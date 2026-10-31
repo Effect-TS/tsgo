@@ -1,0 +1,27 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectTryWithoutCatch_handover.ts(9,23): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+/.src/effectTryWithoutCatch_handover.ts(14,22): warning TS377021: The `catch` callback in `Effect.try` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
+
+
+==== /.src/effectTryWithoutCatch_handover.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectTryWithoutCatch:warning
+    // @effect-diagnostics unknownInEffectCatch:warning
+    import { Effect } from "effect"
+    
+    declare const text: string
+    
+    // MUST TRIGGER effectTryWithoutCatch: the short form
+    export const before = Effect.try(() => JSON.parse(text))
+                          ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
+    // MUST NOT TRIGGER effectTryWithoutCatch, MUST TRIGGER unknownInEffectCatch: the
+    // object form with a catch that returns unknown, so unknownInEffectCatch takes over
+    // and asks for a domain error
+    export const after = Effect.try({ try: () => JSON.parse(text), catch: (cause) => cause })
+                         ~~~~~~~~~~
+!!! warning TS377021: The `catch` callback in `Effect.try` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
+    

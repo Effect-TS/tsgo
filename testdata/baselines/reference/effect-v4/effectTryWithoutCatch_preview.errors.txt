@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectTryWithoutCatch_preview.ts(6,23): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+
+
+==== /.src/effectTryWithoutCatch_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectTryWithoutCatch:warning
+    import { Effect } from "effect"
+    
+    declare const text: string
+    export const parsed = Effect.try(() => JSON.parse(text))
+                          ~~~~~~~~~~
+!!! warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+    
