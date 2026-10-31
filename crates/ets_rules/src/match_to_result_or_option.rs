@@ -21,13 +21,13 @@ use crate::piping_flow::has_explicit_type_arguments;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_REIFIES_THE_OUTCOME_DIRECTLY_THESE_EFFECT_1_HANDLERS_ONLY_WRAP_THE_VALUE_AND_THE_ERROR_EFFECT_MATCH_TO_RESULT_OR_OPTION;
 
-// go: internal/rules/match_to_result_or_option.go:16 MatchToResultOrOption e7f779f802faae72
+// go: internal/rules/match_to_result_or_option.go:16 MatchToResultOrOption 6478a48b9400d941
 // MatchToResultOrOption suggests Effect.result, Effect.option or Effect.either
 // when match handlers, or adjacent map and catch steps, only reify the outcome.
 pub static MATCH_TO_RESULT_OR_OPTION: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "matchToResultOrOption",
     group: "style",
-    description: "Suggests Effect.result, Effect.option or Effect.either when match handlers only reify the outcome",
+    description: "Suggests Effect.result, Effect.option or Effect.either when match handlers, or a map step followed by a catch step, only reify the outcome",
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
@@ -261,20 +261,16 @@ pub(crate) fn match_handler_pair(node: P<Node>) -> (Option<P<Node>>, Option<P<No
     (on_failure, on_success)
 }
 
-// go: internal/rules/match_to_result_or_option.go:191 reifyingHandler c71c517e19290bb0
+// go: internal/rules/match_to_result_or_option.go:191 reifyingHandler f033bfe500ec0f36
 // reifyingHandler classifies a handler that wraps its argument into a
 // container: the constructor itself, a forwarder to it, or a function whose
 // body is exactly Option.none().
 pub(crate) fn reifying_handler(tp: &mut TypeParser<'_>, node: P<Node>) -> Option<ReifyingKind> {
-    let (target, type_arguments, parameter) = tp.unwrap_identity_forwarder(node);
+    let (target, type_arguments, _) = tp.unwrap_identity_forwarder(node);
     if type_arguments.is_some_and(|type_arguments| !type_arguments.nodes().is_empty()) {
         return None;
     }
     if let Some(kind) = reifying_constructor(tp, target) {
-        // Option.none takes no argument, so it is never forwarded one.
-        if parameter.is_some() && kind == REIFYING_OPTION_NONE {
-            return None;
-        }
         return Some(kind);
     }
     let lazy = ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::None);
@@ -287,11 +283,13 @@ pub(crate) fn reifying_handler(tp: &mut TypeParser<'_>, node: P<Node>) -> Option
     None
 }
 
-// go: internal/rules/match_to_result_or_option.go:214 succeedReifyingHandler 52fac41b8a354514
+// go: internal/rules/match_to_result_or_option.go:212 succeedReifyingHandler d4ee085f04f69fda
 // succeedReifyingHandler classifies a handler whose body lifts a reified
 // argument with Effect.succeed: Effect.succeed(Result.fail(e)) for its
 // parameter e, or Effect.succeed(Option.none()). Only direct calls count: a
-// pipe call in the body may run code through its receiver.
+// pipe or pipeable step may run code through its pipe callee or receiver
+// (getFunction().pipe(...), e.pipe(...)), and a step does not expose its
+// enclosing pipe call to check that callee.
 //
 // Rust: the step predicate records the constructor's kind in a `Cell` (Go assigns the captured variable).
 pub(crate) fn succeed_reifying_handler(
@@ -346,7 +344,7 @@ pub(crate) fn succeed_reifying_handler(
     matched.then_some(kind.get())
 }
 
-// go: internal/rules/match_to_result_or_option.go:246 isDirectReifyingCall 6723f2ca2f97d791
+// go: internal/rules/match_to_result_or_option.go:244 isDirectReifyingCall 6723f2ca2f97d791
 // isDirectReifyingCall reports whether a handler body step is a plain call
 // such as Effect.succeed(x), without explicit type arguments.
 pub(crate) fn is_direct_reifying_call(step: &PipingFlowTransformation) -> bool {
@@ -355,7 +353,7 @@ pub(crate) fn is_direct_reifying_call(step: &PipingFlowTransformation) -> bool {
         && !has_explicit_type_arguments(Some(step))
 }
 
-// go: internal/rules/match_to_result_or_option.go:255 isSideEffectFreeReference a064ce13f0404e35
+// go: internal/rules/match_to_result_or_option.go:253 isSideEffectFreeReference a064ce13f0404e35
 // isSideEffectFreeReference reports whether evaluating node runs no code, so
 // dropping the handler or step that holds it changes nothing: an identifier,
 // or a property read through module namespaces only. Other receivers may run
@@ -379,7 +377,7 @@ pub(crate) fn is_side_effect_free_reference(
     }
 }
 
-// go: internal/rules/match_to_result_or_option.go:271 isModuleNamespaceReference 42ac062380695846
+// go: internal/rules/match_to_result_or_option.go:269 isModuleNamespaceReference 42ac062380695846
 // isModuleNamespaceReference reports whether node is a side-effect-free
 // reference to a module namespace, such as an import of effect/Option.
 pub(crate) fn is_module_namespace_reference(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
@@ -395,7 +393,7 @@ pub(crate) fn is_module_namespace_reference(tp: &mut TypeParser<'_>, node: P<Nod
     symbol.is_some_and(|symbol| symbol.flags().intersects(SymbolFlags::ValueModule))
 }
 
-// go: internal/rules/match_to_result_or_option.go:284 reifyingConstructor b0b56e72bb0738bc
+// go: internal/rules/match_to_result_or_option.go:282 reifyingConstructor b0b56e72bb0738bc
 // reifyingConstructor classifies a side-effect-free reference to a
 // constructor that wraps a value or an error into a Result, Option or Either.
 //
@@ -426,7 +424,7 @@ pub(crate) fn reifying_constructor(
     }
 }
 
-// go: internal/rules/match_to_result_or_option.go:308 isReifyingNoneCall f5a83ca372d4bb4b
+// go: internal/rules/match_to_result_or_option.go:306 isReifyingNoneCall f5a83ca372d4bb4b
 // isReifyingNoneCall reports whether node is Option.none(), with or without
 // explicit type arguments.
 //
@@ -445,7 +443,7 @@ pub(crate) fn is_reifying_none_call(tp: &mut TypeParser<'_>, node: Option<P<Node
     reifying_constructor(tp, Some(call.expression())) == Some(REIFYING_OPTION_NONE)
 }
 
-// go: internal/rules/match_to_result_or_option.go:323 hasPlainParameters f3cfa0b864283089
+// go: internal/rules/match_to_result_or_option.go:321 hasPlainParameters 2d488e95f01f3bed
 // hasPlainParameters reports whether a handler declares at most one
 // parameter, bound to an identifier without a default or rest marker.
 pub(crate) fn has_plain_parameters(lazy: &ParsedLazyExpression) -> bool {
@@ -453,9 +451,6 @@ pub(crate) fn has_plain_parameters(lazy: &ParsedLazyExpression) -> bool {
         return false;
     }
     for (_, &parameter) in lazy.params().all() {
-        if parameter.kind() != Kind::Parameter {
-            return false;
-        }
         let declaration = parameter.as_parameter_declaration();
         if declaration.name().kind() != Kind::Identifier
             || declaration.dot_dot_dot_token().is_some()
@@ -467,7 +462,7 @@ pub(crate) fn has_plain_parameters(lazy: &ParsedLazyExpression) -> bool {
     true
 }
 
-// go: internal/rules/match_to_result_or_option.go:340 matchToResultCatchName 1f20dae9b1e52ad2
+// go: internal/rules/match_to_result_or_option.go:335 matchToResultCatchName 1f20dae9b1e52ad2
 //
 // Rust: Go's `(name, ok)` is `Some(name)` when ok.
 pub(crate) fn match_to_result_catch_name(
@@ -482,14 +477,12 @@ pub(crate) fn match_to_result_catch_name(
         .find(|&name| tp.is_node_reference_to_effect_module_api(step.callee(), name))
 }
 
-// go: internal/rules/match_to_result_or_option.go:352 hasSingleArgument 9647c560fd244a62
-//
-// Rust: a transformation's callee is never nil, so that check drops.
+// go: internal/rules/match_to_result_or_option.go:347 hasSingleArgument 451e241223308f8f
 pub(crate) fn has_single_argument(step: &PipingFlowTransformation) -> bool {
-    step.args().len() == 1 && step.args().at(0).kind() != Kind::SpreadElement
+    step.args().len() == 1
 }
 
-// go: internal/rules/match_to_result_or_option.go:361 matchToResultOrOptionFixable 43c8642d3e528dc7
+// go: internal/rules/match_to_result_or_option.go:356 matchToResultOrOptionFixable 550d1c0cc2902336
 // matchToResultOrOptionFixable reports whether the replaced steps can be
 // dropped: their callees run no code when evaluated, and no explicit type
 // argument depends on the old output type. The dropped handlers are always
@@ -503,9 +496,7 @@ pub(crate) fn match_to_result_or_option_fixable(
 ) -> bool {
     for i in start..=end {
         let step = flow.transformations().at(i);
-        if !is_side_effect_free_reference(tp, Some(step.callee()))
-            || step.kind() == TransformationKind::CallWithOptionals
-        {
+        if !is_side_effect_free_reference(tp, Some(step.callee())) {
             return false;
         }
     }
