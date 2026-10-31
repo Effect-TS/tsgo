@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THE_ADAPTER_OF_EFFECT_GEN_IS_NOT_REQUIRED_ANYMORE_IT_IS_NOW_JUST_AN_ALIAS_OF_PIPE_EFFECT_EFFECT_GEN_USES_ADAPTER;
 
-// go: internal/rules/effect_gen_uses_adapter.go:11 EffectGenUsesAdapter faa306c834d412c4
+// go: internal/rules/effect_gen_uses_adapter.go:11 EffectGenUsesAdapter 33f29c8d4520d956
 // EffectGenUsesAdapter warns when using the deprecated adapter parameter in Effect.gen.
 pub static EFFECT_GEN_USES_ADAPTER: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "effectGenUsesAdapter",
@@ -41,7 +41,7 @@ pub static EFFECT_GEN_USES_ADAPTER: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_gen_uses_adapter.go:43 checkEffectGenUsesAdapter 9cf27c302150ce68
+// go: internal/rules/effect_gen_uses_adapter.go:44 checkEffectGenUsesAdapter 9cf27c302150ce68
 pub(crate) fn check_effect_gen_uses_adapter(
     ctx: &mut Context<'_, '_>,
     n: P<Node>,

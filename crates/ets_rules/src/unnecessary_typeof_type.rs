@@ -49,7 +49,7 @@ pub struct UnnecessaryTypeofTypeMatch {
     pub replacement_text: String,
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:41 AnalyzeUnnecessaryTypeofType c31a305610937297
+// go: internal/rules/unnecessary_typeof_type.go:41 AnalyzeUnnecessaryTypeofType 26ce5e28ce6c909d
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub fn analyze_unnecessary_typeof_type(
@@ -79,7 +79,7 @@ pub fn analyze_unnecessary_typeof_type(
     matches
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:64 analyzeUnnecessaryTypeofTypeNode a3de280768d625a6
+// go: internal/rules/unnecessary_typeof_type.go:65 analyzeUnnecessaryTypeofTypeNode a3de280768d625a6
 pub(crate) fn analyze_unnecessary_typeof_type_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -128,7 +128,7 @@ pub(crate) fn analyze_unnecessary_typeof_type_node(
     })
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:114 resolveEntityNameAsType c7c78cb4795a2556
+// go: internal/rules/unnecessary_typeof_type.go:115 resolveEntityNameAsType c7c78cb4795a2556
 //
 // Rust: Go's nil checker never reaches here (the rule always has one).
 pub(crate) fn resolve_entity_name_as_type(
@@ -170,7 +170,7 @@ pub(crate) fn resolve_entity_name_as_type(
     }
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:144 resolveQualifiedTypeMember e6834ee4b00d9847
+// go: internal/rules/unnecessary_typeof_type.go:145 resolveQualifiedTypeMember e6834ee4b00d9847
 pub(crate) fn resolve_qualified_type_member(
     c: &mut Checker,
     location: Option<P<Node>>,
@@ -204,7 +204,7 @@ pub(crate) fn resolve_qualified_type_member(
     None
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:170 resolvedSymbolType e7c8347a0c017a9f
+// go: internal/rules/unnecessary_typeof_type.go:171 resolvedSymbolType e7c8347a0c017a9f
 pub(crate) fn resolved_symbol_type(
     c: &mut Checker,
     symbol: Option<P<Symbol>>,
@@ -221,7 +221,7 @@ pub(crate) fn resolved_symbol_type(
     c.get_type_of_symbol_at_location(symbol, Some(location))
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:184 resolveAliasSymbol c1da45ce5b1f7678
+// go: internal/rules/unnecessary_typeof_type.go:185 resolveAliasSymbol c1da45ce5b1f7678
 pub(crate) fn resolve_alias_symbol(
     c: &mut Checker,
     mut symbol: Option<P<Symbol>>,
@@ -234,7 +234,7 @@ pub(crate) fn resolve_alias_symbol(
     symbol
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:191 isSelfReferentialTypeAliasReference 61581e698e4a65e3
+// go: internal/rules/unnecessary_typeof_type.go:192 isSelfReferentialTypeAliasReference 61581e698e4a65e3
 pub(crate) fn is_self_referential_type_alias_reference(
     symbol: Option<P<Symbol>>,
     location: Option<P<Node>>,

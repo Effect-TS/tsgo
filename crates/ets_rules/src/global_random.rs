@@ -35,7 +35,7 @@ pub static GLOBAL_RANDOM_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_random.go:36 runGlobalRandom 7dcc8ae630f51fa0
+// go: internal/rules/global_random.go:36 runGlobalRandom b9697d1090934340
 pub(crate) fn run_global_random(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

@@ -70,6 +70,7 @@ func AnalyzeEffectFnOpportunity(tp *typeparser.TypeParser, _ *checker.Checker, s
 			})
 		}
 
+		//ets:ast-walk finds function declarations and arrows that could become Effect.fn
 		n.ForEachChild(walk)
 		return false
 	}

@@ -1,9 +1,11 @@
+use std::cell::Cell;
 use std::rc::Rc;
 
 use ets_shim::ast::{
-    self, CallExpression, Kind, Node, NodeFactory, NodeFlags, NodeList, NodeVisitor,
+    self, CallExpression, CommentRange, Kind, Node, NodeFactory, NodeFlags, NodeList, NodeVisitor,
     NodeVisitorHooks, SourceFile,
 };
+use ets_shim::astnav;
 use ets_shim::core::{P, TextRange};
 use ets_shim::scanner;
 use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind};
@@ -11,7 +13,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/rewriter/piping_flow.go:15 PipingFlowTransformationReplacement 7fea11d78d091f40
+// go: internal/rewriter/piping_flow.go:17 PipingFlowTransformationReplacement 7fea11d78d091f40
 // PipingFlowTransformationReplacement describes a replacement operator in its
 // normalized, pipeable form. A nil Arguments list represents a bare operator;
 // a non-nil list represents a call, including an explicit zero-argument call.
@@ -26,7 +28,7 @@ pub struct PipingFlowTransformationReplacement {
 const PARSED_NODE: &str = "a piping flow argument is a parsed node";
 
 impl Tracker {
-    // go: internal/rewriter/piping_flow.go:26 Tracker.ReplacePipingFlowPrefix 535001474c35ec88
+    // go: internal/rewriter/piping_flow.go:28 Tracker.ReplacePipingFlowPrefix 535001474c35ec88
     // ReplacePipingFlowPrefix replaces the subject and the requested leading
     // transformations with a complete replacement expression while retaining any
     // transformations that follow the prefix. It edits nothing and returns false
@@ -82,7 +84,7 @@ impl Tracker {
         true
     }
 
-    // go: internal/rewriter/piping_flow.go:62 Tracker.replaceFunctionPipePrefix 8d690382ad4adba2
+    // go: internal/rewriter/piping_flow.go:64 Tracker.replaceFunctionPipePrefix 8d690382ad4adba2
     pub(crate) fn replace_function_pipe_prefix(
         &mut self,
         source_file: P<SourceFile>,
@@ -117,7 +119,7 @@ impl Tracker {
         true
     }
 
-    // go: internal/rewriter/piping_flow.go:85 Tracker.replaceMethodPipePrefix 1f764a2f2ccb2792
+    // go: internal/rewriter/piping_flow.go:87 Tracker.replaceMethodPipePrefix 1f764a2f2ccb2792
     // Rust: Go's `AsPropertyAccessExpression` panics on another kind, as tsrs's does; the name is never nil.
     pub(crate) fn replace_method_pipe_prefix(
         &mut self,
@@ -159,7 +161,7 @@ impl Tracker {
     }
 }
 
-// go: internal/rewriter/piping_flow.go:117 containingCallArgument 9b75000f48a347d8
+// go: internal/rewriter/piping_flow.go:119 containingCallArgument 9b75000f48a347d8
 // Rust: the call is returned both as its node and as its `CallExpression` data (Go's `*ast.Node` and
 // `*ast.CallExpression`); tsrs's call arguments are never nil.
 pub(crate) fn containing_call_argument(
@@ -183,7 +185,7 @@ pub(crate) fn containing_call_argument(
     (None, None, -1)
 }
 
-// go: internal/rewriter/piping_flow.go:136 pipingFlowTransformationNode 6de0fb2082bf06ed
+// go: internal/rewriter/piping_flow.go:138 pipingFlowTransformationNode 6de0fb2082bf06ed
 // Rust: tsrs's transformation callee is never nil; calls are returned as their nodes.
 pub(crate) fn piping_flow_transformation_node(
     transformation: &PipingFlowTransformation,
@@ -200,7 +202,7 @@ pub(crate) fn piping_flow_transformation_node(
     Some(transformation.callee())
 }
 
-// go: internal/rewriter/piping_flow.go:152 callExpressionForCallee d2506a6002f6283c
+// go: internal/rewriter/piping_flow.go:154 callExpressionForCallee d2506a6002f6283c
 // Rust: returns the call node (Go's `*ast.CallExpression`).
 pub(crate) fn call_expression_for_callee(callee: Option<P<Node>>) -> Option<P<Node>> {
     let callee = callee?;
@@ -214,7 +216,7 @@ pub(crate) fn call_expression_for_callee(callee: Option<P<Node>>) -> Option<P<No
     Some(parent)
 }
 
-// go: internal/rewriter/piping_flow.go:165 appliedCallExpression 723be897b8175f5d
+// go: internal/rewriter/piping_flow.go:167 appliedCallExpression 723be897b8175f5d
 // appliedCallExpression walks out of callee positions, returning the outermost
 // call that applies the given call's result to its subject.
 pub(crate) fn applied_call_expression(call: Option<P<Node>>) -> Option<P<Node>> {
@@ -232,7 +234,7 @@ pub(crate) fn applied_call_expression(call: Option<P<Node>>) -> Option<P<Node>> 
 }
 
 impl Tracker {
-    // go: internal/rewriter/piping_flow.go:182 Tracker.RemoveTrailingPipingFlowTransformation 4be38ba26b227447
+    // go: internal/rewriter/piping_flow.go:184 Tracker.RemoveTrailingPipingFlowTransformation 4be38ba26b227447
     // RemoveTrailingPipingFlowTransformation removes the last step while retaining
     // its input and any earlier transformations. Unsupported flows produce no edits.
     pub fn remove_trailing_piping_flow_transformation(
@@ -377,7 +379,7 @@ impl Tracker {
         }
     }
 
-    // go: internal/rewriter/piping_flow.go:291 Tracker.ReplacePipingFlowTransformation 5e90f24f36b631e5
+    // go: internal/rewriter/piping_flow.go:293 Tracker.ReplacePipingFlowTransformation 5e90f24f36b631e5
     // ReplacePipingFlowTransformation replaces a transformation while preserving
     // how its input is applied in source: as a pipe argument, a data-first or
     // data-last argument, or a unary/curried application. A call with optional
@@ -502,7 +504,7 @@ impl Tracker {
         }
     }
 
-    // go: internal/rewriter/piping_flow.go:378 Tracker.pipingFlowOperator 0acac1ed78187157
+    // go: internal/rewriter/piping_flow.go:380 Tracker.pipingFlowOperator 0acac1ed78187157
     pub(crate) fn piping_flow_operator(
         &self,
         replacement: PipingFlowTransformationReplacement,
@@ -511,7 +513,7 @@ impl Tracker {
     }
 }
 
-// go: internal/rewriter/piping_flow.go:378 Tracker.pipingFlowOperator 0acac1ed78187157
+// go: internal/rewriter/piping_flow.go:380 Tracker.pipingFlowOperator 0acac1ed78187157
 // Rust: the body over the tracker's factory, so that the visitor of `collapse_piping_flow_transformations` (a
 // `'static` closure, which cannot borrow the tracker) can call it. Callers check that the callee is set, as Go's
 // do. tsrs's call expressions always have an argument list: Go's nil `Arguments` next to type arguments is an
@@ -533,7 +535,7 @@ pub(crate) fn piping_flow_operator(
     )
 }
 
-// go: internal/rewriter/piping_flow.go:391 cloneNodeListNodes 795bf81e125deeb7
+// go: internal/rewriter/piping_flow.go:393 cloneNodeListNodes 795bf81e125deeb7
 // Rust: takes the tracker's factory (Go: the tracker, for its embedded factory); nil and empty are one `Vec`.
 pub(crate) fn clone_node_list_nodes(f: &NodeFactory, list: Option<P<NodeList>>) -> Vec<P<Node>> {
     let Some(list) = list else {
@@ -542,7 +544,7 @@ pub(crate) fn clone_node_list_nodes(f: &NodeFactory, list: Option<P<NodeList>>) 
     list.nodes().iter().map(|&node| f.deep_clone_node(Some(node)).unwrap()).collect()
 }
 
-// go: internal/rewriter/piping_flow.go:402 cloneNodeListNodesFrom 5397691c927fff14
+// go: internal/rewriter/piping_flow.go:404 cloneNodeListNodesFrom 5397691c927fff14
 pub(crate) fn clone_node_list_nodes_from(
     f: &NodeFactory,
     list: Option<P<NodeList>>,
@@ -560,14 +562,14 @@ pub(crate) fn clone_node_list_nodes_from(
         .collect()
 }
 
-// go: internal/rewriter/piping_flow.go:413 cloneNodeList a65c5a709c756d5b
+// go: internal/rewriter/piping_flow.go:415 cloneNodeList a65c5a709c756d5b
 pub(crate) fn clone_node_list(f: &NodeFactory, list: Option<P<NodeList>>) -> Option<P<NodeList>> {
     let list = list?;
     Some(f.new_node_list(clone_node_list_nodes(f, Some(list))))
 }
 
 impl Tracker {
-    // go: internal/rewriter/piping_flow.go:424 Tracker.CollapsePipingFlowTransformations 02acf06b46fe674a
+    // go: internal/rewriter/piping_flow.go:426 Tracker.CollapsePipingFlowTransformations 84d676485a0531c1
     // CollapsePipingFlowTransformations replaces an inclusive range of adjacent
     // steps with one operator at the last step. Nested applications are rewritten
     // together so removing an input step cannot overlap the replacement edit. A
@@ -639,9 +641,13 @@ impl Tracker {
         let inputs: Vec<Option<P<Node>>> = (0..kinds.len() as i64)
             .map(|index| PipingFlow::transformation_input_node(Some(flow), index))
             .collect();
+        // Rust: Go's closure assigns `replaced`; the `'static` visitor shares it through a cell.
+        let replaced: Rc<Cell<Option<P<Node>>>> = Rc::new(Cell::new(None));
+        let visit_replaced = Rc::clone(&replaced);
         let factory = self.tracker.node_factory.clone();
         let visit_factory = factory.clone();
         let visit = move |visitor: &mut NodeVisitor, node: P<Node>| -> Option<P<Node>> {
+            let replaced = &visit_replaced;
             let f = &visit_factory;
             let Some(&index) = steps.get(&node) else {
                 let updated = visitor.visit_each_child(Some(node)).unwrap();
@@ -663,7 +669,8 @@ impl Tracker {
                 if index < end {
                     return None;
                 }
-                return Some(piping_flow_operator(f, replacement));
+                replaced.set(Some(piping_flow_operator(f, replacement)));
+                return replaced.get();
             }
             let Some(mut input) = inputs[index as usize] else {
                 return Some(node);
@@ -700,45 +707,305 @@ impl Tracker {
                                 .expect("an optional argument is kept"),
                         );
                     }
-                    return Some(f.new_call_expression(
+                    replaced.set(Some(f.new_call_expression(
                         piping_flow_operator(f, replacement),
                         None,
                         None,
                         f.new_node_list(applied),
                         NodeFlags::None,
-                    ));
+                    )));
+                    return replaced.get();
                 }
                 _ => {
-                    return Some(f.new_call_expression(
+                    replaced.set(Some(f.new_call_expression(
                         piping_flow_operator(f, replacement),
                         None,
                         None,
                         f.new_node_list(vec![subject]),
                         NodeFlags::None,
-                    ));
+                    )));
+                    return replaced.get();
                 }
             }
-            Some(f.new_call_expression(
+            replaced.set(Some(f.new_call_expression(
                 replacement.callee.unwrap(),
                 None,
                 replacement.type_arguments,
                 f.new_node_list(arguments),
                 NodeFlags::None,
+            )));
+            replaced.get()
+        };
+        let mut visitor =
+            ast::new_node_visitor(Some(Rc::new(visit)), Some(factory), NodeVisitorHooks::default());
+        let visited =
+            visitor.visit_node(Some(target)).expect("the collapse target contains a kept step");
+        let result = self.tracker.node_factory.deep_clone_node(Some(visited)).unwrap();
+        let mut removed = Vec::with_capacity((end - start + 1) as usize);
+        for i in start..=end {
+            removed.push(piping_flow_transformation_node(flow.transformations().at(i)));
+        }
+        let result = self.retain_piping_flow_comments(
+            source_file,
+            target,
+            visited,
+            result,
+            &removed,
+            PipingFlow::transformation_input_node(Some(flow), start),
+            replaced.get(),
+        );
+        ast::set_parent_in_children(result);
+        self.replace_node(source_file, Some(target), Some(result), None);
+        true
+    }
+
+    // go: internal/rewriter/piping_flow.go:543 Tracker.retainPipingFlowComments ca8d43868655dbeb
+    // retainPipingFlowComments re-attaches source comments to the synthesized
+    // clone of a collapsed flow. Comments inside the removed steps move to the
+    // replacement; every other comment stays with the innermost kept node that
+    // contains it. Comments outside target stay in the source text, which the
+    // replacement leaves untouched.
+    //
+    // Rust: tsrs's `Block` statements cannot be reassigned, so the placeholders Go appends to a block clone are
+    // collected and the clone is rebuilt with them after every comment is attached (`update_block` copies the
+    // clone's emit node, and so its comments, to the rebuilt node); the function returns the possibly rebuilt
+    // `result`. Go picks the owner by ranging over a map, so between kept nodes of the same extent (a statement
+    // and its expression) the choice follows the map order; the Rust takes the innermost one.
+    #[expect(clippy::too_many_arguments, reason = "mirrors Go's signature")]
+    pub(crate) fn retain_piping_flow_comments(
+        &self,
+        source_file: P<SourceFile>,
+        target: P<Node>,
+        visited: P<Node>,
+        result: P<Node>,
+        removed: &[Option<P<Node>>],
+        kept: Option<P<Node>>,
+        replaced: Option<P<Node>>,
+    ) -> P<Node> {
+        let comments = source_comments(
+            source_file,
+            scanner::get_token_pos_of_node(target, source_file, false),
+            target.end().expect_source(PARSED_NODE),
+        );
+        if comments.is_empty() {
+            return result;
+        }
+        fn children(node: P<Node>) -> Vec<P<Node>> {
+            let mut nodes = Vec::new();
+            node.for_each_child(&mut |child| {
+                nodes.push(child);
+                false
+            });
+            nodes
+        }
+        // Nodes built for the replacement have no source position; updated and
+        // untouched nodes keep theirs, so they own the comments within their range.
+        //
+        // Rust: `order` keeps the keys of `clones` in pairing (pre-order) order for the owner search.
+        let mut clones: FxHashMap<P<Node>, P<Node>> = FxHashMap::default();
+        let mut order: Vec<P<Node>> = Vec::new();
+        let mut replaced_clone = result;
+        fn pair(
+            original: P<Node>,
+            clone: P<Node>,
+            replaced: Option<P<Node>>,
+            replaced_clone: &mut P<Node>,
+            clones: &mut FxHashMap<P<Node>, P<Node>>,
+            order: &mut Vec<P<Node>>,
+        ) {
+            if Some(original) == replaced {
+                *replaced_clone = clone;
+            }
+            if original.pos().source_offset().is_some() {
+                clones.insert(original, clone);
+                order.push(original);
+            }
+            let (originals, cloned) = (children(original), children(clone));
+            if originals.len() == cloned.len() {
+                for (&original, &clone) in originals.iter().zip(&cloned) {
+                    pair(original, clone, replaced, replaced_clone, clones, order);
+                }
+            }
+        }
+        pair(visited, result, replaced, &mut replaced_clone, &mut clones, &mut order);
+        let text = source_file.text();
+        let pos = |node: P<Node>| node.pos().source_offset();
+        let end = |node: P<Node>| node.end().expect_source(PARSED_NODE);
+        // The kept subject keeps its leading trivia, and a removed step takes its
+        // text plus the trivia up to the next token.
+        let in_kept = |comment: &CommentRange| {
+            kept.is_some_and(|kept| {
+                pos(kept).is_some_and(|p| comment.pos() >= p && comment.end() <= end(kept))
+            })
+        };
+        let in_removed = |comment: &CommentRange| {
+            removed.iter().any(|node| {
+                node.is_some_and(|node| {
+                    pos(node).is_some_and(|p| {
+                        comment.pos() >= p && comment.end() <= scanner::skip_trivia(text, end(node))
+                    })
+                })
+            })
+        };
+        // A kept node owns the text from its first token on. Its leading trivia
+        // belongs before it in its parent: a comment there must not end up between
+        // the node's first token and the rest, as in "return // comment\n value".
+        let inside = |comment: &CommentRange, node: P<Node>| {
+            pos(node).is_some()
+                && comment.pos() >= scanner::get_token_pos_of_node(node, source_file, false)
+                && comment.end() <= end(node)
+        };
+        let size = |node: P<Node>| end(node) - pos(node).unwrap();
+        // Rust: the placeholders appended to each block clone, applied after the loop (see above).
+        let mut blocks: FxHashMap<P<Node>, Vec<P<Node>>> = FxHashMap::default();
+        for comment in &comments {
+            if !in_kept(comment) && in_removed(comment) {
+                self.add_piping_flow_comment(text, replaced_clone, comment, true);
+                continue;
+            }
+            let mut owner: Option<P<Node>> = None;
+            for &original in &order {
+                if inside(comment, original)
+                    && owner.is_none_or(|owner| size(original) <= size(owner))
+                {
+                    owner = Some(original);
+                }
+            }
+            let owner = owner.unwrap_or(visited);
+            // Attach to the nearest kept child so the comment keeps its place; an
+            // owner without kept children around the comment takes it itself.
+            let mut before: Option<P<Node>> = None;
+            let mut after: Option<P<Node>> = None;
+            for child in children(owner) {
+                if !clones.contains_key(&child) {
+                    continue;
+                }
+                if end(child) <= comment.pos() {
+                    before = Some(child);
+                } else if after.is_none()
+                    && scanner::get_token_pos_of_node(child, source_file, false) >= comment.end()
+                {
+                    after = Some(child);
+                }
+            }
+            if let Some(after) = after {
+                self.add_piping_flow_comment(text, clones[&after], comment, true);
+            } else if let Some(before) = before {
+                self.add_piping_flow_comment(text, clones[&before], comment, false);
+            } else if let Some(&owner_clone) = clones.get(&owner) {
+                if owner_clone.kind() == Kind::Block {
+                    // Function bodies skip the comments of their block node, so keep
+                    // the comment inside the braces on a placeholder statement.
+                    let placeholder = self.tracker.node_factory.new_not_emitted_statement();
+                    self.add_piping_flow_comment(text, placeholder, comment, true);
+                    blocks.entry(owner_clone).or_default().push(placeholder);
+                } else {
+                    self.add_piping_flow_comment(text, owner_clone, comment, true);
+                }
+            } else {
+                self.add_piping_flow_comment(text, result, comment, true);
+            }
+        }
+        if blocks.is_empty() {
+            return result;
+        }
+        let factory = self.tracker.node_factory.clone();
+        let visit_factory = factory.clone();
+        let visit = move |visitor: &mut NodeVisitor, node: P<Node>| -> Option<P<Node>> {
+            let updated = visitor.visit_each_child(Some(node)).unwrap();
+            let Some(placeholders) = blocks.get(&node) else {
+                return Some(updated);
+            };
+            let block = updated.as_block();
+            let mut statements = block.statements().nodes().to_vec();
+            statements.extend_from_slice(placeholders);
+            Some(visit_factory.update_block(
+                updated,
+                visit_factory.new_node_list(statements),
+                block.multi_line(),
             ))
         };
         let mut visitor =
             ast::new_node_visitor(Some(Rc::new(visit)), Some(factory), NodeVisitorHooks::default());
-        let visited = visitor.visit_node(Some(target));
-        let result = self.tracker.node_factory.deep_clone_node(visited);
-        if let Some(result) = result {
-            ast::set_parent_in_children(result);
+        visitor.visit_node(Some(result)).unwrap()
+    }
+
+    // go: internal/rewriter/piping_flow.go:666 Tracker.addPipingFlowComment ae97aebb26b284aa
+    pub(crate) fn add_piping_flow_comment(
+        &self,
+        text: &str,
+        node: P<Node>,
+        comment: &CommentRange,
+        leading: bool,
+    ) {
+        let mut body = &text[comment.pos() as usize + 2..comment.end() as usize];
+        // A line comment always needs its line break, or it would swallow the code after it.
+        let mut new_line = true;
+        if comment.kind == Kind::MultiLineCommentTrivia {
+            body = body.strip_suffix("*/").unwrap_or(body);
+            new_line = comment.has_trailing_new_line;
         }
-        self.replace_node(source_file, Some(target), result, None);
-        true
+        if leading {
+            self.tracker.emit_context.add_synthetic_leading_comment(
+                node,
+                comment.kind,
+                body,
+                new_line,
+            );
+        } else {
+            self.tracker.emit_context.add_synthetic_trailing_comment(
+                node,
+                comment.kind,
+                body,
+                new_line,
+            );
+        }
     }
 }
 
-// go: internal/rewriter/piping_flow.go:525 isPipingFlowArgument e95d8061c1653ef2
+// go: internal/rewriter/piping_flow.go:643 sourceComments 0d63739be11bd7e6
+// sourceComments lists the comments between start and end in source order.
+// Tokens are skipped by their parsed extent, so comment-like text inside
+// literals, templates and regular expressions is not reported.
+pub(crate) fn source_comments(
+    source_file: P<SourceFile>,
+    start: u32,
+    end: u32,
+) -> Vec<CommentRange> {
+    let text = source_file.text();
+    let mut s = scanner::Scanner::new();
+    s.set_skip_trivia(false);
+    s.set_text(&text[..end as usize]);
+    s.reset_pos(start);
+    let mut comments = Vec::new();
+    let mut token = s.scan();
+    while token != Kind::EndOfFile {
+        match token {
+            Kind::SingleLineCommentTrivia | Kind::MultiLineCommentTrivia => {
+                let rest = text[s.token_end() as usize..].trim_start_matches([' ', '\t']);
+                let new_line = rest.starts_with('\n') || rest.starts_with('\r');
+                comments.push(CommentRange {
+                    text_range: TextRange::new(s.token_start(), s.token_end()),
+                    kind: token,
+                    has_trailing_new_line: new_line,
+                });
+            }
+            Kind::WhitespaceTrivia | Kind::NewLineTrivia | Kind::ConflictMarkerTrivia => {}
+            _ => {
+                let original = astnav::get_token_at_position(source_file, s.token_start());
+                if let Some(original_end) = original.end().source_offset()
+                    && original_end > s.token_end()
+                {
+                    s.reset_pos(original_end.min(end));
+                }
+            }
+        }
+        token = s.scan();
+    }
+    comments
+}
+
+// go: internal/rewriter/piping_flow.go:681 isPipingFlowArgument e95d8061c1653ef2
 pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     matches!(
         kind,
@@ -749,7 +1016,7 @@ pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     )
 }
 
-// go: internal/rewriter/piping_flow.go:533 nodeWithin baedec3b3d887301
+// go: internal/rewriter/piping_flow.go:689 nodeWithin baedec3b3d887301
 pub(crate) fn node_within(node: Option<P<Node>>, ancestor: P<Node>) -> bool {
     let mut node = node;
     while let Some(n) = node {

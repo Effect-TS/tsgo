@@ -67,6 +67,7 @@ func AnalyzeMissingStarInYieldEffectGen(tp *typeparser.TypeParser, _ *checker.Ch
 			}
 		}
 
+		//ets:ast-walk finds yield expressions without a star inside Effect generators
 		n.ForEachChild(walk)
 		return false
 	}

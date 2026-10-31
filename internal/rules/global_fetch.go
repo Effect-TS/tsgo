@@ -71,6 +71,7 @@ func runGlobalFetch(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			}
 		}
 
+		//ets:ast-walk finds calls to the global fetch, a non-Effect callee
 		node.ForEachChild(walk)
 		return false
 	}

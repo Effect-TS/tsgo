@@ -1,0 +1,173 @@
+=== Quick Fix Inventory ===
+
+[D1] (17:25-17:35) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D2] (20:32-20:49) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D3] (23:33-23:50) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D4] (26:32-26:49) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D5] (32:38-32:48) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D6] (38:29-38:39) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D7] (42:30-42:40) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D8] (45:41-45:51) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D9] (49:27-49:37) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D10] (55:17-55:34) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D11] (60:3-60:13) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D12] (65:35-65:45) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D13] (70:31-70:45) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D14] (73:25-73:32) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D15] (74:32-74:46) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D16] (78:27-78:36) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D17] (136:59-136:69) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable effectTryWithoutCatch for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
+skipped by default

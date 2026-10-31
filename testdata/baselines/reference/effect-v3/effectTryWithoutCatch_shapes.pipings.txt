@@ -1,0 +1,321 @@
+==== /.src/effectTryWithoutCatch_shapes.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 6:25 - 6:56
+Node: Data.TaggedError("ParseError")
+Node Kind: KindCallExpression
+
+Subject: "ParseError"
+Subject Type: "ParseError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ParseError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 11:25 - 11:71
+Node: Effect.map(Effect.try(() => 1), (n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 14:23 - 14:77
+Node: Effect.map((n: number) => n + 1)(Effect.try(() => 1))
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+  [1] kind: call
+      callee: Effect.map
+      args: [(n: number) => n + 1]
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 17:28 - 19:3
+Node: Effect.fnUntraced(function*() {\n  return yield* Effect.try(() => 1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Effect.try(() => 1)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, UnknownException, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: () => Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 18:16 - 18:36
+Node: Effect.try(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 22:25 - 22:75
+Node: Effect.fn("inPlainFn")(() => Effect.try(() => 1))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.try(() => 1)
+Subject Type: () => Effect<number, UnknownException, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("inPlainFn")
+      args: (constant)
+      outType: () => Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 22:54 - 22:74
+Node: Effect.try(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 25:34 - 25:56
+Node: Effect.try((() => 1))
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 28:30 - 28:62
+Node: Effect.try(/* thunk */ () => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 31:38 - 31:84
+Node: Effect.tryPromise<Response>(() => fetch(url))
+Node Kind: KindCallExpression
+
+Subject: () => fetch(url)
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 31:72 - 31:83
+Node: fetch(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 35:29 - 35:50
+Node: narrowedTry(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: narrowedTry
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 39:29 - 39:52
+Node: narrowedAgain(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: narrowedAgain
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 43:26 - 43:44
+Node: typedTry(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: typedTry
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 46:35 - 46:111
+Node: Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
+Node Kind: KindCallExpression
+
+Subject: { try: () => 1, catch: (cause) => new ParseError({ cause }) }
+Subject Type: { try: () => number; catch: (cause: unknown) => ParseError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, ParseError, never>
+
+=== Piping Flow ===
+Location: 54:24 - 54:50
+Node: pipe(() => 1, Effect.try)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<unknown, UnknownException, never>
+
+=== Piping Flow ===
+Location: 58:29 - 58:60
+Node: pipe("1", thunkOf, Effect.try)
+Node Kind: KindCallExpression
+
+Subject: "1"
+Subject Type: "1"
+
+Transformations (2):
+  [0] kind: pipe
+      callee: thunkOf
+      args: (constant)
+      outType: () => number
+  [1] kind: pipe
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<unknown, UnknownException, never>
+
+=== Piping Flow ===
+Location: 61:61 - 61:81
+Node: Effect.try(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 64:25 - 68:3
+Node: Effect.tryPromise(async (signal) => {\n  // keep this comment\n  const response = await fetch(url, { signal })\n  return response.status\n})
+Node Kind: KindCallExpression
+
+Subject: async (signal) => {\n  // keep this comment\n  const response = await fetch(url, { signal })\n  return response.status\n}
+Subject Type: (signal: AbortSignal) => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 66:25 - 66:48
+Node: fetch(url, { signal })
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: fetch
+      args: [{ signal }]
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 72:29 - 72:49
+Node: Effect.try(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 76:27 - 76:47
+Node: Effect.try(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, UnknownException, never>

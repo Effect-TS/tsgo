@@ -1,7 +1,7 @@
 ==== /.src/flatMapToTap_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 11:40 - 13:2
+Location: 12:40 - 14:2
 Node: findUser(id).pipe(\n  Effect.flatMap((user) => auditUser(user).pipe(Effect.as(user)))\n)
 Node Kind: KindCallExpression
 
@@ -19,7 +19,7 @@ Transformations (2):
       outType: Effect<User, never, never>
 
 === Piping Flow ===
-Location: 12:27 - 12:65
+Location: 13:27 - 13:65
 Node: auditUser(user).pipe(Effect.as(user))
 Node Kind: KindCallExpression
 

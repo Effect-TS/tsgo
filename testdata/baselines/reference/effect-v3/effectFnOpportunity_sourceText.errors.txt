@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectFnOpportunity_sourceText.ts(3,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn('custom-span')(function*<T>(value, n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_sourceText.ts(21,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_sourceText.ts(28,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_sourceText.ts(38,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_sourceText.ts(44,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(// span expression
+/.src/effectFnOpportunity_sourceText.ts(4,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn('custom-span')(function*<T>(value, n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(22,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(29,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(39,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(45,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(// span expression
     `span-${"name" /* inside span */}-${/[/][*]/.source}`)(function*(n) { ... })`. effect(effectFnOpportunity)
 
 
@@ -14,6 +14,7 @@ Effect version: 3.19.19
     
 
 ==== /.src/effectFnOpportunity_sourceText.ts (5 errors) ====
+    // @effect-v3
     import { Effect } from "effect"
     
     export const signature = <T /* generic */>(

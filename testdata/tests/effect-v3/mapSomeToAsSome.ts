@@ -1,3 +1,4 @@
+// @effect-v3
 import {
   Effect,
   Effect as Fx,

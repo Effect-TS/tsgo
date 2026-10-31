@@ -47,6 +47,8 @@ type ServiceNotAsClassMatch struct {
 
 // AnalyzeServiceNotAsClass finds all const variable declarations using the v4 service constructor
 // that should be class declarations instead. V4-only rule.
+//
+//ets:ast-walk finds const variable declarations initialized with Context.Service
 func AnalyzeServiceNotAsClass(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ServiceNotAsClassMatch {
 	if tp.SupportedEffectVersion() != typeparser.EffectMajorV4 {
 		return nil

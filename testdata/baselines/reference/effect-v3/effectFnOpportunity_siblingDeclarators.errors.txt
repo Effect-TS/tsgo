@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectFnOpportunity_siblingDeclarators.ts(4,3): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_siblingDeclarators.ts(10,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_siblingDeclarators.ts(19,3): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_siblingDeclarators.ts(5,3): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_siblingDeclarators.ts(11,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_siblingDeclarators.ts(20,3): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -20,6 +20,7 @@ Effect version: 3.19.19
     
 
 ==== /.src/effectFnOpportunity_siblingDeclarators.ts (3 errors) ====
+    // @effect-v3
     import { Effect } from "effect"
     
     export const limit = 10,

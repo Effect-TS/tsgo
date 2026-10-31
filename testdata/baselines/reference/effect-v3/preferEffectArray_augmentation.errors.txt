@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/preferEffectArray_augmentation.ts(16,9): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
-/.src/preferEffectArray_augmentation.ts(17,10): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray_augmentation.ts(17,9): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray_augmentation.ts(18,10): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
 
 
 ==== /.src/preferEffectArray_augmentation.ts (2 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectArray:warning
     export {}
