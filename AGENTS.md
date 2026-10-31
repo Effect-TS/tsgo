@@ -9,6 +9,10 @@
 
 The Rust port lives in `crates/` and follows the rules in `porting/`: `PORTING.md` (how to port, the fidelity rule), `TSRS_PORT.md` (decisions, parity policy), `TSRS_API.md` (mapping to the tsrs API) and `DIVERGENCES.md` (known Rust/Go differences, with evidence). `scope.toml` and `skipped.tsv` are read by `repoctl`. Use the `port-change` skill when a branch changes ported Go code.
 
+## Rules and fixes
+
+Before writing or changing a rule, fixable, typeparser or rewriter, read `docs/agents/piping-flows.md`: detection starts from piping flows, fixes use the rewriter's flow edits. Check how each shape you target normalizes with `pnpm exec repoctl pipings`. When flows or the rewriter can't express a case (a primitive gap), stop and ask the user before writing a workaround. Reviews apply `CODING_STANDARDS.md`.
+
 ## Reference Repositories
 
 This repository uses local reference clones under `.repos/` for pattern and implementation research. These repositories are local-only working material and remain gitignored (`.repos/` is ignored by this repo). They are created on demand rather than by `pnpm setup-repo`.
