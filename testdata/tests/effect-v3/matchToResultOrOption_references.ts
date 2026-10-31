@@ -1,0 +1,41 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Effect, Either, Exit } from "effect"
+import * as Ei from "effect/Either"
+import { left as eitherLeft, right as eitherRight } from "effect/Either"
+
+declare const source: Effect.Effect<number, string>
+
+const Local = { Either: { right: <A>(a: A) => a, left: <E>(e: E) => e } }
+const rightAlias = Either.right
+
+// MUST TRIGGER: Either constructors through the effect/Either subpath namespace
+export const subpath = Effect.match(source, { onFailure: Ei.left, onSuccess: Ei.right })
+
+// MUST TRIGGER: renamed named imports of the Either constructors
+export const named = Effect.match(source, { onFailure: eitherLeft, onSuccess: eitherRight })
+
+// MUST TRIGGER: local constant alias of Either.right
+export const alias = Effect.match(source, { onFailure: Either.left, onSuccess: rightAlias })
+
+// MUST TRIGGER: the fold is one step of a longer flow; the fix keeps the next step
+export const inLongerFlow = source.pipe(
+  Effect.match({ onFailure: Either.left, onSuccess: Either.right }),
+  Effect.map(Either.isRight)
+)
+
+// MUST TRIGGER: the fold is a data-first argument of another call, so it roots its own flow
+export const nestedArgument = Effect.zipRight(
+  Effect.log("start"),
+  Effect.match(source, { onFailure: Either.left, onSuccess: Either.right })
+)
+
+// MUST NOT TRIGGER: a local object with Either-shaped members is not the Either module
+export const lookalike = Effect.match(source, { onFailure: Local.Either.left, onSuccess: Local.Either.right })
+
+// MUST NOT TRIGGER: Effect.fail is not Either.left
+export const effectFail = Effect.match(source, { onFailure: Effect.fail, onSuccess: Either.right })
+
+// MUST NOT TRIGGER: Exit.fail is not Either.left
+export const exitFail = Effect.match(source, { onFailure: Exit.fail, onSuccess: Either.right })

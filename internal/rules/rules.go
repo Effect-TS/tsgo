@@ -133,6 +133,7 @@ var All = []rule.Rule{
 	FlatMapIgnoredParamToAndThen,
 	FlatMapIdentityToFlatten,
 	MatchEffectToMatch,
+	MatchToResultOrOption,
 	MatchEffectToMapBoth,
 	MapMapErrorToMapBoth,
 	FlatMapConditionalToFilterOrFail,

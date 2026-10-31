@@ -81,6 +81,7 @@
         "mapSomeToAsSome": "suggestion",
         "matchEffectToMapBoth": "suggestion",
         "matchEffectToMatch": "suggestion",
+        "matchToResultOrOption": "suggestion",
         "missingEffectContext": "error",
         "missingEffectError": "error",
         "missingLayerContext": "error",
@@ -181,6 +182,7 @@
         "mapSomeToAsSome": "error",
         "matchEffectToMapBoth": "error",
         "matchEffectToMatch": "error",
+        "matchToResultOrOption": "error",
         "missingEffectContext": "error",
         "missingEffectError": "error",
         "missingLayerContext": "error",
@@ -355,6 +357,7 @@
         "mapSomeToAsSome": "warning",
         "matchEffectToMapBoth": "warning",
         "matchEffectToMatch": "warning",
+        "matchToResultOrOption": "warning",
         "missedPipeableOpportunity": "warning",
         "missingEffectServiceDependency": "warning",
         "missingPipeableSignature": "warning",
@@ -2981,6 +2984,30 @@
             "start": 100,
             "end": 118,
             "text": "`Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "matchToResultOrOption",
+      "group": "style",
+      "description": "Suggests Effect.result, Effect.option or Effect.either when match handlers, or a map step followed by a catch step, only reify the outcome",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377175
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect, Result } from \"effect\"\n\nclass UserNotFound extends Data.TaggedError(\"UserNotFound\")\u003c{\n  readonly id: string\n}\u003e {}\n\ndeclare const fetchUser: (id: string) =\u003e Effect.Effect\u003c{ readonly name: string }, UserNotFound\u003e\n\n// MUST TRIGGER: both handlers only reify the outcome, which is Effect.result\nexport const userResult = Effect.match(fetchUser(\"u1\"), {\n  onFailure: (e) =\u003e Result.fail(e),\n  onSuccess: (user) =\u003e Result.succeed(user)\n})\n",
+        "diagnostics": [
+          {
+            "start": 339,
+            "end": 351,
+            "text": "`Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)"
           }
         ]
       }

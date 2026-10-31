@@ -2726,6 +2726,11 @@
           "default": "suggestion",
           "description": "Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed"
         },
+        "matchToResultOrOption": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.result, Effect.option or Effect.either when match handlers, or a map step followed by a catch step, only reify the outcome"
+        },
         "missedPipeableOpportunity": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

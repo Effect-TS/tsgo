@@ -2464,6 +2464,9 @@
         "effecttsgo/match-effect-to-match": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/match-to-result-or-option": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/missed-pipeable-opportunity": {
           "$ref": "#/definitions/RuleNoConfig"
         },

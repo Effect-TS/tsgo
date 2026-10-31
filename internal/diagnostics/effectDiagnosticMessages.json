@@ -654,5 +654,9 @@
     "Effect.{0} is called without a `catch` handler, so failures surface as the generic `{1}`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)": {
         "category": "Warning",
         "code": 377169
+    },
+    "`Effect.{0}` reifies the outcome directly; these `Effect.{1}` handlers only wrap the value and the error. effect(matchToResultOrOption)": {
+        "category": "Suggestion",
+        "code": 377175
     }
 }

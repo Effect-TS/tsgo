@@ -1,0 +1,255 @@
+==== /.src/matchToResultOrOption_references.ts (17 flows) ====
+
+=== Piping Flow ===
+Location: 13:23 - 13:89
+Node: Effect.match(source, { onFailure: R.fail, onSuccess: R.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: R.fail, onSuccess: R.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 16:21 - 16:95
+Node: Effect.match(source, { onFailure: resultFail, onSuccess: resultSucceed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: resultFail, onSuccess: resultSucceed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 19:21 - 19:95
+Node: Effect.match(source, { onFailure: Result.fail, onSuccess: succeedAlias })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Result.fail, onSuccess: succeedAlias }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 22:30 - 25:2
+Node: Effect.andThen(\n  Effect.log("start"),\n  Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })\n)
+Node Kind: KindCallExpression
+
+Subject: "start"
+Subject Type: "start"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 23:23 - 24:78
+Node: Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Result.fail, onSuccess: Result.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 28:32 - 33:2
+Node: source.pipe(\n  Effect.tap((n) => Effect.log(n)),\n  Effect.map(Option.some),\n  Effect.catch(() => Effect.succeed(Option.none())),\n  Effect.map(Option.isSome)\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (4):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [(n) => Effect.log(n)]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Option.some]
+      outType: Effect<Option<number>, string, never>
+  [2] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.succeed(Option.none())]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<number> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+  [3] kind: pipeable
+      callee: Effect.map
+      args: [Option.isSome]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 29:20 - 29:34
+Node: Effect.log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 31:21 - 31:51
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 36:25 - 36:113
+Node: Effect.match(source, { onFailure: Local.Result.fail, onSuccess: Local.Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Local.Result.fail, onSuccess: Local.Result.succeed }]
+      outType: Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 39:26 - 39:102
+Node: Effect.match(source, { onFailure: Effect.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Effect.fail, onSuccess: Result.succeed }]
+      outType: Effect<Effect<never, string, never> | Result<number, never>, never, never>
+
+=== Piping Flow ===
+Location: 42:24 - 42:98
+Node: Effect.match(source, { onFailure: Exit.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Exit.fail, onSuccess: Result.succeed }]
+      outType: Effect<Exit<never, string> | Result<number, never>, never, never>
+
+=== Piping Flow ===
+Location: 45:30 - 45:122
+Node: Effect.match(source, { onFailure: <E>(e: E) => Result.fail(e), onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: <E>(e: E) => Result.fail(e), onSuccess: Result.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 45:77 - 45:92
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, E>
+
+=== Piping Flow ===
+Location: 48:29 - 51:3
+Node: Effect.matchEffect(source, {\n  onFailure: () => Effect.succeed(Option.none()),\n  onSuccess: () => Effect.succeed(Option.none())\n})
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: () => Effect.succeed(Option.none()),\n  onSuccess: () => Effect.succeed(Option.none())\n}]
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 49:19 - 49:49
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 50:19 - 50:49
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 54:27 - 54:110
+Node: Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed, ...{} })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Result.fail, onSuccess: Result.succeed, ...{} }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
