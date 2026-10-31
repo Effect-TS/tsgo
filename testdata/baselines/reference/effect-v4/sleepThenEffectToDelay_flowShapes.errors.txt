@@ -1,0 +1,24 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+
+
+==== /.src/sleepThenEffectToDelay_flowShapes.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics sleepThenEffectToDelay:warning
+    import { Effect } from "effect"
+    
+    declare const program: Effect.Effect<number, string>
+    declare const next: Effect.Effect<string>
+    declare const log: (value: number) => Effect.Effect<void>
+    
+    // PIPINGS: a parenthesized curried application is a single `call` step on `program`,
+    // with `next` as the factory argument
+    export const parenthesizedCurried = ((Effect.andThen(next)))(program)
+    export const curried = Effect.andThen(next)(program)
+    
+    // PIPINGS: data-first andThen and tap are single `dataFirst` steps on `program`
+    export const dataFirstAndThen = Effect.andThen(program, next)
+    export const dataFirstAndThenFunction = Effect.andThen(program, (n) => log(n))
+    export const dataFirstTap = Effect.tap(program, (n) => log(n))
+    

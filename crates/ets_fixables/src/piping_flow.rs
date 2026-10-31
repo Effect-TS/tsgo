@@ -4,7 +4,7 @@ use ets_shim::core::{P, TextRange};
 use ets_shim::scanner;
 use ets_typeparser::{PipingFlowTransformation, TransformationKind};
 
-// go: internal/fixables/piping_flow.go:18 removePipingFlowTransformation 740eee2d111ca71e
+// go: internal/fixables/piping_flow.go:18 removePipingFlowTransformation c69045d038307b34
 // removePipingFlowTransformation removes one step from its piping flow and
 // leaves the step's input in place. A pipe argument is deleted, a pipe call left
 // without steps collapses to its subject, and a data-first, data-last or unary
@@ -30,7 +30,7 @@ pub(crate) fn remove_piping_flow_transformation(
             if transformation.kind() == TransformationKind::Call && transformation.args().len() > 0
             {
                 // A curried step `factory(args)(subject)` is applied by the outer call.
-                call_node = direct_call_for_callee(call_node);
+                call_node = ets_typeparser::curried_application_call(call_node);
             }
             let Some(call_node) = call_node else {
                 return false;
@@ -130,7 +130,7 @@ pub(crate) fn remove_piping_flow_transformation(
     }
 }
 
-// go: internal/fixables/piping_flow.go:120 subjectInCallPosition e5233094a4202b7d
+// go: internal/fixables/piping_flow.go:123 subjectInCallPosition e5233094a4202b7d
 // subjectInCallPosition clones a removed step's subject for the position of the
 // call it replaces. A call binds as tightly as any expression, so a subject that
 // binds less tightly (a conditional, binary, assignment, `as` or arrow
@@ -168,7 +168,7 @@ pub(crate) fn subject_in_call_position(
     Some(clone)
 }
 
-// go: internal/fixables/piping_flow.go:139 startsExpressionStatement 7127d9db26afe89c
+// go: internal/fixables/piping_flow.go:142 startsExpressionStatement 7127d9db26afe89c
 // startsExpressionStatement reports whether node begins the expression
 // statement that contains it.
 pub(crate) fn starts_expression_statement(sf: P<SourceFile>, node: P<Node>) -> bool {
@@ -186,7 +186,7 @@ pub(crate) fn starts_expression_statement(sf: P<SourceFile>, node: P<Node>) -> b
     false
 }
 
-// go: internal/fixables/piping_flow.go:154 leadingTokenKind b52c73b5e69322ec
+// go: internal/fixables/piping_flow.go:157 leadingTokenKind b52c73b5e69322ec
 // leadingTokenKind returns the kind of an expression's first token, as far as
 // continuesPreviousStatement needs to tell tokens apart.
 //
@@ -218,7 +218,7 @@ pub(crate) fn leading_token_kind(node: P<Node>) -> Kind {
     }
 }
 
-// go: internal/fixables/piping_flow.go:198 continuesPreviousStatement 74e9e763cff61c0a
+// go: internal/fixables/piping_flow.go:201 continuesPreviousStatement 74e9e763cff61c0a
 // continuesPreviousStatement reports whether a statement beginning with token
 // is parsed as a continuation of a previous statement that has no semicolon.
 pub(crate) fn continues_previous_statement(token: Kind) -> bool {
@@ -234,7 +234,7 @@ pub(crate) fn continues_previous_statement(token: Kind) -> bool {
     )
 }
 
-// go: internal/fixables/piping_flow.go:207 subjectNeedsParentheses 554d1044c7be3351
+// go: internal/fixables/piping_flow.go:210 subjectNeedsParentheses 554d1044c7be3351
 pub(crate) fn subject_needs_parentheses(position: P<Node>, subject: P<Node>) -> bool {
     match subject.kind() {
         Kind::ObjectLiteralExpression | Kind::FunctionExpression | Kind::ClassExpression => {
@@ -254,7 +254,7 @@ pub(crate) fn subject_needs_parentheses(position: P<Node>, subject: P<Node>) -> 
     !ast::is_left_hand_side_expression(subject)
 }
 
-// go: internal/fixables/piping_flow.go:226 positionAcceptsAnyExpression 6a42cd0616c907ab
+// go: internal/fixables/piping_flow.go:229 positionAcceptsAnyExpression 6a42cd0616c907ab
 // positionAcceptsAnyExpression reports whether an expression of assignment
 // precedence can stand at position without parentheses.
 pub(crate) fn position_accepts_any_expression(position: P<Node>) -> bool {
@@ -277,7 +277,7 @@ pub(crate) fn position_accepts_any_expression(position: P<Node>) -> bool {
     }
 }
 
-// go: internal/fixables/piping_flow.go:247 directCallForCallee 26fc1f018d838342
+// go: internal/fixables/piping_flow.go:250 directCallForCallee 26fc1f018d838342
 //
 // Rust: returns the call node (Go: the node and its `*ast.CallExpression`, read with `as_call_expression()`).
 pub(crate) fn direct_call_for_callee(callee: Option<P<Node>>) -> Option<P<Node>> {
@@ -293,7 +293,7 @@ pub(crate) fn direct_call_for_callee(callee: Option<P<Node>>) -> Option<P<Node>>
     Some(parent)
 }
 
-// go: internal/fixables/piping_flow.go:258 containingCallArgument 87b76417be1acb0b
+// go: internal/fixables/piping_flow.go:261 containingCallArgument 87b76417be1acb0b
 //
 // Rust: returns the call node and the argument index (Go also returns the node's `*ast.CallExpression`).
 pub(crate) fn containing_call_argument(node: Option<P<Node>>) -> (Option<P<Node>>, i64) {

@@ -1,4 +1,4 @@
-==== /.src/mapMapErrorToMapBoth.ts (57 flows) ====
+==== /.src/mapMapErrorToMapBoth.ts (56 flows) ====
 
 === Piping Flow ===
 Location: 8:24 - 8:54
@@ -625,28 +625,22 @@ Location: 187:31 - 193:2
 Node: Effect.map(\n  Effect.tap(\n    Effect.mapError(fetchCount, (message) => new TaskError({ message })),\n    (n) => Effect.log(n)\n  ),\n  (n) => n > 0\n)
 Node Kind: KindCallExpression
 
-Subject: Effect.tap(\n    Effect.mapError(fetchCount, (message) => new TaskError({ message })),\n    (n) => Effect.log(n)\n  )
-Subject Type: Effect<number, TaskError, never>
-
-Transformations (1):
-  [0] kind: dataFirst
-      callee: Effect.map
-      args: [(n) => n > 0]
-      outType: Effect<boolean, TaskError, never>
-
-=== Piping Flow ===
-Location: 188:14 - 189:73
-Node: Effect.mapError(fetchCount, (message) => new TaskError({ message }))
-Node Kind: KindCallExpression
-
 Subject: fetchCount
 Subject Type: Effect<number, string, never>
 
-Transformations (1):
+Transformations (3):
   [0] kind: dataFirst
       callee: Effect.mapError
       args: [(message) => new TaskError({ message })]
       outType: Effect<number, TaskError, never>
+  [1] kind: dataFirst
+      callee: Effect.tap
+      args: [(n) => Effect.log(n)]
+      outType: Effect<number, TaskError, never>
+  [2] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
 Location: 190:11 - 190:25

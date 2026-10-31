@@ -4,6 +4,7 @@ Effect version: 3.19.19
 /.src/flatMapToTap.ts(15,39): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
 /.src/flatMapToTap.ts(16,37): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
 /.src/flatMapToTap.ts(17,29): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap.ts(18,28): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
 /.src/flatMapToTap.ts(19,40): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
 /.src/flatMapToTap.ts(20,31): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
 /.src/flatMapToTap.ts(21,38): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
@@ -28,7 +29,7 @@ Effect version: 3.19.19
 /.src/flatMapToTap.ts(91,65): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 
 
-==== /.src/flatMapToTap.ts (25 errors) ====
+==== /.src/flatMapToTap.ts (26 errors) ====
     import { Effect, pipe } from "effect"
     import * as E from "effect/Effect"
     import { as as reYield, flatMap as bind, tap as observe } from "effect/Effect"
@@ -53,6 +54,8 @@ Effect version: 3.19.19
                                 ~~~~~~~~~~~~~~
 !!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
     export const dataFirstAs = Effect.andThen(source, (user) => Effect.as(audit(user), user))
+                               ~~~~~~~~~~~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
     export const andThenPipe = source.pipe(Effect.andThen((user) => audit(user).pipe(Effect.map((unused) => user))))
                                            ~~~~~~~~~~~~~~
 !!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)

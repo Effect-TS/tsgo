@@ -251,6 +251,15 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 func (m *signatureTypeMatcher) compareTypeParameter(left *checker.Type, right *checker.Type) bool {
 	_, leftLocal := m.leftBinders[left]
 	_, rightLocal := m.rightBinders[right]
+	if !leftLocal && !rightLocal && isInferTypeParameter(left) && isInferTypeParameter(right) {
+		// Each conditional type declares its own infer binders, so they are
+		// paired by occurrence like signature binders. Both conditionals are
+		// compared at the same position, so the first occurrence is in the
+		// extends types and later references must use the same pairing.
+		m.registerBinders([]*checker.Type{left}, true)
+		m.registerBinders([]*checker.Type{right}, false)
+		leftLocal, rightLocal = true, true
+	}
 	if leftLocal || rightLocal {
 		if !leftLocal || !rightLocal {
 			return false
@@ -266,6 +275,17 @@ func (m *signatureTypeMatcher) compareTypeParameter(left *checker.Type, right *c
 		return true
 	}
 	return left == right || sameSymbolReference(m.tp.checker, left.Symbol(), right.Symbol())
+}
+
+// isInferTypeParameter reports whether t is declared by an `infer` clause of a
+// conditional type.
+func isInferTypeParameter(t *checker.Type) bool {
+	if t == nil || t.Symbol() == nil {
+		return false
+	}
+	declarations := ast.TSGetSymbolDeclarations(t.Symbol())
+	return len(declarations) == 1 && declarations[0].Kind == ast.KindTypeParameter &&
+		declarations[0].Parent != nil && declarations[0].Parent.Kind == ast.KindInferType
 }
 
 func (m *signatureTypeMatcher) compareObject(left *checker.Type, right *checker.Type, depth int) bool {

@@ -113,6 +113,7 @@
         "schemaStructWithTag": "suggestion",
         "schemaSyncInEffect": "suggestion",
         "scopeInLayerEffect": "warning",
+        "sleepThenEffectToDelay": "suggestion",
         "suspendFailToFailSync": "suggestion",
         "syncToSucceed": "suggestion",
         "timeoutCatchTagToTimeoutOrElse": "suggestion",
@@ -212,6 +213,7 @@
         "schemaStructWithTag": "error",
         "schemaSyncInEffect": "error",
         "scopeInLayerEffect": "error",
+        "sleepThenEffectToDelay": "error",
         "suspendFailToFailSync": "error",
         "syncToSucceed": "error",
         "timeoutCatchTagToTimeoutOrElse": "error",
@@ -376,6 +378,7 @@
         "schemaStructWithTag": "warning",
         "schemaUnionOfLiterals": "warning",
         "serviceNotAsClass": "warning",
+        "sleepThenEffectToDelay": "warning",
         "strictBooleanExpressions": "warning",
         "suspendFailToFailSync": "warning",
         "syncToSucceed": "warning",
@@ -3535,6 +3538,30 @@
             "start": 57,
             "end": 101,
             "text": "`Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends Context.Service\u003cPreview, { port: number }\u003e()(\"Preview\") {}`. effect(serviceNotAsClass)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "sleepThenEffectToDelay",
+      "group": "style",
+      "description": "Suggests Effect.delay instead of sequencing an effect after Effect.sleep",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377178
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const sendRequest: Effect.Effect\u003cvoid\u003e\n\nexport const throttled = Effect.sleep(\"1 second\").pipe(Effect.andThen(sendRequest))\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 118,
+            "text": "`Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)"
           }
         ]
       }
