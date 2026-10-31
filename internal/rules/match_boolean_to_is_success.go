@@ -75,7 +75,7 @@ func AnalyzeMatchBooleanToIsSuccess(tp *typeparser.TypeParser, _ *checker.Checke
 			switch {
 			case transformation.Args().Len() == 1:
 				options = transformation.Args().At(0)
-			case index == 0 && transformation.Kind() == typeparser.TransformationKindCall && transformation.Args().Len() == 0:
+			case index == 0 && transformation.Args().Len() == 0:
 				// A standalone match({...}): the options are the subject of the flow.
 				options = flow.Subject().Node()
 				pointFree = true

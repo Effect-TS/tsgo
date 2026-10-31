@@ -142,9 +142,10 @@ export const matchCauseEager = saveUser.pipe(Effect.matchCauseEager({
 }))
 
 // MUST NOT TRIGGER: Effect.matchEffect is a different API (effectful handlers)
+declare const recheck: (ok: boolean) => Effect.Effect<boolean>
 export const matchEffect = Effect.matchEffect(saveUser, {
-  onFailure: () => Effect.succeed(false),
-  onSuccess: () => Effect.succeed(true)
+  onFailure: () => recheck(false),
+  onSuccess: () => recheck(true)
 })
 
 // MUST NOT TRIGGER: both handlers return the same literal (not complementary)

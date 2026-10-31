@@ -26,9 +26,6 @@ func runMatchBooleanToIsSuccessFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.Flow == nil || match.Callee == nil {
-			continue
-		}
 		member := effectModuleMember(ctx, match.ReplacementName)
 		reference, namedImports := matchBooleanReplacementReference(ctx, match.Callee, member)
 		if reference == nil {
@@ -39,14 +36,15 @@ func runMatchBooleanToIsSuccessFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Replace with Effect." + match.ReplacementName,
 			Run: func(tracker *rewriter.Tracker) {
 				replacement := reference.expression(tracker, member)
+				var replaced bool
 				if match.PointFree {
 					// match({...}) becomes the bare isSuccess / isFailure function.
-					tracker.ReplacePipingFlowPrefix(match.SourceFile, match.Flow, 1, replacement)
+					replaced = tracker.ReplacePipingFlowPrefix(match.SourceFile, match.Flow, 1, replacement)
 				} else {
 					transformation := match.Flow.Transformations().At(match.Index)
-					tracker.ReplacePipingFlowTransformation(match.SourceFile, &transformation, rewriter.PipingFlowTransformationReplacement{Callee: replacement})
+					replaced = tracker.ReplacePipingFlowTransformation(match.SourceFile, &transformation, rewriter.PipingFlowTransformationReplacement{Callee: replacement})
 				}
-				if namedImports != nil {
+				if replaced && namedImports != nil {
 					elements := namedImports.AsNamedImports().Elements
 					tracker.InsertImportSpecifierAtIndex(match.SourceFile,
 						tracker.NewImportSpecifier(false, nil, tracker.NewIdentifier(member.name)), namedImports, len(elements.Nodes))
@@ -60,8 +58,7 @@ func runMatchBooleanToIsSuccessFix(ctx *fixable.Context) []ls.CodeAction {
 }
 
 // matchBooleanReplacementReference keeps the qualifier the match callee is
-// written with: Q.match gives Q.isSuccess, a const alias of Q.match gives
-// Q.isSuccess, and a named import of match gives a bare isSuccess from the same
+// written with: Q.match gives Q.isSuccess, and a named import of match gives a bare isSuccess from the same
 // import. When the bare name has to be imported, namedImports is the list to
 // add it to. Otherwise it falls back to the file's Effect module reference.
 func matchBooleanReplacementReference(ctx *fixable.Context, callee *ast.Node, member moduleMember) (reference *moduleMemberReference, namedImports *ast.Node) {
@@ -77,21 +74,9 @@ func matchBooleanReplacementReference(ctx *fixable.Context, callee *ast.Node, me
 }
 
 // matchBooleanCalleeQualifier returns the Effect module path of a Q.match
-// callee, or of the initializer of a const alias of Q.match.
+// callee.
 func matchBooleanCalleeQualifier(ctx *fixable.Context, callee *ast.Node) typeparser.ModuleReference {
 	callee = ast.SkipParentheses(callee)
-	if ast.IsIdentifier(callee) {
-		declaration := ast.TSGetSymbolValueDeclaration(ctx.TypeParser.GetSymbolAtLocation(callee))
-		if declaration == nil || !ast.IsVariableDeclaration(declaration) || declaration.Parent == nil ||
-			declaration.Parent.Flags&ast.NodeFlagsConst == 0 {
-			return nil
-		}
-		callee = declaration.Initializer()
-		if callee == nil {
-			return nil
-		}
-		callee = ast.SkipParentheses(callee)
-	}
 	if !ast.IsPropertyAccessExpression(callee) {
 		return nil
 	}

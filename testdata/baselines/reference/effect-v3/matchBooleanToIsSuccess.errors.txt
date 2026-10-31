@@ -17,10 +17,9 @@ Effect version: 3.19.19
 /.src/matchBooleanToIsSuccess.ts(93,43): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(100,21): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(110,3): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(134,28): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
 
 
-==== /.src/matchBooleanToIsSuccess.ts (17 errors) ====
+==== /.src/matchBooleanToIsSuccess.ts (16 errors) ====
     // @effect-v3
     import * as Fx from "effect/Effect"
     import { match as matchNamed } from "effect/Effect"
@@ -186,11 +185,10 @@ Effect version: 3.19.19
     }))
     
     // MUST NOT TRIGGER: Effect.matchEffect is a different API (effectful handlers)
+    declare const recheck: (ok: boolean) => Effect.Effect<boolean>
     export const matchEffect = Effect.matchEffect(saveUser, {
-                               ~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
-      onFailure: () => Effect.succeed(false),
-      onSuccess: () => Effect.succeed(true)
+      onFailure: () => recheck(false),
+      onSuccess: () => recheck(true)
     })
     
     // MUST NOT TRIGGER: both handlers return the same literal (not complementary)
