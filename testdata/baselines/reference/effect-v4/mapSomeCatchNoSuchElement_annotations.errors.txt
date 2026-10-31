@@ -2,12 +2,9 @@
 Effect version: 4.0.2
 
 /.src/mapSomeCatchNoSuchElement_annotations.ts(18,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
-/.src/mapSomeCatchNoSuchElement_annotations.ts(22,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
-/.src/mapSomeCatchNoSuchElement_annotations.ts(26,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
-/.src/mapSomeCatchNoSuchElement_annotations.ts(30,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
 
 
-==== /.src/mapSomeCatchNoSuchElement_annotations.ts (4 errors) ====
+==== /.src/mapSomeCatchNoSuchElement_annotations.ts (1 errors) ====
     // @effect-v4
     // @effect-diagnostics *:off
     // @effect-diagnostics mapSomeCatchNoSuchElement:warning
@@ -22,30 +19,27 @@ Effect version: 4.0.2
     declare const lookupAny: Effect.Effect<any, Cause.NoSuchElementError>
     declare const lookupRecord: Effect.Effect<{ readonly value: string }, Cause.NoSuchElementError>
     
-    // MUST TRIGGER: annotations that restate the inferred types do not change the result
-    export const sameHandlerAnnotation = lookup.pipe(
-      Effect.asSome,
-      Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>> => Effect.succeedNone)
-      ~~~~~~~~~~~~~~~
-!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
-    )
-    export const sameMapperAnnotation = lookup.pipe(
-      Effect.map((value): Option.Option<string> => Option.some(value)),
-      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
-      ~~~~~~~~~~~~~~~
-!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
-    )
+    // MUST TRIGGER: a handler parameter annotation does not change the result
     export const handlerParameterAnnotation = lookup.pipe(
       Effect.asSome,
       Effect.catchTag("NoSuchElementError", (_error: Cause.NoSuchElementError) => Effect.succeedNone)
       ~~~~~~~~~~~~~~~
 !!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
     )
+    
+    // MUST NOT TRIGGER: any return annotation skips the report, even one that restates the
+    // inferred types
+    export const sameHandlerAnnotation = lookup.pipe(
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>> => Effect.succeedNone)
+    )
+    export const sameMapperAnnotation = lookup.pipe(
+      Effect.map((value): Option.Option<string> => Option.some(value)),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+    )
     export const anyInputAnyAnnotation = lookupAny.pipe(
       Effect.map((value): Option.Option<any> => Option.some(value)),
       Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<any>> => Effect.succeedNone)
-      ~~~~~~~~~~~~~~~
-!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
     )
     
     // MUST NOT TRIGGER: a handler return annotation widens the success type, which

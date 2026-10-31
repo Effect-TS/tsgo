@@ -3,22 +3,23 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::checker::{LiteralValue, Type, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
-    Effect, EffectMajorVersion, PipingFlow, PipingFlowTransformation, TypeParser,
+    EffectMajorVersion, LazyExpressionFlags, PipingFlow, PipingFlowTransformation, TypeParser,
+    parse_lazy_expression,
 };
 
-use crate::catch_handler::{catch_handler_ignores_error, catch_handler_returns_succeed_none};
+use crate::catch_handler::catch_handler_returns_succeed_none;
 use crate::map_some_to_as_some::is_option_some_mapper;
 use crate::piping_flow::has_explicit_type_arguments;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::USE_EFFECT_CATCH_NO_SUCH_ELEMENT_INSTEAD_OF_WRAPPING_SUCCESSES_IN_OPTION_SOME_AND_CATCHING_NO_SUCH_ELEMENT_ERROR_INTO_OPTION_NONE_EFFECT_MAP_SOME_CATCH_NO_SUCH_ELEMENT;
 
-// go: internal/rules/map_some_catch_no_such_element.go:16 MapSomeCatchNoSuchElement 85d156707fe9a216
+// go: internal/rules/map_some_catch_no_such_element.go:14 MapSomeCatchNoSuchElement dd1475d0f52ec20e
 pub static MAP_SOME_CATCH_NO_SUCH_ELEMENT: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "mapSomeCatchNoSuchElement",
     group: "style",
@@ -37,7 +38,7 @@ pub static MAP_SOME_CATCH_NO_SUCH_ELEMENT: LazyLock<Rule> = LazyLock::new(|| Rul
     },
 });
 
-// go: internal/rules/map_some_catch_no_such_element.go:32 MapSomeCatchNoSuchElementMatch 8c5b5bf3ec92d92b
+// go: internal/rules/map_some_catch_no_such_element.go:30 MapSomeCatchNoSuchElementMatch 8c5b5bf3ec92d92b
 //
 // Rust: Go's `*typeparser.PipingFlow` (into the parser's cached flows) is a clone of the flow.
 #[derive(Clone)]
@@ -48,14 +49,14 @@ pub struct MapSomeCatchNoSuchElementMatch {
     pub location: TextRange,
 }
 
-// go: internal/rules/map_some_catch_no_such_element.go:40 noSuchElementErrorTypeId b6b0652e88e6effb
+// go: internal/rules/map_some_catch_no_such_element.go:38 noSuchElementErrorTypeId b6b0652e88e6effb
 // noSuchElementErrorTypeId is the brand key of Cause.NoSuchElementError, the
 // property Effect.catchNoSuchElement checks at runtime.
 pub(crate) const NO_SUCH_ELEMENT_ERROR_TYPE_ID: &str = "~effect/Cause/NoSuchElementError";
 
-// go: internal/rules/map_some_catch_no_such_element.go:42 AnalyzeMapSomeCatchNoSuchElement 95662b52194c2aba
+// go: internal/rules/map_some_catch_no_such_element.go:40 AnalyzeMapSomeCatchNoSuchElement c304f29ae042eef6
 //
-// Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and checker are never nil.
+// Rust: the parser is never nil.
 pub fn analyze_map_some_catch_no_such_element(
     tp: &mut TypeParser<'_>,
     sf: Option<P<SourceFile>>,
@@ -89,9 +90,8 @@ pub fn analyze_map_some_catch_no_such_element(
             if has_explicit_type_arguments(Some(wrap)) || has_explicit_type_arguments(Some(catch)) {
                 continue;
             }
-            let handler = ast::skip_parentheses(*catch.args().at(1));
-            if !catch_handler_ignores_error(tp, Some(handler))
-                || !catch_handler_returns_succeed_none(tp, handler)
+            if !map_some_catch_handler_is_plain(*catch.args().at(1))
+                || !catch_handler_returns_succeed_none(tp, *catch.args().at(1))
             {
                 continue;
             }
@@ -100,13 +100,6 @@ pub fn analyze_map_some_catch_no_such_element(
                 continue;
             };
             if !no_such_element_error_catchable(tp, Some(input.e())) {
-                continue;
-            }
-            let output_type = catch.out_type(tp);
-            let Some(output) = tp.strict_effect_type(output_type) else {
-                continue;
-            };
-            if !map_some_catch_matches_catch_no_such_element(tp, &input, &output) {
                 continue;
             }
             matches.push(MapSomeCatchNoSuchElementMatch {
@@ -120,18 +113,27 @@ pub fn analyze_map_some_catch_no_such_element(
     matches
 }
 
-// go: internal/rules/map_some_catch_no_such_element.go:78 mapSomeCatchWrapsSome 3ebe81476db50aba
+// go: internal/rules/map_some_catch_no_such_element.go:73 mapSomeCatchWrapsSome 392f82e15c29668f
+// Return type annotations can change any channel of the pair's result, which
+// Effect.catchNoSuchElement would replace with Effect<Option<A>, Exclude<E, NoSuchElementError>, R>.
 pub(crate) fn map_some_catch_wraps_some(
     tp: &mut TypeParser<'_>,
     step: &PipingFlowTransformation,
 ) -> bool {
-    step.args().len() == 0 && tp.is_node_reference_to_effect_module_api(step.callee(), "asSome")
-        || step.args().len() == 1
-            && tp.is_node_reference_to_effect_module_api(step.callee(), "map")
-            && is_option_some_mapper(tp, *step.args().at(0))
+    if step.args().len() == 0 {
+        return tp.is_node_reference_to_effect_module_api(step.callee(), "asSome");
+    }
+    if step.args().len() != 1
+        || !tp.is_node_reference_to_effect_module_api(step.callee(), "map")
+        || !is_option_some_mapper(tp, *step.args().at(0))
+    {
+        return false;
+    }
+    let lazy = parse_lazy_expression(*step.args().at(0), LazyExpressionFlags::None);
+    lazy.is_none_or(|lazy| lazy.node().type_node().is_none())
 }
 
-// go: internal/rules/map_some_catch_no_such_element.go:83 mapSomeCatchCatchesNoSuchElement 683186b5791664c8
+// go: internal/rules/map_some_catch_no_such_element.go:84 mapSomeCatchCatchesNoSuchElement 683186b5791664c8
 pub(crate) fn map_some_catch_catches_no_such_element(
     tp: &mut TypeParser<'_>,
     step: &PipingFlowTransformation,
@@ -145,70 +147,26 @@ pub(crate) fn map_some_catch_catches_no_such_element(
         && tp.is_node_reference_to_effect_module_api(step.callee(), "catchTag")
 }
 
-// go: internal/rules/map_some_catch_no_such_element.go:96 mapSomeCatchMatchesCatchNoSuchElement 73c512483b3cf4d5
-// The fix replaces the pair's result type with catchNoSuchElement's
-// Effect<Option<A>, Exclude<E, NoSuchElementError>, R>. Callback annotations can
-// change any channel of the pair, so compare the pair's output with that shape.
-// Assignability accepts any in place of every type, so use type identity.
-//
-// Rust: Go's checker argument is the parser's checker (`tp.checker()`).
-pub(crate) fn map_some_catch_matches_catch_no_such_element(
-    tp: &mut TypeParser<'_>,
-    input: &Effect,
-    output: &Effect,
-) -> bool {
-    let identical = |tp: &mut TypeParser<'_>, source: P<Type>, target: P<Type>| -> bool {
-        tp.checker().is_type_identical_to(source, target)
+// go: internal/rules/map_some_catch_no_such_element.go:96 mapSomeCatchHandlerIsPlain 4a679e773b271fba
+// The handler's returned flow is checked to be exactly a successful None, so
+// it cannot use the error; destructuring would still read it. A return type
+// annotation could change the pair's result type.
+pub(crate) fn map_some_catch_handler_is_plain(handler: P<Node>) -> bool {
+    let Some(lazy) = parse_lazy_expression(handler, LazyExpressionFlags::None) else {
+        return false;
     };
-    for member in tp.unroll_union_members(output.a()).unwrap_or_default() {
-        let Some(tag) = tp.get_type_of_property_by_name(member, "_tag") else {
-            return false;
-        };
-        if !tag.flags().intersects(TypeFlags::StringLiteral) {
-            return false;
-        }
-        match tag.as_literal_type().value() {
-            Some(LiteralValue::String(text)) if text == "Some" || text == "None" => {}
-            _ => return false,
-        }
-        // Option.none() and Effect.succeedNone contribute Option<never>.
-        let arguments = tp.checker().get_type_arguments(member);
-        if arguments.len() != 1
-            || !arguments[0].flags().intersects(TypeFlags::Never)
-                && !identical(tp, arguments[0], input.a())
-        {
+    if lazy.node().type_node().is_some() {
+        return false;
+    }
+    for (_, param) in lazy.params().all() {
+        if param.name().is_none_or(|name| name.kind() != Kind::Identifier) {
             return false;
         }
     }
-    let mut remaining: Vec<P<Type>> = Vec::new();
-    for member in tp.unroll_union_members(input.e()).unwrap_or_default() {
-        if tp.get_type_of_property_by_name(member, NO_SUCH_ELEMENT_ERROR_TYPE_ID).is_none() {
-            remaining.push(member);
-        }
-    }
-    let mut produced: Vec<P<Type>> = Vec::new();
-    for member in tp.unroll_union_members(output.e()).unwrap_or_default() {
-        if !member.flags().intersects(TypeFlags::Never) {
-            produced.push(member);
-        }
-    }
-    let contains = |tp: &mut TypeParser<'_>, types: &[P<Type>], target: P<Type>| -> bool {
-        types.iter().any(|&candidate| identical(tp, candidate, target))
-    };
-    for &member in &produced {
-        if !contains(tp, &remaining, member) {
-            return false;
-        }
-    }
-    for &member in &remaining {
-        if !contains(tp, &produced, member) {
-            return false;
-        }
-    }
-    identical(tp, output.r(), input.r())
+    true
 }
 
-// go: internal/rules/map_some_catch_no_such_element.go:145 noSuchElementErrorCatchable 6d835f24c8710296
+// go: internal/rules/map_some_catch_no_such_element.go:112 noSuchElementErrorCatchable 6d835f24c8710296
 // catchTag matches by _tag while catchNoSuchElement checks the brand, so every
 // member that may carry the tag must be the real Cause.NoSuchElementError.
 // Untagged, broadly tagged or generic members fail closed.

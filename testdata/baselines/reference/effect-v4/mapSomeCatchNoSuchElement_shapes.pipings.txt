@@ -405,7 +405,7 @@ Transformations (2):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 149:31 - 154:2
+Location: 151:31 - 156:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", function() {\n    return Effect.succeedNone\n  })\n)
 Node Kind: KindCallExpression
 
@@ -423,7 +423,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
 
 === Piping Flow ===
-Location: 157:34 - 160:2
+Location: 160:34 - 163:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", (_error = new Cause.NoSuchElementError()) => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -441,7 +441,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
 
 === Piping Flow ===
-Location: 161:29 - 164:2
+Location: 164:29 - 167:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", (..._args) => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 
@@ -459,7 +459,7 @@ Transformations (2):
       outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
 
 === Piping Flow ===
-Location: 165:37 - 168:2
+Location: 170:37 - 173:2
 Node: lookup.pipe(\n  Effect.asSome,\n  Effect.catchTag("NoSuchElementError", ({ message: _message }) => Effect.succeedNone)\n)
 Node Kind: KindCallExpression
 

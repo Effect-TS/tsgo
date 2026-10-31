@@ -140,12 +140,14 @@ export const instantiatedMapper = lookup.pipe(
   Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
 )
 
-// MUST NOT TRIGGER: async and function expression handlers
+// MUST NOT TRIGGER: an async handler
 export const asyncHandler = lookup.pipe(
   Effect.asSome,
   // @ts-expect-error an async handler returns a Promise, not an Effect
   Effect.catchTag("NoSuchElementError", async () => Effect.succeedNone)
 )
+
+// MUST TRIGGER: a function expression handler returning None cannot observe the error
 export const functionHandler = lookup.pipe(
   Effect.asSome,
   Effect.catchTag("NoSuchElementError", function() {
@@ -153,7 +155,8 @@ export const functionHandler = lookup.pipe(
   })
 )
 
-// MUST NOT TRIGGER: defaulted, rest and destructured handler parameters
+// MUST TRIGGER: catchTag always passes the error, so the default is never evaluated,
+// and an unused rest parameter does not read it
 export const defaultedParameter = lookup.pipe(
   Effect.asSome,
   Effect.catchTag("NoSuchElementError", (_error = new Cause.NoSuchElementError()) => Effect.succeedNone)
@@ -162,6 +165,8 @@ export const restParameter = lookup.pipe(
   Effect.asSome,
   Effect.catchTag("NoSuchElementError", (..._args) => Effect.succeedNone)
 )
+
+// MUST NOT TRIGGER: destructuring reads the error
 export const destructuredParameter = lookup.pipe(
   Effect.asSome,
   Effect.catchTag("NoSuchElementError", ({ message: _message }) => Effect.succeedNone)

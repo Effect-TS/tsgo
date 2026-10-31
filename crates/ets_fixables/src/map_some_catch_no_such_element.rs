@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::USE_EFFECT_CATCH_NO_SUCH_ELEMENT_INSTEAD_OF_WRAPPING_SUCCESSES_IN_OPTION_SOME_AND_CATCHING_NO_SUCH_ELEMENT_ERROR_INTO_OPTION_NONE_EFFECT_MAP_SOME_CATCH_NO_SUCH_ELEMENT;
 
-// go: internal/fixables/map_some_catch_no_such_element.go:12 MapSomeCatchNoSuchElementFix ce29d9177401b03d
+// go: internal/fixables/map_some_catch_no_such_element.go:12 MapSomeCatchNoSuchElementFix c0a0f9c1f72c0564
 pub static MAP_SOME_CATCH_NO_SUCH_ELEMENT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "mapSomeCatchNoSuchElement",
     description: "Replace with Effect.catchNoSuchElement",

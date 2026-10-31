@@ -1,8 +1,6 @@
 package rules
 
 import (
-	"slices"
-
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -22,7 +20,7 @@ var MapSomeCatchNoSuchElement = rule.Rule{
 	Codes:           []int32{tsdiag.Use_Effect_catchNoSuchElement_instead_of_wrapping_successes_in_Option_some_and_catching_NoSuchElementError_into_Option_none_effect_mapSomeCatchNoSuchElement.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diagnostics []*ast.Diagnostic
-		for _, match := range AnalyzeMapSomeCatchNoSuchElement(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
+		for _, match := range AnalyzeMapSomeCatchNoSuchElement(ctx.TypeParser, ctx.SourceFile) {
 			diagnostics = append(diagnostics, ctx.NewDiagnostic(ctx.SourceFile, match.Location, tsdiag.Use_Effect_catchNoSuchElement_instead_of_wrapping_successes_in_Option_some_and_catching_NoSuchElementError_into_Option_none_effect_mapSomeCatchNoSuchElement, nil))
 		}
 		return diagnostics
@@ -39,8 +37,8 @@ type MapSomeCatchNoSuchElementMatch struct {
 // property Effect.catchNoSuchElement checks at runtime.
 const noSuchElementErrorTypeId = "~effect/Cause/NoSuchElementError"
 
-func AnalyzeMapSomeCatchNoSuchElement(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []MapSomeCatchNoSuchElementMatch {
-	if tp == nil || c == nil || sf == nil || tp.SupportedEffectVersion() != typeparser.EffectMajorV4 {
+func AnalyzeMapSomeCatchNoSuchElement(tp *typeparser.TypeParser, sf *ast.SourceFile) []MapSomeCatchNoSuchElementMatch {
+	if tp == nil || sf == nil || tp.SupportedEffectVersion() != typeparser.EffectMajorV4 {
 		return nil
 	}
 
@@ -57,16 +55,11 @@ func AnalyzeMapSomeCatchNoSuchElement(tp *typeparser.TypeParser, c *checker.Chec
 			if hasExplicitTypeArguments(&wrap) || hasExplicitTypeArguments(&catch) {
 				continue
 			}
-			handler := ast.SkipParentheses(catch.Args().At(1))
-			if !catchHandlerIgnoresError(tp, c, handler) || !catchHandlerReturnsSucceedNone(tp, handler) {
+			if !mapSomeCatchHandlerIsPlain(catch.Args().At(1)) || !catchHandlerReturnsSucceedNone(tp, catch.Args().At(1)) {
 				continue
 			}
 			input := tp.StrictEffectType(flow.TransformationInputType(start))
 			if input == nil || !noSuchElementErrorCatchable(tp, input.E()) {
-				continue
-			}
-			output := tp.StrictEffectType(catch.OutType())
-			if output == nil || !mapSomeCatchMatchesCatchNoSuchElement(tp, c, input, output) {
 				continue
 			}
 			matches = append(matches, MapSomeCatchNoSuchElementMatch{Flow: flow, Start: start, End: start + 1, Location: scanner.GetErrorRangeForNode(sf, catch.Callee())})
@@ -75,9 +68,17 @@ func AnalyzeMapSomeCatchNoSuchElement(tp *typeparser.TypeParser, c *checker.Chec
 	return matches
 }
 
+// Return type annotations can change any channel of the pair's result, which
+// Effect.catchNoSuchElement would replace with Effect<Option<A>, Exclude<E, NoSuchElementError>, R>.
 func mapSomeCatchWrapsSome(tp *typeparser.TypeParser, step *typeparser.PipingFlowTransformation) bool {
-	return step.Args().Len() == 0 && tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "asSome") ||
-		step.Args().Len() == 1 && tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "map") && isOptionSomeMapper(tp, step.Args().At(0))
+	if step.Args().Len() == 0 {
+		return tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "asSome")
+	}
+	if step.Args().Len() != 1 || !tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "map") || !isOptionSomeMapper(tp, step.Args().At(0)) {
+		return false
+	}
+	lazy := typeparser.ParseLazyExpression(step.Args().At(0), typeparser.LazyExpressionNone)
+	return lazy == nil || lazy.Node().Type() == nil
 }
 
 func mapSomeCatchCatchesNoSuchElement(tp *typeparser.TypeParser, step *typeparser.PipingFlowTransformation) bool {
@@ -89,54 +90,20 @@ func mapSomeCatchCatchesNoSuchElement(tp *typeparser.TypeParser, step *typeparse
 		tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "catchTag")
 }
 
-// The fix replaces the pair's result type with catchNoSuchElement's
-// Effect<Option<A>, Exclude<E, NoSuchElementError>, R>. Callback annotations can
-// change any channel of the pair, so compare the pair's output with that shape.
-// Assignability accepts any in place of every type, so use type identity.
-func mapSomeCatchMatchesCatchNoSuchElement(tp *typeparser.TypeParser, c *checker.Checker, input, output *typeparser.Effect) bool {
-	identical := func(source, target *checker.Type) bool {
-		return checker.Checker_isTypeIdenticalTo(c, source, target)
+// The handler's returned flow is checked to be exactly a successful None, so
+// it cannot use the error; destructuring would still read it. A return type
+// annotation could change the pair's result type.
+func mapSomeCatchHandlerIsPlain(handler *ast.Node) bool {
+	lazy := typeparser.ParseLazyExpression(handler, typeparser.LazyExpressionNone)
+	if lazy == nil || lazy.Node().Type() != nil {
+		return false
 	}
-	for _, member := range tp.UnrollUnionMembers(output.A()) {
-		tag := tp.GetTypeOfPropertyByName(member, "_tag")
-		if tag == nil || tag.Flags()&checker.TypeFlagsStringLiteral == 0 {
-			return false
-		}
-		if text, ok := tag.AsLiteralType().Value().(string); !ok || text != "Some" && text != "None" {
-			return false
-		}
-		// Option.none() and Effect.succeedNone contribute Option<never>.
-		arguments := c.GetTypeArguments(member)
-		if len(arguments) != 1 || arguments[0].Flags()&checker.TypeFlagsNever == 0 && !identical(arguments[0], input.A()) {
+	for _, param := range lazy.Params().All() {
+		if param.Name().Kind != ast.KindIdentifier {
 			return false
 		}
 	}
-	var remaining []*checker.Type
-	for _, member := range tp.UnrollUnionMembers(input.E()) {
-		if tp.GetTypeOfPropertyByName(member, noSuchElementErrorTypeId) == nil {
-			remaining = append(remaining, member)
-		}
-	}
-	var produced []*checker.Type
-	for _, member := range tp.UnrollUnionMembers(output.E()) {
-		if member.Flags()&checker.TypeFlagsNever == 0 {
-			produced = append(produced, member)
-		}
-	}
-	contains := func(types []*checker.Type, target *checker.Type) bool {
-		return slices.ContainsFunc(types, func(candidate *checker.Type) bool { return identical(candidate, target) })
-	}
-	for _, member := range produced {
-		if !contains(remaining, member) {
-			return false
-		}
-	}
-	for _, member := range remaining {
-		if !contains(produced, member) {
-			return false
-		}
-	}
-	return identical(output.R(), input.R())
+	return true
 }
 
 // catchTag matches by _tag while catchNoSuchElement checks the brand, so every

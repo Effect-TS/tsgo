@@ -12,7 +12,14 @@ declare const lookup: Effect.Effect<string, Cause.NoSuchElementError>
 declare const lookupAny: Effect.Effect<any, Cause.NoSuchElementError>
 declare const lookupRecord: Effect.Effect<{ readonly value: string }, Cause.NoSuchElementError>
 
-// MUST TRIGGER: annotations that restate the inferred types do not change the result
+// MUST TRIGGER: a handler parameter annotation does not change the result
+export const handlerParameterAnnotation = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (_error: Cause.NoSuchElementError) => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: any return annotation skips the report, even one that restates the
+// inferred types
 export const sameHandlerAnnotation = lookup.pipe(
   Effect.asSome,
   Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>> => Effect.succeedNone)
@@ -20,10 +27,6 @@ export const sameHandlerAnnotation = lookup.pipe(
 export const sameMapperAnnotation = lookup.pipe(
   Effect.map((value): Option.Option<string> => Option.some(value)),
   Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
-)
-export const handlerParameterAnnotation = lookup.pipe(
-  Effect.asSome,
-  Effect.catchTag("NoSuchElementError", (_error: Cause.NoSuchElementError) => Effect.succeedNone)
 )
 export const anyInputAnyAnnotation = lookupAny.pipe(
   Effect.map((value): Option.Option<any> => Option.some(value)),
