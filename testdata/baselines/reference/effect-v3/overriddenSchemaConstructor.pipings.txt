@@ -57,18 +57,18 @@ Transformations (1):
       outType: { readonly a: number; }
 
 === Piping Flow ===
-Location: 36:42 - 36:60
-Node: Schema.Struct({})
+Location: 36:42 - 36:78
+Node: Schema.Struct({ a: Schema.String })
 Node Kind: KindCallExpression
 
-Subject: {}
-Subject Type: {}
+Subject: { a: Schema.String }
+Subject Type: { a: typeof String$; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{}>
+      outType: Struct<{ a: typeof String$; }>
 
 === Piping Flow ===
 Location: 37:18 - 38:30
@@ -82,4 +82,4 @@ Transformations (1):
   [0] kind: call
       callee: super
       args: (constant)
-      outType: Variance<{}, {}, never>
+      outType: Variance<{ readonly a: string; }, { readonly a: string; }, never>

@@ -8,15 +8,13 @@ Effect version: 4.0.2
 /.src/schemaOpaqueInstanceMember.ts(13,7): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(16,7): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(21,36): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
-/.src/schemaOpaqueInstanceMember.ts(21,47): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
 /.src/schemaOpaqueInstanceMember.ts(22,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(25,43): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
-/.src/schemaOpaqueInstanceMember.ts(25,54): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
 /.src/schemaOpaqueInstanceMember.ts(26,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(34,34): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 
 
-==== /.src/schemaOpaqueInstanceMember.ts (13 errors) ====
+==== /.src/schemaOpaqueInstanceMember.ts (11 errors) ====
     import { Schema } from "effect"
     import { Opaque as SchemaOpaque } from "effect/Schema"
     import * as S from "effect/Schema"
@@ -49,21 +47,17 @@ Effect version: 4.0.2
       }
     }
     
-    class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({})) {
+    class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({ a: Schema.String })) {
                                        ~~~~~~~
 !!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
-                                                  ~~~~~~~~~~~~~~~~~
-!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
       field = true
       ~~~~~
 !!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
     }
     
-    const Expression = class extends S.Opaque<Invalid>()(S.Struct({})) {
+    const Expression = class extends S.Opaque<Invalid>()(S.Struct({ a: S.String })) {
                                               ~~~~~~~
 !!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
-                                                         ~~~~~~~~~~~~
-!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
       expressionField = true
       ~~~~~~~~~~~~~~~
 !!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)

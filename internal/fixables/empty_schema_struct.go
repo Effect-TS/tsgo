@@ -36,7 +36,8 @@ func runEmptySchemaStructFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Replace with " + scanner.GetTextOfNode(match.ToolNamespace) + ".EmptyParams",
 			Run: func(tracker *rewriter.Tracker) {
 				emptyParams := tracker.NewPropertyAccessExpression(tracker.DeepCloneNode(match.ToolNamespace), nil, tracker.NewIdentifier("EmptyParams"), ast.NodeFlagsNone)
-				tracker.ReplaceNode(sf, match.Call, emptyParams, nil)
+				// The only edit: a refused prefix leaves no changes and no action
+				tracker.ReplacePipingFlowPrefix(sf, match.Flow, 1, emptyParams)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

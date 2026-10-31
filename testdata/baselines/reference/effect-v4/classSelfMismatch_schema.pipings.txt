@@ -58,11 +58,11 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 24:10 - 28:5
-Node: Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")({\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  })
+Node: Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")({\n    payload: Schema.Struct({ a: Schema.String }),\n    success: Schema.Void,\n    error: Schema.Never\n  })
 Node Kind: KindCallExpression
 
-Subject: {\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  }
-Subject Type: { payload: Struct<{}>; success: Void; error: Never; }
+Subject: {\n    payload: Schema.Struct({ a: Schema.String }),\n    success: Schema.Void,\n    error: Schema.Never\n  }
+Subject Type: { payload: Struct<{ readonly a: String; }>; success: Void; error: Never; }
 
 Transformations (1):
   [0] kind: call
@@ -71,26 +71,26 @@ Transformations (1):
       outType: any
 
 === Piping Flow ===
-Location: 25:13 - 25:31
-Node: Schema.Struct({})
+Location: 25:13 - 25:49
+Node: Schema.Struct({ a: Schema.String })
 Node Kind: KindCallExpression
 
-Subject: {}
-Subject Type: {}
+Subject: { a: Schema.String }
+Subject Type: { a: String; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{}>
+      outType: Struct<{ readonly a: String; }>
 
 === Piping Flow ===
 Location: 33:10 - 37:5
-Node: Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")({\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  })
+Node: Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")({\n    payload: Schema.Struct({ a: Schema.String }),\n    success: Schema.Void,\n    error: Schema.Never\n  })
 Node Kind: KindCallExpression
 
-Subject: {\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  }
-Subject Type: { payload: Struct<{}>; success: Void; error: Never; }
+Subject: {\n    payload: Schema.Struct({ a: Schema.String }),\n    success: Schema.Void,\n    error: Schema.Never\n  }
+Subject Type: { payload: Struct<{ readonly a: String; }>; success: Void; error: Never; }
 
 Transformations (1):
   [0] kind: call
@@ -99,15 +99,15 @@ Transformations (1):
       outType: any
 
 === Piping Flow ===
-Location: 34:13 - 34:31
-Node: Schema.Struct({})
+Location: 34:13 - 34:49
+Node: Schema.Struct({ a: Schema.String })
 Node Kind: KindCallExpression
 
-Subject: {}
-Subject Type: {}
+Subject: { a: Schema.String }
+Subject Type: { a: String; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{}>
+      outType: Struct<{ readonly a: String; }>

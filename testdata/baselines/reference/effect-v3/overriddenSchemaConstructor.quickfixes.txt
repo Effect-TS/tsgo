@@ -6,11 +6,7 @@
   Fix 2: "Rewrite using the static 'new' pattern"
   Fix 3: "Remove the constructor override"
 
-[D2] (36:43-36:60) TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
-  Fix 0: "Disable emptySchemaStruct for this line"
-  Fix 1: "Disable emptySchemaStruct for entire file"
-
-[D3] (37:3-37:14) TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
+[D2] (37:3-37:14) TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
   Fix 0: "Disable overriddenSchemaConstructor for this line"
   Fix 1: "Disable overriddenSchemaConstructor for entire file"
   Fix 2: "Rewrite using the static 'new' pattern"
@@ -63,7 +59,7 @@ export class InvalidBecauseOfConstructor
 }
 
 // this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
-export class InvalidExtendsString extends Schema.Struct({}) {
+export class InvalidExtendsString extends Schema.Struct({ a: Schema.String }) {
   constructor() {
     super({} as any as never)
   }
@@ -104,26 +100,20 @@ export class InvalidBecauseOfConstructor
 }
 
 // this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
-export class InvalidExtendsString extends Schema.Struct({}) {
+export class InvalidExtendsString extends Schema.Struct({ a: Schema.String }) {
   constructor() {
     super({} as any as never)
   }
 }
 
 
-=== [D2] Fix 0: "Disable emptySchemaStruct for this line" ===
+=== [D2] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
 skipped by default
 
-=== [D2] Fix 1: "Disable emptySchemaStruct for entire file" ===
+=== [D2] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
 skipped by default
 
-=== [D3] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
-skipped by default
-
-=== [D3] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
-skipped by default
-
-=== [D3] Fix 2: "Rewrite using the static 'new' pattern" ===
+=== [D2] Fix 2: "Rewrite using the static 'new' pattern" ===
 
 --- file:///.src/overriddenSchemaConstructor.ts ---
 // @effect-v3
@@ -161,7 +151,7 @@ export class InvalidBecauseOfConstructor
 }
 
 // this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
-export class InvalidExtendsString extends Schema.Struct({}) {
+export class InvalidExtendsString extends Schema.Struct({ a: Schema.String }) {
   public static new() {
     const _this = new this({} as any as never);
     return _this;
@@ -169,7 +159,7 @@ export class InvalidExtendsString extends Schema.Struct({}) {
 }
 
 
-=== [D3] Fix 3: "Remove the constructor override" ===
+=== [D2] Fix 3: "Remove the constructor override" ===
 
 --- file:///.src/overriddenSchemaConstructor.ts ---
 // @effect-v3
@@ -207,6 +197,6 @@ export class InvalidBecauseOfConstructor
 }
 
 // this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
-export class InvalidExtendsString extends Schema.Struct({}) {
+export class InvalidExtendsString extends Schema.Struct({ a: Schema.String }) {
 }
 

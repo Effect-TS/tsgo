@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -42,118 +43,116 @@ var EmptySchemaStruct = rule.Rule{
 type EmptySchemaStructMatch struct {
 	SourceFile *ast.SourceFile
 	Location   core.TextRange // Pre-computed error range for the diagnostic
-	Call       *ast.Node      // The Schema.Struct({}) call expression
-	// InToolParameters is set when Call is the parameters of Tool.make or Tool.dynamic.
+	// Flow starts with the subject {} and the Schema.Struct step.
+	Flow *typeparser.PipingFlow
+	// InToolParameters is set when the flow is the parameters of Tool.make or Tool.dynamic.
 	InToolParameters bool
 	// ToolNamespace is the Tool module receiver of the tool constructor
 	// (Tool in Tool.make), or nil when the constructor is not accessed on it.
 	ToolNamespace *ast.Node
 }
 
-// AnalyzeEmptySchemaStruct finds all Schema.Struct({}) call expressions and
-// returns match structs for each.
+// AnalyzeEmptySchemaStruct finds every flow that applies Schema.Struct to an
+// empty object literal and returns match structs for each.
 func AnalyzeEmptySchemaStruct(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EmptySchemaStructMatch {
+	flows := tp.PipingFlows(sf, false)
+	toolParameters := emptySchemaStructToolParameters(tp, flows)
+
 	var matches []EmptySchemaStructMatch
-
-	// Stack-based traversal
-	nodeToVisit := make([]*ast.Node, 0)
-	pushChild := func(child *ast.Node) bool {
-		nodeToVisit = append(nodeToVisit, child)
-		return false
-	}
-	sf.AsNode().ForEachChild(pushChild)
-
-	for len(nodeToVisit) > 0 {
-		node := nodeToVisit[len(nodeToVisit)-1]
-		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
-
-		if node.Kind == ast.KindCallExpression {
-			if m, ok := analyzeEmptySchemaStructNode(tp, sf, node); ok {
-				matches = append(matches, m)
-			}
+	for _, flow := range flows.All() {
+		if !flow.MatchesPrefix(
+			func(subject typeparser.PipingFlowSubject) bool {
+				// Spreads and computed keys are properties too
+				node := subject.Node()
+				if node == nil || node.Kind != ast.KindObjectLiteralExpression {
+					return false
+				}
+				properties := node.AsObjectLiteralExpression().Properties
+				return properties == nil || len(properties.Nodes) == 0
+			},
+			func(t typeparser.PipingFlowTransformation) bool {
+				return t.Args().Len() == 0 && tp.IsNodeReferenceToEffectSchemaModuleApi(t.Callee(), "Struct")
+			},
+		) {
+			continue
 		}
 
-		// Enqueue children
-		node.ForEachChild(pushChild)
-	}
+		// The flow node is the Schema.Struct({}) expression itself only when no step follows it
+		node := flow.Node()
+		structOnly := flow.Transformations().Len() == 1
 
+		// Schema.StructWithRest(Schema.Struct({}), records) adds index signatures to the empty struct
+		if structOnly && isStructWithRestFields(tp, node) {
+			continue
+		}
+
+		// A call step is reported on its call; other spellings on the callee
+		step := flow.Transformations().At(0)
+		location := step.Callee()
+		if step.Kind() == typeparser.TransformationKindCall {
+			location = step.Callee().Parent
+		}
+
+		var toolNamespace *ast.Node
+		inToolParameters := false
+		if structOnly {
+			toolNamespace, inToolParameters = toolParameters[node]
+		}
+		matches = append(matches, EmptySchemaStructMatch{
+			SourceFile:       sf,
+			Location:         scanner.GetErrorRangeForNode(sf, location),
+			Flow:             flow,
+			InToolParameters: inToolParameters,
+			ToolNamespace:    toolNamespace,
+		})
+	}
 	return matches
 }
 
-// analyzeEmptySchemaStructNode checks a call expression for Schema.Struct({}).
-func analyzeEmptySchemaStructNode(tp *typeparser.TypeParser, sf *ast.SourceFile, node *ast.Node) (EmptySchemaStructMatch, bool) {
-	call := node.AsCallExpression()
-
-	// A single argument: v3 index-signature records follow the fields as extra arguments
-	if call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
-		return EmptySchemaStructMatch{}, false
+// isStructWithRestFields reports whether node is the fields argument of
+// Schema.StructWithRest, a call that never becomes a flow step.
+func isStructWithRestFields(tp *typeparser.TypeParser, node *ast.Node) bool {
+	parent := node.Parent
+	if parent == nil || parent.Kind != ast.KindCallExpression {
+		return false
 	}
-
-	// The argument must be a literal {}; spreads and computed keys are properties too
-	arg := ast.SkipParentheses(call.Arguments.Nodes[0])
-	if arg.Kind != ast.KindObjectLiteralExpression {
-		return EmptySchemaStructMatch{}, false
-	}
-	if properties := arg.AsObjectLiteralExpression().Properties; properties != nil && len(properties.Nodes) > 0 {
-		return EmptySchemaStructMatch{}, false
-	}
-
-	if !tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "Struct") {
-		return EmptySchemaStructMatch{}, false
-	}
-
-	// Schema.StructWithRest(Schema.Struct({}), records) adds index signatures to the empty struct
-	if parent := ast.WalkUpParenthesizedExpressions(node.Parent); parent != nil && parent.Kind == ast.KindCallExpression {
-		parentCall := parent.AsCallExpression()
-		if parentCall.Arguments != nil && len(parentCall.Arguments.Nodes) > 0 && ast.SkipParentheses(parentCall.Arguments.Nodes[0]) == node &&
-			tp.IsNodeReferenceToEffectSchemaModuleApi(parentCall.Expression, "StructWithRest") {
-			return EmptySchemaStructMatch{}, false
-		}
-	}
-
-	inToolParameters, toolNamespace := emptySchemaStructToolContext(tp, node)
-	return EmptySchemaStructMatch{
-		SourceFile:       sf,
-		Location:         scanner.GetErrorRangeForNode(sf, node),
-		Call:             node,
-		InToolParameters: inToolParameters,
-		ToolNamespace:    toolNamespace,
-	}, true
+	call := parent.AsCallExpression()
+	return call.Arguments != nil && len(call.Arguments.Nodes) > 0 && call.Arguments.Nodes[0] == node &&
+		tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "StructWithRest")
 }
 
-// emptySchemaStructToolContext reports whether call is the parameters property
-// of the options passed to Tool.make or Tool.dynamic, and returns the Tool
-// module receiver of the constructor when there is one.
-func emptySchemaStructToolContext(tp *typeparser.TypeParser, call *ast.Node) (bool, *ast.Node) {
-	// A computed name has a ComputedPropertyName parent, so call is the initializer here
-	property := ast.WalkUpParenthesizedExpressions(call.Parent)
-	if property == nil || property.Kind != ast.KindPropertyAssignment ||
-		ast.GetTextOfPropertyName(property.Name()) != "parameters" {
-		return false, nil
-	}
-
-	options := property.Parent
-	if options == nil || options.Kind != ast.KindObjectLiteralExpression {
-		return false, nil
-	}
-	toolCall := ast.WalkUpParenthesizedExpressions(options.Parent)
-	if toolCall == nil || toolCall.Kind != ast.KindCallExpression {
-		return false, nil
-	}
-	// Tool.make and Tool.dynamic take (name, options)
-	arguments := toolCall.AsCallExpression().Arguments
-	if arguments == nil || len(arguments.Nodes) < 2 || ast.SkipParentheses(arguments.Nodes[1]) != options {
-		return false, nil
-	}
-	callee := toolCall.AsCallExpression().Expression
-	if !tp.IsNodeReferenceToEffectAiToolModuleApi(callee, "make") && !tp.IsNodeReferenceToEffectAiToolModuleApi(callee, "dynamic") {
-		return false, nil
-	}
-
-	if ast.IsPropertyAccessExpression(callee) {
-		if receiver := callee.AsPropertyAccessExpression().Expression; tp.IsExpressionEffectAiToolModule(receiver) {
-			return true, receiver
+// emptySchemaStructToolParameters maps the parameters value of each Tool.make
+// and Tool.dynamic step to the Tool module receiver of its constructor, or nil
+// when the constructor is not accessed on it.
+func emptySchemaStructToolParameters(tp *typeparser.TypeParser, flows readonly.Slice[*typeparser.PipingFlow]) map[*ast.Node]*ast.Node {
+	parameters := map[*ast.Node]*ast.Node{}
+	for _, flow := range flows.All() {
+		for _, t := range flow.Transformations().All() {
+			// Tool.make(name, options) applies the step to the name with the options as its argument
+			if t.Args().Len() != 1 ||
+				(!tp.IsNodeReferenceToEffectAiToolModuleApi(t.Callee(), "make") && !tp.IsNodeReferenceToEffectAiToolModuleApi(t.Callee(), "dynamic")) {
+				continue
+			}
+			options := t.Args().At(0)
+			if options.Kind != ast.KindObjectLiteralExpression {
+				continue
+			}
+			var toolNamespace *ast.Node
+			if ast.IsPropertyAccessExpression(t.Callee()) {
+				if receiver := t.Callee().AsPropertyAccessExpression().Expression; tp.IsExpressionEffectAiToolModule(receiver) {
+					toolNamespace = receiver
+				}
+			}
+			properties := options.AsObjectLiteralExpression().Properties
+			if properties == nil {
+				continue
+			}
+			for _, property := range properties.Nodes {
+				if property.Kind == ast.KindPropertyAssignment && ast.GetTextOfPropertyName(property.Name()) == "parameters" {
+					parameters[ast.SkipParentheses(property.Initializer())] = toolNamespace
+				}
+			}
 		}
 	}
-	return true, nil
+	return parameters
 }

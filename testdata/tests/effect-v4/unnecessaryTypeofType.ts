@@ -11,10 +11,10 @@
 // @filename: schemas.ts
 import { Schema } from "effect"
 
-export const UserId = Schema.Struct({})
+export const UserId = Schema.Struct({ a: Schema.optional(Schema.String) })
 export type UserId = typeof UserId.Type
 
-export const SessionId = Schema.Struct({})
+export const SessionId = Schema.Struct({ a: Schema.optional(Schema.String) })
 
 export namespace UsersRepo {
   export const User = Schema.Struct({ id: Schema.Finite })

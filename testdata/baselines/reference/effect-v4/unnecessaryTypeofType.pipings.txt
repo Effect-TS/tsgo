@@ -1,32 +1,60 @@
-==== /.src/schemas.ts (4 flows) ====
+==== /.src/schemas.ts (6 flows) ====
 
 === Piping Flow ===
-Location: 3:22 - 3:40
-Node: Schema.Struct({})
+Location: 3:22 - 3:75
+Node: Schema.Struct({ a: Schema.optional(Schema.String) })
 Node Kind: KindCallExpression
 
-Subject: {}
-Subject Type: {}
+Subject: { a: Schema.optional(Schema.String) }
+Subject Type: { a: optional<String>; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{}>
+      outType: Struct<{ readonly a: optional<String>; }>
 
 === Piping Flow ===
-Location: 6:25 - 6:43
-Node: Schema.Struct({})
+Location: 3:41 - 3:72
+Node: Schema.optional(Schema.String)
 Node Kind: KindCallExpression
 
-Subject: {}
-Subject Type: {}
+Subject: Schema.String
+Subject Type: String
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.optional
+      args: (constant)
+      outType: optional<String>
+
+=== Piping Flow ===
+Location: 6:25 - 6:78
+Node: Schema.Struct({ a: Schema.optional(Schema.String) })
+Node Kind: KindCallExpression
+
+Subject: { a: Schema.optional(Schema.String) }
+Subject Type: { a: optional<String>; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{}>
+      outType: Struct<{ readonly a: optional<String>; }>
+
+=== Piping Flow ===
+Location: 6:44 - 6:75
+Node: Schema.optional(Schema.String)
+Node Kind: KindCallExpression
+
+Subject: Schema.String
+Subject Type: String
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.optional
+      args: (constant)
+      outType: optional<String>
 
 === Piping Flow ===
 Location: 9:22 - 9:59

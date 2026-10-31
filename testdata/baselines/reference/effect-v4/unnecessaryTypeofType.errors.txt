@@ -1,8 +1,6 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/schemas.ts(3,23): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
-/.src/schemas.ts(6,26): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
 /.src/test.ts(5,10): warning TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
 /.src/test.ts(6,10): warning TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
 /.src/test.ts(7,31): warning TS377090: This `typeof ... .Type` query can be replaced with `Schemas.UsersRepo.User`. effect(unnecessaryTypeofType)
@@ -19,17 +17,13 @@ Effect version: 4.0.2
       }
     }
 
-==== /.src/schemas.ts (2 errors) ====
+==== /.src/schemas.ts (0 errors) ====
     import { Schema } from "effect"
     
-    export const UserId = Schema.Struct({})
-                          ~~~~~~~~~~~~~~~~~
-!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+    export const UserId = Schema.Struct({ a: Schema.optional(Schema.String) })
     export type UserId = typeof UserId.Type
     
-    export const SessionId = Schema.Struct({})
-                             ~~~~~~~~~~~~~~~~~
-!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
+    export const SessionId = Schema.Struct({ a: Schema.optional(Schema.String) })
     
     export namespace UsersRepo {
       export const User = Schema.Struct({ id: Schema.Finite })

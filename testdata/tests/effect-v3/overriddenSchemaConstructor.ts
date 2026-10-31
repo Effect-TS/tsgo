@@ -33,7 +33,7 @@ export class InvalidBecauseOfConstructor
 }
 
 // this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
-export class InvalidExtendsString extends Schema.Struct({}) {
+export class InvalidExtendsString extends Schema.Struct({ a: Schema.String }) {
   constructor() {
     super({} as any as never)
   }

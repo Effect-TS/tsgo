@@ -22,7 +22,7 @@ export class InvalidErrorSchemaClass extends Schema.Class<ValidErrorSchemaClass>
 
 export class ValidSchemaTaggedRequest
   extends Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")({
-    payload: Schema.Struct({}),
+    payload: Schema.Struct({ a: Schema.String }),
     success: Schema.Void,
     error: Schema.Never
   })
@@ -31,7 +31,7 @@ export class ValidSchemaTaggedRequest
 // invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
 export class InvalidSchemaTaggedRequest
   extends Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")({
-    payload: Schema.Struct({}),
+    payload: Schema.Struct({ a: Schema.String }),
     success: Schema.Void,
     error: Schema.Never
   })

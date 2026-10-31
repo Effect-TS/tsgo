@@ -4,6 +4,7 @@ import { Schema as S } from "effect"
 import * as Rpc from "effect/rpc/Rpc"
 import * as Schema from "effect/Schema"
 import { Struct, Struct as SchemaStruct } from "effect/Schema"
+import { pipe } from "effect/Function"
 
 // MUST TRIGGER (no fix): Schema.Struct({}) models the type {}, so any non-null value decodes
 export const Empty = Schema.Struct({})
@@ -47,6 +48,9 @@ export const Annotated = Schema.Struct({}).annotate({ identifier: "Annotated" })
 
 // MUST TRIGGER (no fix): the empty struct is piped
 export const Piped = Schema.Struct({}).pipe(Schema.annotate({ identifier: "Piped" }))
+
+// MUST TRIGGER (no fix): the point-free pipe spelling
+export const PointFree = pipe({}, Schema.Struct)
 
 // MUST TRIGGER (inner call only, no fix): the outer struct has fields, the nested one is empty
 export const Nested = Schema.Struct({
