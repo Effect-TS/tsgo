@@ -181,6 +181,7 @@ func isSynchronousFunction(node *ast.Node) bool {
 	return node.Kind == ast.KindArrowFunction
 }
 
+//ets:ast-walk finds conditional expressions that dispatch on an Option
 func analyzeOptionConditionals(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []OptionMatchToFromOptionMatch {
 	var matches []OptionMatchToFromOptionMatch
 	var visit func(*ast.Node) bool

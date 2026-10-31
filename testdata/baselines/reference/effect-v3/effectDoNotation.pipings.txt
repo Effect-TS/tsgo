@@ -1,7 +1,7 @@
 ==== /.src/effectDoNotation.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 6:21 - 6:74
+Location: 7:21 - 7:74
 Node: Effect.bind(Effect.Do, "a", () => Effect.succeed(1))
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<{ a: number; }, never, never>
 
 === Piping Flow ===
-Location: 6:55 - 6:73
+Location: 7:55 - 7:73
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 

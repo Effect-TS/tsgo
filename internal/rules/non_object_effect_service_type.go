@@ -22,6 +22,7 @@ var NonObjectEffectServiceType = rule.Rule{
 	Codes: []int32{
 		tsdiag.Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType.Code(),
 	},
+	//ets:ast-walk finds class declarations extending Effect.Service, which are not flow steps
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		// V3-only rule
 		if ctx.TypeParser.SupportedEffectVersion() != typeparser.EffectMajorV3 {

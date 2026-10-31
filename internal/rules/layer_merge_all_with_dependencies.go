@@ -56,6 +56,7 @@ func AnalyzeLayerMergeAllWithDependencies(tp *typeparser.TypeParser, c *checker.
 		nodeToVisit = append(nodeToVisit, child)
 		return false
 	}
+	//ets:ast-walk finds Layer.mergeAll calls, whose rest parameter keeps them out of flow steps
 	sf.AsNode().ForEachChild(pushChild)
 
 	for len(nodeToVisit) > 0 {
@@ -69,6 +70,7 @@ func AnalyzeLayerMergeAllWithDependencies(tp *typeparser.TypeParser, c *checker.
 		}
 
 		// Enqueue children
+		//ets:ast-walk finds Layer.mergeAll calls, whose rest parameter keeps them out of flow steps
 		node.ForEachChild(pushChild)
 	}
 

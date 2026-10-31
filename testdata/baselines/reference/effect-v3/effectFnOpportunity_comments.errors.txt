@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectFnOpportunity_comments.ts(3,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_comments.ts(4,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -9,6 +9,7 @@ Effect version: 3.19.19
     
 
 ==== /.src/effectFnOpportunity_comments.ts (1 errors) ====
+    // @effect-v3
     import { Effect } from "effect"
     
     export const f = (n: number) =>

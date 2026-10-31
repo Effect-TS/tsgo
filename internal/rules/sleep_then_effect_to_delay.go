@@ -229,7 +229,7 @@ func classifySleepContinuation(tp *typeparser.TypeParser, c *checker.Checker, co
 // fixes that would call it differently.
 func continuationFunctionIgnoresInput(tp *typeparser.TypeParser, c *checker.Checker, fn *ast.Node) bool {
 	if fn.Kind == ast.KindArrowFunction {
-		return arrowIgnoresParameter(tp, c, fn)
+		return catchHandlerIgnoresError(tp, c, fn)
 	}
 	expression := fn.AsFunctionExpression()
 	if expression.AsteriskToken != nil || ast.GetCombinedModifierFlags(fn)&ast.ModifierFlagsAsync != 0 {

@@ -15,10 +15,16 @@ pub(crate) fn is_disable_style_fix(title: &str) -> bool {
         && (title.ends_with(" for this line") || title.ends_with(" for entire file"))
 }
 
-// go test: internal/effecttest/quickfix_runner.go:25 RunEffectQuickFixTest da7ac127e7e624e0
+// go test: internal/effecttest/quickfix_runner.go:31 RunEffectQuickFixTest 4efec1ab641dbaa1
 // RunEffectQuickFixTest executes a single Effect quick-fix baseline test case.
 // It creates a fourslash test instance, collects quick-fix inventory and application
 // results, and generates a *.quickfixes.txt baseline.
+//
+// TODO: version only picks the baseline folder. The fourslash harness takes the
+// Effect version from a `// @effect-v3` marker in the fixture
+// (etstesthooks/init.go), so a v3 fixture without one runs against Effect v4.
+// `repoctl check` requires the marker on every testdata/tests/effect-v3 fixture
+// until the runner passes version to the harness itself.
 //
 // Rust: the fourslash harness is the Rust-only stand-in `ets_fourslash` (a tsrs language server driven through
 // tsrs's in-process LSP client, as Go's drives typescript-go's); `done` runs when the test ends (also on drop).

@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapSomeToAsSome:warning
 import { Effect, Option } from "effect"

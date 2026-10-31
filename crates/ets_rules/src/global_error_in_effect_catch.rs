@@ -15,7 +15,7 @@ use ets_typeparser::TypeParser;
 pub(crate) static GLOBAL_ERROR_CATCH_APIS: &[&str] =
     &["tryPromise", "try", "tryMap", "tryMapPromise"];
 
-// go: internal/rules/global_error_in_effect_catch.go:19 GlobalErrorInEffectCatch 593de55a5367cd8a
+// go: internal/rules/global_error_in_effect_catch.go:19 GlobalErrorInEffectCatch ea5e2a167fce23e4
 // GlobalErrorInEffectCatch detects when catch callbacks in Effect APIs return the global 'Error'
 // type instead of providing typed errors.
 pub static GLOBAL_ERROR_IN_EFFECT_CATCH: LazyLock<Rule> = LazyLock::new(|| {
@@ -49,7 +49,7 @@ pub static GLOBAL_ERROR_IN_EFFECT_CATCH: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_error_in_effect_catch.go:52 checkGlobalErrorInEffectCatch e0731585608477d4
+// go: internal/rules/global_error_in_effect_catch.go:53 checkGlobalErrorInEffectCatch e0731585608477d4
 // checkGlobalErrorInEffectCatch checks a single call expression for the global-error-in-catch pattern.
 pub(crate) fn check_global_error_in_effect_catch(
     ctx: &mut Context<'_, '_>,
@@ -113,7 +113,7 @@ pub(crate) fn check_global_error_in_effect_catch(
     None
 }
 
-// go: internal/rules/global_error_in_effect_catch.go:109 isGlobalErrorCatchCallee 2a7e03ee9342fdf0
+// go: internal/rules/global_error_in_effect_catch.go:110 isGlobalErrorCatchCallee 2a7e03ee9342fdf0
 // isGlobalErrorCatchCallee checks if a node references one of the Effect module catch APIs.
 //
 // Rust: Go's unused checker argument is dropped (the parser holds the checker).

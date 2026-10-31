@@ -63,6 +63,7 @@ func AnalyzeNestedEffectGenYield(tp *typeparser.TypeParser, sf *ast.SourceFile) 
 			}
 		}
 
+		//ets:ast-walk finds yield* expressions applied to a nested Effect.gen
 		node.ForEachChild(walk)
 		return false
 	}

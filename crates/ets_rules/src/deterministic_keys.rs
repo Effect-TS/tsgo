@@ -53,7 +53,7 @@ pub struct DeterministicKeyMatchExported {
     pub expected_key: String,        // The expected key computed by keybuilder
 }
 
-// go: internal/rules/deterministic_keys.go:49 AnalyzeDeterministicKeys 294c50e3850a8a78
+// go: internal/rules/deterministic_keys.go:51 AnalyzeDeterministicKeys 078d3fd60db6e602
 // AnalyzeDeterministicKeys finds all class declarations where the key string literal
 // doesn't match the expected deterministic key.
 //
@@ -102,7 +102,7 @@ pub fn analyze_deterministic_keys(
     matches
 }
 
-// go: internal/rules/deterministic_keys.go:83 deterministicKeyMatch 74cf8ad545c5f768
+// go: internal/rules/deterministic_keys.go:85 deterministicKeyMatch 74cf8ad545c5f768
 // deterministicKeyMatch holds the matched key info from a class declaration.
 //
 // Rust: Go's `deterministicKeyMatch` and `DeterministicKeyMatch` clash after capitalization; the exported one is
@@ -113,7 +113,7 @@ pub(crate) struct DeterministicKeyMatch {
     pub(crate) target: &'static str,
 }
 
-// go: internal/rules/deterministic_keys.go:89 checkDeterministicKeyMatch 388031c463219885
+// go: internal/rules/deterministic_keys.go:91 checkDeterministicKeyMatch 388031c463219885
 pub(crate) fn check_deterministic_key_match(
     tp: &mut TypeParser<'_>,
     program: &'static dyn Program,
@@ -155,7 +155,7 @@ pub(crate) fn check_deterministic_key_match(
     })
 }
 
-// go: internal/rules/deterministic_keys.go:118 matchClassPattern 701ccd86457afe9a
+// go: internal/rules/deterministic_keys.go:120 matchClassPattern 701ccd86457afe9a
 // matchClassPattern tries to match a class declaration against the supported patterns.
 // Priority: service targets first, then error targets, then tagged class targets, then custom.
 pub(crate) fn match_class_pattern(
@@ -244,7 +244,7 @@ pub(crate) fn match_class_pattern(
     None
 }
 
-// go: internal/rules/deterministic_keys.go:165 matchCustomPattern 39bd05fe97d24b59
+// go: internal/rules/deterministic_keys.go:167 matchCustomPattern 81024e35db4a2a7b
 // matchCustomPattern checks heritage clause nodes for call expressions with string literal
 // arguments whose parameter declarations contain the @effect-identifier annotation.
 //
@@ -318,7 +318,7 @@ pub(crate) fn match_custom_pattern(
     None
 }
 
-// go: internal/rules/deterministic_keys.go:241 getPackageJsonDirectory 91834641597a83b0
+// go: internal/rules/deterministic_keys.go:244 getPackageJsonDirectory 91834641597a83b0
 // getPackageJsonDirectory gets the package.json directory for a source file from its metadata.
 //
 // Rust: Go's checker argument is unused and dropped. Go's assertion to its `metaProvider` interface always

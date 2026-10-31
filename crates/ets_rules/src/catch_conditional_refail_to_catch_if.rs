@@ -326,7 +326,7 @@ pub(crate) fn is_conditional_refail_predicate(
     }
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:245 conditionalRefailNodeContainsParameter 33ffd582f93abe37
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:245 conditionalRefailNodeContainsParameter b70e6bfeb64a1eb8
 pub(crate) fn conditional_refail_node_contains_parameter(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

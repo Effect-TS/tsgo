@@ -68,6 +68,7 @@ func AnalyzeUnnecessaryPipeChain(tp *typeparser.TypeParser, c *checker.Checker, 
 			}
 		}
 
+		//ets:ast-walk finds pipe()/.pipe() calls whose subject is another pipe call
 		n.ForEachChild(walk)
 		return false
 	}

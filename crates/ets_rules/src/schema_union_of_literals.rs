@@ -46,7 +46,7 @@ pub struct SchemaUnionOfLiteralsMatch {
     pub all_literal_args: Vec<P<Node>>, // All arguments collected from every Schema.Literal(...) call, in order
 }
 
-// go: internal/rules/schema_union_of_literals.go:46 AnalyzeSchemaUnionOfLiterals 4edc18fb600c5f8a
+// go: internal/rules/schema_union_of_literals.go:48 AnalyzeSchemaUnionOfLiterals 77518c3ad298cbbe
 // AnalyzeSchemaUnionOfLiterals finds all Schema.Union(...) calls where every argument
 // is a Schema.Literal(...) call, returning matches with captured nodes for diagnostics and fixes.
 //
@@ -84,7 +84,7 @@ pub fn analyze_schema_union_of_literals(
     matches
 }
 
-// go: internal/rules/schema_union_of_literals.go:79 analyzeSchemaUnionOfLiteralsNode 8575420d52ec254e
+// go: internal/rules/schema_union_of_literals.go:81 analyzeSchemaUnionOfLiteralsNode 8575420d52ec254e
 // analyzeSchemaUnionOfLiteralsNode checks if a call expression is Schema.Union(...)
 // where all arguments are Schema.Literal(...) calls.
 pub(crate) fn analyze_schema_union_of_literals_node(

@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::SCHEMA_LITERAL_VALUES_MUST_BE_FINITE_NUMBERS_0_THROWS_DURING_SCHEMA_CONSTRUCTION_USE_A_FINITE_LITERAL_OR_MODEL_NON_FINITE_VALUES_WITH_A_REFINED_SCHEMA_NUMBER_EFFECT_SCHEMA_LITERAL_NON_FINITE;
 
-// go: internal/rules/schema_literal_non_finite.go:13 SchemaLiteralNonFinite d81cc2eb6ea7c45c
+// go: internal/rules/schema_literal_non_finite.go:13 SchemaLiteralNonFinite 0f9e129b1955f419
 pub static SCHEMA_LITERAL_NON_FINITE: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "schemaLiteralNonFinite",
     group: "correctness",

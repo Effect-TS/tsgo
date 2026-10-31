@@ -1,40 +1,36 @@
 === Quick Fix Inventory ===
 
-[D1] (10:36-10:50) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+[D1] (11:36-11:50) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
   Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
   Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
   Fix 2: "Replace with Effect.andThen"
 
-[D2] (13:34-13:48) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+[D2] (14:34-14:48) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
   Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
   Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
   Fix 2: "Replace with Effect.andThen"
 
-[D3] (16:26-16:40) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+[D3] (17:26-17:40) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
   Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
   Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
   Fix 2: "Replace with Effect.andThen"
 
-[D4] (19:25-19:39) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+[D4] (20:25-20:39) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
   Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
   Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
   Fix 2: "Replace with Effect.andThen"
 
-[D5] (23:35-23:42) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+[D5] (24:35-24:42) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
   Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
   Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
   Fix 2: "Replace with Effect.andThen"
 
-[D6] (39:37-39:51) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+[D6] (40:37-40:51) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
   Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
   Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
   Fix 2: "Replace with Effect.andThen"
 
-[D7] (44:17-44:28) TS377091: Exported declaration 'nestedScope' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-  Fix 0: "Disable lazyEffect for this line"
-  Fix 1: "Disable lazyEffect for entire file"
-
-[D8] (45:21-45:35) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+[D7] (46:21-46:35) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
   Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
   Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
   Fix 2: "Replace with Effect.andThen"
@@ -50,6 +46,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.andThen" ===
 
 --- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 
@@ -117,6 +114,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.andThen" ===
 
 --- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 
@@ -184,6 +182,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.andThen" ===
 
 --- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 
@@ -251,6 +250,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.andThen" ===
 
 --- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 
@@ -318,6 +318,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.andThen" ===
 
 --- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 
@@ -385,6 +386,7 @@ skipped by default
 === [D6] Fix 2: "Replace with Effect.andThen" ===
 
 --- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 
@@ -441,21 +443,16 @@ export const unrelatedCall = unrelated.flatMap(1, () => second)
 void mutable
 
 
-=== [D7] Fix 0: "Disable lazyEffect for this line" ===
+=== [D7] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
 skipped by default
 
-=== [D7] Fix 1: "Disable lazyEffect for entire file" ===
+=== [D7] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
 skipped by default
 
-=== [D8] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
-skipped by default
-
-=== [D8] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
-skipped by default
-
-=== [D8] Fix 2: "Replace with Effect.andThen" ===
+=== [D7] Fix 2: "Replace with Effect.andThen" ===
 
 --- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 

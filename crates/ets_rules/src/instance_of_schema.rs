@@ -49,7 +49,7 @@ pub struct InstanceOfSchemaMatch {
     pub right_expr: P<Node>, // Right operand of instanceof (the schema type reference)
 }
 
-// go: internal/rules/instance_of_schema.go:45 AnalyzeInstanceOfSchema 0a719750e5d69ad4
+// go: internal/rules/instance_of_schema.go:45 AnalyzeInstanceOfSchema dde5a9bd4b726c77
 // AnalyzeInstanceOfSchema finds all `value instanceof SchemaClass` expressions
 // where the right-hand side is an Effect Schema type.
 //

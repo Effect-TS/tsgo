@@ -1,62 +1,62 @@
 === Quick Fix Inventory ===
 
-[D1] (8:7-8:20) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D1] (9:7-9:20) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D2] (9:14-9:24) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D2] (10:14-10:24) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D3] (10:14-10:30) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D3] (11:14-11:30) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D4] (11:14-11:32) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D4] (12:14-12:32) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D5] (12:14-12:31) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D5] (13:14-13:31) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D6] (13:14-13:34) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D6] (14:14-14:34) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D7] (16:14-16:34) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D7] (17:14-17:34) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D8] (19:14-19:33) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D8] (20:14-20:33) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D9] (21:14-21:27) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D9] (22:14-22:27) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D10] (23:11-23:31) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D10] (24:11-24:31) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D11] (29:9-29:25) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D11] (30:9-30:25) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D12] (34:16-34:33) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D12] (35:16-35:33) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D13] (38:14-38:29) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D13] (39:14-39:29) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D14] (39:14-39:34) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D14] (40:14-40:34) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 
-[D15] (78:30-78:77) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D15] (79:30-79:77) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 

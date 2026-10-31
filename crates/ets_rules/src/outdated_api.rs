@@ -66,7 +66,7 @@ pub struct OutdatedApiMatch {
     pub migration: Migration,
 }
 
-// go: internal/rules/outdated_api.go:67 AnalyzeOutdatedApi b7cc980964c98292
+// go: internal/rules/outdated_api.go:67 AnalyzeOutdatedApi 15bb06bf96459bd0
 // AnalyzeOutdatedApi finds all usages of Effect v3 APIs in an Effect v4 project.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), so it is dropped.
@@ -99,7 +99,7 @@ pub fn analyze_outdated_api(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> Vec<O
     matches
 }
 
-// go: internal/rules/outdated_api.go:95 checkOutdatedApiPropertyAccess cad5bdfb83598493
+// go: internal/rules/outdated_api.go:96 checkOutdatedApiPropertyAccess cad5bdfb83598493
 //
 // Rust: the checker is the parser's.
 pub(crate) fn check_outdated_api_property_access(
@@ -148,7 +148,7 @@ pub(crate) fn check_outdated_api_property_access(
     })
 }
 
-// go: internal/rules/outdated_api.go:148 migrationHintText 9688d29085592404
+// go: internal/rules/outdated_api.go:149 migrationHintText 9688d29085592404
 pub(crate) fn migration_hint_text(m: &Migration) -> String {
     match m.tag {
         MigrationTag::Removed => m.alternative_pattern.to_string(),

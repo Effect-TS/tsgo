@@ -10,7 +10,7 @@ use ets_typeparser::EffectContextFlags;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::ABORT_CONTROLLER_IS_MANUALLY_CONSTRUCTED_INSIDE_EFFECT_CODE_USE_EFFECT_ABORT_SIGNAL_FOR_EFFECT_MANAGED_CANCELLATION_EFFECT_ABORT_CONTROLLER_IN_EFFECT;
 
-// go: internal/rules/abort_controller_in_effect.go:12 AbortControllerInEffect bed35c22eead4de2
+// go: internal/rules/abort_controller_in_effect.go:12 AbortControllerInEffect 915abe90fda52b44
 pub static ABORT_CONTROLLER_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "abortControllerInEffect",
     group: "effectNative",

@@ -12,7 +12,7 @@ use ets_typeparser::EffectContextFlags;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_EFFECT_GENERATOR_CONTAINS_TRY_SLASHCATCH_IN_THIS_CONTEXT_ERROR_HANDLING_IS_EXPRESSED_WITH_EFFECT_AP_IS_SUCH_AS_EFFECT_TRY_EFFECT_TRY_PROMISE_EFFECT_CATCH_EFFECT_CATCH_TAG_EFFECT_TRY_CATCH_IN_EFFECT_GEN;
 
-// go: internal/rules/try_catch_in_effect_gen.go:14 TryCatchInEffectGen efc2587aeb4fce99
+// go: internal/rules/try_catch_in_effect_gen.go:14 TryCatchInEffectGen e8ee36abc8f63d1f
 // TryCatchInEffectGen detects try/catch statements inside Effect generators
 // and suggests using Effect's error handling mechanisms instead.
 pub static TRY_CATCH_IN_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -47,7 +47,7 @@ pub static TRY_CATCH_IN_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/try_catch_in_effect_gen.go:50 checkTryCatchScope 8aef5e98fc5c0e13
+// go: internal/rules/try_catch_in_effect_gen.go:51 checkTryCatchScope 8aef5e98fc5c0e13
 // checkTryCatchScope checks if the try statement is directly inside an Effect
 // generator scope using FindEnclosingScopes.
 pub(crate) fn check_try_catch_scope(

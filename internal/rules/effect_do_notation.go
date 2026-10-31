@@ -59,6 +59,7 @@ func AnalyzeEffectDoNotation(tp *typeparser.TypeParser, _ *checker.Checker, sf *
 				Node:       n,
 			})
 		} else {
+			//ets:ast-walk finds Effect.Do references, which are property accesses rather than calls
 			n.ForEachChild(walk)
 		}
 

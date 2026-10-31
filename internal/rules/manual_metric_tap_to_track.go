@@ -229,11 +229,13 @@ func usesFunctionExpressionBindings(tp *typeparser.TypeParser, fn *ast.Node, par
 		case ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindMethodDeclaration,
 			ast.KindGetAccessor, ast.KindSetAccessor, ast.KindConstructor:
 			name := node.Name()
+			//ets:ast-walk scans the function for this, super, arguments, new.target and self references
 			return node.ForEachChild(func(child *ast.Node) bool {
 				// A computed method name is evaluated in the enclosing scope.
 				return visit(child, own && child == name)
 			})
 		}
+		//ets:ast-walk scans the function for this, super, arguments, new.target and self references
 		return node.ForEachChild(func(child *ast.Node) bool { return visit(child, own) })
 	}
 	for _, param := range params.All() {

@@ -13,7 +13,7 @@ use ets_typeparser::{
     TransformationKind, TypeParser,
 };
 
-use crate::arrow_parameters::arrow_ignores_parameter;
+use crate::catch_handler::catch_handler_ignores_error;
 use crate::piping_flow::has_explicit_type_arguments;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
@@ -299,7 +299,7 @@ pub(crate) fn classify_sleep_continuation(
     None
 }
 
-// go: internal/rules/sleep_then_effect_to_delay.go:230 continuationFunctionIgnoresInput 980d92506ffbf964
+// go: internal/rules/sleep_then_effect_to_delay.go:230 continuationFunctionIgnoresInput 97597e09d2cd3299
 // continuationFunctionIgnoresInput accepts arrows that never read their
 // parameter and synchronous, non-generic function expressions without
 // parameters. Such a function expression still receives the void sleep result
@@ -307,7 +307,7 @@ pub(crate) fn classify_sleep_continuation(
 // fixes that would call it differently.
 pub(crate) fn continuation_function_ignores_input(tp: &mut TypeParser<'_>, f: P<Node>) -> bool {
     if f.kind() == Kind::ArrowFunction {
-        return arrow_ignores_parameter(tp, Some(f));
+        return catch_handler_ignores_error(tp, Some(f));
     }
     let expression = f.as_function_expression();
     if expression.asterisk_token().is_some()

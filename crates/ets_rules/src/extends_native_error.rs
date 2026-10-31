@@ -39,7 +39,7 @@ pub struct ExtendsNativeErrorMatch {
     pub location: TextRange,
 }
 
-// go: internal/rules/extends_native_error.go:36 AnalyzeExtendsNativeError 45c812bdc67598e4
+// go: internal/rules/extends_native_error.go:36 AnalyzeExtendsNativeError e9a6cd5fd510b2db
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub fn analyze_extends_native_error(
@@ -76,7 +76,7 @@ pub fn analyze_extends_native_error(
     matches
 }
 
-// go: internal/rules/extends_native_error.go:67 checkExtendsNativeError 4f04f9e96066a0ac
+// go: internal/rules/extends_native_error.go:69 checkExtendsNativeError 4f04f9e96066a0ac
 pub(crate) fn check_extends_native_error(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

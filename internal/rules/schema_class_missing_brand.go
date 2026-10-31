@@ -35,6 +35,7 @@ var SchemaClassMissingBrand = rule.Rule{
 					))
 				}
 			}
+			//ets:ast-walk finds class declarations and expressions extending Schema.Class
 			node.ForEachChild(walk)
 			return false
 		}

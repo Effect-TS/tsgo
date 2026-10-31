@@ -170,7 +170,7 @@ impl ArrayMethodPreference {
     }
 }
 
-// go: internal/rules/prefer_effect_array.go:69 runPreferEffectArray ade1bdb7a86f1df3
+// go: internal/rules/prefer_effect_array.go:69 runPreferEffectArray 8ed8caeeff133824
 pub(crate) fn run_prefer_effect_array(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     let mut diagnostics = Vec::new();
     // Rust: Go's recursive `walk` closure is a nested function.

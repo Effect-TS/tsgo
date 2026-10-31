@@ -22,6 +22,12 @@ func isDisableStyleFix(title string) bool {
 // RunEffectQuickFixTest executes a single Effect quick-fix baseline test case.
 // It creates a fourslash test instance, collects quick-fix inventory and application
 // results, and generates a *.quickfixes.txt baseline.
+//
+// TODO: version only picks the baseline folder. The fourslash harness takes the
+// Effect version from a `// @effect-v3` marker in the fixture
+// (etstesthooks/init.go), so a v3 fixture without one runs against Effect v4.
+// `repoctl check` requires the marker on every testdata/tests/effect-v3 fixture
+// until the runner passes version to the harness itself.
 func RunEffectQuickFixTest(t *testing.T, version bundledeffect.EffectVersion, testFile string) {
 	AcquireProgram()
 	defer ReleaseProgram()
