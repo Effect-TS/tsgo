@@ -39,6 +39,8 @@ func runResultMatchToFromResultFix(ctx *fixable.Context) []ls.CodeAction {
 					return
 				}
 
+				// A guard conditional is not a flow: the edit replaces the
+				// ConditionalExpression around the guard flow, which no flow edit reaches.
 				replacement := tracker.NewCallExpression(callee, nil, nil, tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.ResultNode)}), ast.NodeFlagsNone)
 				ast.SetParentInChildren(replacement)
 				tracker.ReplaceNode(ctx.SourceFile, match.ReplacementNode, replacement, nil)

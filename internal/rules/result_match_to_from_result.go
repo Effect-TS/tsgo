@@ -73,22 +73,14 @@ func AnalyzeResultMatchToFromResult(tp *typeparser.TypeParser, c *checker.Checke
 // analyzeResultMatchStep matches a Result.match step whose handlers only lift
 // the failure with Effect.fail and the success with Effect.succeed.
 func analyzeResultMatchStep(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, transformation typeparser.PipingFlowTransformation) (ResultMatchToFromResultMatch, bool) {
-	switch transformation.Kind() {
-	case typeparser.TransformationKindPipe,
-		typeparser.TransformationKindPipeable,
-		typeparser.TransformationKindDataFirst,
-		typeparser.TransformationKindDataLast,
-		typeparser.TransformationKindCall:
-	default:
-		return ResultMatchToFromResultMatch{}, false
-	}
-
 	callee := transformation.Callee()
 	if callee == nil || transformation.Args().Len() != 1 || !hasNoTypeArguments(transformation) {
 		return ResultMatchToFromResultMatch{}, false
 	}
-	onFailure, onSuccess, ok := resultMatchHandlers(transformation.Args().At(0))
-	if !ok ||
+	handlers := ast.SkipParentheses(transformation.Args().At(0))
+	onFailure := typeparser.ObjectLiteralPropertyInitializer(handlers, "onFailure")
+	onSuccess := typeparser.ObjectLiteralPropertyInitializer(handlers, "onSuccess")
+	if onFailure == nil || onSuccess == nil || len(handlers.AsObjectLiteralExpression().Properties.Nodes) != 2 ||
 		!tp.IsNodeReferenceToEffectResultModuleApi(callee, "match") ||
 		!isEffectLiftHandler(tp, c, onSuccess, "succeed") ||
 		!isEffectLiftHandler(tp, c, onFailure, "fail") {
@@ -100,43 +92,6 @@ func analyzeResultMatchStep(tp *typeparser.TypeParser, c *checker.Checker, sf *a
 		Location:       scanner.GetErrorRangeForNode(sf, callee),
 		Transformation: &transformation,
 	}, true
-}
-
-func resultMatchHandlers(node *ast.Node) (onFailure *ast.Node, onSuccess *ast.Node, ok bool) {
-	node = ast.SkipParentheses(node)
-	if node == nil || node.Kind != ast.KindObjectLiteralExpression {
-		return nil, nil, false
-	}
-	object := node.AsObjectLiteralExpression()
-	if object == nil || object.Properties == nil || len(object.Properties.Nodes) != 2 {
-		return nil, nil, false
-	}
-
-	for _, propertyNode := range object.Properties.Nodes {
-		if propertyNode == nil || propertyNode.Kind != ast.KindPropertyAssignment {
-			return nil, nil, false
-		}
-		property := propertyNode.AsPropertyAssignment()
-		if property == nil || property.Name() == nil || property.Name().Kind != ast.KindIdentifier || property.Initializer == nil {
-			return nil, nil, false
-		}
-		switch scanner.GetTextOfNode(property.Name()) {
-		case "onFailure":
-			if onFailure != nil {
-				return nil, nil, false
-			}
-			onFailure = property.Initializer
-		case "onSuccess":
-			if onSuccess != nil {
-				return nil, nil, false
-			}
-			onSuccess = property.Initializer
-		default:
-			return nil, nil, false
-		}
-	}
-
-	return onFailure, onSuccess, onFailure != nil && onSuccess != nil
 }
 
 func hasNoTypeArguments(transformation typeparser.PipingFlowTransformation) bool {
@@ -182,7 +137,7 @@ func isEffectLiftHandler(tp *typeparser.TypeParser, c *checker.Checker, node *as
 func analyzeResultGuardConditional(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, flow *typeparser.PipingFlow) (ResultMatchToFromResultMatch, bool) {
 	isFailure := false
 	isGuard := func(transformation typeparser.PipingFlowTransformation) bool {
-		if transformation.Callee() == nil || transformation.Args().Len() != 0 || !hasNoTypeArguments(transformation) {
+		if transformation.Callee() == nil || transformation.Args().Len() != 0 {
 			return false
 		}
 		if tp.IsNodeReferenceToEffectResultModuleApi(transformation.Callee(), "isSuccess") {
@@ -200,9 +155,6 @@ func analyzeResultGuardConditional(tp *typeparser.TypeParser, c *checker.Checker
 
 	// The conditional is not a call chain, so it is read from the syntax tree.
 	condition := flow.Node()
-	for condition.Parent != nil && condition.Parent.Kind == ast.KindParenthesizedExpression {
-		condition = condition.Parent
-	}
 	if condition.Parent == nil || condition.Parent.Kind != ast.KindConditionalExpression ||
 		condition.Parent.AsConditionalExpression().Condition != condition {
 		return ResultMatchToFromResultMatch{}, false
