@@ -44,7 +44,7 @@ pub(crate) static SYNC_TO_EFFECT_METHOD_V4: SyncToEffectMethod = &[
     ("encodeUnknownSync", "encodeUnknownEffect"),
 ];
 
-// go: internal/rules/schema_sync_in_effect.go:31 SchemaSyncInEffect 2a1481214825dad3
+// go: internal/rules/schema_sync_in_effect.go:31 SchemaSyncInEffect 278161571d46e8e1
 // SchemaSyncInEffect detects Schema sync methods (decodeSync, encodeSync, etc.) used inside
 // Effect generators and suggests using the Effect-based variants instead.
 pub static SCHEMA_SYNC_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -88,7 +88,7 @@ pub static SCHEMA_SYNC_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_sync_in_effect.go:71 checkSchemaSyncInEffect adbec8cb47cec7a6
+// go: internal/rules/schema_sync_in_effect.go:72 checkSchemaSyncInEffect adbec8cb47cec7a6
 // checkSchemaSyncInEffect checks a single call expression for Schema sync methods inside an Effect generator.
 pub(crate) fn check_schema_sync_in_effect(
     ctx: &mut Context<'_, '_>,
@@ -125,7 +125,7 @@ pub(crate) fn check_schema_sync_in_effect(
     ))
 }
 
-// go: internal/rules/schema_sync_in_effect.go:97 matchSchemaSyncMethod 66a4dab5068a27f9
+// go: internal/rules/schema_sync_in_effect.go:98 matchSchemaSyncMethod 66a4dab5068a27f9
 // matchSchemaSyncMethod checks if the node references one of the Schema sync methods via
 // either the ParseResult module (V3) or the SchemaParser module (V4).
 //

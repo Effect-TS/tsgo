@@ -1,3 +1,4 @@
+// @effect-v3
 import { match } from "effect/Effect"
 import type { Effect } from "effect/Effect"
 

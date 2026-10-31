@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics matchBooleanToIsSuccess:suggestion
 import * as E from "effect"

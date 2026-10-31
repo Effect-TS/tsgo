@@ -4,6 +4,7 @@ Effect version: 3.19.19
 
 
 ==== /.src/matchBooleanToIsSuccess_disabled.ts (0 errors) ====
+    // @effect-v3
     // @effect-diagnostics matchBooleanToIsSuccess:off
     import { Effect } from "effect"
     

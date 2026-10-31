@@ -1,3 +1,4 @@
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"

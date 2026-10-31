@@ -44,7 +44,7 @@ pub struct ScopeInLayerEffectMatch {
     pub callee: Option<P<Node>>, // The Layer constructor callee; nil for class declaration matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:45 AnalyzeScopeInLayerEffect 021db9acf6569d2f
+// go: internal/rules/scope_in_layer_effect.go:47 AnalyzeScopeInLayerEffect 75d1595c04387798
 // AnalyzeScopeInLayerEffect finds all Layer.effect*() steps and class declarations
 // with Default layer properties where Scope is in the layer's requirements.
 //
@@ -95,7 +95,7 @@ pub fn analyze_scope_in_layer_effect(
     matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:90 matchLayerEffectTransformation 12baf0896a5f5d70
+// go: internal/rules/scope_in_layer_effect.go:92 matchLayerEffectTransformation 12baf0896a5f5d70
 // matchLayerEffectTransformation checks if a piping flow step applies one of the
 // Layer.effect* constructors and produces a layer with Scope in RIn.
 //
@@ -146,7 +146,7 @@ pub(crate) fn match_layer_effect_transformation(
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:125 matchClassWithDefaultLayer 55b7f0099c3e491f
+// go: internal/rules/scope_in_layer_effect.go:127 matchClassWithDefaultLayer 55b7f0099c3e491f
 // matchClassWithDefaultLayer checks if a class declaration has a Default layer property with Scope in RIn.
 pub(crate) fn match_class_with_default_layer(
     tp: &mut TypeParser<'_>,
@@ -189,7 +189,7 @@ pub(crate) fn match_class_with_default_layer(
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:178 hasScope aa2faccd65c6e6a1
+// go: internal/rules/scope_in_layer_effect.go:180 hasScope aa2faccd65c6e6a1
 // hasScope checks if any union member of the given type is a Scope type.
 pub(crate) fn has_scope(tp: &mut TypeParser<'_>, t: P<Type>) -> bool {
     let members = tp.unroll_union_members(t).unwrap_or_default();

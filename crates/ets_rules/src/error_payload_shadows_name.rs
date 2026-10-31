@@ -38,7 +38,7 @@ pub struct ErrorPayloadShadowsNameMatch {
     pub location: TextRange,
 }
 
-// go: internal/rules/error_payload_shadows_name.go:35 AnalyzeErrorPayloadShadowsName fbaa035e6d935f9e
+// go: internal/rules/error_payload_shadows_name.go:35 AnalyzeErrorPayloadShadowsName 15de1f14f8679149
 pub fn analyze_error_payload_shadows_name(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -90,7 +90,7 @@ pub fn analyze_error_payload_shadows_name(
     matches
 }
 
-// go: internal/rules/error_payload_shadows_name.go:71 errorPayloadFields c8e2b72271b6c39c
+// go: internal/rules/error_payload_shadows_name.go:72 errorPayloadFields c8e2b72271b6c39c
 // Rust: Go's `(fields, errorName)` named results.
 pub(crate) fn error_payload_fields(
     tp: &mut TypeParser<'_>,
@@ -116,7 +116,7 @@ pub(crate) fn error_payload_fields(
     (None, None)
 }
 
-// go: internal/rules/error_payload_shadows_name.go:90 errorPayloadNameMatchesErrorName 396d779976631d71
+// go: internal/rules/error_payload_shadows_name.go:91 errorPayloadNameMatchesErrorName 396d779976631d71
 pub(crate) fn error_payload_name_matches_error_name(
     tp: &mut TypeParser<'_>,
     member: P<Node>,

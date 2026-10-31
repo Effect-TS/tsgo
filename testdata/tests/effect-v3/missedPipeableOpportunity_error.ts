@@ -11,6 +11,7 @@
 }
 
 // @filename: missedPipeableOpportunity_error.ts
+// @effect-v3
 // @effect-diagnostics missedPipeableOpportunity:warning
 import { Duration, identity, pipe, Schedule, Schema } from "effect"
 import * as Effect from "effect/Effect"

@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferEffectArray:warning
 import * as A from "effect/Array"

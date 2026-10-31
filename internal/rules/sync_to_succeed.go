@@ -73,6 +73,7 @@ func AnalyzeSyncToSucceed(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 			}
 		}
 
+		//ets:ast-walk finds Effect.sync(thunk) calls whose thunk result is stable
 		node.ForEachChild(walk)
 		return false
 	}

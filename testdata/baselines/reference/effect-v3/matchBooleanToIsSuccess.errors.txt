@@ -1,26 +1,27 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/matchBooleanToIsSuccess.ts(10,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(16,23): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(22,39): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(30,3): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(37,26): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(43,32): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(49,29): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(55,34): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(61,32): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(67,48): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(73,36): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(79,44): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(85,28): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(92,43): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(99,21): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(109,3): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(133,28): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+/.src/matchBooleanToIsSuccess.ts(11,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(17,23): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(23,39): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(31,3): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(38,26): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(44,32): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(50,29): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(56,34): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(62,32): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(68,48): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(74,36): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(80,44): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(86,28): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(93,43): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(100,21): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(110,3): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(134,28): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
 
 
 ==== /.src/matchBooleanToIsSuccess.ts (17 errors) ====
+    // @effect-v3
     import * as Fx from "effect/Effect"
     import { match as matchNamed } from "effect/Effect"
     import { Effect, Exit, Option, pipe } from "effect"

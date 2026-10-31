@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics globalConsole:warning
 import { Effect } from "effect"
 

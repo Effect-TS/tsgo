@@ -48,7 +48,7 @@ pub struct UnnecessaryPipeMatch {
     pub result: Arc<ParsedPipeCallResult>, // The parsed pipe call (contains Subject node and call Node)
 }
 
-// go: internal/rules/unnecessary_pipe.go:44 AnalyzeUnnecessaryPipe 6788ac26f39f19d1
+// go: internal/rules/unnecessary_pipe.go:44 AnalyzeUnnecessaryPipe c0bf1ba3d71a7743
 // AnalyzeUnnecessaryPipe finds all pipe() and .pipe() calls with no transformation
 // arguments, returning matches with both the diagnostic and the parsed result.
 //

@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/matchBooleanToIsSuccess_namedImportCollision.ts(8,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_namedImportCollision.ts(9,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 
 
 ==== /.src/matchBooleanToIsSuccess_namedImportCollision.ts (1 errors) ====
+    // @effect-v3
     import { Effect } from "effect"
     import { match } from "effect/Effect"
     

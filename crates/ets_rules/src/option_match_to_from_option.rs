@@ -225,7 +225,7 @@ pub(crate) fn is_synchronous_function(node: Option<P<Node>>) -> bool {
     node.kind() == Kind::ArrowFunction
 }
 
-// go: internal/rules/option_match_to_from_option.go:184 analyzeOptionConditionals bb2bb5f98661c5ac
+// go: internal/rules/option_match_to_from_option.go:185 analyzeOptionConditionals d98af4318712be22
 //
 // Rust: the checker is the parser's.
 pub(crate) fn analyze_option_conditionals(
@@ -252,7 +252,7 @@ pub(crate) fn analyze_option_conditionals(
     matches
 }
 
-// go: internal/rules/option_match_to_from_option.go:203 analyzeOptionConditional 6996d5cbe31141c9
+// go: internal/rules/option_match_to_from_option.go:204 analyzeOptionConditional 6996d5cbe31141c9
 //
 // Rust: Go's `(match, ok)` is an `Option`; the checker is the parser's.
 pub(crate) fn analyze_option_conditional(
@@ -314,7 +314,7 @@ pub(crate) fn analyze_option_conditional(
     })
 }
 
-// go: internal/rules/option_match_to_from_option.go:259 isConditionalSucceed 28e2f4991fd55d5a
+// go: internal/rules/option_match_to_from_option.go:260 isConditionalSucceed 28e2f4991fd55d5a
 //
 // Rust: the checker is the parser's.
 pub(crate) fn is_conditional_succeed(
@@ -355,7 +355,7 @@ pub(crate) fn is_conditional_succeed(
     true
 }
 
-// go: internal/rules/option_match_to_from_option.go:283 analyzeEffectFailCall 00e9735250958be4
+// go: internal/rules/option_match_to_from_option.go:284 analyzeEffectFailCall 00e9735250958be4
 //
 // Rust: Go's `(failure, ok)` is an `Option` of the failure.
 #[expect(clippy::option_option, reason = "Go's (node, ok) with a node that may be nil when ok")]
@@ -377,7 +377,7 @@ pub(crate) fn analyze_effect_fail_call(
     Some(Some(call.arguments.nodes()[0]))
 }
 
-// go: internal/rules/option_match_to_from_option.go:297 sameIdentifierReference eca2888e33593d7c
+// go: internal/rules/option_match_to_from_option.go:298 sameIdentifierReference eca2888e33593d7c
 //
 // Rust: the checker is the parser's.
 pub(crate) fn same_identifier_reference(
@@ -399,7 +399,7 @@ pub(crate) fn same_identifier_reference(
             .is_some()
 }
 
-// go: internal/rules/option_match_to_from_option.go:306 isDefaultNoSuchElementError 760fc7ce925cd416
+// go: internal/rules/option_match_to_from_option.go:307 isDefaultNoSuchElementError 760fc7ce925cd416
 pub(crate) fn is_default_no_such_element_error(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

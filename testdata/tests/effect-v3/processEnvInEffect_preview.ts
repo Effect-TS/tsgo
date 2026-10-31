@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics processEnvInEffect:warning
 /// <reference types="node" />

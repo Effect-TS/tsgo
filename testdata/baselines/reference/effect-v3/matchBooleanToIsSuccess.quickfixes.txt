@@ -1,95 +1,92 @@
 === Quick Fix Inventory ===
 
-[D1] (10:22-10:34) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D1] (11:22-11:34) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D2] (16:23-16:35) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D2] (17:23-17:35) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isFailure"
 
-[D3] (22:39-22:51) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D3] (23:39-23:51) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D4] (30:3-30:15) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D4] (31:3-31:15) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isFailure"
 
-[D5] (37:26-37:38) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D5] (38:26-38:38) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D6] (43:32-43:44) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D6] (44:32-44:44) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D7] (49:29-49:41) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D7] (50:29-50:41) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D8] (55:34-55:46) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D8] (56:34-56:46) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D9] (61:32-61:44) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D9] (62:32-62:44) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isFailure"
 
-[D10] (62:15-62:20) TS6133: 'error' is declared but its value is never read.
+[D10] (63:15-63:20) TS6133: 'error' is declared but its value is never read.
   (no quick fixes)
 
-[D11] (67:48-67:60) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D11] (68:48-68:60) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D12] (73:36-73:48) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D12] (74:36-74:48) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D13] (79:44-79:52) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D13] (80:44-80:52) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D14] (85:28-85:38) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D14] (86:28-86:38) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D15] (92:43-92:53) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D15] (93:43-93:53) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isFailure"
 
-[D16] (99:21-99:33) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D16] (100:21-100:33) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D17] (109:3-109:15) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+[D17] (110:3-110:15) TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
   Fix 0: "Disable matchBooleanToIsSuccess for this line"
   Fix 1: "Disable matchBooleanToIsSuccess for entire file"
   Fix 2: "Replace with Effect.isSuccess"
 
-[D18] (133:28-133:46) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+[D18] (134:28-134:46) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
   Fix 0: "Disable matchEffectToMatch for this line"
   Fix 1: "Disable matchEffectToMatch for entire file"
   Fix 2: "Replace with Effect.match"
-
-[D19] (286:74-286:87) TS2551: Property 'isInterrupted' does not exist on type 'typeof import("/node_modules/effect/dist/Exit")'. Did you mean 'interrupt'?
-  (no quick fixes)
 
 === Quick Fix Application Results ===
 
@@ -102,6 +99,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -407,6 +405,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.isFailure" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -712,6 +711,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -1017,6 +1017,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.isFailure" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -1322,6 +1323,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -1627,6 +1629,7 @@ skipped by default
 === [D6] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -1932,6 +1935,7 @@ skipped by default
 === [D7] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -2237,6 +2241,7 @@ skipped by default
 === [D8] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -2542,6 +2547,7 @@ skipped by default
 === [D9] Fix 2: "Replace with Effect.isFailure" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -2847,6 +2853,7 @@ skipped by default
 === [D11] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -3152,6 +3159,7 @@ skipped by default
 === [D12] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -3457,6 +3465,7 @@ skipped by default
 === [D13] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -3762,6 +3771,7 @@ skipped by default
 === [D14] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed, isSuccess } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -4067,6 +4077,7 @@ skipped by default
 === [D15] Fix 2: "Replace with Effect.isFailure" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -4372,6 +4383,7 @@ skipped by default
 === [D16] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -4677,6 +4689,7 @@ skipped by default
 === [D17] Fix 2: "Replace with Effect.isSuccess" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"
@@ -4982,6 +4995,7 @@ skipped by default
 === [D18] Fix 2: "Replace with Effect.match" ===
 
 --- file:///.src/matchBooleanToIsSuccess.ts ---
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { match as matchNamed } from "effect/Effect"
 import { Effect, Exit, Option, pipe } from "effect"

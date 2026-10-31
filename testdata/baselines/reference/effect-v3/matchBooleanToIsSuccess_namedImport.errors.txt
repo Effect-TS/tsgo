@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/matchBooleanToIsSuccess_namedImport.ts(9,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess_namedImport.ts(12,23): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_namedImport.ts(10,22): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess_namedImport.ts(13,23): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 
 
 ==== /.src/matchBooleanToIsSuccess_namedImport.ts (2 errors) ====
+    // @effect-v3
     import { isFailure, match } from "effect/Effect"
     import type { Effect } from "effect/Effect"
     

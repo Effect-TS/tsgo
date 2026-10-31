@@ -76,6 +76,7 @@ func AnalyzeNewSchemaClass(tp *typeparser.TypeParser, c *checker.Checker, sf *as
 			}
 		}
 
+		//ets:ast-walk finds new expressions that construct v4 Schema classes
 		node.ForEachChild(walk)
 		return false
 	}

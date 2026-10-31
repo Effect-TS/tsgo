@@ -42,6 +42,8 @@ type ScopeInLayerEffectMatch struct {
 
 // AnalyzeScopeInLayerEffect finds all Layer.effect*() steps and class declarations
 // with Default layer properties where Scope is in the layer's requirements.
+//
+//ets:ast-walk finds class declarations with a Default layer property, not flow steps
 func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ScopeInLayerEffectMatch {
 	// V3-only rule
 	if tp.SupportedEffectVersion() != typeparser.EffectMajorV3 {

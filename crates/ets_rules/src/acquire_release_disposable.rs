@@ -49,7 +49,7 @@ pub struct AcquireReleaseDisposableMatch {
     pub has_type_arguments: bool,
 }
 
-// go: internal/rules/acquire_release_disposable.go:54 AnalyzeAcquireReleaseDisposable 97fb0da445cc9c45
+// go: internal/rules/acquire_release_disposable.go:54 AnalyzeAcquireReleaseDisposable 4558be472bbd56a4
 // AnalyzeAcquireReleaseDisposable finds Effect.acquireRelease calls whose
 // resulting success type is disposable and whose release callback consists
 // solely of invoking that resource's disposal protocol.
@@ -96,7 +96,7 @@ pub fn analyze_acquire_release_disposable(
     matches
 }
 
-// go: internal/rules/acquire_release_disposable.go:84 globalDisposableUnion cd019e3fc2ce5ad8
+// go: internal/rules/acquire_release_disposable.go:85 globalDisposableUnion cd019e3fc2ce5ad8
 // Rust: Go's checker argument is the parser's checker. `GetDeclaredTypeOfSymbol` never returns nil in tsrs.
 pub(crate) fn global_disposable_union(tp: &mut TypeParser<'_>) -> Option<P<Type>> {
     let c = tp.checker();
@@ -116,7 +116,7 @@ pub(crate) fn global_disposable_union(tp: &mut TypeParser<'_>) -> Option<P<Type>
     Some(c.get_union_type_ex_exported(&types, UnionReduction::None))
 }
 
-// go: internal/rules/acquire_release_disposable.go:104 analyzeAcquireReleaseDisposableCall 49510c97b70155cf
+// go: internal/rules/acquire_release_disposable.go:105 analyzeAcquireReleaseDisposableCall 49510c97b70155cf
 pub(crate) fn analyze_acquire_release_disposable_call(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -155,7 +155,7 @@ pub(crate) fn analyze_acquire_release_disposable_call(
     })
 }
 
-// go: internal/rules/acquire_release_disposable.go:139 isDefinitelyDisposable 006cbf7992fb77dd
+// go: internal/rules/acquire_release_disposable.go:140 isDefinitelyDisposable 006cbf7992fb77dd
 pub(crate) fn is_definitely_disposable(
     tp: &mut TypeParser<'_>,
     success: Option<P<Type>>,
@@ -172,7 +172,7 @@ pub(crate) fn is_definitely_disposable(
     tp.checker().is_type_assignable_to_exported(success, disposable)
 }
 
-// go: internal/rules/acquire_release_disposable.go:151 isDisposalRelease f2b585469555f5b4
+// go: internal/rules/acquire_release_disposable.go:152 isDisposalRelease f2b585469555f5b4
 pub(crate) fn is_disposal_release(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -234,7 +234,7 @@ pub(crate) fn is_disposal_release(
         || protocol == "asyncDispose" && wrapper_name == "promise")
 }
 
-// go: internal/rules/acquire_release_disposable.go:202 isPlainIdentifierParameter 74c6e6e2192550b0
+// go: internal/rules/acquire_release_disposable.go:203 isPlainIdentifierParameter 74c6e6e2192550b0
 pub(crate) fn is_plain_identifier_parameter(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -248,7 +248,7 @@ pub(crate) fn is_plain_identifier_parameter(node: Option<P<Node>>) -> bool {
         && parameter.initializer().is_none()
 }
 
-// go: internal/rules/acquire_release_disposable.go:210 disposalProtocolCall 770e22371150945d
+// go: internal/rules/acquire_release_disposable.go:211 disposalProtocolCall 770e22371150945d
 pub(crate) fn disposal_protocol_call(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

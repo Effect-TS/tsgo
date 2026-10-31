@@ -53,7 +53,7 @@ pub struct ServiceNotAsClassMatch {
     pub modifier_nodes: Option<P<ModifierList>>, // Modifiers from the variable statement (e.g. export)
 }
 
-// go: internal/rules/service_not_as_class.go:50 AnalyzeServiceNotAsClass 2bc11373b9cc3d48
+// go: internal/rules/service_not_as_class.go:52 AnalyzeServiceNotAsClass bd8ddf45a6da5d9e
 // AnalyzeServiceNotAsClass finds all const variable declarations using the v4 service constructor
 // that should be class declarations instead. V4-only rule.
 //
@@ -90,7 +90,7 @@ pub fn analyze_service_not_as_class(
     matches
 }
 
-// go: internal/rules/service_not_as_class.go:80 checkServiceNotAsClass 682c39c8692ef90c
+// go: internal/rules/service_not_as_class.go:82 checkServiceNotAsClass 682c39c8692ef90c
 pub(crate) fn check_service_not_as_class(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -183,7 +183,7 @@ pub(crate) fn check_service_not_as_class(
     })
 }
 
-// go: internal/rules/service_not_as_class.go:169 extractNodeText 6c972669ed450689
+// go: internal/rules/service_not_as_class.go:171 extractNodeText 6c972669ed450689
 // extractNodeText gets the source text of a node, skipping leading trivia.
 pub(crate) fn extract_node_text(sf: P<SourceFile>, text: &str, node: Option<P<Node>>) -> String {
     let Some(node) = node else {
