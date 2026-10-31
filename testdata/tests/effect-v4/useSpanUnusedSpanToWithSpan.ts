@@ -207,7 +207,9 @@ export const viaArguments = Effect.useSpan("fetch-user", function() {
   return Effect.succeed(span.name)
 })
 
-// MUST NOT TRIGGER: an arrow callback body that uses `arguments` (the enclosing function's).
+// MUST TRIGGER: an arrow callback body reads the enclosing function's `arguments`, which cannot
+// reach the span and stays the same once the body moves out of the callback.
+// fix: fetchUser(`${id}/${arguments.length}`).pipe(Effect.withSpan("fetch-user"))
 export const argumentsInArrowCallback = function(id: string) {
   return Effect.useSpan("fetch-user", () => fetchUser(`${id}/${arguments.length}`))
 }

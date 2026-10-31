@@ -20,9 +20,10 @@ Effect version: 4.0.2
 /.src/useSpanUnusedSpanToWithSpan_shapes.ts(93,34): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
 /.src/useSpanUnusedSpanToWithSpan_shapes.ts(96,41): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
 /.src/useSpanUnusedSpanToWithSpan_shapes.ts(101,42): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
+/.src/useSpanUnusedSpanToWithSpan_shapes.ts(134,10): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
 
 
-==== /.src/useSpanUnusedSpanToWithSpan_shapes.ts (19 errors) ====
+==== /.src/useSpanUnusedSpanToWithSpan_shapes.ts (20 errors) ====
     // @effect-v4
     // @effect-diagnostics *:off
     // @effect-diagnostics useSpanUnusedSpanToWithSpan:warning
@@ -191,9 +192,12 @@ Effect version: 4.0.2
       return Effect.succeed(arguments.length)
     })
     
-    // MUST NOT TRIGGER: a parenthesized arrow callback reads the enclosing function's `arguments`.
+    // MUST TRIGGER: a parenthesized arrow callback reads the enclosing function's `arguments`.
+    // fix: Effect.succeed(arguments.length).pipe(Effect.withSpan("a"))
     export const argumentsInParenthesizedArrow = function() {
       return Effect.useSpan("a", (() => Effect.succeed(arguments.length)))
+             ~~~~~~~~~~~~~~
+!!! warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
     }
     
     const laterValue = "later"

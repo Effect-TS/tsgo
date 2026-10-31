@@ -128,7 +128,8 @@ export const argumentsOfCallback = Effect.useSpan("a", function() {
   return Effect.succeed(arguments.length)
 })
 
-// MUST NOT TRIGGER: a parenthesized arrow callback reads the enclosing function's `arguments`.
+// MUST TRIGGER: a parenthesized arrow callback reads the enclosing function's `arguments`.
+// fix: Effect.succeed(arguments.length).pipe(Effect.withSpan("a"))
 export const argumentsInParenthesizedArrow = function() {
   return Effect.useSpan("a", (() => Effect.succeed(arguments.length)))
 }

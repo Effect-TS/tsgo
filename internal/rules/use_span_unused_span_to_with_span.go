@@ -65,27 +65,11 @@ func AnalyzeUseSpanUnusedSpanToWithSpan(tp *typeparser.TypeParser, _ *checker.Ch
 
 func analyzeUseSpanCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *ast.Node) (UseSpanUnusedSpanToWithSpanMatch, bool) {
 	call := node.AsCallExpression()
-	if node.Flags&ast.NodeFlagsOptionalChain != 0 || call.Expression == nil || call.Arguments == nil {
+	if call.Arguments == nil {
 		return UseSpanUnusedSpanToWithSpanMatch{}, false
 	}
 	args := call.Arguments.Nodes
 	if len(args) != 2 && len(args) != 3 {
-		return UseSpanUnusedSpanToWithSpanMatch{}, false
-	}
-	for _, arg := range args {
-		if arg.Kind == ast.KindSpreadElement {
-			return UseSpanUnusedSpanToWithSpanMatch{}, false
-		}
-	}
-	callee := ast.SkipParentheses(call.Expression)
-	switch {
-	case callee.Flags&ast.NodeFlagsOptionalChain != 0:
-		return UseSpanUnusedSpanToWithSpanMatch{}, false
-	case callee.Kind == ast.KindPropertyAccessExpression:
-		if callee.AsPropertyAccessExpression().Name().Text() != "useSpan" {
-			return UseSpanUnusedSpanToWithSpanMatch{}, false
-		}
-	case callee.Kind != ast.KindIdentifier:
 		return UseSpanUnusedSpanToWithSpanMatch{}, false
 	}
 	callback := ast.SkipParentheses(args[len(args)-1])
@@ -93,22 +77,16 @@ func analyzeUseSpanCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *ast
 		return UseSpanUnusedSpanToWithSpanMatch{}, false
 	}
 	params := callback.Parameters()
-	switch len(params) {
-	case 0:
-	case 1:
-		param := params[0].AsParameterDeclaration()
-		if !plainTapParameter(param) || param.Name().Text() == "this" {
-			return UseSpanUnusedSpanToWithSpanMatch{}, false
-		}
-	default:
+	if len(params) > 1 || len(params) == 1 && !plainTapParameter(params[0].AsParameterDeclaration()) {
 		return UseSpanUnusedSpanToWithSpanMatch{}, false
 	}
 
+	callee := ast.SkipParentheses(call.Expression)
 	if !tp.IsNodeReferenceToEffectModuleApi(callee, "useSpan") {
 		return UseSpanUnusedSpanToWithSpanMatch{}, false
 	}
 	body := callback.Body()
-	if body == nil || readsArguments(body) ||
+	if body == nil || callback.Kind == ast.KindFunctionExpression && readsArguments(body) ||
 		len(params) == 1 && tp.AreParametersReferencedIn(callback, []*ast.Node{body}) {
 		return UseSpanUnusedSpanToWithSpanMatch{}, false
 	}
@@ -136,7 +114,7 @@ func useSpanRewriteParts(tp *typeparser.TypeParser, call *ast.Node, callee *ast.
 		return nil, nil
 	}
 	receiver := callee.AsPropertyAccessExpression().Expression
-	if !isImportedModuleReceiver(tp, receiver) || !tp.IsExpressionEffectModule(unwrapZeroDurationExpression(receiver)) {
+	if !tp.IsExpressionEffectModule(receiver) {
 		return nil, nil
 	}
 	parsed := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionNone)
@@ -153,9 +131,9 @@ func useSpanRewriteParts(tp *typeparser.TypeParser, call *ast.Node, callee *ast.
 	return receiver, body
 }
 
-// readsArguments reports whether body reads an `arguments` object outside
-// nested functions that bind their own: the callback's own for a function
-// expression, the enclosing function's for an arrow function.
+// readsArguments reports whether a function expression's body reads its own
+// `arguments` object, through which it could reach the span, outside nested
+// functions that bind their own.
 func readsArguments(body *ast.Node) bool {
 	var visit func(node *ast.Node) bool
 	visit = func(node *ast.Node) bool {

@@ -24,18 +24,19 @@ var UseSpanUnusedSpanToWithSpanFix = fixable.Fixable{
 }
 
 // runUseSpanUnusedSpanToWithSpanFix rewrites `R.useSpan(name, options?, () => body)`
-// to `body.pipe(R.withSpan(name, options?))`. It edits the text around the body
-// so the body, name and options keep their original formatting and comments.
+// to `body.pipe(R.withSpan(name, options?))`. The useSpan call is not a piping
+// flow step, so no flow edit expresses this; it edits the text around the body
+// so the body keeps its original formatting and inner comments.
 func runUseSpanUnusedSpanToWithSpanFix(ctx *fixable.Context) []ls.CodeAction {
 	for _, match := range rules.AnalyzeUseSpanUnusedSpanToWithSpan(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
 		if match.Receiver == nil || match.Body == nil || (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) {
 			continue
 		}
-		parenthesize, ok := pipeReceiverParentheses(match.SourceFile, match.Call, match.Body)
-		if !ok {
+		sf := match.SourceFile
+		parenthesize := receiverNeedsParentheses(match.Body)
+		if replacementContinuesPreviousStatement(sf, match.Call, match.Body, parenthesize) {
 			continue
 		}
-		sf := match.SourceFile
 		nodeText := func(node *ast.Node) string {
 			return sf.Text()[scanner.GetTokenPosOfNode(node, sf, false):node.End()]
 		}

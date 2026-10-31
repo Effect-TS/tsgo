@@ -119,12 +119,7 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 // whether or not the previous statement already ends with one.
 func subjectInCallPosition(tracker *rewriter.Tracker, sf *ast.SourceFile, position *ast.Node, subject *ast.Node) *ast.Node {
 	parenthesize := subjectNeedsParentheses(position, subject)
-	leading := ast.KindOpenParenToken
-	if !parenthesize {
-		leading = leadingTokenKind(subject)
-	}
-	if continuesPreviousStatement(leading) && leading != leadingTokenKind(position) &&
-		startsExpressionStatement(sf, position) {
+	if replacementContinuesPreviousStatement(sf, position, subject, parenthesize) {
 		return nil
 	}
 	clone := tracker.DeepCloneNode(subject)
@@ -134,36 +129,17 @@ func subjectInCallPosition(tracker *rewriter.Tracker, sf *ast.SourceFile, positi
 	return clone
 }
 
-// pipeReceiverParentheses reports how expression can become the receiver of a
-// `.pipe(...)` call that replaces position. The receiver of a member access
-// binds tighter than any operator, so every expression that is not a
-// left-hand-side expression needs parentheses, as do object, function and
-// class expressions, an argument-less `new X` and optional chains.
-//
-// Like subjectInCallPosition, it reports false when the replacement would newly
-// begin an expression statement with a token that continues the previous
-// statement when that one has no semicolon.
-func pipeReceiverParentheses(sf *ast.SourceFile, position *ast.Node, expression *ast.Node) (parenthesize bool, ok bool) {
-	parenthesize = pipeReceiverNeedsParentheses(expression)
+// replacementContinuesPreviousStatement reports whether replacing position with
+// expression, parenthesized or not, would newly begin an expression statement
+// with a token that continues the previous statement when that one has no
+// semicolon.
+func replacementContinuesPreviousStatement(sf *ast.SourceFile, position *ast.Node, expression *ast.Node, parenthesize bool) bool {
 	leading := ast.KindOpenParenToken
 	if !parenthesize {
 		leading = leadingTokenKind(expression)
 	}
-	if continuesPreviousStatement(leading) && leading != leadingTokenKind(position) &&
-		startsExpressionStatement(sf, position) {
-		return false, false
-	}
-	return parenthesize, true
-}
-
-func pipeReceiverNeedsParentheses(expression *ast.Node) bool {
-	switch expression.Kind {
-	case ast.KindObjectLiteralExpression, ast.KindFunctionExpression, ast.KindClassExpression:
-		return true
-	case ast.KindNewExpression:
-		return expression.AsNewExpression().Arguments == nil
-	}
-	return expression.Flags&ast.NodeFlagsOptionalChain != 0 || !ast.IsLeftHandSideExpression(expression)
+	return continuesPreviousStatement(leading) && leading != leadingTokenKind(position) &&
+		startsExpressionStatement(sf, position)
 }
 
 // startsExpressionStatement reports whether node begins the expression
@@ -241,16 +217,30 @@ func subjectNeedsParentheses(position *ast.Node, subject *ast.Node) bool {
 	case ast.KindObjectLiteralExpression, ast.KindFunctionExpression, ast.KindClassExpression:
 		return true
 	}
-	if positionAcceptsAnyExpression(position) {
-		return false
-	}
-	switch {
-	case subject.Kind == ast.KindNewExpression:
-		return subject.AsNewExpression().Arguments == nil
-	case subject.Flags&ast.NodeFlagsOptionalChain != 0:
+	return !positionAcceptsAnyExpression(position) && bindsLooserThanCall(subject)
+}
+
+// receiverNeedsParentheses reports whether expression must be parenthesized to
+// become the receiver of a member access such as `.pipe(...)`, which binds as
+// tightly as a call whatever the position.
+func receiverNeedsParentheses(expression *ast.Node) bool {
+	switch expression.Kind {
+	case ast.KindObjectLiteralExpression, ast.KindFunctionExpression, ast.KindClassExpression:
 		return true
 	}
-	return !ast.IsLeftHandSideExpression(subject)
+	return bindsLooserThanCall(expression)
+}
+
+// bindsLooserThanCall reports whether expression binds less tightly than a call
+// or member access.
+func bindsLooserThanCall(expression *ast.Node) bool {
+	switch {
+	case expression.Kind == ast.KindNewExpression:
+		return expression.AsNewExpression().Arguments == nil
+	case expression.Flags&ast.NodeFlagsOptionalChain != 0:
+		return true
+	}
+	return !ast.IsLeftHandSideExpression(expression)
 }
 
 // positionAcceptsAnyExpression reports whether an expression of assignment

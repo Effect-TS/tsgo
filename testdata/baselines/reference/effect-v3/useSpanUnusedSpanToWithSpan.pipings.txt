@@ -669,7 +669,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 212:44 - 212:83
+Location: 214:44 - 214:83
 Node: fetchUser(`${id}/${arguments.length}`)
 Node Kind: KindCallExpression
 
@@ -683,7 +683,7 @@ Transformations (1):
       outType: Effect<{ name: string; }, never, never>
 
 === Piping Flow ===
-Location: 217:9 - 217:45
+Location: 219:9 - 219:45
 Node: Effect.sync(() => arguments.length)
 Node Kind: KindCallExpression
 
@@ -697,7 +697,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 222:9 - 222:56
+Location: 224:9 - 224:56
 Node: Effect.succeed({ arguments }.arguments.length)
 Node Kind: KindCallExpression
 
@@ -711,7 +711,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 226:36 - 226:51
+Location: 228:36 - 228:51
 Node: fetchUser("a")
 Node Kind: KindCallExpression
 
@@ -725,7 +725,7 @@ Transformations (1):
       outType: Effect<{ name: string; }, never, never>
 
 === Piping Flow ===
-Location: 234:47 - 234:97
+Location: 236:47 - 236:97
 Node: fetchUser(id).pipe(Effect.withSpan("fetch-user"))
 Node Kind: KindCallExpression
 
@@ -743,7 +743,7 @@ Transformations (2):
       outType: Effect<{ name: string; }, never, never>
 
 === Piping Flow ===
-Location: 235:56 - 235:101
+Location: 237:56 - 237:101
 Node: Effect.withSpan(fetchUser(id), "fetch-user")
 Node Kind: KindCallExpression
 
@@ -761,7 +761,7 @@ Transformations (2):
       outType: Effect<{ name: string; }, never, never>
 
 === Piping Flow ===
-Location: 242:67 - 242:85
+Location: 244:67 - 244:85
 Node: evaluate("local")
 Node Kind: KindCallExpression
 
@@ -775,7 +775,7 @@ Transformations (1):
       outType: A
 
 === Piping Flow ===
-Location: 247:30 - 247:103
+Location: 249:30 - 249:103
 Node: Effect.makeSpan("fetch-user").pipe(Effect.andThen(() => fetchUser("a")))
 Node Kind: KindCallExpression
 
@@ -793,7 +793,7 @@ Transformations (2):
       outType: Effect<{ name: string; }, never, never>
 
 === Piping Flow ===
-Location: 247:86 - 247:101
+Location: 249:86 - 249:101
 Node: fetchUser("a")
 Node Kind: KindCallExpression
 

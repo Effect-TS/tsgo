@@ -30,9 +30,10 @@ Effect version: 3.19.19
 /.src/useSpanUnusedSpanToWithSpan.ts(162,43): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
 /.src/useSpanUnusedSpanToWithSpan.ts(171,42): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
 /.src/useSpanUnusedSpanToWithSpan.ts(175,38): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
+/.src/useSpanUnusedSpanToWithSpan.ts(214,10): warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
 
 
-==== /.src/useSpanUnusedSpanToWithSpan.ts (29 errors) ====
+==== /.src/useSpanUnusedSpanToWithSpan.ts (30 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics useSpanUnusedSpanToWithSpan:warning
@@ -300,9 +301,13 @@ Effect version: 3.19.19
       return Effect.succeed(span.name)
     })
     
-    // MUST NOT TRIGGER: an arrow callback body that uses `arguments` (the enclosing function's).
+    // MUST TRIGGER: an arrow callback body reads the enclosing function's `arguments`, which cannot
+    // reach the span and stays the same once the body moves out of the callback.
+    // fix: fetchUser(`${id}/${arguments.length}`).pipe(Effect.withSpan("fetch-user"))
     export const argumentsInArrowCallback = function(id: string) {
       return Effect.useSpan("fetch-user", () => fetchUser(`${id}/${arguments.length}`))
+             ~~~~~~~~~~~~~~
+!!! warning TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
     }
     
     // MUST NOT TRIGGER: the callback's own `arguments` is read inside a nested arrow function.
