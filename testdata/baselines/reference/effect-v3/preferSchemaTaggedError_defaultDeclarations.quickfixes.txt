@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:30-6:58) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+[D1] (7:30-7:58) TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
   Fix 0: "Disable preferSchemaTaggedError for this line"
   Fix 1: "Disable preferSchemaTaggedError for entire file"
 

@@ -421,7 +421,7 @@ pub(crate) fn zip_operand_clonable(operand: ZipViaNestedFlatMapToAllOperand) -> 
             .is_none_or(|type_arguments| type_arguments.nodes().is_empty())
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:320 zipOperandIndependentOf ae66e60612dd1b47
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:320 zipOperandIndependentOf bca03952a40df7df
 // zipOperandIndependentOf reports whether no identifier in the operand,
 // including nested functions and type positions, refers to symbol.
 //

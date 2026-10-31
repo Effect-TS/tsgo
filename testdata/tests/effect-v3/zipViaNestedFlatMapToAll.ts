@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Clock, Effect, Option, pipe, Ref, Scope, Stream } from "effect"

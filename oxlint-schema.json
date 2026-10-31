@@ -2347,6 +2347,9 @@
         "effecttsgo/effect-succeed-with-void": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/effect-try-without-catch": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/error-payload-shadows-name": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2447,6 +2450,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/map-map-error-to-map-both": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/map-some-catch-no-such-element": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/map-some-to-as-some": {

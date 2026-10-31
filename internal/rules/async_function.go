@@ -35,6 +35,7 @@ var AsyncFunction = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds async function and method declarations, which are not flow steps
 			node.ForEachChild(walk)
 			return false
 		}

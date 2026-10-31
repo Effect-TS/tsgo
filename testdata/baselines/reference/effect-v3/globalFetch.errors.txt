@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalFetch.ts(5,22): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
-/.src/globalFetch.ts(8,29): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
-/.src/globalFetch.ts(12,23): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
-/.src/globalFetch.ts(21,20): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
+/.src/globalFetch.ts(6,22): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
+/.src/globalFetch.ts(9,29): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
+/.src/globalFetch.ts(13,23): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
+/.src/globalFetch.ts(22,20): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
 
 
 ==== /.src/globalFetch.ts (4 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalFetch:warning
     import { Effect } from "effect"
     

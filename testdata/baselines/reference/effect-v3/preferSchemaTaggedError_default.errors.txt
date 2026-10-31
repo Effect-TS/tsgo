@@ -4,6 +4,7 @@ Effect version: 3.19.19
 
 
 ==== /.src/preferSchemaTaggedError_default.ts (0 errors) ====
+    // @effect-v3
     import { Data } from "effect"
     
     export class DefaultOffError extends Data.TaggedError("DefaultOffError")<{

@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/preferEffectArray_inheritedAugmentation.ts(7,7): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray_inheritedAugmentation.ts(8,7): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
 
 
 ==== /.src/preferEffectArray_inheritedAugmentation.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectArray:warning
     export {}

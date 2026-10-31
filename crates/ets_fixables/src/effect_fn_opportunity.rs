@@ -332,7 +332,7 @@ fn effect_fn_build_replacement(
     );
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:240 effectFnPipeArgumentText 31727a063bdbf5a3
+// go: internal/fixables/effect_fn_opportunity.go:240 effectFnPipeArgumentText af209f3350f03477
 // effectFnPipeArgumentText prevents Effect.fn's additional function arguments
 // from reaching a bare pipeable's optional parameters. Factory calls already
 // produce data-last pipeables and can be retained as written.
@@ -369,7 +369,7 @@ fn effect_fn_pipe_argument_text(arg: P<Node>, text: &str) -> String {
     format!("{parameter} => {text}({parameter})")
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:273 effectFnSignatureRange 29da66f2ca25dba8
+// go: internal/fixables/effect_fn_opportunity.go:274 effectFnSignatureRange 29da66f2ca25dba8
 // effectFnSignatureRange locates the complete parameter/type-parameter spelling,
 // including comments and defaults. Bare arrow parameters need parentheses when
 // moved to a function expression.
@@ -391,7 +391,7 @@ fn effect_fn_signature_range(sf: P<SourceFile>, target: P<Node>) -> TextRange {
     TextRange::new(start, end)
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:291 effectFnComments f46f6ce346a0400c
+// go: internal/fixables/effect_fn_opportunity.go:292 effectFnComments f46f6ce346a0400c
 // effectFnComments retains comments from discarded wrapper syntax, such as the
 // outer return statement. Arguments and the function body are copied separately.
 fn effect_fn_comments(sf: P<SourceFile>, start: u32, end: u32, moved: Option<P<Node>>) -> String {

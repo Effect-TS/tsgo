@@ -1,23 +1,24 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/zipViaNestedFlatMapToAll_flows.ts(22,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(30,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(36,33): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(44,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(49,39): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(57,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(63,30): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(67,49): error TS1117: An object literal cannot have multiple properties with the same name.
-/.src/zipViaNestedFlatMapToAll_flows.ts(78,34): error TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(123,30): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(128,34): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(133,34): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(138,33): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_flows.ts(147,12): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(23,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(31,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(37,33): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(45,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(50,39): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(58,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(64,30): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(68,49): error TS1117: An object literal cannot have multiple properties with the same name.
+/.src/zipViaNestedFlatMapToAll_flows.ts(79,34): error TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(124,30): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(129,34): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(134,34): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(139,33): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_flows.ts(148,12): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
 
 
 ==== /.src/zipViaNestedFlatMapToAll_flows.ts (14 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics zipViaNestedFlatMapToAll:warning
     import { Effect, pipe } from "effect"

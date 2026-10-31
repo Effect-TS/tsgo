@@ -51,6 +51,7 @@ var SchemaSync = rule.Rule{
 					}
 				}
 			}
+			//ets:ast-walk finds Schema decodeSync/encodeSync calls, including element-access callees
 			node.ForEachChild(walk)
 			return false
 		}

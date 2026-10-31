@@ -323,6 +323,7 @@ func zipOperandIndependentOf(tp *typeparser.TypeParser, c *checker.Checker, oper
 		if node.Kind == ast.KindIdentifier && hoistSensitiveReferenceSymbol(tp, c, node) == symbol {
 			return true
 		}
+		//ets:ast-walk scans the operand for identifiers that refer to the flatMap parameter
 		return node.ForEachChild(references)
 	}
 	return !slices.ContainsFunc(operand.Parts(), references)

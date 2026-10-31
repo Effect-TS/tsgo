@@ -1,16 +1,17 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/unsafeEffectTypeAssertion.ts(14,28): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-/.src/unsafeEffectTypeAssertion.ts(18,36): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-/.src/unsafeEffectTypeAssertion.ts(19,29): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-/.src/unsafeEffectTypeAssertion.ts(20,34): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-/.src/unsafeEffectTypeAssertion.ts(21,33): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-/.src/unsafeEffectTypeAssertion.ts(22,41): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-/.src/unsafeEffectTypeAssertion.ts(23,34): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion.ts(15,28): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion.ts(19,36): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion.ts(20,29): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion.ts(21,34): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion.ts(22,33): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion.ts(23,41): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion.ts(24,34): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
 
 
 ==== /.src/unsafeEffectTypeAssertion.ts (7 errors) ====
+    // @effect-v3
     // @effect-diagnostics unsafeEffectTypeAssertion:warning
     import { Effect, Layer, Stream } from "effect"
     
@@ -27,36 +28,36 @@ Effect version: 3.19.19
     export const narrowsBoth = program as Effect.Effect<string, never, never>
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(14,39): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(14,39): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(15,39): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(15,39): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
     export const skipsAnyError = anyError as Effect.Effect<string, never, "service">
     export const skipsAnyRequirements = anyRequirements as Effect.Effect<string, "boom", never>
     export const safeWiden = program as Effect.Effect<string, "boom" | "other", "service">
     export const narrowsRequirements = noError as Effect.Effect<string, never, never>
                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(18,47): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(19,47): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
     export const narrowsError = noRequirements as Effect.Effect<string, never, never>
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(19,47): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(20,47): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
     export const narrowsStreamBoth = stream as Stream.Stream<string, never, never>
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(20,44): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(20,44): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(21,44): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(21,44): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
     export const narrowsLayerBoth = layer as Layer.Layer<"out", never, never>
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(21,42): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(21,42): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(22,42): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(22,42): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
     export const narrowsLayerRequirements = layerNoError as Layer.Layer<"out", never, never>
                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(22,57): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(23,57): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
     export const narrowsLayerError = layerNoRequirements as Layer.Layer<"out", never, never>
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
-!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(23,57): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
+!!! related TS377087 /.src/unsafeEffectTypeAssertion.ts(24,57): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
     export const notEffect = 1 as number
     

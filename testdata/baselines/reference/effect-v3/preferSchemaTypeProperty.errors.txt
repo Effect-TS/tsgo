@@ -1,12 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/test.ts(5,25): error TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
-/.src/test.ts(8,23): error TS377104: Do not use `S.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
-/.src/test.ts(10,22): suggestion TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
-/.src/test.ts(11,30): error TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Type'.
-/.src/test.ts(13,30): error TS377104: Do not use `Schema.Schema.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
-/.src/test.ts(14,30): error TS377104: Do not use `S.Schema.Context<typeof X>`. Use `typeof X.Context` instead. effect(preferSchemaTypeProperty)
+/.src/test.ts(6,25): error TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+/.src/test.ts(9,23): error TS377104: Do not use `S.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+/.src/test.ts(11,22): suggestion TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
+/.src/test.ts(12,30): error TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Type'.
+/.src/test.ts(14,30): error TS377104: Do not use `Schema.Schema.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
+/.src/test.ts(15,30): error TS377104: Do not use `S.Schema.Context<typeof X>`. Use `typeof X.Context` instead. effect(preferSchemaTypeProperty)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -21,6 +21,7 @@ Effect version: 3.19.19
     }
 
 ==== /.src/test.ts (6 errors) ====
+    // @effect-v3
     // @effect-diagnostics preferSchemaTypeProperty:error
     import { Schema, Schema as S } from "effect"
     

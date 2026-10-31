@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics genericEffectServices:warning
 import { Effect } from "effect"

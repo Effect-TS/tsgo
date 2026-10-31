@@ -1,7 +1,7 @@
 ==== /.src/effectFnOpportunity_siblingDeclarators.ts (6 flows) ====
 
 === Piping Flow ===
-Location: 4:21 - 7:7
+Location: 5:21 - 8:7
 Node: Effect.gen(function* () {\n      return (yield* Effect.succeed(n)) + limit\n    })
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 6:21 - 6:39
+Location: 7:21 - 7:39
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 10:36 - 13:5
+Location: 11:36 - 14:5
 Node: Effect.gen(function* () {\n    return (yield* Effect.succeed(n)) + trailing\n  })
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 12:19 - 12:37
+Location: 13:19 - 13:37
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 20:11 - 22:7
+Location: 21:11 - 23:7
 Node: Effect.gen(function* () {\n      return (yield* Effect.succeed(n)) + leading + last\n    })
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 21:21 - 21:39
+Location: 22:21 - 22:39
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 

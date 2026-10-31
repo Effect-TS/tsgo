@@ -1,0 +1,57 @@
+==== /.src/effectTryWithoutCatch_handover.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 9:22 - 9:57
+Node: Effect.try(() => JSON.parse(text))
+Node Kind: KindCallExpression
+
+Subject: () => JSON.parse(text)
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, UnknownError, never>
+
+=== Piping Flow ===
+Location: 9:39 - 9:56
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 14:21 - 14:90
+Node: Effect.try({ try: () => JSON.parse(text), catch: (cause) => cause })
+Node Kind: KindCallExpression
+
+Subject: { try: () => JSON.parse(text), catch: (cause) => cause }
+Subject Type: { try: () => any; catch: (cause: unknown) => unknown; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, unknown, never>
+
+=== Piping Flow ===
+Location: 14:45 - 14:62
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any

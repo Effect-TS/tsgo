@@ -11,6 +11,7 @@
 }
 
 // @filename: effectFnOpportunity_hoistedDeclaration.ts
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.

@@ -1,116 +1,116 @@
 === Quick Fix Inventory ===
 
-[D1] (7:43-7:50) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D1] (8:43-8:50) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D2] (10:34-10:48) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D2] (11:34-11:48) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedNone"
 
-[D3] (13:34-13:48) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D3] (14:34-14:48) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D4] (16:37-16:47) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D4] (17:37-17:47) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D5] (19:39-19:53) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D5] (20:39-20:53) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedNone"
 
-[D6] (20:39-20:53) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D6] (21:39-21:53) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D7] (23:43-23:57) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D7] (24:43-24:57) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D8] (26:46-26:60) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D8] (27:46-27:60) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D9] (29:57-29:71) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D9] (30:57-30:71) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedNone"
 
-[D10] (30:58-30:72) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D10] (31:58-31:72) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D11] (33:66-33:80) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D11] (34:66-34:80) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedNone"
 
-[D12] (34:67-34:81) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D12] (35:67-35:81) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D13] (37:69-37:83) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D13] (38:69-38:83) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D14] (40:73-40:87) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D14] (41:73-41:87) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D15] (41:72-41:86) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D15] (42:72-42:86) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedNone"
 
-[D16] (42:70-42:84) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D16] (43:70-43:84) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D17] (43:69-43:83) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D17] (44:69-44:83) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedNone"
 
-[D18] (46:52-46:108) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+[D18] (47:52-47:108) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
 
-[D19] (46:73-46:87) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D19] (47:73-47:87) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D20] (47:52-47:108) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+[D20] (48:52-48:108) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
 
-[D21] (47:77-47:91) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D21] (48:77-48:91) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
 
-[D22] (48:58-48:114) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+[D22] (49:58-49:114) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
 
-[D23] (48:84-48:98) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D23] (49:84-49:98) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
@@ -126,6 +126,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -212,6 +213,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.succeedNone" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -298,6 +300,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -384,6 +387,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -470,6 +474,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.succeedNone" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -556,6 +561,7 @@ skipped by default
 === [D6] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -642,6 +648,7 @@ skipped by default
 === [D7] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -728,6 +735,7 @@ skipped by default
 === [D8] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -814,6 +822,7 @@ skipped by default
 === [D9] Fix 2: "Replace with Effect.succeedNone" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -900,6 +909,7 @@ skipped by default
 === [D10] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -986,6 +996,7 @@ skipped by default
 === [D11] Fix 2: "Replace with Effect.succeedNone" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1072,6 +1083,7 @@ skipped by default
 === [D12] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1158,6 +1170,7 @@ skipped by default
 === [D13] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1244,6 +1257,7 @@ skipped by default
 === [D14] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1330,6 +1344,7 @@ skipped by default
 === [D15] Fix 2: "Replace with Effect.succeedNone" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1416,6 +1431,7 @@ skipped by default
 === [D16] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1502,6 +1518,7 @@ skipped by default
 === [D17] Fix 2: "Replace with Effect.succeedNone" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1588,6 +1605,7 @@ skipped by default
 === [D18] Fix 2: "Rewrite as single pipe call" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1674,6 +1692,7 @@ skipped by default
 === [D19] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1760,6 +1779,7 @@ skipped by default
 === [D20] Fix 2: "Rewrite as single pipe call" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1846,6 +1866,7 @@ skipped by default
 === [D21] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -1932,6 +1953,7 @@ skipped by default
 === [D22] Fix 2: "Rewrite as single pipe call" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
@@ -2018,6 +2040,7 @@ skipped by default
 === [D23] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone.ts ---
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 

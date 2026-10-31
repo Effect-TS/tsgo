@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/preferEffectRecord_inheritedAugmentation.ts(7,8): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord_inheritedAugmentation.ts(8,8): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
 
 
 ==== /.src/preferEffectRecord_inheritedAugmentation.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectRecord:warning
     export {}

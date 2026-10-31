@@ -247,6 +247,7 @@ func mapperCanBeHoisted(tp *typeparser.TypeParser, c *checker.Checker, generator
 
 	var canHoist = true
 	var walk ast.Visitor
+	//ets:ast-walk scans the mapper body for identifier references that block hoisting
 	walk = func(node *ast.Node) bool {
 		if node == nil || !canHoist {
 			return canHoist

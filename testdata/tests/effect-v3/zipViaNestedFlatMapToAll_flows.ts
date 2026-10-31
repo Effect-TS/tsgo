@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"

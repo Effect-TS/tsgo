@@ -78,7 +78,7 @@ pub(crate) struct GlobalJsonCall {
     pub(crate) method: &'static str,
 }
 
-// go: internal/rules/global_json.go:51 findGlobalJsonCalls db1392f5b3b3ccdf
+// go: internal/rules/global_json.go:51 findGlobalJsonCalls d5df56c0d1577596
 // findGlobalJsonCalls returns the calls to the global JSON.parse and
 // JSON.stringify whose Effect context matches checkInEffect.
 pub(crate) fn find_global_json_calls(
@@ -121,7 +121,7 @@ pub(crate) fn find_global_json_calls(
     calls
 }
 
-// go: internal/rules/global_json.go:80 globalJsonRecommendation 50b1a1dfed558733
+// go: internal/rules/global_json.go:81 globalJsonRecommendation 50b1a1dfed558733
 pub(crate) fn global_json_recommendation(is_v4: bool) -> &'static str {
     if is_v4 {
         return "Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings.";

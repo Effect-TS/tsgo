@@ -1,7 +1,7 @@
 ==== /.src/zipViaNestedFlatMapToAll_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 6:23 - 7:62
+Location: 7:23 - 8:62
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => [user, orders] as const))
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<readonly [{ readonly id: string; }, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 6:57 - 7:61
+Location: 7:57 - 8:61
 Node: Effect.map(getOrders, (orders) => [user, orders] as const)
 Node Kind: KindCallExpression
 

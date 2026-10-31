@@ -1,68 +1,68 @@
 === Quick Fix Inventory ===
 
-[D1] (22:3-22:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D1] (23:3-23:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D2] (30:3-30:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D2] (31:3-31:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D3] (36:33-36:47) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D3] (37:33-37:47) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D4] (44:3-44:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D4] (45:3-45:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D5] (49:39-49:53) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D5] (50:39-50:53) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D6] (57:3-57:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D6] (58:3-58:17) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
 
-[D7] (63:30-63:40) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D7] (64:30-64:40) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D8] (67:49-67:52) TS1117: An object literal cannot have multiple properties with the same name.
+[D8] (68:49-68:52) TS1117: An object literal cannot have multiple properties with the same name.
   (no quick fixes)
 
-[D9] (78:34-78:48) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D9] (79:34-79:48) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D10] (123:30-123:44) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D10] (124:30-124:44) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D11] (128:34-128:48) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D11] (129:34-129:48) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D12] (133:34-133:48) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D12] (134:34-134:48) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D13] (138:33-138:47) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D13] (139:33-139:47) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
 
-[D14] (147:12-147:26) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D14] (148:12-148:26) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
@@ -78,6 +78,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -241,6 +242,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -405,6 +407,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -571,6 +574,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -739,6 +743,7 @@ skipped by default
 === [D5] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -912,6 +917,7 @@ skipped by default
 === [D7] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -1080,6 +1086,7 @@ skipped by default
 === [D9] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -1247,6 +1254,7 @@ skipped by default
 === [D10] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -1414,6 +1422,7 @@ skipped by default
 === [D11] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -1581,6 +1590,7 @@ skipped by default
 === [D12] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -1748,6 +1758,7 @@ skipped by default
 === [D13] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"
@@ -1915,6 +1926,7 @@ skipped by default
 === [D14] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_flows.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics zipViaNestedFlatMapToAll:warning
 import { Effect, pipe } from "effect"

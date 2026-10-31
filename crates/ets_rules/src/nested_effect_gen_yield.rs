@@ -46,7 +46,7 @@ pub struct NestedEffectGenYieldMatch {
     pub location: TextRange,
 }
 
-// go: internal/rules/nested_effect_gen_yield.go:44 AnalyzeNestedEffectGenYield 8f76da960a9408c9
+// go: internal/rules/nested_effect_gen_yield.go:44 AnalyzeNestedEffectGenYield 2d185c4e8418cf04
 pub fn analyze_nested_effect_gen_yield(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

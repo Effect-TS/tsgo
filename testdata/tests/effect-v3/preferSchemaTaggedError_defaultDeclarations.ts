@@ -1,4 +1,5 @@
 // @filename: anonymousDefault.ts
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferSchemaTaggedError:warning
 import { Data } from "effect"
