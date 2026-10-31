@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics matchEffectToMatch:suggestion
 // @effect-diagnostics-in-tsgo false
 import { Effect } from "effect"

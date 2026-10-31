@@ -1,3 +1,4 @@
+// @effect-v3
 import { Data, Effect } from "effect"
 
 class JsonParseError extends Data.TaggedError("JsonParseError")<{ cause: unknown }> {}

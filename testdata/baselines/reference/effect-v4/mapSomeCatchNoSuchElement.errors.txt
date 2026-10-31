@@ -1,0 +1,269 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/mapSomeCatchNoSuchElement.ts(19,5): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(25,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(31,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(39,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(45,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(52,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(59,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(67,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(73,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(77,32): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(80,27): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(81,30): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(90,9): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(98,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(104,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+/.src/mapSomeCatchNoSuchElement.ts(107,3): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+
+
+==== /.src/mapSomeCatchNoSuchElement.ts (16 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapSomeCatchNoSuchElement:warning
+    import { Cause, Effect, Option, pipe } from "effect"
+    import * as E from "effect/Effect"
+    import * as O from "effect/Option"
+    import { some as optionSome } from "effect/Option"
+    
+    declare const lookup: Effect.Effect<string, Cause.NoSuchElementError>
+    declare const lookupOrFail: Effect.Effect<string, Cause.NoSuchElementError | Cause.TimeoutError>
+    
+    const users = new Map<string, { readonly name: string }>()
+    const findUser = (id: string) => Effect.fromNullishOr(users.get(id))
+    
+    // MUST TRIGGER: the example from the issue, Effect.map(Option.some) then catchTag into Option.none()
+    export const issueExample = (id: string) =>
+      findUser(id).pipe(
+        Effect.map(Option.some),
+        Effect.catchTag("NoSuchElementError", () => Effect.succeed(Option.none()))
+        ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+      )
+    
+    // MUST TRIGGER: Effect.asSome then catchTag into Effect.succeedNone
+    export const asSome = lookup.pipe(
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: eta-expanded Option.some mapper
+    export const etaExpanded = lookup.pipe(
+      Effect.map((value) => Option.some(value)),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: single-return block body mapper
+    export const blockMapper = lookup.pipe(
+      Effect.map((value) => {
+        return Option.some(value)
+      }),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: other errors are preserved, catchNoSuchElement only removes NoSuchElementError
+    export const otherErrorsKept = lookupOrFail.pipe(
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: NoSuchElementError is added by an earlier step of the same flow
+    export const introducedByHead = Effect.succeed([1, 2, 3]).pipe(
+      Effect.head,
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: the pair sits between other steps, which stay in place
+    export const surroundedBySteps = lookup.pipe(
+      Effect.tap((value) => Effect.log(value)),
+      Effect.map(Option.some),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone),
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+      Effect.map(Option.isSome)
+    )
+    
+    // MUST TRIGGER: pipe(...) function form with aliased module namespaces
+    export const aliasedModules = pipe(
+      lookup,
+      E.map(O.some),
+      E.catchTag("NoSuchElementError", () => E.succeed(O.none()))
+      ~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: named import of Option.some
+    export const namedSome = lookup.pipe(
+      Effect.map(optionSome),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: data-first calls
+    export const dataFirstAsSome = Effect.catchTag(Effect.asSome(lookup), "NoSuchElementError", () => Effect.succeedNone)
+                                   ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    
+    // MUST TRIGGER: data-first outer catchTag around a pipeable inner step
+    export const mixedForms = Effect.catchTag(lookup.pipe(Effect.asSome), "NoSuchElementError", () => Effect.succeedNone)
+                              ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    export const mixedFormsMap = Effect.catchTag(
+                                 ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+      lookup.pipe(Effect.map(Option.some)),
+      "NoSuchElementError",
+      () => Effect.succeed(Option.none())
+    )
+    
+    // MUST TRIGGER: the pair spans two chained .pipe(...) calls
+    export const crossPipe = lookup
+      .pipe(Effect.asSome)
+      .pipe(Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+            ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    
+    // MUST TRIGGER: Effect.fn pipeline steps
+    export const effectFn = Effect.fn(
+      function*(id: string) {
+        return yield* findUser(id)
+      },
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST TRIGGER: each occurrence in the same flow is reported
+    export const repeated = lookup.pipe(
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone),
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+      Effect.flatMap(Effect.fromOption),
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+    )
+    
+    // MUST NOT TRIGGER: already uses the dedicated combinator
+    export const alreadyCatchNoSuchElement = lookup.pipe(Effect.catchNoSuchElement)
+    
+    // MUST NOT TRIGGER: reverse order is not equivalent, asSome wraps the recovered None into Some(None)
+    export const reverseOrder = lookup.pipe(
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone),
+      Effect.asSome
+    )
+    
+    // MUST NOT TRIGGER: the steps are not adjacent
+    export const nonAdjacent = lookup.pipe(
+      Effect.asSome,
+      Effect.tap((value) => Effect.log(value)),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+    )
+    
+    // MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+    export const separatedAcrossPipes = lookup
+      .pipe(Effect.asSome, Effect.tap((value) => Effect.log(value)))
+      .pipe(Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+    
+    // MUST NOT TRIGGER: catchTag without the Option.some wrapping step
+    export const catchOnly = lookup.pipe(
+      Effect.catchTag("NoSuchElementError", () => Effect.succeed("fallback"))
+    )
+    
+    // MUST NOT TRIGGER: wrapping step without the catchTag
+    export const asSomeOnly = lookup.pipe(Effect.asSome)
+    
+    // MUST NOT TRIGGER: TimeoutError is a different tag, catchNoSuchElement does not apply
+    export const timeoutTag = lookup.pipe(
+      Effect.timeout("1 second"),
+      Effect.asSome,
+      Effect.catchTag("TimeoutError", () => Effect.succeedNone)
+    )
+    
+    // MUST NOT TRIGGER: the mapper transforms the value before wrapping it
+    export const transformedMapper = lookup.pipe(
+      Effect.map((value) => Option.some(value.length)),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+    )
+    
+    const localSome = <A>(value: A): Option.Option<A> => Option.some(value)
+    
+    // MUST NOT TRIGGER: the mapper does not resolve to Effect's Option.some
+    export const localSomeMapper = lookup.pipe(
+      Effect.map(localSome),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+    )
+    
+    // MUST NOT TRIGGER: the mapper wraps in Option.fromNullishOr, not Option.some
+    export const fromNullishOrMapper = lookup.pipe(
+      Effect.map(Option.fromNullishOr),
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+    )
+    
+    // MUST NOT TRIGGER: the tag argument is not a string literal
+    const tag = "NoSuchElementError" as const
+    export const nonLiteralTag = lookup.pipe(
+      Effect.asSome,
+      Effect.catchTag(tag, () => Effect.succeedNone)
+    )
+    
+    // MUST NOT TRIGGER: the array tag form of catchTag
+    export const arrayTag = lookup.pipe(
+      Effect.asSome,
+      Effect.catchTag(["NoSuchElementError"], () => Effect.succeedNone)
+    )
+    
+    // MUST NOT TRIGGER: catchTag with an orElse handler for the remaining errors
+    export const withOrElse = lookupOrFail.pipe(
+      Effect.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone, () => Effect.succeedNone)
+    )
+    
+    // MUST NOT TRIGGER: explicit type arguments may widen the result type on purpose
+    export const explicitTypeArguments = lookup.pipe(
+      Effect.asSome,
+      Effect.catchTag<"NoSuchElementError", Cause.NoSuchElementError, Option.Option<string>, never, never>(
+        "NoSuchElementError",
+        () => Effect.succeedNone
+      )
+    )
+    
+    // MUST NOT TRIGGER: catchTags is a different API
+    export const catchTags = lookup.pipe(
+      Effect.asSome,
+      Effect.catchTags({ NoSuchElementError: () => Effect.succeedNone })
+    )
+    
+    const fake = {
+      asSome: <A, Err, R>(self: Effect.Effect<A, Err, R>) => self.pipe(Effect.map(Option.some)),
+      catchTag: (_tag: "NoSuchElementError", _f: () => Effect.Effect<Option.Option<never>>) =>
+      <A, Err, R>(self: Effect.Effect<A, Err, R>) => self
+    }
+    
+    // MUST NOT TRIGGER: lookalike APIs that are not from the effect package
+    export const lookalikeAsSome = lookup.pipe(
+      fake.asSome,
+      Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+    )
+    export const lookalikeCatchTag = lookup.pipe(
+      Effect.asSome,
+      fake.catchTag("NoSuchElementError", () => Effect.succeedNone)
+    )
+    

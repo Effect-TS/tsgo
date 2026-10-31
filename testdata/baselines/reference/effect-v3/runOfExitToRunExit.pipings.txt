@@ -1,7 +1,7 @@
 ==== /.src/runOfExitToRunExit.ts (10 flows) ====
 
 === Piping Flow ===
-Location: 6:29 - 6:81
+Location: 7:29 - 7:81
 Node: Effect.runPromise(Effect.exit(program), { signal })
 Node Kind: KindCallExpression
 
@@ -19,7 +19,7 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 7:26 - 7:71
+Location: 8:26 - 8:71
 Node: Effect.runPromise(program.pipe(Effect.exit))
 Node Kind: KindCallExpression
 
@@ -37,7 +37,7 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 8:28 - 8:74
+Location: 9:28 - 9:74
 Node: Effect.runPromise(pipe(program, Effect.exit))
 Node Kind: KindCallExpression
 
@@ -55,7 +55,7 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 9:32 - 9:78
+Location: 10:32 - 10:78
 Node: pipe(program, Effect.exit, Effect.runPromise)
 Node Kind: KindCallExpression
 
@@ -73,7 +73,7 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 12:29 - 12:62
+Location: 13:29 - 13:62
 Node: runPromise(Effect.exit(program))
 Node Kind: KindCallExpression
 
@@ -91,7 +91,7 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 14:31 - 16:2
+Location: 15:31 - 17:2
 Node: Effect.runPromise(\n  program.pipe(Effect.exit, Effect.map((exit) => exit))\n)
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (3):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 17:21 - 17:42
+Location: 18:21 - 18:42
 Node: Effect.exit(program)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Effect<Exit<number, Error>, never, never>
 
 === Piping Flow ===
-Location: 18:30 - 18:62
+Location: 19:30 - 19:62
 Node: Effect.runPromise(computedExit)
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 21:26 - 21:63
+Location: 22:26 - 22:63
 Node: Effect.runSync(Effect.exit(program))
 Node Kind: KindCallExpression
 
@@ -159,7 +159,7 @@ Transformations (2):
       outType: Exit<number, Error>
 
 === Piping Flow ===
-Location: 22:32 - 22:75
+Location: 23:32 - 23:75
 Node: Effect.runSync(pipe(program, Effect.exit))
 Node Kind: KindCallExpression
 

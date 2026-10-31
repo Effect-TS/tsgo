@@ -1,7 +1,7 @@
 ==== /.src/flatMapToTap_aliases.ts (14 flows) ====
 
 === Piping Flow ===
-Location: 10:24 - 10:68
+Location: 11:24 - 11:68
 Node: source.pipe(bind((n) => restore(audit, n)))
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 10:48 - 10:66
+Location: 11:48 - 11:66
 Node: restore(audit, n)
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 12:24 - 12:70
+Location: 13:24 - 13:70
 Node: source.pipe(bind((n) => map(audit, () => n)))
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 12:48 - 12:68
+Location: 13:48 - 13:68
 Node: map(audit, () => n)
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 13:32 - 13:104
+Location: 14:32 - 14:104
 Node: source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 13:74 - 13:102
+Location: 14:74 - 14:102
 Node: Library.Effect.as(audit, n)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 14:30 - 14:100
+Location: 15:30 - 15:100
 Node: ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 14:52 - 14:96
+Location: 15:52 - 15:96
 Node: source.pipe(bind((n) => restore(audit, n)))
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 14:76 - 14:94
+Location: 15:76 - 15:94
 Node: restore(audit, n)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 15:27 - 15:97
+Location: 16:27 - 16:97
 Node: ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 15:49 - 15:93
+Location: 16:49 - 16:93
 Node: source.pipe(bind((n) => restore(audit, n)))
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 15:73 - 15:91
+Location: 16:73 - 16:91
 Node: restore(audit, n)
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 16:85 - 16:129
+Location: 17:85 - 17:129
 Node: source.pipe(bind((n) => restore(audit, n)))
 Node Kind: KindCallExpression
 
@@ -183,7 +183,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 16:109 - 16:127
+Location: 17:109 - 17:127
 Node: restore(audit, n)
 Node Kind: KindCallExpression
 

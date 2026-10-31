@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics errorPayloadShadowsName:warning
 import { Data } from "effect"

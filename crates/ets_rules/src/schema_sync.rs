@@ -12,7 +12,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::X_0_EXECUTES_SYNCHRONOUSLY_USE_SCHEMA_1_TO_COMPOSE_THIS_OPERATION_THROUGH_EFFECT_WITHOUT_THROWING_EFFECT_SCHEMA_SYNC;
 
-// go: internal/rules/schema_sync.go:13 SchemaSync a406a27baaa191b2
+// go: internal/rules/schema_sync.go:13 SchemaSync dafd96ff87bcc336
 // SchemaSync discourages synchronous Schema decoding and encoding in any context.
 pub static SCHEMA_SYNC: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "schemaSync",

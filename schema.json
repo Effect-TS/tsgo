@@ -2531,6 +2531,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
         },
+        "effectTryWithoutCatch": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports Effect.try and Effect.tryPromise calls without a catch handler, whose failures surface as a generic unknown error"
+        },
         "errorPayloadShadowsName": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2705,6 +2710,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow"
+        },
+        "mapSomeCatchNoSuchElement": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none"
         },
         "mapSomeToAsSome": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

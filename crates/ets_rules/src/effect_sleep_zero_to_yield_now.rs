@@ -51,7 +51,7 @@ pub struct EffectSleepZeroToYieldNowMatch {
     pub form: YieldNowForm,
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:54 AnalyzeEffectSleepZeroToYieldNow 83bbc1fc3a2c67cd
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:54 AnalyzeEffectSleepZeroToYieldNow f2022af02d6d859c
 //
 // Rust: Go's checker argument is unused and dropped.
 pub fn analyze_effect_sleep_zero_to_yield_now(
@@ -109,7 +109,7 @@ pub fn analyze_effect_sleep_zero_to_yield_now(
     matches
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:98 unwrapZeroDurationExpression 09e3400c206d959b
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:99 unwrapZeroDurationExpression 09e3400c206d959b
 pub(crate) fn unwrap_zero_duration_expression(node: P<Node>) -> P<Node> {
     ast::skip_outer_expressions(
         node,
@@ -119,7 +119,7 @@ pub(crate) fn unwrap_zero_duration_expression(node: P<Node>) -> P<Node> {
     )
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:102 isOrdinarySingleArgumentCall 449b85a4aa7eed12
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:103 isOrdinarySingleArgumentCall 449b85a4aa7eed12
 pub(crate) fn is_ordinary_single_argument_call(node: P<Node>) -> bool {
     let call = node.as_call_expression();
     let arguments = call.arguments().nodes();
@@ -129,7 +129,7 @@ pub(crate) fn is_ordinary_single_argument_call(node: P<Node>) -> bool {
         && arguments[0].kind() != Kind::SpreadElement
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:109 isImportedModuleReceiver 5b88b506b3a5a073
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:110 isImportedModuleReceiver 5b88b506b3a5a073
 pub(crate) fn is_imported_module_receiver(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     let node = unwrap_zero_duration_expression(node);
     if node.kind() == Kind::PropertyAccessExpression
@@ -160,7 +160,7 @@ pub(crate) fn is_imported_module_receiver(tp: &mut TypeParser<'_>, node: P<Node>
     kind == Kind::ImportSpecifier || kind == Kind::NamespaceImport
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:130 zeroDurationString 7c51699657b1e4b8
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:131 zeroDurationString 7c51699657b1e4b8
 pub(crate) static ZERO_DURATION_STRING: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(-?0+(?:\.0+)?)[ \t]+(nanos?|micros?|millis?|seconds?|minutes?|hours?|days?|weeks?)$",
@@ -168,7 +168,7 @@ pub(crate) static ZERO_DURATION_STRING: LazyLock<Regex> = LazyLock::new(|| {
     .expect("valid regexp")
 });
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:132 isRemovableZeroDuration 94811fcfc9945915
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:133 isRemovableZeroDuration 94811fcfc9945915
 pub(crate) fn is_removable_zero_duration(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -237,7 +237,7 @@ pub(crate) fn is_removable_zero_duration(
     }
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:178 isZeroDurationNumber 4f0885e90f8a81d6
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:179 isZeroDurationNumber 4f0885e90f8a81d6
 pub(crate) fn is_zero_duration_number(node: P<Node>, bigint: bool) -> bool {
     let mut node = unwrap_zero_duration_expression(node);
     if node.kind() == Kind::PrefixUnaryExpression {

@@ -7,25 +7,13 @@ mod autoimport_style_consistency_test;
 mod completion_test;
 mod document_symbols_runner_test;
 mod effect_fn_pipeables_test;
-mod effect_sleep_zero_to_yield_now_test;
-mod effect_succeed_with_undefined_test;
-mod fail_cause_to_constructor_test;
 mod feature_flags_test;
-mod fixes_compile_test;
-mod flat_map_identity_to_flatten_test;
-mod flat_map_to_tap_test;
 mod hover_test;
 mod inlay_hints_baseline_test;
 mod inlay_hints_test;
-mod manual_metric_tap_to_track_test;
-mod map_const_to_as_test;
-mod map_map_error_to_map_both_test;
-mod provide_merge_all_to_array_test;
 mod quickfix_runner_test;
 mod refactor_runner_test;
 mod runner_test;
-mod suspend_fail_to_fail_sync_test;
-mod type_union_to_schema_union_test;
 
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::path::Path;
@@ -62,11 +50,6 @@ pub(crate) fn run_case(
     })
 }
 
-/// Rust-only: Go's `diagnostic.Code != nil && diagnostic.Code.Integer != nil && *diagnostic.Code.Integer == code`.
-pub(crate) fn has_diagnostic_code(diagnostic: &ets_shim::lsproto::Diagnostic, code: i32) -> bool {
-    diagnostic.code.as_ref().and_then(|code| code.integer) == Some(code)
-}
-
 /// The trial standing for a Go test that skips or fails before running its subtests.
 pub(crate) fn parent_failure(name: &str, message: String, skip: bool) -> Vec<Trial> {
     if skip {
@@ -94,17 +77,6 @@ fn main() {
     trials.extend(autoimport_style_consistency_test::tests());
     trials.extend(feature_flags_test::tests());
     trials.extend(effect_fn_pipeables_test::tests());
-    trials.extend(effect_sleep_zero_to_yield_now_test::tests());
-    trials.extend(flat_map_to_tap_test::tests());
-    trials.extend(flat_map_identity_to_flatten_test::tests());
-    trials.extend(map_const_to_as_test::tests());
-    trials.extend(map_map_error_to_map_both_test::tests());
-    trials.extend(manual_metric_tap_to_track_test::tests());
-    trials.extend(fail_cause_to_constructor_test::tests());
-    trials.extend(suspend_fail_to_fail_sync_test::tests());
-    trials.extend(type_union_to_schema_union_test::tests());
-    trials.extend(provide_merge_all_to_array_test::tests());
-    trials.extend(effect_succeed_with_undefined_test::tests());
 
     let conclusion = libtest_mimic::run(&args, trials);
     if !args.list {

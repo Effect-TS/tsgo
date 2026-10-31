@@ -36,6 +36,7 @@
     "effecttsgo/manual-metric-tap-to-track": "warn",
     "effecttsgo/map-const-to-as": "warn",
     "effecttsgo/map-map-error-to-map-both": "warn",
+    "effecttsgo/map-some-catch-no-such-element": "warn",
     "effecttsgo/map-some-to-as-some": "warn",
     "effecttsgo/match-effect-to-map-both": "warn",
     "effecttsgo/match-effect-to-match": "warn",

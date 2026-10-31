@@ -53,7 +53,7 @@ pub struct TypeUnionToSchemaUnionMatch {
     pub members: Vec<TypeUnionToSchemaUnionMember>,
 }
 
-// go: internal/rules/type_union_to_schema_union.go:49 AnalyzeTypeUnionToSchemaUnion 898b2abf15c14d10
+// go: internal/rules/type_union_to_schema_union.go:49 AnalyzeTypeUnionToSchemaUnion e7a7cf2e87677762
 // Rust: Go's `sf == nil` check drops: the source file is not optional.
 pub fn analyze_type_union_to_schema_union(
     tp: &mut TypeParser<'_>,
@@ -86,7 +86,7 @@ pub fn analyze_type_union_to_schema_union(
     matches
 }
 
-// go: internal/rules/type_union_to_schema_union.go:75 typeUnionToSchemaUnionLeaf 9fc4bd9b77eae93f
+// go: internal/rules/type_union_to_schema_union.go:76 typeUnionToSchemaUnionLeaf 9fc4bd9b77eae93f
 // typeUnionToSchemaUnionLeaf is a syntactically accepted union member. For a
 // `<SchemaRef>.<Namespace>.<Side><typeof S>` helper, helper is the <Namespace>
 // identifier and helperName the whole type name; both are nil for `typeof S.<Side>`.
@@ -98,7 +98,7 @@ pub(crate) struct TypeUnionToSchemaUnionLeaf {
     helper_name: Option<P<Node>>,
 }
 
-// go: internal/rules/type_union_to_schema_union.go:82 analyzeTypeUnionToSchemaUnionAlias 8bb6cc1ab85d068b
+// go: internal/rules/type_union_to_schema_union.go:83 analyzeTypeUnionToSchemaUnionAlias 8bb6cc1ab85d068b
 // Rust: Go's `alias == nil` check drops (the kind was checked by the caller).
 pub(crate) fn analyze_type_union_to_schema_union_alias(
     tp: &mut TypeParser<'_>,
@@ -157,7 +157,7 @@ pub(crate) fn analyze_type_union_to_schema_union_alias(
     })
 }
 
-// go: internal/rules/type_union_to_schema_union.go:141 isEffectSchemaPropertyHelper 5f6959b30f43f6ca
+// go: internal/rules/type_union_to_schema_union.go:142 isEffectSchemaPropertyHelper 5f6959b30f43f6ca
 // isEffectSchemaPropertyHelper reports whether the helper namespace is Effect's
 // and the helper itself exists in the installed version: Schema.Schema.Encoded
 // only exists in v3 and Schema.Codec.Encoded only in v4.
@@ -178,7 +178,7 @@ pub(crate) fn is_effect_schema_property_helper(
     symbol.is_some_and(|symbol| !symbol.declarations().is_empty())
 }
 
-// go: internal/rules/type_union_to_schema_union.go:151 flattenTypeUnionToSchemaUnionMembers 4b83a8097722982d
+// go: internal/rules/type_union_to_schema_union.go:152 flattenTypeUnionToSchemaUnionMembers 4b83a8097722982d
 pub(crate) fn flatten_type_union_to_schema_union_members(node: P<Node>, out: &mut Vec<P<Node>>) {
     let node = ast::skip_type_parentheses(node);
     if node.kind() != Kind::UnionType {
@@ -190,7 +190,7 @@ pub(crate) fn flatten_type_union_to_schema_union_members(node: P<Node>, out: &mu
     }
 }
 
-// go: internal/rules/type_union_to_schema_union.go:162 parseTypeUnionToSchemaUnionLeaf 4d138e4814d12d3c
+// go: internal/rules/type_union_to_schema_union.go:163 parseTypeUnionToSchemaUnionLeaf 4d138e4814d12d3c
 // Rust: Go's nil checks on `ExprName`, `TypeName` and the helper drop: tsrs holds them as non-optional nodes.
 pub(crate) fn parse_type_union_to_schema_union_leaf(
     node: P<Node>,
@@ -260,7 +260,7 @@ pub(crate) fn parse_type_union_to_schema_union_leaf(
     }
 }
 
-// go: internal/rules/type_union_to_schema_union.go:218 typeUnionToSchemaUnionSide fab1f01a2fd501a8
+// go: internal/rules/type_union_to_schema_union.go:219 typeUnionToSchemaUnionSide fab1f01a2fd501a8
 pub(crate) fn type_union_to_schema_union_side(name: P<Node>) -> Option<&'static str> {
     if name.kind() != Kind::Identifier {
         return None;
@@ -271,7 +271,7 @@ pub(crate) fn type_union_to_schema_union_side(name: P<Node>) -> Option<&'static 
     }
 }
 
-// go: internal/rules/type_union_to_schema_union.go:229 isIdentifierRootedEntityName f1febf8b28c4ec7a
+// go: internal/rules/type_union_to_schema_union.go:230 isIdentifierRootedEntityName f1febf8b28c4ec7a
 pub(crate) fn is_identifier_rooted_entity_name(mut node: P<Node>) -> bool {
     while node.kind() == Kind::QualifiedName {
         node = node.as_qualified_name().left();
@@ -279,7 +279,7 @@ pub(crate) fn is_identifier_rooted_entity_name(mut node: P<Node>) -> bool {
     node.kind() == Kind::Identifier
 }
 
-// go: internal/rules/type_union_to_schema_union.go:238 TypeUnionToSchemaUnionNameParts 3806d6d04bf9a6e2
+// go: internal/rules/type_union_to_schema_union.go:239 TypeUnionToSchemaUnionNameParts 3806d6d04bf9a6e2
 // TypeUnionToSchemaUnionNameParts returns the names of an entity name: a.b.c
 // becomes ["a", "b", "c"].
 pub fn type_union_to_schema_union_name_parts(node: P<Node>) -> Vec<String> {

@@ -45,7 +45,7 @@ pub struct UnnecessaryFailYieldableErrorMatch {
     pub fail_argument: P<Node>,     // The first argument to Effect.fail (the replacement text)
 }
 
-// go: internal/rules/unnecessary_fail_yieldable_error.go:45 AnalyzeUnnecessaryFailYieldableError 7dfad8e93a4a16ab
+// go: internal/rules/unnecessary_fail_yieldable_error.go:45 AnalyzeUnnecessaryFailYieldableError ae7941768dd15631
 // AnalyzeUnnecessaryFailYieldableError finds all yield* Effect.fail(...) calls
 // where the argument is a yieldable error type that can be yielded directly.
 //

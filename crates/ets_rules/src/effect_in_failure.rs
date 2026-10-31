@@ -14,7 +14,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THE_ERROR_CHANNEL_CONTAINS_AN_EFFECT_0_PUTTING_EFFECT_COMPUTATIONS_IN_THE_FAILURE_CHANNEL_IS_NOT_INTENDED_KEEP_ONLY_FAILURE_TYPES_THERE_EFFECT_EFFECT_IN_FAILURE;
 
-// go: internal/rules/effect_in_failure.go:15 EffectInFailure 8e24ed7516f219d5
+// go: internal/rules/effect_in_failure.go:15 EffectInFailure 15ef8cc06305d730
 // EffectInFailure detects when an Effect type appears in the failure (E) channel
 // of another Effect. Putting Effect computations in the failure channel is not
 // intended; only failure types should appear there.

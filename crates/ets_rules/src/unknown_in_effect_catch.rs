@@ -17,7 +17,7 @@ static MESSAGE: &Message = &tsdiag::THE_CATCH_CALLBACK_IN_0_RETURNS_UNKNOWN_SO_T
 // unknownCatchApis lists the Effect module APIs that have a catch callback parameter.
 pub(crate) static UNKNOWN_CATCH_APIS: &[&str] = &["tryPromise", "try", "tryMap", "tryMapPromise"];
 
-// go: internal/rules/unknown_in_effect_catch.go:19 UnknownInEffectCatch 5daa8fe525aa3a61
+// go: internal/rules/unknown_in_effect_catch.go:19 UnknownInEffectCatch 20267ad44413b349
 // UnknownInEffectCatch detects when catch callbacks in Effect APIs return 'unknown' or 'any'
 // instead of providing typed errors.
 pub static UNKNOWN_IN_EFFECT_CATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -50,7 +50,7 @@ pub static UNKNOWN_IN_EFFECT_CATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/unknown_in_effect_catch.go:52 checkUnknownInEffectCatch fef4cff700f82496
+// go: internal/rules/unknown_in_effect_catch.go:53 checkUnknownInEffectCatch fef4cff700f82496
 // checkUnknownInEffectCatch checks a single call expression for the unknown-in-catch pattern.
 pub(crate) fn check_unknown_in_effect_catch(
     ctx: &mut Context<'_, '_>,
@@ -112,7 +112,7 @@ pub(crate) fn check_unknown_in_effect_catch(
     None
 }
 
-// go: internal/rules/unknown_in_effect_catch.go:109 isUnknownCatchCallee 0c453ab1cef9bf2e
+// go: internal/rules/unknown_in_effect_catch.go:110 isUnknownCatchCallee 0c453ab1cef9bf2e
 // isUnknownCatchCallee checks if a node references one of the Effect module catch APIs.
 //
 // Rust: Go's ignored checker argument is dropped.

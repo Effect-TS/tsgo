@@ -252,6 +252,7 @@ func referencesSymbol(tp *typeparser.TypeParser, c *checker.Checker, node *ast.N
 		case ast.KindIdentifier:
 			return n.Text() == name && tp.GetSymbolAtLocation(n) == symbol
 		}
+		//ets:ast-walk scans for identifier and shorthand property references to the accumulator
 		return n.ForEachChild(visit)
 	}
 	return node != nil && visit(node)
@@ -294,6 +295,7 @@ func mutatedAfterLoop(tp *typeparser.TypeParser, loop *ast.Node, name string, sy
 		if n.Kind == ast.KindIdentifier {
 			return n.Text() == name && tp.GetSymbolAtLocation(n) == symbol && isMutation(n)
 		}
+		//ets:ast-walk scans for references to the accumulator after the loop; element and length writes and delete are not calls
 		return n.ForEachChild(visit)
 	}
 	after := false
@@ -320,6 +322,7 @@ func containsYield(node *ast.Node) bool {
 		if ast.IsFunctionLike(n) {
 			return false
 		}
+		//ets:ast-walk finds yield expressions of the enclosing generator
 		return n.ForEachChild(visit)
 	}
 	return visit(node)

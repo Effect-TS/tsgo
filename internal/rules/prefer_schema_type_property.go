@@ -62,6 +62,7 @@ func AnalyzePreferSchemaTypeProperty(tp *typeparser.TypeParser, sf *ast.SourceFi
 				return false
 			}
 		}
+		//ets:ast-walk finds Schema.Type<typeof X>-style type references, which are type nodes
 		node.ForEachChild(walk)
 		return false
 	}

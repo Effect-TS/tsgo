@@ -41,7 +41,7 @@ pub static GLOBAL_DATE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_date.go:42 runGlobalDate edd6d95bedf68fd1
+// go: internal/rules/global_date.go:42 runGlobalDate 30a212f18977400f
 pub(crate) fn run_global_date(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

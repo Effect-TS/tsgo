@@ -9,7 +9,7 @@ use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 use rustc_hash::{FxHashMap, FxHashSet};
 
-// go: internal/rules/missing_effect_service_dependency.go:19 MissingEffectServiceDependency e175c1d809157b8b
+// go: internal/rules/missing_effect_service_dependency.go:19 MissingEffectServiceDependency c745dd85d8cf099f
 // MissingEffectServiceDependency checks that Effect.Service dependencies satisfy
 // all required layer inputs. It detects when a class extending Effect.Service has
 // required services (from the layer's RIn) that are not provided in the dependencies
@@ -62,7 +62,7 @@ pub static MISSING_EFFECT_SERVICE_DEPENDENCY: LazyLock<Rule> = LazyLock::new(|| 
 }
 });
 
-// go: internal/rules/missing_effect_service_dependency.go:66 checkServiceDependencies 391d639d4b78eda7
+// go: internal/rules/missing_effect_service_dependency.go:68 checkServiceDependencies 391d639d4b78eda7
 // checkServiceDependencies checks if a class extending Effect.Service has all
 // required service dependencies satisfied.
 pub(crate) fn check_service_dependencies(

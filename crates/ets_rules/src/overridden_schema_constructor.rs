@@ -40,7 +40,7 @@ pub struct OverriddenSchemaConstructorMatch {
     pub has_body: bool, // Whether the constructor has a body (the static fix is only available when true)
 }
 
-// go: internal/rules/overridden_schema_constructor.go:42 AnalyzeOverriddenSchemaConstructor 6a1c3ffff59a0cc3
+// go: internal/rules/overridden_schema_constructor.go:44 AnalyzeOverriddenSchemaConstructor 0f18608db61554ec
 // AnalyzeOverriddenSchemaConstructor finds all class declarations extending Schema
 // that have an overridden constructor which is not an allowed passthrough pattern.
 //
@@ -73,7 +73,7 @@ pub fn analyze_overridden_schema_constructor(
     matches
 }
 
-// go: internal/rules/overridden_schema_constructor.go:68 checkOverriddenSchemaConstructor cf5ea392a0b4ca59
+// go: internal/rules/overridden_schema_constructor.go:70 checkOverriddenSchemaConstructor cf5ea392a0b4ca59
 //
 // Rust: Go's (ignored) checker argument is dropped.
 pub(crate) fn check_overridden_schema_constructor(
@@ -124,7 +124,7 @@ pub(crate) fn check_overridden_schema_constructor(
     None
 }
 
-// go: internal/rules/overridden_schema_constructor.go:119 isAllowedConstructor d144bcab2e4795ea
+// go: internal/rules/overridden_schema_constructor.go:121 isAllowedConstructor d144bcab2e4795ea
 // isAllowedConstructor checks if a constructor is a passthrough that simply forwards
 // exactly 2 parameters to super(). This pattern is used internally by Schema and is allowed.
 pub(crate) fn is_allowed_constructor(ctor_node: P<Node>) -> bool {

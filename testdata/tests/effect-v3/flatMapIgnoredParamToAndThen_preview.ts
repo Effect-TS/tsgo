@@ -1,3 +1,4 @@
+// @effect-v3
 import { Effect } from "effect"
 
 const first = Effect.succeed(1)

@@ -11,6 +11,7 @@
 }
 
 // @filename: effectFnOpportunity_siblingDeclarators.ts
+// @effect-v3
 import { Effect } from "effect"
 
 export const limit = 10,

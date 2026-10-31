@@ -30,6 +30,7 @@ var SchemaOpaqueInstanceMember = rule.Rule{
 					}
 				}
 			}
+			//ets:ast-walk finds classes extending Schema.Opaque, which are not flow steps
 			node.ForEachChild(walk)
 			return false
 		}

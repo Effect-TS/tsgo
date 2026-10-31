@@ -1,25 +1,25 @@
 === Quick Fix Inventory ===
 
-[D1] (6:15-6:25) TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+[D1] (7:15-7:25) TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
   Fix 0: "Disable globalDateInEffect for this line"
   Fix 1: "Disable globalDateInEffect for entire file"
 
-[D2] (12:15-12:25) TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+[D2] (13:15-13:25) TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
   Fix 0: "Disable globalDateInEffect for this line"
   Fix 1: "Disable globalDateInEffect for entire file"
 
-[D3] (18:16-18:38) TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+[D3] (19:16-19:38) TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
   Fix 0: "Disable globalDateInEffect for this line"
   Fix 1: "Disable globalDateInEffect for entire file"
 
-[D4] (25:15-25:27) TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+[D4] (26:15-26:27) TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
   Fix 0: "Disable globalDateInEffect for this line"
   Fix 1: "Disable globalDateInEffect for entire file"
 
-[D5] (30:7-30:19) TS6133: '_moduleLevel' is declared but its value is never read.
+[D5] (31:7-31:19) TS6133: '_moduleLevel' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (33:7-33:22) TS6133: '_regularNewDate' is declared but its value is never read.
+[D6] (34:7-34:22) TS6133: '_regularNewDate' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===

@@ -46,6 +46,8 @@ type DeterministicKeyMatch struct {
 
 // AnalyzeDeterministicKeys finds all class declarations where the key string literal
 // doesn't match the expected deterministic key.
+//
+//ets:ast-walk finds class declarations, which are not flow steps
 func AnalyzeDeterministicKeys(tp *typeparser.TypeParser, program checker.Program, c *checker.Checker, sf *ast.SourceFile, effectConfig *etscore.ResolvedEffectPluginOptions) []DeterministicKeyMatch {
 	if effectConfig == nil {
 		return nil
@@ -231,6 +233,7 @@ func matchCustomPattern(c *checker.Checker, _ *ast.SourceFile, classNode *ast.No
 		}
 
 		// Visit children
+		//ets:ast-walk scans heritage clauses for string arguments to @effect-identifier parameters
 		current.ForEachChild(pushHeritageChild)
 	}
 

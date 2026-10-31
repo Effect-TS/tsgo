@@ -15,7 +15,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::METHODS_OF_THIS_SERVICE_REQUIRE_0_FROM_EVERY_CALLER_THE_REQUIREMENT_BECOMES_PART_OF_THE_PUBLIC_SERVICE_SURFACE_INSTEAD_OF_REMAINING_INTERNAL_TO_LAYER_IMPLEMENTATION_RESOLVE_THESE_DEPENDENCIES_AT_LAYER_CREATION_AND_PROVIDE_THEM_TO_EACH_METHOD_SO_THE_SERVICE_S_TYPE_REFLECTS_ITS_PURPOSE_NOT_ITS_IMPLEMENTATION_TO_SUPPRESS_THIS_DIAGNOSTIC_FOR_SPECIFIC_DEPENDENCY_TYPES_THAT_ARE_INTENTIONALLY_PASSED_THROUGH_E_G_HTTP_SERVER_REQUEST_ADD_EFFECT_LEAKABLE_SERVICE_JSDOC_TO_THEIR_INTERFACE_DECLARATIONS_OR_TO_THIS_SERVICE_BY_ADDING_A_EFFECT_EXPECT_LEAKING_0_JSDOC_MORE_INFO_AND_EXAMPLES_AT_HTTPS_COLON_SLASH_SLASHEFFECT_WEBSITE_SLASHDOCS_SLASHREQUIREMENTS_MANAGEMENT_SLASHLAYERS_SLASH_AVOIDING_REQUIREMENT_LEAKAGE_EFFECT_LEAKING_REQUIREMENTS;
 
-// go: internal/rules/leaking_requirements.go:22 LeakingRequirements da8999de866ca163
+// go: internal/rules/leaking_requirements.go:22 LeakingRequirements 03715148cc94b298
 // LeakingRequirements detects when service methods inadvertently expose implementation
 // dependencies (Requirements) in their public type signatures. When every method of a
 // service requires the same dependency types from callers, this is typically a sign that
@@ -147,7 +147,7 @@ pub static LEAKING_REQUIREMENTS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/leaking_requirements.go:133 filterExpectedLeakingRequirements 299ffd08d0ead27a
+// go: internal/rules/leaking_requirements.go:136 filterExpectedLeakingRequirements 299ffd08d0ead27a
 pub(crate) fn filter_expected_leaking_requirements(
     c: &mut Checker,
     report_node: Option<P<Node>>,
@@ -172,7 +172,7 @@ pub(crate) fn filter_expected_leaking_requirements(
     filtered
 }
 
-// go: internal/rules/leaking_requirements.go:152 isExpectedLeakingServiceSuppressed 10925ab0db1e1cf4
+// go: internal/rules/leaking_requirements.go:155 isExpectedLeakingServiceSuppressed 10925ab0db1e1cf4
 //
 // Rust: Go's checker argument is unused (and never nil here), so it is dropped.
 pub(crate) fn is_expected_leaking_service_suppressed(
@@ -208,7 +208,7 @@ pub(crate) fn is_expected_leaking_service_suppressed(
     .is_some()
 }
 
-// go: internal/rules/leaking_requirements.go:179 hasExpectedLeakingComment e7624eddeb8a4f4b
+// go: internal/rules/leaking_requirements.go:182 hasExpectedLeakingComment e7624eddeb8a4f4b
 pub(crate) fn has_expected_leaking_comment(
     source_text: &'static str,
     pos: i64,
@@ -243,7 +243,7 @@ pub(crate) fn has_expected_leaking_comment(
     false
 }
 
-// go: internal/rules/leaking_requirements.go:208 parseLeakedRequirements 373738beeb8e320d
+// go: internal/rules/leaking_requirements.go:211 parseLeakedRequirements 373738beeb8e320d
 // parseLeakedRequirements analyzes the service shape to find requirement types that
 // are shared across all effect-typed members. This is the "leaking requirements" heuristic.
 //
@@ -347,7 +347,7 @@ pub(crate) fn parse_leaked_requirements(
     leaked
 }
 
-// go: internal/rules/leaking_requirements.go:304 hasLeakableServiceAnnotation ad9a553621be2d24
+// go: internal/rules/leaking_requirements.go:307 hasLeakableServiceAnnotation ad9a553621be2d24
 // hasLeakableServiceAnnotation checks if a type's declarations contain the
 // @effect-leakable-service JSDoc annotation.
 pub(crate) fn has_leakable_service_annotation(c: &mut Checker, t: P<Type>) -> bool {
@@ -380,7 +380,7 @@ pub(crate) fn has_leakable_service_annotation(c: &mut Checker, t: P<Type>) -> bo
     false
 }
 
-// go: internal/rules/leaking_requirements.go:342 intersectStringSlices 73173a42ea30166b
+// go: internal/rules/leaking_requirements.go:345 intersectStringSlices 73173a42ea30166b
 // intersectStringSlices returns the elements that appear in both slices.
 //
 // Rust: the result owns its elements (Go returns a read-only view of a fresh slice); `None` is Go's nil slice.

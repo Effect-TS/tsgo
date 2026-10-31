@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics unsafeEffectTypeAssertion:warning
 import { Effect, Layer, Stream } from "effect"
 

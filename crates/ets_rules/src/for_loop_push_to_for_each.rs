@@ -280,7 +280,7 @@ pub(crate) fn for_loop_push_to_for_each_accumulator(
     None
 }
 
-// go: internal/rules/for_loop_push_to_for_each.go:244 referencesSymbol e513640495c7c11e
+// go: internal/rules/for_loop_push_to_for_each.go:244 referencesSymbol 30ca1ac82b9c069f
 // referencesSymbol reports whether node contains an identifier, or a shorthand
 // property, that resolves to symbol. Identifiers are compared by name first so
 // most nodes skip the symbol lookup.
@@ -312,7 +312,7 @@ pub(crate) fn references_symbol(
     node.is_some_and(|node| visit(tp, node, name, symbol))
 }
 
-// go: internal/rules/for_loop_push_to_for_each.go:262 forLoopPushToForEachMutatingMethods 98a183b4d25fcfac
+// go: internal/rules/for_loop_push_to_for_each.go:263 forLoopPushToForEachMutatingMethods 98a183b4d25fcfac
 // forLoopPushToForEachMutatingMethods are the Array methods that change the
 // array they are called on.
 pub(crate) static FOR_LOOP_PUSH_TO_FOR_EACH_MUTATING_METHODS: LazyLock<FxHashSet<&'static str>> =
@@ -322,7 +322,7 @@ pub(crate) static FOR_LOOP_PUSH_TO_FOR_EACH_MUTATING_METHODS: LazyLock<FxHashSet
             .collect()
     });
 
-// go: internal/rules/for_loop_push_to_for_each.go:270 mutatedAfterLoop 99813d4e1e8e9baf
+// go: internal/rules/for_loop_push_to_for_each.go:271 mutatedAfterLoop 683af25c1072e348
 // mutatedAfterLoop reports whether a statement after loop in the same block
 // calls a mutating Array method on the accumulator, writes one of its
 // elements or its length, or deletes one of its elements.
@@ -380,7 +380,7 @@ pub(crate) fn mutated_after_loop(
     false
 }
 
-// go: internal/rules/for_loop_push_to_for_each.go:314 containsYield f6b2b5a85c8c99cf
+// go: internal/rules/for_loop_push_to_for_each.go:316 containsYield 12ed8081aea54472
 // containsYield reports whether node contains a yield expression of the
 // enclosing generator, which could not move into an arrow function.
 pub(crate) fn contains_yield(node: P<Node>) -> bool {
@@ -397,7 +397,7 @@ pub(crate) fn contains_yield(node: P<Node>) -> bool {
     visit(node)
 }
 
-// go: internal/rules/for_loop_push_to_for_each.go:333 forLoopPushToForEachPointFreeCallee bd7a49d346aef735
+// go: internal/rules/for_loop_push_to_for_each.go:336 forLoopPushToForEachPointFreeCallee bd7a49d346aef735
 // forLoopPushToForEachPointFreeCallee returns f when yielded is a flow applying
 // a single step f to the loop variable x, as in `f(x)`, `pipe(x, f)` or
 // `x.pipe(f)`, and f is a plain identifier with a single call signature taking
