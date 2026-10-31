@@ -1,0 +1,259 @@
+diff --git a/crates/tsrs_checker/src/inference.rs b/crates/tsrs_checker/src/inference.rs
+--- a/crates/tsrs_checker/src/inference.rs
++++ b/crates/tsrs_checker/src/inference.rs
+@@ -845,30 +845,21 @@
+         target: P<Type>,
+     ) {
+         if source.flags().intersects(TypeFlags::Conditional) {
+-            let source_check_type = get_non_distributed_type_parameter(
+-                source.as_conditional_type().check_type().unwrap(),
+-            )
+-            .unwrap();
++            let source = self.get_non_distributed_conditional_type(source);
+             self.infer_from_types(
+                 n,
+-                source_check_type,
++                source.as_conditional_type().check_type().unwrap(),
+                 target.as_conditional_type().check_type().unwrap(),
+             );
+-            let source_extends_type = get_non_distributed_type_parameter(
+-                source.as_conditional_type().extends_type().unwrap(),
+-            )
+-            .unwrap();
+             self.infer_from_types(
+                 n,
+-                source_extends_type,
++                source.as_conditional_type().extends_type().unwrap(),
+                 target.as_conditional_type().extends_type().unwrap(),
+             );
+             let source_true_type = self.get_true_type_from_conditional_type(source);
+-            let source_true_type = get_non_distributed_type_parameter(source_true_type).unwrap();
+             let target_true_type = self.get_true_type_from_conditional_type(target);
+             self.infer_from_types(n, source_true_type, target_true_type);
+             let source_false_type = self.get_false_type_from_conditional_type(source);
+-            let source_false_type = get_non_distributed_type_parameter(source_false_type).unwrap();
+             let target_false_type = self.get_false_type_from_conditional_type(target);
+             self.infer_from_types(n, source_false_type, target_false_type);
+         } else {
+diff --git a/crates/tsrs_checker/src/checker_12.rs b/crates/tsrs_checker/src/checker_12.rs
+--- a/crates/tsrs_checker/src/checker_12.rs
++++ b/crates/tsrs_checker/src/checker_12.rs
+@@ -1256,14 +1256,17 @@
+             )));
+             if !outer_type_parameters.is_empty() {
+                 root.instantiations.make();
+-                root.instantiations.set(
+-                    get_conditional_type_key(
+-                        outer_type_parameters,
+-                        None,  /*alias*/
+-                        false, /*forConstraint*/
+-                    ),
+-                    links.resolved_type.get().unwrap(),
+-                );
++                // Do not cache a distributed declaration as its identity instantiation.
++                if !self.is_in_distributive_context(node, None) {
++                    root.instantiations.set(
++                        get_conditional_type_key(
++                            outer_type_parameters,
++                            None,  /*alias*/
++                            false, /*forConstraint*/
++                        ),
++                        links.resolved_type.get().unwrap(),
++                    );
++                }
+             }
+         }
+         links.resolved_type.get().unwrap()
+diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/checker_11.rs
+--- a/crates/tsrs_checker/src/checker_11.rs
++++ b/crates/tsrs_checker/src/checker_11.rs
+@@ -1792,12 +1792,17 @@
+         );
+         // Shared graph: a fork's table for a frozen target holds only what the fork added; the seed's
+         // entries are read through.
++        let in_distributive_context = self.is_in_distributive_context(declaration, None);
+         let from_seed = self.object_type_instantiations.base_get(&target).and_then(|m| m.get(&key));
+         let instantiations =
+             self.object_type_instantiations.own.entry(target).or_insert_with(|| {
+-                let initial_key =
+-                    get_type_instantiation_key(type_parameters, target.alias().into(), false);
+-                PackedMap::from_one(initial_key, target)
++                if in_distributive_context {
++                    PackedMap::new()
++                } else {
++                    let initial_key =
++                        get_type_instantiation_key(type_parameters, target.alias().into(), false);
++                    PackedMap::from_one(initial_key, target)
++                }
+             });
+         let mut result = instantiations.get(&key).or(from_seed);
+         if result.is_none() {
+@@ -2937,26 +2942,63 @@
+     fn get_distributed_type_parameter(&mut self, node: P<Node>, t: P<Type>) -> P<Type> {
+         if t.flags().intersects(TypeFlags::TypeParameter)
+             && !t.as_type_parameter().is_distributed.get()
++            && self.is_in_distributive_context(node, t.symbol())
+         {
+-            let mut n = node.parent();
+-            while let Some(nn) = n {
+-                if is_statement(nn) {
+-                    break;
+-                }
+-                if is_conditional_type_node(nn) {
+-                    let check_type_node = nn.as_conditional_type_node().check_type;
+-                    if is_simple_identifier_type_reference(check_type_node)
+-                        && Some(self.get_symbol_from_type_reference(check_type_node)) == t.symbol()
++            return self.get_distributed_type_from_type_parameter(t);
++        }
++        t
++    }
++
++    // Types declared here may contain distributed type parameters. Their identity
++    // instantiation must rebuild those references rather than return the declaration.
++    pub(crate) fn is_in_distributive_context(
++        &mut self,
++        node: P<Node>,
++        symbol: Option<P<Symbol>>,
++    ) -> bool {
++        let mut n = Some(node);
++        while let Some(nn) = n {
++            if is_statement(nn) {
++                break;
++            }
++            if is_conditional_type_node(nn) {
++                let check_type_node = nn.as_conditional_type_node().check_type;
++                if is_simple_identifier_type_reference(check_type_node) {
++                    let s = self.get_symbol_from_type_reference(check_type_node);
++                    if s.flags().intersects(SymbolFlags::TypeParameter)
++                        && symbol.is_none_or(|symbol| s == symbol)
+                     {
+-                        // If node is contained in a distributive conditional type for the given type parameter,
+-                        // return the distributed form of the type parameter.
+-                        return self.get_distributed_type_from_type_parameter(t);
+-                    }
+-                }
+-                n = nn.parent();
+-            }
+-        }
+-        t
++                        return true;
++                    }
++                }
++            }
++            n = nn.parent();
++        }
++        false
++    }
++
++    // Identity instantiation maps nested distributed references back to their
++    // original type parameter. It does not change root.is_distributive.
++    pub(crate) fn get_non_distributed_conditional_type(&mut self, t: P<Type>) -> P<Type> {
++        let check_type = t.as_conditional_type().check_type().unwrap();
++        let type_parameter = get_non_distributed_type_parameter(check_type).unwrap();
++        if type_parameter == check_type {
++            return t;
++        }
++        let key = CachedTypeKey { kind: CachedTypeKind::NonDistributedConditionalType, type_id: t.id };
++        if let Some(&cached) = self.cached_types.get(&key) {
++            return cached;
++        }
++        let result = self.instantiate_type(
++            t,
++            Some(new_simple_type_mapper(type_parameter, type_parameter)),
++        );
++        assert!(
++            result.flags().intersects(TypeFlags::Conditional),
++            "Identity instantiation of a conditional type should remain deferred"
++        );
++        self.cached_types.insert(key, result);
++        result
+     }
+ 
+     // checker.go:23460
+diff --git a/crates/tsrs_checker/src/relater_2.rs b/crates/tsrs_checker/src/relater_2.rs
+--- a/crates/tsrs_checker/src/relater_2.rs
++++ b/crates/tsrs_checker/src/relater_2.rs
+@@ -1771,6 +1771,10 @@
+                 if source_conditional.root.get().unwrap().is_distributive.get()
+                     == target_conditional.root.get().unwrap().is_distributive.get()
+                 {
++                    let s = c.get_non_distributed_conditional_type(source);
++                    let t = c.get_non_distributed_conditional_type(target);
++                    let source_conditional = s.as_conditional_type();
++                    let target_conditional = t.as_conditional_type();
+                     result = self.is_related_to(
+                         c,
+                         source_conditional.check_type.get().unwrap(),
+@@ -1787,8 +1791,8 @@
+                             false, /*reportErrors*/
+                         );
+                         if result != Ternary::FALSE {
+-                            let source_true = c.get_true_type_from_conditional_type(source);
+-                            let target_true = c.get_true_type_from_conditional_type(target);
++                            let source_true = c.get_true_type_from_conditional_type(s);
++                            let target_true = c.get_true_type_from_conditional_type(t);
+                             result &= self.is_related_to(
+                                 c,
+                                 source_true,
+@@ -1797,8 +1801,8 @@
+                                 false, /*reportErrors*/
+                             );
+                             if result != Ternary::FALSE {
+-                                let source_false = c.get_false_type_from_conditional_type(source);
+-                                let target_false = c.get_false_type_from_conditional_type(target);
++                                let source_false = c.get_false_type_from_conditional_type(s);
++                                let target_false = c.get_false_type_from_conditional_type(t);
+                                 result &= self.is_related_to(
+                                     c,
+                                     source_false,
+@@ -2540,11 +2544,14 @@
+                 return Ternary::MAYBE;
+             }
+             if target.flags().intersects(TypeFlags::Conditional) {
++                // Compare normalized representations on both sides, including both branches.
++                let s = c.get_non_distributed_conditional_type(source);
++                let t = c.get_non_distributed_conditional_type(target);
+                 // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
+                 // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+                 // and Y1 is related to Y2.
+-                let source_conditional = source.as_conditional_type();
+-                let target_conditional = target.as_conditional_type();
++                let source_conditional = s.as_conditional_type();
++                let target_conditional = t.as_conditional_type();
+                 let source_params =
+                     source_conditional.root.get().unwrap().infer_type_parameters.get();
+                 let mut source_extends = source_conditional.extends_type.get().unwrap();
+@@ -2586,9 +2593,9 @@
+                         false,
+                     ) != Ternary::FALSE)
+                 {
+-                    let source_true = c.get_true_type_from_conditional_type(source);
++                    let source_true = c.get_true_type_from_conditional_type(s);
+                     let source_true = c.instantiate_type(source_true, mapper);
+-                    let target_true = c.get_true_type_from_conditional_type(target);
++                    let target_true = c.get_true_type_from_conditional_type(t);
+                     result = self.is_related_to(
+                         c,
+                         source_true,
+@@ -2597,8 +2604,8 @@
+                         report_errors,
+                     );
+                     if result != Ternary::FALSE {
+-                        let source_false = c.get_false_type_from_conditional_type(source);
+-                        let target_false = c.get_false_type_from_conditional_type(target);
++                        let source_false = c.get_false_type_from_conditional_type(s);
++                        let target_false = c.get_false_type_from_conditional_type(t);
+                         result &= self.is_related_to(
+                             c,
+                             source_false,
+diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
+--- a/crates/tsrs_checker/src/checker.rs
++++ b/crates/tsrs_checker/src/checker.rs
+@@ -156,6 +156,7 @@
+     DecoratorContextStatic,
+     DecoratorContextPrivate,
+     DecoratorContextPrivateStatic,
++    NonDistributedConditionalType,
+     SimplifiedConditionalTypeForReading,
+     SimplifiedConditionalTypeForWriting,
+ }
