@@ -104,6 +104,7 @@ mod map_map_error_to_map_both;
 mod map_some_to_as_some;
 mod match_effect_to_map_both;
 mod match_effect_to_match;
+mod match_to_result_or_option;
 mod missed_pipeable_opportunity;
 mod missing_effect_error_catch;
 pub use acquire_release_disposable::*;
@@ -138,6 +139,7 @@ pub use map_map_error_to_map_both::*;
 pub use map_some_to_as_some::*;
 pub use match_effect_to_map_both::*;
 pub use match_effect_to_match::*;
+pub use match_to_result_or_option::*;
 pub use missed_pipeable_opportunity::*;
 pub use missing_effect_error_catch::*;
 

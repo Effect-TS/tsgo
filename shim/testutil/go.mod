@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/testutil
+module github.com/microsoft/TypeScript/tsc/providershim/testutil
 
 go 1.26
 

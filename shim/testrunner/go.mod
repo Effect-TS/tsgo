@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/testrunner
+module github.com/microsoft/TypeScript/tsc/providershim/testrunner
 
 go 1.26
 

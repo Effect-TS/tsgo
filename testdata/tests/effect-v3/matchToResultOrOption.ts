@@ -1,0 +1,122 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Either, Exit, Option, pipe } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+declare const eitherValue: Either.Either<User, UserNotFound>
+
+// In Effect v3 the Result counterpart is Either: Either.right / Either.left -> Effect.either
+
+// MUST TRIGGER: data-first, Either constructor references -> Effect.either
+export const dataFirstEither = Effect.match(fetchUser("u1"), {
+  onFailure: Either.left,
+  onSuccess: Either.right
+})
+
+// MUST TRIGGER: pipeable, identity arrows into Either -> Effect.either
+export const pipeableEither = fetchUser("u1").pipe(
+  Effect.match({
+    onFailure: (e) => Either.left(e),
+    onSuccess: (user) => Either.right(user)
+  })
+)
+
+// MUST TRIGGER: data-first, discarding the error -> Effect.option
+export const dataFirstOption = Effect.match(fetchUser("u1"), {
+  onFailure: () => Option.none(),
+  onSuccess: Option.some
+})
+
+// MUST TRIGGER: pipe function form, Option.none passed point-free -> Effect.option
+export const pipeFunctionOption = pipe(
+  fetchUser("u1"),
+  Effect.match({
+    onFailure: Option.none,
+    onSuccess: (user) => Option.some(user)
+  })
+)
+
+// MUST TRIGGER: matchEffect with both branches Effect.succeed around Either constructors -> Effect.either
+export const matchEffectEither = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Effect.succeed(Either.left(e)),
+  onSuccess: (user) => Effect.succeed(Either.right(user))
+})
+
+// MUST TRIGGER: matchEffect with both branches Effect.succeed around Option constructors -> Effect.option
+export const matchEffectOption = fetchUser("u1").pipe(
+  Effect.matchEffect({
+    onFailure: () => Effect.succeed(Option.none()),
+    onSuccess: (user) => Effect.succeed(Option.some(user))
+  })
+)
+
+// MUST TRIGGER: map(Either.right) directly followed by catchAll(e => succeed(Either.left(e))) -> Effect.either
+export const mapCatchAllEither = fetchUser("u1").pipe(
+  Effect.map(Either.right),
+  Effect.catchAll((e) => Effect.succeed(Either.left(e)))
+)
+
+// MUST TRIGGER: map(Option.some) directly followed by catchAll(() => succeed(Option.none())) -> Effect.option
+export const mapCatchAllOption = pipe(
+  fetchUser("u1"),
+  Effect.map(Option.some),
+  Effect.catchAll(() => Effect.succeed(Option.none()))
+)
+
+// MUST NOT TRIGGER: Either.match folds an Either, not an Effect
+export const eitherMatch = Either.match(eitherValue, {
+  onLeft: () => Option.none(),
+  onRight: Option.some
+})
+
+// MUST NOT TRIGGER: failure handler transforms the error
+export const transformsError = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => Either.left(e.id),
+  onSuccess: Either.right
+})
+
+// MUST NOT TRIGGER: swapped constructors (that is a flip, not Effect.either)
+export const swappedConstructors = Effect.match(fetchUser("u1"), {
+  onFailure: Either.right,
+  onSuccess: Either.left
+})
+
+// MUST NOT TRIGGER: Option shape whose failure handler has a side effect
+export const optionFailureSideEffect = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => {
+    console.log(e)
+    return Option.none()
+  },
+  onSuccess: Option.some
+})
+
+// MUST NOT TRIGGER: matchCause with Exit constructors (Effect.exit is out of scope for this rule)
+export const matchCauseToExit = Effect.matchCause(fetchUser("u1"), {
+  onFailure: Exit.failCause,
+  onSuccess: Exit.succeed
+})
+
+// MUST NOT TRIGGER: catchTag only recovers one error case
+export const mapCatchTag = fetchUser("u1").pipe(
+  Effect.map(Either.right),
+  Effect.catchTag("UserNotFound", (e) => Effect.succeed(Either.left(e)))
+)
+
+// MUST NOT TRIGGER: catchAllCause also reifies defects and interruptions
+export const mapCatchAllCause = fetchUser("u1").pipe(
+  Effect.map(Either.right),
+  Effect.catchAllCause((cause) => Effect.succeed(Either.left(cause)))
+)
+
+// MUST NOT TRIGGER: already using the dedicated combinators
+export const alreadyEither = Effect.either(fetchUser("u1"))
+export const alreadyOption = fetchUser("u1").pipe(Effect.option)

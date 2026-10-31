@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/repo
+module github.com/microsoft/TypeScript/tsc/providershim/repo
 
 go 1.26
 

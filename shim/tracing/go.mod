@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/tracing
+module github.com/microsoft/TypeScript/tsc/providershim/tracing
 
 go 1.26
 

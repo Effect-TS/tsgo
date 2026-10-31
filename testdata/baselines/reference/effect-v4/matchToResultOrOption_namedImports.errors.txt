@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/matchToResultOrOption_namedImports.ts(10,27): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+
+
+==== /.src/matchToResultOrOption_namedImports.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics matchToResultOrOption:warning
+    import type { Effect } from "effect"
+    import { Result } from "effect"
+    import { match } from "effect/Effect"
+    
+    declare const fetchUser: (id: string) => Effect.Effect<{ readonly name: string }, string>
+    
+    // MUST TRIGGER (no fix): no value binding in scope reaches Effect.result
+    export const namedMatch = match(fetchUser("u1"), {
+                              ~~~~~
+!!! warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+      onFailure: Result.fail,
+      onSuccess: Result.succeed
+    })
+    

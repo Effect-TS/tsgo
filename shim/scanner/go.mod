@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/scanner
+module github.com/microsoft/TypeScript/tsc/providershim/scanner
 
 go 1.26
 

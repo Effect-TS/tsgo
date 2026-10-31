@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/project/logging
+module github.com/microsoft/TypeScript/tsc/providershim/project/logging
 
 go 1.26
 

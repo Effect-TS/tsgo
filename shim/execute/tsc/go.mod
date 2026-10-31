@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/execute/tsc
+module github.com/microsoft/TypeScript/tsc/providershim/execute/tsc
 
 go 1.26
 
