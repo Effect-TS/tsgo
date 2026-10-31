@@ -1,7 +1,7 @@
 ==== /.src/preferEffectRecord_inheritedAugmentation.ts (1 flows) ====
 
 === Piping Flow ===
-Location: 6:2 - 7:22
+Location: 7:2 - 8:22
 Node: Object.keys({ a: 1 })
 Node Kind: KindCallExpression
 

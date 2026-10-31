@@ -1,7 +1,5 @@
 === Quick Fix Inventory ===
-
-[D1] (5:51-5:73) TS2694: Namespace '"/node_modules/effect/dist/Cause"' has no exported member 'NoSuchElementException'.
-  (no quick fixes)
+(no diagnostics)
 
 === Quick Fix Application Results ===
 (no quick fixes to apply)

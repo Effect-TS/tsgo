@@ -1,3 +1,4 @@
+// @effect-v3
 import { Effect } from "effect"
 
 const constant = "constant"

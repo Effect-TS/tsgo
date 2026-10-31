@@ -1,12 +1,13 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectDoNotation.ts(4,23): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
-/.src/effectDoNotation.ts(6,34): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
-/.src/effectDoNotation.ts(9,24): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+/.src/effectDoNotation.ts(5,23): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+/.src/effectDoNotation.ts(7,34): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+/.src/effectDoNotation.ts(10,24): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
 
 
 ==== /.src/effectDoNotation.ts (3 errors) ====
+    // @effect-v3
     // @effect-diagnostics effectDoNotation:warning
     import { Effect } from "effect"
     

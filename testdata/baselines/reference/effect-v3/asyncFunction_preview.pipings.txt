@@ -1,7 +1,7 @@
 ==== /.src/asyncFunction_preview.ts (1 flows) ====
 
 === Piping Flow ===
-Location: 5:8 - 5:27
+Location: 6:8 - 6:27
 Node: Promise.resolve(1)
 Node Kind: KindCallExpression
 

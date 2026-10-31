@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (7:10-9:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+[D1] (8:10-10:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D2] (62:17-62:21) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D2] (63:17-63:21) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"safe\")"
 
-[D3] (73:10-73:15) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D3] (74:10-74:15) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -30,6 +30,7 @@ skipped by default
 === [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.
@@ -120,6 +121,7 @@ skipped by default
 === [D2] Fix 2: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.
@@ -204,6 +206,7 @@ export const laterProgram = later(1)
 === [D2] Fix 3: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.
@@ -288,6 +291,7 @@ export const laterProgram = later(1)
 === [D2] Fix 4: "Convert to Effect.fn(\"safe\")" ===
 
 --- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.
@@ -378,6 +382,7 @@ skipped by default
 === [D3] Fix 2: "Convert to Effect.fnUntraced" ===
 
 --- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.
@@ -462,6 +467,7 @@ export const laterProgram = later(1)
 === [D3] Fix 3: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.
@@ -546,6 +552,7 @@ export const laterProgram = later(1)
 === [D3] Fix 4: "Convert to Effect.fn(\"later\")" ===
 
 --- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+// @effect-v3
 import { Effect } from "effect"
 
 // Issue #758, point 4: no opportunity or conversion for this hoisted helper.
