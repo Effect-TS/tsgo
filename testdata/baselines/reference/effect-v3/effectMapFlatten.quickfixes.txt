@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (6:3-6:17) TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
+[D1] (7:3-7:17) TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
   Fix 0: "Disable effectMapFlatten for this line"
   Fix 1: "Disable effectMapFlatten for entire file"
 
-[D2] (13:3-13:17) TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
+[D2] (14:3-14:17) TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
   Fix 0: "Disable effectMapFlatten for this line"
   Fix 1: "Disable effectMapFlatten for entire file"
 
-[D3] (19:3-19:17) TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
+[D3] (20:3-20:17) TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
   Fix 0: "Disable effectMapFlatten for this line"
   Fix 1: "Disable effectMapFlatten for entire file"
 
-[D4] (25:3-25:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+[D4] (26:3-26:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
   Fix 0: "Disable flatMapToMap for this line"
   Fix 1: "Disable flatMapToMap for entire file"
   Fix 2: "Replace with Effect.map"
@@ -46,6 +46,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.map" ===
 
 --- file:///.src/effectMapFlatten.ts ---
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 // Should trigger: pipeable style

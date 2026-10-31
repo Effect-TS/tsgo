@@ -1,0 +1,129 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:52-13:67) TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+  Fix 0: "Disable mapSomeCatchNoSuchElement for this line"
+  Fix 1: "Disable mapSomeCatchNoSuchElement for entire file"
+  Fix 2: "Replace with Effect.catchNoSuchElement"
+
+[D2] (17:51-17:66) TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+  Fix 0: "Disable mapSomeCatchNoSuchElement for this line"
+  Fix 1: "Disable mapSomeCatchNoSuchElement for entire file"
+  Fix 2: "Replace with Effect.catchNoSuchElement"
+
+[D3] (21:56-21:71) TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
+  Fix 0: "Disable mapSomeCatchNoSuchElement for this line"
+  Fix 1: "Disable mapSomeCatchNoSuchElement for entire file"
+  Fix 2: "Replace with Effect.catchNoSuchElement"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapSomeCatchNoSuchElement for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapSomeCatchNoSuchElement for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchNoSuchElement" ===
+
+--- file:///.src/mapSomeCatchNoSuchElement_directives.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeCatchNoSuchElement:warning
+import { Cause, Effect } from "effect"
+
+declare const lookup: Effect.Effect<string, Cause.NoSuchElementError>
+
+// MUST NOT TRIGGER: a next-line directive turns the rule off for one pair
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:off
+export const disabled = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// MUST TRIGGER: the next pair is still reported
+export const reported = lookup.pipe(Effect.catchNoSuchElement)
+
+// MUST TRIGGER (as error): a next-line directive overrides the severity
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:error
+export const asError = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// MUST TRIGGER (as suggestion): a next-line directive overrides the severity
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:suggestion
+export const asSuggestion = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// @effect-diagnostics mapSomeCatchNoSuchElement:off
+
+// MUST NOT TRIGGER: a file directive turns the rule off for the rest of the file
+export const afterFileDirective = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+
+=== [D2] Fix 0: "Disable mapSomeCatchNoSuchElement for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapSomeCatchNoSuchElement for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.catchNoSuchElement" ===
+
+--- file:///.src/mapSomeCatchNoSuchElement_directives.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeCatchNoSuchElement:warning
+import { Cause, Effect } from "effect"
+
+declare const lookup: Effect.Effect<string, Cause.NoSuchElementError>
+
+// MUST NOT TRIGGER: a next-line directive turns the rule off for one pair
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:off
+export const disabled = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// MUST TRIGGER: the next pair is still reported
+export const reported = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// MUST TRIGGER (as error): a next-line directive overrides the severity
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:error
+export const asError = lookup.pipe(Effect.catchNoSuchElement)
+
+// MUST TRIGGER (as suggestion): a next-line directive overrides the severity
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:suggestion
+export const asSuggestion = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// @effect-diagnostics mapSomeCatchNoSuchElement:off
+
+// MUST NOT TRIGGER: a file directive turns the rule off for the rest of the file
+export const afterFileDirective = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+
+=== [D3] Fix 0: "Disable mapSomeCatchNoSuchElement for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapSomeCatchNoSuchElement for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.catchNoSuchElement" ===
+
+--- file:///.src/mapSomeCatchNoSuchElement_directives.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeCatchNoSuchElement:warning
+import { Cause, Effect } from "effect"
+
+declare const lookup: Effect.Effect<string, Cause.NoSuchElementError>
+
+// MUST NOT TRIGGER: a next-line directive turns the rule off for one pair
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:off
+export const disabled = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// MUST TRIGGER: the next pair is still reported
+export const reported = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// MUST TRIGGER (as error): a next-line directive overrides the severity
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:error
+export const asError = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+
+// MUST TRIGGER (as suggestion): a next-line directive overrides the severity
+// @effect-diagnostics-next-line mapSomeCatchNoSuchElement:suggestion
+export const asSuggestion = lookup.pipe(Effect.catchNoSuchElement)
+
+// @effect-diagnostics mapSomeCatchNoSuchElement:off
+
+// MUST NOT TRIGGER: a file directive turns the rule off for the rest of the file
+export const afterFileDirective = lookup.pipe(Effect.asSome, Effect.catchTag("NoSuchElementError", () => Effect.succeedNone))
+

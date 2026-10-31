@@ -65,6 +65,7 @@ func runProcessEnv(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			}
 		}
 
+		//ets:ast-walk finds process.env property accesses
 		node.ForEachChild(walk)
 		return false
 	}

@@ -1,12 +1,13 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/processEnv.ts(6,26): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
-/.src/processEnv.ts(9,33): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
-/.src/processEnv.ts(18,20): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+/.src/processEnv.ts(7,26): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+/.src/processEnv.ts(10,33): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+/.src/processEnv.ts(19,20): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
 
 
 ==== /.src/processEnv.ts (3 errors) ====
+    // @effect-v3
     // @effect-diagnostics processEnv:warning
     /// <reference types="node" />
     import { Effect } from "effect"

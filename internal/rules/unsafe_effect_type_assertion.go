@@ -48,6 +48,7 @@ type UnsafeEffectTypeAssertionMatch struct {
 	Channels       []UnsafeEffectTypeAssertionChannel
 }
 
+//ets:ast-walk finds as/<T> type assertions, which are not flow steps
 func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []UnsafeEffectTypeAssertionMatch {
 	if tp == nil || c == nil || sf == nil {
 		return nil

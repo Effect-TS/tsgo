@@ -58,6 +58,7 @@ var SchemaSyncInEffect = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds Schema sync method calls made inside Effect generators
 			n.ForEachChild(walk)
 			return false
 		}

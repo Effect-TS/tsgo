@@ -1,10 +1,12 @@
 package rewriter
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
@@ -457,6 +459,7 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 	if target == nil {
 		return false
 	}
+	var replaced *ast.Node
 	var visitor *ast.NodeVisitor
 	visitor = ast.NewNodeVisitor(func(node *ast.Node) *ast.Node {
 		index, matched := steps[node]
@@ -478,7 +481,8 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 			if index < end {
 				return nil
 			}
-			return t.pipingFlowOperator(replacement)
+			replaced = t.pipingFlowOperator(replacement)
+			return replaced
 		}
 		input := flow.TransformationInputNode(index)
 		if input == nil {
@@ -495,14 +499,165 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 		case typeparser.TransformationKindDataLast:
 			arguments = append(arguments, subject)
 		default:
-			return t.NewCallExpression(t.pipingFlowOperator(replacement), nil, nil, t.NewNodeList([]*ast.Node{subject}), ast.NodeFlagsNone)
+			replaced = t.NewCallExpression(t.pipingFlowOperator(replacement), nil, nil, t.NewNodeList([]*ast.Node{subject}), ast.NodeFlagsNone)
+			return replaced
 		}
-		return t.NewCallExpression(replacement.Callee, nil, replacement.TypeArguments, t.NewNodeList(arguments), ast.NodeFlagsNone)
+		replaced = t.NewCallExpression(replacement.Callee, nil, replacement.TypeArguments, t.NewNodeList(arguments), ast.NodeFlagsNone)
+		return replaced
 	}, t.NodeFactory, ast.NodeVisitorHooks{})
-	result := t.DeepCloneNode(visitor.VisitNode(target))
+	visited := visitor.VisitNode(target)
+	result := t.DeepCloneNode(visited)
+	removed := make([]*ast.Node, 0, end-start+1)
+	for i := start; i <= end; i++ {
+		removed = append(removed, pipingFlowTransformationNode(flow.Transformations().At(i)))
+	}
+	t.retainPipingFlowComments(sourceFile, target, visited, result, removed, flow.TransformationInputNode(start), replaced)
 	ast.SetParentInChildren(result)
 	t.ReplaceNode(sourceFile, target, result, nil)
 	return true
+}
+
+// retainPipingFlowComments re-attaches source comments to the synthesized
+// clone of a collapsed flow. Comments inside the removed steps move to the
+// replacement; every other comment stays with the innermost kept node that
+// contains it. Comments outside target stay in the source text, which the
+// replacement leaves untouched.
+func (t *Tracker) retainPipingFlowComments(sourceFile *ast.SourceFile, target, visited, result *ast.Node, removed []*ast.Node, kept, replaced *ast.Node) {
+	comments := sourceComments(sourceFile, scanner.GetTokenPosOfNode(target, sourceFile, false), target.End())
+	if len(comments) == 0 {
+		return
+	}
+	children := func(node *ast.Node) []*ast.Node {
+		var nodes []*ast.Node
+		node.ForEachChild(func(child *ast.Node) bool {
+			nodes = append(nodes, child)
+			return false
+		})
+		return nodes
+	}
+	// Nodes built for the replacement have no source position; updated and
+	// untouched nodes keep theirs, so they own the comments within their range.
+	clones := make(map[*ast.Node]*ast.Node)
+	replacedClone := result
+	var pair func(original, clone *ast.Node)
+	pair = func(original, clone *ast.Node) {
+		if original == replaced {
+			replacedClone = clone
+		}
+		if original.Pos() >= 0 {
+			clones[original] = clone
+		}
+		originals, cloned := children(original), children(clone)
+		if len(originals) == len(cloned) {
+			for i := range originals {
+				pair(originals[i], cloned[i])
+			}
+		}
+	}
+	pair(visited, result)
+	text := sourceFile.Text()
+	// The kept subject keeps its leading trivia, and a removed step takes its
+	// text plus the trivia up to the next token.
+	inKept := func(comment ast.CommentRange) bool {
+		return kept != nil && kept.Pos() >= 0 && comment.Pos() >= kept.Pos() && comment.End() <= kept.End()
+	}
+	inRemoved := func(comment ast.CommentRange) bool {
+		return slices.ContainsFunc(removed, func(node *ast.Node) bool {
+			return node != nil && node.Pos() >= 0 && comment.Pos() >= node.Pos() && comment.End() <= scanner.SkipTrivia(text, node.End())
+		})
+	}
+	// A kept node owns the text from its first token on. Its leading trivia
+	// belongs before it in its parent: a comment there must not end up between
+	// the node's first token and the rest, as in "return // comment\n value".
+	inside := func(comment ast.CommentRange, node *ast.Node) bool {
+		return node.Pos() >= 0 && comment.Pos() >= scanner.GetTokenPosOfNode(node, sourceFile, false) && comment.End() <= node.End()
+	}
+	for _, comment := range comments {
+		if !inKept(comment) && inRemoved(comment) {
+			t.addPipingFlowComment(text, replacedClone, comment, true)
+			continue
+		}
+		var owner *ast.Node
+		for original := range clones {
+			if inside(comment, original) && (owner == nil || original.End()-original.Pos() < owner.End()-owner.Pos()) {
+				owner = original
+			}
+		}
+		if owner == nil {
+			owner = visited
+		}
+		// Attach to the nearest kept child so the comment keeps its place; an
+		// owner without kept children around the comment takes it itself.
+		var before, after *ast.Node
+		for _, child := range children(owner) {
+			if clones[child] == nil {
+				continue
+			}
+			if child.End() <= comment.Pos() {
+				before = child
+			} else if after == nil && scanner.GetTokenPosOfNode(child, sourceFile, false) >= comment.End() {
+				after = child
+			}
+		}
+		switch {
+		case after != nil:
+			t.addPipingFlowComment(text, clones[after], comment, true)
+		case before != nil:
+			t.addPipingFlowComment(text, clones[before], comment, false)
+		case clones[owner] == nil:
+			t.addPipingFlowComment(text, result, comment, true)
+		case clones[owner].Kind == ast.KindBlock:
+			// Function bodies skip the comments of their block node, so keep
+			// the comment inside the braces on a placeholder statement.
+			block := clones[owner].AsBlock()
+			placeholder := t.NodeFactory.NewNotEmittedStatement()
+			t.addPipingFlowComment(text, placeholder, comment, true)
+			block.Statements = t.NewNodeList(append(slices.Clone(block.Statements.Nodes), placeholder))
+		default:
+			t.addPipingFlowComment(text, clones[owner], comment, true)
+		}
+	}
+}
+
+// sourceComments lists the comments between start and end in source order.
+// Tokens are skipped by their parsed extent, so comment-like text inside
+// literals, templates and regular expressions is not reported.
+func sourceComments(sourceFile *ast.SourceFile, start, end int) []ast.CommentRange {
+	text := sourceFile.Text()
+	s := scanner.NewScanner()
+	s.SetSkipTrivia(false)
+	s.SetText(text[:end])
+	s.ResetPos(start)
+	var comments []ast.CommentRange
+	for token := s.Scan(); token != ast.KindEndOfFile; token = s.Scan() {
+		switch token {
+		case ast.KindSingleLineCommentTrivia, ast.KindMultiLineCommentTrivia:
+			rest := strings.TrimLeft(text[s.TokenEnd():], " \t")
+			newLine := strings.HasPrefix(rest, "\n") || strings.HasPrefix(rest, "\r")
+			comments = append(comments, ast.CommentRange{TextRange: core.NewTextRange(s.TokenStart(), s.TokenEnd()), Kind: token, HasTrailingNewLine: newLine})
+		case ast.KindWhitespaceTrivia, ast.KindNewLineTrivia, ast.KindConflictMarkerTrivia:
+		default:
+			if original := astnav.GetTokenAtPosition(sourceFile, s.TokenStart()); original != nil && original.End() > s.TokenEnd() {
+				s.ResetPos(min(original.End(), end))
+			}
+		}
+	}
+	return comments
+}
+
+func (t *Tracker) addPipingFlowComment(text string, node *ast.Node, comment ast.CommentRange, leading bool) {
+	body := text[comment.Pos()+2 : comment.End()]
+	// A line comment always needs its line break, or it would swallow the code after it.
+	newLine := true
+	if comment.Kind == ast.KindMultiLineCommentTrivia {
+		body = strings.TrimSuffix(body, "*/")
+		newLine = comment.HasTrailingNewLine
+	}
+	if leading {
+		t.AddSyntheticLeadingComment(node, comment.Kind, body, newLine)
+	} else {
+		t.AddSyntheticTrailingComment(node, comment.Kind, body, newLine)
+	}
 }
 
 func isPipingFlowArgument(kind typeparser.TransformationKind) bool {

@@ -48,7 +48,7 @@ pub struct SchemaNumberMatch {
     pub replacement_identifier: &'static str,
 }
 
-// go: internal/rules/schema_number.go:39 AnalyzeSchemaNumber a333778df8e6dcc5
+// go: internal/rules/schema_number.go:39 AnalyzeSchemaNumber da4e945765367ded
 pub fn analyze_schema_number(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> Vec<SchemaNumberMatch> {
     if tp.supported_effect_version() != EffectMajorVersion::V4 {
         return Vec::new();
@@ -99,7 +99,7 @@ pub fn analyze_schema_number(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> Vec<
     filtered
 }
 
-// go: internal/rules/schema_number.go:82 analyzeSchemaNumberReference 2e772ac68be20665
+// go: internal/rules/schema_number.go:83 analyzeSchemaNumberReference 2e772ac68be20665
 pub(crate) fn analyze_schema_number_reference(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -120,7 +120,7 @@ pub(crate) fn analyze_schema_number_reference(
     None
 }
 
-// go: internal/rules/schema_number.go:98 schemaNumberHasFiniteMethodCheck 675d87fdedcc45b8
+// go: internal/rules/schema_number.go:99 schemaNumberHasFiniteMethodCheck 675d87fdedcc45b8
 pub(crate) fn schema_number_has_finite_method_check(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -164,7 +164,7 @@ pub(crate) fn schema_number_has_finite_method_check(
     false
 }
 
-// go: internal/rules/schema_number.go:132 schemaNumberHasFinitePipingCheck fc1c764a37c8c0c6
+// go: internal/rules/schema_number.go:133 schemaNumberHasFinitePipingCheck fc1c764a37c8c0c6
 pub(crate) fn schema_number_has_finite_piping_check(
     tp: &mut TypeParser<'_>,
     reference: P<Node>,
@@ -188,7 +188,7 @@ pub(crate) fn schema_number_has_finite_piping_check(
     false
 }
 
-// go: internal/rules/schema_number.go:148 schemaNumberHasFinitePredicate 35a944c2adbb1644
+// go: internal/rules/schema_number.go:149 schemaNumberHasFinitePredicate 35a944c2adbb1644
 pub(crate) fn schema_number_has_finite_predicate(
     tp: &mut TypeParser<'_>,
     arguments: Slice<'_, P<Node>>,
@@ -209,7 +209,7 @@ pub(crate) fn schema_number_has_finite_predicate(
     false
 }
 
-// go: internal/rules/schema_number.go:166 schemaNumberNodeContains 350bddadd8f7b38a
+// go: internal/rules/schema_number.go:167 schemaNumberNodeContains 350bddadd8f7b38a
 pub(crate) fn schema_number_node_contains(
     ancestor: Option<P<Node>>,
     target: Option<P<Node>>,
@@ -222,14 +222,14 @@ pub(crate) fn schema_number_node_contains(
     }
 }
 
-// go: internal/rules/schema_number.go:170 schemaNumberApi f91ebbd2865cb6e2
+// go: internal/rules/schema_number.go:171 schemaNumberApi f91ebbd2865cb6e2
 pub(crate) struct SchemaNumberApi {
     pub(crate) name: &'static str,
     pub(crate) replacement: &'static str,
     pub(crate) replacement_identifier: &'static str,
 }
 
-// go: internal/rules/schema_number.go:176 schemaNumberApis 6e402fd86f220f25
+// go: internal/rules/schema_number.go:177 schemaNumberApis 6e402fd86f220f25
 pub(crate) static SCHEMA_NUMBER_APIS: &[SchemaNumberApi] = &[
     SchemaNumberApi {
         name: "Number",
@@ -243,7 +243,7 @@ pub(crate) static SCHEMA_NUMBER_APIS: &[SchemaNumberApi] = &[
     },
 ];
 
-// go: internal/rules/schema_number.go:181 schemaNumberReferenceLocation 024604adbf3655ce
+// go: internal/rules/schema_number.go:182 schemaNumberReferenceLocation 024604adbf3655ce
 pub(crate) fn schema_number_reference_location(node: P<Node>) -> P<Node> {
     if node.kind() == Kind::PropertyAccessExpression {
         return node.as_property_access_expression().name();

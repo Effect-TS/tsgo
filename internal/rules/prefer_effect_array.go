@@ -104,6 +104,7 @@ func runPreferEffectArray(ctx *rule.Context) []*ast.Diagnostic {
 				}
 			}
 		}
+		//ets:ast-walk finds native Array method property and element accesses, called or not
 		node.ForEachChild(walk)
 		return false
 	}

@@ -51,6 +51,7 @@ func AnalyzePreferSchemaTaggedError(tp *typeparser.TypeParser, sf *ast.SourceFil
 				})
 			}
 		}
+		//ets:ast-walk finds class declarations extending Data.TaggedError
 		node.ForEachChild(walk)
 		return false
 	}

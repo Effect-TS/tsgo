@@ -62,6 +62,7 @@ func AnalyzeTypeUnionToSchemaUnion(tp *typeparser.TypeParser, c *checker.Checker
 				matches = append(matches, *match)
 			}
 		}
+		//ets:ast-walk finds type alias declarations, which are type nodes
 		node.ForEachChild(walk)
 		return false
 	}

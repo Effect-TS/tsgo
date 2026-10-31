@@ -2711,6 +2711,11 @@
           "default": "off",
           "description": "Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow"
         },
+        "mapSomeCatchNoSuchElement": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none"
+        },
         "mapSomeToAsSome": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

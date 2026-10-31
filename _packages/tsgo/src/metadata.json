@@ -78,6 +78,7 @@
         "leakingRequirements": "suggestion",
         "manualMetricTapToTrack": "suggestion",
         "mapConstToAs": "suggestion",
+        "mapSomeCatchNoSuchElement": "suggestion",
         "mapSomeToAsSome": "suggestion",
         "matchEffectToMapBoth": "suggestion",
         "matchEffectToMatch": "suggestion",
@@ -178,6 +179,7 @@
         "leakingRequirements": "error",
         "manualMetricTapToTrack": "error",
         "mapConstToAs": "error",
+        "mapSomeCatchNoSuchElement": "error",
         "mapSomeToAsSome": "error",
         "matchEffectToMapBoth": "error",
         "matchEffectToMatch": "error",
@@ -352,6 +354,7 @@
         "manualMetricTapToTrack": "warning",
         "mapConstToAs": "warning",
         "mapMapErrorToMapBoth": "warning",
+        "mapSomeCatchNoSuchElement": "warning",
         "mapSomeToAsSome": "warning",
         "matchEffectToMapBoth": "warning",
         "matchEffectToMatch": "warning",
@@ -2900,6 +2903,29 @@
             "start": 341,
             "end": 356,
             "text": "`Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mapSomeCatchNoSuchElement",
+      "group": "style",
+      "description": "Suggests Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377167
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Option } from \"effect\"\n\nconst users = new Map\u003cstring, { readonly name: string }\u003e()\n\nconst findUser = (id: string) =\u003e Effect.fromNullishOr(users.get(id))\n\nexport const lookupUser = (id: string) =\u003e\n  findUser(id).pipe(\n    Effect.map(Option.some),\n    Effect.catchTag(\"NoSuchElementError\", () =\u003e Effect.succeed(Option.none()))\n  )\n",
+        "diagnostics": [
+          {
+            "start": 267,
+            "end": 282,
+            "text": "Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)"
           }
         ]
       }

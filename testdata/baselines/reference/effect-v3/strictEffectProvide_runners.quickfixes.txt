@@ -1,288 +1,65 @@
 === Quick Fix Inventory ===
 
-[D1] (1:1-1:1) TS377053: This project targets Effect v4, but this code uses Effect v3 APIs. The referenced API belongs to the v3 surface rather than the configured v4 surface. effect(outdatedApi)
-  Fix 0: "Disable outdatedApi for this line"
-  Fix 1: "Disable outdatedApi for entire file"
-
-[D2] (4:40-4:47) TS2551: Property 'Service' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'service'?
-  (no quick fixes)
-
-[D3] (4:40-4:47) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Service`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Context.Service instead of Effect.Service. effect(outdatedApi)
-  Fix 0: "Disable outdatedApi for this line"
-  Fix 1: "Disable outdatedApi for entire file"
-
-[D4] (8:40-8:47) TS2551: Property 'Service' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'service'?
-  (no quick fixes)
-
-[D5] (8:40-8:47) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Service`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Context.Service instead of Effect.Service. effect(outdatedApi)
-  Fix 0: "Disable outdatedApi for this line"
-  Fix 1: "Disable outdatedApi for entire file"
-
-[D6] (12:51-12:58) TS2339: Property 'Default' does not exist on type 'typeof MyService1'.
-  (no quick fixes)
-
-[D7] (12:71-12:78) TS2339: Property 'Default' does not exist on type 'typeof MyService2'.
-  (no quick fixes)
-
-[D8] (15:27-15:37) TS2488: Type 'typeof MyService1' must have a '[Symbol.iterator]()' method that returns an iterator.
-  (no quick fixes)
-
-[D9] (16:27-16:37) TS2488: Type 'typeof MyService2' must have a '[Symbol.iterator]()' method that returns an iterator.
-  (no quick fixes)
-
-[D10] (11:40-11:57) TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<any, any, any>) => Promise<any>'.
-  Types of parameters 'effect' and '_' are incompatible.
-    Type 'Effect<any, any, any>' is not assignable to type 'Effect<any, any, never>'.
-      Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D11] (11:40-11:57) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D12] (12:56-12:70) TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Fiber<A, E>' is not assignable to parameter of type '(c: Effect<void, any, any>) => Fiber<void, any>'.
-  Types of parameters 'effect' and 'c' are incompatible.
-    Type 'Effect<void, any, any>' is not assignable to type 'Effect<void, any, never>'.
-      Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D13] (12:56-12:70) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D14] (13:14-13:38) TS2345: Argument of type '<A, E, R>(self: Effect<A, E, R>) => Effect<A, any, any>' is not assignable to parameter of type '(_: Effect<any, unknown, unknown>) => Effect<unknown, unknown, never>'.
-  Type 'Effect<any, any, any>' is not assignable to type 'Effect<unknown, unknown, never>'.
-    Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D15] (13:14-13:38) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D16] (14:40-14:91) TS2345: Argument of type '<E, A>(effect: Effect<A, E, never>) => void' is not assignable to parameter of type '(_: Effect<any, any, any>) => void'.
-  Types of parameters 'effect' and '_' are incompatible.
-    Type 'Effect<any, any, any>' is not assignable to type 'Effect<any, any, never>'.
-      Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D17] (14:40-14:91) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D18] (17:1-17:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+[D1] (17:1-17:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
   Fix 0: "Disable discardedRunPromiseToRunFork for this line"
   Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
   Fix 2: "Replace with Effect.runFork"
 
-[D19] (17:19-17:57) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
+[D2] (22:1-22:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
+  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
 
-[D20] (17:19-17:57) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
+[D3] (29:37-29:61) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
 
-[D21] (18:16-18:49) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
+[D4] (30:18-30:51) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
 
-[D22] (18:16-18:49) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D23] (19:21-19:54) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D24] (19:21-19:54) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D25] (20:23-20:56) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D26] (20:23-20:56) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D27] (21:20-21:53) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D28] (21:20-21:53) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D29] (22:1-22:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+[D5] (31:1-31:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
   Fix 0: "Disable discardedRunPromiseToRunFork for this line"
   Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
   Fix 2: "Replace with Effect.runFork"
 
-[D30] (22:19-22:57) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D31] (22:19-22:57) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D32] (23:21-23:54) TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-      Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D33] (23:21-23:54) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D34] (24:20-24:58) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D35] (24:20-24:58) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D36] (25:24-25:62) TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-      Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D37] (25:24-25:62) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D38] (26:11-26:44) TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-      Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D39] (26:11-26:44) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D40] (29:37-29:61) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
-  Fix 0: "Disable strictEffectProvide for this line"
-  Fix 1: "Disable strictEffectProvide for entire file"
-
-[D41] (30:18-30:51) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
-  Fix 0: "Disable strictEffectProvide for this line"
-  Fix 1: "Disable strictEffectProvide for entire file"
-
-[D42] (31:1-31:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
+[D6] (34:1-34:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
   Fix 0: "Disable discardedRunPromiseToRunFork for this line"
   Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
   Fix 2: "Replace with Effect.runFork"
 
-[D43] (31:19-31:27) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D44] (31:19-31:27) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D45] (34:1-34:18) TS377179: The Promise returned by `Effect.runPromise` is discarded, so any failure or defect becomes an unhandled rejection. Use `Effect.runFork` to run it fire-and-forget as a Fiber. effect(discardedRunPromiseToRunFork)
-  Fix 0: "Disable discardedRunPromiseToRunFork for this line"
-  Fix 1: "Disable discardedRunPromiseToRunFork for entire file"
-  Fix 2: "Replace with Effect.runFork"
-
-[D46] (34:19-34:72) TS2345: Argument of type 'Effect<void, any, any>' is not assignable to parameter of type 'Effect<void, any, never>'.
-  Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D47] (34:19-34:72) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D48] (34:32-34:56) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D7] (34:32-34:56) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D49] (35:14-35:38) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D8] (35:14-35:38) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D50] (35:40-35:53) TS2345: Argument of type '<A, E, R>(self: Effect<A, E, R>) => Effect<void, E, R>' is not assignable to parameter of type '(_: Effect<any, any, any>) => Effect<unknown, unknown, never>'.
-  Type 'Effect<void, any, any>' is not assignable to type 'Effect<unknown, unknown, never>'.
-    Type 'any' is not assignable to type 'never'.
-  (no quick fixes)
-
-[D51] (35:40-35:53) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
-  Fix 0: "Disable missingEffectContext for this line"
-  Fix 1: "Disable missingEffectContext for entire file"
-
-[D52] (38:43-38:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D9] (38:43-38:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D53] (39:43-39:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D10] (39:43-39:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D54] (43:38-43:62) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D11] (43:38-43:62) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D55] (44:47-44:80) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D12] (44:47-44:80) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable outdatedApi for this line" ===
+=== [D1] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable outdatedApi for entire file" ===
+=== [D1] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D3] Fix 0: "Disable outdatedApi for this line" ===
-skipped by default
-
-=== [D3] Fix 1: "Disable outdatedApi for entire file" ===
-skipped by default
-
-=== [D5] Fix 0: "Disable outdatedApi for this line" ===
-skipped by default
-
-=== [D5] Fix 1: "Disable outdatedApi for entire file" ===
-skipped by default
-
-=== [D11] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D11] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D13] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D13] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D15] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D15] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D17] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D17] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D18] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
-skipped by default
-
-=== [D18] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
-skipped by default
-
-=== [D18] Fix 2: "Replace with Effect.runFork" ===
+=== [D1] Fix 2: "Replace with Effect.runFork" ===
 
 --- file:///.src/main.ts ---
 // @effect-diagnostics strictEffectProvide:warning
@@ -331,140 +108,31 @@ export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPro
 export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
 
 
-=== [D20] Fix 0: "Disable missingEffectContext for this line" ===
+=== [D2] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D20] Fix 1: "Disable missingEffectContext for entire file" ===
+=== [D2] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D22] Fix 0: "Disable missingEffectContext for this line" ===
+=== [D3] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D22] Fix 1: "Disable missingEffectContext for entire file" ===
+=== [D3] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D24] Fix 0: "Disable missingEffectContext for this line" ===
+=== [D4] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D24] Fix 1: "Disable missingEffectContext for entire file" ===
+=== [D4] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D26] Fix 0: "Disable missingEffectContext for this line" ===
+=== [D5] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D26] Fix 1: "Disable missingEffectContext for entire file" ===
+=== [D5] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D28] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D28] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D29] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
-skipped by default
-
-=== [D29] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
-skipped by default
-
-=== [D29] Fix 2: "Replace with Effect.runFork" ===
-
---- file:///.src/main.ts ---
-// @effect-diagnostics strictEffectProvide:warning
-import { BrowserRuntime } from "@effect/platform-browser"
-import { BunRuntime } from "@effect/platform-bun"
-import { NodeRuntime } from "@effect/platform-node"
-import { runMain as startMain } from "@effect/platform-node/NodeRuntime"
-import * as Effect from "effect/Effect"
-import { pipe } from "effect/Function"
-import { AppLayer, program } from "./services"
-
-// Should NOT report: the runner is the next step of the pipe
-program.pipe(Effect.provide(AppLayer), Effect.runPromise)
-pipe(program, Effect.asVoid, Effect.provide(AppLayer), Effect.runFork)
-program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
-program.pipe(Effect.provide(AppLayer), BunRuntime.runMain({ disableErrorReporting: true }))
-
-// Should NOT report: the provided Effect is the runner's argument
-Effect.runPromise(program.pipe(Effect.provide(AppLayer)))
-Effect.runSync(Effect.provide(program, AppLayer))
-Effect.runSyncExit((Effect.provide(program, AppLayer)))
-Effect.runPromiseExit(Effect.provide(AppLayer)(program))
-Effect.runCallback(Effect.provide(program, AppLayer))
-Effect.runFork(program.pipe(Effect.provide(AppLayer)), { signal: new AbortController().signal })
-NodeRuntime.runMain(Effect.provide(program, AppLayer))
-BunRuntime.runMain(program.pipe(Effect.provide(AppLayer)), { disableErrorReporting: true })
-BrowserRuntime.runMain(program.pipe(Effect.provide(AppLayer)))
-startMain(Effect.provide(program, AppLayer))
-
-// Should report: the provided Effect is bound to a variable first
-export const handler = program.pipe(Effect.provide(AppLayer))
-const provided = Effect.provide(program, AppLayer)
-Effect.runPromise(provided)
-
-// Should report: another step follows the provide before the runner
-Effect.runPromise(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
-program.pipe(Effect.provide(AppLayer), Effect.asVoid, NodeRuntime.runMain)
-
-// Should report: the provided Effect is not run
-export const inEffect = Effect.sync(() => Effect.provide(program, AppLayer))
-Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
-
-// Should report: a similarly named local function is not a runner
-const FakeEffect = { runPromise: <A>(value: A) => value }
-export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPromise)
-export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
-
-
-=== [D31] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D31] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D33] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D33] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D35] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D35] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D37] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D37] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D39] Fix 0: "Disable missingEffectContext for this line" ===
-skipped by default
-
-=== [D39] Fix 1: "Disable missingEffectContext for entire file" ===
-skipped by default
-
-=== [D40] Fix 0: "Disable strictEffectProvide for this line" ===
-skipped by default
-
-=== [D40] Fix 1: "Disable strictEffectProvide for entire file" ===
-skipped by default
-
-=== [D41] Fix 0: "Disable strictEffectProvide for this line" ===
-skipped by default
-
-=== [D41] Fix 1: "Disable strictEffectProvide for entire file" ===
-skipped by default
-
-=== [D42] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
-skipped by default
-
-=== [D42] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
-skipped by default
-
-=== [D42] Fix 2: "Replace with Effect.runFork" ===
+=== [D5] Fix 2: "Replace with Effect.runFork" ===
 
 --- file:///.src/main.ts ---
 // @effect-diagnostics strictEffectProvide:warning
@@ -513,19 +181,13 @@ export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPro
 export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
 
 
-=== [D44] Fix 0: "Disable missingEffectContext for this line" ===
+=== [D6] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
 skipped by default
 
-=== [D44] Fix 1: "Disable missingEffectContext for entire file" ===
+=== [D6] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
 skipped by default
 
-=== [D45] Fix 0: "Disable discardedRunPromiseToRunFork for this line" ===
-skipped by default
-
-=== [D45] Fix 1: "Disable discardedRunPromiseToRunFork for entire file" ===
-skipped by default
-
-=== [D45] Fix 2: "Replace with Effect.runFork" ===
+=== [D6] Fix 2: "Replace with Effect.runFork" ===
 
 --- file:///.src/main.ts ---
 // @effect-diagnostics strictEffectProvide:warning
@@ -574,50 +236,38 @@ export const fakeStep = program.pipe(Effect.provide(AppLayer), FakeEffect.runPro
 export const fakeCall = FakeEffect.runPromise(Effect.provide(program, AppLayer))
 
 
-=== [D47] Fix 0: "Disable missingEffectContext for this line" ===
+=== [D7] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D47] Fix 1: "Disable missingEffectContext for entire file" ===
+=== [D7] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D48] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D8] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D48] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D8] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D49] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D9] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D49] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D9] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D51] Fix 0: "Disable missingEffectContext for this line" ===
+=== [D10] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D51] Fix 1: "Disable missingEffectContext for entire file" ===
+=== [D10] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D52] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D11] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D52] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D11] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
 
-=== [D53] Fix 0: "Disable strictEffectProvide for this line" ===
+=== [D12] Fix 0: "Disable strictEffectProvide for this line" ===
 skipped by default
 
-=== [D53] Fix 1: "Disable strictEffectProvide for entire file" ===
-skipped by default
-
-=== [D54] Fix 0: "Disable strictEffectProvide for this line" ===
-skipped by default
-
-=== [D54] Fix 1: "Disable strictEffectProvide for entire file" ===
-skipped by default
-
-=== [D55] Fix 0: "Disable strictEffectProvide for this line" ===
-skipped by default
-
-=== [D55] Fix 1: "Disable strictEffectProvide for entire file" ===
+=== [D12] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default

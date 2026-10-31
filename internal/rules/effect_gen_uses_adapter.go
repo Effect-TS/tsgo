@@ -30,6 +30,7 @@ var EffectGenUsesAdapter = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds Effect.gen calls, which are overloaded and never become flow steps
 			n.ForEachChild(walk)
 			return false
 		}

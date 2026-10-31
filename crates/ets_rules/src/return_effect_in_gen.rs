@@ -44,7 +44,7 @@ pub struct ReturnEffectInGenMatch {
     pub return_node: P<Node>,       // The return statement AST node
 }
 
-// go: internal/rules/return_effect_in_gen.go:43 AnalyzeReturnEffectInGen ab7f54144dc8b5cb
+// go: internal/rules/return_effect_in_gen.go:43 AnalyzeReturnEffectInGen 581f3266d705d9d7
 // AnalyzeReturnEffectInGen finds all return statements inside Effect generators
 // that return an Effect-able type, returning matches with both the diagnostic and the return node.
 //
@@ -78,7 +78,7 @@ pub fn analyze_return_effect_in_gen(
     matches
 }
 
-// go: internal/rules/return_effect_in_gen.go:72 checkReturnEffectInGenScope 769da6b29c82c1c6
+// go: internal/rules/return_effect_in_gen.go:73 checkReturnEffectInGenScope 769da6b29c82c1c6
 // checkReturnEffectInGenScope checks if a return statement inside an Effect generator
 // is returning an Effect-able type (which would cause nested Effect<Effect<...>>).
 //

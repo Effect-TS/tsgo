@@ -1,19 +1,19 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectFnOpportunity_unaryPipeables.ts(4,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(name, attributes) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_unaryPipeables.ts(5,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_unaryPipeables.ts(11,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("mixed")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_unaryPipeables.ts(23,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_unaryPipeables.ts(24,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_unaryPipeables.ts(28,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_unaryPipeables.ts(29,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_unaryPipeables.ts(35,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_unaryPipeables.ts(36,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_unaryPipeables.ts(41,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_unaryPipeables.ts(51,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(name) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_unaryPipeables.ts(52,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_unaryPipeables.ts(59,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_unaryPipeables.ts(5,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(name, attributes) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_unaryPipeables.ts(6,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_unaryPipeables.ts(12,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("mixed")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_unaryPipeables.ts(24,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_unaryPipeables.ts(25,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_unaryPipeables.ts(29,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_unaryPipeables.ts(30,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_unaryPipeables.ts(36,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_unaryPipeables.ts(37,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_unaryPipeables.ts(42,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_unaryPipeables.ts(52,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(name) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_unaryPipeables.ts(53,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_unaryPipeables.ts(60,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -30,6 +30,7 @@ Effect version: 3.19.19
     
 
 ==== /.src/effectFnOpportunity_unaryPipeables.ts (13 errors) ====
+    // @effect-v3
     import { Effect } from "effect"
     
     // Issue #758, point 5: ignore must only receive the Effect, not name/attributes.

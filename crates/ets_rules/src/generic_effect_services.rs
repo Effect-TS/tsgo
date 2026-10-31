@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node};
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::EffectMajorVersion;
 
-// go: internal/rules/generic_effect_services.go:14 GenericEffectServices aa96b74a5b0468b4
+// go: internal/rules/generic_effect_services.go:14 GenericEffectServices 6bba63ff428e804d
 // GenericEffectServices detects Effect Service class declarations that have type
 // parameters (generics), which cannot be properly discriminated at runtime.
 // This is a V3-only rule.

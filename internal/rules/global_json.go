@@ -68,6 +68,7 @@ func findGlobalJsonCalls(ctx *rule.Context, checkInEffect bool) []globalJsonCall
 			}
 		}
 
+		//ets:ast-walk finds calls to the global JSON.parse and JSON.stringify
 		node.ForEachChild(walk)
 		return false
 	}
