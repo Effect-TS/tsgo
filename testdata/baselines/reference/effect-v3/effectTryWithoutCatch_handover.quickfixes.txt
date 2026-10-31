@@ -3,7 +3,6 @@
 [D1] (10:23-10:33) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
 [D2] (15:22-15:32) TS377021: The `catch` callback in `Effect.try` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
   Fix 0: "Disable unknownInEffectCatch for this line"
@@ -16,26 +15,6 @@ skipped by default
 
 === [D1] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
-
-=== [D1] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_handover.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-// @effect-diagnostics unknownInEffectCatch:warning
-import { Effect } from "effect"
-
-declare const text: string
-
-// MUST TRIGGER effectTryWithoutCatch: the fix rewrites it to the form below
-export const before = Effect.try({ try: () => JSON.parse(text), catch: (cause) => cause })
-
-// MUST NOT TRIGGER effectTryWithoutCatch, MUST TRIGGER unknownInEffectCatch: the
-// quick fix's output; its placeholder catch returns unknown, so unknownInEffectCatch
-// takes over and asks for a domain error
-export const after = Effect.try({ try: () => JSON.parse(text), catch: (cause) => cause })
-
 
 === [D2] Fix 0: "Disable unknownInEffectCatch for this line" ===
 skipped by default

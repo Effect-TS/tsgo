@@ -131,7 +131,7 @@ export const eitherTry = Either.try(() => parseDocument(text))
 export const reference = Effect.try
 
 // MUST TRIGGER: Effect.try is a pipe step applied to the thunk; the piping flow
-// sees the same short form, and the fix moves the thunk into the object form
+// sees the same short form
 // (v3 lists the short form last, so this compiles)
 export const asCallback = pipe(() => parseDocument(text), Effect.try)
 

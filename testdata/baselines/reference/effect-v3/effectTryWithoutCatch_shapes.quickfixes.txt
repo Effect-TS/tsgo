@@ -3,74 +3,62 @@
 [D1] (11:37-11:47) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
 [D2] (14:57-14:67) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
 [D3] (18:17-18:27) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
 [D4] (22:55-22:65) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
 [D5] (25:35-25:45) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
 [D6] (28:31-28:41) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
 [D7] (31:39-31:56) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
-[D8] (36:30-36:41) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+[D8] (35:30-35:41) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
 
-[D9] (40:30-40:43) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+[D9] (39:30-39:43) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
 
-[D10] (44:27-44:35) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
-  Fix 0: "Disable effectTryWithoutCatch for this line"
-  Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
-
-[D11] (55:39-55:49) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
-  Fix 0: "Disable effectTryWithoutCatch for this line"
-  Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
-
-[D12] (60:49-60:59) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+[D10] (43:27-43:35) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
 
-[D13] (63:62-63:72) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+[D11] (54:39-54:49) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
-[D14] (66:26-66:43) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+[D12] (58:49-58:59) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
 
-[D15] (74:30-74:40) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+[D13] (61:62-61:72) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
   Fix 0: "Disable effectTryWithoutCatch for this line"
   Fix 1: "Disable effectTryWithoutCatch for entire file"
-  Fix 2: "Add a catch handler (object form)"
+
+[D14] (64:26-64:43) TS377169: Effect.tryPromise is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
+
+[D15] (72:30-72:40) TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownException`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
+  Fix 0: "Disable effectTryWithoutCatch for this line"
+  Fix 1: "Disable effectTryWithoutCatch for entire file"
 
 === Quick Fix Application Results ===
 
@@ -80,177 +68,11 @@ skipped by default
 === [D1] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
 
-=== [D1] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try({ try: () => 1, catch: (cause) => cause }), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
-
 === [D2] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
 
 === [D2] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
-
-=== [D2] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try({ try: () => 1, catch: (cause) => cause }))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
 
 === [D3] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
@@ -258,177 +80,11 @@ skipped by default
 === [D3] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
 
-=== [D3] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try({ try: () => 1, catch: (cause) => cause })
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
-
 === [D4] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
 
 === [D4] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
-
-=== [D4] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try({ try: () => 1, catch: (cause) => cause }))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
 
 === [D5] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
@@ -436,266 +92,17 @@ skipped by default
 === [D5] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
 
-=== [D5] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try({ try: (() => 1), catch: (cause) => cause })
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
-
 === [D6] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
 
 === [D6] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ { try: () => 1, catch: (cause) => cause })
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
-
 === [D7] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
 
 === [D7] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
-
-=== [D7] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response, unknown>({ try: () => fetch(url), catch: (cause) => cause })
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
 
 === [D8] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
@@ -715,177 +122,11 @@ skipped by default
 === [D10] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
 
-=== [D10] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry({ try: () => 1, catch: (cause) => cause })
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
-
 === [D11] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
 
 === [D11] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
-
-=== [D11] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = Effect.try({ try: () => 1, catch: cause => cause })
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
 
 === [D12] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
@@ -899,263 +140,14 @@ skipped by default
 === [D13] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
 
-=== [D13] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try({ try: () => 1, catch: (cause) => cause }))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
-
 === [D14] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
 
 === [D14] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
 
-=== [D14] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise({ try: async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-}, catch: (cause) => cause })
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try(() => 1)
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-
-
 === [D15] Fix 0: "Disable effectTryWithoutCatch for this line" ===
 skipped by default
 
 === [D15] Fix 1: "Disable effectTryWithoutCatch for entire file" ===
 skipped by default
-
-=== [D15] Fix 2: "Add a catch handler (object form)" ===
-
---- file:///.src/effectTryWithoutCatch_shapes.ts ---
-// @effect-v3
-// @effect-diagnostics *:off
-// @effect-diagnostics effectTryWithoutCatch:warning
-import { type Cause, Data, Effect, pipe } from "effect"
-
-class ParseError extends Data.TaggedError("ParseError")<{ readonly cause: unknown }> {}
-
-declare const url: string
-
-// MUST TRIGGER: subject of a data-first call
-export const dataFirst = Effect.map(Effect.try(() => 1), (n) => n + 1)
-
-// MUST TRIGGER: subject of a curried pipeable call
-export const curried = Effect.map((n: number) => n + 1)(Effect.try(() => 1))
-
-// MUST TRIGGER: inside an Effect.fnUntraced body
-export const inFnUntraced = Effect.fnUntraced(function*() {
-  return yield* Effect.try(() => 1)
-})
-
-// MUST TRIGGER: inside a non-generator Effect.fn body
-export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
-
-// MUST TRIGGER: parenthesised thunk
-export const parenthesisedThunk = Effect.try((() => 1))
-
-// MUST TRIGGER: the fix keeps the comment before the thunk
-export const leadingComment = Effect.try(/* thunk */ () => 1)
-
-// MUST TRIGGER: one explicit type argument on tryPromise
-export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
-
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
-const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
-export const narrowedAlias = narrowedTry(() => 1)
-
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
-const narrowedAgain = narrowedTry
-export const narrowedChain = narrowedAgain(() => 1)
-
-// MUST TRIGGER: an alias annotated with the API's own type keeps the object form
-const typedTry: typeof Effect.try = Effect.try
-export const typedAlias = typedTry(() => 1)
-
-// MUST NOT TRIGGER: parenthesised object form
-export const parenthesisedObject = Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
-
-// MUST NOT TRIGGER: a spread argument has no single thunk to rewrite
-declare const args: [() => number]
-export const spread = Effect.try(...args)
-
-// MUST TRIGGER: the thunk is the subject of pipe(...) and Effect.try a pipe step
-// (v3 only: v3 lists the short-form overload last, so passing the API compiles)
-export const pipeStep = pipe(() => 1, Effect.try)
-
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
-declare function thunkOf(input: string): () => number
-export const laterPipeStep = pipe("1", thunkOf, Effect.try)
-
-// MUST TRIGGER: a data-first value argument
-export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
-
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
-export const multiline = Effect.tryPromise(async (signal) => {
-  // keep this comment
-  const response = await fetch(url, { signal })
-  return response.status
-})
-
-// MUST TRIGGER, as an error: a next-line directive overrides the severity
-// @effect-diagnostics-next-line effectTryWithoutCatch:error
-export const nextLineError = Effect.try({ try: () => 1, catch: (cause) => cause })
-
-// MUST NOT TRIGGER: a next-line directive disables the rule for one line
-// @effect-diagnostics-next-line effectTryWithoutCatch:off
-export const nextLineOff = Effect.try(() => 1)
-

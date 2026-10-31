@@ -163,7 +163,7 @@ Transformations (1):
       outType: Promise<Response>
 
 === Piping Flow ===
-Location: 35:29 - 35:50
+Location: 34:29 - 34:50
 Node: narrowedTry(() => 1)
 Node Kind: KindCallExpression
 
@@ -177,7 +177,7 @@ Transformations (1):
       outType: Effect<number, UnknownError, never>
 
 === Piping Flow ===
-Location: 39:29 - 39:52
+Location: 38:29 - 38:52
 Node: narrowedAgain(() => 1)
 Node Kind: KindCallExpression
 
@@ -191,7 +191,7 @@ Transformations (1):
       outType: Effect<number, UnknownError, never>
 
 === Piping Flow ===
-Location: 43:26 - 43:44
+Location: 42:26 - 42:44
 Node: typedTry(() => 1)
 Node Kind: KindCallExpression
 
@@ -205,7 +205,7 @@ Transformations (1):
       outType: Effect<number, UnknownError, never>
 
 === Piping Flow ===
-Location: 46:35 - 46:111
+Location: 45:35 - 45:111
 Node: Effect.try(({ try: () => 1, catch: (cause) => new ParseError({ cause }) }))
 Node Kind: KindCallExpression
 
@@ -219,7 +219,7 @@ Transformations (1):
       outType: Effect<number, ParseError, never>
 
 === Piping Flow ===
-Location: 53:33 - 53:82
+Location: 52:33 - 52:82
 Node: Effect.andThen(Effect.void, Effect.try(() => 1))
 Node Kind: KindCallExpression
 
@@ -233,7 +233,7 @@ Transformations (1):
       outType: Effect<number, UnknownError, never>
 
 === Piping Flow ===
-Location: 53:61 - 53:81
+Location: 52:61 - 52:81
 Node: Effect.try(() => 1)
 Node Kind: KindCallExpression
 
@@ -247,7 +247,7 @@ Transformations (1):
       outType: Effect<number, UnknownError, never>
 
 === Piping Flow ===
-Location: 56:25 - 60:3
+Location: 55:25 - 59:3
 Node: Effect.tryPromise(async (signal) => {\n  // keep this comment\n  const response = await fetch(url, { signal })\n  return response.status\n})
 Node Kind: KindCallExpression
 
@@ -261,7 +261,7 @@ Transformations (1):
       outType: Effect<number, UnknownError, never>
 
 === Piping Flow ===
-Location: 58:25 - 58:48
+Location: 57:25 - 57:48
 Node: fetch(url, { signal })
 Node Kind: KindCallExpression
 
@@ -275,7 +275,7 @@ Transformations (1):
       outType: Promise<Response>
 
 === Piping Flow ===
-Location: 64:29 - 64:49
+Location: 63:29 - 63:49
 Node: Effect.try(() => 1)
 Node Kind: KindCallExpression
 
@@ -289,7 +289,7 @@ Transformations (1):
       outType: Effect<number, UnknownError, never>
 
 === Piping Flow ===
-Location: 68:27 - 68:47
+Location: 67:27 - 67:47
 Node: Effect.try(() => 1)
 Node Kind: KindCallExpression
 

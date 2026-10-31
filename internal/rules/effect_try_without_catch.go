@@ -40,22 +40,12 @@ var EffectTryWithoutCatch = rule.Rule{
 	},
 }
 
-// EffectTryWithoutCatchMatch holds the nodes needed by the diagnostic and quick fix.
+// EffectTryWithoutCatchMatch holds the nodes needed by the diagnostic.
 type EffectTryWithoutCatchMatch struct {
 	SourceFile *ast.SourceFile
 	Location   core.TextRange
 	ApiName    string // try or tryPromise
 	ErrorType  *checker.Type
-	// Flow applies Effect.try or Effect.tryPromise at step Index to the thunk.
-	Flow  *typeparser.PipingFlow
-	Index int
-	// Thunk is the input of that step, when it is a standalone node.
-	Thunk *ast.Node
-}
-
-// Step returns the Effect.try or Effect.tryPromise step.
-func (m EffectTryWithoutCatchMatch) Step() typeparser.PipingFlowTransformation {
-	return m.Flow.Transformations().At(m.Index)
 }
 
 // AnalyzeEffectTryWithoutCatch finds piping flow steps that apply Effect.try or
@@ -103,9 +93,6 @@ func AnalyzeEffectTryWithoutCatch(tp *typeparser.TypeParser, c *checker.Checker,
 				Location:   scanner.GetErrorRangeForNode(sf, step.Callee()),
 				ApiName:    apiName(step),
 				ErrorType:  effect.E(),
-				Flow:       flow,
-				Index:      index,
-				Thunk:      flow.TransformationInputNode(index),
 			})
 		}
 	}

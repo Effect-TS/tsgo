@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, SourceFile};
 use ets_shim::checker::{SignatureKind, Type, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
@@ -43,30 +43,17 @@ pub static EFFECT_TRY_WITHOUT_CATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_try_without_catch.go:44 EffectTryWithoutCatchMatch a92043a389de184a
-// EffectTryWithoutCatchMatch holds the nodes needed by the diagnostic and quick fix.
+// go: internal/rules/effect_try_without_catch.go:44 EffectTryWithoutCatchMatch af18a21b49fff545
+// EffectTryWithoutCatchMatch holds the nodes needed by the diagnostic.
 #[derive(Clone)]
 pub struct EffectTryWithoutCatchMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub api_name: &'static str, // try or tryPromise
     pub error_type: P<Type>,
-    // Flow applies Effect.try or Effect.tryPromise at step Index to the thunk.
-    pub flow: PipingFlow,
-    pub index: i64,
-    // Thunk is the input of that step, when it is a standalone node.
-    pub thunk: Option<P<Node>>,
 }
 
-impl EffectTryWithoutCatchMatch {
-    // go: internal/rules/effect_try_without_catch.go:57 EffectTryWithoutCatchMatch.Step fc886ca85f8a97e9
-    // Step returns the Effect.try or Effect.tryPromise step.
-    pub fn step(&self) -> &PipingFlowTransformation {
-        self.flow.transformations().at(self.index)
-    }
-}
-
-// go: internal/rules/effect_try_without_catch.go:65 AnalyzeEffectTryWithoutCatch 8099a120a63de2cb
+// go: internal/rules/effect_try_without_catch.go:55 AnalyzeEffectTryWithoutCatch 43e3ac06cf28f530
 // AnalyzeEffectTryWithoutCatch finds piping flow steps that apply Effect.try or
 // Effect.tryPromise to a function, i.e. the short form without catch, however
 // the step is written: Effect.try(thunk), pipe(thunk, Effect.try) or a later
@@ -125,9 +112,6 @@ pub fn analyze_effect_try_without_catch(
                 location: scanner::get_error_range_for_node(sf, step.callee()),
                 api_name: api_name(tp, &step),
                 error_type: effect.e(),
-                flow: flow.clone(),
-                index,
-                thunk: PipingFlow::transformation_input_node(Some(flow), index),
             });
         }
     }

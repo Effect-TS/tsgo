@@ -8,7 +8,7 @@ Reports Effect.try and Effect.tryPromise calls without a catch handler, whose fa
 | --- | --- |
 | Category | Anti-pattern |
 | Default severity | `off` |
-| Fixable | Yes |
+| Fixable | No |
 | Effect versions | v3, v4 |
 | Diagnostic codes | `TS377169` |
 | Language Service name | `effectTryWithoutCatch` |

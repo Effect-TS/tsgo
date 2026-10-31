@@ -24,18 +24,17 @@ export const inPlainFn = Effect.fn("inPlainFn")(() => Effect.try(() => 1))
 // MUST TRIGGER: parenthesised thunk
 export const parenthesisedThunk = Effect.try((() => 1))
 
-// MUST TRIGGER: the fix keeps the comment before the thunk
+// MUST TRIGGER: a comment before the thunk
 export const leadingComment = Effect.try(/* thunk */ () => 1)
 
 // MUST TRIGGER: one explicit type argument on tryPromise
 export const tryPromiseTypeArgument = Effect.tryPromise<Response>(() => fetch(url))
 
-// MUST TRIGGER, without a fix: the annotation narrows the alias to the short form,
-// so the object form would not type-check
+// MUST TRIGGER: the annotation narrows the alias to the short form
 const narrowedTry: <A>(thunk: () => A) => Effect.Effect<A, Cause.UnknownException> = Effect.try
 export const narrowedAlias = narrowedTry(() => 1)
 
-// MUST TRIGGER, without a fix: a const chain through the narrowed alias
+// MUST TRIGGER: a const chain through the narrowed alias
 const narrowedAgain = narrowedTry
 export const narrowedChain = narrowedAgain(() => 1)
 
@@ -54,15 +53,14 @@ export const spread = Effect.try(...args)
 // (v3 only: v3 lists the short-form overload last, so passing the API compiles)
 export const pipeStep = pipe(() => 1, Effect.try)
 
-// MUST TRIGGER, without a fix: a later pipe step, whose thunk is the result of the
-// previous step and so has no node to move into the object form
+// MUST TRIGGER: a later pipe step, whose thunk is the result of the previous step
 declare function thunkOf(input: string): () => number
 export const laterPipeStep = pipe("1", thunkOf, Effect.try)
 
 // MUST TRIGGER: a data-first value argument
 export const dataFirstArgument = Effect.andThen(Effect.void, Effect.try(() => 1))
 
-// MUST TRIGGER: the fix keeps a multi-line async thunk and its comments
+// MUST TRIGGER: a multi-line async thunk with comments
 export const multiline = Effect.tryPromise(async (signal) => {
   // keep this comment
   const response = await fetch(url, { signal })
