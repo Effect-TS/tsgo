@@ -57,10 +57,11 @@ pub struct DiscardedRunPromiseToRunForkMatch {
     pub rename_to: &'static str,
 }
 
-// go: internal/rules/discarded_run_promise_to_run_fork.go:60 AnalyzeDiscardedRunPromiseToRunFork 0531fa3af7d52c42
+// go: internal/rules/discarded_run_promise_to_run_fork.go:61 AnalyzeDiscardedRunPromiseToRunFork e180937bd98d9ac3
 // AnalyzeDiscardedRunPromiseToRunFork finds piping flows ending in a
-// runPromise run whose resulting Promise is discarded. A runner that is not
-// the flow's last step is consumed by the next step.
+// runPromise run whose resulting Promise is discarded, in any spelling of the
+// step. A runner that is not the flow's last step is consumed by the next
+// step.
 //
 // Rust: Go's checker argument is the parser's checker; Go ignores it, so it is dropped. A transformation's
 // callee is never nil here, so Go's `last.Callee() == nil` check drops.
@@ -80,12 +81,6 @@ pub fn analyze_discarded_run_promise_to_run_fork(
             continue;
         }
         let last = transformations.at(transformations.len() - 1);
-        match last.kind() {
-            TransformationKind::Call
-            | TransformationKind::CallWithOptionals
-            | TransformationKind::DataLast => {}
-            _ => continue,
-        }
         if !is_discarded_expression(Some(flow.node())) {
             continue;
         }
@@ -109,7 +104,7 @@ pub fn analyze_discarded_run_promise_to_run_fork(
     matches
 }
 
-// go: internal/rules/discarded_run_promise_to_run_fork.go:102 discardedRunner c863d7bad21741b2
+// go: internal/rules/discarded_run_promise_to_run_fork.go:98 discardedRunner c863d7bad21741b2
 // discardedRunner describes a recognized Promise runner and the Fiber runner
 // its fix renames it to.
 pub(crate) struct DiscardedRunner {
@@ -121,28 +116,28 @@ pub(crate) struct DiscardedRunner {
     owns_replacement: fn(tp: &mut TypeParser<'_>, receiver: P<Node>) -> bool,
 }
 
-// go: internal/rules/discarded_run_promise_to_run_fork.go:111 effectRunPromiseRunner 3b8e39489ee3be6e
+// go: internal/rules/discarded_run_promise_to_run_fork.go:107 effectRunPromiseRunner 3b8e39489ee3be6e
 pub(crate) static EFFECT_RUN_PROMISE_RUNNER: DiscardedRunner = DiscardedRunner {
     name: "Effect.runPromise",
     replacement: "Effect.runFork",
     rename_to: "runFork",
     owns_replacement: |tp, receiver| tp.is_expression_effect_module(receiver),
 };
-// go: internal/rules/discarded_run_promise_to_run_fork.go:111 effectRunPromiseRunner 3b8e39489ee3be6e
+// go: internal/rules/discarded_run_promise_to_run_fork.go:107 effectRunPromiseRunner 3b8e39489ee3be6e
 pub(crate) static EFFECT_RUN_PROMISE_WITH_RUNNER: DiscardedRunner = DiscardedRunner {
     name: "Effect.runPromiseWith",
     replacement: "Effect.runForkWith",
     rename_to: "runForkWith",
     owns_replacement: |tp, receiver| tp.is_expression_effect_module(receiver),
 };
-// go: internal/rules/discarded_run_promise_to_run_fork.go:111 effectRunPromiseRunner 3b8e39489ee3be6e
+// go: internal/rules/discarded_run_promise_to_run_fork.go:107 effectRunPromiseRunner 3b8e39489ee3be6e
 pub(crate) static RUNTIME_RUN_PROMISE_RUNNER: DiscardedRunner = DiscardedRunner {
     name: "Runtime.runPromise",
     replacement: "Runtime.runFork",
     rename_to: "runFork",
     owns_replacement: |tp, receiver| tp.is_expression_effect_runtime_module(receiver),
 };
-// go: internal/rules/discarded_run_promise_to_run_fork.go:111 effectRunPromiseRunner 3b8e39489ee3be6e
+// go: internal/rules/discarded_run_promise_to_run_fork.go:107 effectRunPromiseRunner 3b8e39489ee3be6e
 pub(crate) static MANAGED_RUNTIME_RUN_PROMISE_RUNNER: DiscardedRunner = DiscardedRunner {
     name: "runPromise",
     replacement: "runFork",
@@ -150,8 +145,8 @@ pub(crate) static MANAGED_RUNTIME_RUN_PROMISE_RUNNER: DiscardedRunner = Discarde
     owns_replacement: |tp, receiver| tp.is_expression_plain_effect_managed_runtime(receiver),
 };
 
-// go: internal/rules/discarded_run_promise_to_run_fork.go:132 discardedRunPromiseRunner 8a37036b64405f25
-// discardedRunPromiseRunner classifies the runner of the last flow step and
+// go: internal/rules/discarded_run_promise_to_run_fork.go:128 discardedRunPromiseRunner 7153c70b492ae392
+// discardedRunPromiseRunner classifies the runner of the flow's last step and
 // returns the node the diagnostic is reported on.
 //
 // Rust: Go's `(match, node, ok)` is an `Option`. The match is built with `sf`, which the caller sets on it
@@ -159,7 +154,7 @@ pub(crate) static MANAGED_RUNTIME_RUN_PROMISE_RUNNER: DiscardedRunner = Discarde
 pub(crate) fn discarded_run_promise_runner(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
-    call: P<Node>,
+    flow_node: P<Node>,
     transformation: &PipingFlowTransformation,
 ) -> Option<(DiscardedRunPromiseToRunForkMatch, P<Node>)> {
     let callee = ast::skip_parentheses(transformation.callee());
@@ -191,24 +186,23 @@ pub(crate) fn discarded_run_promise_runner(
         (m, runner_node)
     }
 
-    let kind = transformation.kind();
-    let is_applied =
-        kind == TransformationKind::Call || kind == TransformationKind::CallWithOptionals;
-    if is_applied && tp.is_node_reference_to_effect_module_api(callee, "runPromise") {
+    if tp.is_node_reference_to_effect_module_api(callee, "runPromise") {
         return Some(new_match(tp, sf, callee, &EFFECT_RUN_PROMISE_RUNNER, true));
-    } else if is_applied
-        && tp.is_node_reference_to_effect_managed_runtime_member(callee, "runPromise")
-    {
+    } else if tp.is_node_reference_to_effect_managed_runtime_member(callee, "runPromise") {
         return Some(new_match(tp, sf, callee, &MANAGED_RUNTIME_RUN_PROMISE_RUNNER, true));
-    } else if kind == TransformationKind::DataLast
-        && tp.is_node_reference_to_effect_runtime_module_api(callee, "runPromise")
-    {
-        return Some(new_match(tp, sf, callee, &RUNTIME_RUN_PROMISE_RUNNER, true));
-    } else if !is_applied {
-        return None;
     }
 
-    // Curried: the step's callee is the factory call, as in
+    // The factory with its context or runtime as the step's argument, as in
+    // effect.pipe(Effect.runPromiseWith(context)) or the data-first
+    // Runtime.runPromise(runtime, effect). Without that argument the step only
+    // builds the runner.
+    if transformation.args().len() == 1
+        && let Some(runner) = discarded_run_promise_factory(tp, callee)
+    {
+        return Some(new_match(tp, sf, callee, runner, true));
+    }
+
+    // Curried: flows keep the factory call as the step's callee, as in
     // Effect.runPromiseWith(context)(effect).
     if callee.kind() == Kind::CallExpression {
         let factory = callee.as_call_expression();
@@ -221,8 +215,14 @@ pub(crate) fn discarded_run_promise_runner(
     }
 
     // Hoisted: the callee is a binding of the factory call's result, so there
-    // is no runner name to rename in place.
-    if let Some(owner) = tp.returned_function_call_owner(call)
+    // is no runner name to rename in place. Flows do not expose the call of a
+    // pipe or pipeable step, so only the applied spellings, whose call is the
+    // flow node, are resolved.
+    let kind = transformation.kind();
+    if kind != TransformationKind::Call && kind != TransformationKind::CallWithOptionals {
+        return None;
+    }
+    if let Some(owner) = tp.returned_function_call_owner(flow_node)
         && let Some(runner) = discarded_run_promise_factory(tp, owner)
     {
         return Some(new_match(tp, sf, callee, runner, false));
@@ -230,7 +230,7 @@ pub(crate) fn discarded_run_promise_runner(
     None
 }
 
-// go: internal/rules/discarded_run_promise_to_run_fork.go:189 discardedRunPromiseFactory 41ab489118816681
+// go: internal/rules/discarded_run_promise_to_run_fork.go:195 discardedRunPromiseFactory 41ab489118816681
 // discardedRunPromiseFactory recognizes the runners that take a context or
 // runtime first and return the Promise runner.
 pub(crate) fn discarded_run_promise_factory(
@@ -245,7 +245,7 @@ pub(crate) fn discarded_run_promise_factory(
     None
 }
 
-// go: internal/rules/discarded_run_promise_to_run_fork.go:202 isDiscardedExpression b72a38d38e43d282
+// go: internal/rules/discarded_run_promise_to_run_fork.go:208 isDiscardedExpression b72a38d38e43d282
 // isDiscardedExpression reports whether the value of node is discarded: it is
 // an expression statement, the operand of void, or a comma operand whose value
 // is not used. Parentheses are transparent.

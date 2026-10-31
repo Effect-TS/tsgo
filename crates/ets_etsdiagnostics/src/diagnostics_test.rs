@@ -301,7 +301,7 @@ impl Drop for TempDir {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:212 writeEffectV4Project 11af852ef4277224
+// go test: etsdiagnostics/diagnostics_test.go:212 writeEffectV4Project 9ec28990e6999adc
 // Rust: returns the temporary directory too (Go's `t.TempDir` is removed by the test framework).
 fn write_effect_v4_project(source: &str) -> (TempDir, String) {
     let mut files = ets_bundledeffect::TestFS::default();
@@ -323,7 +323,7 @@ fn write_effect_v4_project(source: &str) -> (TempDir, String) {
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true,
-    "plugins": [{ "name": "@effect/language-service" }]
+    "plugins": [{ "name": "@effect/language-service", "diagnosticSeverity": { "discardedRunPromiseToRunFork": "off" } }]
   },
   "files": ["main.ts"]
 }"#,

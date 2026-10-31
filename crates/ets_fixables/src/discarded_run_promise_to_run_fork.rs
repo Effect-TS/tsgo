@@ -16,7 +16,7 @@ pub static DISCARDED_RUN_PROMISE_TO_RUN_FORK_FIX: LazyLock<Fixable> = LazyLock::
     run: run_discarded_run_promise_to_run_fork_fix,
 });
 
-// go: internal/fixables/discarded_run_promise_to_run_fork.go:21 runDiscardedRunPromiseToRunForkFix 4fa12b216a291eca
+// go: internal/fixables/discarded_run_promise_to_run_fork.go:21 runDiscardedRunPromiseToRunForkFix f0d8110126996a16
 fn run_discarded_run_promise_to_run_fork_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_discarded_run_promise_to_run_fork(&mut ctx.type_parser, Some(sf)) {
@@ -29,6 +29,10 @@ fn run_discarded_run_promise_to_run_fork_fix(ctx: &mut Context<'_, '_>) -> Vec<C
 
         // The result is discarded, so renaming the runner in place keeps the
         // receiver, the arguments and any surrounding void untouched.
+        // ReplacePipingFlowTransformation would rebuild the call and reprint
+        // its arguments, losing their comments, and could not rebuild a
+        // ManagedRuntime receiver or a curried factory call that flows keep
+        // as the step's callee.
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with ".to_string() + m.replacement_name,
             run: Box::new(move |tracker| {
