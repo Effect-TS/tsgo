@@ -1,0 +1,15 @@
+==== /.src/useSpanUnusedSpanToWithSpan_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:79 - 8:93
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>

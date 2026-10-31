@@ -124,7 +124,8 @@
         "unnecessaryPipe": "suggestion",
         "unnecessaryPipeChain": "suggestion",
         "unnecessaryTypeofType": "suggestion",
-        "unstableApiUsage": "warning"
+        "unstableApiUsage": "warning",
+        "useSpanUnusedSpanToWithSpan": "suggestion"
       }
     },
     {
@@ -224,7 +225,8 @@
         "unnecessaryPipe": "error",
         "unnecessaryPipeChain": "error",
         "unnecessaryTypeofType": "error",
-        "unstableApiUsage": "error"
+        "unstableApiUsage": "error",
+        "useSpanUnusedSpanToWithSpan": "error"
       }
     },
     {
@@ -283,7 +285,8 @@
         "scopeInLayerEffect": "warning",
         "strictEffectProvide": "warning",
         "tryCatchInEffectGen": "warning",
-        "unknownInEffectCatch": "warning"
+        "unknownInEffectCatch": "warning",
+        "useSpanUnusedSpanToWithSpan": "warning"
       }
     },
     {
@@ -1532,6 +1535,30 @@
             "start": 56,
             "end": 73,
             "text": "The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "useSpanUnusedSpanToWithSpan",
+      "group": "antipattern",
+      "description": "Suggests Effect.withSpan when an Effect.useSpan callback never uses its span, since useSpan does not parent inner spans",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377172
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const fetchUser: (id: string) =\u003e Effect.Effect\u003c{ name: string }\u003e\n\nexport const getUser = (id: string) =\u003e Effect.useSpan(\"fetch-user\", (_span) =\u003e fetchUser(id))\n",
+        "diagnostics": [
+          {
+            "start": 146,
+            "end": 160,
+            "text": "This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)"
           }
         ]
       }

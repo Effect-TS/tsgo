@@ -26,6 +26,7 @@
     "effecttsgo/scope-in-layer-effect": "warn",
     "effecttsgo/strict-effect-provide": "warn",
     "effecttsgo/try-catch-in-effect-gen": "warn",
-    "effecttsgo/unknown-in-effect-catch": "warn"
+    "effecttsgo/unknown-in-effect-catch": "warn",
+    "effecttsgo/use-span-unused-span-to-with-span": "warn"
   }
 }

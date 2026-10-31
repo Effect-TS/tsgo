@@ -458,6 +458,11 @@ func (tp *TypeParser) tryExtractWithSpanExpression(expr *ast.Node) *ast.Node {
 	return call.Arguments.Nodes[0]
 }
 
+// AreParametersReferencedIn reports whether any parameter of fnNode is referenced within nodes.
+func (tp *TypeParser) AreParametersReferencedIn(fnNode *ast.Node, nodes []*ast.Node) bool {
+	return tp.areParametersReferencedIn(fnNode, nodes)
+}
+
 // areParametersReferencedIn checks if any of the function's parameter symbols
 // are referenced within the given nodes. Uses declaration position range checking.
 func (tp *TypeParser) areParametersReferencedIn(fnNode *ast.Node, nodes []*ast.Node) bool {

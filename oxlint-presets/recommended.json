@@ -100,6 +100,7 @@
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
     "effecttsgo/unnecessary-typeof-type": "warn",
-    "effecttsgo/unstable-api-usage": "warn"
+    "effecttsgo/unstable-api-usage": "warn",
+    "effecttsgo/use-span-unused-span-to-with-span": "warn"
   }
 }

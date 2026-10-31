@@ -2674,6 +2674,9 @@
         "effecttsgo/unstable-api-usage": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/use-span-unused-span-to-with-span": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "eqeqeq": {
           "anyOf": [
             {

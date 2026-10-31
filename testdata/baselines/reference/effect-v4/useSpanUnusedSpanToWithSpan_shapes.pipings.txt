@@ -1,0 +1,229 @@
+==== /.src/useSpanUnusedSpanToWithSpan_shapes.ts (16 flows) ====
+
+=== Piping Flow ===
+Location: 36:9 - 36:45
+Node: Effect.succeed(String(this).length)
+Node Kind: KindCallExpression
+
+Subject: String(this).length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 36:25 - 36:37
+Node: String(this)
+Node Kind: KindCallExpression
+
+Subject: this
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 43:35 - 43:49
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 71:57 - 71:84
+Node: Effect.succeed(LaterClass)
+Node Kind: KindCallExpression
+
+Subject: LaterClass
+Subject Type: typeof LaterClass
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<typeof LaterClass, never, never>
+
+=== Piping Flow ===
+Location: 74:56 - 74:84
+Node: Effect.succeed(LaterEnum.A)
+Node Kind: KindCallExpression
+
+Subject: LaterEnum.A
+Subject Type: LaterEnum
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<LaterEnum, never, never>
+
+=== Piping Flow ===
+Location: 78:60 - 78:87
+Node: Effect.sync(laterFunction)
+Node Kind: KindCallExpression
+
+Subject: laterFunction
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 82:53 - 82:77
+Node: Effect.succeed(Math.PI)
+Node Kind: KindCallExpression
+
+Subject: Math.PI
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 86:63 - 86:109
+Node: Effect.succeed(((value: number) => value)(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: ((value: number) => value)
+      args: (constant)
+      outType: number
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 90:58 - 90:105
+Node: Effect.succeed<typeof laterValue | null>(null)
+Node Kind: KindCallExpression
+
+Subject: null
+Subject Type: null
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<"later" | null, never, never>
+
+=== Piping Flow ===
+Location: 93:59 - 93:87
+Node: Effect.succeed({ mutable })
+Node Kind: KindCallExpression
+
+Subject: { mutable }
+Subject Type: { mutable: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ mutable: number; }, never, never>
+
+=== Piping Flow ===
+Location: 96:66 - 96:114
+Node: Effect.succeed({ [laterValue]() { return 1 } })
+Node Kind: KindCallExpression
+
+Subject: { [laterValue]() { return 1 } }
+Subject Type: { later(): 1; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ later(): 1; }, never, never>
+
+=== Piping Flow ===
+Location: 102:9 - 104:5
+Node: Effect.sync(function() {\n    return arguments.length\n  })
+Node Kind: KindCallExpression
+
+Subject: function() {\n    return arguments.length\n  }
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 112:56 - 112:97
+Node: Effect.succeed<typeof span | null>(null)
+Node Kind: KindCallExpression
+
+Subject: null
+Subject Type: null
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Span | null, never, never>
+
+=== Piping Flow ===
+Location: 115:59 - 115:84
+Node: Effect.succeed({ span })
+Node Kind: KindCallExpression
+
+Subject: { span }
+Subject Type: { span: Span; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ span: Span; }, never, never>
+
+=== Piping Flow ===
+Location: 128:9 - 128:42
+Node: Effect.succeed(arguments.length)
+Node Kind: KindCallExpression
+
+Subject: arguments.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 134:36 - 134:69
+Node: Effect.succeed(arguments.length)
+Node Kind: KindCallExpression
+
+Subject: arguments.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
