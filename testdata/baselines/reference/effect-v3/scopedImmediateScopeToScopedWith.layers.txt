@@ -8,7 +8,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`layerScoped<br/><small>_ln 244 col 13_</small>`"]
+  subgraph 0 ["`layerScoped<br/><small>_ln 251 col 13_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["Database"]
@@ -26,5 +26,5 @@ flowchart TD
 
 --- quickinfo ---
 /**
- * - Database provided at ln 244 col 13 by `layerScoped`
+ * - Database provided at ln 251 col 13 by `layerScoped`
  */

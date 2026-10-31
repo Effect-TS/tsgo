@@ -1,43 +1,43 @@
 === Quick Fix Inventory ===
 
-[D1] (42:11-42:24) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+[D1] (43:11-43:24) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
   Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
   Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
   Fix 2: "Replace with Effect.scopedWith"
 
-[D2] (47:3-47:16) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+[D2] (48:3-48:16) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
   Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
   Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
   Fix 2: "Replace with Effect.scopedWith"
 
-[D3] (55:11-55:24) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+[D3] (56:11-56:24) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
   Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
   Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
   Fix 2: "Replace with Effect.scopedWith"
 
-[D4] (62:42-62:55) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+[D4] (63:42-63:55) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
   Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
   Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
 
-[D5] (69:40-69:46) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+[D5] (70:40-70:46) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
   Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
   Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
 
-[D6] (79:9-79:22) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+[D6] (80:9-80:22) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
   Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
   Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
 
-[D7] (83:31-83:44) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-  Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
-  Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
-  Fix 2: "Replace with Effect.scopedWith"
-
-[D8] (93:9-93:22) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+[D7] (84:31-84:44) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
   Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
   Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
   Fix 2: "Replace with Effect.scopedWith"
 
-[D9] (105:9-105:14) TS6133: 'scope' is declared but its value is never read.
+[D8] (94:9-94:22) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+  Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
+  Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
+  Fix 2: "Replace with Effect.scopedWith"
+
+[D9] (106:9-106:14) TS6133: 'scope' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -57,6 +57,7 @@ skipped by default
 import * as Effect from "effect/Effect"
 import { gen, scope as currentScope, scoped } from "effect/Effect"
 import * as Scope from "effect/Scope"
+import type { YieldWrap } from "effect/Utils"
 
 interface Box<T> {
   readonly value: T
@@ -183,6 +184,19 @@ export const supertypeRequirement = Effect.gen(function*() {
 // MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
 export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
 
+// MUST NOT TRIGGER: explicit type arguments pin the result type
+export const explicitTypeArguments = Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}))
+
+// MUST NOT TRIGGER: a return annotation pins the generator's requirements
+export const annotatedGenerator = Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}).pipe(Effect.scoped)
+
+
 
 === [D2] Fix 0: "Disable scopedImmediateScopeToScopedWith for this line" ===
 skipped by default
@@ -199,6 +213,7 @@ skipped by default
 import * as Effect from "effect/Effect"
 import { gen, scope as currentScope, scoped } from "effect/Effect"
 import * as Scope from "effect/Scope"
+import type { YieldWrap } from "effect/Utils"
 
 interface Box<T> {
   readonly value: T
@@ -326,6 +341,19 @@ export const supertypeRequirement = Effect.gen(function*() {
 // MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
 export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
 
+// MUST NOT TRIGGER: explicit type arguments pin the result type
+export const explicitTypeArguments = Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}))
+
+// MUST NOT TRIGGER: a return annotation pins the generator's requirements
+export const annotatedGenerator = Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}).pipe(Effect.scoped)
+
+
 
 === [D3] Fix 0: "Disable scopedImmediateScopeToScopedWith for this line" ===
 skipped by default
@@ -342,6 +370,7 @@ skipped by default
 import * as Effect from "effect/Effect"
 import { gen, scope as currentScope, scoped } from "effect/Effect"
 import * as Scope from "effect/Scope"
+import type { YieldWrap } from "effect/Utils"
 
 interface Box<T> {
   readonly value: T
@@ -468,6 +497,19 @@ export const supertypeRequirement = Effect.gen(function*() {
 // MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
 export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
 
+// MUST NOT TRIGGER: explicit type arguments pin the result type
+export const explicitTypeArguments = Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}))
+
+// MUST NOT TRIGGER: a return annotation pins the generator's requirements
+export const annotatedGenerator = Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}).pipe(Effect.scoped)
+
+
 
 === [D4] Fix 0: "Disable scopedImmediateScopeToScopedWith for this line" ===
 skipped by default
@@ -502,6 +544,7 @@ skipped by default
 import * as Effect from "effect/Effect"
 import { gen, scope as currentScope, scoped } from "effect/Effect"
 import * as Scope from "effect/Scope"
+import type { YieldWrap } from "effect/Utils"
 
 interface Box<T> {
   readonly value: T
@@ -628,6 +671,19 @@ export const supertypeRequirement = Effect.gen(function*() {
 // MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
 export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
 
+// MUST NOT TRIGGER: explicit type arguments pin the result type
+export const explicitTypeArguments = Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}))
+
+// MUST NOT TRIGGER: a return annotation pins the generator's requirements
+export const annotatedGenerator = Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}).pipe(Effect.scoped)
+
+
 
 === [D8] Fix 0: "Disable scopedImmediateScopeToScopedWith for this line" ===
 skipped by default
@@ -644,6 +700,7 @@ skipped by default
 import * as Effect from "effect/Effect"
 import { gen, scope as currentScope, scoped } from "effect/Effect"
 import * as Scope from "effect/Scope"
+import type { YieldWrap } from "effect/Utils"
 
 interface Box<T> {
   readonly value: T
@@ -769,4 +826,17 @@ export const supertypeRequirement = Effect.gen(function*() {
 
 // MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
 export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
+
+// MUST NOT TRIGGER: explicit type arguments pin the result type
+export const explicitTypeArguments = Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}))
+
+// MUST NOT TRIGGER: a return annotation pins the generator's requirements
+export const annotatedGenerator = Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}).pipe(Effect.scoped)
+
 

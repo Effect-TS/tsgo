@@ -1,4 +1,4 @@
-==== /.src/scopedImmediateScopeToScopedWith.ts (107 flows) ====
+==== /.src/scopedImmediateScopeToScopedWith.ts (110 flows) ====
 
 === Piping Flow ===
 Location: 14:23 - 14:47
@@ -15,7 +15,7 @@ Transformations (1):
       outType: <Self, Shape>() => TagClass<Self, "Database", Shape>
 
 === Piping Flow ===
-Location: 26:28 - 31:23
+Location: 27:28 - 32:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const connection = yield* openConnection(scope)\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return connection\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -33,7 +33,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 28:28 - 28:50
+Location: 29:28 - 29:50
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -47,7 +47,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 29:35 - 29:57
+Location: 30:35 - 30:57
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -61,7 +61,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 35:26 - 38:4
+Location: 36:26 - 39:4
 Node: Effect.scoped(Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}))
 Node Kind: KindCallExpression
 
@@ -79,7 +79,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 37:16 - 37:38
+Location: 38:16 - 38:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -93,7 +93,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 42:28 - 48:2
+Location: 43:28 - 49:2
 Node: pipe(\n  Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    return yield* openConnection(scope)\n  }),\n  Effect.scoped\n)
 Node Kind: KindCallExpression
 
@@ -111,7 +111,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 45:18 - 45:40
+Location: 46:18 - 46:40
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -125,7 +125,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 52:32 - 55:52
+Location: 53:32 - 56:52
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped, Effect.map((s) => s.length))
 Node Kind: KindCallExpression
 
@@ -147,7 +147,7 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 54:16 - 54:38
+Location: 55:16 - 55:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -161,7 +161,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 59:33 - 63:23
+Location: 60:33 - 64:23
 Node: Effect.gen(function*() {\n  const connectionScope = yield* Effect.scope\n  yield* Scope.addFinalizer(connectionScope, Effect.log("closing"))\n  return yield* openConnection(connectionScope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -179,7 +179,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 61:45 - 61:67
+Location: 62:45 - 62:67
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -193,7 +193,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 62:16 - 62:48
+Location: 63:16 - 63:48
 Node: openConnection(connectionScope)
 Node Kind: KindCallExpression
 
@@ -207,7 +207,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 67:33 - 72:23
+Location: 68:33 - 73:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const db = yield* Database\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return yield* db.query("select 1")\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -225,7 +225,7 @@ Transformations (2):
       outType: Effect<string, never, Database>
 
 === Piping Flow ===
-Location: 70:35 - 70:57
+Location: 71:35 - 71:57
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -239,7 +239,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 71:16 - 71:37
+Location: 72:16 - 72:37
 Node: db.query("select 1")
 Node Kind: KindCallExpression
 
@@ -253,7 +253,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 76:27 - 79:23
+Location: 77:27 - 80:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return 1\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -271,7 +271,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 83:33 - 88:23
+Location: 84:33 - 89:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const child = yield* Scope.fork(scope, ExecutionStrategy.sequential)\n  yield* Scope.addFinalizer(child, Effect.log("child closed"))\n  return yield* Scope.extend(acquire, child)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -289,7 +289,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 86:35 - 86:62
+Location: 87:35 - 87:62
 Node: Effect.log("child closed")
 Node Kind: KindCallExpression
 
@@ -303,7 +303,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 87:16 - 87:45
+Location: 88:16 - 88:45
 Node: Scope.extend(acquire, child)
 Node Kind: KindCallExpression
 
@@ -317,7 +317,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 92:31 - 95:19
+Location: 93:31 - 96:19
 Node: Fx.gen(function*() {\n  const scope = yield* Fx.scope\n  return yield* openConnection(scope)\n}).pipe(Fx.scoped)
 Node Kind: KindCallExpression
 
@@ -335,7 +335,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 94:16 - 94:38
+Location: 95:16 - 95:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -349,7 +349,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 99:28 - 102:4
+Location: 100:28 - 103:4
 Node: scoped(gen(function*() {\n  const scope = yield* currentScope\n  return yield* openConnection(scope)\n}))
 Node Kind: KindCallExpression
 
@@ -367,7 +367,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 101:16 - 101:38
+Location: 102:16 - 102:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -381,7 +381,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 106:27 - 106:105
+Location: 107:27 - 107:105
 Node: Effect.scoped(Effect.flatMap(Effect.scope, (scope) => openConnection(scope)))
 Node Kind: KindCallExpression
 
@@ -399,7 +399,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 106:81 - 106:103
+Location: 107:81 - 107:103
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -413,7 +413,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 109:32 - 109:92
+Location: 110:32 - 110:92
 Node: Effect.scoped(Effect.flatMap(Effect.scope, openConnection))
 Node Kind: KindCallExpression
 
@@ -431,7 +431,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 113:33 - 115:2
+Location: 114:33 - 116:2
 Node: Effect.scoped(\n  Effect.scope.pipe(Effect.flatMap((scope) => Scope.addFinalizer(scope, Effect.log("closing"))))\n)
 Node Kind: KindCallExpression
 
@@ -449,7 +449,7 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 114:72 - 114:94
+Location: 115:72 - 115:94
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -463,7 +463,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 118:35 - 118:101
+Location: 119:35 - 119:101
 Node: pipe(Effect.scope, Effect.flatMap(openConnection), Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -481,7 +481,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 121:39 - 121:104
+Location: 122:39 - 122:104
 Node: Effect.scope.pipe(Effect.flatMap(openConnection), Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -499,7 +499,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 124:29 - 124:77
+Location: 125:29 - 125:77
 Node: Effect.scoped(Effect.scopeWith(openConnection))
 Node Kind: KindCallExpression
 
@@ -517,7 +517,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 125:29 - 125:100
+Location: 126:29 - 126:100
 Node: Effect.scopeWith((scope) => openConnection(scope)).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -535,7 +535,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 125:57 - 125:79
+Location: 126:57 - 126:79
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -549,7 +549,73 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 128:27 - 133:3
+Location: 129:33 - 129:91
+Node: pipe(makeCallback("db"), Effect.scopeWith, Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: "db"
+Subject Type: "db"
+
+Transformations (3):
+  [0] kind: call
+      callee: makeCallback
+      args: (constant)
+      outType: (scope: Scope) => Effect<string, never, never>
+  [1] kind: pipe
+      callee: Effect.scopeWith
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [2] kind: pipe
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 130:43 - 130:101
+Node: Effect.scoped(pipe(makeCallback("db"), Effect.scopeWith))
+Node Kind: KindCallExpression
+
+Subject: "db"
+Subject Type: "db"
+
+Transformations (3):
+  [0] kind: call
+      callee: makeCallback
+      args: (constant)
+      outType: (scope: Scope) => Effect<string, never, never>
+  [1] kind: pipe
+      callee: Effect.scopeWith
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [2] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 132:47 - 132:110
+Node: pipe(makeCallback("db"), Effect.scopeWith).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: "db"
+Subject Type: "db"
+
+Transformations (3):
+  [0] kind: call
+      callee: makeCallback
+      args: (constant)
+      outType: (scope: Scope) => Effect<string, never, never>
+  [1] kind: pipe
+      callee: Effect.scopeWith
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [2] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 135:27 - 140:3
 Node: Effect.gen(function*() {\n  return yield* Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    return yield* openConnection(scope)\n  }).pipe(Effect.scoped)\n})
 Node Kind: KindCallExpression
 
@@ -563,7 +629,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 129:16 - 132:25
+Location: 136:16 - 139:25
 Node: Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    return yield* openConnection(scope)\n  }).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -581,7 +647,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 131:18 - 131:40
+Location: 138:18 - 138:40
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -595,7 +661,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 134:31 - 141:2
+Location: 141:31 - 148:2
 Node: Effect.succeed(1).pipe(\n  Effect.flatMap(() =>\n    Effect.gen(function*() {\n      const scope = yield* Effect.scope\n      return yield* openConnection(scope)\n    }).pipe(Effect.scoped)\n  )\n)
 Node Kind: KindCallExpression
 
@@ -613,7 +679,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 135:23 - 139:27
+Location: 142:23 - 146:27
 Node: Effect.gen(function*() {\n      const scope = yield* Effect.scope\n      return yield* openConnection(scope)\n    }).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -631,7 +697,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 138:20 - 138:42
+Location: 145:20 - 145:42
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -645,7 +711,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 144:33 - 150:2
+Location: 151:33 - 157:2
 Node: Effect.scopedWith((scope) =>\n  Effect.gen(function*() {\n    const connection = yield* openConnection(scope)\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return connection\n  })\n)
 Node Kind: KindCallExpression
 
@@ -659,7 +725,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 144:62 - 149:5
+Location: 151:62 - 156:5
 Node: Effect.gen(function*() {\n    const connection = yield* openConnection(scope)\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return connection\n  })
 Node Kind: KindCallExpression
 
@@ -673,7 +739,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 146:30 - 146:52
+Location: 153:30 - 153:52
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -687,7 +753,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 147:37 - 147:59
+Location: 154:37 - 154:59
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -701,7 +767,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 153:33 - 157:23
+Location: 160:33 - 164:23
 Node: Effect.gen(function*() {\n  yield* Effect.log("opening")\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -719,7 +785,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 154:9 - 154:31
+Location: 161:9 - 161:31
 Node: Effect.log("opening")
 Node Kind: KindCallExpression
 
@@ -733,7 +799,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 156:16 - 156:38
+Location: 163:16 - 163:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -747,7 +813,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 158:31 - 162:23
+Location: 165:31 - 169:23
 Node: Effect.gen(function*() {\n  log("opening")\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -765,7 +831,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 158:56 - 159:17
+Location: 165:56 - 166:17
 Node: log("opening")
 Node Kind: KindCallExpression
 
@@ -779,7 +845,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 161:16 - 161:38
+Location: 168:16 - 168:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -793,7 +859,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 165:30 - 170:23
+Location: 172:30 - 177:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const again = yield* Effect.scope\n  yield* Scope.addFinalizer(again, Effect.log("closing"))\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -811,7 +877,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 168:35 - 168:57
+Location: 175:35 - 175:57
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -825,7 +891,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 169:16 - 169:38
+Location: 176:16 - 176:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -839,7 +905,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 173:36 - 178:23
+Location: 180:36 - 185:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const later = () => Effect.scope\n  log(typeof later)\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -857,7 +923,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 175:35 - 176:20
+Location: 182:35 - 183:20
 Node: log(typeof later)
 Node Kind: KindCallExpression
 
@@ -871,7 +937,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 177:16 - 177:38
+Location: 184:16 - 184:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -885,7 +951,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 183:34 - 188:23
+Location: 190:34 - 195:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const resource = yield* Effect.acquireRelease(acquire, release)\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return resource\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -903,7 +969,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 185:26 - 185:66
+Location: 192:26 - 192:66
 Node: Effect.acquireRelease(acquire, release)
 Node Kind: KindCallExpression
 
@@ -917,7 +983,7 @@ Transformations (1):
       outType: Effect<string, never, Scope>
 
 === Piping Flow ===
-Location: 186:35 - 186:57
+Location: 193:35 - 193:57
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -931,7 +997,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 189:32 - 193:23
+Location: 196:32 - 200:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  yield* Effect.addFinalizer(() => Effect.log("closing"))\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -949,7 +1015,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 191:9 - 191:58
+Location: 198:9 - 198:58
 Node: Effect.addFinalizer(() => Effect.log("closing"))
 Node Kind: KindCallExpression
 
@@ -963,7 +1029,7 @@ Transformations (1):
       outType: Effect<void, never, Scope>
 
 === Piping Flow ===
-Location: 191:35 - 191:57
+Location: 198:35 - 198:57
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -977,7 +1043,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 192:16 - 192:38
+Location: 199:16 - 199:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -991,7 +1057,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 194:32 - 197:23
+Location: 201:32 - 204:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openScopedConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -1009,7 +1075,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 196:16 - 196:44
+Location: 203:16 - 203:44
 Node: openScopedConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1023,7 +1089,7 @@ Transformations (1):
       outType: Effect<string, never, Scope>
 
 === Piping Flow ===
-Location: 198:35 - 204:23
+Location: 205:35 - 211:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  yield* Effect.gen(function*() {\n    yield* Effect.addFinalizer(() => Effect.log("inner"))\n  })\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -1041,7 +1107,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 200:9 - 202:5
+Location: 207:9 - 209:5
 Node: Effect.gen(function*() {\n    yield* Effect.addFinalizer(() => Effect.log("inner"))\n  })
 Node Kind: KindCallExpression
 
@@ -1055,7 +1121,7 @@ Transformations (1):
       outType: Effect<void, never, Scope>
 
 === Piping Flow ===
-Location: 201:11 - 201:58
+Location: 208:11 - 208:58
 Node: Effect.addFinalizer(() => Effect.log("inner"))
 Node Kind: KindCallExpression
 
@@ -1069,7 +1135,7 @@ Transformations (1):
       outType: Effect<void, never, Scope>
 
 === Piping Flow ===
-Location: 201:37 - 201:57
+Location: 208:37 - 208:57
 Node: Effect.log("inner")
 Node Kind: KindCallExpression
 
@@ -1083,7 +1149,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 203:16 - 203:38
+Location: 210:16 - 210:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1097,7 +1163,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 205:41 - 205:107
+Location: 212:41 - 212:107
 Node: Effect.scoped(Effect.flatMap(Effect.scope, openScopedConnection))
 Node Kind: KindCallExpression
 
@@ -1115,7 +1181,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 206:43 - 206:97
+Location: 213:43 - 213:97
 Node: Effect.scoped(Effect.scopeWith(openScopedConnection))
 Node Kind: KindCallExpression
 
@@ -1133,7 +1199,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 209:26 - 213:23
+Location: 216:26 - 220:23
 Node: Effect.gen(function*() {\n  let scope = yield* Effect.scope\n  scope = yield* Scope.fork(scope, ExecutionStrategy.sequential)\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -1151,7 +1217,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 212:16 - 212:38
+Location: 219:16 - 219:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1165,7 +1231,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 216:34 - 219:23
+Location: 223:34 - 226:23
 Node: Effect.gen(function*() {\n  yield* Effect.scope\n  return yield* acquire\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -1183,7 +1249,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 220:35 - 223:23
+Location: 227:35 - 230:23
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope, label = "db"\n  return yield* openConnection(scope).pipe(Effect.map((s) => `${label}:${s}`))\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -1201,7 +1267,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 222:16 - 222:79
+Location: 229:16 - 229:79
 Node: openConnection(scope).pipe(Effect.map((s) => `${label}:${s}`))
 Node Kind: KindCallExpression
 
@@ -1219,7 +1285,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 226:28 - 229:23
+Location: 233:28 - 236:23
 Node: Effect.gen(function*() {\n  const scope = yield* Scope.Scope\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -1237,7 +1303,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 228:16 - 228:38
+Location: 235:16 - 235:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1251,7 +1317,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 232:39 - 235:52
+Location: 239:39 - 242:52
 Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}).pipe(Effect.map((s) => s.length), Effect.scoped)
 Node Kind: KindCallExpression
 
@@ -1273,34 +1339,6 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 234:16 - 234:38
-Node: openConnection(scope)
-Node Kind: KindCallExpression
-
-Subject: scope
-Subject Type: Scope
-
-Transformations (1):
-  [0] kind: call
-      callee: openConnection
-      args: (constant)
-      outType: Effect<string, never, never>
-
-=== Piping Flow ===
-Location: 239:25 - 242:3
-Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n})
-Node Kind: KindCallExpression
-
-Subject: function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}
-Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.gen
-      args: (constant)
-      outType: Effect<string, never, Scope>
-
-=== Piping Flow ===
 Location: 241:16 - 241:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
@@ -1315,7 +1353,35 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 243:34 - 243:67
+Location: 246:25 - 249:3
+Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Scope>
+
+=== Piping Flow ===
+Location: 248:16 - 248:38
+Node: openConnection(scope)
+Node Kind: KindCallExpression
+
+Subject: scope
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 250:34 - 250:67
 Node: Effect.scopeWith(openConnection)
 Node Kind: KindCallExpression
 
@@ -1329,7 +1395,7 @@ Transformations (1):
       outType: Effect<string, never, Scope>
 
 === Piping Flow ===
-Location: 244:27 - 251:2
+Location: 251:27 - 258:2
 Node: Layer.scoped(\n  Database,\n  Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return { query: (sql: string) => Effect.succeed(sql) }\n  })\n)
 Node Kind: KindCallExpression
 
@@ -1347,7 +1413,7 @@ Transformations (2):
       outType: Layer<Database, never, never>
 
 === Piping Flow ===
-Location: 248:37 - 248:59
+Location: 255:37 - 255:59
 Node: Effect.log("closing")
 Node Kind: KindCallExpression
 
@@ -1361,7 +1427,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 249:37 - 249:57
+Location: 256:37 - 256:57
 Node: Effect.succeed(sql)
 Node Kind: KindCallExpression
 
@@ -1375,7 +1441,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 252:28 - 255:4
+Location: 259:28 - 262:4
 Node: Stream.scoped(Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}))
 Node Kind: KindCallExpression
 
@@ -1393,7 +1459,7 @@ Transformations (2):
       outType: Stream<string, never, never>
 
 === Piping Flow ===
-Location: 254:16 - 254:38
+Location: 261:16 - 261:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1407,7 +1473,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 256:27 - 262:2
+Location: 263:27 - 269:2
 Node: Effect.acquireRelease(\n  Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    return yield* openConnection(scope)\n  }),\n  release\n)
 Node Kind: KindCallExpression
 
@@ -1425,7 +1491,7 @@ Transformations (2):
       outType: Effect<string, never, Scope>
 
 === Piping Flow ===
-Location: 259:18 - 259:40
+Location: 266:18 - 266:40
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1439,7 +1505,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 263:30 - 266:3
+Location: 270:30 - 273:3
 Node: Effect.fnUntraced(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n})
 Node Kind: KindCallExpression
 
@@ -1451,34 +1517,6 @@ Transformations (1):
       callee: Effect.fnUntraced
       args: (constant)
       outType: () => Effect<string, never, Scope>
-
-=== Piping Flow ===
-Location: 265:16 - 265:38
-Node: openConnection(scope)
-Node Kind: KindCallExpression
-
-Subject: scope
-Subject Type: Scope
-
-Transformations (1):
-  [0] kind: call
-      callee: openConnection
-      args: (constant)
-      outType: Effect<string, never, never>
-
-=== Piping Flow ===
-Location: 270:28 - 273:18
-Node: Effect.fn("fnWithScoped")(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
-Node Kind: KindCallExpression
-
-Subject: Effect.fn("fnWithScoped")(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
-Subject Type: Effect<string, never, Scope>
-
-Transformations (1):
-  [0] kind: effectFn
-      callee: Effect.scoped
-      args: (constant)
-      outType: Effect<string, never, never>
 
 === Piping Flow ===
 Location: 272:16 - 272:38
@@ -1495,21 +1533,21 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 274:36 - 277:18
-Node: Effect.fnUntraced(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
+Location: 277:28 - 280:18
+Node: Effect.fn("fnWithScoped")(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
 Node Kind: KindCallExpression
 
-Subject: Effect.fnUntraced(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
+Subject: Effect.fn("fnWithScoped")(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
 Subject Type: Effect<string, never, Scope>
 
 Transformations (1):
-  [0] kind: effectFnUntraced
+  [0] kind: effectFn
       callee: Effect.scoped
       args: (constant)
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 276:16 - 276:38
+Location: 279:16 - 279:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1523,7 +1561,35 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 280:27 - 280:55
+Location: 281:36 - 284:18
+Node: Effect.fnUntraced(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: Effect.fnUntraced(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}, Effect.scoped)
+Subject Type: Effect<string, never, Scope>
+
+Transformations (1):
+  [0] kind: effectFnUntraced
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 283:16 - 283:38
+Node: openConnection(scope)
+Node Kind: KindCallExpression
+
+Subject: scope
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 287:27 - 287:55
 Node: Effect.scoped(Effect.scope)
 Node Kind: KindCallExpression
 
@@ -1537,7 +1603,7 @@ Transformations (1):
       outType: Effect<Scope, never, never>
 
 === Piping Flow ===
-Location: 281:29 - 281:84
+Location: 288:29 - 288:84
 Node: Effect.scoped(Effect.acquireRelease(acquire, release))
 Node Kind: KindCallExpression
 
@@ -1555,7 +1621,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 282:34 - 282:93
+Location: 289:34 - 289:93
 Node: Effect.scoped(Effect.flatMap(acquire, () => Effect.scope))
 Node Kind: KindCallExpression
 
@@ -1573,7 +1639,7 @@ Transformations (2):
       outType: Effect<Scope, never, never>
 
 === Piping Flow ===
-Location: 283:24 - 283:73
+Location: 290:24 - 290:73
 Node: Effect.scoped(Effect.map(Effect.scope, () => 1))
 Node Kind: KindCallExpression
 
@@ -1591,7 +1657,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 284:28 - 284:88
+Location: 291:28 - 291:88
 Node: Effect.scoped(Effect.andThen(Effect.scope, openConnection))
 Node Kind: KindCallExpression
 
@@ -1605,7 +1671,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 288:53 - 288:73
+Location: 295:53 - 295:73
 Node: Effect.scoped(self)
 Node Kind: KindCallExpression
 
@@ -1619,7 +1685,7 @@ Transformations (1):
       outType: Effect<A, E, Exclude<R, Scope>>
 
 === Piping Flow ===
-Location: 289:9 - 289:39
+Location: 296:9 - 296:39
 Node: Effect.succeed("not a scope")
 Node Kind: KindCallExpression
 
@@ -1633,7 +1699,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 291:27 - 294:4
+Location: 298:27 - 301:4
 Node: Local.scoped(Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}))
 Node Kind: KindCallExpression
 
@@ -1651,7 +1717,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 293:16 - 293:38
+Location: 300:16 - 300:38
 Node: openConnection(scope)
 Node Kind: KindCallExpression
 
@@ -1665,7 +1731,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 295:26 - 298:23
+Location: 302:26 - 305:23
 Node: Effect.gen(function*() {\n  const label = yield* Local.scope\n  return label\n}).pipe(Effect.scoped)
 Node Kind: KindCallExpression
 

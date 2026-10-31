@@ -1,14 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(42,11): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(47,3): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(55,11): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(62,42): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(69,40): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(79,9): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(83,31): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
-/.src/scopedImmediateScopeToScopedWith_regressions.ts(93,9): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(43,11): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(48,3): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(56,11): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(63,42): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(70,40): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(80,9): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(84,31): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+/.src/scopedImmediateScopeToScopedWith_regressions.ts(94,9): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
 
 
 ==== /.src/scopedImmediateScopeToScopedWith_regressions.ts (8 errors) ====
@@ -18,6 +18,7 @@ Effect version: 3.19.19
     import * as Effect from "effect/Effect"
     import { gen, scope as currentScope, scoped } from "effect/Effect"
     import * as Scope from "effect/Scope"
+    import type { YieldWrap } from "effect/Utils"
     
     interface Box<T> {
       readonly value: T
@@ -160,4 +161,17 @@ Effect version: 3.19.19
     
     // MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
     export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
+    
+    // MUST NOT TRIGGER: explicit type arguments pin the result type
+    export const explicitTypeArguments = Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {
+      const scope = yield* Effect.scope
+      return yield* openConnection(scope)
+    }))
+    
+    // MUST NOT TRIGGER: a return annotation pins the generator's requirements
+    export const annotatedGenerator = Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {
+      const scope = yield* Effect.scope
+      return yield* openConnection(scope)
+    }).pipe(Effect.scoped)
+    
     

@@ -18,6 +18,7 @@ class Database extends Context.Tag("Database")<Database, {
 declare const openConnection: (scope: Scope.Scope) => Effect.Effect<string>
 declare const openScopedConnection: (scope: Scope.Scope) => Effect.Effect<string, never, Scope.Scope>
 declare const acquire: Effect.Effect<string>
+declare const makeCallback: (label: string) => (scope: Scope.Scope) => Effect.Effect<string>
 declare const release: (value: string) => Effect.Effect<void>
 declare const log: (message: string) => void
 
@@ -123,6 +124,12 @@ export const flatMapMethodPipeScoped = Effect.scope.pipe(Effect.flatMap(openConn
 // MUST TRIGGER: v3 Effect.scopeWith(f) is Effect.flatMap(Effect.scope, f) -> Effect.scopedWith(openConnection)
 export const scopeWithCall = Effect.scoped(Effect.scopeWith(openConnection))
 export const scopeWithPipe = Effect.scopeWith((scope) => openConnection(scope)).pipe(Effect.scoped)
+
+// MUST TRIGGER: the scopeWith callback is the previous step's result -> pipe(makeCallback("db"), Effect.scopedWith)
+export const scopeWithPipeStep = pipe(makeCallback("db"), Effect.scopeWith, Effect.scoped)
+export const scopeWithPipeStepScopedCall = Effect.scoped(pipe(makeCallback("db"), Effect.scopeWith))
+// MUST TRIGGER (no fix): collapsing would call .pipe on the callback
+export const scopeWithPipeStepScopedPipeable = pipe(makeCallback("db"), Effect.scopeWith).pipe(Effect.scoped)
 
 // MUST TRIGGER: inside generators and pipelines, only the Effect.scoped-wrapped gen
 export const nestedInGen = Effect.gen(function*() {

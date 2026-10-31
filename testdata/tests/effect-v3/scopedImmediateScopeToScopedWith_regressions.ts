@@ -4,6 +4,7 @@
 import * as Effect from "effect/Effect"
 import { gen, scope as currentScope, scoped } from "effect/Effect"
 import * as Scope from "effect/Scope"
+import type { YieldWrap } from "effect/Utils"
 
 interface Box<T> {
   readonly value: T
@@ -130,3 +131,16 @@ export const supertypeRequirement = Effect.gen(function*() {
 
 // MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
 export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
+
+// MUST NOT TRIGGER: explicit type arguments pin the result type
+export const explicitTypeArguments = Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}))
+
+// MUST NOT TRIGGER: a return annotation pins the generator's requirements
+export const annotatedGenerator = Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}).pipe(Effect.scoped)
+

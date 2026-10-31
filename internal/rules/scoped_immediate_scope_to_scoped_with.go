@@ -74,37 +74,23 @@ func AnalyzeScopedImmediateScopeToScopedWith(tp *typeparser.TypeParser, c *check
 	noTypeArguments := func(transformation typeparser.PipingFlowTransformation) bool {
 		return transformation.TypeArguments() == nil || len(transformation.TypeArguments().Nodes) == 0
 	}
-	isEffectApi := func(name string, argCount int, kinds ...typeparser.TransformationKind) func(typeparser.PipingFlowTransformation) bool {
+	// Explicit type arguments pin types the rewrite would infer differently.
+	isEffectApi := func(name string, argCount int) func(typeparser.PipingFlowTransformation) bool {
 		return func(transformation typeparser.PipingFlowTransformation) bool {
-			if transformation.Callee() == nil || transformation.Args().Len() != argCount || !noTypeArguments(transformation) {
-				return false
-			}
-			if len(kinds) > 0 && !slices.Contains(kinds, transformation.Kind()) {
-				return false
-			}
-			for _, arg := range transformation.Args().All() {
-				if arg == nil || arg.Kind == ast.KindSpreadElement {
-					return false
-				}
-			}
-			return tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), name)
+			return transformation.Args().Len() == argCount && noTypeArguments(transformation) &&
+				tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), name)
 		}
 	}
-	// Effect.fn post-transformations apply to a function body, not an expression.
-	isScoped := isEffectApi("scoped", 0,
-		typeparser.TransformationKindCall, typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable)
-	isGen := isEffectApi("gen", 0, typeparser.TransformationKindCall)
-	isFlatMap := isEffectApi("flatMap", 1,
-		typeparser.TransformationKindCall, typeparser.TransformationKindDataFirst,
-		typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable)
+	isScoped := isEffectApi("scoped", 0)
+	isGen := isEffectApi("gen", 0)
+	isFlatMap := isEffectApi("flatMap", 1)
 	isScopeWith := isEffectApi("scopeWith", 0)
 	isGeneratorSubject := func(subject typeparser.PipingFlowSubject) bool {
 		node := subject.Node()
 		return node != nil && node.Kind == ast.KindFunctionExpression && node.AsFunctionExpression().AsteriskToken != nil
 	}
 	isEffectScope := func(node *ast.Node) bool {
-		return node != nil && (ast.IsIdentifier(node) || ast.IsPropertyAccessExpression(node)) &&
-			tp.IsNodeReferenceToEffectModuleApi(node, "scope")
+		return node != nil && tp.IsNodeReferenceToEffectModuleApi(node, "scope")
 	}
 	isScopeSubject := func(subject typeparser.PipingFlowSubject) bool {
 		return isEffectScope(subject.Node())
@@ -118,13 +104,21 @@ func AnalyzeScopedImmediateScopeToScopedWith(tp *typeparser.TypeParser, c *check
 		case flow.MatchesPrefix(isGeneratorSubject, isGen, isScoped):
 			match, ok = analyzeScopedImmediateScopeGen(tp, c, flow, isEffectScope)
 		case flow.MatchesPrefix(isScopeSubject, isFlatMap, isScoped):
-			match, ok = analyzeScopedImmediateScopeCallback(tp, c, flow, flow.Transformations().At(0).Args().At(0), 2, isEffectScope)
+			callback := flow.Transformations().At(0).Args().At(0)
+			match, ok = analyzeScopedImmediateScopeCallback(tp, c, flow, callback, tp.GetTypeAtLocation(callback), 2, isEffectScope)
 		default:
 			for _, sequence := range flow.FindTransformationSequences(isScopeWith, isScoped).All() {
-				if callback := flow.TransformationInputNode(sequence.Start()); callback != nil {
-					if match, ok = analyzeScopedImmediateScopeCallback(tp, c, flow, callback, sequence.Start()+2, isEffectScope); ok {
-						break
+				// A pipe step has no input node; the callback is the previous
+				// step's result and only its type is known.
+				start := sequence.Start()
+				if match, ok = analyzeScopedImmediateScopeCallback(tp, c, flow, flow.TransformationInputNode(start), flow.TransformationInputType(start), start+2, isEffectScope); ok {
+					if match.Callback == nil {
+						// The fix collapses both steps into Effect.scopedWith, which
+						// would land on the callback's own .pipe when Effect.scoped
+						// is a .pipe step.
+						match.Fixable = flow.Transformations().At(start+1).Kind() != typeparser.TransformationKindPipeable
 					}
+					break
 				}
 			}
 		}
@@ -142,20 +136,14 @@ func AnalyzeScopedImmediateScopeToScopedWith(tp *typeparser.TypeParser, c *check
 
 func analyzeScopedImmediateScopeGen(tp *typeparser.TypeParser, c *checker.Checker, flow *typeparser.PipingFlow, isEffectScope func(*ast.Node) bool) (ScopedImmediateScopeToScopedWithMatch, bool) {
 	genStep := flow.Transformations().At(0)
-	gen := tp.EffectGenCall(genStep.Callee().Parent)
-	// Options, pipe arguments and a return annotation pin the result
-	// independently of the body.
-	if gen == nil || gen.OptionsNode() != nil || gen.PipeArguments().Len() != 0 ||
-		gen.GeneratorFunction().AsNode() != flow.Subject().Node() {
-		return ScopedImmediateScopeToScopedWithMatch{}, false
-	}
-	genFn := gen.GeneratorFunction()
-	if genFn.Type != nil || genFn.Modifiers() != nil || genFn.TypeParameters != nil && len(genFn.TypeParameters.Nodes) > 0 ||
-		genFn.Body == nil || !ast.IsBlock(genFn.Body) {
+	genFn := flow.Subject().Node().AsFunctionExpression()
+	// A return annotation pins the requirements independently of the body; the
+	// fix rebuilds the generator without type parameters.
+	if genFn.Type != nil || genFn.TypeParameters != nil && len(genFn.TypeParameters.Nodes) > 0 {
 		return ScopedImmediateScopeToScopedWithMatch{}, false
 	}
 	statements := genFn.Body.AsBlock().Statements
-	if statements == nil || len(statements.Nodes) == 0 {
+	if len(statements.Nodes) == 0 {
 		return ScopedImmediateScopeToScopedWithMatch{}, false
 	}
 
@@ -173,17 +161,13 @@ func analyzeScopedImmediateScopeGen(tp *typeparser.TypeParser, c *checker.Checke
 		return ScopedImmediateScopeToScopedWithMatch{}, false
 	}
 	declaration := declarations.Nodes[0].AsVariableDeclaration()
-	if declaration.Name() == nil || !ast.IsIdentifier(declaration.Name()) || declaration.Type != nil ||
-		declaration.ExclamationToken != nil || declaration.Initializer == nil ||
-		!ast.IsYieldExpression(declaration.Initializer) {
+	if !ast.IsIdentifier(declaration.Name()) || declaration.Initializer == nil || !ast.IsYieldExpression(declaration.Initializer) {
 		return ScopedImmediateScopeToScopedWithMatch{}, false
 	}
 	retrieval := declaration.Initializer.AsYieldExpression()
-	if retrieval.AsteriskToken == nil || retrieval.Expression == nil {
-		return ScopedImmediateScopeToScopedWithMatch{}, false
-	}
-	operand := ast.SkipParentheses(retrieval.Expression)
-	if !isEffectScope(operand) {
+	// A plain yield returns the Effect.scope effect itself, not the Scope.
+	operand := retrieval.Expression
+	if retrieval.AsteriskToken == nil || !isEffectScope(operand) {
 		return ScopedImmediateScopeToScopedWithMatch{}, false
 	}
 
@@ -197,11 +181,11 @@ func analyzeScopedImmediateScopeGen(tp *typeparser.TypeParser, c *checker.Checke
 	keepsRequirements := scopedWithKeepsRequirements(tp, c, flow, 2)
 	retrievalNode := declaration.Initializer
 	changesRequirements := checker.ForEachYieldExpression(genFn.Body, func(expr *ast.Node) bool {
-		if expr == retrievalNode || expr.Kind != ast.KindYieldExpression || tp.GetEffectYieldGeneratorFunction(expr) != genFn {
+		if expr == retrievalNode {
 			return false
 		}
 		yield := expr.AsYieldExpression()
-		if yield.AsteriskToken == nil || yield.Expression == nil {
+		if yield.Expression == nil {
 			return false
 		}
 		effect := tp.EffectYieldableTypeAtLocation(yield.Expression)
@@ -224,14 +208,15 @@ func analyzeScopedImmediateScopeGen(tp *typeparser.TypeParser, c *checker.Checke
 	}, true
 }
 
-func analyzeScopedImmediateScopeCallback(tp *typeparser.TypeParser, c *checker.Checker, flow *typeparser.PipingFlow, callback *ast.Node, prefixLength int, isEffectScope func(*ast.Node) bool) (ScopedImmediateScopeToScopedWithMatch, bool) {
-	if callback == nil || hasEffectScopeReference(callback, nil, isEffectScope) {
+// analyzeScopedImmediateScopeCallback checks a flatMap or scopeWith callback.
+// callback is nil when the callback is the previous step's result.
+func analyzeScopedImmediateScopeCallback(tp *typeparser.TypeParser, c *checker.Checker, flow *typeparser.PipingFlow, callback *ast.Node, callbackType *checker.Type, prefixLength int, isEffectScope func(*ast.Node) bool) (ScopedImmediateScopeToScopedWithMatch, bool) {
+	if callback != nil && hasEffectScopeReference(callback, nil, isEffectScope) {
 		return ScopedImmediateScopeToScopedWithMatch{}, false
 	}
 	// The flatMap and scopeWith results already require Scope, so the effect
 	// the callback returns must keep its requirements under Effect.scopedWith.
 	keepsRequirements := scopedWithKeepsRequirements(tp, c, flow, prefixLength)
-	callbackType := tp.GetTypeAtLocation(callback)
 	if callbackType == nil {
 		return ScopedImmediateScopeToScopedWithMatch{}, false
 	}
@@ -275,6 +260,7 @@ func hasEffectScopeReference(node *ast.Node, allowed *ast.Node, isEffectScope fu
 			}
 			return found
 		}
+		//ets:ast-walk finds Effect.scope references, which are identifiers and property accesses rather than calls
 		return current.ForEachChild(visit)
 	}
 	visit(node)
@@ -343,6 +329,7 @@ func referencesName(node *ast.Node, name string) bool {
 		case ast.IsIdentifier(current):
 			return current.Text() == name
 		}
+		//ets:ast-walk finds identifiers the new callback parameter would capture, which are not calls
 		return current.ForEachChild(visit)
 	}
 	return visit(node)

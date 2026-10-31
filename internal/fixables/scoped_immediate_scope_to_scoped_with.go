@@ -59,10 +59,16 @@ func runScopedImmediateScopeToScopedWithFix(ctx *fixable.Context) []ls.CodeActio
 					callee = target.expression(tracker, member)
 				}
 				var argument *ast.Node
-				if match.GenFunction != nil {
+				switch {
+				case match.GenFunction != nil:
 					argument = newScopedWithGenCallback(tracker, match)
-				} else {
+				case match.Callback != nil:
 					argument = tracker.DeepCloneNode(match.Callback)
+				default:
+					// The callback is the previous step's result: collapse
+					// Effect.scopeWith and Effect.scoped into Effect.scopedWith.
+					tracker.CollapsePipingFlowTransformations(sf, match.Flow, match.PrefixLength-2, match.PrefixLength-1, rewriter.PipingFlowTransformationReplacement{Callee: callee})
+					return
 				}
 				replacement := tracker.NewCallExpression(callee, nil, nil, tracker.NewNodeList([]*ast.Node{argument}), ast.NodeFlagsNone)
 				tracker.ReplacePipingFlowPrefix(sf, match.Flow, match.PrefixLength, replacement)
