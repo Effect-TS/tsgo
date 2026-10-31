@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, NodeFlags, OuterExpressionKinds, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, NodeFlags, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::scanner;
@@ -48,7 +48,7 @@ pub struct YieldInCallArgumentMatch {
     pub statement: Option<P<Node>>,
 }
 
-// go: internal/rules/yield_in_call_argument.go:53 AnalyzeYieldInCallArgument 9e258d2ba0b0a880
+// go: internal/rules/yield_in_call_argument.go:53 AnalyzeYieldInCallArgument d52ffff7211a6a6a
 pub fn analyze_yield_in_call_argument(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -87,6 +87,7 @@ pub fn analyze_yield_in_call_argument(
             }
         }
 
+        // ets:ast-walk finds yield* call arguments; new expressions and multi-argument calls to a non-dual callee produce no flow step
         node.for_each_child(&mut |child| walk(tp, sf, child, matches));
         false
     }
@@ -108,7 +109,7 @@ pub(crate) fn yield_in_call_argument_is_argument(node: P<Node>) -> bool {
     parent.arguments().contains(&node)
 }
 
-// go: internal/rules/yield_in_call_argument.go:103 yieldInCallArgumentHoistAnchor 2da1e74334dbee6a
+// go: internal/rules/yield_in_call_argument.go:103 yieldInCallArgumentHoistAnchor 6c6393551964b8e9
 // yieldInCallArgumentHoistAnchor returns the statement before which the yield*
 // argument can be hoisted without changing what runs before the effect, or nil.
 // It climbs from the argument through an allowlist of parent kinds; everything
@@ -120,19 +121,8 @@ pub(crate) fn yield_in_call_argument_hoist_anchor(arg: P<Node>) -> Option<P<Node
         match p.kind() {
             Kind::ParenthesizedExpression
             | Kind::AsExpression
-            | Kind::SatisfiesExpression
             | Kind::NonNullExpression
-            | Kind::TypeAssertionExpression
-            | Kind::TypeOfExpression
-            | Kind::VoidExpression
-            | Kind::AwaitExpression
             | Kind::YieldExpression => {}
-            Kind::PrefixUnaryExpression => {
-                let operator = p.as_prefix_unary_expression().operator();
-                if operator == Kind::PlusPlusToken || operator == Kind::MinusMinusToken {
-                    return None;
-                }
-            }
             Kind::CallExpression | Kind::NewExpression => {
                 let expression = p.expression().expect("a call or new expression has a callee");
                 if child != expression {
@@ -217,7 +207,7 @@ pub(crate) fn yield_in_call_argument_hoist_anchor(arg: P<Node>) -> Option<P<Node
     None
 }
 
-// go: internal/rules/yield_in_call_argument.go:180 yieldInCallArgumentFinalizeAnchor 6655bd2c7ae49357
+// go: internal/rules/yield_in_call_argument.go:173 yieldInCallArgumentFinalizeAnchor 6655bd2c7ae49357
 // yieldInCallArgumentFinalizeAnchor accepts a statement only when it sits in a
 // statement list, so a const can be inserted right before it.
 pub(crate) fn yield_in_call_argument_finalize_anchor(statement: P<Node>) -> Option<P<Node>> {
@@ -228,16 +218,11 @@ pub(crate) fn yield_in_call_argument_finalize_anchor(statement: P<Node>) -> Opti
     }
 }
 
-// go: internal/rules/yield_in_call_argument.go:193 yieldInCallArgumentIsSideEffectFree 7e61e7d4974416e4
+// go: internal/rules/yield_in_call_argument.go:186 yieldInCallArgumentIsSideEffectFree cdcd23d12fe7c18b
 // yieldInCallArgumentIsSideEffectFree reports whether evaluating node cannot run
 // code: identifiers, literals and non-optional property accesses on them.
 pub(crate) fn yield_in_call_argument_is_side_effect_free(node: P<Node>) -> bool {
-    let node = ast::skip_outer_expressions(
-        node,
-        OuterExpressionKinds::Parentheses
-            | OuterExpressionKinds::Assertions
-            | OuterExpressionKinds::Satisfies,
-    );
+    let node = ast::skip_parentheses(node);
     match node.kind() {
         Kind::Identifier
         | Kind::StringLiteral
@@ -250,9 +235,7 @@ pub(crate) fn yield_in_call_argument_is_side_effect_free(node: P<Node>) -> bool 
         | Kind::NullKeyword => true,
         Kind::PrefixUnaryExpression => {
             let prefix = node.as_prefix_unary_expression();
-            prefix.operator() == Kind::MinusToken
-                && (prefix.operand().kind() == Kind::NumericLiteral
-                    || prefix.operand().kind() == Kind::BigIntLiteral)
+            prefix.operator() == Kind::MinusToken && prefix.operand().kind() == Kind::NumericLiteral
         }
         Kind::PropertyAccessExpression => {
             !node.flags().intersects(NodeFlags::OptionalChain)

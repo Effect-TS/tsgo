@@ -25,7 +25,7 @@ pub static YIELD_IN_CALL_ARGUMENT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_yield_in_call_argument_fix,
 });
 
-// go: internal/fixables/yield_in_call_argument.go:29 runYieldInCallArgumentFix 367f8b9513332a47
+// go: internal/fixables/yield_in_call_argument.go:29 runYieldInCallArgumentFix e9fceefb9b802d33
 fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let matches = ets_rules::analyze_yield_in_call_argument(&mut ctx.type_parser, sf);
@@ -59,6 +59,9 @@ fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
             );
             ast::set_parent_in_children(statement_node);
 
+            // No flow edit inserts a statement or replaces a single argument, and
+            // new or multi-argument calls have no flow, so the fix edits nodes directly.
+
             let pos = scanner::get_token_pos_of_node(statement, sf, true);
             // Rust: tsrs's `NodeOptions` has crate-private fields, so the literal is a default with Go's field set.
             let mut options = NodeOptions::default();
@@ -77,7 +80,7 @@ fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
     Vec::new()
 }
 
-// go: internal/fixables/yield_in_call_argument.go:65 yieldInCallArgumentMatchAt 9aaf7408d4cbe738
+// go: internal/fixables/yield_in_call_argument.go:68 yieldInCallArgumentMatchAt 9aaf7408d4cbe738
 // yieldInCallArgumentMatchAt picks the match whose location is exactly span,
 // falling back to the first overlapping one. The exact match comes first because
 // a nested yield* such as f(yield* g(yield* x)) lies inside the outer range.
@@ -93,28 +96,15 @@ fn yield_in_call_argument_match_at(
     matches.iter().find(|m| m.location.intersects(span) || span.contained_by(m.location))
 }
 
-// go: internal/fixables/yield_in_call_argument.go:81 yieldInCallArgumentVerbs 5f771a43216a46ff
+// go: internal/fixables/yield_in_call_argument.go:84 yieldInCallArgumentVerbs 0d344c5ad43828a4
 // yieldInCallArgumentVerbs maps a leading verb of the yielded name to its past
 // participle, so `load` becomes `loaded` and `fetchUser` becomes `fetchedUser`.
 static YIELD_IN_CALL_ARGUMENT_VERBS: LazyLock<FxHashMap<&'static str, &'static str>> =
     LazyLock::new(|| {
-        FxHashMap::from_iter([
-            ("load", "loaded"),
-            ("fetch", "fetched"),
-            ("find", "found"),
-            ("make", "made"),
-            ("create", "created"),
-            ("build", "built"),
-            ("resolve", "resolved"),
-            ("acquire", "acquired"),
-            ("compute", "computed"),
-            ("parse", "parsed"),
-            ("decode", "decoded"),
-            ("request", "requested"),
-        ])
+        FxHashMap::from_iter([("load", "loaded"), ("fetch", "fetched"), ("build", "built")])
     });
 
-// go: internal/fixables/yield_in_call_argument.go:100 yieldInCallArgumentName 6aa40f397796e969
+// go: internal/fixables/yield_in_call_argument.go:94 yieldInCallArgumentName ff0a04534d5b32bb
 // yieldInCallArgumentName picks the hoisted const name from the yielded
 // expression (its identifier or last property name, with a leading verb turned
 // into a participle), falling back to `value`, then appends 2, 3, ... until no
@@ -123,9 +113,7 @@ fn yield_in_call_argument_name(c: &mut Checker, operand: P<Node>, statement: P<N
     let mut base = "value".to_string();
     let operand = ast::skip_outer_expressions(
         operand,
-        OuterExpressionKinds::Parentheses
-            | OuterExpressionKinds::Assertions
-            | OuterExpressionKinds::Satisfies,
+        OuterExpressionKinds::Parentheses | OuterExpressionKinds::Assertions,
     );
     let mut segment = String::new();
     match operand.kind() {
