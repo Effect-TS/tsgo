@@ -2626,6 +2626,9 @@
         "effecttsgo/service-not-as-class": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/sleep-then-effect-to-delay": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/strict-boolean-expressions": {
           "$ref": "#/definitions/RuleNoConfig"
         },

@@ -1,0 +1,2632 @@
+=== Quick Fix Inventory ===
+
+[D1] (17:36-17:48) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D2] (21:39-21:51) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D3] (26:1-26:13) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D4] (30:37-30:49) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D5] (35:3-35:15) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D6] (41:33-41:45) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D7] (45:3-45:15) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D8] (48:38-48:50) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D9] (76:50-76:62) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D10] (77:34-77:46) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D11] (78:39-78:51) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D12] (79:50-79:62) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D13] (82:46-82:58) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D14] (86:55-86:67) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D15] (90:46-90:58) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D16] (94:47-94:59) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D17] (98:67-98:79) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D18] (99:81-99:93) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D19] (112:52-112:64) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D20] (113:33-113:45) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D21] (116:51-116:63) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D22] (120:54-120:66) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D23] (131:58-131:70) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D24] (132:47-132:59) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D25] (135:49-135:61) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D26] (138:59-138:71) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D27] (144:46-144:58) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D28] (146:43-146:55) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D29] (150:56-150:68) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+[D30] (156:49-156:61) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+[D31] (160:44-160:56) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D2] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (sendRequest).pipe(Effect.delay("1 second"))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D3] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D5] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D6] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = sendRequest.pipe().pipe(Effect.delay("1 second"))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D7] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D14] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.delay(next, duration())
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D15] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D15] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.delay(next, "1 second")
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D16] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.delay(Effect.suspend(() => next), duration())
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D17] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = Effect.delay(sendRequest, "1 second")
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D18] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D18] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = Effect.delay(sendRequest, "1 second")
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D19] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D22] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D22] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.delay(mutateDuration(), primitiveDuration)
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D23] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D25] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D26] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D26] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D27] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D27] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D27] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.delay(Effect.suspend(arrowThunk), 0)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D28] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D28] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D28] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.flatMap(Effect.sleep(0), function() {
+  return sendRequest
+})
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D29] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D29] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D29] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_fixGuards.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Duration, Effect, pipe } from "effect"
+
+interface Request {
+  readonly url: string
+}
+
+declare const sendRequest: Effect.Effect<void>
+declare const fetchUser: Effect.Effect<{ readonly id: string }, Error, Request>
+declare const cond: boolean
+declare const loop: (request: Request) => Effect.Effect<string, Error>
+declare const request: Request
+
+// MUST TRIGGER: a receiver that binds less tightly than a call is parenthesized
+// -> (cond ? sendRequest : Effect.void).pipe(Effect.delay("1 second"))
+export const conditionalReceiver = Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: an already parenthesized sleep keeps its parentheses
+// -> (sendRequest).pipe(Effect.delay("1 second"))
+export const parenthesizedReceiver = (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: the rewritten statement would start with `(` after a line without a
+// semicolon, so it would continue the previous statement
+export const beforeStatement = 1
+Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+
+// MUST TRIGGER: the ignored parameter is dropped, since Effect.suspend takes a LazyArg
+// -> Effect.suspend(() => loop(request)).pipe(Effect.delay("1 second"))
+export const droppedParameterPipe = Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+
+// MUST TRIGGER: the dropped-parameter thunk keeps its return type annotation
+// -> Effect.delay(Effect.suspend((): Effect.Effect<string, Error> => loop(request)), "1 second")
+export const droppedParameterAnnotated = Effect.flatMap(
+  Effect.sleep("1 second"),
+  (_): Effect.Effect<string, Error> => loop(request)
+)
+
+// MUST TRIGGER: an empty pipe between the sleep and the sequencer is the identity
+// -> sendRequest.pipe().pipe(Effect.delay("1 second"))
+export const emptyPipeBetween = Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+
+// MUST TRIGGER, no fix: explicit type arguments of the sequencer cannot be carried over to Effect.delay
+export const typeArgumentsDataFirst = Effect.andThen<void, never, never, void, never, never>(
+  Effect.sleep("1 second"),
+  sendRequest
+)
+export const typeArgumentsPipeable = Effect.sleep("1 second").pipe(
+  Effect.andThen<void, never, never>(sendRequest)
+)
+
+// MUST NOT TRIGGER: a function expression could read the sleep result through its arguments object
+export const functionExpressionParameter = Effect.flatMap(Effect.sleep("1 second"), function(_) {
+  return sendRequest
+})
+
+// MUST NOT TRIGGER: async and generic callbacks are not plain Effect thunks
+// @ts-expect-error
+export const asyncCallback = Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+export const genericCallback = Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+
+// MUST NOT TRIGGER (conservative): the thunk returns a union of different Effect types,
+// which is not checked as a single Effect
+export const unionReturn = Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+
+// Evaluation order: every form but the curried one evaluates the duration before the
+// continuation, while Effect.delay(continuation, duration) evaluates the continuation first.
+let next: Effect.Effect<string> = Effect.succeed("old")
+const duration = (): "1 second" => {
+  next = Effect.succeed("new")
+  return "1 second"
+}
+let makeNext = (): Effect.Effect<string> => next
+
+// MUST TRIGGER, no fix: the rewrite would read `next` before `duration()` reassigns it
+export const reorderedDataFirst = Effect.andThen(Effect.sleep(duration()), next)
+export const reorderedPipeable = Effect.sleep(duration()).pipe(Effect.andThen(next))
+export const reorderedFreePipe = pipe(Effect.sleep(duration()), Effect.andThen(next))
+export const reorderedReference = Effect.flatMap(Effect.sleep(duration()), makeNext)
+
+// MUST TRIGGER, no fix (conservative): both the duration and the continuation are calls
+export const reorderedCalls = Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+
+// MUST TRIGGER: the curried form already evaluates the continuation first
+// -> Effect.delay(next, duration())
+export const curriedKeepsOrder = Effect.andThen(next)(Effect.sleep(duration()))
+
+// MUST TRIGGER: a stable duration cannot observe or change the continuation
+// -> Effect.delay(next, "1 second")
+export const stableDuration = Effect.andThen(Effect.sleep("1 second"), next)
+
+// MUST TRIGGER: a thunk reads `next` after the sleep in both forms
+// -> Effect.delay(Effect.suspend(() => next), duration())
+export const thunkReadsLater = Effect.flatMap(Effect.sleep(duration()), () => next)
+
+// MUST TRIGGER: a parenthesized curried factory is replaced together with its application
+// -> Effect.delay(sendRequest, "1 second")
+export const parenthesizedCurried = (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+export const doublyParenthesizedCurried = ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+
+// Mutable durations: sleep reads the duration when it is constructed, before the continuation
+// is evaluated, while Effect.delay(continuation, duration) reads it afterwards.
+const tupleDuration: [number, number] = [0, 0]
+const objectDuration = Duration.seconds(0)
+const primitiveDuration = "1 second"
+const mutateDuration = () => {
+  tupleDuration[0] = 1
+  return Effect.void
+}
+
+// MUST TRIGGER, no fix: a const binding of a tuple can still be mutated by the continuation
+export const mutableTupleDuration = Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+export const mutableTuplePipe = Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+
+// MUST TRIGGER, no fix (conservative): a Duration value is an object, so it is treated the same way
+export const objectValueDuration = Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+
+// MUST TRIGGER: a const binding of a primitive cannot change
+// -> Effect.delay(mutateDuration(), primitiveDuration)
+export const primitiveConstDuration = Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+
+// Invocation: the sequencer calls the continuation with the sleep result, Effect.suspend calls it
+// with no arguments, which a non-arrow function can observe through `arguments` or `this`.
+const countArguments = function() {
+  return Effect.succeed(arguments.length)
+}
+const arrowThunk = () => Effect.succeed(1)
+declare const declaredThunk: () => Effect.Effect<number>
+
+// MUST TRIGGER, no fix: a reference to a function expression could read `arguments`
+export const functionReferenceArguments = Effect.flatMap(Effect.sleep(0), countArguments)
+export const functionReferenceArgumentsPipe = Effect.sleep(0).pipe(Effect.andThen(countArguments))
+
+// MUST TRIGGER, no fix: a declared function may be bound to any function
+export const declaredReference = Effect.flatMap(Effect.sleep(0), declaredThunk)
+
+// MUST TRIGGER, no fix: an inline function expression that builds its effect could read `arguments`
+export const functionExpressionArguments = Effect.flatMap(Effect.sleep(0), function() {
+  return Effect.succeed(arguments.length)
+})
+
+// MUST TRIGGER: an arrow cannot observe how it is called
+// -> Effect.delay(Effect.suspend(arrowThunk), 0)
+export const arrowReference = Effect.flatMap(Effect.sleep(0), arrowThunk)
+// -> Effect.delay(Effect.suspend(() => Effect.succeed(1)), 0)
+export const inlineArrow = Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+
+// MUST TRIGGER: a function expression that only returns a stable value is inlined
+// -> Effect.delay(sendRequest, 0)
+export const functionExpressionStable = Effect.delay(sendRequest, 0)
+
+// MUST TRIGGER, no fix: a property access may be bound to any function
+const holder = { thunk: () => Effect.succeed(1) }
+export const propertyReference = Effect.flatMap(Effect.sleep(0), holder.thunk)
+
+// MUST TRIGGER, no fix: a `let` binding may be reassigned to a non-arrow function
+let letThunk = () => Effect.succeed(1)
+export const letReference = Effect.flatMap(Effect.sleep(0), letThunk)
+
+
+=== [D30] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D30] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D31] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D31] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default

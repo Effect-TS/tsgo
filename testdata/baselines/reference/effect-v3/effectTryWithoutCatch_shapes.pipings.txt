@@ -1,4 +1,4 @@
-==== /.src/effectTryWithoutCatch_shapes.ts (22 flows) ====
+==== /.src/effectTryWithoutCatch_shapes.ts (23 flows) ====
 
 === Piping Flow ===
 Location: 6:25 - 6:56
@@ -249,6 +249,20 @@ Transformations (2):
       callee: Effect.try
       args: (constant)
       outType: Effect<unknown, UnknownException, never>
+
+=== Piping Flow ===
+Location: 61:33 - 61:82
+Node: Effect.andThen(Effect.void, Effect.try(() => 1))
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [Effect.try(() => 1)]
+      outType: Effect<number, UnknownException, never>
 
 === Piping Flow ===
 Location: 61:61 - 61:81

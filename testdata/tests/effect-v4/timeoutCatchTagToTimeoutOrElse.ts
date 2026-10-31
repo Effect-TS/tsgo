@@ -49,3 +49,7 @@ export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("Tim
 export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
 export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
 export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+// Should report and rebuild the timeout input from the applied call, through the parentheses
+// around the curried factory: -> Effect.timeoutOrElse(task, { duration: 1, orElse: ... })
+export const parenthesizedCurriedTimeout = Effect.catchTag((Effect.timeout(1))(task), "TimeoutError", () => Effect.succeed("fallback"))

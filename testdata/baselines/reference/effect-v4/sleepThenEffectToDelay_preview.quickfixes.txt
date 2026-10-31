@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:26-7:38) TS377178: `Effect.sleep` sequenced before this effect re-implements `Effect.delay`. `Effect.delay` expresses the postponed effect directly. effect(sleepThenEffectToDelay)
+  Fix 0: "Disable sleepThenEffectToDelay for this line"
+  Fix 1: "Disable sleepThenEffectToDelay for entire file"
+  Fix 2: "Rewrite to Effect.delay"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable sleepThenEffectToDelay for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable sleepThenEffectToDelay for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite to Effect.delay" ===
+
+--- file:///.src/sleepThenEffectToDelay_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics sleepThenEffectToDelay:warning
+import { Effect } from "effect"
+
+declare const sendRequest: Effect.Effect<void>
+
+export const throttled = sendRequest.pipe(Effect.delay("1 second"))
+

@@ -2996,6 +2996,11 @@
           "default": "off",
           "description": "Warns when Context.Service is used as a variable instead of a class declaration"
         },
+        "sleepThenEffectToDelay": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.delay instead of sequencing an effect after Effect.sleep"
+        },
         "strictBooleanExpressions": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

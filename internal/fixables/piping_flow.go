@@ -25,7 +25,10 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 		callNode, call := directCallForCallee(transformation.Callee())
 		if transformation.Kind() == typeparser.TransformationKindCall && transformation.Args().Len() > 0 {
 			// A curried step `factory(args)(subject)` is applied by the outer call.
-			callNode, call = directCallForCallee(callNode)
+			callNode, call = nil, typeparser.CurriedApplicationCall(call)
+			if call != nil {
+				callNode = call.AsNode()
+			}
 		}
 		if call == nil || call.Arguments == nil {
 			return false

@@ -15,9 +15,10 @@ Effect version: 4.0.2
 /.src/timeoutCatchTagToTimeoutOrElse.ts(27,61): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
 /.src/timeoutCatchTagToTimeoutOrElse.ts(46,61): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
 /.src/timeoutCatchTagToTimeoutOrElse.ts(47,82): warning TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+/.src/timeoutCatchTagToTimeoutOrElse.ts(55,44): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
 
 
-==== /.src/timeoutCatchTagToTimeoutOrElse.ts (14 errors) ====
+==== /.src/timeoutCatchTagToTimeoutOrElse.ts (15 errors) ====
     // @effect-v4
     // @effect-diagnostics *:off
     // @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
@@ -97,4 +98,10 @@ Effect version: 4.0.2
     export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
     export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
     export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+    
+    // Should report and rebuild the timeout input from the applied call, through the parentheses
+    // around the curried factory: -> Effect.timeoutOrElse(task, { duration: 1, orElse: ... })
+    export const parenthesizedCurriedTimeout = Effect.catchTag((Effect.timeout(1))(task), "TimeoutError", () => Effect.succeed("fallback"))
+                                               ~~~~~~~~~~~~~~~
+!!! warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
     

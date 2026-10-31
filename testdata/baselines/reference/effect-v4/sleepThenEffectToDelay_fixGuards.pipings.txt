@@ -1,0 +1,803 @@
+==== /.src/sleepThenEffectToDelay_fixGuards.ts (47 flows) ====
+
+=== Piping Flow ===
+Location: 17:35 - 17:115
+Node: Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [cond ? sendRequest : Effect.void]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 21:37 - 21:98
+Node: (Effect.sleep("1 second")).pipe(Effect.andThen(sendRequest))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 25:33 - 26:80
+Node: Effect.sleep("1 second").pipe(Effect.andThen(cond ? sendRequest : Effect.void))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [cond ? sendRequest : Effect.void]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:36 - 30:104
+Node: Effect.sleep("1 second").pipe(Effect.andThen((_) => loop(request)))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [(_) => loop(request)]
+      outType: Effect<string, Error, never>
+
+=== Piping Flow ===
+Location: 30:88 - 30:102
+Node: loop(request)
+Node Kind: KindCallExpression
+
+Subject: request
+Subject Type: Request
+
+Transformations (1):
+  [0] kind: call
+      callee: loop
+      args: (constant)
+      outType: Effect<string, Error, never>
+
+=== Piping Flow ===
+Location: 34:41 - 37:2
+Node: Effect.flatMap(\n  Effect.sleep("1 second"),\n  (_): Effect.Effect<string, Error> => loop(request)\n)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(_): Effect.Effect<string, Error> => loop(request)]
+      outType: Effect<string, Error, never>
+
+=== Piping Flow ===
+Location: 36:39 - 36:53
+Node: loop(request)
+Node Kind: KindCallExpression
+
+Subject: request
+Subject Type: Request
+
+Transformations (1):
+  [0] kind: call
+      callee: loop
+      args: (constant)
+      outType: Effect<string, Error, never>
+
+=== Piping Flow ===
+Location: 41:32 - 41:98
+Node: Effect.sleep("1 second").pipe().pipe(Effect.andThen(sendRequest))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 44:38 - 47:2
+Node: Effect.andThen<void, never, never, void, never, never>(\n  Effect.sleep("1 second"),\n  sendRequest\n)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 48:37 - 50:2
+Node: Effect.sleep("1 second").pipe(\n  Effect.andThen<void, never, never>(sendRequest)\n)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 53:43 - 55:3
+Node: Effect.flatMap(Effect.sleep("1 second"), function(_) {\n  return sendRequest\n})
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [function(_) {\n  return sendRequest\n}]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 59:29 - 59:95
+Node: Effect.flatMap(Effect.sleep("1 second"), async () => sendRequest)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [async () => sendRequest]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 60:31 - 60:127
+Node: Effect.flatMap(Effect.sleep("1 second"), <T>() => sendRequest as Effect.Effect<void, never, T>)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [<T>() => sendRequest as Effect.Effect<void, never, T>]
+      outType: Effect<void, never, unknown>
+
+=== Piping Flow ===
+Location: 64:27 - 64:106
+Node: Effect.andThen(Effect.sleep("1 second"), () => cond ? fetchUser : sendRequest)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [() => cond ? fetchUser : sendRequest]
+      outType: Effect<void, Error, Request>
+
+=== Piping Flow ===
+Location: 68:34 - 68:56
+Node: Effect.succeed("old")
+Node Kind: KindCallExpression
+
+Subject: "old"
+Subject Type: "old"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 70:9 - 70:31
+Node: Effect.succeed("new")
+Node Kind: KindCallExpression
+
+Subject: "new"
+Subject Type: "new"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 76:34 - 76:81
+Node: Effect.andThen(Effect.sleep(duration()), next)
+Node Kind: KindCallExpression
+
+Subject: duration()
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 77:33 - 77:85
+Node: Effect.sleep(duration()).pipe(Effect.andThen(next))
+Node Kind: KindCallExpression
+
+Subject: duration()
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 78:33 - 78:86
+Node: pipe(Effect.sleep(duration()), Effect.andThen(next))
+Node Kind: KindCallExpression
+
+Subject: duration()
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipe
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 79:34 - 79:85
+Node: Effect.flatMap(Effect.sleep(duration()), makeNext)
+Node Kind: KindCallExpression
+
+Subject: duration()
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [makeNext]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 82:30 - 82:101
+Node: Effect.andThen(Effect.sleep(Duration.seconds(1)), Effect.succeed("x"))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: dataFirst
+      callee: Effect.andThen
+      args: [Effect.succeed("x")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 82:80 - 82:100
+Node: Effect.succeed("x")
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 86:33 - 86:80
+Node: Effect.andThen(next)(Effect.sleep(duration()))
+Node Kind: KindCallExpression
+
+Subject: duration()
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 90:30 - 90:77
+Node: Effect.andThen(Effect.sleep("1 second"), next)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 94:31 - 94:84
+Node: Effect.flatMap(Effect.sleep(duration()), () => next)
+Node Kind: KindCallExpression
+
+Subject: duration()
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [() => next]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 98:36 - 98:92
+Node: (Effect.andThen(sendRequest))(Effect.sleep("1 second"))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 99:42 - 99:106
+Node: ((Effect.flatMap(() => sendRequest)))(Effect.sleep("1 second"))
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.flatMap
+      args: [() => sendRequest]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 104:23 - 104:43
+Node: Duration.seconds(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+
+=== Piping Flow ===
+Location: 112:36 - 112:98
+Node: Effect.andThen(Effect.sleep(tupleDuration), mutateDuration())
+Node Kind: KindCallExpression
+
+Subject: tupleDuration
+Subject Type: [number, number]
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [mutateDuration()]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 113:32 - 113:99
+Node: Effect.sleep(tupleDuration).pipe(Effect.andThen(mutateDuration()))
+Node Kind: KindCallExpression
+
+Subject: tupleDuration
+Subject Type: [number, number]
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [mutateDuration()]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 116:35 - 116:98
+Node: Effect.andThen(Effect.sleep(objectDuration), mutateDuration())
+Node Kind: KindCallExpression
+
+Subject: objectDuration
+Subject Type: Duration
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [mutateDuration()]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 120:38 - 120:104
+Node: Effect.andThen(Effect.sleep(primitiveDuration), mutateDuration())
+Node Kind: KindCallExpression
+
+Subject: primitiveDuration
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [mutateDuration()]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 125:9 - 125:42
+Node: Effect.succeed(arguments.length)
+Node Kind: KindCallExpression
+
+Subject: arguments.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 127:25 - 127:43
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 131:42 - 131:90
+Node: Effect.flatMap(Effect.sleep(0), countArguments)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [countArguments]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 132:46 - 132:99
+Node: Effect.sleep(0).pipe(Effect.andThen(countArguments))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [countArguments]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 135:33 - 135:80
+Node: Effect.flatMap(Effect.sleep(0), declaredThunk)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [declaredThunk]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 138:43 - 140:3
+Node: Effect.flatMap(Effect.sleep(0), function() {\n  return Effect.succeed(arguments.length)\n})
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [function() {\n  return Effect.succeed(arguments.length)\n}]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 139:9 - 139:42
+Node: Effect.succeed(arguments.length)
+Node Kind: KindCallExpression
+
+Subject: arguments.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 144:30 - 144:74
+Node: Effect.flatMap(Effect.sleep(0), arrowThunk)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [arrowThunk]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 146:27 - 146:84
+Node: Effect.flatMap(Effect.sleep(0), () => Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [() => Effect.succeed(1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 146:65 - 146:83
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 150:40 - 152:3
+Node: Effect.flatMap(Effect.sleep(0), function() {\n  return sendRequest\n})
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [function() {\n  return sendRequest\n}]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 155:30 - 155:48
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 156:33 - 156:79
+Node: Effect.flatMap(Effect.sleep(0), holder.thunk)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [holder.thunk]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 159:21 - 159:39
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 160:28 - 160:70
+Node: Effect.flatMap(Effect.sleep(0), letThunk)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [letThunk]
+      outType: Effect<number, never, never>
