@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::PipingFlowTransformationReplacement;
 use ets_shim::P;
-use ets_shim::ast::{self, Node, NodeFlags, SymbolFlags};
+use ets_shim::ast::{self, Node, SymbolFlags};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 use ets_typeparser::ModuleReference;
@@ -25,9 +25,7 @@ pub static MATCH_BOOLEAN_TO_IS_SUCCESS_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_match_boolean_to_is_success_fix,
 });
 
-// go: internal/fixables/match_boolean_to_is_success.go:24 runMatchBooleanToIsSuccessFix 92484a33bcba157b
-//
-// Rust: the match's flow and callee are never nil (non-optional fields), so Go's nil check drops.
+// go: internal/fixables/match_boolean_to_is_success.go:24 runMatchBooleanToIsSuccessFix f6b99c76f17eacc3
 fn run_match_boolean_to_is_success_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_match_boolean_to_is_success(&mut ctx.type_parser, Some(source_file))
@@ -46,14 +44,14 @@ fn run_match_boolean_to_is_success_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
             description: format!("Replace with Effect.{}", m.replacement_name),
             run: Box::new(move |tracker| {
                 let replacement = reference.expression(tracker, &member);
-                if m.point_free {
+                let replaced = if m.point_free {
                     // match({...}) becomes the bare isSuccess / isFailure function.
                     tracker.replace_piping_flow_prefix(
                         Some(m.source_file),
                         Some(&m.flow),
                         1,
                         Some(replacement),
-                    );
+                    )
                 } else {
                     let transformation = m.flow.transformations().at(m.index).clone();
                     tracker.replace_piping_flow_transformation(
@@ -64,9 +62,9 @@ fn run_match_boolean_to_is_success_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
                             type_arguments: None,
                             arguments: None,
                         },
-                    );
-                }
-                if let Some(named_imports) = named_imports {
+                    )
+                };
+                if replaced && let Some(named_imports) = named_imports {
                     let elements = named_imports.as_named_imports().elements();
                     let specifier = tracker.new_import_specifier(
                         false,
@@ -88,11 +86,10 @@ fn run_match_boolean_to_is_success_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
     Vec::new()
 }
 
-// go: internal/fixables/match_boolean_to_is_success.go:67 matchBooleanReplacementReference 9f2a6e18b319d073
+// go: internal/fixables/match_boolean_to_is_success.go:64 matchBooleanReplacementReference a9508c4396295719
 // matchBooleanReplacementReference keeps the qualifier the match callee is
-// written with: Q.match gives Q.isSuccess, a const alias of Q.match gives
-// Q.isSuccess, and a named import of match gives a bare isSuccess from the same
-// import. When the bare name has to be imported, namedImports is the list to
+// written with: Q.match gives Q.isSuccess, and a named import of match gives a
+// bare isSuccess from the same import. When the bare name has to be imported, namedImports is the list to
 // add it to. Otherwise it falls back to the file's Effect module reference.
 fn match_boolean_replacement_reference(
     ctx: &mut Context<'_, '_>,
@@ -111,32 +108,16 @@ fn match_boolean_replacement_reference(
     (resolve_module_member(ctx, callee, &preferred, member), None)
 }
 
-// go: internal/fixables/match_boolean_to_is_success.go:81 matchBooleanCalleeQualifier c414793c13e3984c
+// go: internal/fixables/match_boolean_to_is_success.go:78 matchBooleanCalleeQualifier b1994c16a7eff580
 // matchBooleanCalleeQualifier returns the Effect module path of a Q.match
-// callee, or of the initializer of a const alias of Q.match.
+// callee.
 //
 // Rust: Go's nil `ModuleReference` is `None`.
 fn match_boolean_callee_qualifier(
     ctx: &mut Context<'_, '_>,
     callee: P<Node>,
 ) -> Option<ModuleReference> {
-    let mut callee = ast::skip_parentheses(callee);
-    if ast::is_identifier(callee) {
-        let declaration = ctx
-            .type_parser
-            .get_symbol_at_location(callee)
-            .and_then(|symbol| symbol.value_declaration());
-        let declaration = declaration?;
-        if !ast::is_variable_declaration(declaration)
-            || !declaration
-                .parent()
-                .is_some_and(|parent| parent.flags().intersects(NodeFlags::Const))
-        {
-            return None;
-        }
-        callee = declaration.initializer()?;
-        callee = ast::skip_parentheses(callee);
-    }
+    let callee = ast::skip_parentheses(callee);
     if !ast::is_property_access_expression(callee) {
         return None;
     }
@@ -147,7 +128,7 @@ fn match_boolean_callee_qualifier(
     identifier_path(qualifier?)
 }
 
-// go: internal/fixables/match_boolean_to_is_success.go:107 identifierPath 63de0494736b1d00
+// go: internal/fixables/match_boolean_to_is_success.go:92 identifierPath 63de0494736b1d00
 // identifierPath returns the names of an identifier or a chain of property
 // accesses on identifiers, or nil for any other expression.
 //
@@ -165,7 +146,7 @@ fn identifier_path(node: P<Node>) -> Option<ModuleReference> {
     None
 }
 
-// go: internal/fixables/match_boolean_to_is_success.go:123 namedImportModuleMember d91d46b4294c6a15
+// go: internal/fixables/match_boolean_to_is_success.go:108 namedImportModuleMember d91d46b4294c6a15
 // namedImportModuleMember handles a callee that is a named import binding of
 // the match API: it reuses a bare member binding already in scope, or returns
 // the bare member name with the callee's NamedImports to add it to when the

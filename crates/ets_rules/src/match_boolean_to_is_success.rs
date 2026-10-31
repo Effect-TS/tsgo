@@ -6,7 +6,7 @@ use ets_shim::P;
 use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::{LazyExpressionFlags, PipingFlow, TransformationKind, TypeParser};
+use ets_typeparser::{LazyExpressionFlags, PipingFlow, TypeParser};
 
 use crate::is_ignorable_map_parameter_list;
 
@@ -68,7 +68,7 @@ pub struct MatchBooleanToIsSuccessMatch {
     pub replacement_name: &'static str, // "isSuccess" or "isFailure"
 }
 
-// go: internal/rules/match_boolean_to_is_success.go:60 AnalyzeMatchBooleanToIsSuccess 2659346c380487c7
+// go: internal/rules/match_boolean_to_is_success.go:60 AnalyzeMatchBooleanToIsSuccess 4352036244600965
 // AnalyzeMatchBooleanToIsSuccess finds Effect.match and Effect.matchEager
 // calls whose inline handlers ignore their input and return complementary
 // boolean literals.
@@ -93,10 +93,7 @@ pub fn analyze_match_boolean_to_is_success(
             let mut point_free = false;
             if transformation.args().len() == 1 {
                 options = *transformation.args().at(0);
-            } else if index == 0
-                && transformation.kind() == TransformationKind::Call
-                && transformation.args().len() == 0
-            {
+            } else if index == 0 && transformation.args().len() == 0 {
                 // A standalone match({...}): the options are the subject of the flow.
                 let Some(subject) = flow.subject().node() else {
                     continue;
