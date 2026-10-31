@@ -8,8 +8,7 @@ use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
-    EffectMajorVersion, LazyExpressionFlags, PipingFlow, PipingFlowSubject,
-    PipingFlowTransformation, TypeParser,
+    EffectMajorVersion, PipingFlow, PipingFlowSubject, PipingFlowTransformation, TypeParser,
 };
 
 use crate::*;
@@ -55,7 +54,7 @@ pub struct ResultMatchToFromResultMatch {
     pub result_node: Option<P<Node>>,
 }
 
-// go: internal/rules/result_match_to_from_result.go:54 AnalyzeResultMatchToFromResult c84786d50bb0b79b
+// go: internal/rules/result_match_to_from_result.go:54 AnalyzeResultMatchToFromResult 97a2f78cb93fc471
 // AnalyzeResultMatchToFromResult finds Result.match steps and Result guard
 // conditionals that are equivalent to Effect.fromResult.
 //
@@ -86,11 +85,11 @@ pub fn analyze_result_match_to_from_result(
     matches
 }
 
-// go: internal/rules/result_match_to_from_result.go:75 analyzeResultMatchStep 12f8797ee19a53b2
+// go: internal/rules/result_match_to_from_result.go:75 analyzeResultMatchStep 4d5ab7675cadacb0
 // analyzeResultMatchStep matches a Result.match step whose handlers only lift
 // the failure with Effect.fail and the success with Effect.succeed.
 //
-// Rust: Go's `(match, ok)` is an `Option`; the checker is the parser's. A transformation's callee is never nil, so
+// Rust: Go's `(match, ok)` is an `Option`. A transformation's callee is never nil, so
 // Go's nil check drops.
 pub(crate) fn analyze_result_match_step(
     tp: &mut TypeParser<'_>,
@@ -144,48 +143,20 @@ pub(crate) fn is_effect_lift_step(
     }
 }
 
-// go: internal/rules/result_match_to_from_result.go:113 isEffectLiftHandler cb9f7bbbb858d191
-// isEffectLiftHandler reports whether a Result.match handler passes its
-// argument unchanged to Effect.<api>: either the API itself, or a function of
-// one parameter whose returned flow only applies Effect.<api> to it.
-//
-// Rust: the checker is the parser's; Go's nil checks on the parameter name and the lazy expression drop, both are
-// non-optional here.
+// go: internal/rules/result_match_to_from_result.go:112 isEffectLiftHandler 8211651107155f0d
+// isEffectLiftHandler reports whether a Result.match handler is Effect.<api>,
+// directly or through an identity forwarder, without type arguments.
 pub(crate) fn is_effect_lift_handler(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
     api: &'static str,
 ) -> bool {
-    let node = ast::skip_parentheses(node);
-    if tp.is_node_reference_to_effect_module_api(node, api) {
-        return true;
-    }
-    let Some(lazy) = ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::None) else {
-        return false;
-    };
-    if lazy.params().len() != 1 || lazy.params().at(0).kind() != Kind::Parameter {
-        return false;
-    }
-    let parameter = lazy.params().at(0).as_parameter_declaration();
-    let parameter_name = parameter.name();
-    if parameter_name.kind() != Kind::Identifier
-        || parameter.dot_dot_dot_token().is_some()
-        || parameter.initializer().is_some()
-    {
-        return false;
-    }
-    let flow = tp.longest_piping_flow_at(lazy.expression(), false);
-    let is_parameter = |tp: &mut TypeParser<'_>, subject: &PipingFlowSubject| -> bool {
-        same_identifier_reference(
-            tp,
-            Some(parameter_name),
-            subject.node().map(ast::skip_parentheses),
-        )
-    };
-    PipingFlow::matches_exactly(flow.as_ref(), tp, &is_parameter, &[&is_effect_lift_step(api)])
+    let (target, type_arguments, _) = tp.unwrap_identity_forwarder(node);
+    type_arguments.is_none_or(|type_arguments| type_arguments.nodes().is_empty())
+        && target.is_some_and(|target| tp.is_node_reference_to_effect_module_api(target, api))
 }
 
-// go: internal/rules/result_match_to_from_result.go:137 analyzeResultGuardConditional 8811d0eb3ad87132
+// go: internal/rules/result_match_to_from_result.go:121 analyzeResultGuardConditional 8811d0eb3ad87132
 // analyzeResultGuardConditional matches a flow that applies Result.isSuccess or
 // Result.isFailure to an identifier and is the condition of a conditional
 // whose branches lift that identifier's .success with Effect.succeed and its
@@ -252,7 +223,7 @@ pub(crate) fn analyze_result_guard_conditional(
     })
 }
 
-// go: internal/rules/result_match_to_from_result.go:184 isResultMemberLift 391e2f4c0b3de763
+// go: internal/rules/result_match_to_from_result.go:168 isResultMemberLift 391e2f4c0b3de763
 // isResultMemberLift reports whether node is a flow that only applies
 // Effect.<api> to resultNode.<property>.
 //
