@@ -2941,6 +2941,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise"
         },
+        "runProvidedContextToRunWith": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.run*With instead of running an effect provided with Effect.provideContext or Effect.setContext"
+        },
         "schemaClassMissingBrand": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

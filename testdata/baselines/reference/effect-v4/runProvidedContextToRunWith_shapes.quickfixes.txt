@@ -1,0 +1,626 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:37-13:51) TS377166: `Effect.runSync` of `Effect.setContext` re-implements `Effect.runSyncWith`. Use `Effect.runSyncWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runSyncWith"
+
+[D2] (17:78-17:96) TS377166: `Effect.runSyncExit` of `Effect.setContext` re-implements `Effect.runSyncExitWith`. Use `Effect.runSyncExitWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runSyncExitWith"
+
+[D3] (21:79-21:97) TS377166: `Effect.runCallback` of `Effect.provideContext` re-implements `Effect.runCallbackWith`. Use `Effect.runCallbackWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runCallbackWith"
+
+[D4] (25:53-25:67) TS377166: `Effect.runSync` of `Effect.provideContext` re-implements `Effect.runSyncWith`. Use `Effect.runSyncWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runSyncWith"
+
+[D5] (31:37-31:54) TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runPromiseWith"
+
+[D6] (37:33-37:47) TS377166: `Effect.runSync` of `Effect.setContext` re-implements `Effect.runSyncWith`. Use `Effect.runSyncWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runSyncWith"
+
+[D7] (41:33-41:50) TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+  Fix 2: "Replace with Effect.runPromiseWith"
+
+[D8] (47:39-47:56) TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+
+[D9] (54:36-54:50) TS377166: `Effect.runFork` of `Effect.provideContext` re-implements `Effect.runForkWith`. Use `Effect.runForkWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+
+[D10] (57:36-57:53) TS377166: `Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)
+  Fix 0: "Disable runProvidedContextToRunWith for this line"
+  Fix 1: "Disable runProvidedContextToRunWith for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.runSyncWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_shapes.ts ---
+import { Context, Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+declare const load: () => Context.Context<"Config">
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER - call shapes covered by the same piping-flow match
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER - curried setContext inside redundant parentheses
+// fix: Effect.runSyncWith(services)(program)
+export const curriedParenthesized = Effect.runSyncWith(services)(program)
+
+// MUST TRIGGER - setContext and runSyncExit as Function.pipe steps
+// fix: pipe(program, Effect.runSyncExitWith(services))
+export const functionPipeRunner = pipe(program, Effect.setContext(services), Effect.runSyncExit)
+
+// MUST TRIGGER - runCallback as the method pipe step after provideContext
+// fix: program.pipe(Effect.runCallbackWith(services))
+export const methodPipeRunner = program.pipe(Effect.provideContext(services), Effect.runCallback)
+
+// MUST TRIGGER - the run is a data-first value argument of another call
+// fix: Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+export const valueArgument = Effect.as(Effect.void, Effect.runSync(Effect.provideContext(program, services)))
+
+// MUST TRIGGER - provideContext and the runner as Effect.fn pipeable steps
+// fix: Effect.fn(function*() { return yield* program }, Effect.runPromiseWith(services))
+export const fnSteps = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.runPromise)
+
+// MUST TRIGGER - the same steps on Effect.fnUntraced
+// fix: Effect.fnUntraced(function*() { return yield* program }, Effect.runSyncWith(services))
+export const fnUntracedSteps = Effect.fnUntraced(function*() {
+  return yield* program
+}, Effect.setContext(services), Effect.runSync)
+
+// MUST TRIGGER - constructors over fresh contexts are evaluated in either order
+// fix: Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+export const freshConstructor = Effect.runPromise(
+  Effect.provideContext(Effect.succeed(1), Context.merge(Context.empty(), Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): Context.merge reads the bound `services`
+// when it is evaluated, which the rewrite would move ahead of the effect
+export const constructorOverBinding = Effect.runPromise(
+  Effect.provideContext(program, Context.merge(services, Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): the computed context of a called runner would
+// move ahead of the effect, even when the runner has options
+declare const signal: AbortSignal
+export const computedWithOptions = Effect.runFork(Effect.provideContext(program, load()), { signal })
+
+// MUST TRIGGER - no fix (report only): explicit runner type arguments
+export const runnerTypeArguments = Effect.runPromise<string, never>(Effect.provideContext(program, services))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER - near misses
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER - an Effect.fn step follows provideContext before the runner
+export const fnNotAdjacent = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+
+// MUST NOT TRIGGER - the provided effect is a data-first subject that no runner takes
+export const providedAsValue = Effect.as(Effect.provideContext(program, services), 1)
+
+
+=== [D2] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.runSyncExitWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_shapes.ts ---
+import { Context, Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+declare const load: () => Context.Context<"Config">
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER - call shapes covered by the same piping-flow match
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER - curried setContext inside redundant parentheses
+// fix: Effect.runSyncWith(services)(program)
+export const curriedParenthesized = Effect.runSync((Effect.setContext(services)(program)))
+
+// MUST TRIGGER - setContext and runSyncExit as Function.pipe steps
+// fix: pipe(program, Effect.runSyncExitWith(services))
+export const functionPipeRunner = pipe(program, Effect.runSyncExitWith(services))
+
+// MUST TRIGGER - runCallback as the method pipe step after provideContext
+// fix: program.pipe(Effect.runCallbackWith(services))
+export const methodPipeRunner = program.pipe(Effect.provideContext(services), Effect.runCallback)
+
+// MUST TRIGGER - the run is a data-first value argument of another call
+// fix: Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+export const valueArgument = Effect.as(Effect.void, Effect.runSync(Effect.provideContext(program, services)))
+
+// MUST TRIGGER - provideContext and the runner as Effect.fn pipeable steps
+// fix: Effect.fn(function*() { return yield* program }, Effect.runPromiseWith(services))
+export const fnSteps = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.runPromise)
+
+// MUST TRIGGER - the same steps on Effect.fnUntraced
+// fix: Effect.fnUntraced(function*() { return yield* program }, Effect.runSyncWith(services))
+export const fnUntracedSteps = Effect.fnUntraced(function*() {
+  return yield* program
+}, Effect.setContext(services), Effect.runSync)
+
+// MUST TRIGGER - constructors over fresh contexts are evaluated in either order
+// fix: Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+export const freshConstructor = Effect.runPromise(
+  Effect.provideContext(Effect.succeed(1), Context.merge(Context.empty(), Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): Context.merge reads the bound `services`
+// when it is evaluated, which the rewrite would move ahead of the effect
+export const constructorOverBinding = Effect.runPromise(
+  Effect.provideContext(program, Context.merge(services, Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): the computed context of a called runner would
+// move ahead of the effect, even when the runner has options
+declare const signal: AbortSignal
+export const computedWithOptions = Effect.runFork(Effect.provideContext(program, load()), { signal })
+
+// MUST TRIGGER - no fix (report only): explicit runner type arguments
+export const runnerTypeArguments = Effect.runPromise<string, never>(Effect.provideContext(program, services))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER - near misses
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER - an Effect.fn step follows provideContext before the runner
+export const fnNotAdjacent = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+
+// MUST NOT TRIGGER - the provided effect is a data-first subject that no runner takes
+export const providedAsValue = Effect.as(Effect.provideContext(program, services), 1)
+
+
+=== [D3] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.runCallbackWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_shapes.ts ---
+import { Context, Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+declare const load: () => Context.Context<"Config">
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER - call shapes covered by the same piping-flow match
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER - curried setContext inside redundant parentheses
+// fix: Effect.runSyncWith(services)(program)
+export const curriedParenthesized = Effect.runSync((Effect.setContext(services)(program)))
+
+// MUST TRIGGER - setContext and runSyncExit as Function.pipe steps
+// fix: pipe(program, Effect.runSyncExitWith(services))
+export const functionPipeRunner = pipe(program, Effect.setContext(services), Effect.runSyncExit)
+
+// MUST TRIGGER - runCallback as the method pipe step after provideContext
+// fix: program.pipe(Effect.runCallbackWith(services))
+export const methodPipeRunner = program.pipe(Effect.runCallbackWith(services))
+
+// MUST TRIGGER - the run is a data-first value argument of another call
+// fix: Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+export const valueArgument = Effect.as(Effect.void, Effect.runSync(Effect.provideContext(program, services)))
+
+// MUST TRIGGER - provideContext and the runner as Effect.fn pipeable steps
+// fix: Effect.fn(function*() { return yield* program }, Effect.runPromiseWith(services))
+export const fnSteps = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.runPromise)
+
+// MUST TRIGGER - the same steps on Effect.fnUntraced
+// fix: Effect.fnUntraced(function*() { return yield* program }, Effect.runSyncWith(services))
+export const fnUntracedSteps = Effect.fnUntraced(function*() {
+  return yield* program
+}, Effect.setContext(services), Effect.runSync)
+
+// MUST TRIGGER - constructors over fresh contexts are evaluated in either order
+// fix: Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+export const freshConstructor = Effect.runPromise(
+  Effect.provideContext(Effect.succeed(1), Context.merge(Context.empty(), Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): Context.merge reads the bound `services`
+// when it is evaluated, which the rewrite would move ahead of the effect
+export const constructorOverBinding = Effect.runPromise(
+  Effect.provideContext(program, Context.merge(services, Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): the computed context of a called runner would
+// move ahead of the effect, even when the runner has options
+declare const signal: AbortSignal
+export const computedWithOptions = Effect.runFork(Effect.provideContext(program, load()), { signal })
+
+// MUST TRIGGER - no fix (report only): explicit runner type arguments
+export const runnerTypeArguments = Effect.runPromise<string, never>(Effect.provideContext(program, services))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER - near misses
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER - an Effect.fn step follows provideContext before the runner
+export const fnNotAdjacent = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+
+// MUST NOT TRIGGER - the provided effect is a data-first subject that no runner takes
+export const providedAsValue = Effect.as(Effect.provideContext(program, services), 1)
+
+
+=== [D4] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.runSyncWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_shapes.ts ---
+import { Context, Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+declare const load: () => Context.Context<"Config">
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER - call shapes covered by the same piping-flow match
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER - curried setContext inside redundant parentheses
+// fix: Effect.runSyncWith(services)(program)
+export const curriedParenthesized = Effect.runSync((Effect.setContext(services)(program)))
+
+// MUST TRIGGER - setContext and runSyncExit as Function.pipe steps
+// fix: pipe(program, Effect.runSyncExitWith(services))
+export const functionPipeRunner = pipe(program, Effect.setContext(services), Effect.runSyncExit)
+
+// MUST TRIGGER - runCallback as the method pipe step after provideContext
+// fix: program.pipe(Effect.runCallbackWith(services))
+export const methodPipeRunner = program.pipe(Effect.provideContext(services), Effect.runCallback)
+
+// MUST TRIGGER - the run is a data-first value argument of another call
+// fix: Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+export const valueArgument = Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+
+// MUST TRIGGER - provideContext and the runner as Effect.fn pipeable steps
+// fix: Effect.fn(function*() { return yield* program }, Effect.runPromiseWith(services))
+export const fnSteps = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.runPromise)
+
+// MUST TRIGGER - the same steps on Effect.fnUntraced
+// fix: Effect.fnUntraced(function*() { return yield* program }, Effect.runSyncWith(services))
+export const fnUntracedSteps = Effect.fnUntraced(function*() {
+  return yield* program
+}, Effect.setContext(services), Effect.runSync)
+
+// MUST TRIGGER - constructors over fresh contexts are evaluated in either order
+// fix: Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+export const freshConstructor = Effect.runPromise(
+  Effect.provideContext(Effect.succeed(1), Context.merge(Context.empty(), Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): Context.merge reads the bound `services`
+// when it is evaluated, which the rewrite would move ahead of the effect
+export const constructorOverBinding = Effect.runPromise(
+  Effect.provideContext(program, Context.merge(services, Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): the computed context of a called runner would
+// move ahead of the effect, even when the runner has options
+declare const signal: AbortSignal
+export const computedWithOptions = Effect.runFork(Effect.provideContext(program, load()), { signal })
+
+// MUST TRIGGER - no fix (report only): explicit runner type arguments
+export const runnerTypeArguments = Effect.runPromise<string, never>(Effect.provideContext(program, services))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER - near misses
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER - an Effect.fn step follows provideContext before the runner
+export const fnNotAdjacent = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+
+// MUST NOT TRIGGER - the provided effect is a data-first subject that no runner takes
+export const providedAsValue = Effect.as(Effect.provideContext(program, services), 1)
+
+
+=== [D5] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.runPromiseWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_shapes.ts ---
+import { Context, Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+declare const load: () => Context.Context<"Config">
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER - call shapes covered by the same piping-flow match
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER - curried setContext inside redundant parentheses
+// fix: Effect.runSyncWith(services)(program)
+export const curriedParenthesized = Effect.runSync((Effect.setContext(services)(program)))
+
+// MUST TRIGGER - setContext and runSyncExit as Function.pipe steps
+// fix: pipe(program, Effect.runSyncExitWith(services))
+export const functionPipeRunner = pipe(program, Effect.setContext(services), Effect.runSyncExit)
+
+// MUST TRIGGER - runCallback as the method pipe step after provideContext
+// fix: program.pipe(Effect.runCallbackWith(services))
+export const methodPipeRunner = program.pipe(Effect.provideContext(services), Effect.runCallback)
+
+// MUST TRIGGER - the run is a data-first value argument of another call
+// fix: Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+export const valueArgument = Effect.as(Effect.void, Effect.runSync(Effect.provideContext(program, services)))
+
+// MUST TRIGGER - provideContext and the runner as Effect.fn pipeable steps
+// fix: Effect.fn(function*() { return yield* program }, Effect.runPromiseWith(services))
+export const fnSteps = Effect.fn(function* () {
+    return yield* program;
+}, Effect.runPromiseWith(services))
+
+// MUST TRIGGER - the same steps on Effect.fnUntraced
+// fix: Effect.fnUntraced(function*() { return yield* program }, Effect.runSyncWith(services))
+export const fnUntracedSteps = Effect.fnUntraced(function*() {
+  return yield* program
+}, Effect.setContext(services), Effect.runSync)
+
+// MUST TRIGGER - constructors over fresh contexts are evaluated in either order
+// fix: Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+export const freshConstructor = Effect.runPromise(
+  Effect.provideContext(Effect.succeed(1), Context.merge(Context.empty(), Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): Context.merge reads the bound `services`
+// when it is evaluated, which the rewrite would move ahead of the effect
+export const constructorOverBinding = Effect.runPromise(
+  Effect.provideContext(program, Context.merge(services, Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): the computed context of a called runner would
+// move ahead of the effect, even when the runner has options
+declare const signal: AbortSignal
+export const computedWithOptions = Effect.runFork(Effect.provideContext(program, load()), { signal })
+
+// MUST TRIGGER - no fix (report only): explicit runner type arguments
+export const runnerTypeArguments = Effect.runPromise<string, never>(Effect.provideContext(program, services))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER - near misses
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER - an Effect.fn step follows provideContext before the runner
+export const fnNotAdjacent = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+
+// MUST NOT TRIGGER - the provided effect is a data-first subject that no runner takes
+export const providedAsValue = Effect.as(Effect.provideContext(program, services), 1)
+
+
+=== [D6] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.runSyncWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_shapes.ts ---
+import { Context, Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+declare const load: () => Context.Context<"Config">
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER - call shapes covered by the same piping-flow match
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER - curried setContext inside redundant parentheses
+// fix: Effect.runSyncWith(services)(program)
+export const curriedParenthesized = Effect.runSync((Effect.setContext(services)(program)))
+
+// MUST TRIGGER - setContext and runSyncExit as Function.pipe steps
+// fix: pipe(program, Effect.runSyncExitWith(services))
+export const functionPipeRunner = pipe(program, Effect.setContext(services), Effect.runSyncExit)
+
+// MUST TRIGGER - runCallback as the method pipe step after provideContext
+// fix: program.pipe(Effect.runCallbackWith(services))
+export const methodPipeRunner = program.pipe(Effect.provideContext(services), Effect.runCallback)
+
+// MUST TRIGGER - the run is a data-first value argument of another call
+// fix: Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+export const valueArgument = Effect.as(Effect.void, Effect.runSync(Effect.provideContext(program, services)))
+
+// MUST TRIGGER - provideContext and the runner as Effect.fn pipeable steps
+// fix: Effect.fn(function*() { return yield* program }, Effect.runPromiseWith(services))
+export const fnSteps = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.runPromise)
+
+// MUST TRIGGER - the same steps on Effect.fnUntraced
+// fix: Effect.fnUntraced(function*() { return yield* program }, Effect.runSyncWith(services))
+export const fnUntracedSteps = Effect.fnUntraced(function* () {
+    return yield* program;
+}, Effect.runSyncWith(services))
+
+// MUST TRIGGER - constructors over fresh contexts are evaluated in either order
+// fix: Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+export const freshConstructor = Effect.runPromise(
+  Effect.provideContext(Effect.succeed(1), Context.merge(Context.empty(), Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): Context.merge reads the bound `services`
+// when it is evaluated, which the rewrite would move ahead of the effect
+export const constructorOverBinding = Effect.runPromise(
+  Effect.provideContext(program, Context.merge(services, Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): the computed context of a called runner would
+// move ahead of the effect, even when the runner has options
+declare const signal: AbortSignal
+export const computedWithOptions = Effect.runFork(Effect.provideContext(program, load()), { signal })
+
+// MUST TRIGGER - no fix (report only): explicit runner type arguments
+export const runnerTypeArguments = Effect.runPromise<string, never>(Effect.provideContext(program, services))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER - near misses
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER - an Effect.fn step follows provideContext before the runner
+export const fnNotAdjacent = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+
+// MUST NOT TRIGGER - the provided effect is a data-first subject that no runner takes
+export const providedAsValue = Effect.as(Effect.provideContext(program, services), 1)
+
+
+=== [D7] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.runPromiseWith" ===
+
+--- file:///.src/runProvidedContextToRunWith_shapes.ts ---
+import { Context, Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<string, never, "Config">
+declare const services: Context.Context<"Config">
+declare const load: () => Context.Context<"Config">
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER - call shapes covered by the same piping-flow match
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER - curried setContext inside redundant parentheses
+// fix: Effect.runSyncWith(services)(program)
+export const curriedParenthesized = Effect.runSync((Effect.setContext(services)(program)))
+
+// MUST TRIGGER - setContext and runSyncExit as Function.pipe steps
+// fix: pipe(program, Effect.runSyncExitWith(services))
+export const functionPipeRunner = pipe(program, Effect.setContext(services), Effect.runSyncExit)
+
+// MUST TRIGGER - runCallback as the method pipe step after provideContext
+// fix: program.pipe(Effect.runCallbackWith(services))
+export const methodPipeRunner = program.pipe(Effect.provideContext(services), Effect.runCallback)
+
+// MUST TRIGGER - the run is a data-first value argument of another call
+// fix: Effect.as(Effect.void, Effect.runSyncWith(services)(program))
+export const valueArgument = Effect.as(Effect.void, Effect.runSync(Effect.provideContext(program, services)))
+
+// MUST TRIGGER - provideContext and the runner as Effect.fn pipeable steps
+// fix: Effect.fn(function*() { return yield* program }, Effect.runPromiseWith(services))
+export const fnSteps = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.runPromise)
+
+// MUST TRIGGER - the same steps on Effect.fnUntraced
+// fix: Effect.fnUntraced(function*() { return yield* program }, Effect.runSyncWith(services))
+export const fnUntracedSteps = Effect.fnUntraced(function*() {
+  return yield* program
+}, Effect.setContext(services), Effect.runSync)
+
+// MUST TRIGGER - constructors over fresh contexts are evaluated in either order
+// fix: Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+export const freshConstructor = Effect.runPromiseWith(Context.merge(Context.empty(), Context.empty()))(Effect.succeed(1))
+
+// MUST TRIGGER - no fix (report only): Context.merge reads the bound `services`
+// when it is evaluated, which the rewrite would move ahead of the effect
+export const constructorOverBinding = Effect.runPromise(
+  Effect.provideContext(program, Context.merge(services, Context.empty()))
+)
+
+// MUST TRIGGER - no fix (report only): the computed context of a called runner would
+// move ahead of the effect, even when the runner has options
+declare const signal: AbortSignal
+export const computedWithOptions = Effect.runFork(Effect.provideContext(program, load()), { signal })
+
+// MUST TRIGGER - no fix (report only): explicit runner type arguments
+export const runnerTypeArguments = Effect.runPromise<string, never>(Effect.provideContext(program, services))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER - near misses
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER - an Effect.fn step follows provideContext before the runner
+export const fnNotAdjacent = Effect.fn(function*() {
+  return yield* program
+}, Effect.provideContext(services), Effect.asVoid, Effect.runPromise)
+
+// MUST NOT TRIGGER - the provided effect is a data-first subject that no runner takes
+export const providedAsValue = Effect.as(Effect.provideContext(program, services), 1)
+
+
+=== [D8] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable runProvidedContextToRunWith for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable runProvidedContextToRunWith for entire file" ===
+skipped by default

@@ -1,4 +1,5 @@
 use ets_shim::ast::{Node, SourceFile};
+use ets_shim::checker::{Type, TypeFlags};
 use ets_shim::core::P;
 
 use crate::*;
@@ -47,5 +48,50 @@ impl TypeParser<'_> {
             &EFFECT_CONTEXT_PACKAGE_SOURCE_FILE_DESCRIPTOR,
             member_name,
         )
+    }
+}
+
+// go: internal/typeparser/context_type.go:41 ContextTypeId 3f65ffbf2ccdc299
+// ContextTypeId is the property key for Context's variance struct (v4).
+pub const CONTEXT_TYPE_ID: &str = "~effect/Context";
+
+impl TypeParser<'_> {
+    // go: internal/typeparser/context_type.go:46 TypeParser.ContextType 6d706117dec53495
+    // ContextType returns t itself when it is an Effect v4 Context.Context type,
+    // or nil otherwise. It checks for the "~effect/Context" variance struct and its
+    // contravariant _Services marker, so any, unknown and never never match.
+    pub fn context_type(&mut self, t: impl Into<Option<P<Type>>>) -> Option<P<Type>> {
+        let t = t.into()?;
+        cached(
+            self,
+            |l| &mut l.context_type,
+            t,
+            |tp| {
+                if tp.detect_effect_version() != EffectMajorVersion::V4 {
+                    return None;
+                }
+                if t.flags().intersects(TypeFlags::Any | TypeFlags::Unknown | TypeFlags::Never) {
+                    return None;
+                }
+                let variance = tp.get_type_of_property_by_name(t, CONTEXT_TYPE_ID);
+                if variance.is_none()
+                    || tp.extract_contravariant_type(variance, "_Services").is_none()
+                {
+                    return None;
+                }
+                Some(t)
+            },
+        )
+    }
+
+    // go: internal/typeparser/context_type.go:67 TypeParser.ContextTypeAtLocation 548b56741da3da46
+    // ContextTypeAtLocation parses the type of node as a v4 Context type, without
+    // computing the type when nodeCannotBeEffectLibraryType rules node out.
+    pub fn context_type_at_location(
+        &mut self,
+        node: impl Into<Option<P<Node>>>,
+    ) -> Option<P<Type>> {
+        let t = self.effect_library_type_at_location(node);
+        self.context_type(t)
     }
 }

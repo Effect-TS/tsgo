@@ -106,6 +106,7 @@
         "returnEffectInGen": "suggestion",
         "runEffectInsideEffect": "suggestion",
         "runOfExitToRunExit": "suggestion",
+        "runProvidedContextToRunWith": "suggestion",
         "schemaClassMissingBrand": "suggestion",
         "schemaClassObjectLiteral": "warning",
         "schemaLiteralNonFinite": "error",
@@ -206,6 +207,7 @@
         "returnEffectInGen": "error",
         "runEffectInsideEffect": "error",
         "runOfExitToRunExit": "error",
+        "runProvidedContextToRunWith": "error",
         "schemaClassMissingBrand": "error",
         "schemaClassObjectLiteral": "error",
         "schemaLiteralNonFinite": "error",
@@ -375,6 +377,7 @@
         "redundantOrDie": "warning",
         "redundantSchemaTagIdentifier": "warning",
         "runOfExitToRunExit": "warning",
+        "runProvidedContextToRunWith": "warning",
         "schemaNumber": "warning",
         "schemaStructWithTag": "warning",
         "schemaUnionOfLiterals": "warning",
@@ -3463,6 +3466,29 @@
             "start": 106,
             "end": 123,
             "text": "`Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "runProvidedContextToRunWith",
+      "group": "style",
+      "description": "Suggests Effect.run*With instead of running an effect provided with Effect.provideContext or Effect.setContext",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377166
+      ],
+      "preview": {
+        "sourceText": "import { Context, Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, never, \"Config\"\u003e\ndeclare const services: Context.Context\u003c\"Config\"\u003e\n\nexport const result = Effect.runPromise(Effect.provideContext(program, services))\n",
+        "diagnostics": [
+          {
+            "start": 177,
+            "end": 194,
+            "text": "`Effect.runPromise` of `Effect.provideContext` re-implements `Effect.runPromiseWith`. Use `Effect.runPromiseWith(context)(effect)` to run the effect with the context directly. effect(runProvidedContextToRunWith)"
           }
         ]
       }

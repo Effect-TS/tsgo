@@ -2593,6 +2593,9 @@
         "effecttsgo/run-of-exit-to-run-exit": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/run-provided-context-to-run-with": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/schema-class-missing-brand": {
           "$ref": "#/definitions/RuleNoConfig"
         },

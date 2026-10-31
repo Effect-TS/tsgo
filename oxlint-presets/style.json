@@ -59,6 +59,7 @@
     "effecttsgo/redundant-or-die": "warn",
     "effecttsgo/redundant-schema-tag-identifier": "warn",
     "effecttsgo/run-of-exit-to-run-exit": "warn",
+    "effecttsgo/run-provided-context-to-run-with": "warn",
     "effecttsgo/schema-number": "warn",
     "effecttsgo/schema-struct-with-tag": "warn",
     "effecttsgo/schema-union-of-literals": "warn",

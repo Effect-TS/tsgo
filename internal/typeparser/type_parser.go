@@ -48,6 +48,7 @@ type EffectLinks struct {
 	ContextTag             core.LinkStore[*checker.Type, *Service]
 	EffectSchemaTypes      core.LinkStore[*checker.Type, *SchemaTypes]
 	ScopeType              core.LinkStore[*checker.Type, *checker.Type]
+	ContextType            core.LinkStore[*checker.Type, *checker.Type]
 	IsPipeableType         core.LinkStore[*checker.Type, bool]
 	GlobalInterfaceHasPipe core.LinkStore[string, bool]
 	PromiseType            core.LinkStore[*checker.Type, *checker.Type]
