@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (5:21-5:35) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D1] (6:21-6:35) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedNone"
 
-[D2] (6:21-6:35) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+[D2] (7:21-7:35) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
   Fix 0: "Disable preferSucceedSomeOrNone for this line"
   Fix 1: "Disable preferSucceedSomeOrNone for entire file"
   Fix 2: "Replace with Effect.succeedSome"
@@ -21,6 +21,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.succeedNone" ===
 
 --- file:///.src/preferSucceedSomeOrNone_preview.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferSucceedSomeOrNone:warning
 import { Effect, Option } from "effect"
@@ -38,6 +39,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.succeedSome" ===
 
 --- file:///.src/preferSucceedSomeOrNone_preview.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics preferSucceedSomeOrNone:warning
 import { Effect, Option } from "effect"

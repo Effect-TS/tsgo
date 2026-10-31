@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/lsp
+module github.com/microsoft/TypeScript/tsc/shim/lsp
 
 go 1.26
 

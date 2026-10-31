@@ -250,7 +250,7 @@ pub(crate) fn is_parameter_verbatim(
     symbol.is_some() && symbol == tp.get_symbol_at_location(param.name())
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:205 usesFunctionExpressionBindings 6e3954c058d2bbaa
+// go: internal/rules/manual_metric_tap_to_track.go:205 usesFunctionExpressionBindings 8ea8c569fb84cf63
 // usesFunctionExpressionBindings reports whether the parameters or the input of
 // the function expression fn read a binding that fn itself provides: this,
 // super, arguments, new.target or fn's own name. An arrow function in the
@@ -316,7 +316,7 @@ pub(crate) fn uses_function_expression_bindings(
     visit(tp, self_, Some(input), true)
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:247 resolveManualMetricTapAPI 0af0435b267899a2
+// go: internal/rules/manual_metric_tap_to_track.go:249 resolveManualMetricTapAPI 0af0435b267899a2
 pub(crate) fn resolve_manual_metric_tap_api(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,

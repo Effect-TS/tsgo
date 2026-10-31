@@ -48,7 +48,7 @@ pub struct UnnecessaryPipeChainMatch {
     pub inner: Arc<ParsedPipeCallResult>, // The inner pipe call parse result (subject of outer)
 }
 
-// go: internal/rules/unnecessary_pipe_chain.go:47 AnalyzeUnnecessaryPipeChain 4ae248a130a15a6a
+// go: internal/rules/unnecessary_pipe_chain.go:47 AnalyzeUnnecessaryPipeChain 744269412225e424
 // AnalyzeUnnecessaryPipeChain finds all chained pipe() and .pipe() calls
 // (outer pipe whose subject is also a pipe call), returning matches with
 // the diagnostic and both parsed results.
@@ -88,7 +88,7 @@ pub fn analyze_unnecessary_pipe_chain(
     matches
 }
 
-// go: internal/rules/unnecessary_pipe_chain.go:79 pipeMergeSupportsArity 0023d1a6e90284be
+// go: internal/rules/unnecessary_pipe_chain.go:80 pipeMergeSupportsArity 0023d1a6e90284be
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go passes a nil callee type on to
 // `GetSignaturesOfType`; here a callee without a type has no signatures.
@@ -121,7 +121,7 @@ pub(crate) fn pipe_merge_supports_arity(
     false
 }
 
-// go: internal/rules/unnecessary_pipe_chain.go:101 containsSpreadArgument c5c90d34d2885f12
+// go: internal/rules/unnecessary_pipe_chain.go:102 containsSpreadArgument c5c90d34d2885f12
 pub(crate) fn contains_spread_argument(args: Slice<'_, P<Node>>) -> bool {
     for (_, arg) in args.all() {
         if arg.kind() == Kind::SpreadElement {

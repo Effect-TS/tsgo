@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/ls/lsconv
+module github.com/microsoft/TypeScript/tsc/shim/ls/lsconv
 
 go 1.26
 

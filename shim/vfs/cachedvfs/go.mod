@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/vfs/cachedvfs
+module github.com/microsoft/TypeScript/tsc/shim/vfs/cachedvfs
 
 go 1.26
 

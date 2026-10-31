@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/astnav
+module github.com/microsoft/TypeScript/tsc/shim/astnav
 
 go 1.26
 

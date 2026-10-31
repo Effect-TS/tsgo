@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/ast
+module github.com/microsoft/TypeScript/tsc/shim/ast
 
 go 1.26
 

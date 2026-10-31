@@ -1,207 +1,207 @@
 === Quick Fix Inventory ===
 
-[D1] (9:8-9:12) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D1] (10:8-10:12) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D2] (10:27-10:31) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D2] (11:27-11:31) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D3] (11:7-11:18) TS6133: 'bracketKeys' is declared but its value is never read.
+[D3] (12:7-12:18) TS6133: 'bracketKeys' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (11:28-11:34) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D4] (12:28-12:34) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D5] (12:8-12:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D5] (13:8-13:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D6] (13:7-13:19) TS6133: 'nativeValues' is declared but its value is never read.
+[D6] (14:7-14:19) TS6133: 'nativeValues' is declared but its value is never read.
   (no quick fixes)
 
-[D7] (13:29-13:35) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D7] (14:29-14:35) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D8] (14:8-14:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D8] (15:8-15:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D9] (15:7-15:20) TS6133: 'nativeEntries' is declared but its value is never read.
+[D9] (16:7-16:20) TS6133: 'nativeEntries' is declared but its value is never read.
   (no quick fixes)
 
-[D10] (15:30-15:37) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D10] (16:30-16:37) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D11] (16:8-16:19) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+[D11] (17:8-17:19) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D12] (17:7-17:24) TS6133: 'nativeFromEntries' is declared but its value is never read.
+[D12] (18:7-18:24) TS6133: 'nativeFromEntries' is declared but its value is never read.
   (no quick fixes)
 
-[D13] (17:34-17:45) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+[D13] (18:34-18:45) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D14] (18:8-18:14) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+[D14] (19:8-19:14) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D15] (19:7-19:19) TS6133: 'nativeHasOwn' is declared but its value is never read.
+[D15] (20:7-20:19) TS6133: 'nativeHasOwn' is declared but its value is never read.
   (no quick fixes)
 
-[D16] (19:29-19:35) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+[D16] (20:29-20:35) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D17] (20:6-20:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D17] (21:6-21:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D18] (21:7-21:27) TS6133: 'nativeHasOwnProperty' is declared but its value is never read.
+[D18] (22:7-22:27) TS6133: 'nativeHasOwnProperty' is declared but its value is never read.
   (no quick fixes)
 
-[D19] (21:35-21:49) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D19] (22:35-22:49) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D20] (22:18-22:32) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D20] (23:18-23:32) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D21] (23:8-23:22) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D21] (24:8-24:22) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D22] (24:8-24:14) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D22] (25:8-25:14) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D23] (25:8-25:16) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D23] (26:8-26:16) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D24] (26:8-26:17) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D24] (27:8-27:17) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D25] (27:8-27:22) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D25] (28:8-28:22) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D26] (28:8-28:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D26] (29:8-29:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D27] (29:11-29:17) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+[D27] (30:11-30:17) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D28] (31:12-31:28) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D28] (32:12-32:28) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D29] (33:23-33:29) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D29] (34:23-34:29) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D30] (35:8-35:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D30] (36:8-36:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D31] (36:14-36:18) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D31] (37:14-37:18) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D32] (37:19-37:25) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+[D32] (38:19-38:25) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D33] (38:10-38:21) TS6133: 'constrained' is declared but its value is never read.
+[D33] (39:10-39:21) TS6133: 'constrained' is declared but its value is never read.
   (no quick fixes)
 
-[D34] (38:78-38:84) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D34] (39:78-39:84) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D35] (39:10-39:30) TS6133: 'constrainedReference' is declared but its value is never read.
+[D35] (40:10-40:30) TS6133: 'constrainedReference' is declared but its value is never read.
   (no quick fixes)
 
-[D36] (39:87-39:93) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D36] (40:87-40:93) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D37] (40:10-40:29) TS6133: 'constrainedInstance' is declared but its value is never read.
+[D37] (41:10-41:29) TS6133: 'constrainedInstance' is declared but its value is never read.
   (no quick fixes)
 
-[D38] (40:73-40:87) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D38] (41:73-41:87) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D39] (42:17-42:31) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D39] (43:17-43:31) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D40] (44:8-44:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D40] (45:8-45:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D41] (47:10-47:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D41] (48:10-48:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D42] (48:8-48:12) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+[D42] (49:8-49:12) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D43] (49:8-49:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D43] (50:8-50:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D44] (50:8-50:19) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+[D44] (51:8-51:19) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D45] (51:8-51:14) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+[D45] (52:8-52:14) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D46] (52:6-52:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D46] (53:6-53:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D47] (53:6-53:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+[D47] (54:6-54:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D48] (54:63-54:70) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D48] (55:63-55:70) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
-[D49] (56:7-56:16) TS6133: 'typedKeys' is declared but its value is never read.
+[D49] (57:7-57:16) TS6133: 'typedKeys' is declared but its value is never read.
   (no quick fixes)
 
-[D50] (57:7-57:19) TS6133: 'typedEntries' is declared but its value is never read.
+[D50] (58:7-58:19) TS6133: 'typedEntries' is declared but its value is never read.
   (no quick fixes)
 
-[D51] (86:6-86:10) TS6196: 'Keys' is declared but never used.
+[D51] (87:6-87:10) TS6196: 'Keys' is declared but never used.
   (no quick fixes)
 
-[D52] (92:10-92:18) TS6133: 'shadowed' is declared but its value is never read.
+[D52] (93:10-93:18) TS6133: 'shadowed' is declared but its value is never read.
   (no quick fixes)
 
-[D53] (93:33-93:36) TS6133: 'key' is declared but its value is never read.
+[D53] (94:33-94:36) TS6133: 'key' is declared but its value is never read.
   (no quick fixes)
 
-[D54] (95:7-95:12) TS6196: 'Child' is declared but never used.
+[D54] (96:7-96:12) TS6196: 'Child' is declared but never used.
   (no quick fixes)
 
-[D55] (108:35-108:38) TS6133: 'key' is declared but its value is never read.
+[D55] (109:35-109:38) TS6133: 'key' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===

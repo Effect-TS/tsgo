@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/vfs
+module github.com/microsoft/TypeScript/tsc/shim/vfs
 
 go 1.26
 

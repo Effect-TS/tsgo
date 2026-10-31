@@ -384,6 +384,10 @@ Mappings that come up in these files (worked out with `ets_refactors`):
   trait `ets_rewriter::NodeFactoryPaths` (so helpers that take `&NodeFactory` call them after `use
   ets_rewriter::NodeFactoryPaths;`), with forwarding methods on `Tracker`; they return the node and panic on an
   empty path instead of Go's nil, since every caller passes a module reference.
+- Go code that reassigns a field of a synthesized node (`block.Statements = ...` on a clone in
+  `retainPipingFlowComments`): tsrs's node data is immutable, so collect the new values and rebuild the clone with
+  the factory's `update_*` (through a `NodeVisitor` over the result tree) once every other edit to the tree is done;
+  the tracker factory's update hook copies the emit node (synthetic comments) to the rebuilt node.
 Mappings that recur in fixables (`ets_fixables`):
 - A Go `fixable.FixAction{Run: func(tracker) {...}}` closure -> `Box::new(move |tracker| ...)` that moves the
   (owned) match in; Go's `return []ls.CodeAction{*action}` inside the match loop stays a loop with `continue`s.

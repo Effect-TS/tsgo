@@ -53,6 +53,7 @@ func AnalyzeUnnecessaryTypeofType(tp *typeparser.TypeParser, c *checker.Checker,
 			}
 		}
 
+		//ets:ast-walk finds typeof type queries, which are type nodes
 		node.ForEachChild(walk)
 		return false
 	}

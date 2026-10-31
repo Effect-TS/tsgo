@@ -2,7 +2,3 @@
 	path = typescript
 	url = https://github.com/microsoft/TypeScript.git
 	ignore = dirty
-[submodule "tsrs"]
-	path = tsrs
-	url = https://github.com/oxc-project/tsrs.git
-	ignore = dirty

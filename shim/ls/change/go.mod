@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/ls/change
+module github.com/microsoft/TypeScript/tsc/shim/ls/change
 
 go 1.26
 

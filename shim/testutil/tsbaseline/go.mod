@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/testutil/tsbaseline
+module github.com/microsoft/TypeScript/tsc/shim/testutil/tsbaseline
 
 go 1.26
 

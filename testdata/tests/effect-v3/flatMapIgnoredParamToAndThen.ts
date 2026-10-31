@@ -1,3 +1,4 @@
+// @effect-v3
 import * as Fx from "effect/Effect"
 import { Effect, pipe } from "effect"
 

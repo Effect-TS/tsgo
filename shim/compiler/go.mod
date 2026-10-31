@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/compiler
+module github.com/microsoft/TypeScript/tsc/shim/compiler
 
 go 1.26
 

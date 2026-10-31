@@ -103,6 +103,7 @@ func runPreferEffectString(ctx *rule.Context) []*ast.Diagnostic {
 				}
 			}
 		}
+		//ets:ast-walk finds native String method accesses used as callees, including zero-argument calls
 		node.ForEachChild(walk)
 		return false
 	}

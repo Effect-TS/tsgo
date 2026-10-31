@@ -77,6 +77,7 @@ func AnalyzeFloatingEffect(tp *typeparser.TypeParser, c *checker.Checker, sf *as
 			})
 		}
 
+		//ets:ast-walk finds expression statements whose value is a discarded Effect
 		node.ForEachChild(walk)
 		return false
 	}

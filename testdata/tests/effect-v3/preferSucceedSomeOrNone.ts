@@ -1,3 +1,4 @@
+// @effect-v3
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 

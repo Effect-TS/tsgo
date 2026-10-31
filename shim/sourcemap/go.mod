@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/sourcemap
+module github.com/microsoft/TypeScript/tsc/shim/sourcemap
 
 go 1.26
 

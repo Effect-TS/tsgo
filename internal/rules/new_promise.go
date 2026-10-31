@@ -40,6 +40,7 @@ var NewPromise = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds new Promise(...) expressions
 			node.ForEachChild(walk)
 			return false
 		}

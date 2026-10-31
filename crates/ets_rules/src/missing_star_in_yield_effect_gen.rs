@@ -42,7 +42,7 @@ pub struct MissingStarInYieldEffectGenMatch {
     pub gen_fn_node: P<Node>,       // The generator function node (for related info)
 }
 
-// go: internal/rules/missing_star_in_yield_effect_gen.go:44 AnalyzeMissingStarInYieldEffectGen 152d50385b96c5cd
+// go: internal/rules/missing_star_in_yield_effect_gen.go:44 AnalyzeMissingStarInYieldEffectGen dd298d180fd5b389
 // AnalyzeMissingStarInYieldEffectGen finds all yield expressions inside Effect generators
 // that are missing the asterisk (yield instead of yield*).
 //

@@ -302,7 +302,7 @@ pub(crate) fn enclosing_generator_call(node: Option<P<Node>>) -> Option<P<Node>>
     None
 }
 
-// go: internal/rules/redundant_map_error.go:243 mapperCanBeHoisted 042ef1d3a1b86763
+// go: internal/rules/redundant_map_error.go:243 mapperCanBeHoisted ea5cd9a965f03433
 //
 // Rust: the checker is the parser's.
 pub(crate) fn mapper_can_be_hoisted(
@@ -362,7 +362,7 @@ pub(crate) fn mapper_can_be_hoisted(
     can_hoist
 }
 
-// go: internal/rules/redundant_map_error.go:281 allSymbolDeclarationsInsideNode e9fb8e9ac9b9b6ec
+// go: internal/rules/redundant_map_error.go:282 allSymbolDeclarationsInsideNode e9fb8e9ac9b9b6ec
 pub(crate) fn all_symbol_declarations_inside_node(
     symbol: Option<P<Symbol>>,
     node: Option<P<Node>>,
@@ -381,7 +381,7 @@ pub(crate) fn all_symbol_declarations_inside_node(
     true
 }
 
-// go: internal/rules/redundant_map_error.go:293 allSymbolDeclarationsOutsideNode f0976b95279f4a81
+// go: internal/rules/redundant_map_error.go:294 allSymbolDeclarationsOutsideNode f0976b95279f4a81
 pub(crate) fn all_symbol_declarations_outside_node(
     symbol: Option<P<Symbol>>,
     node: Option<P<Node>>,
@@ -397,7 +397,7 @@ pub(crate) fn all_symbol_declarations_outside_node(
     true
 }
 
-// go: internal/rules/redundant_map_error.go:305 hoistSensitiveReferenceSymbol 7c792d5a90d779d1
+// go: internal/rules/redundant_map_error.go:306 hoistSensitiveReferenceSymbol 7c792d5a90d779d1
 //
 // Rust: the checker is the parser's.
 pub(crate) fn hoist_sensitive_reference_symbol(
@@ -414,7 +414,7 @@ pub(crate) fn hoist_sensitive_reference_symbol(
     tp.get_symbol_at_location(node)
 }
 
-// go: internal/rules/redundant_map_error.go:317 generatorFunctionKeywordRange f43246ec7ea19b70
+// go: internal/rules/redundant_map_error.go:318 generatorFunctionKeywordRange f43246ec7ea19b70
 //
 // Rust: Go's `*ast.FunctionExpression` is its node (never nil here, as at Go's call sites).
 pub(crate) fn generator_function_keyword_range(
@@ -432,7 +432,7 @@ pub(crate) fn generator_function_keyword_range(
     TextRange::from_text_pos(ets_shim::core::TextPos::source(start), end)
 }
 
-// go: internal/rules/redundant_map_error.go:329 isHoistSensitiveValueReference 3dd839ac1265c916
+// go: internal/rules/redundant_map_error.go:330 isHoistSensitiveValueReference 3dd839ac1265c916
 pub(crate) fn is_hoist_sensitive_value_reference(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -469,7 +469,7 @@ pub(crate) fn is_hoist_sensitive_value_reference(node: Option<P<Node>>) -> bool 
     true
 }
 
-// go: internal/rules/redundant_map_error.go:356 unwrapTransparentExpression cb8f071204eca4e3
+// go: internal/rules/redundant_map_error.go:357 unwrapTransparentExpression cb8f071204eca4e3
 pub(crate) fn unwrap_transparent_expression(node: Option<P<Node>>) -> Option<P<Node>> {
     let mut node = node;
     while let Some(n) = node {
@@ -485,7 +485,7 @@ pub(crate) fn unwrap_transparent_expression(node: Option<P<Node>>) -> Option<P<N
     None
 }
 
-// go: internal/rules/redundant_map_error.go:368 nodeSourceText 5b512b47ccd971b4
+// go: internal/rules/redundant_map_error.go:369 nodeSourceText 5b512b47ccd971b4
 pub(crate) fn node_source_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> String {
     let (Some(sf), Some(node)) = (sf, node) else {
         return String::new();

@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/vfs/iovfs
+module github.com/microsoft/TypeScript/tsc/shim/vfs/iovfs
 
 go 1.26
 

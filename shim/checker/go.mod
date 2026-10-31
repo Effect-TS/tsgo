@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/checker
+module github.com/microsoft/TypeScript/tsc/shim/checker
 
 go 1.26
 

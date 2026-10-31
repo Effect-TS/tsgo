@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/fourslash
+module github.com/microsoft/TypeScript/tsc/shim/fourslash
 
 go 1.26
 

@@ -17,6 +17,7 @@ var StrictBooleanExpressions = rule.Rule{
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Unexpected_0_type_in_condition_expected_strictly_a_boolean_instead_effect_strictBooleanExpressions.Code()},
+	//ets:ast-walk finds if/while/ternary/! conditions, which are not calls
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 		conditionChecks := make(map[*ast.Node]bool)

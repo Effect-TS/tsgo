@@ -33,6 +33,7 @@ var GlobalErrorInEffectFailure = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds new Error(...) expressions
 			n.ForEachChild(walk)
 			return false
 		}

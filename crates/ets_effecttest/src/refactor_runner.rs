@@ -127,10 +127,16 @@ pub(crate) fn parse_refactor_comment(content: &str) -> RefactorCommentResult {
     RefactorCommentResult { found: true, ranges }
 }
 
-// go test: internal/effecttest/refactor_runner.go:115 RunEffectRefactorTest 6bce5f171307652c
+// go test: internal/effecttest/refactor_runner.go:121 RunEffectRefactorTest 4da473d78ea2fba4
 // RunEffectRefactorTest executes a single Effect refactor baseline test case.
 // It creates a fourslash test instance, collects refactor inventory and application
 // results for the selection specified by a "// refactor:" comment, and generates a *.refactors.txt baseline.
+//
+// TODO: version only picks the baseline folder. The fourslash harness takes the
+// Effect version from a `// @effect-v3` marker in the fixture
+// (etstesthooks/init.go), so a v3 fixture without one runs against Effect v4.
+// `repoctl check` requires the marker on every testdata/tests/effect-v3 fixture
+// until the runner passes version to the harness itself.
 //
 // Rust: the fourslash harness is the Rust-only stand-in `ets_fourslash` (see `run_effect_quick_fix_test`).
 pub fn run_effect_refactor_test(t: &T, version: EffectVersion, test_file: &Path) {

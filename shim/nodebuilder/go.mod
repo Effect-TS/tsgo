@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/nodebuilder
+module github.com/microsoft/TypeScript/tsc/shim/nodebuilder
 
 go 1.26
 

@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/providershim/ls/autoimport
+module github.com/microsoft/TypeScript/tsc/shim/ls/autoimport
 
 go 1.26
 

@@ -22,6 +22,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.X_0_effect_anyUnknownInErrorContext.Code()},
+	//ets:ast-walk checks the E and R channels of every expression's type, not only flow steps
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		type matchEntry struct {
 			node        *ast.Node

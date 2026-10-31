@@ -41,6 +41,40 @@ export class PatchParityError extends Data.TaggedError("PatchParityError")<{
   }
 }
 
+const effectV3FixturesRoot = "testdata/tests/effect-v3"
+
+export class MissingEffectV3MarkerError extends Data.TaggedError("MissingEffectV3MarkerError")<{
+  readonly fixtures: ReadonlyArray<string>
+}> {
+  get message(): string {
+    return [
+      `${this.fixtures.length} fixture(s) under ${effectV3FixturesRoot} lack a \`// @effect-v3\` line. The language ` +
+      "service tests (quick fixes, refactors, completions) pick the Effect version from that marker, not the folder, " +
+      "so without it they run against Effect v4. Add `// @effect-v3` as the first line:",
+      ...this.fixtures.map((fixture) => `  ${fixture}`)
+    ].join("\n")
+  }
+}
+
+// Mirrors the marker test in etstesthooks/init.go: a `// @effect-v3` line anywhere in the fixture.
+const hasEffectV3Marker = (content: string) => content.startsWith("// @effect-v3") || content.includes("\n// @effect-v3")
+
+// Every fixture of the v3 suite carries the `// @effect-v3` marker.
+export const checkEffectV3FixtureMarkers = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const root = path.join(repositoryRoot, effectV3FixturesRoot)
+  const fixtures: Array<string> = []
+  for (const name of (yield* fs.readDirectory(root)).sort()) {
+    if (name.endsWith(".ts") && !hasEffectV3Marker(yield* fs.readFileString(path.join(root, name)))) {
+      fixtures.push(`${effectV3FixturesRoot}/${name}`)
+    }
+  }
+  if (fixtures.length > 0) {
+    return yield* new MissingEffectV3MarkerError({ fixtures })
+  }
+})
+
 // The `<provider>-<gitHead>` override folders (upstream.ts, getTypeScriptComponentSource). Node only: names, no
 // checkout needed.
 // - Each one must name the gitHead of a TypeScript component with that provider, or it is stale.
@@ -93,6 +127,8 @@ export const runChecks = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   yield* Console.log("Checking TypeScript override folders")
   yield* checkOverrideFolders(repositoryRoot, (yield* readUpstream(repositoryRoot)).components.typescript)
+  yield* Console.log("Checking Effect v3 fixture markers")
+  yield* checkEffectV3FixtureMarkers(repositoryRoot)
   yield* ensureEffectFixtures(repositoryRoot)
   yield* Console.log("Checking Go packages")
   yield* runCommand("go", repositoryRoot, ["build", "./..."], false, { CGO_ENABLED: "0" })
