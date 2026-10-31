@@ -23,10 +23,7 @@ pub static RUN_PROVIDED_CONTEXT_TO_RUN_WITH_FIX: LazyLock<Fixable> = LazyLock::n
     run: run_run_provided_context_to_run_with_fix,
 });
 
-// go: internal/fixables/run_provided_context_to_run_with.go:26 runRunProvidedContextToRunWithFix 3a9c63f4bf451e71
-//
-// Rust: the match's provide and runner steps and context are never nil (non-optional fields), so
-// Go's nil check drops.
+// go: internal/fixables/run_provided_context_to_run_with.go:26 runRunProvidedContextToRunWithFix 202902ba10bff9c0
 fn run_run_provided_context_to_run_with_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_run_provided_context_to_run_with(&mut ctx.type_parser, Some(sf)) {
@@ -42,9 +39,7 @@ fn run_run_provided_context_to_run_with_fix(ctx: &mut Context<'_, '_>) -> Vec<Co
 
         // run*With(context)(effect) evaluates the context before the effect;
         // only reorder when the context cannot observe or affect that work.
-        if run_provided_context_reorders_context(&m)
-            && !order_insensitive_context(ctx, Some(m.context))
-        {
+        if run_provided_context_reorders_context(&m) && !order_insensitive_context(ctx, m.context) {
             continue;
         }
         // Only offer the fix when the generated reference resolves at the call site.
@@ -103,7 +98,7 @@ fn run_run_provided_context_to_run_with_fix(ctx: &mut Context<'_, '_>) -> Vec<Co
     Vec::new()
 }
 
-// go: internal/fixables/run_provided_context_to_run_with.go:81 runProvidedContextReordersContext 6b8ac2d49ccc66fe
+// go: internal/fixables/run_provided_context_to_run_with.go:78 runProvidedContextReordersContext 6b8ac2d49ccc66fe
 // runProvidedContextReordersContext reports whether the fix moves the context
 // ahead of the effect expression. A called runner originally evaluates its whole
 // effect argument, the context last unless the provide step is the curried
@@ -117,17 +112,16 @@ fn run_provided_context_reorders_context(m: &RunProvidedContextToRunWithMatch) -
     }
 }
 
-// go: internal/fixables/run_provided_context_to_run_with.go:91 runProvidedContextConstructors fddf45a8bd7f6477
+// go: internal/fixables/run_provided_context_to_run_with.go:88 runProvidedContextConstructors d4d8e34593107f93
 // runProvidedContextConstructors are the Context constructors that only build a
 // new Context from their arguments.
-static RUN_PROVIDED_CONTEXT_CONSTRUCTORS: &[&str] =
-    &["empty", "make", "add", "merge", "mergeAll", "pick", "omit"];
+static RUN_PROVIDED_CONTEXT_CONSTRUCTORS: &[&str] = &["empty", "make", "add", "merge", "mergeAll"];
 
-// go: internal/fixables/run_provided_context_to_run_with.go:104 orderInsensitiveContext 2e5f74087c5ee750
+// go: internal/fixables/run_provided_context_to_run_with.go:101 orderInsensitiveContext a46f6c2f9774c2fe
 // orderInsensitiveContext reports whether evaluating node earlier yields the
-// same value and has no effect other code could observe: literals, const
-// bindings, parameters that are never reassigned, and object or array literals
-// and Context constructor calls built only from those.
+// same value and has no effect other code could observe: string literals, const
+// bindings, parameters that are never reassigned, and object literals and
+// Context constructor calls built only from those.
 //
 // A binding is only a stable reference: its contents may still change, which
 // is harmless where the reference itself is provided, because both forms read
@@ -137,19 +131,10 @@ static RUN_PROVIDED_CONTEXT_CONSTRUCTORS: &[&str] =
 // stored by reference, so stable bindings are fine there.
 //
 // Rust: tsrs's `skip_alias` never returns nil, so Go's nil check on the target drops.
-fn order_insensitive_context(ctx: &mut Context<'_, '_>, node: Option<P<Node>>) -> bool {
-    let Some(node) = node else {
-        return false;
-    };
+fn order_insensitive_context(ctx: &mut Context<'_, '_>, node: P<Node>) -> bool {
     let node = ast::skip_outer_expressions(node, OuterExpressionKinds::All);
     match node.kind() {
-        Kind::StringLiteral
-        | Kind::NumericLiteral
-        | Kind::BigIntLiteral
-        | Kind::NoSubstitutionTemplateLiteral
-        | Kind::TrueKeyword
-        | Kind::FalseKeyword
-        | Kind::NullKeyword => true,
+        Kind::StringLiteral => true,
         Kind::Identifier => {
             let Some(symbol) = ctx.type_parser.get_symbol_at_location(node) else {
                 return false;
@@ -167,32 +152,14 @@ fn order_insensitive_context(ctx: &mut Context<'_, '_>, node: Option<P<Node>>) -
         }
         Kind::ObjectLiteralExpression => {
             for &property in node.as_object_literal_expression().properties().nodes() {
-                match property.kind() {
-                    Kind::PropertyAssignment => {
-                        if property
-                            .name()
-                            .is_none_or(|name| name.kind() == Kind::ComputedPropertyName)
-                            || !order_insensitive_context(
-                                ctx,
-                                Some(property.as_property_assignment().initializer()),
-                            )
-                        {
-                            return false;
-                        }
-                    }
-                    Kind::ShorthandPropertyAssignment => {
-                        if !order_insensitive_context(ctx, property.name()) {
-                            return false;
-                        }
-                    }
-                    _ => return false,
-                }
-            }
-            true
-        }
-        Kind::ArrayLiteralExpression => {
-            for &element in node.as_array_literal_expression().elements().nodes() {
-                if !order_insensitive_context(ctx, Some(element)) {
+                if property.kind() != Kind::PropertyAssignment
+                    || property.name().expect("a property assignment has a name").kind()
+                        == Kind::ComputedPropertyName
+                    || !order_insensitive_context(
+                        ctx,
+                        property.as_property_assignment().initializer(),
+                    )
+                {
                     return false;
                 }
             }
@@ -200,12 +167,10 @@ fn order_insensitive_context(ctx: &mut Context<'_, '_>, node: Option<P<Node>>) -
         }
         Kind::CallExpression => {
             let call = node.as_call_expression();
-            if call.question_dot_token().is_some()
-                || !RUN_PROVIDED_CONTEXT_CONSTRUCTORS.iter().any(|name| {
-                    ctx.type_parser
-                        .is_node_reference_to_effect_context_module_api(call.expression(), name)
-                })
-            {
+            if !RUN_PROVIDED_CONTEXT_CONSTRUCTORS.iter().any(|name| {
+                ctx.type_parser
+                    .is_node_reference_to_effect_context_module_api(call.expression(), name)
+            }) {
                 return false;
             }
             for &argument in call.arguments().nodes() {
@@ -215,7 +180,7 @@ fn order_insensitive_context(ctx: &mut Context<'_, '_>, node: Option<P<Node>>) -
                 {
                     return false;
                 }
-                if !order_insensitive_context(ctx, Some(argument)) {
+                if !order_insensitive_context(ctx, argument) {
                     return false;
                 }
             }

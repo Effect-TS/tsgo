@@ -3,12 +3,10 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::{
-    EffectMajorVersion, PipingFlow, PipingFlowTransformation, TransformationKind, TypeParser,
-};
+use ets_typeparser::{EffectMajorVersion, PipingFlow, PipingFlowTransformation, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_OF_EFFECT_1_RE_IMPLEMENTS_EFFECT_2_USE_EFFECT_2_CONTEXT_EFFECT_TO_RUN_THE_EFFECT_WITH_THE_CONTEXT_DIRECTLY_EFFECT_RUN_PROVIDED_CONTEXT_TO_RUN_WITH;
@@ -152,65 +150,33 @@ pub fn analyze_run_provided_context_to_run_with(
     matches
 }
 
-// go: internal/rules/run_provided_context_to_run_with.go:139 runProvidedContextProvideName e1b12b73548c2fe1
+// go: internal/rules/run_provided_context_to_run_with.go:139 runProvidedContextProvideName 16c9cc921bf0ebd7
 // runProvidedContextProvideName returns "provideContext" or "setContext" when
 // transformation provides a single argument through one of those APIs.
-//
-// Rust: a transformation's callee is never nil, so Go's nil check drops.
 pub(crate) fn run_provided_context_provide_name(
     tp: &mut TypeParser<'_>,
     transformation: &PipingFlowTransformation,
 ) -> &'static str {
-    let callee = transformation.callee();
-    if transformation.args().len() != 1 || ast::is_spread_element(*transformation.args().at(0)) {
+    if transformation.args().len() != 1 {
         return "";
     }
-    match transformation.kind() {
-        TransformationKind::DataFirst
-        | TransformationKind::Call
-        | TransformationKind::Pipe
-        | TransformationKind::Pipeable
-        | TransformationKind::EffectFn
-        | TransformationKind::EffectFnUntraced => {}
-        _ => return "",
-    }
     for name in ["provideContext", "setContext"] {
-        if tp.is_node_reference_to_effect_module_api(callee, name) {
+        if tp.is_node_reference_to_effect_module_api(transformation.callee(), name) {
             return name;
         }
     }
     ""
 }
 
-// go: internal/rules/run_provided_context_to_run_with.go:162 runProvidedContextRunner c84636d81919c897
+// go: internal/rules/run_provided_context_to_run_with.go:153 runProvidedContextRunner a7445846ec94df7e
 // runProvidedContextRunner returns the runner name and its *With replacement
 // when transformation runs its input with one of the context-free runners.
-// Already-applied factories such as Effect.runPromiseWith(context) never match.
-//
-// Rust: a transformation's callee is never nil, so Go's nil check drops.
 pub(crate) fn run_provided_context_runner(
     tp: &mut TypeParser<'_>,
     transformation: &PipingFlowTransformation,
 ) -> (&'static str, &'static str) {
-    let callee = transformation.callee();
-    if callee.kind() == Kind::CallExpression {
-        return ("", "");
-    }
-    match transformation.kind() {
-        TransformationKind::Call
-        | TransformationKind::Pipe
-        | TransformationKind::Pipeable
-        | TransformationKind::EffectFn
-        | TransformationKind::EffectFnUntraced => {
-            if transformation.args().len() != 0 {
-                return ("", "");
-            }
-        }
-        TransformationKind::CallWithOptionals => {}
-        _ => return ("", ""),
-    }
     for &(runner, replacement) in RUN_PROVIDED_CONTEXT_RUNNERS {
-        if tp.is_node_reference_to_effect_module_api(callee, runner) {
+        if tp.is_node_reference_to_effect_module_api(transformation.callee(), runner) {
             return (runner, replacement);
         }
     }
