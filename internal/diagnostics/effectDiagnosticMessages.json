@@ -654,5 +654,9 @@
     "Effect.{0} is called without a `catch` handler, so failures surface as the generic `{1}`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)": {
         "category": "Warning",
         "code": 377169
+    },
+    "This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)": {
+        "category": "Suggestion",
+        "code": 377168
     }
 }

@@ -124,7 +124,8 @@
         "unnecessaryPipe": "suggestion",
         "unnecessaryPipeChain": "suggestion",
         "unnecessaryTypeofType": "suggestion",
-        "unstableApiUsage": "warning"
+        "unstableApiUsage": "warning",
+        "zipViaNestedFlatMapToAll": "suggestion"
       }
     },
     {
@@ -224,7 +225,8 @@
         "unnecessaryPipe": "error",
         "unnecessaryPipeChain": "error",
         "unnecessaryTypeofType": "error",
-        "unstableApiUsage": "error"
+        "unstableApiUsage": "error",
+        "zipViaNestedFlatMapToAll": "error"
       }
     },
     {
@@ -389,7 +391,8 @@
         "unnecessaryFailYieldableError": "warning",
         "unnecessaryPipe": "warning",
         "unnecessaryPipeChain": "warning",
-        "unnecessaryTypeofType": "warning"
+        "unnecessaryTypeofType": "warning",
+        "zipViaNestedFlatMapToAll": "warning"
       }
     },
     {
@@ -3834,6 +3837,30 @@
             "start": 184,
             "end": 210,
             "text": "This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "zipViaNestedFlatMapToAll",
+      "group": "style",
+      "description": "Suggests Effect.all when a nested Effect.flatMap/Effect.map only pairs two independent effects",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377168
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const getUser: Effect.Effect\u003c{ readonly id: string }\u003e\ndeclare const getOrders: Effect.Effect\u003cReadonlyArray\u003cstring\u003e\u003e\n\nexport const program = Effect.flatMap(getUser, (user) =\u003e\n  Effect.map(getOrders, (orders) =\u003e [user, orders] as const))\n",
+        "diagnostics": [
+          {
+            "start": 181,
+            "end": 195,
+            "text": "This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)"
           }
         ]
       }

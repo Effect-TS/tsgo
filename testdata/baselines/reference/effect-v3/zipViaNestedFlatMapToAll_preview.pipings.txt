@@ -1,0 +1,29 @@
+==== /.src/zipViaNestedFlatMapToAll_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 8:62
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => [user, orders] as const))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<{ readonly id: string; }, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [{ readonly id: string; }, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 7:57 - 8:61
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [{ readonly id: string; }, readonly string[]], never, never>

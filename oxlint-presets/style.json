@@ -73,6 +73,7 @@
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
-    "effecttsgo/unnecessary-typeof-type": "warn"
+    "effecttsgo/unnecessary-typeof-type": "warn",
+    "effecttsgo/zip-via-nested-flat-map-to-all": "warn"
   }
 }

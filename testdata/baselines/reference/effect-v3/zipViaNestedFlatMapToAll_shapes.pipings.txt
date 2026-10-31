@@ -1,0 +1,787 @@
+==== /.src/zipViaNestedFlatMapToAll_shapes.ts (53 flows) ====
+
+=== Piping Flow ===
+Location: 16:32 - 21:2
+Node: Effect.fn("effectFnPipeline")(\n  function*() {\n    return yield* getUser\n  },\n  Effect.flatMap((user) => Effect.map(getOrders, (orders) => [user, orders] as const))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("effectFnPipeline")(\n  function*() {\n    return yield* getUser\n  },\n  Effect.flatMap((user) => Effect.map(getOrders, (orders) => [user, orders] as const))\n)
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 20:27 - 20:86
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 25:34 - 27:3
+Node: Effect.fn("insideEffectFnBody")(function*() {\n  return yield* Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders] as const))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders] as const))\n}
+Subject Type: () => Generator<YieldWrap<Effect<readonly [User, readonly string[]], never, never>>, readonly [User, readonly string[]], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("insideEffectFnBody")
+      args: (constant)
+      outType: () => Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 26:16 - 26:110
+Node: Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders] as const))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 26:50 - 26:109
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 31:33 - 34:3
+Node: Effect.gen(function*() {\n  const ref = yield* Ref.make(0)\n  return yield* Effect.flatMap(getUser, (user) => Ref.get(ref).pipe(Effect.map((count) => [user, count] as const)))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const ref = yield* Ref.make(0)\n  return yield* Effect.flatMap(getUser, (user) => Ref.get(ref).pipe(Effect.map((count) => [user, count] as const)))\n}
+Subject Type: () => Generator<YieldWrap<Effect<Ref<number>, never, never>> | YieldWrap<Effect<readonly [User, number], never, never>>, readonly [User, number], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 32:21 - 32:33
+Node: Ref.make(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Ref.make
+      args: (constant)
+      outType: Effect<Ref<number>, never, never>
+
+=== Piping Flow ===
+Location: 33:16 - 33:116
+Node: Effect.flatMap(getUser, (user) => Ref.get(ref).pipe(Effect.map((count) => [user, count] as const)))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Ref.get(ref).pipe(Effect.map((count) => [user, count] as const))]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 33:50 - 33:115
+Node: Ref.get(ref).pipe(Effect.map((count) => [user, count] as const))
+Node Kind: KindCallExpression
+
+Subject: ref
+Subject Type: Ref<number>
+
+Transformations (2):
+  [0] kind: call
+      callee: Ref.get
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(count) => [user, count] as const]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 38:40 - 42:5
+Node: Effect.flatMap(getUser, (user) =>\n  getOrders.pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  ))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  getOrders.pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  )]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 38:74 - 42:4
+Node: getOrders.pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  )
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [audit]
+      outType: Effect<readonly string[], never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 45:38 - 49:5
+Node: Effect.flatMap(getUser, (user) =>\n  getOrders.pipe(\n    Effect.tap(() => audit(user)),\n    Effect.map((orders) => [user, orders] as const)\n  ))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  getOrders.pipe(\n    Effect.tap(() => audit(user)),\n    Effect.map((orders) => [user, orders] as const)\n  )]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 45:72 - 49:4
+Node: getOrders.pipe(\n    Effect.tap(() => audit(user)),\n    Effect.map((orders) => [user, orders] as const)\n  )
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [() => audit(user)]
+      outType: Effect<readonly string[], never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 47:21 - 47:33
+Node: audit(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 53:32 - 55:94
+Node: getUser\n  .pipe(Effect.tap(audit))\n  .pipe(Effect.flatMap((user) => Effect.map(getOrders, (orders) => [user, orders] as const)))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [audit]
+      outType: Effect<User, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 55:33 - 55:92
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 59:43 - 63:2
+Node: pipe(\n  getUser,\n  Effect.tap(audit),\n  Effect.flatMap((user) => Effect.map(getOrders, (orders) => [user, orders] as const))\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.tap
+      args: [audit]
+      outType: Effect<User, never, never>
+  [1] kind: pipe
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 62:27 - 62:86
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 67:36 - 69:2
+Node: Effect.asVoid(\n  Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders] as const))\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+  [1] kind: call
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 68:36 - 68:95
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 73:26 - 74:68
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(Effect.succeed(Math.PI), (pi) => [user, pi] as const))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(Effect.succeed(Math.PI), (pi) => [user, pi] as const)]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 73:60 - 74:67
+Node: Effect.map(Effect.succeed(Math.PI), (pi) => [user, pi] as const)
+Node Kind: KindCallExpression
+
+Subject: Math.PI
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(pi) => [user, pi] as const]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 79:9 - 79:90
+Node: Effect.flatMap(getUser, (user) => Effect.map(source, (n) => [user, n] as const))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(source, (n) => [user, n] as const)]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 79:43 - 79:89
+Node: Effect.map(source, (n) => [user, n] as const)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => [user, n] as const]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 84:33 - 85:61
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => <const> [user, orders]))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getOrders, (orders) => <const> [user, orders])]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 84:67 - 85:60
+Node: Effect.map(getOrders, (orders) => <const> [user, orders])
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => <const> [user, orders]]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 88:37 - 91:2
+Node: Effect.flatMap<User, never, never, readonly [User, ReadonlyArray<string>], never, never>(\n  getUser,\n  (user) => Effect.map(getOrders, (orders) => [user, orders] as const)\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 90:12 - 90:71
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 94:42 - 98:5
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(\n    getOrders,\n    (orders) => [user, orders] as const\n  ))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(\n    getOrders,\n    (orders) => [user, orders] as const\n  )]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 94:76 - 98:4
+Node: Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(\n    getOrders,\n    (orders) => [user, orders] as const\n  )
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 102:11 - 102:49
+Node: source.pipe(Effect.map((n) => n + 1))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 103:9 - 103:90
+Node: Effect.flatMap(getUser, (user) => Effect.map(source, (n) => [user, n] as const))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(source, (n) => [user, n] as const)]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 103:43 - 103:89
+Node: Effect.map(source, (n) => [user, n] as const)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => [user, n] as const]
+      outType: Effect<readonly [User, number], never, never>
+
+=== Piping Flow ===
+Location: 107:31 - 108:67
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => ({ "1": user, "0": orders })))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getOrders, (orders) => ({ "1": user, "0": orders }))]
+      outType: Effect<{ "1": User; "0": readonly string[]; }, never, never>
+
+=== Piping Flow ===
+Location: 107:65 - 108:66
+Node: Effect.map(getOrders, (orders) => ({ "1": user, "0": orders }))
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => ({ "1": user, "0": orders })]
+      outType: Effect<{ "1": User; "0": readonly string[]; }, never, never>
+
+=== Piping Flow ===
+Location: 111:24 - 112:70
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => ({ "__proto__": user, orders })))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getOrders, (orders) => ({ "__proto__": user, orders }))]
+      outType: Effect<{ __proto__: User; orders: readonly string[]; }, never, never>
+
+=== Piping Flow ===
+Location: 111:58 - 112:69
+Node: Effect.map(getOrders, (orders) => ({ "__proto__": user, orders }))
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => ({ "__proto__": user, orders })]
+      outType: Effect<{ __proto__: User; orders: readonly string[]; }, never, never>
+
+=== Piping Flow ===
+Location: 115:39 - 118:6
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, function(orders) {\n    return [user, orders] as const\n  }))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getOrders, function(orders) {\n    return [user, orders] as const\n  })]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 115:73 - 118:5
+Node: Effect.map(getOrders, function(orders) {\n    return [user, orders] as const\n  })
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [function(orders) {\n    return [user, orders] as const\n  }]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 121:36 - 122:94
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => <readonly [User, ReadonlyArray<string>]> [user, orders]))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getOrders, (orders) => <readonly [User, ReadonlyArray<string>]> [user, orders])]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 121:70 - 122:93
+Node: Effect.map(getOrders, (orders) => <readonly [User, ReadonlyArray<string>]> [user, orders])
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => <readonly [User, ReadonlyArray<string>]> [user, orders]]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 125:33 - 126:93
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => [user, orders] satisfies [User, ReadonlyArray<string>]))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getOrders, (orders) => [user, orders] satisfies [User, ReadonlyArray<string>])]
+      outType: Effect<[User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 125:67 - 126:92
+Node: Effect.map(getOrders, (orders) => [user, orders] satisfies [User, ReadonlyArray<string>])
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] satisfies [User, ReadonlyArray<string>]]
+      outType: Effect<[User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 129:33 - 130:62
+Node: Effect.flatMap(getUser, (user?: User) =>\n  Effect.map(getOrders, (orders) => [user, orders] as const))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user?: User) =>\n  Effect.map(getOrders, (orders) => [user, orders] as const)]
+      outType: Effect<readonly [User | undefined, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 129:74 - 130:61
+Node: Effect.map(getOrders, (orders) => [user, orders] as const)
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User | undefined, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 138:41 - 142:5
+Node: Effect.flatMap(getUser, (user) =>\n  getOrdersFor(user.id).pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  ))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  getOrdersFor(user.id).pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  )]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 138:75 - 142:4
+Node: getOrdersFor(user.id).pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  )
+Node Kind: KindCallExpression
+
+Subject: user.id
+Subject Type: string
+
+Transformations (3):
+  [0] kind: call
+      callee: getOrdersFor
+      args: (constant)
+      outType: Effect<readonly string[], never, never>
+  [1] kind: pipeable
+      callee: Effect.tap
+      args: [audit]
+      outType: Effect<readonly string[], never, never>
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 145:36 - 149:5
+Node: Effect.flatMap(getUser, (user) =>\n  getOrders.pipe(\n    Effect.tap(currentAudit),\n    Effect.map((orders) => [user, orders] as const)\n  ))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  getOrders.pipe(\n    Effect.tap(currentAudit),\n    Effect.map((orders) => [user, orders] as const)\n  )]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 145:70 - 149:4
+Node: getOrders.pipe(\n    Effect.tap(currentAudit),\n    Effect.map((orders) => [user, orders] as const)\n  )
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [currentAudit]
+      outType: Effect<readonly string[], never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 153:37 - 157:5
+Node: Effect.flatMap(getUser, (user) =>\n  getOrders.pipe(\n    Effect.tap((orders) => currentAudit(orders)),\n    Effect.map((orders) => [user, orders] as const)\n  ))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  getOrders.pipe(\n    Effect.tap((orders) => currentAudit(orders)),\n    Effect.map((orders) => [user, orders] as const)\n  )]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 153:71 - 157:4
+Node: getOrders.pipe(\n    Effect.tap((orders) => currentAudit(orders)),\n    Effect.map((orders) => [user, orders] as const)\n  )
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [(orders) => currentAudit(orders)]
+      outType: Effect<readonly string[], never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 155:27 - 155:48
+Node: currentAudit(orders)
+Node Kind: KindCallExpression
+
+Subject: orders
+Subject Type: readonly string[]
+
+Transformations (1):
+  [0] kind: call
+      callee: currentAudit
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 159:26 - 159:39
+Node: audit(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<void, never, never>

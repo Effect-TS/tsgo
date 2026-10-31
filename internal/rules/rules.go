@@ -131,6 +131,7 @@ var All = []rule.Rule{
 	FlatMapToMap,
 	FlatMapToTap,
 	FlatMapIgnoredParamToAndThen,
+	ZipViaNestedFlatMapToAll,
 	FlatMapIdentityToFlatten,
 	MatchEffectToMatch,
 	MatchEffectToMapBoth,
