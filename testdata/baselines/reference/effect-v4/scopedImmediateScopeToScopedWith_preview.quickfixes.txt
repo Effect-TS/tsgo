@@ -1,0 +1,31 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:9-13:22) TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+  Fix 0: "Disable scopedImmediateScopeToScopedWith for this line"
+  Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file"
+  Fix 2: "Replace with Effect.scopedWith"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable scopedImmediateScopeToScopedWith for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable scopedImmediateScopeToScopedWith for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.scopedWith" ===
+
+--- file:///.src/scopedImmediateScopeToScopedWith_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics scopedImmediateScopeToScopedWith:warning
+import { Effect, Scope } from "effect"
+
+declare const openConnection: (scope: Scope.Scope) => Effect.Effect<string>
+
+export const program = Effect.scopedWith(scope => Effect.gen(function* () {
+    const connection = yield* openConnection(scope);
+    yield* Scope.addFinalizer(scope, Effect.log("closing"));
+    return connection;
+}))
+
