@@ -26,7 +26,7 @@ pub static SLEEP_THEN_EFFECT_TO_DELAY_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_sleep_then_effect_to_delay_fix,
 });
 
-// go: internal/fixables/sleep_then_effect_to_delay.go:23 runSleepThenEffectToDelayFix 8de220bd92cdf3e7
+// go: internal/fixables/sleep_then_effect_to_delay.go:23 runSleepThenEffectToDelayFix 112caa440a76ca64
 fn run_sleep_then_effect_to_delay_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_sleep_then_effect_to_delay(&mut ctx.type_parser, Some(sf)) {
@@ -55,9 +55,7 @@ fn run_sleep_then_effect_to_delay_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
                 let (mut delayed, original) =
                     sleep_then_effect_to_delay_effect(tracker, &m, suspend.as_ref());
                 match m.sequencer.kind() {
-                    TransformationKind::DataFirst
-                    | TransformationKind::DataLast
-                    | TransformationKind::Call => {
+                    TransformationKind::DataFirst | TransformationKind::Call => {
                         if original.is_some() {
                             delayed = tracker.deep_clone_node(original);
                         }
@@ -94,12 +92,14 @@ fn run_sleep_then_effect_to_delay_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
                                 return;
                             }
                         }
-                        tracker.replace_piping_flow_prefix(
+                        if !tracker.replace_piping_flow_prefix(
                             Some(sf),
                             Some(&m.flow),
                             m.sleep_index + 1,
                             delayed,
-                        );
+                        ) {
+                            return;
+                        }
                         let callee = delay(tracker);
                         let arguments = tracker.new_node_list(vec![
                             tracker.deep_clone_node(Some(m.duration)).unwrap(),
@@ -125,7 +125,7 @@ fn run_sleep_then_effect_to_delay_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
     Vec::new()
 }
 
-// go: internal/fixables/sleep_then_effect_to_delay.go:82 sleepThenEffectToDelayEffect 30d61924dd34aa4d
+// go: internal/fixables/sleep_then_effect_to_delay.go:84 sleepThenEffectToDelayEffect 30d61924dd34aa4d
 // sleepThenEffectToDelayEffect returns the effect to delay: either a source
 // expression that callers clone for its new position, or a synthesized
 // Effect.suspend call that keeps the continuation lazy.
@@ -172,7 +172,7 @@ fn sleep_then_effect_to_delay_effect(
     )
 }
 
-// go: internal/fixables/sleep_then_effect_to_delay.go:108 effectModuleMemberCallee af959678a48e7369
+// go: internal/fixables/sleep_then_effect_to_delay.go:110 effectModuleMemberCallee af959678a48e7369
 // effectModuleMemberCallee returns a builder for a reference to the Effect
 // module member name at location. The qualifier of the callee at location is
 // kept when it is the Effect module; otherwise the file's Effect import, or an
