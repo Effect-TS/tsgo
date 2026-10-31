@@ -3104,7 +3104,7 @@
       "group": "style",
       "description": "Reports imports of individual modules from packages configured in barrelImportPackages that should be named imports from the package barrel",
       "defaultSeverity": "off",
-      "fixable": false,
+      "fixable": true,
       "supportedEffect": [
         "v3",
         "v4"
@@ -3128,7 +3128,7 @@
       "group": "style",
       "description": "Reports named imports from packages configured in namespaceImportPackages that should be namespace imports",
       "defaultSeverity": "off",
-      "fixable": false,
+      "fixable": true,
       "supportedEffect": [
         "v3",
         "v4"

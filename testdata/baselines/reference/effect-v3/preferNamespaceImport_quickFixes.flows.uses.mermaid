@@ -1,0 +1,11 @@
+flowchart TB
+  0[/"type: number#91;#93;<br/>node: #91;1, 2#93;"/]
+  1["type: number#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: #123; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: #40;self: S#41; =#gt; With#lt;S, B#gt;; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: With#lt;S, B#gt;; #125;<br/>node: map"/]
+  3[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
+  4[/"type: number<br/>node: n * 2"/]
+  5[/"type: #123; map: #123; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: #40;self: S#41; =#gt; With#lt;S, B#gt;; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: With#lt;S, B#gt;; #125;; #125;<br/>node: #123; map #125;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 0
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 0

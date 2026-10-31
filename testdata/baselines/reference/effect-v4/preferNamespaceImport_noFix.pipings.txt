@@ -1,0 +1,51 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/node_modules/@acme/kit/package.json (0 flows) ====
+==== /.src/node_modules/@acme/kit/dist/index.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/kit/dist/nested/deep.d.ts (0 flows) ====
+==== /.src/globalValue.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 8:49
+Node: map([1, 2], (n) => n * 2)
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [(n) => n * 2]
+      outType: number[]
+==== /.src/followGlobal.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:21 - 8:43
+Node: pipe(1, (n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: pipe
+      callee: (n) => n + 1
+      args: (constant)
+      outType: number
+==== /.src/reexport.ts (0 flows) ====
+==== /.src/comment.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 7:49
+Node: map([1, 2], (n) => n * 2)
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [(n) => n * 2]
+      outType: number[]
+==== /.src/noTarget.ts (0 flows) ====

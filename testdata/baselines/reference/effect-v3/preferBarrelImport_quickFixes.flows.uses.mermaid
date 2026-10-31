@@ -1,0 +1,11 @@
+flowchart TB
+  0[/"type: Record#lt;string, number#gt;<br/>node: empty#lt;string, number#gt;#40;#41;"/]
+  1["type: Record#lt;string, number#gt;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: #123; #lt;K extends string #124; symbol, K1 extends K #124; #40;#40;string #124; symbol#41; #amp; #123;#125;#41;, B#gt;#40;key: K1, value: B#41;: #lt;A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; Record#lt;K #124; K1, A #124; B#gt;; #lt;K extends string #124; symbol, A, K1 extends K #124; #40;#40;string #124; symbol#41; #amp; #123;#125;#41;, B#gt;#40;self: ReadonlyRecord#lt;K, A#gt;, key: K1, value: B#41;: Record#lt;K #124; K1, A #124; B#gt;; #125;<br/>node: set"/]
+  3[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  4[/"type: 1<br/>node: 1"/]
+  5[/"type: #123; empty: #lt;K extends string #124; symbol = never, V = never#gt;#40;#41; =#gt; Record#lt;NonLiteralKey#lt;K#gt;, V#gt;; #125;<br/>node: #123; empty #125;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 0
+  3 -->|"kind: transformArg"| 0
+  4 -->|"kind: transformArg"| 0

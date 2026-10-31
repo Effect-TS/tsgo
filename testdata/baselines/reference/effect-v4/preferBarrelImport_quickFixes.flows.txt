@@ -1,0 +1,9 @@
+/.src/package.json -> preferBarrelImport_quickFixes.flows.package.mermaid
+/.src/node_modules/@acme/ui/package.json -> preferBarrelImport_quickFixes.flows.package1.mermaid
+/.src/node_modules/@acme/ui/dist/index.d.ts -> preferBarrelImport_quickFixes.flows.index.d.mermaid
+/.src/node_modules/@acme/ui/dist/Button.d.ts -> preferBarrelImport_quickFixes.flows.Button.d.mermaid
+/.src/uses.ts -> preferBarrelImport_quickFixes.flows.uses.mermaid
+/.src/reuse.ts -> preferBarrelImport_quickFixes.flows.reuse.mermaid
+/.src/typeOnly.ts -> preferBarrelImport_quickFixes.flows.typeOnly.mermaid
+/.src/style.ts -> preferBarrelImport_quickFixes.flows.style.mermaid
+/.src/alias.ts -> preferBarrelImport_quickFixes.flows.alias.mermaid

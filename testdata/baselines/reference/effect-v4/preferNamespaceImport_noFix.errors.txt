@@ -1,0 +1,101 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/comment.ts(5,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+/.src/followGlobal.ts(5,10): warning TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+/.src/globalValue.ts(5,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+/.src/noTarget.ts(5,10): warning TS377147: 'deep' is imported by name from '@acme/kit', but namespaceImportPackages expects a namespace import of the module that declares 'deep'. effect(preferNamespaceImport)
+/.src/reexport.ts(5,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "namespaceImportPackages": ["effect", "@acme/kit"],
+            "topLevelNamedReexports": "follow"
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/node_modules/@acme/kit/package.json (0 errors) ====
+    { "name": "@acme/kit", "version": "1.0.0", "types": "./dist/index.d.ts", "exports": { ".": { "types": "./dist/index.d.ts" }, "./*": { "types": "./dist/*.d.ts" } } }
+    
+
+==== /.src/node_modules/@acme/kit/dist/index.d.ts (0 errors) ====
+    export { deep } from "./nested/deep.js"
+    
+
+==== /.src/node_modules/@acme/kit/dist/nested/deep.d.ts (0 errors) ====
+    export declare const deep: number
+    
+
+==== /.src/globalValue.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // no fix: Array would rebind the global Array that the file reads
+    import { map } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    export const isList = Array.isArray
+    export const doubled = map([1, 2], (n) => n * 2)
+    
+
+==== /.src/followGlobal.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // no fix: pipe would become Function.pipe, and Function would rebind the global the file reads
+    import { pipe } from "effect"
+             ~~~~
+!!! warning TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+    
+    export const isFunction = (u: unknown): u is Function => typeof u === "function"
+    export const value = pipe(1, (n) => n + 1)
+    
+
+==== /.src/reexport.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // no fix: the binding is re-exported, and Array.map can't stand in an export specifier
+    import { map } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    export { map }
+    
+
+==== /.src/comment.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // no fix: the rewrite would drop the comment inside the declaration
+    import { map /* the Effect one */ } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    export const doubled = map([1, 2], (n) => n * 2)
+    
+
+==== /.src/noTarget.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // no fix: the report names no module to import as a namespace
+    import { deep } from "@acme/kit"
+             ~~~~
+!!! warning TS377147: 'deep' is imported by name from '@acme/kit', but namespaceImportPackages expects a namespace import of the module that declares 'deep'. effect(preferNamespaceImport)
+    
+    export const value = deep
+    

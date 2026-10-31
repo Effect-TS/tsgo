@@ -1,0 +1,116 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:28-5:43) TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import Record from 'effect' and qualify the uses"
+
+[D2] (6:28-6:43) TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Qualify the uses with the existing Option import from 'effect'"
+
+[D3] (5:31-5:48) TS377148: 'effect/Duration' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Duration } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import type Duration from 'effect' and qualify the uses"
+
+[D4] (5:21-5:35) TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import Array from 'effect' and qualify the uses"
+
+[D5] (5:22-5:39) TS377148: '@acme/ui/Button' is imported directly, but barrelImportPackages expects named imports from the barrel '@acme/ui'. Use 'import { Button } from "@acme/ui"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import Button as Ui from '@acme/ui' and qualify the uses"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Import Record from 'effect' and qualify the uses" ===
+
+--- file:///.src/uses.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// fix: the named imports become members of Record, shorthand properties included
+import { Record } from "effect"
+
+export const counts = Record.set(Record.empty<string, number>(), "a", 1)
+export const factories = { empty: Record.empty }
+export type Empty = typeof Record.empty
+
+=== [D2] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Qualify the uses with the existing Option import from 'effect'" ===
+
+--- file:///.src/reuse.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// fix: the uses are qualified with the Option import already in the file
+import { Option } from "effect"
+
+export const values = [Option.some(1), Option.none(), Option.isSome]
+
+=== [D3] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Import type Duration from 'effect' and qualify the uses" ===
+
+--- file:///.src/typeOnly.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// fix: only types are imported, so the barrel import is type-only
+import type { Duration } from "effect"
+
+export type Timeout = Duration.Duration
+
+=== [D4] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Import Array from 'effect' and qualify the uses" ===
+
+--- file:///.src/style.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// fix: quotes and semicolons are kept
+import { Array } from 'effect';
+
+export const doubled = Array.map([1, 2], (n) => n * 2);
+
+=== [D5] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Import Button as Ui from '@acme/ui' and qualify the uses" ===
+
+--- file:///.src/alias.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// fix: importAliases names the binding
+import { Button as Ui } from "@acme/ui"
+
+export const save = Ui.make("save")
+

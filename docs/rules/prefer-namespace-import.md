@@ -8,7 +8,7 @@ Reports named imports from packages configured in namespaceImportPackages that s
 | --- | --- |
 | Category | Style |
 | Default severity | `off` |
-| Fixable | No |
+| Fixable | Yes |
 | Effect versions | v3, v4 |
 | Diagnostic codes | `TS377146`, `TS377147` |
 | Language Service name | `preferNamespaceImport` |
