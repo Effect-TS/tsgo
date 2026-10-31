@@ -91,7 +91,7 @@ pub struct ZipViaNestedFlatMapToAllMatch {
     pub fixable: bool,
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:83 AnalyzeZipViaNestedFlatMapToAll 826085741d862f34
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:83 AnalyzeZipViaNestedFlatMapToAll b190b8dc35a611ab
 // AnalyzeZipViaNestedFlatMapToAll finds Effect.flatMap steps whose callback
 // returns a flow ending in Effect.map over an effect that does not depend on
 // the flatMap value, with a combiner that only packs both values into [x, y]
@@ -145,9 +145,6 @@ pub fn analyze_zip_via_nested_flat_map_to_all(
             let (Some(outer_symbol), Some(inner_symbol)) = (outer_symbol, inner_symbol) else {
                 continue;
             };
-            if outer_symbol == inner_symbol {
-                continue;
-            }
             let Some((record, keys)) = zip_combiner_shape(
                 tp,
                 Some(inner_callback.expression()),
@@ -204,22 +201,17 @@ pub fn analyze_zip_via_nested_flat_map_to_all(
     matches
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:156 zipCallback 66a565ea1cac8233
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:156 zipCallback 2883d1d54155b6a1
 // zipCallback returns the single arrow callback of a step when it declares one
 // plain identifier parameter and returns an expression.
 //
 // Rust: the step's callee and arguments are never nil, and a parsed callback always has an expression, so Go's nil
 // checks on them drop.
 pub(crate) fn zip_callback(step: &PipingFlowTransformation) -> Option<ParsedLazyExpression> {
-    let callee = step.callee();
-    if callee.flags().intersects(NodeFlags::OptionalChain) || step.args().len() != 1 {
+    if step.args().len() != 1 {
         return None;
     }
-    let argument = *step.args().at(0);
-    if argument.kind() == Kind::SpreadElement {
-        return None;
-    }
-    let callback = parse_lazy_expression(argument, LazyExpressionFlags::None)?;
+    let callback = parse_lazy_expression(*step.args().at(0), LazyExpressionFlags::None)?;
     if callback.node().kind() != Kind::ArrowFunction || callback.params().len() != 1 {
         return None;
     }
@@ -232,7 +224,7 @@ pub(crate) fn zip_callback(step: &PipingFlowTransformation) -> Option<ParsedLazy
     Some(callback)
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:180 zipCombinerShape a79638f542f0c047
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:176 zipCombinerShape e16024ceafd2217c
 // zipCombinerShape reports whether combiner is exactly [x, y] (optionally
 // `as const`) or a two-property object literal whose values are x then y.
 // For records it returns the key nodes in order.
@@ -280,13 +272,6 @@ pub(crate) fn zip_combiner_shape(
             for (i, &property) in properties.iter().enumerate() {
                 let value = match property.kind() {
                     Kind::ShorthandPropertyAssignment => {
-                        if property
-                            .as_shorthand_property_assignment()
-                            .object_assignment_initializer()
-                            .is_some()
-                        {
-                            return None;
-                        }
                         tp.checker().get_shorthand_assignment_value_symbol(Some(property))
                     }
                     Kind::PropertyAssignment => {
@@ -322,7 +307,7 @@ pub(crate) fn zip_combiner_shape(
     }
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:247 isCanonicalArrayIndex 79038d8be8b00f8a
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:240 isCanonicalArrayIndex 79038d8be8b00f8a
 pub(crate) fn is_canonical_array_index(text: &str) -> bool {
     if text.is_empty() || text.len() > 1 && text.as_bytes()[0] == b'0' {
         return false;
@@ -335,7 +320,7 @@ pub(crate) fn is_canonical_array_index(text: &str) -> bool {
     true
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:262 zipStepInput f88d54413001f485
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:255 zipStepInput f88d54413001f485
 // zipStepInput returns the effect consumed by the indexed step of flow. A pipe
 // or pipeable step that is not the first argument of its pipe call consumes
 // the same call truncated before it.
@@ -380,7 +365,7 @@ pub(crate) fn zip_step_input(
     Some(ZipViaNestedFlatMapToAllOperand { node: Some(input), ..Default::default() })
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:296 zipPipeCallOf 24b45d87c8431601
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:289 zipPipeCallOf 24b45d87c8431601
 // zipPipeCallOf returns the pipe call that receives a pipe or pipeable step as
 // an argument, with the argument's index.
 //
@@ -406,7 +391,7 @@ pub(crate) fn zip_pipe_call_of(step: &PipingFlowTransformation) -> Option<(P<Nod
     Some((parent, index as i64))
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:311 zipOperandClonable 1c9506a0f0a6f137
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:304 zipOperandClonable 1c9506a0f0a6f137
 // zipOperandClonable reports whether the fix can rebuild the operand without
 // dropping explicit type arguments or optional chaining of a truncated pipe call.
 pub(crate) fn zip_operand_clonable(operand: ZipViaNestedFlatMapToAllOperand) -> bool {
@@ -421,7 +406,7 @@ pub(crate) fn zip_operand_clonable(operand: ZipViaNestedFlatMapToAllOperand) -> 
             .is_none_or(|type_arguments| type_arguments.nodes().is_empty())
 }
 
-// go: internal/rules/zip_via_nested_flat_map_to_all.go:320 zipOperandIndependentOf bca03952a40df7df
+// go: internal/rules/zip_via_nested_flat_map_to_all.go:313 zipOperandIndependentOf bca03952a40df7df
 // zipOperandIndependentOf reports whether no identifier in the operand,
 // including nested functions and type positions, refers to symbol.
 //
