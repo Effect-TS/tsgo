@@ -2,7 +2,7 @@
 
 # `matchToResultOrOption`
 
-Suggests Effect.result, Effect.option or Effect.either when match handlers only reify the outcome
+Suggests Effect.result, Effect.option or Effect.either when match handlers, or a map step followed by a catch step, only reify the outcome
 
 | Property | Value |
 | --- | --- |

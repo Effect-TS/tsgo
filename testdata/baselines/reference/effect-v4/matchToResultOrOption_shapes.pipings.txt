@@ -1,4 +1,4 @@
-==== /.src/matchToResultOrOption_shapes.ts (25 flows) ====
+==== /.src/matchToResultOrOption_shapes.ts (28 flows) ====
 
 === Piping Flow ===
 Location: 5:27 - 5:60
@@ -390,6 +390,60 @@ Transformations (2):
 
 === Piping Flow ===
 Location: 105:29 - 108:3
+Node: Effect.matchEffect(fetchUser("u1"), {\n  onFailure: (...e) => Effect.succeed(Result.fail(e)),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: (...e) => Effect.succeed(Result.fail(e)),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, [e: UserNotFound]> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 106:23 - 106:54
+Node: Effect.succeed(Result.fail(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: [e: UserNotFound]
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, [e: UserNotFound]>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, [e: UserNotFound]>, never, never>
+
+=== Piping Flow ===
+Location: 107:23 - 107:60
+Node: Effect.succeed(Result.succeed(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 111:29 - 114:3
 Node: Effect.match({\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n})
 Node Kind: KindCallExpression
 

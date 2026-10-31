@@ -2,7 +2,7 @@
 "@effect/tsgo": minor
 ---
 
-Add the `matchToResultOrOption` diagnostic (style, suggestion). It reports `Effect.match` / `Effect.matchEffect` calls whose handlers only wrap the value and the error, and adjacent `Effect.map` + `Effect.catch` steps (`catchAll` in v3) that do the same. The quick fix replaces them with `Effect.result` or `Effect.option` (v4), or `Effect.either` or `Effect.option` (v3). These combinators also carry the error type through precisely, instead of producing a wider union type.
+Add the `matchToResultOrOption` diagnostic (style, suggestion). It reports `Effect.match` / `Effect.matchEffect` calls whose handlers only wrap the value and the error, and adjacent `Effect.map` + `Effect.catch` steps (`catchAll` in v3) that do the same. When the rewrite cannot drop code (every removed callee is a side-effect-free reference and no explicit type argument depends on the old output type) and an `Effect` namespace binding is in scope, the quick fix replaces them with `Effect.result` or `Effect.option` (v4), or `Effect.either` or `Effect.option` (v3). These combinators also carry the error type through precisely, instead of producing a wider union type.
 
 ```ts
 // reported, fix: Effect.result(fetchUser("u1"))

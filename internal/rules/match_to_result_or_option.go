@@ -16,7 +16,7 @@ import (
 var MatchToResultOrOption = rule.Rule{
 	Name:            "matchToResultOrOption",
 	Group:           "style",
-	Description:     "Suggests Effect.result, Effect.option or Effect.either when match handlers only reify the outcome",
+	Description:     "Suggests Effect.result, Effect.option or Effect.either when match handlers, or a map step followed by a catch step, only reify the outcome",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
@@ -189,15 +189,11 @@ func matchHandlerPair(node *ast.Node) (onFailure, onSuccess *ast.Node) {
 // container: the constructor itself, a forwarder to it, or a function whose
 // body is exactly Option.none().
 func reifyingHandler(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) (reifyingKind, bool) {
-	target, typeArguments, parameter := tp.UnwrapIdentityForwarder(node)
+	target, typeArguments, _ := tp.UnwrapIdentityForwarder(node)
 	if typeArguments != nil && len(typeArguments.Nodes) > 0 {
 		return reifyingKind{}, false
 	}
 	if kind, ok := reifyingConstructor(tp, c, target); ok {
-		// Option.none takes no argument, so it is never forwarded one.
-		if parameter != nil && kind == (reifyingKind{family: reifyingOption, failure: true}) {
-			return reifyingKind{}, false
-		}
 		return kind, true
 	}
 	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
@@ -210,7 +206,9 @@ func reifyingHandler(tp *typeparser.TypeParser, c *checker.Checker, node *ast.No
 // succeedReifyingHandler classifies a handler whose body lifts a reified
 // argument with Effect.succeed: Effect.succeed(Result.fail(e)) for its
 // parameter e, or Effect.succeed(Option.none()). Only direct calls count: a
-// pipe call in the body may run code through its receiver.
+// pipe or pipeable step may run code through its pipe callee or receiver
+// (getFunction().pipe(...), e.pipe(...)), and a step does not expose its
+// enclosing pipe call to check that callee.
 func succeedReifyingHandler(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) (reifyingKind, bool) {
 	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
 	if lazy == nil || !hasPlainParameters(lazy) {
@@ -325,9 +323,6 @@ func hasPlainParameters(lazy *typeparser.ParsedLazyExpression) bool {
 		return false
 	}
 	for _, parameter := range lazy.Params().All() {
-		if parameter.Kind != ast.KindParameter {
-			return false
-		}
 		declaration := parameter.AsParameterDeclaration()
 		if declaration.Name() == nil || declaration.Name().Kind != ast.KindIdentifier ||
 			declaration.DotDotDotToken != nil || declaration.Initializer != nil {
@@ -350,7 +345,7 @@ func matchToResultCatchName(tp *typeparser.TypeParser, step typeparser.PipingFlo
 }
 
 func hasSingleArgument(step typeparser.PipingFlowTransformation) bool {
-	return step.Callee() != nil && step.Args().Len() == 1 && step.Args().At(0).Kind != ast.KindSpreadElement
+	return step.Args().Len() == 1
 }
 
 // matchToResultOrOptionFixable reports whether the replaced steps can be
@@ -361,7 +356,7 @@ func hasSingleArgument(step typeparser.PipingFlowTransformation) bool {
 func matchToResultOrOptionFixable(tp *typeparser.TypeParser, c *checker.Checker, flow *typeparser.PipingFlow, start, end int) bool {
 	for i := start; i <= end; i++ {
 		step := flow.Transformations().At(i)
-		if !isSideEffectFreeReference(tp, c, step.Callee()) || step.Kind() == typeparser.TransformationKindCallWithOptionals {
+		if !isSideEffectFreeReference(tp, c, step.Callee()) {
 			return false
 		}
 	}

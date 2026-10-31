@@ -101,6 +101,12 @@ export const defaultParameter = Effect.match(fetchUser("u1"), {
   onSuccess: Option.some
 })
 
+// MUST NOT TRIGGER: a rest parameter collects the error into an array, so Result.fail(e) wraps [error]
+export const restParameter = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (...e) => Effect.succeed(Result.fail(e)),
+  onSuccess: (user) => Effect.succeed(Result.succeed(user))
+})
+
 // MUST NOT TRIGGER: an unapplied pipeable match is not applied to an Effect yet
 export const unappliedFold = Effect.match({
   onFailure: Result.fail,
