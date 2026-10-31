@@ -4,14 +4,15 @@ Effect version: 4.0.2
 /.src/mapSomeToAsSome.ts(15,61): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 /.src/mapSomeToAsSome.ts(19,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 /.src/mapSomeToAsSome.ts(24,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
-/.src/mapSomeToAsSome.ts(28,39): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
-/.src/mapSomeToAsSome.ts(33,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome.ts(29,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome.ts(33,39): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 /.src/mapSomeToAsSome.ts(38,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
-/.src/mapSomeToAsSome.ts(83,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
-/.src/mapSomeToAsSome.ts(90,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome.ts(43,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome.ts(88,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome.ts(95,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 
 
-==== /.src/mapSomeToAsSome.ts (8 errors) ====
+==== /.src/mapSomeToAsSome.ts (9 errors) ====
     import {
       Effect,
       Effect as Fx,
@@ -40,6 +41,13 @@ Effect version: 4.0.2
     // Should trigger: exact eta-expansion
     export const shouldTriggerEtaExpanded = numberEffect.pipe(
       Effect.map((value) => Option.some(value))
+      ~~~~~~~~~~
+!!! suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+    )
+    
+    // Should trigger: eta-expansion written as a piping flow
+    export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+      Effect.map((value) => pipe(value, Option.some))
       ~~~~~~~~~~
 !!! suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
     )

@@ -6,7 +6,7 @@ use ets_shim::scanner::get_text_of_node;
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/identity_forwarder_test.go:10 TestUnwrapIdentityForwarder e1cf193c94cdcfbb
+// go test: internal/typeparser/identity_forwarder_test.go:10 TestUnwrapIdentityForwarder 2f57adf131c8408c
 #[test]
 fn test_unwrap_identity_forwarder() {
     run(|t| {
@@ -16,6 +16,8 @@ fn test_unwrap_identity_forwarder() {
 declare const call: (value: unknown) => unknown
 declare const other: (value: unknown) => unknown
 declare const genericCall: <A>(value: unknown) => A
+declare const source: Pipeable
+interface Pipeable { pipe<B>(f: (self: Pipeable) => B): B; pipe<B, C>(f: (self: Pipeable) => B, g: (b: B) => C): C }
 
 const direct = call
 const arrow = (value: unknown) => call(value)
@@ -24,6 +26,7 @@ const functionExpression = function(value: unknown) { return call(value) }
 const parenthesized = (value: unknown) => (call)((value))
 const differentCallee = (value: unknown) => other(value)
 const typeArguments = (value: unknown) => genericCall<string>(value)
+const pipeable = (value: Pipeable) => value.pipe(call)
 
 const wrapped = (value: unknown) => call(String(value))
 const differentValue = (value: unknown) => call(undefined)
@@ -34,6 +37,8 @@ const twoParameters = (value: unknown, other: unknown) => call(value)
 const asynchronous = async (value: unknown) => call(value)
 const generator = function*(value: unknown) { return call(value) }
 const notACall = (value: unknown) => value
+const pipeableChain = (value: Pipeable) => value.pipe(call, other)
+const pipeableOtherSubject = (value: Pipeable) => source.pipe(call)
 "#;
 
         let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, source);
@@ -48,6 +53,7 @@ const notACall = (value: unknown) => value
             ("parenthesized", "call", true, 0),
             ("differentCallee", "other", true, 0),
             ("typeArguments", "genericCall", true, 1),
+            ("pipeable", "call", true, 0),
             ("wrapped", "", false, 0),
             ("differentValue", "", false, 0),
             ("shadowed", "", false, 0),
@@ -57,6 +63,8 @@ const notACall = (value: unknown) => value
             ("asynchronous", "", false, 0),
             ("generator", "", false, 0),
             ("notACall", "", false, 0),
+            ("pipeableChain", "", false, 0),
+            ("pipeableOtherSubject", "", false, 0),
         ];
 
         for &(name, want_target, want_unwrap, want_type_arguments) in tests {
@@ -109,7 +117,7 @@ const notACall = (value: unknown) => value
     });
 }
 
-// go test: internal/typeparser/identity_forwarder_test.go:91 findVariableInitializer d2ef79445e3972ba
+// go test: internal/typeparser/identity_forwarder_test.go:99 findVariableInitializer d2ef79445e3972ba
 pub(crate) fn find_variable_initializer(t: &T, sf: P<SourceFile>, name: &str) -> P<Node> {
     t.helper();
 

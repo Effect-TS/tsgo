@@ -4,16 +4,17 @@ Effect version: 4.0.2
 /.src/optionMatchToFromOption.ts(16,31): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
 /.src/optionMatchToFromOption.ts(22,26): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
 /.src/optionMatchToFromOption.ts(28,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-/.src/optionMatchToFromOption.ts(35,31): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-/.src/optionMatchToFromOption.ts(44,3): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-/.src/optionMatchToFromOption.ts(53,3): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-/.src/optionMatchToFromOption.ts(60,25): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-/.src/optionMatchToFromOption.ts(66,31): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-/.src/optionMatchToFromOption.ts(72,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-/.src/optionMatchToFromOption.ts(77,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(34,34): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(41,31): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(50,3): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(59,3): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(66,25): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(72,31): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(78,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(83,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
 
 
-==== /.src/optionMatchToFromOption.ts (10 errors) ====
+==== /.src/optionMatchToFromOption.ts (11 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics optionMatchToFromOption:suggestion
     import { Cause, Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
@@ -50,6 +51,14 @@ Effect version: 4.0.2
 !!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
       onSome: (value) => Fx.succeed(value),
       onNone: () => Fx.fail(new MissingValue("identity"))
+    })
+    
+    // Should trigger: an identity arrow written as a piping flow is accepted.
+    export const identityArrowPipe = Option.match(option, {
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+      onSome: (value) => pipe(value, Effect.succeed)
     })
     
     // Should trigger without a fix: replacing a function expression with an arrow

@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+
+
+==== /.src/resultMatchToFromResult_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    import { Effect, Result } from "effect"
+    
+    declare const parsePort: (raw: string) => Result.Result<number, Error>
+    
+    export const port = Result.match(parsePort("8080"), {
+      onFailure: (error) => Effect.fail(error),
+      onSuccess: (value) => Effect.succeed(value)
+    })
+    

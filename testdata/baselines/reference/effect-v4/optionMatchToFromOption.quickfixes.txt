@@ -15,36 +15,41 @@
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D4] (35:31-35:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-  Fix 0: "Disable optionMatchToFromOption for this line"
-  Fix 1: "Disable optionMatchToFromOption for entire file"
-
-[D5] (44:3-44:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D4] (34:34-34:46) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D6] (53:3-53:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D5] (41:31-41:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+  Fix 0: "Disable optionMatchToFromOption for this line"
+  Fix 1: "Disable optionMatchToFromOption for entire file"
+
+[D6] (50:3-50:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D7] (60:25-60:37) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D7] (59:3-59:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D8] (66:31-66:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D8] (66:25-66:37) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D9] (72:30-72:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D9] (72:31-72:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D10] (77:30-77:38) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D10] (78:30-78:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+  Fix 0: "Disable optionMatchToFromOption for this line"
+  Fix 1: "Disable optionMatchToFromOption for entire file"
+  Fix 2: "Replace with Effect.fromOption"
+
+[D11] (83:30-83:38) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
@@ -87,6 +92,12 @@ export const dataFirst = Option.match(option, {
 export const identityArrow = O.match(option, {
   onSome: (value) => Fx.succeed(value),
   onNone: () => Fx.fail(new MissingValue("identity"))
+})
+
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
 })
 
 // Should trigger without a fix: replacing a function expression with an arrow
@@ -216,6 +227,12 @@ export const identityArrow = O.match(option, {
   onNone: () => Fx.fail(new MissingValue("identity"))
 })
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {
@@ -343,6 +360,12 @@ export const dataFirst = Option.match(option, {
 // Should trigger: handler order is irrelevant and an exact identity arrow is accepted.
 export const identityArrow = Effect.fromOption(option, () => new MissingValue("identity"))
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {
@@ -438,13 +461,7 @@ skipped by default
 === [D4] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D5] Fix 0: "Disable optionMatchToFromOption for this line" ===
-skipped by default
-
-=== [D5] Fix 1: "Disable optionMatchToFromOption for entire file" ===
-skipped by default
-
-=== [D5] Fix 2: "Replace with Effect.fromOption" ===
+=== [D4] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -479,6 +496,9 @@ export const identityArrow = O.match(option, {
   onNone: () => Fx.fail(new MissingValue("identity"))
 })
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Effect.fromOption(option, () => new MissingValue("identity-pipe"))
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {
@@ -490,7 +510,10 @@ export const functionOnNone = Option.match(option, {
 
 // Should trigger: pipeable Option.match rewrites to pipeable Effect.fromOption.
 export const pipeable = option.pipe(
-  Effect.fromOption(() => new MissingValue("pipeable"))
+  Option.match({
+    onNone: () => Effect.fail(new MissingValue("pipeable")),
+    onSome: Effect.succeed
+  })
 )
 
 // Should trigger: the function-pipe form is normalized the same way.
@@ -565,6 +588,12 @@ export const unrelated = local.match(1, {
 })
 
 
+=== [D5] Fix 0: "Disable optionMatchToFromOption for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+skipped by default
+
 === [D6] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
@@ -606,6 +635,12 @@ export const identityArrow = O.match(option, {
   onNone: () => Fx.fail(new MissingValue("identity"))
 })
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {
@@ -617,16 +652,16 @@ export const functionOnNone = Option.match(option, {
 
 // Should trigger: pipeable Option.match rewrites to pipeable Effect.fromOption.
 export const pipeable = option.pipe(
-  Option.match({
-    onNone: () => Effect.fail(new MissingValue("pipeable")),
-    onSome: Effect.succeed
-  })
+  Effect.fromOption(() => new MissingValue("pipeable"))
 )
 
 // Should trigger: the function-pipe form is normalized the same way.
 export const functionPipe = pipe(
   option,
-  Effect.fromOption(() => new MissingValue("pipe"))
+  Option.match({
+    onNone: () => Effect.fail(new MissingValue("pipe")),
+    onSome: Effect.succeed
+  })
 )
 
 // Should trigger: direct data-last application is also supported.
@@ -733,6 +768,12 @@ export const identityArrow = O.match(option, {
   onNone: () => Fx.fail(new MissingValue("identity"))
 })
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {
@@ -753,14 +794,14 @@ export const pipeable = option.pipe(
 // Should trigger: the function-pipe form is normalized the same way.
 export const functionPipe = pipe(
   option,
-  Option.match({
-    onNone: () => Effect.fail(new MissingValue("pipe")),
-    onSome: Effect.succeed
-  })
+  Effect.fromOption(() => new MissingValue("pipe"))
 )
 
 // Should trigger: direct data-last application is also supported.
-export const dataLast = Effect.fromOption(() => new MissingValue("data-last"))(option)
+export const dataLast = Option.match({
+  onNone: () => Effect.fail(new MissingValue("data-last")),
+  onSome: Effect.succeed
+})(option)
 
 // Should trigger and use the one-argument Effect.fromOption form.
 export const defaultFailure = Option.match(option, {
@@ -860,6 +901,12 @@ export const identityArrow = O.match(option, {
   onNone: () => Fx.fail(new MissingValue("identity"))
 })
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {
@@ -887,13 +934,13 @@ export const functionPipe = pipe(
 )
 
 // Should trigger: direct data-last application is also supported.
-export const dataLast = Option.match({
-  onNone: () => Effect.fail(new MissingValue("data-last")),
-  onSome: Effect.succeed
-})(option)
+export const dataLast = Effect.fromOption(() => new MissingValue("data-last"))(option)
 
 // Should trigger and use the one-argument Effect.fromOption form.
-export const defaultFailure = Effect.fromOption(option)
+export const defaultFailure = Option.match(option, {
+  onNone: () => Effect.fail(new Cause.NoSuchElementError()),
+  onSome: Effect.succeed
+})
 
 // Should trigger: isSome puts the success branch first.
 export const isSomeTernary = Option.isSome(option)
@@ -987,6 +1034,145 @@ export const identityArrow = O.match(option, {
   onNone: () => Fx.fail(new MissingValue("identity"))
 })
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
+// Should trigger without a fix: replacing a function expression with an arrow
+// could change the meaning of arguments or this inside the failure expression.
+export const functionOnNone = Option.match(option, {
+  onNone: function() {
+    return Effect.fail(new MissingValue(String(arguments.length)))
+  },
+  onSome: Effect.succeed
+})
+
+// Should trigger: pipeable Option.match rewrites to pipeable Effect.fromOption.
+export const pipeable = option.pipe(
+  Option.match({
+    onNone: () => Effect.fail(new MissingValue("pipeable")),
+    onSome: Effect.succeed
+  })
+)
+
+// Should trigger: the function-pipe form is normalized the same way.
+export const functionPipe = pipe(
+  option,
+  Option.match({
+    onNone: () => Effect.fail(new MissingValue("pipe")),
+    onSome: Effect.succeed
+  })
+)
+
+// Should trigger: direct data-last application is also supported.
+export const dataLast = Option.match({
+  onNone: () => Effect.fail(new MissingValue("data-last")),
+  onSome: Effect.succeed
+})(option)
+
+// Should trigger and use the one-argument Effect.fromOption form.
+export const defaultFailure = Effect.fromOption(option)
+
+// Should trigger: isSome puts the success branch first.
+export const isSomeTernary = Option.isSome(option)
+  ? Effect.succeed(option.value)
+  : Effect.fail(new MissingValue("isSome"))
+
+// Should trigger: isNone reverses the two branch roles.
+export const isNoneTernary = O.isNone(option)
+  ? Fx.fail(new Cause.NoSuchElementError())
+  : Fx.succeed(option.value)
+
+// Should NOT trigger: onSome transforms the value.
+export const transformedSome = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("transformed")),
+  onSome: (value) => Effect.succeed(value + 1)
+})
+
+// Should NOT trigger: onNone is not Effect.fail.
+export const diesOnNone = Option.match(option, {
+  onNone: () => Effect.die("missing"),
+  onSome: Effect.succeed
+})
+
+// Should NOT trigger: a default success is a legitimate Option.match use.
+export const defaultSuccess = Option.match(option, {
+  onNone: () => Effect.succeed(0),
+  onSome: Effect.succeed
+})
+
+// Should NOT trigger: the succeed branch reads a different option.
+export const mismatchedOption = Option.isSome(option)
+  ? Effect.succeed(otherSome.value)
+  : Effect.fail(new MissingValue("mismatch"))
+
+// Should NOT trigger: the succeed branch transforms the unwrapped value.
+export const transformedTernary = Option.isSome(option)
+  ? Effect.succeed(option.value + 1)
+  : Effect.fail(new MissingValue("transformed"))
+
+const local = {
+  isSome: Option.isSome,
+  match: <A, B, C>(value: A, handlers: { onNone: () => B; onSome: (value: A) => C }): B | C =>
+    handlers.onSome(value)
+}
+
+// Should NOT trigger: an unrelated function with the same surface shape.
+export const unrelated = local.match(1, {
+  onNone: () => Effect.fail(new MissingValue("unrelated")),
+  onSome: Effect.succeed
+})
+
+
+=== [D10] Fix 0: "Disable optionMatchToFromOption for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.fromOption" ===
+
+--- file:///.src/optionMatchToFromOption.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics optionMatchToFromOption:suggestion
+import { Cause, Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
+
+class MissingValue {
+  readonly _tag = "MissingValue"
+  constructor(readonly message: string) {}
+}
+
+declare const option: Option.Option<number>
+declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
+
+// Should trigger: data-first Option.match with a point-free success handler.
+export const dataFirst = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("data-first")),
+  onSome: Effect.succeed
+})
+
+// Should trigger: handler order is irrelevant and an exact identity arrow is accepted.
+export const identityArrow = O.match(option, {
+  onSome: (value) => Fx.succeed(value),
+  onNone: () => Fx.fail(new MissingValue("identity"))
+})
+
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {
@@ -1074,13 +1260,13 @@ export const unrelated = local.match(1, {
 })
 
 
-=== [D10] Fix 0: "Disable optionMatchToFromOption for this line" ===
+=== [D11] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
-=== [D10] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+=== [D11] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D10] Fix 2: "Replace with Effect.fromOption" ===
+=== [D11] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -1113,6 +1299,12 @@ export const dataFirst = Option.match(option, {
 export const identityArrow = O.match(option, {
   onSome: (value) => Fx.succeed(value),
   onNone: () => Fx.fail(new MissingValue("identity"))
+})
+
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
 })
 
 // Should trigger without a fix: replacing a function expression with an arrow

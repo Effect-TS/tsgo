@@ -137,6 +137,7 @@ var All = []rule.Rule{
 	MapMapErrorToMapBoth,
 	FlatMapConditionalToFilterOrFail,
 	OptionMatchToFromOption,
+	ResultMatchToFromResult,
 	SyncToSucceed,
 	EffectSleepZeroToYieldNow,
 	ExtendsNativeError,
