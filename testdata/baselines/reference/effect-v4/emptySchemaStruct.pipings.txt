@@ -1,0 +1,481 @@
+==== /.src/emptySchemaStruct.ts (34 flows) ====
+
+=== Piping Flow ===
+Location: 9:21 - 9:39
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 12:23 - 12:71
+Node: Schema.decodeUnknownSync(Schema.Struct({}))(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Schema.Struct({}))
+      args: (constant)
+      outType: {}
+
+=== Piping Flow ===
+Location: 12:49 - 12:66
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 17:27 - 17:45
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 20:27 - 22:3
+Node: Schema.Struct({\n  // TODO: add the fields\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  // TODO: add the fields\n}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 25:25 - 27:2
+Node: Schema.Struct(\n  {}\n)
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 30:29 - 30:49
+Node: Schema.Struct(({}))
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 33:27 - 33:40
+Node: S.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 36:27 - 36:38
+Node: Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 39:29 - 39:46
+Node: SchemaStruct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: SchemaStruct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 43:26 - 43:41
+Node: makeStruct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: makeStruct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 46:25 - 46:81
+Node: Schema.Struct({}).annotate({ identifier: "Annotated" })
+Node Kind: KindCallExpression
+
+Subject: { identifier: "Annotated" }
+Subject Type: { identifier: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct({}).annotate
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 46:25 - 46:43
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 49:21 - 49:86
+Node: Schema.Struct({}).pipe(Schema.annotate({ identifier: "Piped" }))
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+  [1] kind: pipeable
+      callee: Schema.annotate
+      args: [{ identifier: "Piped" }]
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 52:22 - 55:3
+Node: Schema.Struct({\n  name: Schema.String,\n  metadata: Schema.Struct({})\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n  metadata: Schema.Struct({})\n}
+Subject Type: { name: String; metadata: Struct<{}>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; readonly metadata: Struct<{}>; }>
+
+=== Piping Flow ===
+Location: 54:12 - 54:30
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 58:23 - 58:72
+Node: Schema.Union([Schema.String, Schema.Struct({})])
+Node Kind: KindCallExpression
+
+Subject: [Schema.String, Schema.Struct({})]
+Subject Type: [String, Struct<{}>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Union
+      args: (constant)
+      outType: Union<readonly [String, Struct<{}>]>
+
+=== Piping Flow ===
+Location: 58:52 - 58:70
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 61:20 - 64:3
+Node: Rpc.make("Ping", {\n  payload: Schema.Struct({}),\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "Ping"
+Subject Type: "Ping"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Rpc.make
+      args: [{\n  payload: Schema.Struct({}),\n  success: Schema.String\n}]
+      outType: Rpc<"Ping", Struct<{}>, String, Never, never, never>
+
+=== Piping Flow ===
+Location: 62:11 - 62:29
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 67:30 - 69:3
+Node: Schema.Class<Settings>("Settings")({\n  extra: Schema.Struct({})\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  extra: Schema.Struct({})\n}
+Subject Type: { extra: Struct<{}>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Settings>("Settings")
+      args: (constant)
+      outType: Class<Settings, Struct<{ readonly extra: Struct<{}>; }>, {}>
+
+=== Piping Flow ===
+Location: 68:9 - 68:27
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 72:20 - 74:3
+Node: Schema.Struct({\n  name: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String\n}
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; }>
+
+=== Piping Flow ===
+Location: 78:24 - 80:3
+Node: Schema.Struct({\n  [dynamicKey]: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  [dynamicKey]: Schema.String\n}
+Subject Type: { id: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: String; }>
+
+=== Piping Flow ===
+Location: 84:30 - 84:54
+Node: Schema.Struct(noFields)
+Node Kind: KindCallExpression
+
+Subject: noFields
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 88:22 - 88:55
+Node: Schema.Struct({ ...baseFields })
+Node Kind: KindCallExpression
+
+Subject: { ...baseFields }
+Subject Type: { id: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: String; }>
+
+=== Piping Flow ===
+Location: 91:29 - 91:54
+Node: Schema.Struct({ ...{} })
+Node Kind: KindCallExpression
+
+Subject: { ...{} }
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 95:47 - 95:64
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 107:32 - 107:75
+Node: Schema.Class<EmptyClass>("EmptyClass")({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<EmptyClass>("EmptyClass")
+      args: (constant)
+      outType: Class<EmptyClass, Struct<{}>, {}>
+
+=== Piping Flow ===
+Location: 110:26 - 113:3
+Node: Rpc.make("PingFields", {\n  payload: {},\n  success: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: "PingFields"
+Subject Type: "PingFields"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Rpc.make
+      args: [{\n  payload: {},\n  success: Schema.String\n}]
+      outType: Rpc<"PingFields", Struct<{}>, String, Never, never, never>
+
+=== Piping Flow ===
+Location: 122:27 - 122:44
+Node: Local.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Local.Struct
+      args: (constant)
+      outType: {}
+
+=== Piping Flow ===
+Location: 125:49 - 126:13
+Node: register({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: register
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 130:27 - 130:45
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 134:29 - 134:47
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>

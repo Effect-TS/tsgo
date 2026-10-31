@@ -2536,6 +2536,11 @@
           "default": "off",
           "description": "Reports Effect.try and Effect.tryPromise calls without a catch handler, whose failures surface as a generic unknown error"
         },
+        "emptySchemaStruct": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Detects Schema.Struct({}), which accepts any non-null value without validation"
+        },
         "errorPayloadShadowsName": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

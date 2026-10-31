@@ -1,0 +1,134 @@
+// @effect-diagnostics *:off
+// @effect-diagnostics emptySchemaStruct:warning
+import { Schema as S } from "effect"
+import * as Rpc from "effect/rpc/Rpc"
+import * as Schema from "effect/Schema"
+import { Struct, Struct as SchemaStruct } from "effect/Schema"
+
+// MUST TRIGGER (no fix): Schema.Struct({}) models the type {}, so any non-null value decodes
+export const Empty = Schema.Struct({})
+
+// MUST TRIGGER (no fix): the reproduction from the issue, decoding 42 succeeds and returns 42
+export const decoded = Schema.decodeUnknownSync(Schema.Struct({}))(42)
+
+// MUST TRIGGER (no fix): the right replacement depends on intent, and replacing the call
+// with Schema.ObjectKeyword would change the type to object and break Struct-only uses
+// such as .fields
+export const emptyFields = Schema.Struct({}).fields
+
+// MUST TRIGGER (no fix): a body holding only a comment still has zero properties
+export const Placeholder = Schema.Struct({
+  // TODO: add the fields
+})
+
+// MUST TRIGGER (no fix): an empty literal spread over several lines
+export const Multiline = Schema.Struct(
+  {}
+)
+
+// MUST TRIGGER (no fix): a parenthesised empty literal
+export const Parenthesised = Schema.Struct(({}))
+
+// MUST TRIGGER (no fix): barrel import under another name
+export const BarrelAlias = S.Struct({})
+
+// MUST TRIGGER (no fix): named import from effect/Schema
+export const NamedImport = Struct({})
+
+// MUST TRIGGER (no fix): renamed named import from effect/Schema
+export const RenamedImport = SchemaStruct({})
+
+// MUST TRIGGER (no fix): const alias of the API
+const makeStruct = Schema.Struct
+export const ConstAlias = makeStruct({})
+
+// MUST TRIGGER (no fix): the empty struct is the subject of a method chain, the call itself is reported
+export const Annotated = Schema.Struct({}).annotate({ identifier: "Annotated" })
+
+// MUST TRIGGER (no fix): the empty struct is piped
+export const Piped = Schema.Struct({}).pipe(Schema.annotate({ identifier: "Piped" }))
+
+// MUST TRIGGER (inner call only, no fix): the outer struct has fields, the nested one is empty
+export const Nested = Schema.Struct({
+  name: Schema.String,
+  metadata: Schema.Struct({})
+})
+
+// MUST TRIGGER (no fix): member of a union
+export const InUnion = Schema.Union([Schema.String, Schema.Struct({})])
+
+// MUST TRIGGER (no fix): an empty RPC payload struct, the most common real-world occurrence
+export const Ping = Rpc.make("Ping", {
+  payload: Schema.Struct({}),
+  success: Schema.String
+})
+
+// MUST TRIGGER (no fix): inside a Schema.Class field bag
+export class Settings extends Schema.Class<Settings>("Settings")({
+  extra: Schema.Struct({})
+}) {}
+
+// MUST NOT TRIGGER: a non-empty field literal
+export const User = Schema.Struct({
+  name: Schema.String
+})
+
+// MUST NOT TRIGGER: a computed key is still a field
+const dynamicKey = "id"
+export const Computed = Schema.Struct({
+  [dynamicKey]: Schema.String
+})
+
+// MUST NOT TRIGGER: the fields are passed by reference, only a literal {} is reported
+const noFields = {}
+export const FromIdentifier = Schema.Struct(noFields)
+
+// MUST NOT TRIGGER: a spread is a property element, so the literal is not empty
+const baseFields = { id: Schema.String }
+export const Spread = Schema.Struct({ ...baseFields })
+
+// MUST NOT TRIGGER: even a spread of an empty object is not a literal {}
+export const SpreadOfEmpty = Schema.Struct({ ...{} })
+
+// MUST NOT TRIGGER: StructWithRest adds index signatures, so the empty struct is meaningful
+// (decoding 42 fails here)
+export const WithRest = Schema.StructWithRest(Schema.Struct({}), [
+  Schema.Record(Schema.String, Schema.Number)
+])
+
+// MUST NOT TRIGGER: the suggested replacements
+export const AnyObject = Schema.ObjectKeyword
+export const OpenMap = Schema.Record(Schema.String, Schema.Number)
+
+// MUST NOT TRIGGER: TaggedStruct always has the _tag field
+export const Tagged = Schema.TaggedStruct("Tagged", {})
+
+// MUST NOT TRIGGER: other Schema APIs taking an empty field bag are out of scope
+export class EmptyClass extends Schema.Class<EmptyClass>("EmptyClass")({}) {}
+
+// MUST NOT TRIGGER: RPC fields form, there is no Schema.Struct call
+export const PingFields = Rpc.make("PingFields", {
+  payload: {},
+  success: Schema.String
+})
+
+// MUST NOT TRIGGER: Schema.Struct is referenced, not called
+export const reference = Schema.Struct
+
+// MUST NOT TRIGGER: a local object whose method is named like the Effect API
+const Local = {
+  Struct: <A extends object>(fields: A) => fields
+}
+export const localStruct = Local.Struct({})
+
+// MUST NOT TRIGGER: empty object literals passed to other functions
+declare function register(options: object): void
+register({})
+
+// MUST NOT TRIGGER: a next-line directive disables the rule for one line
+// @effect-diagnostics-next-line emptySchemaStruct:off
+export const nextLineOff = Schema.Struct({})
+
+// MUST TRIGGER, as an error (no fix): a next-line directive overrides the severity
+// @effect-diagnostics-next-line emptySchemaStruct:error
+export const nextLineError = Schema.Struct({})

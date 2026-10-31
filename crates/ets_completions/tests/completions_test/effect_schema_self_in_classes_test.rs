@@ -300,7 +300,7 @@ class Foo extends Local."#,
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:205 TestEffectSchemaSelfInClasses_AcceptedSnippet 976744b9a8b64b8e
+// go test: internal/completions/effect_schema_self_in_classes_test.go:205 TestEffectSchemaSelfInClasses_AcceptedSnippet fbe37255e5ac2397
 #[test]
 fn test_effect_schema_self_in_classes_accepted_snippet() {
     go_test(|t| {
@@ -329,7 +329,7 @@ fn test_effect_schema_self_in_classes_accepted_snippet() {
                 let item = item.unwrap();
                 let mut placeholder = "";
                 if expected.api == "Opaque" {
-                    placeholder = "Schema.Struct({})";
+                    placeholder = "Schema.Struct({ a: Schema.String })";
                 }
                 let snippet = new_text(item).replace("${0}", placeholder);
                 let edit_range = edit_range(item);

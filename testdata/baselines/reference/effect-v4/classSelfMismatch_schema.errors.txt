@@ -8,10 +8,12 @@ Effect version: 4.0.2
 /.src/classSelfMismatch_schema.ts(19,59): error TS377046: The `Self` type parameter for this class should be `InvalidErrorSchemaClass`. effect(classSelfMismatch)
 /.src/classSelfMismatch_schema.ts(19,59): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/classSelfMismatch_schema.ts(24,18): error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
+/.src/classSelfMismatch_schema.ts(25,14): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
 /.src/classSelfMismatch_schema.ts(33,18): error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
+/.src/classSelfMismatch_schema.ts(34,14): warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
 
 
-==== /.src/classSelfMismatch_schema.ts (8 errors) ====
+==== /.src/classSelfMismatch_schema.ts (10 errors) ====
     import * as Schema from "effect/Schema"
     
     // valid usage
@@ -51,6 +53,8 @@ Effect version: 4.0.2
                      ~~~~~~~~~~~~
 !!! error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
         payload: Schema.Struct({}),
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
         success: Schema.Void,
         error: Schema.Never
       })
@@ -62,6 +66,8 @@ Effect version: 4.0.2
                      ~~~~~~~~~~~~
 !!! error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
         payload: Schema.Struct({}),
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377176: `Schema.Struct({})` models the type `{}`, so any non-null value passes decoding unvalidated. Use an object-keyword schema (`Schema.ObjectKeyword` in v4, `Schema.Object` in v3) for "any object", a record schema for open key/value maps, or add the intended fields. effect(emptySchemaStruct)
         success: Schema.Void,
         error: Schema.Never
       })
