@@ -1,0 +1,127 @@
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics scopedImmediateScopeToScopedWith:warning
+import { Effect, Scope } from "effect"
+import { gen, scope as currentScope, scoped } from "effect/Effect"
+
+interface Box<T> {
+  readonly value: T
+}
+
+declare const openConnection: (scope: Scope.Scope) => Effect.Effect<string>
+declare const tag: string
+
+// Generic requirements: Effect.scoped yields Exclude<R, Scope>, which stays deferred
+// for a generic R, while Effect.scopedWith yields R itself, so the rewrite changes the type
+
+// MUST NOT TRIGGER: the flatMap callback returns a generic requirement
+export const genericFlatMap = <R>(f: (scope: Scope.Scope) => Effect.Effect<string, never, R>) =>
+  Effect.scoped(Effect.flatMap(Effect.scope, f))
+
+// MUST NOT TRIGGER: the body yields an effect with a generic requirement
+export const genericYield = <R>(effect: Effect.Effect<string, never, R>) =>
+  Effect.gen(function*() {
+    const scope = yield* Effect.scope
+    yield* Scope.addFinalizer(scope, Effect.log("closing"))
+    return yield* effect
+  }).pipe(Effect.scoped)
+
+// MUST TRIGGER: a requirement that only contains a type parameter can never be a Scope,
+// so Exclude<Box<T>, Scope> resolves to Box<T> and the rewrite keeps the type
+// -> Effect.scopedWith((scope) => Effect.gen(function*() { ...; return yield* effect }))
+export const genericBoxedYield = <T>(effect: Effect.Effect<string, never, Box<T>>) =>
+  Effect.gen(function*() {
+    const scope = yield* Effect.scope
+    yield* Scope.addFinalizer(scope, Effect.log("closing"))
+    return yield* effect
+  }).pipe(Effect.scoped)
+
+// MUST TRIGGER: generic success types with concrete requirements keep their type
+// -> Effect.scopedWith(make)
+export const genericSuccessFlatMap = <A>(make: (scope: Scope.Scope) => Effect.Effect<A>) =>
+  Effect.scoped(Effect.flatMap(Effect.scope, make))
+
+// MUST TRIGGER: -> Effect.scopedWith((scope) => Effect.gen(function*() { ...; return value }))
+export const genericSuccessGen = <A>(value: A) =>
+  Effect.gen(function*() {
+    const scope = yield* Effect.scope
+    yield* Scope.addFinalizer(scope, Effect.log("closing"))
+    return value
+  }).pipe(Effect.scoped)
+
+// The new callback parameter scopes over code outside the generator body: the gen callee,
+// the generator's name and its parameters. A fix that would capture one of them is withheld.
+
+// MUST TRIGGER: report only, no fix. The generator is named like the binding, so the
+// references in the body would resolve to the generator instead of the parameter
+export const generatorNamedLikeBinding = Effect.scoped(Effect.gen(function* scope() {
+  const scope = yield* Effect.scope
+  return yield* Scope.addFinalizer(scope, Effect.void)
+}))
+
+// MUST TRIGGER: report only, no fix. The binding shadows the named gen import the
+// replacement calls
+export const bindingShadowsGenCallee = scoped(gen(function*() {
+  const gen = yield* currentScope
+  return yield* openConnection(gen)
+}))
+
+// MUST TRIGGER: report only, no fix. A parameter default reads an outer name the
+// binding would capture
+export const parameterDefaultCapture = Effect.gen(function*(_label: string = tag) {
+  const tag = yield* Effect.scope
+  yield* Scope.addFinalizer(tag, Effect.log(_label))
+}).pipe(Effect.scoped)
+
+// MUST TRIGGER: a differently named generator keeps its name
+// -> Effect.scopedWith((scope) => Effect.gen(function* program() { ... }))
+export const namedGenerator = Effect.scoped(Effect.gen(function* program() {
+  const scope = yield* Effect.scope
+  return yield* openConnection(scope)
+}))
+
+// MUST TRIGGER: the binding name only appears as a member name of the gen callee
+// -> Effect.scopedWith((gen) => Effect.gen(function*() { ... }))
+export const bindingMatchesMemberName = Effect.gen(function*() {
+  const gen = yield* Effect.scope
+  return yield* openConnection(gen)
+}).pipe(Effect.scoped)
+
+// Broad requirements: unknown, any and supertypes of Scope may stand for a Scope the effect
+// reads at runtime, and the combined requirements they produce accept Scope too
+declare const opaque: Effect.Effect<void, never, unknown>
+declare const loose: Effect.Effect<void, never, any>
+declare const objectRequirement: Effect.Effect<void, never, object>
+declare const openOpaque: (scope: Scope.Scope) => Effect.Effect<void, never, unknown>
+
+// MUST NOT TRIGGER: addFinalizer still needs the ambient Scope; an unknown requirement
+// elsewhere in the body makes the combined requirements unknown, which accepts Scope
+export const scopeNeededBesideUnknown = Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  yield* Effect.addFinalizer(() => Effect.void)
+  return yield* opaque
+}).pipe(Effect.scoped)
+
+// MUST NOT TRIGGER: an effect requiring unknown may read the ambient Scope
+export const unknownRequirement = Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  yield* Scope.addFinalizer(scope, Effect.log("closing"))
+  return yield* opaque
+}).pipe(Effect.scoped)
+
+// MUST NOT TRIGGER: an effect requiring any may read the ambient Scope
+export const anyRequirement = Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  yield* Scope.addFinalizer(scope, Effect.log("closing"))
+  return yield* loose
+}).pipe(Effect.scoped)
+
+// MUST NOT TRIGGER: an effect requiring a supertype of Scope may read the ambient Scope
+export const supertypeRequirement = Effect.gen(function*() {
+  const scope = yield* Effect.scope
+  yield* Scope.addFinalizer(scope, Effect.log("closing"))
+  return yield* objectRequirement
+}).pipe(Effect.scoped)
+
+// MUST NOT TRIGGER: the flatMap callback returns an effect requiring unknown
+export const unknownCallback = Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))

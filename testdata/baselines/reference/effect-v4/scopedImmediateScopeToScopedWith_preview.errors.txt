@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/scopedImmediateScopeToScopedWith_preview.ts(13,9): warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+
+
+==== /.src/scopedImmediateScopeToScopedWith_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics scopedImmediateScopeToScopedWith:warning
+    import { Effect, Scope } from "effect"
+    
+    declare const openConnection: (scope: Scope.Scope) => Effect.Effect<string>
+    
+    export const program = Effect.gen(function*() {
+      const scope = yield* Effect.scope
+      const connection = yield* openConnection(scope)
+      yield* Scope.addFinalizer(scope, Effect.log("closing"))
+      return connection
+    }).pipe(Effect.scoped)
+            ~~~~~~~~~~~~~
+!!! warning TS377180: `Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)
+    

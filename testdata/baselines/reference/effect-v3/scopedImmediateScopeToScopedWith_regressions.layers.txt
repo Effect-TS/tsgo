@@ -1,0 +1,1 @@
+==== /.src/scopedImmediateScopeToScopedWith_regressions.ts (0 layer exports) ====

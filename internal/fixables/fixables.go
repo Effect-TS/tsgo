@@ -35,6 +35,7 @@ var All = []fixable.Fixable{
 	ManualMetricTapToTrackFix,
 	FailCauseToConstructorFix,
 	SuspendFailToFailSyncFix,
+	ScopedImmediateScopeToScopedWithFix,
 	OptionMatchToFromOptionFix,
 	SyncToSucceedFix,
 	EffectSleepZeroToYieldNowFix,
