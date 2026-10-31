@@ -1,0 +1,99 @@
+==== /.src/sleepThenEffectToDelay_flowShapes.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 11:36 - 11:70
+Node: ((Effect.andThen(next)))(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, string, never>
+
+=== Piping Flow ===
+Location: 12:23 - 12:53
+Node: Effect.andThen(next)(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, string, never>
+
+=== Piping Flow ===
+Location: 15:32 - 15:62
+Node: Effect.andThen(program, next)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, string, never>
+
+=== Piping Flow ===
+Location: 16:40 - 16:79
+Node: Effect.andThen(program, (n) => log(n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [(n) => log(n)]
+      outType: Effect<void, string, never>
+
+=== Piping Flow ===
+Location: 16:71 - 16:78
+Node: log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 17:28 - 17:63
+Node: Effect.tap(program, (n) => log(n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.tap
+      args: [(n) => log(n)]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 17:55 - 17:62
+Node: log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: log
+      args: (constant)
+      outType: Effect<void, never, never>

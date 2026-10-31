@@ -1,4 +1,4 @@
-==== /.src/timeoutCatchTagToTimeoutOrElse.ts (55 flows) ====
+==== /.src/timeoutCatchTagToTimeoutOrElse.ts (57 flows) ====
 
 === Piping Flow ===
 Location: 14:21 - 14:127
@@ -929,3 +929,35 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<{ error: TimeoutError; }, never, never>
+
+=== Piping Flow ===
+Location: 55:43 - 55:136
+Node: Effect.catchTag((Effect.timeout(1))(task), "TimeoutError", () => Effect.succeed("fallback"))
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<string, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.timeout
+      args: [1]
+      outType: Effect<string, TimeoutError, never>
+  [1] kind: dataFirst
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeed("fallback")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 55:108 - 55:135
+Node: Effect.succeed("fallback")
+Node Kind: KindCallExpression
+
+Subject: "fallback"
+Subject Type: "fallback"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

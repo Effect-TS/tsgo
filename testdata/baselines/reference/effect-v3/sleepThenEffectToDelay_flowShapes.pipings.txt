@@ -1,0 +1,113 @@
+==== /.src/sleepThenEffectToDelay_flowShapes.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 12:36 - 12:70
+Node: ((Effect.andThen(next)))(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, string, never>
+
+=== Piping Flow ===
+Location: 13:23 - 13:53
+Node: Effect.andThen(next)(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, string, never>
+
+=== Piping Flow ===
+Location: 18:32 - 18:62
+Node: Effect.andThen(program, next)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [next]
+      outType: Effect<string, string, never>
+
+=== Piping Flow ===
+Location: 19:40 - 19:79
+Node: Effect.andThen(program, (n) => log(n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [(n) => log(n)]
+      outType: Effect<void, string, never>
+
+=== Piping Flow ===
+Location: 19:71 - 19:78
+Node: log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 20:28 - 20:63
+Node: Effect.tap(program, (n) => log(n))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.tap
+      args: [(n) => log(n)]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 20:55 - 20:62
+Node: log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 45:27 - 45:47
+Node: same(box, (a) => a)
+Node Kind: KindCallExpression
+
+Subject: box
+Subject Type: Box<number, string>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: same
+      args: [(a) => a]
+      outType: Box<number, string>

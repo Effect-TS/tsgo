@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, ModifierFlags, Node, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::checker::{LiteralValue, Type, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
@@ -12,6 +12,7 @@ use ets_typeparser::{
     PipingFlowTransformation, TypeParser,
 };
 
+use crate::arrow_parameters::arrow_ignores_parameter;
 use crate::piping_flow::has_explicit_type_arguments;
 use crate::prefer_succeed_some_or_none::is_option_none_call;
 
@@ -59,7 +60,7 @@ pub struct TimeoutCatchTagToTimeoutOrElseMatch {
     pub handler: P<Node>,
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:38 AnalyzeTimeoutCatchTagToTimeoutOrElse 10c99fb4a5adeda3
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:38 AnalyzeTimeoutCatchTagToTimeoutOrElse 3367b1108524f97b
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and checker are never nil.
 pub fn analyze_timeout_catch_tag_to_timeout_or_else(
@@ -119,7 +120,7 @@ pub fn analyze_timeout_catch_tag_to_timeout_or_else(
                 continue;
             }
             let handler = ast::skip_parentheses(*catch.args().at(1));
-            if !timeout_ignores_error(tp, Some(handler)) {
+            if !arrow_ignores_parameter(tp, Some(handler)) {
                 i += 1;
                 continue;
             }
@@ -221,62 +222,4 @@ pub(crate) fn timeout_error_excluded(tp: &mut TypeParser<'_>, error_type: Option
         }
     }
     true
-}
-
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:147 timeoutIgnoresError fc8dd5d22bae030c
-// Restrict callbacks to arrows so the caught error cannot be observed through
-// a function's arguments object. An unused plain parameter can be removed.
-pub(crate) fn timeout_ignores_error(tp: &mut TypeParser<'_>, handler: Option<P<Node>>) -> bool {
-    let Some(handler) = handler else {
-        return false;
-    };
-    if handler.kind() != Kind::ArrowFunction
-        || ast::get_combined_modifier_flags(handler).intersects(ModifierFlags::Async)
-    {
-        return false;
-    }
-    if let Some(params) = ets_typeparser::get_function_like_type_parameters(handler)
-        && !params.nodes().is_empty()
-    {
-        return false;
-    }
-    let params = ets_typeparser::get_function_like_parameters(handler);
-    let Some(params) = params.filter(|params| !params.nodes().is_empty()) else {
-        return true;
-    };
-    if params.nodes().len() != 1 {
-        return false;
-    }
-    let parameter = params.nodes()[0].as_parameter_declaration();
-    if parameter.name().kind() != Kind::Identifier
-        || parameter.initializer().is_some()
-        || parameter.dot_dot_dot_token().is_some()
-    {
-        return false;
-    }
-    let Some(symbol) = tp.get_symbol_at_location(parameter.name()) else {
-        return false;
-    };
-
-    // Rust: Go's recursive `usesParameter` closure is a nested function.
-    fn uses_parameter(
-        tp: &mut TypeParser<'_>,
-        symbol: P<ets_shim::ast::Symbol>,
-        node: P<Node>,
-    ) -> bool {
-        if node.kind() == Kind::ShorthandPropertyAssignment
-            && tp.checker().get_shorthand_assignment_value_symbol(Some(node)) == Some(symbol)
-        {
-            return true;
-        }
-        if node.kind() == Kind::Identifier && tp.get_symbol_at_location(node) == Some(symbol) {
-            return true;
-        }
-        node.for_each_child(&mut |child| uses_parameter(tp, symbol, child))
-    }
-
-    let arrow = handler.as_arrow_function();
-    let body = handler.body().expect("an arrow function has a body");
-    !uses_parameter(tp, symbol, body)
-        && arrow.type_().is_none_or(|type_node| !uses_parameter(tp, symbol, type_node))
 }

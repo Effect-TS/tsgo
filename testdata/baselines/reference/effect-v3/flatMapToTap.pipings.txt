@@ -1,4 +1,4 @@
-==== /.src/flatMapToTap.ts (112 flows) ====
+==== /.src/flatMapToTap.ts (113 flows) ====
 
 === Piping Flow ===
 Location: 15:26 - 15:99
@@ -94,6 +94,20 @@ Transformations (2):
   [1] kind: dataFirst
       callee: Effect.map
       args: [() => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 18:27 - 18:90
+Node: Effect.andThen(source, (user) => Effect.as(audit(user), user))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [(user) => Effect.as(audit(user), user)]
       outType: Effect<User, "audit", "service">
 
 === Piping Flow ===
@@ -196,8 +210,8 @@ Transformations (2):
       args: (constant)
       outType: Effect<unknown, never, never>
   [1] kind: call
-      callee: Effect.andThen((user) => Effect.as(Effect.log(user), user))
-      args: (constant)
+      callee: Effect.andThen
+      args: [(user) => Effect.as(Effect.log(user), user)]
       outType: Effect<unknown, never, never>
 
 === Piping Flow ===

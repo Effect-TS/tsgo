@@ -173,10 +173,10 @@ func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
 	}
 	transformation := &flow.transformations[index]
 	call := pipingFlowTransformationCall(transformation)
-	if transformation.kind == TransformationKindCall {
+	if transformation.kind == TransformationKindCall && len(transformation.args) > 0 {
 		// Curried factories decompose into a factory call and a trailing
-		// application; the input feeds the outermost applied call.
-		call = appliedCallOf(call)
+		// application; the input feeds the applied call.
+		call = CurriedApplicationCall(call)
 	}
 	if call != nil && call.Arguments != nil {
 		switch transformation.kind {
@@ -200,24 +200,22 @@ func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
 	return nil
 }
 
-// appliedCallOf walks out of callee positions, returning the outermost call
-// that applies the given call's result to its subject.
-func appliedCallOf(call *ast.CallExpression) *ast.CallExpression {
-	if call == nil {
+// CurriedApplicationCall returns the call that applies the result of a
+// curried factory call to its subject, looking through parentheses around the
+// factory call as decomposeCurriedPipeable does. It returns nil when the
+// factory call is not applied.
+func CurriedApplicationCall(factory *ast.CallExpression) *ast.CallExpression {
+	if factory == nil {
 		return nil
 	}
-	current := call.AsNode()
-	for current != nil && current.Parent != nil && ast.IsCallExpression(current.Parent) {
-		parent := current.Parent.AsCallExpression()
-		if parent == nil || parent.Expression != current {
-			break
-		}
-		current = parent.AsNode()
+	node := factory.AsNode()
+	for node.Parent != nil && node.Parent.Kind == ast.KindParenthesizedExpression {
+		node = node.Parent
 	}
-	if current == nil {
+	if node.Parent == nil || !ast.IsCallExpression(node.Parent) || node.Parent.AsCallExpression().Expression != node {
 		return nil
 	}
-	return current.AsCallExpression()
+	return node.Parent.AsCallExpression()
 }
 
 func pipingFlowTransformationCall(transformation *PipingFlowTransformation) *ast.CallExpression {

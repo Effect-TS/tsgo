@@ -138,6 +138,7 @@ var All = []rule.Rule{
 	OptionMatchToFromOption,
 	SyncToSucceed,
 	EffectSleepZeroToYieldNow,
+	SleepThenEffectToDelay,
 	ExtendsNativeError,
 	NodeBuiltinImport,
 	ObsoleteMatchImport,

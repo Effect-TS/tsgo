@@ -138,10 +138,10 @@ func pipingFlowTransformationNode(transformation typeparser.PipingFlowTransforma
 		return nil
 	}
 	call := callExpressionForCallee(transformation.Callee())
-	if transformation.Kind() == typeparser.TransformationKindCall {
+	if transformation.Kind() == typeparser.TransformationKindCall && transformation.Args().Len() > 0 {
 		// Curried factories decompose into a factory call and a trailing
-		// application; the replaced node is the outermost applied call.
-		call = appliedCallExpression(call)
+		// application; the replaced node is the applied call.
+		call = typeparser.CurriedApplicationCall(call)
 	}
 	if call != nil {
 		return call.AsNode()
@@ -158,23 +158,6 @@ func callExpressionForCallee(callee *ast.Node) *ast.CallExpression {
 		return nil
 	}
 	return call
-}
-
-// appliedCallExpression walks out of callee positions, returning the outermost
-// call that applies the given call's result to its subject.
-func appliedCallExpression(call *ast.CallExpression) *ast.CallExpression {
-	if call == nil {
-		return nil
-	}
-	current := call.AsNode()
-	for current != nil && current.Parent != nil && ast.IsCallExpression(current.Parent) {
-		parent := current.Parent.AsCallExpression()
-		if parent == nil || parent.Expression != current {
-			break
-		}
-		current = parent.AsNode()
-	}
-	return current.AsCallExpression()
 }
 
 // RemoveTrailingPipingFlowTransformation removes the last step while retaining
