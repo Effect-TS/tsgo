@@ -43,6 +43,8 @@ type SchemaStructWithTagMatch struct {
 
 // AnalyzeSchemaStructWithTag finds all Schema.Struct({ _tag: Schema.Literal("..."), ... })
 // call expressions and returns match structs for each.
+//
+//ets:ast-walk finds Schema.Struct calls whose object literal has a _tag field
 func AnalyzeSchemaStructWithTag(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []SchemaStructWithTagMatch {
 	var matches []SchemaStructWithTagMatch
 

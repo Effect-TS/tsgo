@@ -77,6 +77,7 @@ func runOverriddenSchemaConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 						}
 						return v.VisitEachChild(node)
 					}
+					//ets:ast-walk rewrites super(...) statements and this keywords in the constructor body
 					v = ast.NewNodeVisitor(visitFn, tracker.NodeFactory, ast.NodeVisitorHooks{})
 
 					// Transform the constructor body

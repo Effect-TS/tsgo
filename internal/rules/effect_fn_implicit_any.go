@@ -42,6 +42,7 @@ var EffectFnImplicitAny = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds Effect.fn calls, which are overloaded and never become flow steps
 			n.ForEachChild(walk)
 			return false
 		}

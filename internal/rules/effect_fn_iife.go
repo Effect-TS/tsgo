@@ -78,6 +78,7 @@ func AnalyzeEffectFnIife(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 			})
 		}
 
+		//ets:ast-walk finds immediately invoked Effect.fn(...)(...) calls; Effect.fn is overloaded
 		n.ForEachChild(walk)
 		return false
 	}

@@ -157,6 +157,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 			}
 			report(node, node.Text(), stability)
 		}
+		//ets:ast-walk checks every identifier and object literal property for @stability tags
 		node.ForEachChild(walk)
 		return false
 	}

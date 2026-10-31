@@ -37,6 +37,7 @@ var LeakingRequirements = rule.Rule{
 			nodeToVisit = append(nodeToVisit, child)
 			return false
 		}
+		//ets:ast-walk finds service class declarations and GenericTag/Service tag constructor calls
 		ctx.SourceFile.AsNode().ForEachChild(pushChild)
 
 		for len(nodeToVisit) > 0 {
@@ -79,6 +80,7 @@ var LeakingRequirements = rule.Rule{
 
 			if len(typesToCheck) == 0 {
 				// No patterns matched, enqueue children
+				//ets:ast-walk finds service class declarations and GenericTag/Service tag constructor calls
 				node.ForEachChild(pushChild)
 				continue
 			}
@@ -122,6 +124,7 @@ var LeakingRequirements = rule.Rule{
 
 			if !matched {
 				// Type resolution failed for all candidates, continue visiting children
+				//ets:ast-walk finds service class declarations and GenericTag/Service tag constructor calls
 				node.ForEachChild(pushChild)
 			}
 		}

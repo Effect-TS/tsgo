@@ -38,6 +38,7 @@ func catchHandlerIgnoresError(tp *typeparser.TypeParser, c *checker.Checker, han
 		if node.Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(node) == symbol {
 			return true
 		}
+		//ets:ast-walk scans the handler body and return type for references to the caught error
 		return node.ForEachChild(usesParameter)
 	}
 	return !usesParameter(handler.AsArrowFunction().Body) && (handler.AsArrowFunction().Type == nil || !usesParameter(handler.AsArrowFunction().Type))

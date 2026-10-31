@@ -88,6 +88,7 @@ func AnalyzeEffectSleepZeroToYieldNow(tp *typeparser.TypeParser, _ *checker.Chec
 				})
 			}
 		}
+		//ets:ast-walk finds Effect.sleep calls whose argument is a zero duration
 		node.ForEachChild(walk)
 		return false
 	}

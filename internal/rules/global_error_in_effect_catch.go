@@ -38,6 +38,7 @@ var GlobalErrorInEffectCatch = rule.Rule{
 				}
 			}
 
+			//ets:ast-walk finds Effect.try/tryPromise calls and inspects the catch callback in the options
 			n.ForEachChild(walk)
 			return false
 		}

@@ -40,6 +40,7 @@ var MissingEffectServiceDependency = rule.Rule{
 			nodeToVisit = append(nodeToVisit, child)
 			return false
 		}
+		//ets:ast-walk finds class declarations that extend Effect.Service
 		ctx.SourceFile.AsNode().ForEachChild(pushChild)
 
 		for len(nodeToVisit) > 0 {
@@ -54,6 +55,7 @@ var MissingEffectServiceDependency = rule.Rule{
 			}
 
 			// Enqueue children
+			//ets:ast-walk finds class declarations that extend Effect.Service
 			node.ForEachChild(pushChild)
 		}
 
