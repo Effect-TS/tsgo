@@ -71,11 +71,6 @@ func AnalyzeEffectTryWithoutCatch(tp *typeparser.TypeParser, c *checker.Checker,
 		if callee == nil || transformation.Args().Len() != 0 {
 			return ""
 		}
-		switch transformation.Kind() {
-		case typeparser.TransformationKindCall, typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
-		default:
-			return ""
-		}
 		for _, name := range []string{"try", "tryPromise"} {
 			if tp.IsNodeReferenceToEffectModuleApi(callee, name) {
 				return name

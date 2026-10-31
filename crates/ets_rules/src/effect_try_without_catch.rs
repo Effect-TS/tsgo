@@ -8,7 +8,7 @@ use ets_shim::checker::{SignatureKind, Type, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::scanner;
-use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind, TypeParser};
+use ets_typeparser::{PipingFlow, PipingFlowTransformation, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_IS_CALLED_WITHOUT_A_CATCH_HANDLER_SO_FAILURES_SURFACE_AS_THE_GENERIC_1_THE_OBJECT_FORM_TRY_CATCH_MAPS_THE_CAUSE_TO_A_TYPED_DOMAIN_SPECIFIC_ERROR_EFFECT_EFFECT_TRY_WITHOUT_CATCH;
@@ -66,7 +66,7 @@ impl EffectTryWithoutCatchMatch {
     }
 }
 
-// go: internal/rules/effect_try_without_catch.go:65 AnalyzeEffectTryWithoutCatch 038ff7467c4b8078
+// go: internal/rules/effect_try_without_catch.go:65 AnalyzeEffectTryWithoutCatch 8099a120a63de2cb
 // AnalyzeEffectTryWithoutCatch finds piping flow steps that apply Effect.try or
 // Effect.tryPromise to a function, i.e. the short form without catch, however
 // the step is written: Effect.try(thunk), pipe(thunk, Effect.try) or a later
@@ -82,24 +82,19 @@ pub fn analyze_effect_try_without_catch(
     let Some(sf) = sf else {
         return Vec::new();
     };
-    let api_name = |tp: &mut TypeParser<'_>,
-                    transformation: &PipingFlowTransformation|
-     -> &'static str {
-        let callee = transformation.callee();
-        if transformation.args().len() != 0 {
-            return "";
-        }
-        match transformation.kind() {
-            TransformationKind::Call | TransformationKind::Pipe | TransformationKind::Pipeable => {}
-            _ => return "",
-        }
-        for name in ["try", "tryPromise"] {
-            if tp.is_node_reference_to_effect_module_api(callee, name) {
-                return name;
+    let api_name =
+        |tp: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| -> &'static str {
+            let callee = transformation.callee();
+            if transformation.args().len() != 0 {
+                return "";
             }
-        }
-        ""
-    };
+            for name in ["try", "tryPromise"] {
+                if tp.is_node_reference_to_effect_module_api(callee, name) {
+                    return name;
+                }
+            }
+            ""
+        };
     let is_try_step = |tp: &mut TypeParser<'_>,
                        transformation: &PipingFlowTransformation|
      -> bool { !api_name(tp, transformation).is_empty() };
