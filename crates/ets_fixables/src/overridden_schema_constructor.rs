@@ -19,7 +19,7 @@ pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(
     run: run_overridden_schema_constructor_fix,
 });
 
-// go: internal/fixables/overridden_schema_constructor.go:23 runOverriddenSchemaConstructorFix df1b8e415f0c21fa
+// go: internal/fixables/overridden_schema_constructor.go:23 runOverriddenSchemaConstructorFix 54d761f8a08c6088
 fn run_overridden_schema_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -136,7 +136,7 @@ fn run_overridden_schema_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeA
     Vec::new()
 }
 
-// go: internal/fixables/overridden_schema_constructor.go:134 constructorSupportsStaticRewrite 5f47205b2587306f
+// go: internal/fixables/overridden_schema_constructor.go:135 constructorSupportsStaticRewrite 5f47205b2587306f
 pub(crate) fn constructor_supports_static_rewrite(ctor_node: P<Node>) -> bool {
     let ctor = ctor_node.as_constructor_declaration();
     let Some(parameters) = ctor.parameters() else {

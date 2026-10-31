@@ -15,7 +15,7 @@ use crate::*;
 static MESSAGE: &Message =
     &tsdiag::THIS_OBJECT_LITERAL_IS_CHECKED_AS_AN_INSTANCE_OF_SCHEMA_CLASS_0_BUT_HAS_NO_CLASS_PROTOTYPE_INSTANCEOF_CHECKS_METHODS_AND_SCHEMA_ENCODING_CAN_FAIL_USE_0_MAKE_OR_NEW_0_INSTEAD_EFFECT_SCHEMA_CLASS_OBJECT_LITERAL;
 
-// go: internal/rules/schema_class_object_literal.go:14 SchemaClassObjectLiteral a7c7a1f71d8f769c
+// go: internal/rules/schema_class_object_literal.go:14 SchemaClassObjectLiteral 220a320297b5ed42
 pub static SCHEMA_CLASS_OBJECT_LITERAL: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "schemaClassObjectLiteral",
     group: "correctness",
@@ -120,7 +120,7 @@ pub static SCHEMA_CLASS_OBJECT_LITERAL: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_class_object_literal.go:83 schemaClassObjectLiteralInV4Constructor 7d63c2c426fb86c1
+// go: internal/rules/schema_class_object_literal.go:84 schemaClassObjectLiteralInV4Constructor 7d63c2c426fb86c1
 pub(crate) fn schema_class_object_literal_in_v4_constructor(
     ctx: &mut Context<'_, '_>,
     node: P<Node>,
