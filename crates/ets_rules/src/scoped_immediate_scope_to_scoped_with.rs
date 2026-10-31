@@ -79,14 +79,14 @@ pub(crate) struct ScopedImmediateScopeAnalysis {
 /// Rust-only: Go's `isEffectScope` closure, which captures the parser.
 pub(crate) type IsEffectScope<'p> = &'p dyn Fn(&mut TypeParser<'_>, Option<P<Node>>) -> bool;
 
-// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:69 AnalyzeScopedImmediateScopeToScopedWith bd4379a55565e3b9
+// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:69 AnalyzeScopedImmediateScopeToScopedWith 24b226409f97bd46
 // AnalyzeScopedImmediateScopeToScopedWith finds piping flows that apply
 // Effect.scoped to an Effect.gen whose first statement reads Effect.scope, or
 // to Effect.flatMap(Effect.scope, f) (Effect.scopeWith(f) on Effect v3), when
 // nothing else in the body reads or requires the ambient Scope.
 //
 // Rust: Go's checker argument is the parser's checker, so it is dropped; Go's nil parser check has no counterpart
-// (the parser is a reference). Go's `Callee() == nil` and `arg == nil` checks drop: both are non-optional here.
+// (the parser is a reference).
 pub fn analyze_scoped_immediate_scope_to_scoped_with(
     tp: &mut TypeParser<'_>,
     sf: Option<P<SourceFile>>,
@@ -98,41 +98,18 @@ pub fn analyze_scoped_immediate_scope_to_scoped_with(
     let no_type_arguments = |transformation: &PipingFlowTransformation| -> bool {
         transformation.type_arguments().is_none_or(|arguments| arguments.nodes().is_empty())
     };
-    let is_effect_api =
-        |name: &'static str, arg_count: i64, kinds: &'static [TransformationKind]| {
-            move |tp: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| -> bool {
-                if transformation.args().len() != arg_count || !no_type_arguments(transformation) {
-                    return false;
-                }
-                if !kinds.is_empty() && !kinds.contains(&transformation.kind()) {
-                    return false;
-                }
-                for (_, arg) in transformation.args().all() {
-                    if arg.kind() == Kind::SpreadElement {
-                        return false;
-                    }
-                }
-                tp.is_node_reference_to_effect_module_api(transformation.callee(), name)
-            }
-        };
-    // Effect.fn post-transformations apply to a function body, not an expression.
-    let is_scoped = is_effect_api(
-        "scoped",
-        0,
-        &[TransformationKind::Call, TransformationKind::Pipe, TransformationKind::Pipeable],
-    );
-    let is_gen = is_effect_api("gen", 0, &[TransformationKind::Call]);
-    let is_flat_map = is_effect_api(
-        "flatMap",
-        1,
-        &[
-            TransformationKind::Call,
-            TransformationKind::DataFirst,
-            TransformationKind::Pipe,
-            TransformationKind::Pipeable,
-        ],
-    );
-    let is_scope_with = is_effect_api("scopeWith", 0, &[]);
+    // Explicit type arguments pin types the rewrite would infer differently.
+    let is_effect_api = |name: &'static str, arg_count: i64| {
+        move |tp: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| -> bool {
+            transformation.args().len() == arg_count
+                && no_type_arguments(transformation)
+                && tp.is_node_reference_to_effect_module_api(transformation.callee(), name)
+        }
+    };
+    let is_scoped = is_effect_api("scoped", 0);
+    let is_gen = is_effect_api("gen", 0);
+    let is_flat_map = is_effect_api("flatMap", 1);
+    let is_scope_with = is_effect_api("scopeWith", 0);
     let is_generator_subject = |_: &mut TypeParser<'_>, subject: &PipingFlowSubject| -> bool {
         subject.node().is_some_and(|node| {
             node.kind() == Kind::FunctionExpression
@@ -140,10 +117,7 @@ pub fn analyze_scoped_immediate_scope_to_scoped_with(
         })
     };
     let is_effect_scope = |tp: &mut TypeParser<'_>, node: Option<P<Node>>| -> bool {
-        node.is_some_and(|node| {
-            (ast::is_identifier(node) || ast::is_property_access_expression(node))
-                && tp.is_node_reference_to_effect_module_api(node, "scope")
-        })
+        node.is_some_and(|node| tp.is_node_reference_to_effect_module_api(node, "scope"))
     };
     let is_scope_subject = |tp: &mut TypeParser<'_>, subject: &PipingFlowSubject| -> bool {
         is_effect_scope(tp, subject.node())
@@ -162,10 +136,13 @@ pub fn analyze_scoped_immediate_scope_to_scoped_with(
             &is_scope_subject,
             &[&is_flat_map, &is_scoped],
         ) {
+            let callback = *flow.transformations().at(0).args().at(0);
+            let callback_type = tp.get_type_at_location(callback);
             analysis = analyze_scoped_immediate_scope_callback(
                 tp,
                 flow,
-                Some(*flow.transformations().at(0).args().at(0)),
+                Some(callback),
+                callback_type,
                 2,
                 &is_effect_scope,
             );
@@ -176,19 +153,28 @@ pub fn analyze_scoped_immediate_scope_to_scoped_with(
                 &[&is_scope_with, &is_scoped],
             );
             for sequence in sequences.iter().flatten() {
-                if let Some(callback) =
-                    PipingFlow::transformation_input_node(Some(flow), sequence.start())
-                {
-                    analysis = analyze_scoped_immediate_scope_callback(
-                        tp,
-                        flow,
-                        Some(callback),
-                        sequence.start() + 2,
-                        &is_effect_scope,
-                    );
-                    if analysis.is_some() {
-                        break;
+                // A pipe step has no input node; the callback is the previous
+                // step's result and only its type is known.
+                let start = sequence.start();
+                let callback = PipingFlow::transformation_input_node(Some(flow), start);
+                let callback_type = PipingFlow::transformation_input_type(Some(flow), tp, start);
+                analysis = analyze_scoped_immediate_scope_callback(
+                    tp,
+                    flow,
+                    callback,
+                    callback_type,
+                    start + 2,
+                    &is_effect_scope,
+                );
+                if let Some(analysis) = analysis.as_mut() {
+                    if analysis.callback.is_none() {
+                        // The fix collapses both steps into Effect.scopedWith, which
+                        // would land on the callback's own .pipe when Effect.scoped
+                        // is a .pipe step.
+                        analysis.fixable = flow.transformations().at(start + 1).kind()
+                            != TransformationKind::Pipeable;
                     }
+                    break;
                 }
             }
         }
@@ -212,36 +198,26 @@ pub fn analyze_scoped_immediate_scope_to_scoped_with(
     matches
 }
 
-// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:143 analyzeScopedImmediateScopeGen 0310fba4b9aa72b9
+// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:137 analyzeScopedImmediateScopeGen c514b1e2136c7d5f
 //
-// Rust: `(match, ok)` is an `Option`; the checker is the parser's. Go's nil checks on the declaration list, its
-// declarations and the declaration name drop: tsrs holds them as non-optional.
+// Rust: `(match, ok)` is an `Option`; the checker is the parser's. A function expression's body is optional in
+// tsrs, so the body Go reads unconditionally returns `None` when missing.
 pub(crate) fn analyze_scoped_immediate_scope_gen(
     tp: &mut TypeParser<'_>,
     flow: &PipingFlow,
     is_effect_scope: IsEffectScope<'_>,
 ) -> Option<ScopedImmediateScopeAnalysis> {
     let gen_step = flow.transformations().at(0);
-    let gen_ = tp.effect_gen_call(gen_step.callee().parent());
-    // Options, pipe arguments and a return annotation pin the result
-    // independently of the body.
-    let gen_ = gen_?;
-    if gen_.options_node().is_some()
-        || gen_.pipe_arguments().len() != 0
-        || Some(gen_.generator_function()) != flow.subject().node()
-    {
-        return None;
-    }
-    let gen_fn_node = gen_.generator_function();
+    let gen_fn_node = flow.subject().node()?;
     let gen_fn = gen_fn_node.as_function_expression();
+    // A return annotation pins the requirements independently of the body; the
+    // fix rebuilds the generator without type parameters.
     if gen_fn.type_().is_some()
-        || gen_fn.modifiers().is_some()
         || gen_fn.type_parameters().is_some_and(|parameters| !parameters.nodes().is_empty())
-        || gen_fn.body().is_none_or(|body| !ast::is_block(body))
     {
         return None;
     }
-    let body = gen_fn.body().unwrap();
+    let body = gen_fn.body()?;
     let statements = body.as_block().statements();
     if statements.nodes().is_empty() {
         return None;
@@ -262,8 +238,6 @@ pub(crate) fn analyze_scoped_immediate_scope_gen(
     }
     let declaration = declarations.nodes()[0].as_variable_declaration();
     if !ast::is_identifier(declaration.name())
-        || declaration.type_().is_some()
-        || declaration.exclamation_token().is_some()
         || declaration
             .initializer()
             .is_none_or(|initializer| !ast::is_yield_expression(initializer))
@@ -272,14 +246,14 @@ pub(crate) fn analyze_scoped_immediate_scope_gen(
     }
     let retrieval_node = declaration.initializer().unwrap();
     let retrieval = retrieval_node.as_yield_expression();
-    retrieval.asterisk_token()?;
-    let operand = ast::skip_parentheses(retrieval.expression()?);
-    if !is_effect_scope(tp, Some(operand)) {
+    // A plain yield returns the Effect.scope effect itself, not the Scope.
+    let operand = retrieval.expression();
+    if retrieval.asterisk_token().is_none() || !is_effect_scope(tp, operand) {
         return None;
     }
 
     // The retrieval must be the only Effect.scope reference in the body.
-    if has_effect_scope_reference(tp, Some(body), Some(operand), is_effect_scope) {
+    if has_effect_scope_reference(tp, Some(body), operand, is_effect_scope) {
         return None;
     }
 
@@ -287,14 +261,11 @@ pub(crate) fn analyze_scoped_immediate_scope_gen(
     // Effect.scopedWith, which does not provide the ambient Scope.
     let keeps_requirements = scoped_with_keeps_requirements(tp, flow, 2);
     let changes_requirements = ets_shim::checker::for_each_yield_expression(body, |expr| {
-        if expr == retrieval_node
-            || expr.kind() != Kind::YieldExpression
-            || tp.get_effect_yield_generator_function(expr) != Some(gen_fn_node)
-        {
+        if expr == retrieval_node {
             return false;
         }
         let yield_ = expr.as_yield_expression();
-        let (Some(_), Some(expression)) = (yield_.asterisk_token(), yield_.expression()) else {
+        let Some(expression) = yield_.expression() else {
             return false;
         };
         let effect = tp.effect_yieldable_type_at_location(expression);
@@ -324,24 +295,27 @@ pub(crate) fn analyze_scoped_immediate_scope_gen(
     })
 }
 
-// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:227 analyzeScopedImmediateScopeCallback 6948a952db373522
+// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:213 analyzeScopedImmediateScopeCallback f00c3215f3b20901
+//
+// analyzeScopedImmediateScopeCallback checks a flatMap or scopeWith callback.
+// callback is nil when the callback is the previous step's result.
 //
 // Rust: `(match, ok)` is an `Option`; the checker is the parser's.
 pub(crate) fn analyze_scoped_immediate_scope_callback(
     tp: &mut TypeParser<'_>,
     flow: &PipingFlow,
     callback: Option<P<Node>>,
+    callback_type: Option<P<Type>>,
     prefix_length: i64,
     is_effect_scope: IsEffectScope<'_>,
 ) -> Option<ScopedImmediateScopeAnalysis> {
-    let callback = callback?;
-    if has_effect_scope_reference(tp, Some(callback), None, is_effect_scope) {
+    if callback.is_some() && has_effect_scope_reference(tp, callback, None, is_effect_scope) {
         return None;
     }
     // The flatMap and scopeWith results already require Scope, so the effect
     // the callback returns must keep its requirements under Effect.scopedWith.
     let keeps_requirements = scoped_with_keeps_requirements(tp, flow, prefix_length);
-    let callback_type = tp.get_type_at_location(callback)?;
+    let callback_type = callback_type?;
     let call_signatures = tp.checker().get_signatures_of_type(callback_type, SignatureKind::Call);
     if call_signatures.is_empty() {
         return None;
@@ -358,12 +332,12 @@ pub(crate) fn analyze_scoped_immediate_scope_callback(
         gen_callee: None,
         gen_function: None,
         binding_name: "",
-        callback: Some(callback),
+        callback,
         fixable: true,
     })
 }
 
-// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:257 hasEffectScopeReference 40be2db853dd237b
+// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:242 hasEffectScopeReference ea66b9da0e011b9f
 // hasEffectScopeReference reports whether node contains a reference to
 // Effect.scope other than allowed, skipping type positions.
 //
@@ -406,6 +380,7 @@ pub(crate) fn has_effect_scope_reference(
             }
             return *found;
         }
+        //ets:ast-walk finds Effect.scope references, which are identifiers and property accesses rather than calls
         current.for_each_child(&mut |child| visit(tp, allowed, is_effect_scope, found, Some(child)))
     }
     let mut found = false;
@@ -413,7 +388,7 @@ pub(crate) fn has_effect_scope_reference(
     found
 }
 
-// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:297 scopedWithKeepsRequirements e3df00091d154d4b
+// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:283 scopedWithKeepsRequirements e3df00091d154d4b
 // scopedWithKeepsRequirements returns a check that an effect moved from
 // Effect.scoped to Effect.scopedWith, which does not provide the ambient
 // Scope, neither needs that Scope nor changes the result type.
@@ -474,7 +449,7 @@ pub(crate) fn scoped_with_keeps_requirements(
     }
 }
 
-// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:334 referencesName d17dc26aa3a6adb5
+// go: internal/rules/scoped_immediate_scope_to_scoped_with.go:320 referencesName 6a50a925c943c838
 // referencesName reports whether node contains an identifier named name,
 // other than a property access member name.
 //
@@ -489,6 +464,7 @@ pub(crate) fn references_name(node: Option<P<Node>>, name: &str) -> bool {
         } else if ast::is_identifier(current) {
             return current.text() == name;
         }
+        //ets:ast-walk finds identifiers the new callback parameter would capture, which are not calls
         current.for_each_child(&mut |child| visit(Some(child), name))
     }
     visit(node, name)

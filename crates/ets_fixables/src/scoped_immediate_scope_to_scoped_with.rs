@@ -1,6 +1,7 @@
 use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
+use ets_rewriter::PipingFlowTransformationReplacement;
 use ets_shim::P;
 use ets_shim::ast::{self, Kind, Node, NodeFactory, NodeFlags, NodeList};
 use ets_shim::diagnostics::{self as tsdiag, Message};
@@ -21,7 +22,7 @@ pub static SCOPED_IMMEDIATE_SCOPE_TO_SCOPED_WITH_FIX: LazyLock<Fixable> =
         run: run_scoped_immediate_scope_to_scoped_with_fix,
     });
 
-// go: internal/fixables/scoped_immediate_scope_to_scoped_with.go:23 runScopedImmediateScopeToScopedWithFix 69e759f56d854af2
+// go: internal/fixables/scoped_immediate_scope_to_scoped_with.go:23 runScopedImmediateScopeToScopedWithFix 2c98df7922f4daac
 fn run_scoped_immediate_scope_to_scoped_with_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in
@@ -76,8 +77,23 @@ fn run_scoped_immediate_scope_to_scoped_with_fix(ctx: &mut Context<'_, '_>) -> V
                 };
                 let argument = if m.gen_function.is_some() {
                     new_scoped_with_gen_callback(tracker, &m)
-                } else {
+                } else if m.callback.is_some() {
                     tracker.deep_clone_node(m.callback).unwrap()
+                } else {
+                    // The callback is the previous step's result: collapse
+                    // Effect.scopeWith and Effect.scoped into Effect.scopedWith.
+                    tracker.collapse_piping_flow_transformations(
+                        Some(sf),
+                        Some(&m.flow),
+                        m.prefix_length - 2,
+                        m.prefix_length - 1,
+                        PipingFlowTransformationReplacement {
+                            callee: Some(callee),
+                            type_arguments: None,
+                            arguments: None,
+                        },
+                    );
+                    return;
                 };
                 let replacement = tracker.new_call_expression(
                     callee,
@@ -101,7 +117,7 @@ fn run_scoped_immediate_scope_to_scoped_with_fix(ctx: &mut Context<'_, '_>) -> V
     Vec::new()
 }
 
-// go: internal/fixables/scoped_immediate_scope_to_scoped_with.go:80 newScopedWithGenCallback a8fd7dc9e5abfb5c
+// go: internal/fixables/scoped_immediate_scope_to_scoped_with.go:86 newScopedWithGenCallback a8fd7dc9e5abfb5c
 // newScopedWithGenCallback builds `(<binding>) => <gen>(function*() { <rest> })`,
 // dropping the leading Effect.scope retrieval from the generator body.
 //
@@ -156,7 +172,7 @@ fn new_scoped_with_gen_callback(
     )
 }
 
-// go: internal/fixables/scoped_immediate_scope_to_scoped_with.go:106 cloneScopedWithNodeList 015bf7b68acdef98
+// go: internal/fixables/scoped_immediate_scope_to_scoped_with.go:112 cloneScopedWithNodeList 015bf7b68acdef98
 //
 // Rust: the helper only builds nodes, so it takes the node factory.
 fn clone_scoped_with_node_list(factory: &NodeFactory, list: Option<P<NodeList>>) -> P<NodeList> {
