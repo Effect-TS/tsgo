@@ -89,6 +89,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
 
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
+
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
   source = source.pipe(Effect.map((n) => n + 1))

@@ -1,4 +1,4 @@
-==== /.src/zipViaNestedFlatMapToAll_shapes.ts (51 flows) ====
+==== /.src/zipViaNestedFlatMapToAll_shapes.ts (53 flows) ====
 
 === Piping Flow ===
 Location: 15:32 - 20:2
@@ -421,7 +421,35 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 94:11 - 94:49
+Location: 93:42 - 97:5
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(\n    getOrders,\n    (orders) => [user, orders] as const\n  ))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(\n    getOrders,\n    (orders) => [user, orders] as const\n  )]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 93:76 - 97:4
+Node: Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(\n    getOrders,\n    (orders) => [user, orders] as const\n  )
+Node Kind: KindCallExpression
+
+Subject: getOrders
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(orders) => [user, orders] as const]
+      outType: Effect<readonly [User, readonly string[]], never, never>
+
+=== Piping Flow ===
+Location: 101:11 - 101:49
 Node: source.pipe(Effect.map((n) => n + 1))
 Node Kind: KindCallExpression
 
@@ -435,7 +463,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 95:9 - 95:90
+Location: 102:9 - 102:90
 Node: Effect.flatMap(getUser, (user) => Effect.map(source, (n) => [user, n] as const))
 Node Kind: KindCallExpression
 
@@ -449,7 +477,7 @@ Transformations (1):
       outType: Effect<readonly [User, number], never, never>
 
 === Piping Flow ===
-Location: 95:43 - 95:89
+Location: 102:43 - 102:89
 Node: Effect.map(source, (n) => [user, n] as const)
 Node Kind: KindCallExpression
 
@@ -463,7 +491,7 @@ Transformations (1):
       outType: Effect<readonly [User, number], never, never>
 
 === Piping Flow ===
-Location: 99:31 - 100:67
+Location: 106:31 - 107:67
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => ({ "1": user, "0": orders })))
 Node Kind: KindCallExpression
 
@@ -477,7 +505,7 @@ Transformations (1):
       outType: Effect<{ "1": User; "0": readonly string[]; }, never, never>
 
 === Piping Flow ===
-Location: 99:65 - 100:66
+Location: 106:65 - 107:66
 Node: Effect.map(getOrders, (orders) => ({ "1": user, "0": orders }))
 Node Kind: KindCallExpression
 
@@ -491,7 +519,7 @@ Transformations (1):
       outType: Effect<{ "1": User; "0": readonly string[]; }, never, never>
 
 === Piping Flow ===
-Location: 103:24 - 104:70
+Location: 110:24 - 111:70
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => ({ "__proto__": user, orders })))
 Node Kind: KindCallExpression
 
@@ -505,7 +533,7 @@ Transformations (1):
       outType: Effect<{ __proto__: User; orders: readonly string[]; }, never, never>
 
 === Piping Flow ===
-Location: 103:58 - 104:69
+Location: 110:58 - 111:69
 Node: Effect.map(getOrders, (orders) => ({ "__proto__": user, orders }))
 Node Kind: KindCallExpression
 
@@ -519,7 +547,7 @@ Transformations (1):
       outType: Effect<{ __proto__: User; orders: readonly string[]; }, never, never>
 
 === Piping Flow ===
-Location: 107:39 - 110:6
+Location: 114:39 - 117:6
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, function(orders) {\n    return [user, orders] as const\n  }))
 Node Kind: KindCallExpression
 
@@ -533,7 +561,7 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 107:73 - 110:5
+Location: 114:73 - 117:5
 Node: Effect.map(getOrders, function(orders) {\n    return [user, orders] as const\n  })
 Node Kind: KindCallExpression
 
@@ -547,7 +575,7 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 113:36 - 114:94
+Location: 120:36 - 121:94
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => <readonly [User, ReadonlyArray<string>]> [user, orders]))
 Node Kind: KindCallExpression
 
@@ -561,7 +589,7 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 113:70 - 114:93
+Location: 120:70 - 121:93
 Node: Effect.map(getOrders, (orders) => <readonly [User, ReadonlyArray<string>]> [user, orders])
 Node Kind: KindCallExpression
 
@@ -575,7 +603,7 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 117:33 - 118:93
+Location: 124:33 - 125:93
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getOrders, (orders) => [user, orders] satisfies [User, ReadonlyArray<string>]))
 Node Kind: KindCallExpression
 
@@ -589,7 +617,7 @@ Transformations (1):
       outType: Effect<[User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 117:67 - 118:92
+Location: 124:67 - 125:92
 Node: Effect.map(getOrders, (orders) => [user, orders] satisfies [User, ReadonlyArray<string>])
 Node Kind: KindCallExpression
 
@@ -603,7 +631,7 @@ Transformations (1):
       outType: Effect<[User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 121:33 - 122:62
+Location: 128:33 - 129:62
 Node: Effect.flatMap(getUser, (user?: User) =>\n  Effect.map(getOrders, (orders) => [user, orders] as const))
 Node Kind: KindCallExpression
 
@@ -617,7 +645,7 @@ Transformations (1):
       outType: Effect<readonly [User | undefined, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 121:74 - 122:61
+Location: 128:74 - 129:61
 Node: Effect.map(getOrders, (orders) => [user, orders] as const)
 Node Kind: KindCallExpression
 
@@ -631,7 +659,7 @@ Transformations (1):
       outType: Effect<readonly [User | undefined, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 130:41 - 134:5
+Location: 137:41 - 141:5
 Node: Effect.flatMap(getUser, (user) =>\n  getOrdersFor(user.id).pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  ))
 Node Kind: KindCallExpression
 
@@ -645,7 +673,7 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 130:75 - 134:4
+Location: 137:75 - 141:4
 Node: getOrdersFor(user.id).pipe(\n    Effect.tap(audit),\n    Effect.map((orders) => [user, orders] as const)\n  )
 Node Kind: KindCallExpression
 
@@ -667,7 +695,7 @@ Transformations (3):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 137:36 - 141:5
+Location: 144:36 - 148:5
 Node: Effect.flatMap(getUser, (user) =>\n  getOrders.pipe(\n    Effect.tap(currentAudit),\n    Effect.map((orders) => [user, orders] as const)\n  ))
 Node Kind: KindCallExpression
 
@@ -681,7 +709,7 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 137:70 - 141:4
+Location: 144:70 - 148:4
 Node: getOrders.pipe(\n    Effect.tap(currentAudit),\n    Effect.map((orders) => [user, orders] as const)\n  )
 Node Kind: KindCallExpression
 
@@ -699,7 +727,7 @@ Transformations (2):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 145:37 - 149:5
+Location: 152:37 - 156:5
 Node: Effect.flatMap(getUser, (user) =>\n  getOrders.pipe(\n    Effect.tap((orders) => currentAudit(orders)),\n    Effect.map((orders) => [user, orders] as const)\n  ))
 Node Kind: KindCallExpression
 
@@ -713,7 +741,7 @@ Transformations (1):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 145:71 - 149:4
+Location: 152:71 - 156:4
 Node: getOrders.pipe(\n    Effect.tap((orders) => currentAudit(orders)),\n    Effect.map((orders) => [user, orders] as const)\n  )
 Node Kind: KindCallExpression
 
@@ -731,7 +759,7 @@ Transformations (2):
       outType: Effect<readonly [User, readonly string[]], never, never>
 
 === Piping Flow ===
-Location: 147:27 - 147:48
+Location: 154:27 - 154:48
 Node: currentAudit(orders)
 Node Kind: KindCallExpression
 
@@ -745,7 +773,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 151:26 - 151:39
+Location: 158:26 - 158:39
 Node: audit(value)
 Node Kind: KindCallExpression
 

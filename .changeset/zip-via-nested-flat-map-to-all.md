@@ -28,4 +28,4 @@ getUser.pipe(
 Effect.all([getUser.pipe(Effect.tap(audit)), getOrders]).pipe(Effect.asVoid)
 ```
 
-The rule does not report when the inner effect references the outer value, reads a `let`/`var` binding eagerly, or uses a binding declared later. Both callbacks must be arrow functions with a single plain parameter, and the combiner must list the outer value first. The fix is not offered for an `Effect.fn` pipeline step or when either step has explicit type arguments.
+The rule does not report when the inner effect references the outer value, reads a `let`/`var` binding or a reassigned parameter eagerly, or uses a binding declared later. Both callbacks must be arrow functions with a single plain parameter, and the combiner must list the outer value first. The fix is not offered for an `Effect.fn` pipeline step or when either step has explicit type arguments, or when an operand is a `pipe(...)`/`.pipe(...)` call cut before the step and that call uses `?.` or explicit type arguments.

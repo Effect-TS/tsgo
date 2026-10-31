@@ -12,10 +12,11 @@ Effect version: 3.19.19
 /.src/zipViaNestedFlatMapToAll_shapes.ts(79,10): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
 /.src/zipViaNestedFlatMapToAll_shapes.ts(84,34): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
 /.src/zipViaNestedFlatMapToAll_shapes.ts(88,38): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
-/.src/zipViaNestedFlatMapToAll_shapes.ts(146,38): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_shapes.ts(94,43): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll_shapes.ts(153,38): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
 
 
-==== /.src/zipViaNestedFlatMapToAll_shapes.ts (12 errors) ====
+==== /.src/zipViaNestedFlatMapToAll_shapes.ts (13 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics zipViaNestedFlatMapToAll:warning
@@ -129,6 +130,15 @@ Effect version: 3.19.19
       getUser,
       (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
     )
+    
+    // MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+    export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+                                              ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+        getOrders,
+        (orders) => [user, orders] as const
+      ))
     
     // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
     export function reassignedParameter(source: Effect.Effect<number>) {

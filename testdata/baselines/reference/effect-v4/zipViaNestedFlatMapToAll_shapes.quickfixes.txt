@@ -53,7 +53,11 @@
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
 
-[D12] (145:38-145:52) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+[D12] (93:43-93:57) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+  Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
+  Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
+
+[D13] (152:38-152:52) TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
   Fix 0: "Disable zipViaNestedFlatMapToAll for this line"
   Fix 1: "Disable zipViaNestedFlatMapToAll for entire file"
   Fix 2: "Replace with Effect.all"
@@ -165,6 +169,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   getUser,
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
+
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
 
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
@@ -328,6 +339,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
 
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
+
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
   source = source.pipe(Effect.map((n) => n + 1))
@@ -485,6 +503,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   getUser,
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
+
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
 
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
@@ -646,6 +671,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
 
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
+
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
   source = source.pipe(Effect.map((n) => n + 1))
@@ -803,6 +835,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   getUser,
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
+
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
 
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
@@ -966,6 +1005,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
 
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
+
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
   source = source.pipe(Effect.map((n) => n + 1))
@@ -1126,6 +1172,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   getUser,
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
+
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
 
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
@@ -1289,6 +1342,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
 
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
+
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
   source = source.pipe(Effect.map((n) => n + 1))
@@ -1450,6 +1510,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
 
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
+
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {
   source = source.pipe(Effect.map((n) => n + 1))
@@ -1524,7 +1591,13 @@ skipped by default
 === [D12] Fix 1: "Disable zipViaNestedFlatMapToAll for entire file" ===
 skipped by default
 
-=== [D12] Fix 2: "Replace with Effect.all" ===
+=== [D13] Fix 0: "Disable zipViaNestedFlatMapToAll for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable zipViaNestedFlatMapToAll for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with Effect.all" ===
 
 --- file:///.src/zipViaNestedFlatMapToAll_shapes.ts ---
 // @effect-diagnostics *:off
@@ -1617,6 +1690,13 @@ export const explicitTypeArguments = Effect.flatMap<User, never, never, readonly
   getUser,
   (user) => Effect.map(getOrders, (orders) => [user, orders] as const)
 )
+
+// MUST TRIGGER, no quickfix: explicit type arguments on the inner Effect.map cannot be carried over to Effect.all
+export const innerExplicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  Effect.map<ReadonlyArray<string>, never, never, readonly [User, ReadonlyArray<string>]>(
+    getOrders,
+    (orders) => [user, orders] as const
+  ))
 
 // MUST NOT TRIGGER: the parameter is reassigned, so reading it eagerly may observe another value
 export function reassignedParameter(source: Effect.Effect<number>) {

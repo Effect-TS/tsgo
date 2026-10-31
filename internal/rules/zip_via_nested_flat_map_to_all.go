@@ -111,7 +111,7 @@ func AnalyzeZipViaNestedFlatMapToAll(tp *typeparser.TypeParser, c *checker.Check
 
 			outerSymbol := tp.GetSymbolAtLocation(outer.Params().At(0).Name())
 			innerSymbol := tp.GetSymbolAtLocation(innerCallback.Params().At(0).Name())
-			if outerSymbol == nil || innerSymbol == nil || outerSymbol == innerSymbol {
+			if outerSymbol == nil || innerSymbol == nil {
 				continue
 			}
 			record, keys, ok := zipCombinerShape(tp, c, innerCallback.Expression(), outerSymbol, innerSymbol)
@@ -155,14 +155,10 @@ func AnalyzeZipViaNestedFlatMapToAll(tp *typeparser.TypeParser, c *checker.Check
 // plain identifier parameter and returns an expression.
 func zipCallback(step typeparser.PipingFlowTransformation) *typeparser.ParsedLazyExpression {
 	callee := step.Callee()
-	if callee == nil || callee.Flags&ast.NodeFlagsOptionalChain != 0 || step.Args().Len() != 1 {
+	if callee == nil || step.Args().Len() != 1 {
 		return nil
 	}
-	argument := step.Args().At(0)
-	if argument == nil || argument.Kind == ast.KindSpreadElement {
-		return nil
-	}
-	callback := typeparser.ParseLazyExpression(argument, typeparser.LazyExpressionNone)
+	callback := typeparser.ParseLazyExpression(step.Args().At(0), typeparser.LazyExpressionNone)
 	if callback == nil || callback.Node().Kind != ast.KindArrowFunction || callback.Expression() == nil ||
 		callback.Params().Len() != 1 {
 		return nil
@@ -212,9 +208,6 @@ func zipCombinerShape(tp *typeparser.TypeParser, c *checker.Checker, combiner *a
 			var value *ast.Symbol
 			switch property.Kind {
 			case ast.KindShorthandPropertyAssignment:
-				if property.AsShorthandPropertyAssignment().ObjectAssignmentInitializer != nil {
-					return false, nil, false
-				}
 				value = c.GetShorthandAssignmentValueSymbol(property)
 			case ast.KindPropertyAssignment:
 				initializer := ast.SkipParentheses(property.Initializer())
