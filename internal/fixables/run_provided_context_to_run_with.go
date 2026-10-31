@@ -28,9 +28,6 @@ func runRunProvidedContextToRunWithFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.Provide == nil || match.Runner == nil || match.Context == nil {
-			continue
-		}
 		// Explicit runner type arguments have no verified rewrite: report only.
 		if typeArguments := match.Runner.TypeArguments(); typeArguments != nil && len(typeArguments.Nodes) > 0 {
 			continue
@@ -88,12 +85,12 @@ func runProvidedContextReordersContext(match rules.RunProvidedContextToRunWithMa
 
 // runProvidedContextConstructors are the Context constructors that only build a
 // new Context from their arguments.
-var runProvidedContextConstructors = []string{"empty", "make", "add", "merge", "mergeAll", "pick", "omit"}
+var runProvidedContextConstructors = []string{"empty", "make", "add", "merge", "mergeAll"}
 
 // orderInsensitiveContext reports whether evaluating node earlier yields the
-// same value and has no effect other code could observe: literals, const
-// bindings, parameters that are never reassigned, and object or array literals
-// and Context constructor calls built only from those.
+// same value and has no effect other code could observe: string literals, const
+// bindings, parameters that are never reassigned, and object literals and
+// Context constructor calls built only from those.
 //
 // A binding is only a stable reference: its contents may still change, which
 // is harmless where the reference itself is provided, because both forms read
@@ -102,13 +99,9 @@ var runProvidedContextConstructors = []string{"empty", "make", "add", "merge", "
 // constructor calls. Tags only contribute their key and service values are
 // stored by reference, so stable bindings are fine there.
 func orderInsensitiveContext(ctx *fixable.Context, node *ast.Node) bool {
-	if node == nil {
-		return false
-	}
 	node = ast.SkipOuterExpressions(node, ast.OEKAll)
 	switch node.Kind {
-	case ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindBigIntLiteral, ast.KindNoSubstitutionTemplateLiteral,
-		ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword:
+	case ast.KindStringLiteral:
 		return true
 	case ast.KindIdentifier:
 		symbol := ctx.TypeParser.GetSymbolAtLocation(node)
@@ -133,31 +126,15 @@ func orderInsensitiveContext(ctx *fixable.Context, node *ast.Node) bool {
 		return false
 	case ast.KindObjectLiteralExpression:
 		for _, property := range node.AsObjectLiteralExpression().Properties.Nodes {
-			switch property.Kind {
-			case ast.KindPropertyAssignment:
-				if name := property.Name(); name == nil || name.Kind == ast.KindComputedPropertyName ||
-					!orderInsensitiveContext(ctx, property.AsPropertyAssignment().Initializer) {
-					return false
-				}
-			case ast.KindShorthandPropertyAssignment:
-				if !orderInsensitiveContext(ctx, property.Name()) {
-					return false
-				}
-			default:
-				return false
-			}
-		}
-		return true
-	case ast.KindArrayLiteralExpression:
-		for _, element := range node.AsArrayLiteralExpression().Elements.Nodes {
-			if !orderInsensitiveContext(ctx, element) {
+			if property.Kind != ast.KindPropertyAssignment || property.Name().Kind == ast.KindComputedPropertyName ||
+				!orderInsensitiveContext(ctx, property.AsPropertyAssignment().Initializer) {
 				return false
 			}
 		}
 		return true
 	case ast.KindCallExpression:
 		call := node.AsCallExpression()
-		if call.QuestionDotToken != nil || !slices.ContainsFunc(runProvidedContextConstructors, func(name string) bool {
+		if !slices.ContainsFunc(runProvidedContextConstructors, func(name string) bool {
 			return ctx.TypeParser.IsNodeReferenceToEffectContextModuleApi(call.Expression, name)
 		}) {
 			return false

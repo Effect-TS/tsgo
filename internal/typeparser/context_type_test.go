@@ -6,6 +6,8 @@ import (
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
 )
 
+// Fixtures cover the Context types runProvidedContextToRunWith accepts; this
+// covers the types the parser must reject.
 func TestContextType_V4(t *testing.T) {
 	t.Parallel()
 	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
@@ -18,23 +20,13 @@ import { Context, Effect, Layer } from "effect"
 interface Config {
   readonly apiUrl: string
 }
-const Config = Context.Service<Config>("Config")
 
 interface LocalContext<S> {
   readonly services: S
 }
 
-declare const wider: Context.Context<Config | "Other">
 declare const untyped: any
 declare const local: LocalContext<Config>
-
-const made = Context.make(Config, { apiUrl: "https://api.example.com" })
-const empty = Context.empty()
-const widerRef = wider
-export function generic<XR>(context: Context.Context<XR>) {
-  const genericRef = context
-  return genericRef
-}
 
 const anyRef = untyped
 const effectRef = Effect.succeed(1)
@@ -43,11 +35,6 @@ const localRef = local
 `)
 	defer done()
 
-	for _, name := range []string{"made", "empty", "widerRef", "genericRef"} {
-		if tp.ContextTypeAtLocation(findVariableInitializer(t, sf, name)) == nil {
-			t.Errorf("expected %s to parse as a Context type", name)
-		}
-	}
 	for _, name := range []string{"anyRef", "effectRef", "layerRef", "localRef"} {
 		if tp.ContextTypeAtLocation(findVariableInitializer(t, sf, name)) != nil {
 			t.Errorf("expected %s not to parse as a Context type", name)

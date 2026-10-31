@@ -137,19 +137,11 @@ func AnalyzeRunProvidedContextToRunWith(tp *typeparser.TypeParser, _ *checker.Ch
 // runProvidedContextProvideName returns "provideContext" or "setContext" when
 // transformation provides a single argument through one of those APIs.
 func runProvidedContextProvideName(tp *typeparser.TypeParser, transformation typeparser.PipingFlowTransformation) string {
-	callee := transformation.Callee()
-	if callee == nil || transformation.Args().Len() != 1 || ast.IsSpreadElement(transformation.Args().At(0)) {
-		return ""
-	}
-	switch transformation.Kind() {
-	case typeparser.TransformationKindDataFirst, typeparser.TransformationKindCall,
-		typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable,
-		typeparser.TransformationKindEffectFn, typeparser.TransformationKindEffectFnUntraced:
-	default:
+	if transformation.Args().Len() != 1 {
 		return ""
 	}
 	for _, name := range []string{"provideContext", "setContext"} {
-		if tp.IsNodeReferenceToEffectModuleApi(callee, name) {
+		if tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), name) {
 			return name
 		}
 	}
@@ -158,24 +150,9 @@ func runProvidedContextProvideName(tp *typeparser.TypeParser, transformation typ
 
 // runProvidedContextRunner returns the runner name and its *With replacement
 // when transformation runs its input with one of the context-free runners.
-// Already-applied factories such as Effect.runPromiseWith(context) never match.
 func runProvidedContextRunner(tp *typeparser.TypeParser, transformation typeparser.PipingFlowTransformation) (string, string) {
-	callee := transformation.Callee()
-	if callee == nil || callee.Kind == ast.KindCallExpression {
-		return "", ""
-	}
-	switch transformation.Kind() {
-	case typeparser.TransformationKindCall, typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable,
-		typeparser.TransformationKindEffectFn, typeparser.TransformationKindEffectFnUntraced:
-		if transformation.Args().Len() != 0 {
-			return "", ""
-		}
-	case typeparser.TransformationKindCallWithOptionals:
-	default:
-		return "", ""
-	}
 	for _, candidate := range runProvidedContextRunners {
-		if tp.IsNodeReferenceToEffectModuleApi(callee, candidate.runner) {
+		if tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), candidate.runner) {
 			return candidate.runner, candidate.replacement
 		}
 	}
