@@ -130,7 +130,7 @@ pub(crate) fn remove_piping_flow_transformation(
     }
 }
 
-// go: internal/fixables/piping_flow.go:120 subjectInCallPosition e5233094a4202b7d
+// go: internal/fixables/piping_flow.go:120 subjectInCallPosition c42ceeecac9d50e0
 // subjectInCallPosition clones a removed step's subject for the position of the
 // call it replaces. A call binds as tightly as any expression, so a subject that
 // binds less tightly (a conditional, binary, assignment, `as` or arrow
@@ -151,14 +151,7 @@ pub(crate) fn subject_in_call_position(
     subject: P<Node>,
 ) -> Option<P<Node>> {
     let parenthesize = subject_needs_parentheses(position, subject);
-    let mut leading = Kind::OpenParenToken;
-    if !parenthesize {
-        leading = leading_token_kind(subject);
-    }
-    if continues_previous_statement(leading)
-        && leading != leading_token_kind(position)
-        && starts_expression_statement(sf, position)
-    {
+    if replacement_continues_previous_statement(sf, position, subject, parenthesize) {
         return None;
     }
     let clone = tracker.deep_clone_node(Some(subject)).unwrap();
@@ -168,51 +161,27 @@ pub(crate) fn subject_in_call_position(
     Some(clone)
 }
 
-// go: internal/fixables/piping_flow.go:146 pipeReceiverParentheses cf6c812f8b14bf5d
-// pipeReceiverParentheses reports how expression can become the receiver of a
-// `.pipe(...)` call that replaces position. The receiver of a member access
-// binds tighter than any operator, so every expression that is not a
-// left-hand-side expression needs parentheses, as do object, function and
-// class expressions, an argument-less `new X` and optional chains.
-//
-// Like subjectInCallPosition, it reports false when the replacement would newly
-// begin an expression statement with a token that continues the previous
-// statement when that one has no semicolon.
-//
-// Rust: Go's `(parenthesize, ok)` is `Option<bool>` (`None` for Go's false `ok`).
-pub(crate) fn pipe_receiver_parentheses(
+// go: internal/fixables/piping_flow.go:136 replacementContinuesPreviousStatement 9f36097ae3a8a875
+// replacementContinuesPreviousStatement reports whether replacing position with
+// expression, parenthesized or not, would newly begin an expression statement
+// with a token that continues the previous statement when that one has no
+// semicolon.
+pub(crate) fn replacement_continues_previous_statement(
     sf: P<SourceFile>,
     position: P<Node>,
     expression: P<Node>,
-) -> Option<bool> {
-    let parenthesize = pipe_receiver_needs_parentheses(expression);
+    parenthesize: bool,
+) -> bool {
     let mut leading = Kind::OpenParenToken;
     if !parenthesize {
         leading = leading_token_kind(expression);
     }
-    if continues_previous_statement(leading)
+    continues_previous_statement(leading)
         && leading != leading_token_kind(position)
         && starts_expression_statement(sf, position)
-    {
-        return None;
-    }
-    Some(parenthesize)
 }
 
-// go: internal/fixables/piping_flow.go:159 pipeReceiverNeedsParentheses ac2718dff3f11a1e
-pub(crate) fn pipe_receiver_needs_parentheses(expression: P<Node>) -> bool {
-    match expression.kind() {
-        Kind::ObjectLiteralExpression | Kind::FunctionExpression | Kind::ClassExpression => {
-            return true;
-        }
-        Kind::NewExpression => return expression.as_new_expression().arguments().is_none(),
-        _ => {}
-    }
-    expression.flags().intersects(NodeFlags::OptionalChain)
-        || !ast::is_left_hand_side_expression(expression)
-}
-
-// go: internal/fixables/piping_flow.go:171 startsExpressionStatement 7127d9db26afe89c
+// go: internal/fixables/piping_flow.go:147 startsExpressionStatement 7127d9db26afe89c
 // startsExpressionStatement reports whether node begins the expression
 // statement that contains it.
 pub(crate) fn starts_expression_statement(sf: P<SourceFile>, node: P<Node>) -> bool {
@@ -230,7 +199,7 @@ pub(crate) fn starts_expression_statement(sf: P<SourceFile>, node: P<Node>) -> b
     false
 }
 
-// go: internal/fixables/piping_flow.go:186 leadingTokenKind b52c73b5e69322ec
+// go: internal/fixables/piping_flow.go:162 leadingTokenKind b52c73b5e69322ec
 // leadingTokenKind returns the kind of an expression's first token, as far as
 // continuesPreviousStatement needs to tell tokens apart.
 //
@@ -262,7 +231,7 @@ pub(crate) fn leading_token_kind(node: P<Node>) -> Kind {
     }
 }
 
-// go: internal/fixables/piping_flow.go:230 continuesPreviousStatement 74e9e763cff61c0a
+// go: internal/fixables/piping_flow.go:206 continuesPreviousStatement 74e9e763cff61c0a
 // continuesPreviousStatement reports whether a statement beginning with token
 // is parsed as a continuation of a previous statement that has no semicolon.
 pub(crate) fn continues_previous_statement(token: Kind) -> bool {
@@ -278,7 +247,7 @@ pub(crate) fn continues_previous_statement(token: Kind) -> bool {
     )
 }
 
-// go: internal/fixables/piping_flow.go:239 subjectNeedsParentheses 554d1044c7be3351
+// go: internal/fixables/piping_flow.go:215 subjectNeedsParentheses ea83f06b97c18290
 pub(crate) fn subject_needs_parentheses(position: P<Node>, subject: P<Node>) -> bool {
     match subject.kind() {
         Kind::ObjectLiteralExpression | Kind::FunctionExpression | Kind::ClassExpression => {
@@ -286,19 +255,37 @@ pub(crate) fn subject_needs_parentheses(position: P<Node>, subject: P<Node>) -> 
         }
         _ => {}
     }
-    if position_accepts_any_expression(position) {
-        return false;
-    }
-    if subject.kind() == Kind::NewExpression {
-        return subject.as_new_expression().arguments().is_none();
-    }
-    if subject.flags().intersects(NodeFlags::OptionalChain) {
-        return true;
-    }
-    !ast::is_left_hand_side_expression(subject)
+    !position_accepts_any_expression(position) && binds_looser_than_call(subject)
 }
 
-// go: internal/fixables/piping_flow.go:258 positionAcceptsAnyExpression 6a42cd0616c907ab
+// go: internal/fixables/piping_flow.go:226 receiverNeedsParentheses f642f0c637542053
+// receiverNeedsParentheses reports whether expression must be parenthesized to
+// become the receiver of a member access such as `.pipe(...)`, which binds as
+// tightly as a call whatever the position.
+pub(crate) fn receiver_needs_parentheses(expression: P<Node>) -> bool {
+    match expression.kind() {
+        Kind::ObjectLiteralExpression | Kind::FunctionExpression | Kind::ClassExpression => {
+            return true;
+        }
+        _ => {}
+    }
+    binds_looser_than_call(expression)
+}
+
+// go: internal/fixables/piping_flow.go:236 bindsLooserThanCall ebd2e7aa18c34a35
+// bindsLooserThanCall reports whether expression binds less tightly than a call
+// or member access.
+fn binds_looser_than_call(expression: P<Node>) -> bool {
+    if expression.kind() == Kind::NewExpression {
+        return expression.as_new_expression().arguments().is_none();
+    }
+    if expression.flags().intersects(NodeFlags::OptionalChain) {
+        return true;
+    }
+    !ast::is_left_hand_side_expression(expression)
+}
+
+// go: internal/fixables/piping_flow.go:248 positionAcceptsAnyExpression 6a42cd0616c907ab
 // positionAcceptsAnyExpression reports whether an expression of assignment
 // precedence can stand at position without parentheses.
 pub(crate) fn position_accepts_any_expression(position: P<Node>) -> bool {
@@ -321,7 +308,7 @@ pub(crate) fn position_accepts_any_expression(position: P<Node>) -> bool {
     }
 }
 
-// go: internal/fixables/piping_flow.go:279 directCallForCallee 26fc1f018d838342
+// go: internal/fixables/piping_flow.go:269 directCallForCallee 26fc1f018d838342
 //
 // Rust: returns the call node (Go: the node and its `*ast.CallExpression`, read with `as_call_expression()`).
 pub(crate) fn direct_call_for_callee(callee: Option<P<Node>>) -> Option<P<Node>> {
@@ -337,7 +324,7 @@ pub(crate) fn direct_call_for_callee(callee: Option<P<Node>>) -> Option<P<Node>>
     Some(parent)
 }
 
-// go: internal/fixables/piping_flow.go:290 containingCallArgument 87b76417be1acb0b
+// go: internal/fixables/piping_flow.go:280 containingCallArgument 87b76417be1acb0b
 //
 // Rust: returns the call node and the argument index (Go also returns the node's `*ast.CallExpression`).
 pub(crate) fn containing_call_argument(node: Option<P<Node>>) -> (Option<P<Node>>, i64) {

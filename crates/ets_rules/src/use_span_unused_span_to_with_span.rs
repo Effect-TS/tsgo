@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, NodeFlags, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{LazyExpressionFlags, TypeParser};
@@ -76,7 +76,7 @@ pub fn analyze_use_span_unused_span_to_with_span(
     matches
 }
 
-// go: internal/rules/use_span_unused_span_to_with_span.go:66 analyzeUseSpanCall 7a0df952cef35297
+// go: internal/rules/use_span_unused_span_to_with_span.go:66 analyzeUseSpanCall 632d47a87886ada2
 //
 // Rust: tsrs's call expression and arguments are never nil, so Go's nil checks drop.
 pub(crate) fn analyze_use_span_call(
@@ -85,26 +85,8 @@ pub(crate) fn analyze_use_span_call(
     node: P<Node>,
 ) -> Option<UseSpanUnusedSpanToWithSpanMatch> {
     let call = node.as_call_expression();
-    if node.flags().intersects(NodeFlags::OptionalChain) {
-        return None;
-    }
     let args = call.arguments().nodes();
     if args.len() != 2 && args.len() != 3 {
-        return None;
-    }
-    for arg in args {
-        if arg.kind() == Kind::SpreadElement {
-            return None;
-        }
-    }
-    let callee = ast::skip_parentheses(call.expression());
-    if callee.flags().intersects(NodeFlags::OptionalChain) {
-        return None;
-    } else if callee.kind() == Kind::PropertyAccessExpression {
-        if callee.as_property_access_expression().name().text() != "useSpan" {
-            return None;
-        }
-    } else if callee.kind() != Kind::Identifier {
         return None;
     }
     let callback = ast::skip_parentheses(args[args.len() - 1]);
@@ -112,24 +94,16 @@ pub(crate) fn analyze_use_span_call(
         return None;
     }
     let params = callback.parameters();
-    match params.len() {
-        0 => {}
-        1 => {
-            let param = params[0];
-            if !plain_tap_parameter(param)
-                || param.name().expect("a plain parameter has a name").text() == "this"
-            {
-                return None;
-            }
-        }
-        _ => return None,
+    if params.len() > 1 || params.len() == 1 && !plain_tap_parameter(params[0]) {
+        return None;
     }
 
+    let callee = ast::skip_parentheses(call.expression());
     if !tp.is_node_reference_to_effect_module_api(callee, "useSpan") {
         return None;
     }
     let body = callback.body()?;
-    if reads_arguments(body)
+    if callback.kind() == Kind::FunctionExpression && reads_arguments(body)
         || params.len() == 1 && tp.are_parameters_referenced_in_exported(callback, &[body])
     {
         return None;
@@ -152,7 +126,7 @@ pub(crate) fn analyze_use_span_call(
     Some(m)
 }
 
-// go: internal/rules/use_span_unused_span_to_with_span.go:134 useSpanRewriteParts c0288e5c8cb88b1b
+// go: internal/rules/use_span_unused_span_to_with_span.go:112 useSpanRewriteParts bf06efbceb410902
 // useSpanRewriteParts returns the Effect module receiver and the callback's
 // returned expression when the call can be rewritten to Effect.withSpan, or nil
 // for both when moving the expression out of the callback could change what
@@ -169,9 +143,7 @@ pub(crate) fn use_span_rewrite_parts(
         return (None, None);
     }
     let receiver = callee.as_property_access_expression().expression();
-    if !is_imported_module_receiver(tp, receiver)
-        || !tp.is_expression_effect_module(unwrap_zero_duration_expression(receiver))
-    {
+    if !tp.is_expression_effect_module(receiver) {
         return (None, None);
     }
     let Some(parsed) = ets_typeparser::parse_lazy_expression(callback, LazyExpressionFlags::None)
@@ -190,10 +162,10 @@ pub(crate) fn use_span_rewrite_parts(
     (Some(receiver), Some(body))
 }
 
-// go: internal/rules/use_span_unused_span_to_with_span.go:159 readsArguments 42e45ebfcbcd475a
-// readsArguments reports whether body reads an `arguments` object outside
-// nested functions that bind their own: the callback's own for a function
-// expression, the enclosing function's for an arrow function.
+// go: internal/rules/use_span_unused_span_to_with_span.go:137 readsArguments d9fc3f2fb20882f0
+// readsArguments reports whether a function expression's body reads its own
+// `arguments` object, through which it could reach the span, outside nested
+// functions that bind their own.
 pub(crate) fn reads_arguments(body: P<Node>) -> bool {
     // Rust: Go's recursive `visit` closure is a nested function.
     fn visit(node: P<Node>) -> bool {

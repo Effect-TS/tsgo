@@ -21,10 +21,11 @@ pub static USE_SPAN_UNUSED_SPAN_TO_WITH_SPAN_FIX: LazyLock<Fixable> = LazyLock::
     run: run_use_span_unused_span_to_with_span_fix,
 });
 
-// go: internal/fixables/use_span_unused_span_to_with_span.go:29 runUseSpanUnusedSpanToWithSpanFix a614f1a7552384d1
+// go: internal/fixables/use_span_unused_span_to_with_span.go:30 runUseSpanUnusedSpanToWithSpanFix 100a6bc1af5b1427
 // runUseSpanUnusedSpanToWithSpanFix rewrites `R.useSpan(name, options?, () => body)`
-// to `body.pipe(R.withSpan(name, options?))`. It edits the text around the body
-// so the body, name and options keep their original formatting and comments.
+// to `body.pipe(R.withSpan(name, options?))`. The useSpan call is not a piping
+// flow step, so no flow edit expresses this; it edits the text around the body
+// so the body keeps its original formatting and inner comments.
 fn run_use_span_unused_span_to_with_span_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_use_span_unused_span_to_with_span(&mut ctx.type_parser, source_file)
@@ -35,10 +36,11 @@ fn run_use_span_unused_span_to_with_span_fix(ctx: &mut Context<'_, '_>) -> Vec<C
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
-        let Some(parenthesize) = pipe_receiver_parentheses(m.source_file, m.call, body) else {
-            continue;
-        };
         let sf = m.source_file;
+        let parenthesize = receiver_needs_parentheses(body);
+        if replacement_continues_previous_statement(sf, m.call, body, parenthesize) {
+            continue;
+        }
         let node_text = |node: P<Node>| -> &'static str {
             &sf.text()[scanner::get_token_pos_of_node(node, sf, false) as usize
                 ..node.end().expect_source("a parsed node") as usize]
