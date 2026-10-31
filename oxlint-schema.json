@@ -2623,6 +2623,9 @@
         "effecttsgo/scope-in-layer-effect": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/scoped-immediate-scope-to-scoped-with": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/service-not-as-class": {
           "$ref": "#/definitions/RuleNoConfig"
         },

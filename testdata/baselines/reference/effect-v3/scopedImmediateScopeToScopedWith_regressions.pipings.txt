@@ -1,0 +1,507 @@
+==== /.src/scopedImmediateScopeToScopedWith_regressions.ts (31 flows) ====
+
+=== Piping Flow ===
+Location: 20:97 - 21:49
+Node: Effect.scoped(Effect.flatMap(Effect.scope, f))
+Node Kind: KindCallExpression
+
+Subject: Effect.scope
+Subject Type: Effect<Scope, never, Scope>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [f]
+      outType: Effect<string, never, R | Scope>
+  [1] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, Exclude<R, Scope>>
+
+=== Piping Flow ===
+Location: 24:99 - 25:37
+Node: Effect.scoped(Effect.scopeWith(f))
+Node Kind: KindCallExpression
+
+Subject: f
+Subject Type: (scope: Scope) => Effect<string, never, R>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.scopeWith
+      args: (constant)
+      outType: Effect<string, never, R | Scope>
+  [1] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, Exclude<R, Scope>>
+
+=== Piping Flow ===
+Location: 28:76 - 33:25
+Node: Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return yield* effect\n  }).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    const scope = yield* Effect.scope\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return yield* effect\n  }
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>> | YieldWrap<Effect<string, never, R>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, R | Scope>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, Exclude<R, Scope>>
+
+=== Piping Flow ===
+Location: 31:37 - 31:59
+Node: Effect.log("closing")
+Node Kind: KindCallExpression
+
+Subject: "closing"
+Subject Type: "closing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 38:86 - 43:25
+Node: Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return yield* effect\n  }).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    const scope = yield* Effect.scope\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return yield* effect\n  }
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>> | YieldWrap<Effect<string, never, Box<T>>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Box<T> | Scope>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, Box<T>>
+
+=== Piping Flow ===
+Location: 41:37 - 41:59
+Node: Effect.log("closing")
+Node Kind: KindCallExpression
+
+Subject: "closing"
+Subject Type: "closing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 47:92 - 48:52
+Node: Effect.scoped(Effect.flatMap(Effect.scope, make))
+Node Kind: KindCallExpression
+
+Subject: Effect.scope
+Subject Type: Effect<Scope, never, Scope>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [make]
+      outType: Effect<A, never, Scope>
+  [1] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 51:50 - 56:25
+Node: Effect.gen(function*() {\n    const scope = yield* Effect.scope\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return value\n  }).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    const scope = yield* Effect.scope\n    yield* Scope.addFinalizer(scope, Effect.log("closing"))\n    return value\n  }
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, A, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<A, never, Scope>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 54:37 - 54:59
+Node: Effect.log("closing")
+Node Kind: KindCallExpression
+
+Subject: "closing"
+Subject Type: "closing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 63:41 - 66:4
+Node: Effect.scoped(Effect.gen(function* scope() {\n  const scope = yield* Effect.scope\n  return yield* Scope.addFinalizer(scope, Effect.void)\n}))
+Node Kind: KindCallExpression
+
+Subject: function* scope() {\n  const scope = yield* Effect.scope\n  return yield* Scope.addFinalizer(scope, Effect.void)\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, Scope>
+  [1] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 70:39 - 73:4
+Node: scoped(gen(function*() {\n  const gen = yield* currentScope\n  return yield* openConnection(gen)\n}))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const gen = yield* currentScope\n  return yield* openConnection(gen)\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: gen
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [1] kind: call
+      callee: scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 72:16 - 72:36
+Node: openConnection(gen)
+Node Kind: KindCallExpression
+
+Subject: gen
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 77:39 - 80:23
+Node: Effect.gen(function*(_adapter = tag) {\n  const tag = yield* Effect.scope\n  yield* Scope.addFinalizer(tag, Effect.log(typeof _adapter))\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*(_adapter = tag) {\n  const tag = yield* Effect.scope\n  yield* Scope.addFinalizer(tag, Effect.log(typeof _adapter))\n}
+Subject Type: (_adapter?: Adapter) => Generator<YieldWrap<Effect<void, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, Scope>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 79:33 - 79:61
+Node: Effect.log(typeof _adapter)
+Node Kind: KindCallExpression
+
+Subject: typeof _adapter
+Subject Type: "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 84:30 - 87:4
+Node: Effect.scoped(Effect.gen(function* program() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}))
+Node Kind: KindCallExpression
+
+Subject: function* program() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [1] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 86:16 - 86:38
+Node: openConnection(scope)
+Node Kind: KindCallExpression
+
+Subject: scope
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 91:40 - 94:23
+Node: Effect.gen(function*() {\n  const gen = yield* Effect.scope\n  return yield* openConnection(gen)\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const gen = yield* Effect.scope\n  return yield* openConnection(gen)\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 93:16 - 93:36
+Node: openConnection(gen)
+Node Kind: KindCallExpression
+
+Subject: gen
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 105:40 - 109:23
+Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  yield* Effect.addFinalizer(() => Effect.void)\n  return yield* opaque\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = yield* Effect.scope\n  yield* Effect.addFinalizer(() => Effect.void)\n  return yield* opaque\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, unknown>>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, unknown>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<void, never, unknown>
+
+=== Piping Flow ===
+Location: 107:9 - 107:48
+Node: Effect.addFinalizer(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.addFinalizer
+      args: (constant)
+      outType: Effect<void, never, Scope>
+
+=== Piping Flow ===
+Location: 112:34 - 116:23
+Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return yield* opaque\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = yield* Effect.scope\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return yield* opaque\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, unknown>>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, unknown>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<void, never, unknown>
+
+=== Piping Flow ===
+Location: 114:35 - 114:57
+Node: Effect.log("closing")
+Node Kind: KindCallExpression
+
+Subject: "closing"
+Subject Type: "closing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 119:30 - 123:23
+Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return yield* loose\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = yield* Effect.scope\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return yield* loose\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, any>>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, any>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<void, never, any>
+
+=== Piping Flow ===
+Location: 121:35 - 121:57
+Node: Effect.log("closing")
+Node Kind: KindCallExpression
+
+Subject: "closing"
+Subject Type: "closing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 126:36 - 130:23
+Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return yield* objectRequirement\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = yield* Effect.scope\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return yield* objectRequirement\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, object>>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, object>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<void, never, object>
+
+=== Piping Flow ===
+Location: 128:35 - 128:57
+Node: Effect.log("closing")
+Node Kind: KindCallExpression
+
+Subject: "closing"
+Subject Type: "closing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 133:31 - 133:87
+Node: Effect.scoped(Effect.flatMap(Effect.scope, openOpaque))
+Node Kind: KindCallExpression
+
+Subject: Effect.scope
+Subject Type: Effect<Scope, never, Scope>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [openOpaque]
+      outType: Effect<void, never, unknown>
+  [1] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<void, never, unknown>
+
+=== Piping Flow ===
+Location: 136:37 - 139:4
+Node: Effect.scoped<string, never, Scope.Scope>(Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [1] kind: call
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 138:16 - 138:38
+Node: openConnection(scope)
+Node Kind: KindCallExpression
+
+Subject: scope
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 142:34 - 145:23
+Node: Effect.gen(function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*(): Generator<YieldWrap<Effect.Effect<Scope.Scope, never, Scope.Scope>> | YieldWrap<Effect.Effect<string>>, string> {\n  const scope = yield* Effect.scope\n  return yield* openConnection(scope)\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<Scope, never, Scope>>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 144:16 - 144:38
+Node: openConnection(scope)
+Node Kind: KindCallExpression
+
+Subject: scope
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>

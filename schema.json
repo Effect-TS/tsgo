@@ -2991,6 +2991,11 @@
           "default": "warning",
           "description": "Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements"
         },
+        "scopedImmediateScopeToScopedWith": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.scopedWith instead of Effect.scoped around a body that immediately reads Effect.scope"
+        },
         "serviceNotAsClass": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

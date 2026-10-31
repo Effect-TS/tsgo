@@ -1,0 +1,47 @@
+==== /.src/scopedImmediateScopeToScopedWith_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 13:23
+Node: Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const connection = yield* openConnection(scope)\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return connection\n}).pipe(Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = yield* Effect.scope\n  const connection = yield* openConnection(scope)\n  yield* Scope.addFinalizer(scope, Effect.log("closing"))\n  return connection\n}
+Subject Type: () => Generator<Effect<void, never, never> | Effect<Scope, never, Scope>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Scope>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 10:28 - 10:50
+Node: openConnection(scope)
+Node Kind: KindCallExpression
+
+Subject: scope
+Subject Type: Scope
+
+Transformations (1):
+  [0] kind: call
+      callee: openConnection
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 11:35 - 11:57
+Node: Effect.log("closing")
+Node Kind: KindCallExpression
+
+Subject: "closing"
+Subject Type: "closing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

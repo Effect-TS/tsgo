@@ -128,6 +128,7 @@ var All = []rule.Rule{
 	ManualMetricTapToTrack,
 	FailCauseToConstructor,
 	SuspendFailToFailSync,
+	ScopedImmediateScopeToScopedWith,
 	FlatMapToMap,
 	FlatMapToTap,
 	FlatMapIgnoredParamToAndThen,

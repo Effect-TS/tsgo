@@ -114,6 +114,7 @@
         "schemaStructWithTag": "suggestion",
         "schemaSyncInEffect": "suggestion",
         "scopeInLayerEffect": "warning",
+        "scopedImmediateScopeToScopedWith": "suggestion",
         "suspendFailToFailSync": "suggestion",
         "syncToSucceed": "suggestion",
         "timeoutCatchTagToTimeoutOrElse": "suggestion",
@@ -214,6 +215,7 @@
         "schemaStructWithTag": "error",
         "schemaSyncInEffect": "error",
         "scopeInLayerEffect": "error",
+        "scopedImmediateScopeToScopedWith": "error",
         "suspendFailToFailSync": "error",
         "syncToSucceed": "error",
         "timeoutCatchTagToTimeoutOrElse": "error",
@@ -378,6 +380,7 @@
         "schemaNumber": "warning",
         "schemaStructWithTag": "warning",
         "schemaUnionOfLiterals": "warning",
+        "scopedImmediateScopeToScopedWith": "warning",
         "serviceNotAsClass": "warning",
         "strictBooleanExpressions": "warning",
         "suspendFailToFailSync": "warning",
@@ -3538,6 +3541,30 @@
             "start": 64,
             "end": 118,
             "text": "This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "scopedImmediateScopeToScopedWith",
+      "group": "style",
+      "description": "Suggests Effect.scopedWith instead of Effect.scoped around a body that immediately reads Effect.scope",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377180
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Scope } from \"effect\"\n\ndeclare const openConnection: (scope: Scope.Scope) =\u003e Effect.Effect\u003cstring\u003e\n\nexport const program = Effect.gen(function*() {\n  const scope = yield* Effect.scope\n  const connection = yield* openConnection(scope)\n  yield* Scope.addFinalizer(scope, Effect.log(\"closing\"))\n  return connection\n}).pipe(Effect.scoped)\n",
+        "diagnostics": [
+          {
+            "start": 337,
+            "end": 350,
+            "text": "`Effect.scoped` provides a scope that this body immediately reads back with `Effect.scope`; `Effect.scopedWith` passes the scope to the callback directly. effect(scopedImmediateScopeToScopedWith)"
           }
         ]
       }
