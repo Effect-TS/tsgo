@@ -974,7 +974,7 @@ index 807f810b..47c775ce 100644
          export: &Export,
          for_jsx: bool,
 diff --git a/crates/tsrs_ls/src/change/tracker.rs b/crates/tsrs_ls/src/change/tracker.rs
-index a71d6076..96687fd8 100644
+index a71d6076..9ee37a31 100644
 --- a/crates/tsrs_ls/src/change/tracker.rs
 +++ b/crates/tsrs_ls/src/change/tracker.rs
 @@ -23,10 +23,10 @@ use crate::spanmap::{self, Feature};
@@ -1096,6 +1096,15 @@ index a71d6076..96687fd8 100644
          self.replace_text_range_with_text(source_file, text_range, "");
      }
  
+@@ -857,7 +850,7 @@ impl Tracker {
+ 
+     // tracker.go:522
+     // InsertImportSpecifierAtIndex inserts a new import specifier at the specified index in a NamedImports list
+-    pub(crate) fn insert_import_specifier_at_index(
++    pub fn insert_import_specifier_at_index(
+         &mut self,
+         source_file: P<SourceFile>,
+         new_specifier: P<Node>,
 diff --git a/crates/tsrs_ls/src/change/trackerimpl.rs b/crates/tsrs_ls/src/change/trackerimpl.rs
 index 575373b8..adf04382 100644
 --- a/crates/tsrs_ls/src/change/trackerimpl.rs

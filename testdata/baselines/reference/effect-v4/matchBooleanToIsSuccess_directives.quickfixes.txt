@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:23-10:35) TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+  Fix 0: "Disable matchBooleanToIsSuccess for this line"
+  Fix 1: "Disable matchBooleanToIsSuccess for entire file"
+  Fix 2: "Replace with Effect.isFailure"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchBooleanToIsSuccess for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchBooleanToIsSuccess for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.isFailure" ===
+
+--- file:///.src/matchBooleanToIsSuccess_directives.ts ---
+import { Effect } from "effect"
+
+declare const saveUser: Effect.Effect<void, Error>
+
+// MUST NOT TRIGGER: disabled for the next line
+// @effect-diagnostics-next-line matchBooleanToIsSuccess:off
+export const saved = Effect.match(saveUser, { onFailure: () => false, onSuccess: () => true })
+
+// MUST TRIGGER: the directive only covers the line after it -> Effect.isFailure
+export const failed = Effect.isFailure(saveUser)
+

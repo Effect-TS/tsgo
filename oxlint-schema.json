@@ -2458,6 +2458,9 @@
         "effecttsgo/map-some-to-as-some": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/match-boolean-to-is-success": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/match-effect-to-map-both": {
           "$ref": "#/definitions/RuleNoConfig"
         },

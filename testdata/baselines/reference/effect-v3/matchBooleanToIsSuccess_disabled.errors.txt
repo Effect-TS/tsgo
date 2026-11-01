@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+
+
+==== /.src/matchBooleanToIsSuccess_disabled.ts (0 errors) ====
+    // @effect-v3
+    // @effect-diagnostics matchBooleanToIsSuccess:off
+    import { Effect } from "effect"
+    
+    declare const saveUser: Effect.Effect<void, Error>
+    
+    // MUST NOT TRIGGER: the rule is off for the whole file
+    export const saved = Effect.match(saveUser, { onFailure: () => false, onSuccess: () => true })
+    

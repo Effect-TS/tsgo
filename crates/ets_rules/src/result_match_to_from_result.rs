@@ -85,7 +85,7 @@ pub fn analyze_result_match_to_from_result(
     matches
 }
 
-// go: internal/rules/result_match_to_from_result.go:75 analyzeResultMatchStep 4d5ab7675cadacb0
+// go: internal/rules/result_match_to_from_result.go:75 analyzeResultMatchStep dd0befeb51f14722
 // analyzeResultMatchStep matches a Result.match step whose handlers only lift
 // the failure with Effect.fail and the success with Effect.succeed.
 //
@@ -106,7 +106,8 @@ pub(crate) fn analyze_result_match_step(
     let (Some(on_failure), Some(on_success)) = (on_failure, on_success) else {
         return None;
     };
-    if handlers.as_object_literal_expression().properties.nodes().len() != 2
+    if !ast::is_object_literal_expression(handlers)
+        || handlers.as_object_literal_expression().properties.nodes().len() != 2
         || !tp.is_node_reference_to_effect_result_module_api(callee, "match")
         || !is_effect_lift_handler(tp, on_success, "succeed")
         || !is_effect_lift_handler(tp, on_failure, "fail")
@@ -123,12 +124,12 @@ pub(crate) fn analyze_result_match_step(
     })
 }
 
-// go: internal/rules/result_match_to_from_result.go:97 hasNoTypeArguments 1f39635fff140d67
+// go: internal/rules/result_match_to_from_result.go:98 hasNoTypeArguments 1f39635fff140d67
 pub(crate) fn has_no_type_arguments(transformation: &PipingFlowTransformation) -> bool {
     transformation.type_arguments().is_none_or(|arguments| arguments.nodes().is_empty())
 }
 
-// go: internal/rules/result_match_to_from_result.go:103 isEffectLiftStep 331913a366849bad
+// go: internal/rules/result_match_to_from_result.go:104 isEffectLiftStep 331913a366849bad
 // isEffectLiftStep reports whether a step applies Effect.<api> to its input
 // without extra or type arguments.
 //
@@ -143,7 +144,7 @@ pub(crate) fn is_effect_lift_step(
     }
 }
 
-// go: internal/rules/result_match_to_from_result.go:112 isEffectLiftHandler 8211651107155f0d
+// go: internal/rules/result_match_to_from_result.go:113 isEffectLiftHandler 8211651107155f0d
 // isEffectLiftHandler reports whether a Result.match handler is Effect.<api>,
 // directly or through an identity forwarder, without type arguments.
 pub(crate) fn is_effect_lift_handler(
@@ -156,7 +157,7 @@ pub(crate) fn is_effect_lift_handler(
         && target.is_some_and(|target| tp.is_node_reference_to_effect_module_api(target, api))
 }
 
-// go: internal/rules/result_match_to_from_result.go:121 analyzeResultGuardConditional 8811d0eb3ad87132
+// go: internal/rules/result_match_to_from_result.go:122 analyzeResultGuardConditional 8811d0eb3ad87132
 // analyzeResultGuardConditional matches a flow that applies Result.isSuccess or
 // Result.isFailure to an identifier and is the condition of a conditional
 // whose branches lift that identifier's .success with Effect.succeed and its
@@ -223,7 +224,7 @@ pub(crate) fn analyze_result_guard_conditional(
     })
 }
 
-// go: internal/rules/result_match_to_from_result.go:168 isResultMemberLift 391e2f4c0b3de763
+// go: internal/rules/result_match_to_from_result.go:169 isResultMemberLift 391e2f4c0b3de763
 // isResultMemberLift reports whether node is a flow that only applies
 // Effect.<api> to resultNode.<property>.
 //

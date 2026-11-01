@@ -1,0 +1,15 @@
+==== /.src/matchBooleanToIsSuccess_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:21 - 10:3
+Node: Effect.match(saveUser, {\n  onFailure: () => false,\n  onSuccess: () => true\n})
+Node Kind: KindCallExpression
+
+Subject: saveUser
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: () => false,\n  onSuccess: () => true\n}]
+      outType: Effect<boolean, never, never>
