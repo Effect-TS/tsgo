@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, NodeFlags, SourceFile};
+use ets_shim::ast::{self, Diagnostic, FindAncestorResult, Kind, Node, NodeFlags, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::scanner;
@@ -48,7 +48,7 @@ pub struct YieldInCallArgumentMatch {
     pub statement: Option<P<Node>>,
 }
 
-// go: internal/rules/yield_in_call_argument.go:53 AnalyzeYieldInCallArgument d52ffff7211a6a6a
+// go: internal/rules/yield_in_call_argument.go:53 AnalyzeYieldInCallArgument 638a8b092e03d0f3
 pub fn analyze_yield_in_call_argument(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -66,13 +66,7 @@ pub fn analyze_yield_in_call_argument(
         if node.kind() == Kind::YieldExpression {
             let yield_expr = node.as_yield_expression();
             if yield_expr.asterisk_token().is_some() && yield_expr.expression().is_some() {
-                let mut arg = node;
-                while let Some(parent) = arg.parent()
-                    && parent.kind() == Kind::ParenthesizedExpression
-                {
-                    arg = parent;
-                }
-                if yield_in_call_argument_is_argument(arg)
+                if let Some(arg) = yield_in_call_argument_argument(node)
                     && tp
                         .get_effect_context_flags(node)
                         .intersects(EffectContextFlags::CanYieldEffect)
@@ -96,118 +90,135 @@ pub fn analyze_yield_in_call_argument(
     matches
 }
 
-// go: internal/rules/yield_in_call_argument.go:91 yieldInCallArgumentIsArgument fe135d442815a810
-// yieldInCallArgumentIsArgument reports whether node is one of the arguments of
-// its parent call or new expression.
-pub(crate) fn yield_in_call_argument_is_argument(node: P<Node>) -> bool {
-    let Some(parent) = node.parent() else {
-        return false;
-    };
-    if parent.kind() != Kind::CallExpression && parent.kind() != Kind::NewExpression {
-        return false;
+// go: internal/rules/yield_in_call_argument.go:87 yieldInCallArgumentArgument fec4d96a7bdb2e37
+// yieldInCallArgumentArgument returns the argument of a call or new expression
+// that is node, or node in parentheses, or nil when node is not an argument.
+pub(crate) fn yield_in_call_argument_argument(node: P<Node>) -> Option<P<Node>> {
+    let call = ast::walk_up_parenthesized_expressions(node.parent())?;
+    if !ast::is_call_or_new_expression(call) {
+        return None;
     }
-    parent.arguments().contains(&node)
+    call.arguments().iter().copied().find(|&argument| ast::skip_parentheses(argument) == node)
 }
 
-// go: internal/rules/yield_in_call_argument.go:103 yieldInCallArgumentHoistAnchor 6c6393551964b8e9
+// go: internal/rules/yield_in_call_argument.go:103 yieldInCallArgumentHoistAnchor df8ab9f25c95dfc9
 // yieldInCallArgumentHoistAnchor returns the statement before which the yield*
 // argument can be hoisted without changing what runs before the effect, or nil.
 // It climbs from the argument through an allowlist of parent kinds; everything
 // evaluated before the argument along the way must be side-effect free.
-// Rust: Go's `continue` (to the loop's `child, p = p, p.Parent` step) is an arm that does nothing more.
 pub(crate) fn yield_in_call_argument_hoist_anchor(arg: P<Node>) -> Option<P<Node>> {
     let mut child = arg;
-    while let Some(p) = child.parent() {
-        match p.kind() {
-            Kind::ParenthesizedExpression
-            | Kind::AsExpression
-            | Kind::NonNullExpression
-            | Kind::YieldExpression => {}
-            Kind::CallExpression | Kind::NewExpression => {
-                let expression = p.expression().expect("a call or new expression has a callee");
-                if child != expression {
-                    if p.flags().intersects(NodeFlags::OptionalChain)
-                        || !yield_in_call_argument_is_side_effect_free(expression)
-                    {
-                        return None;
-                    }
-                    for &argument in p.arguments() {
-                        if argument == child {
-                            break;
-                        }
-                        if !yield_in_call_argument_is_side_effect_free(argument) {
-                            return None;
-                        }
-                    }
-                }
-            }
-            Kind::PropertyAccessExpression => {
-                if Some(child) != p.expression() {
-                    return None;
-                }
-            }
-            Kind::ElementAccessExpression => {
-                let expression = p.expression().expect("an element access has an expression");
-                if child != expression
-                    && (p.flags().intersects(NodeFlags::OptionalChain)
-                        || !yield_in_call_argument_is_side_effect_free(expression))
-                {
-                    return None;
-                }
-            }
-            Kind::BinaryExpression => {
-                let binary = p.as_binary_expression();
-                if child != binary.left() {
-                    let operator = binary.operator_token().kind();
-                    if operator == Kind::AmpersandAmpersandToken
-                        || operator == Kind::BarBarToken
-                        || operator == Kind::QuestionQuestionToken
-                        || ast::is_logical_or_coalescing_assignment_operator(operator)
-                        || !yield_in_call_argument_is_side_effect_free(binary.left())
-                    {
-                        return None;
-                    }
-                }
-            }
-            Kind::ConditionalExpression => {
-                if child != p.as_conditional_expression().condition() {
-                    return None;
-                }
-            }
-            Kind::ExpressionStatement | Kind::ReturnStatement => {
-                return yield_in_call_argument_finalize_anchor(p);
-            }
-            Kind::IfStatement => {
-                if child != p.as_if_statement().expression() {
-                    return None;
-                }
-                return yield_in_call_argument_finalize_anchor(p);
-            }
-            Kind::VariableDeclaration => {
-                let list = p.parent();
-                if Some(child) != p.initializer()
-                    || list.is_none_or(|list| {
-                        list.kind() != Kind::VariableDeclarationList
-                            || !list.flags().intersects(NodeFlags::Const)
-                            || list.as_variable_declaration_list().declarations().nodes().len() != 1
-                            || list
-                                .parent()
-                                .is_none_or(|parent| parent.kind() != Kind::VariableStatement)
-                    })
-                {
-                    return None;
-                }
-                let statement = list.and_then(|list| list.parent()).expect("checked above");
-                return yield_in_call_argument_finalize_anchor(statement);
-            }
-            _ => return None,
-        }
+    let mut anchor = ast::find_ancestor_or_quit(arg.parent(), |p| {
+        let result = yield_in_call_argument_hoist_step(p, child);
         child = p;
+        result
+    })?;
+    if anchor.kind() == Kind::VariableDeclaration {
+        anchor = anchor
+            .parent()
+            .and_then(|list| list.parent())
+            .expect("the hoist step checked the variable statement");
     }
-    None
+    yield_in_call_argument_finalize_anchor(anchor)
 }
 
-// go: internal/rules/yield_in_call_argument.go:173 yieldInCallArgumentFinalizeAnchor 6655bd2c7ae49357
+// go: internal/rules/yield_in_call_argument.go:123 yieldInCallArgumentHoistStep 72c201a66a81b6b2
+// yieldInCallArgumentHoistStep decides one step of the climb from child to its
+// parent p: climb on, stop at p as the statement (or the single const
+// declaration) to hoist before, or quit because hoisting could change what runs
+// before the effect.
+pub(crate) fn yield_in_call_argument_hoist_step(p: P<Node>, child: P<Node>) -> FindAncestorResult {
+    match p.kind() {
+        Kind::ParenthesizedExpression
+        | Kind::AsExpression
+        | Kind::NonNullExpression
+        | Kind::YieldExpression => FindAncestorResult::False,
+        Kind::CallExpression | Kind::NewExpression => {
+            let expression = p.expression().expect("a call or new expression has a callee");
+            if child == expression {
+                return FindAncestorResult::False;
+            }
+            if p.flags().intersects(NodeFlags::OptionalChain)
+                || !yield_in_call_argument_is_side_effect_free(expression)
+            {
+                return FindAncestorResult::Quit;
+            }
+            for &argument in p.arguments() {
+                if argument == child {
+                    break;
+                }
+                if !yield_in_call_argument_is_side_effect_free(argument) {
+                    return FindAncestorResult::Quit;
+                }
+            }
+            FindAncestorResult::False
+        }
+        Kind::PropertyAccessExpression => {
+            if Some(child) != p.expression() {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::ElementAccessExpression => {
+            let expression = p.expression().expect("an element access has an expression");
+            if child != expression
+                && (p.flags().intersects(NodeFlags::OptionalChain)
+                    || !yield_in_call_argument_is_side_effect_free(expression))
+            {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::BinaryExpression => {
+            let binary = p.as_binary_expression();
+            if child == binary.left() {
+                return FindAncestorResult::False;
+            }
+            let operator = binary.operator_token().kind();
+            if operator == Kind::AmpersandAmpersandToken
+                || operator == Kind::BarBarToken
+                || operator == Kind::QuestionQuestionToken
+                || ast::is_logical_or_coalescing_assignment_operator(operator)
+                || !yield_in_call_argument_is_side_effect_free(binary.left())
+            {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::ConditionalExpression => {
+            if child != p.as_conditional_expression().condition() {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::ExpressionStatement | Kind::ReturnStatement => FindAncestorResult::True,
+        Kind::IfStatement => {
+            if child != p.as_if_statement().expression() {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::True
+        }
+        Kind::VariableDeclaration => {
+            let list = p.parent();
+            if Some(child) != p.initializer()
+                || list.is_none_or(|list| {
+                    list.kind() != Kind::VariableDeclarationList
+                        || !list.flags().intersects(NodeFlags::Const)
+                        || list.as_variable_declaration_list().declarations().nodes().len() != 1
+                        || list
+                            .parent()
+                            .is_none_or(|parent| parent.kind() != Kind::VariableStatement)
+                })
+            {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::True
+        }
+        _ => FindAncestorResult::Quit,
+    }
+}
+
+// go: internal/rules/yield_in_call_argument.go:190 yieldInCallArgumentFinalizeAnchor 6655bd2c7ae49357
 // yieldInCallArgumentFinalizeAnchor accepts a statement only when it sits in a
 // statement list, so a const can be inserted right before it.
 pub(crate) fn yield_in_call_argument_finalize_anchor(statement: P<Node>) -> Option<P<Node>> {
@@ -218,7 +229,7 @@ pub(crate) fn yield_in_call_argument_finalize_anchor(statement: P<Node>) -> Opti
     }
 }
 
-// go: internal/rules/yield_in_call_argument.go:186 yieldInCallArgumentIsSideEffectFree cdcd23d12fe7c18b
+// go: internal/rules/yield_in_call_argument.go:203 yieldInCallArgumentIsSideEffectFree cdcd23d12fe7c18b
 // yieldInCallArgumentIsSideEffectFree reports whether evaluating node cannot run
 // code: identifiers, literals and non-optional property accesses on them.
 pub(crate) fn yield_in_call_argument_is_side_effect_free(node: P<Node>) -> bool {
