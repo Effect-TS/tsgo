@@ -37,9 +37,16 @@ func runYieldInCallArgumentFix(ctx *fixable.Context) []ls.CodeAction {
 		Run: func(tracker *rewriter.Tracker) {
 			// The printer turns the name into the first of name, name_1, ... that
 			// no identifier in the file uses, as TypeScript's extract refactors do.
-			name := tracker.Factory.NewUniqueNameEx(yieldInCallArgumentName(match.Yield.Expression()), printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+			// Each use gets its own node: every edit is printed by a fresh printer,
+			// which resolves the same name, and a node shared between the edits
+			// would carry the positions of the first print into the second, where
+			// the printer emits the source comments found at those positions.
+			base := yieldInCallArgumentName(match.Yield.Expression())
+			newName := func() *ast.Node {
+				return tracker.Factory.NewUniqueNameEx(base, printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
+			}
 			declaration := tracker.NewVariableDeclaration(
-				name,
+				newName(),
 				nil,
 				nil,
 				tracker.NewYieldExpression(tracker.NewToken(ast.KindAsteriskToken), tracker.DeepCloneNode(match.Yield.Expression())),
@@ -54,7 +61,7 @@ func runYieldInCallArgumentFix(ctx *fixable.Context) []ls.CodeAction {
 			// new or multi-argument calls have no flow, so the fix edits nodes directly.
 
 			tracker.InsertNodeBefore(sf, match.Statement, statement, false, rewriter.LeadingTriviaOptionNone)
-			tracker.ReplaceNode(sf, match.Argument, name, nil)
+			tracker.ReplaceNode(sf, match.Argument, newName(), nil)
 		},
 	}); action != nil {
 		return []ls.CodeAction{*action}

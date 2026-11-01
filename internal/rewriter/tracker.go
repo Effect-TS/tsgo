@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/format"
 	"github.com/microsoft/TypeScript/tsc/shim/ls/change"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
@@ -92,7 +91,7 @@ func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, new
 			TrailingTriviaOption: change.TrailingTriviaOptionExclude,
 		}
 	}
-	start := t.GetAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption).Pos()
+	start := change.Tracker_getAdjustedStartPosition(t.Tracker, sourceFile, oldNode, options.LeadingTriviaOption, false)
 	text := t.consumePendingPrefix(sourceFile, oldNode, start) + t.nodeText(sourceFile, newNode)
 	if options.Prefix != "" {
 		text = options.Prefix + text
@@ -132,8 +131,16 @@ func (t *Tracker) flushPendingBefore() {
 		if edit.before == nil || edit.sourceFile == nil || edit.text == "" {
 			continue
 		}
-		start := t.GetAdjustedRange(edit.sourceFile, edit.before, edit.before, edit.leading, change.TrailingTriviaOptionNone).Pos()
-		t.ReplaceTextRangeWithText(edit.sourceFile, core.NewTextRange(start, start), pendingBeforeText(edit, start))
+		start := change.Tracker_getAdjustedStartPosition(t.Tracker, edit.sourceFile, edit.before, edit.leading, false)
+		change.InsertTextAtAdjustedRangeStart(
+			t.Tracker,
+			edit.sourceFile,
+			edit.before,
+			edit.before,
+			edit.leading,
+			change.TrailingTriviaOptionNone,
+			pendingBeforeText(edit, start),
+		)
 	}
 	t.pendingBefore = nil
 }
