@@ -22,7 +22,7 @@ pub static YIELD_IN_CALL_ARGUMENT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_yield_in_call_argument_fix,
 });
 
-// go: internal/fixables/yield_in_call_argument.go:28 runYieldInCallArgumentFix d5e0dc9690c7c244
+// go: internal/fixables/yield_in_call_argument.go:28 runYieldInCallArgumentFix c3ac9b036ea98618
 fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let matches = ets_rules::analyze_yield_in_call_argument(&mut ctx.type_parser, sf);
@@ -39,15 +39,22 @@ fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         run: Box::new(move |tracker| {
             // The printer turns the name into the first of name, name_1, ... that
             // no identifier in the file uses, as TypeScript's extract refactors do.
-            let name = tracker.emit_context.factory.new_unique_name_ex(
-                &yield_in_call_argument_name(operand),
-                AutoGenerateOptions {
-                    flags: GeneratedIdentifierFlags::Optimistic,
-                    ..Default::default()
-                },
-            );
+            // Each use gets its own node: every edit is printed by a fresh printer,
+            // which resolves the same name, and a node shared between the edits
+            // would carry the positions of the first print into the second, where
+            // the printer emits the source comments found at those positions.
+            let base = yield_in_call_argument_name(operand);
+            let new_name = |tracker: &ets_rewriter::Tracker| {
+                tracker.emit_context.factory.new_unique_name_ex(
+                    &base,
+                    AutoGenerateOptions {
+                        flags: GeneratedIdentifierFlags::Optimistic,
+                        ..Default::default()
+                    },
+                )
+            };
             let declaration = tracker.new_variable_declaration(
-                name,
+                new_name(tracker),
                 None,
                 None,
                 Some(tracker.new_yield_expression(
@@ -74,6 +81,7 @@ fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
                 false,
                 ets_rewriter::LEADING_TRIVIA_OPTION_NONE,
             );
+            let name = new_name(tracker);
             tracker.replace_node(sf, Some(m.argument), Some(name), None);
         }),
     }) {
@@ -82,7 +90,7 @@ fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
     Vec::new()
 }
 
-// go: internal/fixables/yield_in_call_argument.go:68 yieldInCallArgumentMatchAt 9aaf7408d4cbe738
+// go: internal/fixables/yield_in_call_argument.go:75 yieldInCallArgumentMatchAt 9aaf7408d4cbe738
 // yieldInCallArgumentMatchAt picks the match whose location is exactly span,
 // falling back to the first overlapping one. The exact match comes first because
 // a nested yield* such as f(yield* g(yield* x)) lies inside the outer range.
@@ -98,7 +106,7 @@ fn yield_in_call_argument_match_at(
     matches.iter().find(|m| m.location.intersects(span) || span.contained_by(m.location))
 }
 
-// go: internal/fixables/yield_in_call_argument.go:84 yieldInCallArgumentVerbs 0d344c5ad43828a4
+// go: internal/fixables/yield_in_call_argument.go:91 yieldInCallArgumentVerbs 0d344c5ad43828a4
 // yieldInCallArgumentVerbs maps a leading verb of the yielded name to its past
 // participle, so `load` becomes `loaded` and `fetchUser` becomes `fetchedUser`.
 static YIELD_IN_CALL_ARGUMENT_VERBS: LazyLock<FxHashMap<&'static str, &'static str>> =
@@ -106,7 +114,7 @@ static YIELD_IN_CALL_ARGUMENT_VERBS: LazyLock<FxHashMap<&'static str, &'static s
         FxHashMap::from_iter([("load", "loaded"), ("fetch", "fetched"), ("build", "built")])
     });
 
-// go: internal/fixables/yield_in_call_argument.go:93 yieldInCallArgumentName c099258f00d1e09e
+// go: internal/fixables/yield_in_call_argument.go:100 yieldInCallArgumentName c099258f00d1e09e
 // yieldInCallArgumentName picks the base of the hoisted const name from the
 // yielded expression: its identifier or last property name, with a leading verb
 // turned into a participle, falling back to `value`.
