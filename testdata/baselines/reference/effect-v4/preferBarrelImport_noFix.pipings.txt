@@ -1,0 +1,49 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/globalValue.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 8:49
+Node: map([1, 2], (n) => n * 2)
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [(n) => n * 2]
+      outType: number[]
+==== /.src/globalType.ts (0 flows) ====
+==== /.src/bound.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:24 - 8:31
+Node: some(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: some
+      args: (constant)
+      outType: Option<number>
+==== /.src/shadowed.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:40 - 7:53
+Node: some(Option)
+Node Kind: KindCallExpression
+
+Subject: Option
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: some
+      args: (constant)
+      outType: Option<number>
+==== /.src/reexport.ts (0 flows) ====
+==== /.src/comment.ts (0 flows) ====

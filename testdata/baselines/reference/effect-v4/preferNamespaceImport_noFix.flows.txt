@@ -1,0 +1,9 @@
+/.src/package.json -> preferNamespaceImport_noFix.flows.package.mermaid
+/.src/node_modules/@acme/kit/package.json -> preferNamespaceImport_noFix.flows.package1.mermaid
+/.src/node_modules/@acme/kit/dist/index.d.ts -> preferNamespaceImport_noFix.flows.index.d.mermaid
+/.src/node_modules/@acme/kit/dist/nested/deep.d.ts -> preferNamespaceImport_noFix.flows.deep.d.mermaid
+/.src/globalValue.ts -> preferNamespaceImport_noFix.flows.globalValue.mermaid
+/.src/followGlobal.ts -> preferNamespaceImport_noFix.flows.followGlobal.mermaid
+/.src/reexport.ts -> preferNamespaceImport_noFix.flows.reexport.mermaid
+/.src/comment.ts -> preferNamespaceImport_noFix.flows.comment.mermaid
+/.src/noTarget.ts -> preferNamespaceImport_noFix.flows.noTarget.mermaid

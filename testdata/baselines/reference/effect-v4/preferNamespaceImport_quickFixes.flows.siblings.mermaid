@@ -1,0 +1,18 @@
+flowchart TB
+  0[/"type: number#91;#93;<br/>node: #91;1, 2, 3#93;"/]
+  1["type: number#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: #123; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: #40;self: S#41; =#gt; With#lt;S, B#gt;; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: With#lt;S, B#gt;; #125;<br/>node: map"/]
+  3[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
+  4[/"type: number<br/>node: n * 2"/]
+  5["type: number#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: #123; #lt;A, B extends A#gt;#40;refinement: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; a is B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; B#91;#93;; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; A#91;#93;; #lt;A, B extends A#gt;#40;self: Iterable#lt;A#gt;, refinement: #40;a: A, i: number#41; =#gt; a is B#41;: B#91;#93;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: A#91;#93;; #125;<br/>node: filter"/]
+  7[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 2"]]
+  8[/"type: boolean<br/>node: n #gt; 2"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 0
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 0
+  1 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 0
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 0

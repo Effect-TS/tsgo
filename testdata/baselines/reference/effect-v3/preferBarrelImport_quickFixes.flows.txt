@@ -1,0 +1,3 @@
+/.src/namespace.ts -> preferBarrelImport_quickFixes.flows.namespace.mermaid
+/.src/uses.ts -> preferBarrelImport_quickFixes.flows.uses.mermaid
+/.src/globalValue.ts -> preferBarrelImport_quickFixes.flows.globalValue.mermaid

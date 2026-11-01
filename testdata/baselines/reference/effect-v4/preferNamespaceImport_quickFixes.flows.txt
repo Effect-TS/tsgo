@@ -1,0 +1,9 @@
+/.src/package.json -> preferNamespaceImport_quickFixes.flows.package.mermaid
+/.src/node_modules/@acme/kit/package.json -> preferNamespaceImport_quickFixes.flows.package1.mermaid
+/.src/node_modules/@acme/kit/dist/index.d.ts -> preferNamespaceImport_quickFixes.flows.index.d.mermaid
+/.src/node_modules/@acme/kit/dist/Dialog.d.ts -> preferNamespaceImport_quickFixes.flows.Dialog.d.mermaid
+/.src/uses.ts -> preferNamespaceImport_quickFixes.flows.uses.mermaid
+/.src/siblings.ts -> preferNamespaceImport_quickFixes.flows.siblings.mermaid
+/.src/reuse.ts -> preferNamespaceImport_quickFixes.flows.reuse.mermaid
+/.src/style.ts -> preferNamespaceImport_quickFixes.flows.style.mermaid
+/.src/alias.ts -> preferNamespaceImport_quickFixes.flows.alias.mermaid

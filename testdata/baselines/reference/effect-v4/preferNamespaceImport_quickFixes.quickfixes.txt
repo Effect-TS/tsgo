@@ -1,0 +1,142 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:10-5:13) TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Array' as Array and qualify the uses"
+
+[D2] (5:10-5:13) TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Array' as Array and qualify the uses"
+
+[D3] (5:15-5:21) TS377146: 'filter' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Array' as Array and qualify the uses"
+
+[D4] (6:10-6:14) TS377146: 'some' is imported by name from 'effect/Option', but namespaceImportPackages expects a namespace import. Use 'import * as Option from "effect/Option"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Qualify the uses with the existing Option import of 'effect/Option'"
+
+[D5] (5:10-5:13) TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Array' as Array and qualify the uses"
+
+[D6] (5:10-5:14) TS377146: 'open' is imported by name from '@acme/kit/Dialog', but namespaceImportPackages expects a namespace import. Use 'import * as Dialog from "@acme/kit/Dialog"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import '@acme/kit/Dialog' as Kit and qualify the uses"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Import 'effect/Array' as Array and qualify the uses" ===
+
+--- file:///.src/uses.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// fix: the named import becomes a member of Array, shorthand properties included
+import * as Array from "effect/Array"
+
+interface User {
+  readonly name: string
+}
+export const names = (users: ReadonlyArray<User>) => Array.map(users, (user) => user.name)
+export const helpers = { map: Array.map }
+
+=== [D2] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Import 'effect/Array' as Array and qualify the uses" ===
+
+--- file:///.src/siblings.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// fix: the reported specifier leaves the declaration, and the others stay
+import { filter } from "effect/Array"
+import * as Array from "effect/Array"
+
+export const evens = filter(Array.map([1, 2, 3], (n) => n * 2), (n) => n > 2)
+
+=== [D3] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Import 'effect/Array' as Array and qualify the uses" ===
+
+--- file:///.src/siblings.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// fix: the reported specifier leaves the declaration, and the others stay
+import { map } from "effect/Array"
+import * as Array from "effect/Array"
+
+export const evens = Array.filter(map([1, 2, 3], (n) => n * 2), (n) => n > 2)
+
+=== [D4] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Qualify the uses with the existing Option import of 'effect/Option'" ===
+
+--- file:///.src/reuse.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// fix: the uses are qualified with the namespace import already in the file
+import * as Option from "effect/Option"
+
+export const values = [Option.some(1), Option.none()]
+
+=== [D5] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Import 'effect/Array' as Array and qualify the uses" ===
+
+--- file:///.src/style.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// fix: quotes and semicolons are kept
+import * as Array from 'effect/Array';
+
+export const doubled = Array.map([1, 2], (n) => n * 2);
+
+=== [D6] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Import '@acme/kit/Dialog' as Kit and qualify the uses" ===
+
+--- file:///.src/alias.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// fix: importAliases names the namespace
+import * as Kit from "@acme/kit/Dialog"
+
+export const show = () => Kit.open()
+

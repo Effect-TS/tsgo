@@ -1,0 +1,61 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalValue.ts(6,21): warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+/.src/namespace.ts(6,20): warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option as O } from "effect"' instead. effect(preferBarrelImport)
+/.src/uses.ts(6,28): warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "barrelImportPackages": ["effect"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/namespace.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // fix: the namespace import keeps its binding
+    import * as O from "effect/Option"
+                       ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option as O } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const value = O.some(1)
+    
+
+==== /.src/uses.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // fix: the named imports become members of Record, shorthand properties included
+    import { empty, set } from "effect/Record"
+                               ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const counts = set(empty<string, number>(), "a", 1)
+    export const factories = { empty }
+    
+
+==== /.src/globalValue.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // no fix: Array would rebind the global Array that the file reads
+    import { map } from "effect/Array"
+                        ~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const isList = Array.isArray
+    export const doubled = map([1, 2], (n) => n * 2)
+    

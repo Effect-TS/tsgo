@@ -3,30 +3,37 @@
 [D1] (5:25-5:40) TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
   Fix 0: "Disable preferBarrelImport for this line"
   Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import Record from 'effect'"
 
 [D2] (6:20-6:35) TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option as O } from "effect"' instead. effect(preferBarrelImport)
   Fix 0: "Disable preferBarrelImport for this line"
   Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import Option as O from 'effect'"
 
 [D3] (7:27-7:42) TS377148: 'effect/Schema' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import type { Schema as Sch } from "effect"' instead. effect(preferBarrelImport)
   Fix 0: "Disable preferBarrelImport for this line"
   Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import type Schema as Sch from 'effect'"
 
 [D4] (8:29-8:53) TS377148: 'effect/http/HttpClient' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect/http'. Use 'import { HttpClient } from "effect/http"' instead. effect(preferBarrelImport)
   Fix 0: "Disable preferBarrelImport for this line"
   Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import HttpClient from 'effect/http'"
 
 [D5] (11:29-11:43) TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
   Fix 0: "Disable preferBarrelImport for this line"
   Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import Array from 'effect' and qualify the uses"
 
 [D6] (12:31-12:48) TS377148: 'effect/Duration' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import type { Duration } from "effect"' instead. effect(preferBarrelImport)
   Fix 0: "Disable preferBarrelImport for this line"
   Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Import type Duration from 'effect' and qualify the uses"
 
 [D7] (13:35-13:61) TS377148: 'effect/testing/TestClock' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect/testing'. Use 'import { TestClock } from "effect/testing"' instead. effect(preferBarrelImport)
   Fix 0: "Disable preferBarrelImport for this line"
   Fix 1: "Disable preferBarrelImport for entire file"
+  Fix 2: "Qualify the uses with the existing TestClock import from 'effect/testing'"
 
 === Quick Fix Application Results ===
 
@@ -36,11 +43,75 @@ skipped by default
 === [D1] Fix 1: "Disable preferBarrelImport for entire file" ===
 skipped by default
 
+=== [D1] Fix 2: "Import Record from 'effect'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported: namespace import of a module
+import { Record } from "effect"
+import * as O from "effect/Option"
+import type * as Sch from "effect/Schema"
+import * as HttpClient from "effect/http/HttpClient"
+
+// reported once per declaration: named imports from a module
+import { map, filter } from "effect/Array"
+import type { Duration } from "effect/Duration"
+import { make as makeClock } from "effect/testing/TestClock"
+
+// not reported: imports from a barrel
+import { Effect, pipe } from "effect"
+import { TestClock } from "effect/testing"
+import * as Http from "effect/http"
+
+// not reported: side-effect imports
+import "effect/Order"
+
+// not reported: packages outside barrelImportPackages
+import * as VitestUtils from "@effect/vitest/utils"
+
+export const usages = [Record, O, HttpClient, map, filter, makeClock, Effect, pipe, TestClock, Http, VitestUtils]
+export type Usages = [Sch.Top, Duration]
+
+
 === [D2] Fix 0: "Disable preferBarrelImport for this line" ===
 skipped by default
 
 === [D2] Fix 1: "Disable preferBarrelImport for entire file" ===
 skipped by default
+
+=== [D2] Fix 2: "Import Option as O from 'effect'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported: namespace import of a module
+import * as Record from "effect/Record"
+import { Option as O } from "effect"
+import type * as Sch from "effect/Schema"
+import * as HttpClient from "effect/http/HttpClient"
+
+// reported once per declaration: named imports from a module
+import { map, filter } from "effect/Array"
+import type { Duration } from "effect/Duration"
+import { make as makeClock } from "effect/testing/TestClock"
+
+// not reported: imports from a barrel
+import { Effect, pipe } from "effect"
+import { TestClock } from "effect/testing"
+import * as Http from "effect/http"
+
+// not reported: side-effect imports
+import "effect/Order"
+
+// not reported: packages outside barrelImportPackages
+import * as VitestUtils from "@effect/vitest/utils"
+
+export const usages = [Record, O, HttpClient, map, filter, makeClock, Effect, pipe, TestClock, Http, VitestUtils]
+export type Usages = [Sch.Top, Duration]
+
 
 === [D3] Fix 0: "Disable preferBarrelImport for this line" ===
 skipped by default
@@ -48,11 +119,75 @@ skipped by default
 === [D3] Fix 1: "Disable preferBarrelImport for entire file" ===
 skipped by default
 
+=== [D3] Fix 2: "Import type Schema as Sch from 'effect'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported: namespace import of a module
+import * as Record from "effect/Record"
+import * as O from "effect/Option"
+import type { Schema as Sch } from "effect"
+import * as HttpClient from "effect/http/HttpClient"
+
+// reported once per declaration: named imports from a module
+import { map, filter } from "effect/Array"
+import type { Duration } from "effect/Duration"
+import { make as makeClock } from "effect/testing/TestClock"
+
+// not reported: imports from a barrel
+import { Effect, pipe } from "effect"
+import { TestClock } from "effect/testing"
+import * as Http from "effect/http"
+
+// not reported: side-effect imports
+import "effect/Order"
+
+// not reported: packages outside barrelImportPackages
+import * as VitestUtils from "@effect/vitest/utils"
+
+export const usages = [Record, O, HttpClient, map, filter, makeClock, Effect, pipe, TestClock, Http, VitestUtils]
+export type Usages = [Sch.Top, Duration]
+
+
 === [D4] Fix 0: "Disable preferBarrelImport for this line" ===
 skipped by default
 
 === [D4] Fix 1: "Disable preferBarrelImport for entire file" ===
 skipped by default
+
+=== [D4] Fix 2: "Import HttpClient from 'effect/http'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported: namespace import of a module
+import * as Record from "effect/Record"
+import * as O from "effect/Option"
+import type * as Sch from "effect/Schema"
+import { HttpClient } from "effect/http"
+
+// reported once per declaration: named imports from a module
+import { map, filter } from "effect/Array"
+import type { Duration } from "effect/Duration"
+import { make as makeClock } from "effect/testing/TestClock"
+
+// not reported: imports from a barrel
+import { Effect, pipe } from "effect"
+import { TestClock } from "effect/testing"
+import * as Http from "effect/http"
+
+// not reported: side-effect imports
+import "effect/Order"
+
+// not reported: packages outside barrelImportPackages
+import * as VitestUtils from "@effect/vitest/utils"
+
+export const usages = [Record, O, HttpClient, map, filter, makeClock, Effect, pipe, TestClock, Http, VitestUtils]
+export type Usages = [Sch.Top, Duration]
+
 
 === [D5] Fix 0: "Disable preferBarrelImport for this line" ===
 skipped by default
@@ -60,14 +195,109 @@ skipped by default
 === [D5] Fix 1: "Disable preferBarrelImport for entire file" ===
 skipped by default
 
+=== [D5] Fix 2: "Import Array from 'effect' and qualify the uses" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported: namespace import of a module
+import * as Record from "effect/Record"
+import * as O from "effect/Option"
+import type * as Sch from "effect/Schema"
+import * as HttpClient from "effect/http/HttpClient"
+
+// reported once per declaration: named imports from a module
+import { Array } from "effect"
+import type { Duration } from "effect/Duration"
+import { make as makeClock } from "effect/testing/TestClock"
+
+// not reported: imports from a barrel
+import { Effect, pipe } from "effect"
+import { TestClock } from "effect/testing"
+import * as Http from "effect/http"
+
+// not reported: side-effect imports
+import "effect/Order"
+
+// not reported: packages outside barrelImportPackages
+import * as VitestUtils from "@effect/vitest/utils"
+
+export const usages = [Record, O, HttpClient, Array.map, Array.filter, makeClock, Effect, pipe, TestClock, Http, VitestUtils]
+export type Usages = [Sch.Top, Duration]
+
+
 === [D6] Fix 0: "Disable preferBarrelImport for this line" ===
 skipped by default
 
 === [D6] Fix 1: "Disable preferBarrelImport for entire file" ===
 skipped by default
 
+=== [D6] Fix 2: "Import type Duration from 'effect' and qualify the uses" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported: namespace import of a module
+import * as Record from "effect/Record"
+import * as O from "effect/Option"
+import type * as Sch from "effect/Schema"
+import * as HttpClient from "effect/http/HttpClient"
+
+// reported once per declaration: named imports from a module
+import { map, filter } from "effect/Array"
+import type { Duration } from "effect"
+import { make as makeClock } from "effect/testing/TestClock"
+
+// not reported: imports from a barrel
+import { Effect, pipe } from "effect"
+import { TestClock } from "effect/testing"
+import * as Http from "effect/http"
+
+// not reported: side-effect imports
+import "effect/Order"
+
+// not reported: packages outside barrelImportPackages
+import * as VitestUtils from "@effect/vitest/utils"
+
+export const usages = [Record, O, HttpClient, map, filter, makeClock, Effect, pipe, TestClock, Http, VitestUtils]
+export type Usages = [Sch.Top, Duration.Duration]
+
+
 === [D7] Fix 0: "Disable preferBarrelImport for this line" ===
 skipped by default
 
 === [D7] Fix 1: "Disable preferBarrelImport for entire file" ===
 skipped by default
+
+=== [D7] Fix 2: "Qualify the uses with the existing TestClock import from 'effect/testing'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported: namespace import of a module
+import * as Record from "effect/Record"
+import * as O from "effect/Option"
+import type * as Sch from "effect/Schema"
+import * as HttpClient from "effect/http/HttpClient"
+
+// reported once per declaration: named imports from a module
+import { map, filter } from "effect/Array"
+import type { Duration } from "effect/Duration"
+
+// not reported: imports from a barrel
+import { Effect, pipe } from "effect"
+import { TestClock } from "effect/testing"
+import * as Http from "effect/http"
+
+// not reported: side-effect imports
+import "effect/Order"
+
+// not reported: packages outside barrelImportPackages
+import * as VitestUtils from "@effect/vitest/utils"
+
+export const usages = [Record, O, HttpClient, map, filter, TestClock.make, Effect, pipe, TestClock, Http, VitestUtils]
+export type Usages = [Sch.Top, Duration]
+

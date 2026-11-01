@@ -1,0 +1,107 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/alias.ts(5,10): warning TS377146: 'open' is imported by name from '@acme/kit/Dialog', but namespaceImportPackages expects a namespace import. Use 'import * as Dialog from "@acme/kit/Dialog"' instead. effect(preferNamespaceImport)
+/.src/reuse.ts(6,10): warning TS377146: 'some' is imported by name from 'effect/Option', but namespaceImportPackages expects a namespace import. Use 'import * as Option from "effect/Option"' instead. effect(preferNamespaceImport)
+/.src/siblings.ts(5,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+/.src/siblings.ts(5,15): warning TS377146: 'filter' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+/.src/style.ts(5,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+/.src/uses.ts(5,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "namespaceImportPackages": ["effect", "@acme/kit"],
+            "importAliases": { "@acme/kit": "Kit" }
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/node_modules/@acme/kit/package.json (0 errors) ====
+    { "name": "@acme/kit", "version": "1.0.0", "types": "./dist/index.d.ts", "exports": { ".": { "types": "./dist/index.d.ts" }, "./*": { "types": "./dist/*.d.ts" } } }
+    
+
+==== /.src/node_modules/@acme/kit/dist/index.d.ts (0 errors) ====
+    export * as Dialog from "./Dialog.js"
+    
+
+==== /.src/node_modules/@acme/kit/dist/Dialog.d.ts (0 errors) ====
+    export declare const open: () => void
+    
+
+==== /.src/uses.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // fix: the named import becomes a member of Array, shorthand properties included
+    import { map } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    interface User {
+      readonly name: string
+    }
+    export const names = (users: ReadonlyArray<User>) => map(users, (user) => user.name)
+    export const helpers = { map }
+    
+
+==== /.src/siblings.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // fix: the reported specifier leaves the declaration, and the others stay
+    import { map, filter } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+                  ~~~~~~
+!!! warning TS377146: 'filter' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    export const evens = filter(map([1, 2, 3], (n) => n * 2), (n) => n > 2)
+    
+
+==== /.src/reuse.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // fix: the uses are qualified with the namespace import already in the file
+    import * as Option from "effect/Option"
+    import { some } from "effect/Option"
+             ~~~~
+!!! warning TS377146: 'some' is imported by name from 'effect/Option', but namespaceImportPackages expects a namespace import. Use 'import * as Option from "effect/Option"' instead. effect(preferNamespaceImport)
+    
+    export const values = [some(1), Option.none()]
+    
+
+==== /.src/style.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // fix: quotes and semicolons are kept
+    import { map } from 'effect/Array';
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    export const doubled = map([1, 2], (n) => n * 2);
+    
+
+==== /.src/alias.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // fix: importAliases names the namespace
+    import { open } from "@acme/kit/Dialog"
+             ~~~~
+!!! warning TS377146: 'open' is imported by name from '@acme/kit/Dialog', but namespaceImportPackages expects a namespace import. Use 'import * as Dialog from "@acme/kit/Dialog"' instead. effect(preferNamespaceImport)
+    
+    export const show = () => open()
+    
