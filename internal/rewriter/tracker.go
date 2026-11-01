@@ -5,8 +5,11 @@ import (
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/format"
 	"github.com/microsoft/TypeScript/tsc/shim/ls/change"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 type NodeOptions = change.NodeOptions
@@ -25,10 +28,11 @@ const TrailingTriviaOptionExcludeWhitespace = change.TrailingTriviaOptionExclude
 const TrailingTriviaOptionInclude = change.TrailingTriviaOptionInclude
 
 type pendingBeforeEdit struct {
-	sourceFile *ast.SourceFile
-	before     *ast.Node
-	text       string
-	leading    change.LeadingTriviaOption
+	sourceFile       *ast.SourceFile
+	before           *ast.Node
+	text             string
+	blankLineBetween bool
+	leading          change.LeadingTriviaOption
 }
 
 type Tracker struct {
@@ -88,7 +92,8 @@ func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, new
 			TrailingTriviaOption: change.TrailingTriviaOptionExclude,
 		}
 	}
-	text := t.consumePendingPrefix(sourceFile, oldNode) + t.nodeText(sourceFile, newNode)
+	start := t.GetAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption).Pos()
+	text := t.consumePendingPrefix(sourceFile, oldNode, start) + t.nodeText(sourceFile, newNode)
 	if options.Prefix != "" {
 		text = options.Prefix + text
 	}
@@ -106,17 +111,20 @@ func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, new
 	)
 }
 
+// InsertNodeBefore inserts newNode as a statement before the statement
+// before. The text is laid out when the edits are collected, so newNode takes
+// the indentation of before's line, and a replacement of before keeps it.
 func (t *Tracker) InsertNodeBefore(sourceFile *ast.SourceFile, before *ast.Node, newNode *ast.Node, blankLineBetween bool, leadingTriviaOption change.LeadingTriviaOption) {
 	if before == nil || newNode == nil {
 		return
 	}
-	text := t.nodeText(sourceFile, newNode)
-	if blankLineBetween {
-		text += "\n\n"
-	} else {
-		text += "\n"
-	}
-	t.pendingBefore = append(t.pendingBefore, pendingBeforeEdit{sourceFile: sourceFile, before: before, text: text, leading: leadingTriviaOption})
+	t.pendingBefore = append(t.pendingBefore, pendingBeforeEdit{
+		sourceFile:       sourceFile,
+		before:           before,
+		text:             t.nodeText(sourceFile, newNode),
+		blankLineBetween: blankLineBetween,
+		leading:          leadingTriviaOption,
+	})
 }
 
 func (t *Tracker) flushPendingBefore() {
@@ -124,20 +132,36 @@ func (t *Tracker) flushPendingBefore() {
 		if edit.before == nil || edit.sourceFile == nil || edit.text == "" {
 			continue
 		}
-		change.InsertTextAtAdjustedRangeStart(
-			t.Tracker,
-			edit.sourceFile,
-			edit.before,
-			edit.before,
-			edit.leading,
-			change.TrailingTriviaOptionNone,
-			edit.text,
-		)
+		start := t.GetAdjustedRange(edit.sourceFile, edit.before, edit.before, edit.leading, change.TrailingTriviaOptionNone).Pos()
+		t.ReplaceTextRangeWithText(edit.sourceFile, core.NewTextRange(start, start), pendingBeforeText(edit, start))
 	}
 	t.pendingBefore = nil
 }
 
-func (t *Tracker) consumePendingPrefix(sourceFile *ast.SourceFile, target *ast.Node) string {
+// pendingBeforeText lays out the text of edit inserted at pos. When before
+// starts its line, the text gets the line's indentation and before moves to the
+// next line, indented as it was; when code precedes before on its line, as in
+// `{ f() }`, the text is joined with a space.
+func pendingBeforeText(edit pendingBeforeEdit, pos int) string {
+	sourceText := edit.sourceFile.Text()
+	beforeStart := scanner.GetTokenPosOfNode(edit.before, edit.sourceFile, false)
+	indentation := sourceText[format.GetLineStartPositionForPosition(beforeStart, edit.sourceFile):beforeStart]
+	if strings.TrimLeft(indentation, " \t") != "" {
+		return edit.text + " "
+	}
+	newLines := "\n"
+	if edit.blankLineBetween {
+		newLines = "\n\n"
+	}
+	if pos == format.GetLineStartPositionForPosition(pos, edit.sourceFile) {
+		return indentation + edit.text + newLines
+	}
+	return edit.text + newLines + indentation
+}
+
+// consumePendingPrefix takes the pending inserts before target, laid out for a
+// replacement of target that starts at pos.
+func (t *Tracker) consumePendingPrefix(sourceFile *ast.SourceFile, target *ast.Node, pos int) string {
 	if target == nil || len(t.pendingBefore) == 0 {
 		return ""
 	}
@@ -145,7 +169,7 @@ func (t *Tracker) consumePendingPrefix(sourceFile *ast.SourceFile, target *ast.N
 	kept := t.pendingBefore[:0]
 	for _, edit := range t.pendingBefore {
 		if edit.sourceFile == sourceFile && edit.before == target {
-			builder.WriteString(edit.text)
+			builder.WriteString(pendingBeforeText(edit, pos))
 			continue
 		}
 		kept = append(kept, edit)

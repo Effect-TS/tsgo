@@ -142,8 +142,8 @@ declare function key(): string
 // ---------------------------------------------------------------------------
 
 export const nestedYields = Effect.gen(function*() {
-  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
   const value = yield* make(yield* load);
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
   return transform(value)
 })
 
@@ -281,8 +281,8 @@ declare function key(): string
 // ---------------------------------------------------------------------------
 
 export const nestedYields = Effect.gen(function*() {
-  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
   const loaded = yield* load;
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
   return transform(yield* make(loaded))
 })
 
@@ -425,8 +425,8 @@ export const nestedYields = Effect.gen(function*() {
 })
 
 export const verbNames = Effect.gen(function*() {
-  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
   const fetchedUser = yield* fetchUser;
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
   consume(fetchedUser)
   // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
   consume(yield* services.buildReport)
@@ -566,8 +566,8 @@ export const nestedYields = Effect.gen(function*() {
 export const verbNames = Effect.gen(function*() {
   // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
   consume(yield* fetchUser)
-  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
   const builtReport = yield* services.buildReport;
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
   consume(builtReport)
   // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
   consume(yield* services.delete)
@@ -707,8 +707,8 @@ export const verbNames = Effect.gen(function*() {
   consume(yield* fetchUser)
   // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
   consume(yield* services.buildReport)
-  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
   const value = yield* services.delete;
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
   consume(value)
   // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
   consume(yield* (load as Effect.Effect<number>))
@@ -848,8 +848,8 @@ export const verbNames = Effect.gen(function*() {
   consume(yield* services.buildReport)
   // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
   consume(yield* services.delete)
-  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
   const loaded = yield* (load as Effect.Effect<number>);
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
   consume(loaded)
 })
 
@@ -992,8 +992,8 @@ export const verbNames = Effect.gen(function*() {
 })
 
 export const literalPrecedingArgs = Effect.gen(function*() {
-  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
   const loaded = yield* load;
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
   return combine(-1, 1n, `t`, /r/, config.prefix, loaded)
 })
 
@@ -1136,8 +1136,8 @@ export const literalPrecedingArgs = Effect.gen(function*() {
 })
 
 export const parenthesizedStatement = Effect.gen(function*() {
-  // MUST TRIGGER (fix): parenthesized argument of an expression statement
   const loaded = yield* load;
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
   consume(loaded)
 })
 
@@ -1280,8 +1280,8 @@ export const parenthesizedStatement = Effect.gen(function*() {
 })
 
 export const calledResult = Effect.gen(function*() {
-  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
   const loaded = yield* load;
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
   return curried(loaded)(sideEffect())
 })
 
@@ -1424,8 +1424,8 @@ export const calledResult = Effect.gen(function*() {
 })
 
 export const indexedResult = Effect.gen(function*() {
-  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
   const loaded = yield* load;
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
   return lookup(loaded)[key()]
 })
 
@@ -1568,8 +1568,8 @@ export const indexedResult = Effect.gen(function*() {
 })
 
 export const leftOperand = Effect.gen(function*() {
-  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
   const loaded = yield* load;
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
   return transform(loaded) + sideEffect()
 })
 
@@ -1712,8 +1712,8 @@ export const leftOperand = Effect.gen(function*() {
 })
 
 export const assertedResult = Effect.gen(function*() {
-  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
   const loaded = yield* load;
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
   return (transform(loaded) as string)!
 })
 
@@ -1856,8 +1856,8 @@ export const assertedResult = Effect.gen(function*() {
 })
 
 export const conditionalCondition = Effect.gen(function*() {
-  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
   const loaded = yield* load;
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
   return transform(loaded) ? sideEffect() : key()
 })
 

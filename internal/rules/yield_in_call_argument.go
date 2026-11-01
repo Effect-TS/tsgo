@@ -62,11 +62,7 @@ func AnalyzeYieldInCallArgument(tp *typeparser.TypeParser, sf *ast.SourceFile) [
 		if node.Kind == ast.KindYieldExpression {
 			yieldExpr := node.AsYieldExpression()
 			if yieldExpr.AsteriskToken != nil && yieldExpr.Expression != nil {
-				arg := node
-				for arg.Parent != nil && arg.Parent.Kind == ast.KindParenthesizedExpression {
-					arg = arg.Parent
-				}
-				if yieldInCallArgumentIsArgument(arg) && tp.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0 {
+				if arg := yieldInCallArgumentArgument(node); arg != nil && tp.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0 {
 					matches = append(matches, YieldInCallArgumentMatch{
 						Location:  scanner.GetErrorRangeForNode(sf, node),
 						Yield:     node,
@@ -86,14 +82,18 @@ func AnalyzeYieldInCallArgument(tp *typeparser.TypeParser, sf *ast.SourceFile) [
 	return matches
 }
 
-// yieldInCallArgumentIsArgument reports whether node is one of the arguments of
-// its parent call or new expression.
-func yieldInCallArgumentIsArgument(node *ast.Node) bool {
-	parent := node.Parent
-	if parent == nil || (parent.Kind != ast.KindCallExpression && parent.Kind != ast.KindNewExpression) {
-		return false
+// yieldInCallArgumentArgument returns the argument of a call or new expression
+// that is node, or node in parentheses, or nil when node is not an argument.
+func yieldInCallArgumentArgument(node *ast.Node) *ast.Node {
+	call := ast.WalkUpParenthesizedExpressions(node.Parent)
+	if call == nil || !ast.IsCallOrNewExpression(call) {
+		return nil
 	}
-	return slices.Contains(parent.Arguments(), node)
+	arguments := call.Arguments()
+	if i := slices.IndexFunc(arguments, func(argument *ast.Node) bool { return ast.SkipParentheses(argument) == node }); i >= 0 {
+		return arguments[i]
+	}
+	return nil
 }
 
 // yieldInCallArgumentHoistAnchor returns the statement before which the yield*
@@ -102,70 +102,87 @@ func yieldInCallArgumentIsArgument(node *ast.Node) bool {
 // evaluated before the argument along the way must be side-effect free.
 func yieldInCallArgumentHoistAnchor(arg *ast.Node) *ast.Node {
 	child := arg
-	for p := child.Parent; p != nil; child, p = p, p.Parent {
-		switch p.Kind {
-		case ast.KindParenthesizedExpression, ast.KindAsExpression, ast.KindNonNullExpression, ast.KindYieldExpression:
-			continue
-		case ast.KindCallExpression, ast.KindNewExpression:
-			if child == p.Expression() {
-				continue
-			}
-			if p.Flags&ast.NodeFlagsOptionalChain != 0 || !yieldInCallArgumentIsSideEffectFree(p.Expression()) {
-				return nil
-			}
-			for _, argument := range p.Arguments() {
-				if argument == child {
-					break
-				}
-				if !yieldInCallArgumentIsSideEffectFree(argument) {
-					return nil
-				}
-			}
-		case ast.KindPropertyAccessExpression:
-			if child != p.Expression() {
-				return nil
-			}
-		case ast.KindElementAccessExpression:
-			if child == p.Expression() {
-				continue
-			}
-			if p.Flags&ast.NodeFlagsOptionalChain != 0 || !yieldInCallArgumentIsSideEffectFree(p.Expression()) {
-				return nil
-			}
-		case ast.KindBinaryExpression:
-			binary := p.AsBinaryExpression()
-			if child == binary.Left {
-				continue
-			}
-			operator := binary.OperatorToken.Kind
-			if operator == ast.KindAmpersandAmpersandToken || operator == ast.KindBarBarToken || operator == ast.KindQuestionQuestionToken ||
-				ast.IsLogicalOrCoalescingAssignmentOperator(operator) || !yieldInCallArgumentIsSideEffectFree(binary.Left) {
-				return nil
-			}
-		case ast.KindConditionalExpression:
-			if child != p.AsConditionalExpression().Condition {
-				return nil
-			}
-		case ast.KindExpressionStatement, ast.KindReturnStatement:
-			return yieldInCallArgumentFinalizeAnchor(p)
-		case ast.KindIfStatement:
-			if child != p.AsIfStatement().Expression {
-				return nil
-			}
-			return yieldInCallArgumentFinalizeAnchor(p)
-		case ast.KindVariableDeclaration:
-			list := p.Parent
-			if child != p.Initializer() || list == nil || list.Kind != ast.KindVariableDeclarationList ||
-				list.Flags&ast.NodeFlagsConst == 0 || len(list.AsVariableDeclarationList().Declarations.Nodes) != 1 ||
-				list.Parent == nil || list.Parent.Kind != ast.KindVariableStatement {
-				return nil
-			}
-			return yieldInCallArgumentFinalizeAnchor(list.Parent)
-		default:
-			return nil
-		}
+	anchor := ast.FindAncestorOrQuit(arg.Parent, func(p *ast.Node) ast.FindAncestorResult {
+		result := yieldInCallArgumentHoistStep(p, child)
+		child = p
+		return result
+	})
+	if anchor == nil {
+		return nil
 	}
-	return nil
+	if anchor.Kind == ast.KindVariableDeclaration {
+		anchor = anchor.Parent.Parent
+	}
+	return yieldInCallArgumentFinalizeAnchor(anchor)
+}
+
+// yieldInCallArgumentHoistStep decides one step of the climb from child to its
+// parent p: climb on, stop at p as the statement (or the single const
+// declaration) to hoist before, or quit because hoisting could change what runs
+// before the effect.
+func yieldInCallArgumentHoistStep(p *ast.Node, child *ast.Node) ast.FindAncestorResult {
+	switch p.Kind {
+	case ast.KindParenthesizedExpression, ast.KindAsExpression, ast.KindNonNullExpression, ast.KindYieldExpression:
+		return ast.FindAncestorFalse
+	case ast.KindCallExpression, ast.KindNewExpression:
+		if child == p.Expression() {
+			return ast.FindAncestorFalse
+		}
+		if p.Flags&ast.NodeFlagsOptionalChain != 0 || !yieldInCallArgumentIsSideEffectFree(p.Expression()) {
+			return ast.FindAncestorQuit
+		}
+		for _, argument := range p.Arguments() {
+			if argument == child {
+				break
+			}
+			if !yieldInCallArgumentIsSideEffectFree(argument) {
+				return ast.FindAncestorQuit
+			}
+		}
+		return ast.FindAncestorFalse
+	case ast.KindPropertyAccessExpression:
+		if child != p.Expression() {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindElementAccessExpression:
+		if child != p.Expression() && (p.Flags&ast.NodeFlagsOptionalChain != 0 || !yieldInCallArgumentIsSideEffectFree(p.Expression())) {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindBinaryExpression:
+		binary := p.AsBinaryExpression()
+		if child == binary.Left {
+			return ast.FindAncestorFalse
+		}
+		operator := binary.OperatorToken.Kind
+		if operator == ast.KindAmpersandAmpersandToken || operator == ast.KindBarBarToken || operator == ast.KindQuestionQuestionToken ||
+			ast.IsLogicalOrCoalescingAssignmentOperator(operator) || !yieldInCallArgumentIsSideEffectFree(binary.Left) {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindConditionalExpression:
+		if child != p.AsConditionalExpression().Condition {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindExpressionStatement, ast.KindReturnStatement:
+		return ast.FindAncestorTrue
+	case ast.KindIfStatement:
+		if child != p.AsIfStatement().Expression {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorTrue
+	case ast.KindVariableDeclaration:
+		list := p.Parent
+		if child != p.Initializer() || list == nil || list.Kind != ast.KindVariableDeclarationList ||
+			list.Flags&ast.NodeFlagsConst == 0 || len(list.AsVariableDeclarationList().Declarations.Nodes) != 1 ||
+			list.Parent == nil || list.Parent.Kind != ast.KindVariableStatement {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorTrue
+	}
+	return ast.FindAncestorQuit
 }
 
 // yieldInCallArgumentFinalizeAnchor accepts a statement only when it sits in a

@@ -206,9 +206,9 @@ function* numbers(): Generator<number, number> {
 // ---------------------------------------------------------------------------
 
 export const basic = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): the issue example, `load` -> `loaded`
-  const loaded = yield* load;
-  const result = transform(loaded)
+  const result = transform(loaded_1)
   return result
 })
 
@@ -549,9 +549,9 @@ export const basic = Effect.gen(function*() {
 })
 
 export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): Effect.fn generator body
-  const loaded = yield* load;
-  return transform(loaded)
+  return transform(loaded_1)
 })
 
 export const inEffectFnAnonymous = Effect.fn(function*() {
@@ -891,9 +891,9 @@ export const inEffectFn = Effect.fn("inEffectFn")(function*() {
 })
 
 export const inEffectFnAnonymous = Effect.fn(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): Effect.fn without a span name
-  const loaded = yield* load;
-  return transform(loaded)
+  return transform(loaded_1)
 })
 
 export const inEffectFnWithPipeables = Effect.fn("inEffectFnWithPipeables")(
@@ -1234,9 +1234,9 @@ export const inEffectFnAnonymous = Effect.fn(function*() {
 
 export const inEffectFnWithPipeables = Effect.fn("inEffectFnWithPipeables")(
   function*() {
+    const loaded_1 = yield* load;
     // MUST TRIGGER (fix): Effect.fn with trailing pipeables
-    const loaded = yield* load;
-    return transform(loaded)
+    return transform(loaded_1)
   },
   Effect.asVoid
 )
@@ -1578,9 +1578,9 @@ export const inEffectFnWithPipeables = Effect.fn("inEffectFnWithPipeables")(
 )
 
 export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): Effect.fnUntraced generator body
-  const loaded = yield* load;
-  return transform(loaded)
+  return transform(loaded_1)
 })
 
 export const reassignment = Effect.gen(function*() {
@@ -1920,8 +1920,8 @@ export const inEffectFnUntraced = Effect.fnUntraced(function*() {
 })
 
 export const reassignment = Effect.gen(function*() {
-  // MUST TRIGGER (fix): the issue example, assignment statement; `provider` is an identifier so it is side-effect free
   const loadedProvider = yield* loadProvider;
+  // MUST TRIGGER (fix): the issue example, assignment statement; `provider` is an identifier so it is side-effect free
   provider = ConfigProvider.orElse(provider, loadedProvider)
 })
 
@@ -2262,9 +2262,9 @@ export const reassignment = Effect.gen(function*() {
 })
 
 export const newExpression = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): argument of a `new` expression
-  const loaded = yield* load;
-  return new Wrapper(loaded)
+  return new Wrapper(loaded_1)
 })
 
 export const expressionStatement = Effect.gen(function*() {
@@ -2604,9 +2604,9 @@ export const newExpression = Effect.gen(function*() {
 })
 
 export const expressionStatement = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): call used as an expression statement
-  const loaded = yield* load;
-  consume(loaded)
+  consume(loaded_1)
 })
 
 export const sideEffectFreePrecedingArgs = Effect.gen(function*() {
@@ -2947,9 +2947,9 @@ export const expressionStatement = Effect.gen(function*() {
 
 export const sideEffectFreePrecedingArgs = Effect.gen(function*() {
   const prefix = "p"
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): preceding arguments are an identifier, literals and a property access
-  const loaded = yield* load;
-  return combine(prefix, "a", 1, true, null, config.prefix, loaded)
+  return combine(prefix, "a", 1, true, null, config.prefix, loaded_1)
 })
 
 export const methodCallee = Effect.gen(function*() {
@@ -3289,9 +3289,9 @@ export const sideEffectFreePrecedingArgs = Effect.gen(function*() {
 })
 
 export const methodCallee = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): the callee is a property access, free of side effects
-  const loaded = yield* load;
-  return service.process(loaded)
+  return service.process(loaded_1)
 })
 
 export const parenthesized = Effect.gen(function*() {
@@ -3631,9 +3631,9 @@ export const methodCallee = Effect.gen(function*() {
 })
 
 export const parenthesized = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): parentheses around the yield* are transparent
-  const loaded = yield* load;
-  return transform(loaded)
+  return transform(loaded_1)
 })
 
 export const ifCondition = Effect.gen(function*() {
@@ -3973,9 +3973,9 @@ export const parenthesized = Effect.gen(function*() {
 })
 
 export const ifCondition = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): an `if` condition is evaluated once, before anything else in the statement
-  const loaded = yield* load;
-  if (check(loaded)) {
+  if (check(loaded_1)) {
     return 1
   }
   return 0
@@ -4318,9 +4318,9 @@ export const ifCondition = Effect.gen(function*() {
 })
 
 export const nestedCall = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): directly an argument of `inner`; nothing runs before it in `outer(...)` either
-  const loaded = yield* load;
-  return outer(inner(loaded))
+  return outer(inner(loaded_1))
 })
 
 export const fallbackName = Effect.gen(function*() {
@@ -4660,9 +4660,9 @@ export const nestedCall = Effect.gen(function*() {
 })
 
 export const fallbackName = Effect.gen(function*() {
+  const value_1 = yield* Effect.succeed(1);
   // MUST TRIGGER (fix): no name derivable from a call, falls back to `value`
-  const value = yield* Effect.succeed(1);
-  return transform(value)
+  return transform(value_1)
 })
 
 export const propertyAccessName = Effect.gen(function*() {
@@ -5002,9 +5002,9 @@ export const fallbackName = Effect.gen(function*() {
 })
 
 export const propertyAccessName = Effect.gen(function*() {
+  const config_1 = yield* services.config;
   // MUST TRIGGER (fix): name derived from the yielded property access (`services.config`)
-  const config2 = yield* services.config;
-  return transform(config2)
+  return transform(config_1)
 })
 
 export const nameClash = Effect.gen(function*() {
@@ -5346,9 +5346,9 @@ export const propertyAccessName = Effect.gen(function*() {
 export const nameClash = Effect.gen(function*() {
   const loaded = 1
   const value = 2
+  const loaded_1 = yield* load;
   // MUST TRIGGER (fix): `loaded` and `value` are taken, the hoisted name must not clash with them
-  const loaded2 = yield* load;
-  return combine(loaded, value, transform(loaded2))
+  return combine(loaded, value, transform(loaded_1))
 })
 
 export const firstOfTwoYields = Effect.gen(function*() {
@@ -5688,9 +5688,9 @@ export const nameClash = Effect.gen(function*() {
 })
 
 export const firstOfTwoYields = Effect.gen(function*() {
+  const loaded_1 = yield* load;
   // MUST TRIGGER twice: `yield* load` (fix) and `yield* other` (no fix, `yield* load` runs before it)
-  const loaded = yield* load;
-  return combine(loaded, yield* other)
+  return combine(loaded_1, yield* other)
 })
 
 export const nestedEffectGenInCallback = Effect.gen(function*() {
@@ -6038,9 +6038,9 @@ export const firstOfTwoYields = Effect.gen(function*() {
 export const nestedEffectGenInCallback = Effect.gen(function*() {
   const make = () =>
     Effect.gen(function*() {
+      const loaded_1 = yield* load;
       // MUST TRIGGER (fix): the inner Effect.gen is an Effect generator on its own
-      const loaded = yield* load;
-      return transform(loaded)
+      return transform(loaded_1)
     })
   return yield* make()
 })

@@ -34,8 +34,8 @@ declare const load: Effect.Effect<number>
 declare function transform(n: number): string
 
 export const enabledByDirective = Effect.gen(function*() {
-  // MUST TRIGGER: the file directive enables the rule as a warning
   const loaded = yield* load;
+  // MUST TRIGGER: the file directive enables the rule as a warning
   return transform(loaded)
 })
 
@@ -86,8 +86,8 @@ export const nextLineOff = Effect.gen(function*() {
   // MUST NOT TRIGGER: the next-line directive turns the rule off for this line only
   // @effect-diagnostics-next-line yieldInCallArgument:off
   const a = transform(yield* load)
-  // MUST TRIGGER: the next-line directive covered only the previous line
   const loaded = yield* load;
+  // MUST TRIGGER: the next-line directive covered only the previous line
   const b = transform(loaded)
   return a + b
 })
@@ -137,8 +137,8 @@ export const nextLineOff = Effect.gen(function*() {
 
 // @effect-diagnostics yieldInCallArgument:error
 export const errorSeverity = Effect.gen(function*() {
-  // MUST TRIGGER (error): the section directive raises the severity to error
   const loaded = yield* load;
+  // MUST TRIGGER (error): the section directive raises the severity to error
   return transform(loaded)
 })
 

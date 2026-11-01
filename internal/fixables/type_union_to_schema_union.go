@@ -2,7 +2,6 @@ package fixables
 
 import (
 	"strconv"
-	"strings"
 
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
@@ -10,11 +9,8 @@ import (
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
-	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
-	"github.com/microsoft/TypeScript/tsc/shim/format"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var TypeUnionToSchemaUnionFix = fixable.Fixable{
@@ -72,8 +68,7 @@ func runTypeUnionToSchemaUnionFix(ctx *fixable.Context) []ls.CodeAction {
 				)
 				ast.SetParentInChildren(statement)
 
-				pos := scanner.GetTokenPosOfNode(alias, sf, true)
-				tracker.InsertNodeAt(sf, core.TextPos(pos), statement, rewriter.NodeOptions{Suffix: typeUnionToSchemaUnionInsertionSuffix(sf, pos)})
+				tracker.InsertNodeBefore(sf, alias, statement, false, rewriter.LeadingTriviaOptionNone)
 
 				replacement := tracker.NewTypeQueryNode(
 					tracker.NewQualifiedName(tracker.NewIdentifier(name), tracker.NewIdentifier(match.Side)),
@@ -87,18 +82,6 @@ func runTypeUnionToSchemaUnionFix(ctx *fixable.Context) []ls.CodeAction {
 		return nil
 	}
 	return nil
-}
-
-// typeUnionToSchemaUnionInsertionSuffix separates the inserted const from the
-// alias at pos: when the alias starts its line, the const gets its own line with
-// the alias indentation; when other code precedes the alias on its line (an
-// inline block body, a previous statement, a comment), the const stays inline.
-func typeUnionToSchemaUnionInsertionSuffix(sf *ast.SourceFile, pos int) string {
-	linePrefix := sf.Text()[format.GetLineStartPositionForPosition(pos, sf):pos]
-	if strings.TrimLeft(linePrefix, " \t") != "" {
-		return " "
-	}
-	return "\n" + linePrefix
 }
 
 // typeUnionToSchemaUnionHasLateMember reports whether any member, or any prefix

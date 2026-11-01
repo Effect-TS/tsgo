@@ -122,8 +122,8 @@ declare function makeFn(options: { readonly tag: string }): (n: number) => strin
 // ---------------------------------------------------------------------------
 
 export const pipeableStep = Effect.gen(function*() {
-  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
   const loadedFn = yield* loadFn;
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
   return yield* subject.pipe(Effect.map(loadedFn))
 })
 
@@ -285,8 +285,8 @@ export const pipeableStep = Effect.gen(function*() {
 })
 
 export const pipeFunctionStep = Effect.gen(function*() {
-  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
   const loadedFn = yield* loadFn;
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
   return yield* pipe(subject, Effect.map(loadedFn))
 })
 
@@ -448,8 +448,8 @@ export const pipeFunctionStep = Effect.gen(function*() {
 })
 
 export const dataFirst = Effect.gen(function*() {
-  // MUST TRIGGER (fix): data-first call
   const loadedFn = yield* loadFn;
+  // MUST TRIGGER (fix): data-first call
   return yield* Effect.map(subject, loadedFn)
 })
 
@@ -611,8 +611,8 @@ export const dataFirst = Effect.gen(function*() {
 })
 
 export const curriedCallee = Effect.gen(function*() {
-  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
   const loadedFn = yield* loadFn;
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
   return yield* Effect.map(loadedFn)(subject)
 })
 
@@ -774,8 +774,8 @@ export const curriedCallee = Effect.gen(function*() {
 })
 
 export const pipeSubject = Effect.gen(function*() {
-  // MUST TRIGGER (fix): first argument of pipe(...)
   const loaded = yield* load;
+  // MUST TRIGGER (fix): first argument of pipe(...)
   return yield* pipe(loaded, Effect.succeed)
 })
 
@@ -937,8 +937,8 @@ export const pipeSubject = Effect.gen(function*() {
 })
 
 export const insideYieldOperand = Effect.gen(function*() {
-  // MUST TRIGGER (fix): only the inner yield* is a call argument
   const loaded = yield* load;
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
   return yield* Effect.succeed(transform(loaded))
 })
 
@@ -1100,8 +1100,8 @@ export const insideYieldOperand = Effect.gen(function*() {
 })
 
 export const propertyAssignment = Effect.gen(function*() {
-  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
   const loaded = yield* load;
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
   obj.prop = transform(loaded)
 })
 
@@ -1264,8 +1264,8 @@ export const propertyAssignment = Effect.gen(function*() {
 
 export const compoundAssignment = Effect.gen(function*() {
   let n = 0
-  // MUST TRIGGER (fix): compound assignment to an identifier
   const loaded = yield* load;
+  // MUST TRIGGER (fix): compound assignment to an identifier
   n += sum(loaded)
   return n
 })
@@ -1757,8 +1757,8 @@ export const withJsDoc = Effect.gen(function*() {
 export const caseClause = Effect.gen(function*() {
   switch (cond) {
     case true:
-      // MUST TRIGGER (fix): case clauses are statement lists
       const loaded = yield* load;
+      // MUST TRIGGER (fix): case clauses are statement lists
       consume(loaded)
       break
     default:
@@ -1919,8 +1919,8 @@ export const caseClause = Effect.gen(function*() {
       consume(yield* load)
       break
     default:
-      // MUST TRIGGER (fix): default clauses are statement lists
       const loaded = yield* load;
+      // MUST TRIGGER (fix): default clauses are statement lists
       consume(loaded)
   }
 })
@@ -2084,8 +2084,8 @@ export const caseClause = Effect.gen(function*() {
 
 export const whileBody = Effect.gen(function*() {
   while (cond) {
-    // MUST TRIGGER (fix): a braced loop body is a statement list
     const loaded = yield* load;
+    // MUST TRIGGER (fix): a braced loop body is a statement list
     consume(loaded)
   }
 })

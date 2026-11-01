@@ -1,7 +1,6 @@
 package fixables
 
 import (
-	"strconv"
 	"strings"
 	"unicode"
 
@@ -9,10 +8,10 @@ import (
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
+	"github.com/microsoft/TypeScript/tsc/shim/printer"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
@@ -33,12 +32,14 @@ func runYieldInCallArgumentFix(ctx *fixable.Context) []ls.CodeAction {
 		return nil
 	}
 
-	name := yieldInCallArgumentName(ctx.Checker, match.Yield.Expression(), match.Statement)
 	if action := ctx.NewFixAction(fixable.FixAction{
 		Description: "Hoist yield* into a const",
 		Run: func(tracker *rewriter.Tracker) {
+			// The printer turns the name into the first of name, name_1, ... that
+			// no identifier in the file uses, as TypeScript's extract refactors do.
+			name := tracker.Factory.NewUniqueNameEx(yieldInCallArgumentName(match.Yield.Expression()), printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
 			declaration := tracker.NewVariableDeclaration(
-				tracker.NewIdentifier(name),
+				name,
 				nil,
 				nil,
 				tracker.NewYieldExpression(tracker.NewToken(ast.KindAsteriskToken), tracker.DeepCloneNode(match.Yield.Expression())),
@@ -52,9 +53,8 @@ func runYieldInCallArgumentFix(ctx *fixable.Context) []ls.CodeAction {
 			// No flow edit inserts a statement or replaces a single argument, and
 			// new or multi-argument calls have no flow, so the fix edits nodes directly.
 
-			pos := scanner.GetTokenPosOfNode(match.Statement, sf, true)
-			tracker.InsertNodeAt(sf, core.TextPos(pos), statement, rewriter.NodeOptions{Suffix: typeUnionToSchemaUnionInsertionSuffix(sf, pos)})
-			tracker.ReplaceNode(sf, match.Argument, tracker.NewIdentifier(name), nil)
+			tracker.InsertNodeBefore(sf, match.Statement, statement, false, rewriter.LeadingTriviaOptionNone)
+			tracker.ReplaceNode(sf, match.Argument, name, nil)
 		},
 	}); action != nil {
 		return []ls.CodeAction{*action}
@@ -87,12 +87,10 @@ var yieldInCallArgumentVerbs = map[string]string{
 	"build": "built",
 }
 
-// yieldInCallArgumentName picks the hoisted const name from the yielded
-// expression (its identifier or last property name, with a leading verb turned
-// into a participle), falling back to `value`, then appends 2, 3, ... until no
-// value with that name is visible at the statement.
-func yieldInCallArgumentName(c *checker.Checker, operand *ast.Node, statement *ast.Node) string {
-	base := "value"
+// yieldInCallArgumentName picks the base of the hoisted const name from the
+// yielded expression: its identifier or last property name, with a leading verb
+// turned into a participle, falling back to `value`.
+func yieldInCallArgumentName(operand *ast.Node) string {
 	operand = ast.SkipOuterExpressions(operand, ast.OEKParentheses|ast.OEKAssertions)
 	segment := ""
 	switch operand.Kind {
@@ -103,29 +101,19 @@ func yieldInCallArgumentName(c *checker.Checker, operand *ast.Node, statement *a
 			segment = name.Text()
 		}
 	}
-	if segment != "" {
-		verbEnd := strings.IndexFunc(segment, func(r rune) bool { return !unicode.IsLower(r) })
-		if verbEnd < 0 {
-			verbEnd = len(segment)
-		}
-		if participle, ok := yieldInCallArgumentVerbs[segment[:verbEnd]]; ok {
-			segment = participle + segment[verbEnd:]
-		}
-		if token := scanner.StringToToken(segment); scanner.IsValidIdentifier(segment) &&
-			(token < ast.KindFirstReservedWord || token > ast.KindLastFutureReservedWord) {
-			base = segment
-		}
+	if segment == "" {
+		return "value"
 	}
-
-	isFree := func(candidate string) bool {
-		return c.ResolveName(candidate, statement, ast.SymbolFlagsValue|ast.SymbolFlagsAlias, false) == nil
+	verbEnd := strings.IndexFunc(segment, func(r rune) bool { return !unicode.IsLower(r) })
+	if verbEnd < 0 {
+		verbEnd = len(segment)
 	}
-	if isFree(base) {
-		return base
+	if participle, ok := yieldInCallArgumentVerbs[segment[:verbEnd]]; ok {
+		segment = participle + segment[verbEnd:]
 	}
-	for i := 2; ; i++ {
-		if candidate := base + strconv.Itoa(i); isFree(candidate) {
-			return candidate
-		}
+	if token := scanner.StringToToken(segment); !scanner.IsValidIdentifier(segment) ||
+		(token >= ast.KindFirstReservedWord && token <= ast.KindLastFutureReservedWord) {
+		return "value"
 	}
+	return segment
 }
