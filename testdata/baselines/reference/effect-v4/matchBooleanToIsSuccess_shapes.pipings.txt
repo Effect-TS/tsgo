@@ -1,7 +1,7 @@
-==== /.src/matchBooleanToIsSuccess_shapes.ts (22 flows) ====
+==== /.src/matchBooleanToIsSuccess_shapes.ts (25 flows) ====
 
 === Piping Flow ===
-Location: 11:31 - 11:121
+Location: 12:31 - 12:121
 Node: Effect.match(source, { onFailure: (): boolean => false, onSuccess: (): boolean => true })
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 14:34 - 14:124
+Location: 15:34 - 15:124
 Node: Effect.match(source, { onFailure: (_: string) => false, onSuccess: (_: number) => true })
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 17:29 - 17:140
+Location: 18:29 - 18:140
 Node: source.pipe(Effect.match<string, boolean, number, boolean>({ onFailure: () => true, onSuccess: () => false }))
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 20:38 - 20:151
+Location: 21:38 - 21:151
 Node: Effect.match<number, string, never, boolean, boolean>(source, { onFailure: () => false, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 23:31 - 23:107
+Location: 24:31 - 24:107
 Node: E.Effect.match(saveUser, { onFailure: () => false, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 26:31 - 26:134
+Location: 27:31 - 27:134
 Node: Effect.andThen(Effect.void, Effect.match(saveUser, { onFailure: () => false, onSuccess: () => true }))
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 26:59 - 26:133
+Location: 27:59 - 27:133
 Node: Effect.match(saveUser, { onFailure: () => false, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 29:32 - 29:139
+Location: 30:32 - 30:139
 Node: Effect.map(Effect.match(saveUser, { onFailure: () => true, onSuccess: () => false }), (failed) => !failed)
 Node Kind: KindCallExpression
 
@@ -117,7 +117,7 @@ Transformations (2):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 32:30 - 32:138
+Location: 33:30 - 33:138
 Node: Effect.andThen(Effect.void, saveUser.pipe(Effect.match({ onFailure: () => false, onSuccess: () => true })))
 Node Kind: KindCallExpression
 
@@ -131,7 +131,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 32:58 - 32:137
+Location: 33:58 - 33:137
 Node: saveUser.pipe(Effect.match({ onFailure: () => false, onSuccess: () => true }))
 Node Kind: KindCallExpression
 
@@ -145,7 +145,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 35:32 - 35:136
+Location: 36:32 - 36:136
 Node: Effect.match({ onFailure: () => false, onSuccess: () => true })(saveUser).pipe(Effect.map((ok) => !ok))
 Node Kind: KindCallExpression
 
@@ -163,7 +163,7 @@ Transformations (2):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 38:33 - 38:139
+Location: 39:33 - 39:139
 Node: Effect.flatMap(Effect.succeed(saveUser), Effect.match({ onFailure: () => true, onSuccess: () => false }))
 Node Kind: KindCallExpression
 
@@ -181,7 +181,7 @@ Transformations (2):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 38:74 - 38:138
+Location: 39:74 - 39:138
 Node: Effect.match({ onFailure: () => true, onSuccess: () => false })
 Node Kind: KindCallExpression
 
@@ -195,7 +195,7 @@ Transformations (1):
       outType: <R>(self: Effect<void, Error, R>) => Effect<boolean, never, R>
 
 === Piping Flow ===
-Location: 41:29 - 41:129
+Location: 42:29 - 42:129
 Node: Effect.match(source, { onFailure: () => false, onSuccess: () => true, extra: () => true } as never)
 Node Kind: KindCallExpression
 
@@ -209,7 +209,7 @@ Transformations (1):
       outType: Effect<unknown, never, never>
 
 === Piping Flow ===
-Location: 44:31 - 44:116
+Location: 45:31 - 45:116
 Node: Effect.match(source, { ...handlers, onFailure: () => false, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -223,7 +223,21 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 47:29 - 47:113
+Location: 48:33 - 48:119
+Node: Effect.match(source, { onFailure: () => false, onSuccess: () => true, ...overrides })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: () => false, onSuccess: () => true, ...overrides }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 51:29 - 51:113
 Node: Effect.match(source, { onFailure: async () => false, onSuccess: async () => true })
 Node Kind: KindCallExpression
 
@@ -237,7 +251,7 @@ Transformations (1):
       outType: Effect<Promise<boolean>, never, never>
 
 === Piping Flow ===
-Location: 50:29 - 50:124
+Location: 54:29 - 54:124
 Node: Effect.match(source, { onFailure: (..._args: Array<string>) => false, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -251,7 +265,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 53:29 - 53:124
+Location: 57:29 - 57:124
 Node: Effect.match(source, { onFailure: (_a: string, _b?: number) => false, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -265,7 +279,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 56:28 - 56:103
+Location: 60:28 - 60:103
 Node: Effect.match(source, { onFailure: <T>() => false, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -279,7 +293,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 59:30 - 59:102
+Location: 63:30 - 63:102
 Node: Effect.match(source, { onFailure: () => !true, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -293,7 +307,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 62:32 - 62:122
+Location: 66:32 - 66:122
 Node: Effect.match(source, { onFailure: () => false satisfies boolean, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -307,7 +321,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 65:25 - 65:104
+Location: 69:25 - 69:104
 Node: Effect.match(source, { onFailure: handlers.onFailure, onSuccess: () => true })
 Node Kind: KindCallExpression
 
@@ -319,3 +333,31 @@ Transformations (1):
       callee: Effect.match
       args: [{ onFailure: handlers.onFailure, onSuccess: () => true }]
       outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 72:35 - 72:141
+Node: Effect.match(source, { onFailure: () => { console.log("failed"); return false }, onSuccess: () => true })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: () => { console.log("failed"); return false }, onSuccess: () => true }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 72:77 - 72:99
+Node: console.log("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void

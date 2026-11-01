@@ -5,7 +5,6 @@ Effect version: 3.19.19
 /.src/matchBooleanToIsSuccess.ts(17,23): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(23,39): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(31,3): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
-/.src/matchBooleanToIsSuccess.ts(38,26): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(44,32): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(50,29): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(56,34): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
@@ -17,9 +16,11 @@ Effect version: 3.19.19
 /.src/matchBooleanToIsSuccess.ts(93,43): suggestion TS377174: `Effect.isFailure` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(100,21): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess.ts(110,3): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(191,28): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
+/.src/matchBooleanToIsSuccess.ts(201,36): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 
 
-==== /.src/matchBooleanToIsSuccess.ts (16 errors) ====
+==== /.src/matchBooleanToIsSuccess.ts (17 errors) ====
     // @effect-v3
     import * as Fx from "effect/Effect"
     import { match as matchNamed } from "effect/Effect"
@@ -64,10 +65,8 @@ Effect version: 3.19.19
       })
     )
     
-    // MUST TRIGGER: point-free form used as a function value -> Effect.isSuccess
+    // MUST NOT TRIGGER: an unapplied match is not a piping step
     export const succeeded = Effect.match({
-                             ~~~~~~~~~~~~
-!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
       onFailure: () => false,
       onSuccess: () => true
     })
@@ -241,8 +240,10 @@ Effect version: 3.19.19
       onSuccess: () => true as const
     })
     
-    // MUST NOT TRIGGER: block bodies are outside the bare-literal shape
+    // MUST TRIGGER: a block body with a single return of the literal -> Effect.isSuccess
     export const blockBodies = Effect.match(saveUser, {
+                               ~~~~~~~~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
       onFailure: () => {
         return false
       },
@@ -251,8 +252,10 @@ Effect version: 3.19.19
       }
     })
     
-    // MUST NOT TRIGGER: function expressions and methods are not arrow functions
+    // MUST TRIGGER: function expressions returning the literal -> Effect.isSuccess
     export const functionExpressions = Effect.match(saveUser, {
+                                       ~~~~~~~~~~~~
+!!! suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
       onFailure: function() {
         return false
       },
@@ -260,6 +263,7 @@ Effect version: 3.19.19
         return true
       }
     })
+    // MUST NOT TRIGGER: methods are not property assignments
     export const methods = Effect.match(saveUser, {
       onFailure() {
         return false

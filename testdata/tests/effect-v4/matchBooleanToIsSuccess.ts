@@ -33,7 +33,7 @@ export const piped = pipe(
   })
 )
 
-// MUST TRIGGER: point-free form used as a function value -> Effect.isSuccess
+// MUST NOT TRIGGER: an unapplied match is not a piping step
 export const succeeded = Effect.match({
   onFailure: () => false,
   onSuccess: () => true
@@ -51,7 +51,7 @@ export const eagerDataFirst = Effect.matchEager(saveUser, {
   onSuccess: () => true
 })
 
-// MUST TRIGGER: Effect.matchEager, point-free (Effect's own isFailure definition shape) -> Effect.isFailure
+// MUST NOT TRIGGER: an unapplied matchEager (Effect's own isFailure definition shape) is not a piping step
 export const eagerPointFree = Effect.matchEager({
   onFailure: () => true,
   onSuccess: () => false
@@ -198,7 +198,7 @@ export const asserted = Effect.match(saveUser, {
   onSuccess: () => true as const
 })
 
-// MUST NOT TRIGGER: block bodies are outside the bare-literal shape
+// MUST TRIGGER: a block body with a single return of the literal -> Effect.isSuccess
 export const blockBodies = Effect.match(saveUser, {
   onFailure: () => {
     return false
@@ -208,7 +208,7 @@ export const blockBodies = Effect.match(saveUser, {
   }
 })
 
-// MUST NOT TRIGGER: function expressions and methods are not arrow functions
+// MUST TRIGGER: function expressions returning the literal -> Effect.isSuccess
 export const functionExpressions = Effect.match(saveUser, {
   onFailure: function() {
     return false
@@ -217,6 +217,7 @@ export const functionExpressions = Effect.match(saveUser, {
     return true
   }
 })
+// MUST NOT TRIGGER: methods are not property assignments
 export const methods = Effect.match(saveUser, {
   onFailure() {
     return false

@@ -7,6 +7,7 @@ import { Effect } from "effect"
 declare const source: Effect.Effect<number, string>
 declare const saveUser: Effect.Effect<void, Error>
 const handlers = { onFailure: () => false, onSuccess: () => true }
+declare const overrides: Partial<typeof handlers>
 
 // MUST TRIGGER: return type annotations on the handlers -> Effect.isSuccess
 export const annotatedReturn = Effect.match(source, { onFailure: (): boolean => false, onSuccess: (): boolean => true })
@@ -35,14 +36,17 @@ export const nestedPipeable = Effect.andThen(Effect.void, saveUser.pipe(Effect.m
 // MUST TRIGGER: point-free match applied immediately and piped on -> Effect.isSuccess
 export const appliedThenPiped = Effect.match({ onFailure: () => false, onSuccess: () => true })(saveUser).pipe(Effect.map((ok) => !ok))
 
-// MUST TRIGGER: point-free match as the callback of another call -> Effect.isFailure
+// MUST NOT TRIGGER: an unapplied match passed as a callback is not a piping step
 export const pointFreeArgument = Effect.flatMap(Effect.succeed(saveUser), Effect.match({ onFailure: () => true, onSuccess: () => false }))
 
-// MUST NOT TRIGGER: extra properties
+// MUST TRIGGER: extra properties do not change the handlers -> Effect.isSuccess
 export const extraProperty = Effect.match(source, { onFailure: () => false, onSuccess: () => true, extra: () => true } as never)
 
-// MUST NOT TRIGGER: spread next to inline handlers
+// MUST TRIGGER: a spread before the handlers is overridden by them -> Effect.isSuccess
 export const spreadAndInline = Effect.match(source, { ...handlers, onFailure: () => false, onSuccess: () => true })
+
+// MUST NOT TRIGGER: a spread after the handlers may override them
+export const spreadAfterInline = Effect.match(source, { onFailure: () => false, onSuccess: () => true, ...overrides })
 
 // MUST NOT TRIGGER: async handlers return promises
 export const asyncHandlers = Effect.match(source, { onFailure: async () => false, onSuccess: async () => true })
@@ -64,3 +68,6 @@ export const satisfiesLiteral = Effect.match(source, { onFailure: () => false sa
 
 // MUST NOT TRIGGER: handler taken from another object
 export const shorthand = Effect.match(source, { onFailure: handlers.onFailure, onSuccess: () => true })
+
+// MUST NOT TRIGGER: a block body with statements before the return
+export const multiStatementBlock = Effect.match(source, { onFailure: () => { console.log("failed"); return false }, onSuccess: () => true })

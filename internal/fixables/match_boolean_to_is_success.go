@@ -35,15 +35,9 @@ func runMatchBooleanToIsSuccessFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementName,
 			Run: func(tracker *rewriter.Tracker) {
-				replacement := reference.expression(tracker, member)
-				var replaced bool
-				if match.PointFree {
-					// match({...}) becomes the bare isSuccess / isFailure function.
-					replaced = tracker.ReplacePipingFlowPrefix(match.SourceFile, match.Flow, 1, replacement)
-				} else {
-					transformation := match.Flow.Transformations().At(match.Index)
-					replaced = tracker.ReplacePipingFlowTransformation(match.SourceFile, &transformation, rewriter.PipingFlowTransformationReplacement{Callee: replacement})
-				}
+				transformation := match.Flow.Transformations().At(match.Index)
+				replaced := tracker.ReplacePipingFlowTransformation(match.SourceFile, &transformation,
+					rewriter.PipingFlowTransformationReplacement{Callee: reference.expression(tracker, member)})
 				if replaced && namedImports != nil {
 					elements := namedImports.AsNamedImports().Elements
 					tracker.InsertImportSpecifierAtIndex(match.SourceFile,
