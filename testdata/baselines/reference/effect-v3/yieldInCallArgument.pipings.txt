@@ -1,0 +1,1353 @@
+==== /.src/yieldInCallArgument.ts (96 flows) ====
+
+=== Piping Flow ===
+Location: 42:21 - 46:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): the issue example, `load` -> `loaded`\n  const result = transform(yield* load)\n  return result\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): the issue example, `load` -> `loaded`\n  const result = transform(yield* load)\n  return result\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 44:17 - 44:40
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 48:26 - 51:3
+Node: Effect.fn("inEffectFn")(function*() {\n  // MUST TRIGGER (fix): Effect.fn generator body\n  return transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): Effect.fn generator body\n  return transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("inEffectFn")
+      args: (constant)
+      outType: () => Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 50:9 - 50:32
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 53:35 - 56:3
+Node: Effect.fn(function*() {\n  // MUST TRIGGER (fix): Effect.fn without a span name\n  return transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): Effect.fn without a span name\n  return transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: () => Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 55:9 - 55:32
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 58:39 - 64:2
+Node: Effect.fn("inEffectFnWithPipeables")(\n  function*() {\n    // MUST TRIGGER (fix): Effect.fn with trailing pipeables\n    return transform(yield* load)\n  },\n  Effect.asVoid\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("inEffectFnWithPipeables")(\n  function*() {\n    // MUST TRIGGER (fix): Effect.fn with trailing pipeables\n    return transform(yield* load)\n  },\n  Effect.asVoid\n)
+Subject Type: Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 61:11 - 61:34
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 66:34 - 69:3
+Node: Effect.fnUntraced(function*() {\n  // MUST TRIGGER (fix): Effect.fnUntraced generator body\n  return transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): Effect.fnUntraced generator body\n  return transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: () => Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 68:9 - 68:32
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 71:28 - 74:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): the issue example (v3 orElse takes a LazyArg), assignment statement; `provider` is an identifier so it is side-effect free\n  provider = ConfigProvider.orElse(provider, yield* loadProvider)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): the issue example (v3 orElse takes a LazyArg), assignment statement; `provider` is an identifier so it is side-effect free\n  provider = ConfigProvider.orElse(provider, yield* loadProvider)\n}
+Subject Type: () => Generator<YieldWrap<Effect<() => ConfigProvider, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 73:13 - 73:66
+Node: ConfigProvider.orElse(provider, yield* loadProvider)
+Node Kind: KindCallExpression
+
+Subject: provider
+Subject Type: ConfigProvider
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: ConfigProvider.orElse
+      args: [yield* loadProvider]
+      outType: ConfigProvider
+
+=== Piping Flow ===
+Location: 76:29 - 79:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): argument of a `new` expression\n  return new Wrapper(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): argument of a `new` expression\n  return new Wrapper(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, Wrapper, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Wrapper, never, never>
+
+=== Piping Flow ===
+Location: 81:35 - 84:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): call used as an expression statement\n  consume(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): call used as an expression statement\n  consume(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 81:60 - 83:23
+Node: consume(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: consume
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 86:43 - 90:3
+Node: Effect.gen(function*() {\n  const prefix = "p"\n  // MUST TRIGGER (fix): preceding arguments are an identifier, literals and a property access\n  return combine(prefix, "a", 1, true, null, config.prefix, yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const prefix = "p"\n  // MUST TRIGGER (fix): preceding arguments are an identifier, literals and a property access\n  return combine(prefix, "a", 1, true, null, config.prefix, yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 92:28 - 95:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): the callee is a property access, free of side effects\n  return service.process(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): the callee is a property access, free of side effects\n  return service.process(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 94:9 - 94:38
+Node: service.process(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: service.process
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 97:29 - 100:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): parentheses around the yield* are transparent\n  return transform((yield* load))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): parentheses around the yield* are transparent\n  return transform((yield* load))\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 99:9 - 99:34
+Node: transform((yield* load))
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 102:27 - 108:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): an `if` condition is evaluated once, before anything else in the statement\n  if (check(yield* load)) {\n    return 1\n  }\n  return 0\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): an `if` condition is evaluated once, before anything else in the statement\n  if (check(yield* load)) {\n    return 1\n  }\n  return 0\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, 0 | 1, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<0 | 1, never, never>
+
+=== Piping Flow ===
+Location: 104:7 - 104:25
+Node: check(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: check
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 110:26 - 113:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): directly an argument of `inner`; nothing runs before it in `outer(...)` either\n  return outer(inner(yield* load))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): directly an argument of `inner`; nothing runs before it in `outer(...)` either\n  return outer(inner(yield* load))\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 112:9 - 112:35
+Node: outer(inner(yield* load))
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: inner
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: outer
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 115:28 - 118:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): no name derivable from a call, falls back to `value`\n  return transform(yield* Effect.succeed(1))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): no name derivable from a call, falls back to `value`\n  return transform(yield* Effect.succeed(1))\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 117:9 - 117:45
+Node: transform(yield* Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: yield* Effect.succeed(1)
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 117:26 - 117:44
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 120:34 - 123:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (fix): name derived from the yielded property access (`services.config`)\n  return transform(yield* services.config)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (fix): name derived from the yielded property access (`services.config`)\n  return transform(yield* services.config)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 122:9 - 122:43
+Node: transform(yield* services.config)
+Node Kind: KindCallExpression
+
+Subject: yield* services.config
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 125:25 - 130:3
+Node: Effect.gen(function*() {\n  const loaded = 1\n  const value = 2\n  // MUST TRIGGER (fix): `loaded` and `value` are taken, the hoisted name must not clash with them\n  return combine(loaded, value, transform(yield* load))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const loaded = 1\n  const value = 2\n  // MUST TRIGGER (fix): `loaded` and `value` are taken, the hoisted name must not clash with them\n  return combine(loaded, value, transform(yield* load))\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 129:32 - 129:55
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 132:32 - 135:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER twice: `yield* load` (fix) and `yield* other` (no fix, `yield* load` runs before it)\n  return combine(yield* load, yield* other)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER twice: `yield* load` (fix) and `yield* other` (no fix, `yield* load` runs before it)\n  return combine(yield* load, yield* other)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 137:41 - 144:3
+Node: Effect.gen(function*() {\n  const make = () =>\n    Effect.gen(function*() {\n      // MUST TRIGGER (fix): the inner Effect.gen is an Effect generator on its own\n      return transform(yield* load)\n    })\n  return yield* make()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const make = () =>\n    Effect.gen(function*() {\n      // MUST TRIGGER (fix): the inner Effect.gen is an Effect generator on its own\n      return transform(yield* load)\n    })\n  return yield* make()\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 138:21 - 142:7
+Node: Effect.gen(function*() {\n      // MUST TRIGGER (fix): the inner Effect.gen is an Effect generator on its own\n      return transform(yield* load)\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n      // MUST TRIGGER (fix): the inner Effect.gen is an Effect generator on its own\n      return transform(yield* load)\n    }
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 141:13 - 141:36
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 150:32 - 153:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): `sideEffect()` runs before the effect\n  return combine(sideEffect(), yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): `sideEffect()` runs before the effect\n  return combine(sideEffect(), yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 155:32 - 158:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): evaluating the callee calls `getService()` first\n  return getService().process(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): evaluating the callee calls `getService()` first\n  return getService().process(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 157:9 - 157:43
+Node: getService().process(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: getService().process
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 160:41 - 163:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): `sideEffect()` of the enclosing `outer(...)` call runs before the effect\n  return outer(sideEffect(), inner(yield* load))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): `sideEffect()` of the enclosing `outer(...)` call runs before the effect\n  return outer(sideEffect(), inner(yield* load))\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 162:29 - 162:48
+Node: inner(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: inner
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 165:44 - 168:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): `sideEffect()` earlier in the same statement runs before the effect\n  return sideEffect() + transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): `sideEffect()` earlier in the same statement runs before the effect\n  return sideEffect() + transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 167:24 - 167:47
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 170:35 - 174:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): the first declarator runs `sideEffect()` before the effect\n  const a = sideEffect(), b = transform(yield* load)\n  return [a, b]\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): the first declarator runs `sideEffect()` before the effect\n  const a = sideEffect(), b = transform(yield* load)\n  return [a, b]\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 172:30 - 172:53
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 176:28 - 179:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): with `?.` the argument only runs when the callee is defined\n  return maybeTransform?.(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): with `?.` the argument only runs when the callee is defined\n  return maybeTransform?.(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string | undefined, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string | undefined, never, never>
+
+=== Piping Flow ===
+Location: 178:9 - 178:39
+Node: maybeTransform?.(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: maybeTransform
+      args: (constant)
+      outType: string | undefined
+
+=== Piping Flow ===
+Location: 185:29 - 189:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): the issue example, ternary branch\n  const r = cond ? transform(yield* load) : null\n  return r\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): the issue example, ternary branch\n  const r = cond ? transform(yield* load) : null\n  return r\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string | null, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string | null, never, never>
+
+=== Piping Flow ===
+Location: 187:19 - 187:42
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 191:26 - 194:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): right side of `&&`\n  return cond && transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): right side of `&&`\n  return cond && transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string | false, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string | false, never, never>
+
+=== Piping Flow ===
+Location: 193:17 - 193:40
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 196:25 - 199:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): right side of `||`\n  return cond || check(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): right side of `||`\n  return cond || check(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, boolean, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 198:17 - 198:36
+Node: check(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: check
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 201:33 - 204:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): right side of `??`\n  return config.prefix ?? transform(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): right side of `??`\n  return config.prefix ?? transform(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 203:26 - 203:49
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 206:30 - 211:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): a loop condition runs on every iteration\n  while (check(yield* load)) {\n    yield* Effect.log("again")\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): a loop condition runs on every iteration\n  while (check(yield* load)) {\n    yield* Effect.log("again")\n  }\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 208:10 - 208:28
+Node: check(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: check
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 209:11 - 209:31
+Node: Effect.log("again")
+Node Kind: KindCallExpression
+
+Subject: "again"
+Subject Type: "again"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 213:32 - 218:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): a loop condition runs on every iteration\n  do {\n    yield* Effect.log("again")\n  } while (check(yield* load))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): a loop condition runs on every iteration\n  do {\n    yield* Effect.log("again")\n  } while (check(yield* load))\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 216:11 - 216:31
+Node: Effect.log("again")
+Node Kind: KindCallExpression
+
+Subject: "again"
+Subject Type: "again"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 217:12 - 217:30
+Node: check(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: check
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 220:28 - 225:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): a loop condition runs on every iteration\n  for (let i = 0; i < sum(yield* load); i++) {\n    yield* Effect.log("again")\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): a loop condition runs on every iteration\n  for (let i = 0; i < sum(yield* load); i++) {\n    yield* Effect.log("again")\n  }\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 222:22 - 222:39
+Node: sum(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: sum
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 223:11 - 223:31
+Node: Effect.log("again")
+Node Kind: KindCallExpression
+
+Subject: "again"
+Subject Type: "again"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 227:31 - 235:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): an `else if` condition only runs when the first condition is false\n  if (cond) {\n    return 1\n  } else if (check(yield* load)) {\n    return 2\n  }\n  return 0\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): an `else if` condition only runs when the first condition is false\n  if (cond) {\n    return 1\n  } else if (check(yield* load)) {\n    return 2\n  }\n  return 0\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, 0 | 1 | 2, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<0 | 1 | 2, never, never>
+
+=== Piping Flow ===
+Location: 231:14 - 231:32
+Node: check(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: check
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 237:30 - 240:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER (no fix): the enclosing statement is the unbraced body of an `if`\n  if (cond) consume(yield* load)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER (no fix): the enclosing statement is the unbraced body of an `if`\n  if (cond) consume(yield* load)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 239:12 - 239:33
+Node: consume(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: consume
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 246:30 - 250:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the issue example, yield first then call\n  const value = yield* load\n  return transform(value)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the issue example, yield first then call\n  const value = yield* load\n  return transform(value)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 249:9 - 249:26
+Node: transform(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 252:28 - 255:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the issue example, map the effect instead\n  return yield* load.pipe(Effect.map(transform))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the issue example, map the effect instead\n  return yield* load.pipe(Effect.map(transform))\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 254:16 - 254:49
+Node: load.pipe(Effect.map(transform))
+Node Kind: KindCallExpression
+
+Subject: load
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [transform]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 257:27 - 260:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: pipe(...) is the yielded expression, not a call around the yield*\n  return yield* pipe(load, Effect.map(transform))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: pipe(...) is the yielded expression, not a call around the yield*\n  return yield* pipe(load, Effect.map(transform))\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 259:16 - 259:50
+Node: pipe(load, Effect.map(transform))
+Node Kind: KindCallExpression
+
+Subject: load
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [transform]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 262:27 - 266:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the call is the operand of yield*, not the other way around\n  yield* Effect.log("message")\n  return yield* Effect.succeed(transform(1))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the call is the operand of yield*, not the other way around\n  yield* Effect.log("message")\n  return yield* Effect.succeed(transform(1))\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 264:9 - 264:31
+Node: Effect.log("message")
+Node Kind: KindCallExpression
+
+Subject: "message"
+Subject Type: "message"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 265:16 - 265:45
+Node: Effect.succeed(transform(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 268:29 - 271:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the yield* is the callee, not an argument\n  return (yield* loadFn)(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the yield* is the callee, not an argument\n  return (yield* loadFn)(1)\n}
+Subject Type: () => Generator<YieldWrap<Effect<(n: number) => string, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 270:9 - 270:28
+Node: (yield* loadFn)(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: (yield* loadFn)
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 273:31 - 276:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the yield* is the receiver of a method call, not an argument\n  return (yield* load).toFixed(2)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the yield* is the receiver of a method call, not an argument\n  return (yield* load).toFixed(2)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 275:9 - 275:34
+Node: (yield* load).toFixed(2)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (1):
+  [0] kind: call
+      callee: (yield* load).toFixed
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 278:37 - 281:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the yield* is an array element, not directly an argument\n  return combine([yield* load])\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the yield* is an array element, not directly an argument\n  return combine([yield* load])\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 280:9 - 280:32
+Node: combine([yield* load])
+Node Kind: KindCallExpression
+
+Subject: [yield* load]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: combine
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 283:38 - 286:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the yield* is a property value, not directly an argument\n  return combine({ value: yield* load })\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the yield* is a property value, not directly an argument\n  return combine({ value: yield* load })\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 285:9 - 285:41
+Node: combine({ value: yield* load })
+Node Kind: KindCallExpression
+
+Subject: { value: yield* load }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: combine
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 288:38 - 291:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the argument is a binary expression containing the yield*\n  return transform((yield* load) + 1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the argument is a binary expression containing the yield*\n  return transform((yield* load) + 1)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 290:9 - 290:38
+Node: transform((yield* load) + 1)
+Node Kind: KindCallExpression
+
+Subject: (yield* load) + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 293:40 - 296:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the yield* is a template substitution, not directly an argument\n  return combine(`${yield* load}`)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the yield* is a template substitution, not directly an argument\n  return combine(`${yield* load}`)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 295:9 - 295:35
+Node: combine(`${yield* load}`)
+Node Kind: KindCallExpression
+
+Subject: `${yield* load}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: combine
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 298:30 - 301:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the argument is a spread element, not the yield* itself\n  return sum(...(yield* loadMany))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the argument is a spread element, not the yield* itself\n  return sum(...(yield* loadMany))\n}
+Subject Type: () => Generator<YieldWrap<Effect<number[], never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 303:30 - 306:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: a tagged template is not a call or `new` expression\n  return tag`${yield* load}`\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: a tagged template is not a call or `new` expression\n  return tag`${yield* load}`\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 308:49 - 314:3
+Node: Effect.gen(function*() {\n  // MUST NOT TRIGGER: the inner generator is not an Effect generator\n  const plain = function*() {\n    return transform(yield* numbers())\n  }\n  return Array.from(plain())\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST NOT TRIGGER: the inner generator is not an Effect generator\n  const plain = function*() {\n    return transform(yield* numbers())\n  }\n  return Array.from(plain())\n}
+Subject Type: () => Generator<never, number[], never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 311:11 - 311:39
+Node: transform(yield* numbers())
+Node Kind: KindCallExpression
+
+Subject: yield* numbers()
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 313:9 - 313:29
+Node: Array.from(plain())
+Node Kind: KindCallExpression
+
+Subject: plain()
+Subject Type: Generator<number, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Array.from
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 318:9 - 318:37
+Node: transform(yield* numbers())
+Node Kind: KindCallExpression
+
+Subject: yield* numbers()
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 322:24 - 326:2
+Node: Array.from(\n  (function*() {\n    consume(yield* numbers())\n  })()\n)
+Node Kind: KindCallExpression
+
+Subject: (function*() {\n    consume(yield* numbers())\n  })()
+Subject Type: Generator<number, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Array.from
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 323:17 - 324:30
+Node: consume(yield* numbers())
+Node Kind: KindCallExpression
+
+Subject: yield* numbers()
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: consume
+      args: (constant)
+      outType: void

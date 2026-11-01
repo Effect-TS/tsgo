@@ -74,6 +74,7 @@
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
-    "effecttsgo/unnecessary-typeof-type": "warn"
+    "effecttsgo/unnecessary-typeof-type": "warn",
+    "effecttsgo/yield-in-call-argument": "warn"
   }
 }

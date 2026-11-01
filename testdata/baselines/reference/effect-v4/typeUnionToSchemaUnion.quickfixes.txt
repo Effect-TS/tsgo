@@ -939,9 +939,9 @@ export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Sc
 export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
 export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number })
 
+export const Shape = Schema.Union([Circle, Square]);
 // MUST TRIGGER - exported union of `typeof S.Type`; the fix keeps `export` and
 // inserts `export const Shape = Schema.Union([Circle, Square])` just before the alias
-export const Shape = Schema.Union([Circle, Square]);
 export type Shape = typeof Shape.Type
 
 // MUST TRIGGER - union of `typeof S.Encoded`; the fixed alias uses `.Encoded`
@@ -1154,8 +1154,8 @@ export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: 
 // inserts `export const Shape = Schema.Union([Circle, Square])` just before the alias
 export type Shape = typeof Circle.Type | typeof Square.Type
 
-// MUST TRIGGER - union of `typeof S.Encoded`; the fixed alias uses `.Encoded`
 export const ShapeEncoded = Schema.Union([Circle, Square]);
+// MUST TRIGGER - union of `typeof S.Encoded`; the fixed alias uses `.Encoded`
 export type ShapeEncoded = typeof ShapeEncoded.Encoded
 
 // MUST TRIGGER - non-exported alias with three members; the fix inserts a non-exported const
@@ -1368,8 +1368,8 @@ export type Shape = typeof Circle.Type | typeof Square.Type
 // MUST TRIGGER - union of `typeof S.Encoded`; the fixed alias uses `.Encoded`
 export type ShapeEncoded = typeof Circle.Encoded | typeof Square.Encoded
 
-// MUST TRIGGER - non-exported alias with three members; the fix inserts a non-exported const
 const AnyShape = Schema.Union([Circle, Square, Triangle]);
+// MUST TRIGGER - non-exported alias with three members; the fix inserts a non-exported const
 type AnyShape = typeof AnyShape.Type
 
 // MUST TRIGGER - nested parenthesized unions are flattened into a single Schema.Union
@@ -1582,8 +1582,8 @@ export type ShapeEncoded = typeof Circle.Encoded | typeof Square.Encoded
 // MUST TRIGGER - non-exported alias with three members; the fix inserts a non-exported const
 type AnyShape = typeof Circle.Type | typeof Square.Type | typeof Triangle.Type
 
-// MUST TRIGGER - nested parenthesized unions are flattened into a single Schema.Union
 const FlatShape = Schema.Union([Circle, Square, Triangle]);
+// MUST TRIGGER - nested parenthesized unions are flattened into a single Schema.Union
 type FlatShape = typeof FlatShape.Type
 
 // MUST TRIGGER - leading `|` and parenthesized members
@@ -1796,8 +1796,8 @@ type AnyShape = typeof Circle.Type | typeof Square.Type | typeof Triangle.Type
 // MUST TRIGGER - nested parenthesized unions are flattened into a single Schema.Union
 type FlatShape = (typeof Circle.Type | typeof Square.Type) | (typeof Triangle.Type)
 
-// MUST TRIGGER - leading `|` and parenthesized members
 const LeadingPipe = Schema.Union([Circle, Square]);
+// MUST TRIGGER - leading `|` and parenthesized members
 type LeadingPipe =
   typeof LeadingPipe.Encoded
 
@@ -2011,8 +2011,8 @@ type LeadingPipe =
   | (typeof Circle.Encoded)
   | typeof Square.Encoded
 
-// MUST TRIGGER - members are property-access expressions on the Schema module
 const Primitive = Schema.Union([Schema.String, Schema.Number]);
+// MUST TRIGGER - members are property-access expressions on the Schema module
 type Primitive = typeof Primitive.Type
 
 // MUST TRIGGER - members are Schema classes
@@ -4207,9 +4207,9 @@ export const localAlias = () => {
   return value
 }
 
+const HelperShape = Schema.Union([Circle, Square]);
 // MUST TRIGGER - union of `Schema.Schema.Type<typeof S>` members; the fix uses
 // `Schema.Union([Circle, Square])` and the alias becomes `typeof HelperShape.Type`
-const HelperShape = Schema.Union([Circle, Square]);
 type HelperShape = typeof HelperShape.Type
 
 // MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
@@ -4422,9 +4422,9 @@ export const localAlias = () => {
 // `Schema.Union([Circle, Square])` and the alias becomes `typeof HelperShape.Type`
 type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof Square>
 
+const MixedForms = Schema.Union([Circle, Square, Triangle]);
 // MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
 // the Type side, so the fix uses `Schema.Union([Circle, Square, Triangle])`
-const MixedForms = Schema.Union([Circle, Square, Triangle]);
 type MixedForms = typeof MixedForms.Type
 
 // MUST TRIGGER - union of `Schema.Codec.Encoded<typeof S>` members; the fix uses
@@ -4637,9 +4637,9 @@ type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof
 // the Type side, so the fix uses `Schema.Union([Circle, Square, Triangle])`
 type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeof Triangle.Type
 
+const CodecEncoded = Schema.Union([Circle, Square]);
 // MUST TRIGGER - union of `Schema.Codec.Encoded<typeof S>` members; the fix uses
 // `Schema.Union([Circle, Square])` and the alias becomes `typeof CodecEncoded.Encoded`
-const CodecEncoded = Schema.Union([Circle, Square]);
 type CodecEncoded = typeof CodecEncoded.Encoded
 
 // MUST TRIGGER - `typeof S.Encoded` and `Schema.Codec.Encoded<typeof S>` mixed: both
@@ -4852,9 +4852,9 @@ type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeo
 // `Schema.Union([Circle, Square])` and the alias becomes `typeof CodecEncoded.Encoded`
 type CodecEncoded = Schema.Codec.Encoded<typeof Circle> | Schema.Codec.Encoded<typeof Square>
 
+const MixedFormsEncoded = Schema.Union([Circle, Square]);
 // MUST TRIGGER - `typeof S.Encoded` and `Schema.Codec.Encoded<typeof S>` mixed: both
 // extract the Encoded side
-const MixedFormsEncoded = Schema.Union([Circle, Square]);
 type MixedFormsEncoded = typeof MixedFormsEncoded.Encoded
 
 // MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
@@ -5067,8 +5067,8 @@ type CodecEncoded = Schema.Codec.Encoded<typeof Circle> | Schema.Codec.Encoded<t
 // extract the Encoded side
 type MixedFormsEncoded = typeof Circle.Encoded | Schema.Codec.Encoded<typeof Square>
 
-// MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
 const HelperPrimitive = Schema.Union([Schema.String, Schema.Number]);
+// MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
 type HelperPrimitive = typeof HelperPrimitive.Type
 
 // MUST TRIGGER - the alias does not start its line (inline function body); the fix
@@ -5927,8 +5927,8 @@ namespace InlineShapes { export type Any = typeof Circle.Type | typeof Square.Ty
 // MUST TRIGGER - another statement precedes the alias on the same line
 const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.Encoded
 
-// MUST TRIGGER - a block comment precedes the alias on the same line
-/* shapes */ const Commented = Schema.Union([Circle, Square]); type Commented = typeof Commented.Type
+const Commented = Schema.Union([Circle, Square]); // MUST TRIGGER - a block comment precedes the alias on the same line
+/* shapes */ type Commented = typeof Commented.Type
 
 // MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
 /** Either a circle or a square */

@@ -1,0 +1,150 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:20-10:25) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D2] (18:23-18:28) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D3] (25:20-25:25) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_directives.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare function transform(n: number): string
+
+export const enabledByDirective = Effect.gen(function*() {
+  const loaded = yield* load;
+  // MUST TRIGGER: the file directive enables the rule as a warning
+  return transform(loaded)
+})
+
+export const nextLineOff = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the next-line directive turns the rule off for this line only
+  // @effect-diagnostics-next-line yieldInCallArgument:off
+  const a = transform(yield* load)
+  // MUST TRIGGER: the next-line directive covered only the previous line
+  const b = transform(yield* load)
+  return a + b
+})
+
+// @effect-diagnostics yieldInCallArgument:error
+export const errorSeverity = Effect.gen(function*() {
+  // MUST TRIGGER (error): the section directive raises the severity to error
+  return transform(yield* load)
+})
+
+// @effect-diagnostics yieldInCallArgument:off
+export const sectionOff = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the section directive turns the rule off for the rest of the file
+  return transform(yield* load)
+})
+
+
+=== [D2] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_directives.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare function transform(n: number): string
+
+export const enabledByDirective = Effect.gen(function*() {
+  // MUST TRIGGER: the file directive enables the rule as a warning
+  return transform(yield* load)
+})
+
+export const nextLineOff = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the next-line directive turns the rule off for this line only
+  // @effect-diagnostics-next-line yieldInCallArgument:off
+  const a = transform(yield* load)
+  const loaded = yield* load;
+  // MUST TRIGGER: the next-line directive covered only the previous line
+  const b = transform(loaded)
+  return a + b
+})
+
+// @effect-diagnostics yieldInCallArgument:error
+export const errorSeverity = Effect.gen(function*() {
+  // MUST TRIGGER (error): the section directive raises the severity to error
+  return transform(yield* load)
+})
+
+// @effect-diagnostics yieldInCallArgument:off
+export const sectionOff = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the section directive turns the rule off for the rest of the file
+  return transform(yield* load)
+})
+
+
+=== [D3] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_directives.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare function transform(n: number): string
+
+export const enabledByDirective = Effect.gen(function*() {
+  // MUST TRIGGER: the file directive enables the rule as a warning
+  return transform(yield* load)
+})
+
+export const nextLineOff = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the next-line directive turns the rule off for this line only
+  // @effect-diagnostics-next-line yieldInCallArgument:off
+  const a = transform(yield* load)
+  // MUST TRIGGER: the next-line directive covered only the previous line
+  const b = transform(yield* load)
+  return a + b
+})
+
+// @effect-diagnostics yieldInCallArgument:error
+export const errorSeverity = Effect.gen(function*() {
+  const loaded = yield* load;
+  // MUST TRIGGER (error): the section directive raises the severity to error
+  return transform(loaded)
+})
+
+// @effect-diagnostics yieldInCallArgument:off
+export const sectionOff = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the section directive turns the rule off for the rest of the file
+  return transform(yield* load)
+})
+

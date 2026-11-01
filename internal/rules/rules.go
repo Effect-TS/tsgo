@@ -98,6 +98,7 @@ var All = []rule.Rule{
 	LazyPromiseInEffectSync,
 	PromiseInEffectSuccess,
 	NestedEffectGenYield,
+	YieldInCallArgument,
 	RedundantMapError,
 	RedundantOrDie,
 	UnnecessaryArrowBlock,
