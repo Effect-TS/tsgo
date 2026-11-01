@@ -1,33 +1,43 @@
 use ets_shim::ast::{Kind, Node};
 use ets_shim::core::P;
 
-// go: internal/typeparser/object_literal.go:7 ObjectLiteralPropertyInitializer c026dc8e1f1fb5b1
-// ObjectLiteralPropertyInitializer returns the initializer of an explicitly
-// assigned identifier or string-literal property in an object literal.
+// go: internal/typeparser/object_literal.go:11 ObjectLiteralPropertyInitializer d73c0e0506af05a9
+// ObjectLiteralPropertyInitializer returns the initializer that a property of
+// an object literal (under any parentheses, type assertions or satisfies) is
+// known to hold: the last property assignment with that name, provided nothing
+// after it can override it. A later spread, a later shorthand, method or
+// accessor with the same name, or a later computed name that is not a literal
+// makes the value unknown, and the result nil.
+//
+// Rust: Go's nil node and nil property-list checks are the type system's.
 pub fn object_literal_property_initializer(
     node: impl Into<Option<P<Node>>>,
     name: &str,
 ) -> Option<P<Node>> {
-    let node = ets_shim::ast::skip_parentheses(node.into()?);
+    let node = ets_shim::ast::skip_outer_expressions(
+        node.into()?,
+        ets_shim::ast::OuterExpressionKinds::All,
+    );
     if node.kind() != Kind::ObjectLiteralExpression {
         return None;
     }
-    let object = node.as_object_literal_expression();
-    for &property_node in object.properties().nodes() {
-        if property_node.kind() != Kind::PropertyAssignment {
+    let mut initializer = None;
+    for &property in node.as_object_literal_expression().properties().nodes() {
+        if property.kind() == Kind::SpreadAssignment {
+            initializer = None;
             continue;
         }
-        let property = property_node.as_property_assignment();
-        let property_name = property.name();
-        match property_name.kind() {
-            Kind::Identifier if property_name.as_identifier().text() == name => {
-                return Some(property.initializer());
+        let Some(property_name) = property.name() else {
+            continue;
+        };
+        match ets_shim::ast::try_get_text_of_property_name(property_name) {
+            None => initializer = None,
+            Some(text) if text != name => {}
+            Some(_) if property.kind() == Kind::PropertyAssignment => {
+                initializer = Some(property.as_property_assignment().initializer());
             }
-            Kind::StringLiteral if property_name.as_string_literal().text() == name => {
-                return Some(property.initializer());
-            }
-            _ => {}
+            Some(_) => initializer = None,
         }
     }
-    None
+    initializer
 }

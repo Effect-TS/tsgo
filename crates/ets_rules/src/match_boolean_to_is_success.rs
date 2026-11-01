@@ -49,7 +49,7 @@ pub static MATCH_BOOLEAN_TO_IS_SUCCESS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/match_boolean_to_is_success.go:43 MatchBooleanToIsSuccessMatch cca1160de2972958
+// go: internal/rules/match_boolean_to_is_success.go:43 MatchBooleanToIsSuccessMatch 2d25367fac14986d
 // MatchBooleanToIsSuccessMatch holds the nodes needed by the diagnostic and quick fix.
 //
 // Rust: the callee and the flow are never nil (non-optional fields).
@@ -61,14 +61,11 @@ pub struct MatchBooleanToIsSuccessMatch {
     // Flow contains the match step at Index.
     pub flow: PipingFlow,
     pub index: i64,
-    // PointFree is true for a standalone match({...}) call: the options are the
-    // subject of Flow and the call is its first step, applied to no input.
-    pub point_free: bool,
     pub match_name: &'static str,       // "match" or "matchEager"
     pub replacement_name: &'static str, // "isSuccess" or "isFailure"
 }
 
-// go: internal/rules/match_boolean_to_is_success.go:60 AnalyzeMatchBooleanToIsSuccess 4352036244600965
+// go: internal/rules/match_boolean_to_is_success.go:57 AnalyzeMatchBooleanToIsSuccess d94afe611676f4e0
 // AnalyzeMatchBooleanToIsSuccess finds Effect.match and Effect.matchEager
 // calls whose inline handlers ignore their input and return complementary
 // boolean literals.
@@ -89,28 +86,18 @@ pub fn analyze_match_boolean_to_is_success(
             let transformation = flow.transformations().at(index);
             let callee = transformation.callee();
 
-            let options;
-            let mut point_free = false;
-            if transformation.args().len() == 1 {
-                options = *transformation.args().at(0);
-            } else if index == 0 && transformation.args().len() == 0 {
-                // A standalone match({...}): the options are the subject of the flow.
-                let Some(subject) = flow.subject().node() else {
-                    continue;
-                };
-                options = subject;
-                point_free = true;
-            } else {
+            if transformation.args().len() != 1 {
                 continue;
             }
-
-            let Some((on_success, on_failure)) = match_boolean_handlers(options) else {
+            let options = *transformation.args().at(0);
+            let Some(success_value) = boolean_literal_handler(
+                ets_typeparser::object_literal_property_initializer(options, "onSuccess"),
+            ) else {
                 continue;
             };
-            let Some(success_value) = boolean_literal_handler(Some(on_success)) else {
-                continue;
-            };
-            let Some(failure_value) = boolean_literal_handler(Some(on_failure)) else {
+            let Some(failure_value) = boolean_literal_handler(
+                ets_typeparser::object_literal_property_initializer(options, "onFailure"),
+            ) else {
                 continue;
             };
             if success_value == failure_value {
@@ -135,7 +122,6 @@ pub fn analyze_match_boolean_to_is_success(
                 callee,
                 flow: flow.clone(),
                 index,
-                point_free,
                 match_name,
                 replacement_name,
             });
@@ -144,43 +130,16 @@ pub fn analyze_match_boolean_to_is_success(
     matches
 }
 
-// go: internal/rules/match_boolean_to_is_success.go:130 matchBooleanHandlers 882005de929e4810
-// matchBooleanHandlers returns the onSuccess and onFailure initializers of an
-// inline object literal made of exactly those two property assignments.
+// go: internal/rules/match_boolean_to_is_success.go:110 booleanLiteralHandler 24b0c4628824c0a0
+// booleanLiteralHandler accepts a lazy expression (see ParseLazyExpression)
+// that ignores its input and returns a bare (possibly parenthesized) boolean
+// literal.
 //
-// Rust: Go's `(onSuccess, onFailure, ok)` is `Option<(onSuccess, onFailure)>`.
-pub(crate) fn match_boolean_handlers(options: P<Node>) -> Option<(P<Node>, P<Node>)> {
-    let object = ast::skip_parentheses(options);
-    if object.kind() != Kind::ObjectLiteralExpression {
-        return None;
-    }
-    let properties = object.as_object_literal_expression().properties().nodes();
-    if properties.len() != 2 {
-        return None;
-    }
-    for property in properties {
-        if property.kind() != Kind::PropertyAssignment {
-            return None;
-        }
-    }
-    let on_success = ets_typeparser::object_literal_property_initializer(object, "onSuccess");
-    let on_failure = ets_typeparser::object_literal_property_initializer(object, "onFailure");
-    Some((on_success?, on_failure?))
-}
-
-// go: internal/rules/match_boolean_to_is_success.go:151 booleanLiteralHandler e7800bbfb724146e
-// booleanLiteralHandler accepts an expression-bodied arrow function that
-// ignores its input and returns a bare (possibly parenthesized) boolean literal.
-//
-// Rust: Go's `(value, ok)` is `Option<value>`; the lazy expression's body and expression are non-optional, so
-// their nil checks drop.
+// Rust: Go's `(value, ok)` is `Option<value>`.
 pub(crate) fn boolean_literal_handler(handler: Option<P<Node>>) -> Option<bool> {
     let handler = handler?;
-    if ast::skip_parentheses(handler).kind() != Kind::ArrowFunction {
-        return None;
-    }
     let lazy = ets_typeparser::parse_lazy_expression(handler, LazyExpressionFlags::None)?;
-    if lazy.body().kind() == Kind::Block || !is_ignorable_map_parameter_list(lazy.params()) {
+    if !is_ignorable_map_parameter_list(lazy.params()) {
         return None;
     }
     match ast::skip_parentheses(lazy.expression()).kind() {
