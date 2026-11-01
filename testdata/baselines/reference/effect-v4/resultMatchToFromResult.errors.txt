@@ -1,0 +1,297 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/resultMatchToFromResult.ts(23,26): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(29,31): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(35,31): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(41,30): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(47,31): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(53,28): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(63,30): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(70,3): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(79,3): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(86,25): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(94,5): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(100,33): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(105,33): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult.ts(111,3): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+
+
+==== /.src/resultMatchToFromResult.ts (14 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics resultMatchToFromResult:suggestion
+    import { Effect, Effect as Fx, Exit, Result, Result as R, pipe } from "effect"
+    import * as ResultModule from "effect/Result"
+    
+    class ParseError {
+      readonly _tag = "ParseError"
+      constructor(readonly cause: unknown) {}
+    }
+    
+    declare const result: Result.Result<number, Error>
+    declare const parsePort: (raw: string) => Result.Result<number, Error>
+    declare const handlers: {
+      readonly onFailure: (error: Error) => Effect.Effect<never, Error>
+      readonly onSuccess: (value: number) => Effect.Effect<number>
+    }
+    declare const exit: Exit.Exit<number, Error>
+    declare const fallback: number
+    const succeed = Effect.succeed
+    const fail = Effect.fail
+    
+    // MUST TRIGGER: data-first Result.match with point-free Effect.fail / Effect.succeed.
+    export const dataFirst = Result.match(result, {
+                             ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST TRIGGER: the issue example, identity arrows on both handlers and a call as the Result.
+    export const identityArrows = Result.match(parsePort("8080"), {
+                                  ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: (error) => Effect.fail(error),
+      onSuccess: (value) => Effect.succeed(value)
+    })
+    
+    // MUST TRIGGER: handler order is irrelevant and module aliases are resolved.
+    export const aliasedModules = R.match(result, {
+                                  ~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onSuccess: (value) => Fx.succeed(value),
+      onFailure: (error) => Fx.fail(error)
+    })
+    
+    // MUST TRIGGER: a point-free handler mixed with an identity arrow.
+    export const mixedHandlers = Result.match(result, {
+                                 ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: (error) => Effect.fail(error),
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST TRIGGER: local aliases of Effect.succeed / Effect.fail still resolve to the Effect module.
+    export const handlerAliases = Result.match(result, {
+                                  ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: fail,
+      onSuccess: succeed
+    })
+    
+    // MUST TRIGGER: single-return block bodies and function expressions are still identity lifts.
+    export const blockBodies = Result.match(result, {
+                               ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: function(error) {
+        return Effect.fail(error)
+      },
+      onSuccess: (value) => {
+        return Effect.succeed(value)
+      }
+    })
+    
+    // MUST TRIGGER: Result.match imported through the effect/Result subpath namespace.
+    export const subpathImport = ResultModule.match(result, {
+                                 ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST TRIGGER: pipeable Result.match rewrites to result.pipe(Effect.fromResult).
+    export const pipeable = result.pipe(
+      Result.match({
+      ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+        onFailure: Effect.fail,
+        onSuccess: Effect.succeed
+      })
+    )
+    
+    // MUST TRIGGER: the function-pipe form is normalized the same way.
+    export const functionPipe = pipe(
+      result,
+      Result.match({
+      ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+        onFailure: (error) => Effect.fail(error),
+        onSuccess: (value) => Effect.succeed(value)
+      })
+    )
+    
+    // MUST TRIGGER: direct data-last application.
+    export const dataLast = Result.match({
+                            ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed
+    })(result)
+    
+    // MUST TRIGGER: nested inside a generic callback, the lift is still Effect.fromResult.
+    export const nested = <A, E>(effect: Effect.Effect<Result.Result<A, E>>) =>
+      Effect.flatMap(effect, (inner) =>
+        Result.match(inner, {
+        ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+          onFailure: Effect.fail,
+          onSuccess: Effect.succeed
+        }))
+    
+    // MUST TRIGGER: isSuccess guard ternary reading .success / .failure from the tested identifier.
+    export const isSuccessTernary = Result.isSuccess(result)
+                                    ~~~~~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      ? Effect.succeed(result.success)
+      : Effect.fail(result.failure)
+    
+    // MUST TRIGGER: isFailure guard ternary mirrors the branch roles.
+    export const isFailureTernary = R.isFailure(result)
+                                    ~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      ? Fx.fail(result.failure)
+      : Fx.succeed(result.success)
+    
+    // MUST TRIGGER: guard ternary on a parameter inside a function.
+    export const ternaryInFunction = (parsed: Result.Result<string, ParseError>) =>
+      Result.isSuccess(parsed) ? Effect.succeed(parsed.success) : Effect.fail(parsed.failure)
+      ~~~~~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+    
+    // MUST NOT TRIGGER: the SchemaGetter near-miss, onFailure builds a new error instead of lifting it.
+    export const rewrappedFailureThunk = Result.match(result, {
+      onFailure: () => Effect.fail(new ParseError("invalid")),
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: onFailure wraps the original error.
+    export const wrappedFailure = Result.match(result, {
+      onFailure: (error) => Effect.fail(new ParseError(error)),
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: onSuccess transforms the value.
+    export const transformedSuccess = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: (value) => Effect.succeed(value + 1)
+    })
+    
+    // MUST NOT TRIGGER: onSuccess ignores its parameter and lifts something else.
+    export const otherSuccessValue = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: (_value) => Effect.succeed(fallback)
+    })
+    
+    // MUST NOT TRIGGER: explicit type arguments may change the inferred Effect type.
+    export const explicitTypeArguments = Result.match(result, {
+      onFailure: (error) => Effect.fail<Error | ParseError>(error),
+      onSuccess: (value) => Effect.succeed<number | string>(value)
+    })
+    
+    // MUST NOT TRIGGER: onFailure dies instead of failing.
+    export const diesOnFailure = Result.match(result, {
+      onFailure: Effect.die,
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: the failure is recovered into the success channel.
+    export const recoveredFailure = Result.match(result, {
+      onFailure: Effect.succeed,
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: the channels are swapped, this is Effect.flip-like, not a lift.
+    export const swappedChannels = Result.match(result, {
+      onFailure: Effect.succeed,
+      onSuccess: Effect.fail
+    })
+    
+    // MUST NOT TRIGGER: onSuccess is lazy rather than an identity lift.
+    export const lazySuccess = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: (value) => Effect.sync(() => value)
+    })
+    
+    // MUST NOT TRIGGER: async handlers return a Promise of an Effect.
+    export const asyncHandlers = Result.match(result, {
+      onFailure: async (error) => Effect.fail(error),
+      onSuccess: async (value) => Effect.succeed(value)
+    })
+    
+    // MUST NOT TRIGGER: Result.fail / Result.succeed rebuild a Result, not an Effect.
+    export const resultConstructors = Result.match(result, {
+      onFailure: Result.fail,
+      onSuccess: Result.succeed
+    })
+    
+    // MUST NOT TRIGGER: the handlers are not an inline object literal.
+    export const handlerObject = Result.match(result, handlers)
+    
+    // MUST NOT TRIGGER: Exit.match has the same handler names but folds a Cause, not a Result.
+    export const exitMatch = Exit.match(exit, {
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: Effect.match folds an Effect, it is not Result.match.
+    export const effectMatch = Effect.match(Effect.succeed(1), {
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed
+    })
+    
+    const local = {
+      succeed: <A>(value: A) => Effect.succeed(value),
+      fail: <E>(error: E) => Effect.fail(error),
+      match: <A, E, B, C>(
+        value: Result.Result<A, E>,
+        options: { readonly onFailure: (error: E) => B; readonly onSuccess: (value: A) => C }
+      ): B | C => Result.isSuccess(value) ? options.onSuccess(value.success) : options.onFailure(value.failure)
+    }
+    
+    // MUST NOT TRIGGER: an unrelated match with the same surface shape.
+    export const unrelatedMatch = local.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: same-named succeed / fail that are not the Effect module APIs.
+    export const unrelatedHandlers = Result.match(result, {
+      onFailure: local.fail,
+      onSuccess: local.succeed
+    })
+    
+    declare const otherSuccess: Result.Success<number, Error>
+    declare const otherFailure: Result.Failure<number, Error>
+    declare const holder: { readonly result: Result.Result<number, Error> }
+    
+    // MUST NOT TRIGGER: the succeed branch reads a different Result than the one tested.
+    export const mismatchedSuccess = Result.isSuccess(result)
+      ? Effect.succeed(otherSuccess.success)
+      : Effect.fail(result.failure)
+    
+    // MUST NOT TRIGGER: the fail branch reads a different Result than the one tested.
+    export const mismatchedFailure = Result.isSuccess(result)
+      ? Effect.succeed(result.success)
+      : Effect.fail(otherFailure.failure)
+    
+    // MUST NOT TRIGGER: the guard ternary transforms the failure.
+    export const transformedTernary = Result.isSuccess(result)
+      ? Effect.succeed(result.success)
+      : Effect.fail(new ParseError(result.failure))
+    
+    // MUST NOT TRIGGER: the guard ternary transforms the success value.
+    export const transformedTernarySuccess = Result.isFailure(result)
+      ? Effect.fail(result.failure)
+      : Effect.succeed(result.success * 2)
+    
+    // MUST NOT TRIGGER: the tested Result is a property access, not a plain identifier.
+    export const propertyAccessTernary = Result.isSuccess(holder.result)
+      ? Effect.succeed(holder.result.success)
+      : Effect.fail(holder.result.failure)
+    
+    // MUST NOT TRIGGER: the guard is not the Effect Result module's isSuccess.
+    export const unrelatedGuard = ((value: Result.Result<number, Error>): value is Result.Success<number, Error> =>
+        value._tag === "Success")(result)
+      ? Effect.succeed(result.success)
+      : Effect.fail(result.failure)
+    

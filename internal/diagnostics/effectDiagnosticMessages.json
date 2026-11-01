@@ -662,5 +662,9 @@
     "`Effect.isFailure` expresses this check more directly than `Effect.{0}` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)": {
         "category": "Suggestion",
         "code": 377174
+    },
+    "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)": {
+        "category": "Suggestion",
+        "code": 377165
     }
 }

@@ -59,6 +59,7 @@
     "effecttsgo/redundant-map-error": "warn",
     "effecttsgo/redundant-or-die": "warn",
     "effecttsgo/redundant-schema-tag-identifier": "warn",
+    "effecttsgo/result-match-to-from-result": "warn",
     "effecttsgo/run-of-exit-to-run-exit": "warn",
     "effecttsgo/schema-number": "warn",
     "effecttsgo/schema-struct-with-tag": "warn",
