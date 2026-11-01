@@ -3085,6 +3085,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
           "description": "Warns when using an API marked @stability unstable"
+        },
+        "yieldInCallArgument": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests yielding into a const before a call instead of passing a yield* directly as a call or new argument in Effect generators"
         }
       },
       "type": "object"

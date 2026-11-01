@@ -135,6 +135,7 @@ mod unnecessary_pipe;
 mod unnecessary_pipe_chain;
 mod unnecessary_typeof_type;
 mod unsafe_effect_type_assertion;
+mod yield_in_call_argument;
 pub use async_function::*;
 pub use catch_to_ignore::*;
 pub use catch_to_or_else_succeed::*;
@@ -284,6 +285,7 @@ pub use unnecessary_pipe::*;
 pub use unnecessary_pipe_chain::*;
 pub use unnecessary_typeof_type::*;
 pub use unsafe_effect_type_assertion::*;
+pub use yield_in_call_argument::*;
 
 #[cfg(test)]
 mod all_order_test;

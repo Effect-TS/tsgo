@@ -25,6 +25,8 @@ type NodeOptions = change.NodeOptions
 type Tracker = change.Tracker
 //go:linkname Tracker_getNonformattedText github.com/microsoft/TypeScript/tsc/internal/ls/change.(*Tracker).getNonformattedText
 func Tracker_getNonformattedText(recv *change.Tracker, node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node)
+//go:linkname Tracker_getAdjustedStartPosition github.com/microsoft/TypeScript/tsc/internal/ls/change.(*Tracker).getAdjustedStartPosition
+func Tracker_getAdjustedStartPosition(recv *change.Tracker, sourceFile *ast.SourceFile, node *ast.Node, leadingOption change.LeadingTriviaOption, hasTrailingComment bool) int
 type TrailingTriviaOption = change.TrailingTriviaOption
 const TrailingTriviaOptionExclude = change.TrailingTriviaOptionExclude
 const TrailingTriviaOptionExcludeWhitespace = change.TrailingTriviaOptionExcludeWhitespace
