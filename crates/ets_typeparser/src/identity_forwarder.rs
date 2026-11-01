@@ -4,14 +4,18 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/identity_forwarder.go:15 TypeParser.UnwrapIdentityForwarder 52006fcf008df325
-    // UnwrapIdentityForwarder returns the callee of a one-argument function that
-    // forwards its argument unchanged, any explicit type arguments on the
-    // forwarded call, and the forwarder's parameter declaration so that callers
-    // can apply stricter checks (e.g. reject annotated parameters). All other
-    // expressions are returned as-is with no type arguments and no parameter.
+    // go: internal/typeparser/identity_forwarder.go:17 TypeParser.UnwrapIdentityForwarder e1137554430df53e
+    // UnwrapIdentityForwarder returns the callee of a one-parameter function
+    // whose body is a piping flow that applies a single operator to that
+    // parameter, any explicit type arguments on that operator, and the
+    // forwarder's parameter declaration so that callers can apply stricter checks
+    // (e.g. reject annotated parameters). All other expressions are returned
+    // as-is with no type arguments and no parameter.
     //
-    // For example, both fn and value => fn(value) normalize to fn.
+    // For example, fn, value => fn(value), value => pipe(value, fn) and
+    // value => value.pipe(fn) all normalize to fn.
+    //
+    // Rust: a transformation's callee is never nil, so Go's nil check on it drops.
     pub fn unwrap_identity_forwarder(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -40,35 +44,37 @@ impl TypeParser<'_> {
         {
             return (Some(node), None, None);
         }
-
-        let expression = ets_shim::ast::skip_parentheses(lazy.expression);
-        if expression.kind() != Kind::CallExpression {
-            return (Some(node), None, None);
-        }
-        let call = expression.as_call_expression();
-        let arguments = call.arguments().nodes();
-        if arguments.len() != 1 {
-            return (Some(node), None, None);
-        }
-
-        let argument = ets_shim::ast::skip_parentheses(arguments[0]);
-        if argument.kind() != Kind::Identifier {
-            return (Some(node), None, None);
-        }
-
         let parameter_symbol = self.get_symbol_at_location(parameter_declaration.name());
-        let argument_symbol = self.get_symbol_at_location(argument);
-        if parameter_symbol.is_none()
-            || argument_symbol.is_none()
-            || get_symbol_if_same_reference(self.checker, parameter_symbol, argument_symbol)
-                .is_none()
-        {
+        if parameter_symbol.is_none() {
             return (Some(node), None, None);
         }
 
+        let is_parameter = |tp: &mut TypeParser<'_>, subject: &PipingFlowSubject| -> bool {
+            let Some(argument) = subject.node().map(ets_shim::ast::skip_parentheses) else {
+                return false;
+            };
+            if argument.kind() != Kind::Identifier {
+                return false;
+            }
+            let argument_symbol = tp.get_symbol_at_location(argument);
+            argument_symbol.is_some()
+                && get_symbol_if_same_reference(tp.checker, parameter_symbol, argument_symbol)
+                    .is_some()
+        };
+        let is_bare_operator = |_: &mut TypeParser<'_>,
+                                transformation: &PipingFlowTransformation|
+         -> bool { transformation.args().len() == 0 };
+        let Some(flow) = self.longest_piping_flow_at(lazy.expression, false) else {
+            return (Some(node), None, None);
+        };
+        if !PipingFlow::matches_exactly(Some(&flow), self, &is_parameter, &[&is_bare_operator]) {
+            return (Some(node), None, None);
+        }
+
+        let forwarded = flow.transformations().at(0);
         (
-            Some(ets_shim::ast::skip_parentheses(call.expression())),
-            call.type_arguments(),
+            Some(ets_shim::ast::skip_parentheses(forwarded.callee())),
+            forwarded.type_arguments(),
             Some(parameter_node),
         )
     }

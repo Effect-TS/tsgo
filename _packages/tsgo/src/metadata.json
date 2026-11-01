@@ -103,6 +103,7 @@
         "redundantMapError": "suggestion",
         "redundantOrDie": "suggestion",
         "redundantSchemaTagIdentifier": "suggestion",
+        "resultMatchToFromResult": "suggestion",
         "returnEffectInGen": "suggestion",
         "runEffectInsideEffect": "suggestion",
         "runOfExitToRunExit": "suggestion",
@@ -203,6 +204,7 @@
         "redundantMapError": "error",
         "redundantOrDie": "error",
         "redundantSchemaTagIdentifier": "error",
+        "resultMatchToFromResult": "error",
         "returnEffectInGen": "error",
         "runEffectInsideEffect": "error",
         "runOfExitToRunExit": "error",
@@ -374,6 +376,7 @@
         "redundantMapError": "warning",
         "redundantOrDie": "warning",
         "redundantSchemaTagIdentifier": "warning",
+        "resultMatchToFromResult": "warning",
         "runOfExitToRunExit": "warning",
         "schemaNumber": "warning",
         "schemaStructWithTag": "warning",
@@ -3440,6 +3443,29 @@
             "start": 100,
             "end": 109,
             "text": "Identifier 'Preview' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "resultMatchToFromResult",
+      "group": "style",
+      "description": "Suggests Effect.fromResult when Result.match or a Result guard conditional only converts Success to Effect.succeed and Failure to Effect.fail",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377165
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Result } from \"effect\"\n\ndeclare const parsePort: (raw: string) =\u003e Result.Result\u003cnumber, Error\u003e\n\nexport const port = Result.match(parsePort(\"8080\"), {\n  onFailure: (error) =\u003e Effect.fail(error),\n  onSuccess: (value) =\u003e Effect.succeed(value)\n})\n",
+        "diagnostics": [
+          {
+            "start": 133,
+            "end": 145,
+            "text": "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)"
           }
         ]
       }

@@ -1,4 +1,4 @@
-==== /.src/optionMatchToFromOption.ts (39 flows) ====
+==== /.src/optionMatchToFromOption.ts (42 flows) ====
 
 === Piping Flow ===
 Location: 16:30 - 19:3
@@ -99,7 +99,49 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 35:30 - 40:3
+Location: 34:33 - 37:3
+Node: Option.match(option, {\n  onNone: () => Effect.fail(new MissingValue("identity-pipe")),\n  onSome: (value) => pipe(value, Effect.succeed)\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.match
+      args: [{\n  onNone: () => Effect.fail(new MissingValue("identity-pipe")),\n  onSome: (value) => pipe(value, Effect.succeed)\n}]
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 35:16 - 35:63
+Node: Effect.fail(new MissingValue("identity-pipe"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("identity-pipe")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 36:21 - 36:49
+Node: pipe(value, Effect.succeed)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 41:30 - 46:3
 Node: Option.match(option, {\n  onNone: function() {\n    return Effect.fail(new MissingValue(String(arguments.length)))\n  },\n  onSome: Effect.succeed\n})
 Node Kind: KindCallExpression
 
@@ -113,7 +155,7 @@ Transformations (1):
       outType: Effect<number, never, never> | Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 37:11 - 37:67
+Location: 43:11 - 43:67
 Node: Effect.fail(new MissingValue(String(arguments.length)))
 Node Kind: KindCallExpression
 
@@ -127,7 +169,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 37:41 - 37:65
+Location: 43:41 - 43:65
 Node: String(arguments.length)
 Node Kind: KindCallExpression
 
@@ -141,7 +183,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 43:24 - 48:2
+Location: 49:24 - 54:2
 Node: option.pipe(\n  Option.match({\n    onNone: () => Effect.fail(new MissingValue("pipeable")),\n    onSome: Effect.succeed\n  })\n)
 Node Kind: KindCallExpression
 
@@ -155,7 +197,7 @@ Transformations (1):
       outType: Effect<number, never, never> | Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 45:18 - 45:60
+Location: 51:18 - 51:60
 Node: Effect.fail(new MissingValue("pipeable"))
 Node Kind: KindCallExpression
 
@@ -169,7 +211,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 51:28 - 57:2
+Location: 57:28 - 63:2
 Node: pipe(\n  option,\n  Option.match({\n    onNone: () => Effect.fail(new MissingValue("pipe")),\n    onSome: Effect.succeed\n  })\n)
 Node Kind: KindCallExpression
 
@@ -183,7 +225,7 @@ Transformations (1):
       outType: Effect<number, never, never> | Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 54:18 - 54:56
+Location: 60:18 - 60:56
 Node: Effect.fail(new MissingValue("pipe"))
 Node Kind: KindCallExpression
 
@@ -197,7 +239,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 60:24 - 63:11
+Location: 66:24 - 69:11
 Node: Option.match({\n  onNone: () => Effect.fail(new MissingValue("data-last")),\n  onSome: Effect.succeed\n})(option)
 Node Kind: KindCallExpression
 
@@ -211,7 +253,7 @@ Transformations (1):
       outType: Effect<number, never, never> | Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 61:16 - 61:59
+Location: 67:16 - 67:59
 Node: Effect.fail(new MissingValue("data-last"))
 Node Kind: KindCallExpression
 
@@ -225,7 +267,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 66:30 - 69:3
+Location: 72:30 - 75:3
 Node: Option.match(option, {\n  onNone: () => Effect.fail(new Cause.NoSuchElementError()),\n  onSome: Effect.succeed\n})
 Node Kind: KindCallExpression
 
@@ -239,7 +281,7 @@ Transformations (1):
       outType: Effect<number, never, never> | Effect<never, NoSuchElementError, never>
 
 === Piping Flow ===
-Location: 67:16 - 67:60
+Location: 73:16 - 73:60
 Node: Effect.fail(new Cause.NoSuchElementError())
 Node Kind: KindCallExpression
 
@@ -253,7 +295,7 @@ Transformations (1):
       outType: Effect<never, NoSuchElementError, never>
 
 === Piping Flow ===
-Location: 72:29 - 72:51
+Location: 78:29 - 78:51
 Node: Option.isSome(option)
 Node Kind: KindCallExpression
 
@@ -267,7 +309,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 73:4 - 73:33
+Location: 79:4 - 79:33
 Node: Effect.succeed(option.value)
 Node Kind: KindCallExpression
 
@@ -281,7 +323,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 74:4 - 74:44
+Location: 80:4 - 80:44
 Node: Effect.fail(new MissingValue("isSome"))
 Node Kind: KindCallExpression
 
@@ -295,7 +337,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 77:29 - 77:46
+Location: 83:29 - 83:46
 Node: O.isNone(option)
 Node Kind: KindCallExpression
 
@@ -309,7 +351,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 78:4 - 78:44
+Location: 84:4 - 84:44
 Node: Fx.fail(new Cause.NoSuchElementError())
 Node Kind: KindCallExpression
 
@@ -323,7 +365,7 @@ Transformations (1):
       outType: Effect<never, NoSuchElementError, never>
 
 === Piping Flow ===
-Location: 79:4 - 79:29
+Location: 85:4 - 85:29
 Node: Fx.succeed(option.value)
 Node Kind: KindCallExpression
 
@@ -337,7 +379,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 82:31 - 85:3
+Location: 88:31 - 91:3
 Node: Option.match(option, {\n  onNone: () => Effect.fail(new MissingValue("transformed")),\n  onSome: (value) => Effect.succeed(value + 1)\n})
 Node Kind: KindCallExpression
 
@@ -351,7 +393,7 @@ Transformations (1):
       outType: Effect<number, never, never> | Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 83:16 - 83:61
+Location: 89:16 - 89:61
 Node: Effect.fail(new MissingValue("transformed"))
 Node Kind: KindCallExpression
 
@@ -365,7 +407,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 84:21 - 84:47
+Location: 90:21 - 90:47
 Node: Effect.succeed(value + 1)
 Node Kind: KindCallExpression
 
@@ -379,7 +421,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 88:26 - 91:3
+Location: 94:26 - 97:3
 Node: Option.match(option, {\n  onNone: () => Effect.die("missing"),\n  onSome: Effect.succeed\n})
 Node Kind: KindCallExpression
 
@@ -393,7 +435,7 @@ Transformations (1):
       outType: Effect<number, never, never> | Effect<never, never, never>
 
 === Piping Flow ===
-Location: 89:16 - 89:38
+Location: 95:16 - 95:38
 Node: Effect.die("missing")
 Node Kind: KindCallExpression
 
@@ -407,7 +449,7 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 94:30 - 97:3
+Location: 100:30 - 103:3
 Node: Option.match(option, {\n  onNone: () => Effect.succeed(0),\n  onSome: Effect.succeed\n})
 Node Kind: KindCallExpression
 
@@ -421,7 +463,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 95:16 - 95:34
+Location: 101:16 - 101:34
 Node: Effect.succeed(0)
 Node Kind: KindCallExpression
 
@@ -435,7 +477,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 100:32 - 100:54
+Location: 106:32 - 106:54
 Node: Option.isSome(option)
 Node Kind: KindCallExpression
 
@@ -449,7 +491,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 101:4 - 101:36
+Location: 107:4 - 107:36
 Node: Effect.succeed(otherSome.value)
 Node Kind: KindCallExpression
 
@@ -463,7 +505,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 102:4 - 102:46
+Location: 108:4 - 108:46
 Node: Effect.fail(new MissingValue("mismatch"))
 Node Kind: KindCallExpression
 
@@ -477,7 +519,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 105:34 - 105:56
+Location: 111:34 - 111:56
 Node: Option.isSome(option)
 Node Kind: KindCallExpression
 
@@ -491,7 +533,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 106:4 - 106:37
+Location: 112:4 - 112:37
 Node: Effect.succeed(option.value + 1)
 Node Kind: KindCallExpression
 
@@ -505,7 +547,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 107:4 - 107:49
+Location: 113:4 - 113:49
 Node: Effect.fail(new MissingValue("transformed"))
 Node Kind: KindCallExpression
 
@@ -519,7 +561,7 @@ Transformations (1):
       outType: Effect<never, MissingValue, never>
 
 === Piping Flow ===
-Location: 111:95 - 112:27
+Location: 117:95 - 118:27
 Node: handlers.onSome(value)
 Node Kind: KindCallExpression
 
@@ -533,7 +575,7 @@ Transformations (1):
       outType: C
 
 === Piping Flow ===
-Location: 117:16 - 117:59
+Location: 123:16 - 123:59
 Node: Effect.fail(new MissingValue("unrelated"))
 Node Kind: KindCallExpression
 

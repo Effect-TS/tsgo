@@ -30,6 +30,12 @@ export const identityArrow = O.match(option, {
   onNone: () => Fx.fail(new MissingValue("identity"))
 })
 
+// Should trigger: an identity arrow written as a piping flow is accepted.
+export const identityArrowPipe = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("identity-pipe")),
+  onSome: (value) => pipe(value, Effect.succeed)
+})
+
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
 export const functionOnNone = Option.match(option, {

@@ -2584,6 +2584,9 @@
         "effecttsgo/redundant-schema-tag-identifier": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/result-match-to-from-result": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/return-effect-in-gen": {
           "$ref": "#/definitions/RuleNoConfig"
         },

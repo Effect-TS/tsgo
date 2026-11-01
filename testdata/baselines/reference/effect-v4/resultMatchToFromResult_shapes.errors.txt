@@ -1,0 +1,211 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/resultMatchToFromResult_shapes.ts(14,3): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(20,17): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(25,17): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(31,3): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(35,28): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(38,27): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(41,38): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(47,34): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(53,30): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(59,37): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+/.src/resultMatchToFromResult_shapes.ts(64,37): suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+
+
+==== /.src/resultMatchToFromResult_shapes.ts (11 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics resultMatchToFromResult:suggestion
+    import { Effect, pipe, Result } from "effect"
+    import { match as matchResult } from "effect/Result"
+    
+    declare const result: Result.Result<number, Error>
+    declare const parsePort: (raw: string) => Result.Result<number, Error>
+    const matchAlias = Result.match
+    const onFailure = Effect.fail
+    const onSuccess = Effect.succeed
+    
+    // MUST TRIGGER: a pipeable Result.match inside a longer pipe chain is replaced in place.
+    export const pipeChain = result.pipe(
+      Result.match({ onFailure: Effect.fail, onSuccess: Effect.succeed }),
+      ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      (effect: Effect.Effect<number, Error>) => effect
+    )
+    
+    // MUST TRIGGER: Result.match inside an Effect.fn generator body.
+    export const insideEffectFn = Effect.fn("parse")(function*(raw: string) {
+      return yield* Result.match(parsePort(raw), { onFailure: Effect.fail, onSuccess: Effect.succeed })
+                    ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+    })
+    
+    // MUST TRIGGER: Result.match inside an Effect.fnUntraced generator body.
+    export const insideEffectFnUntraced = Effect.fnUntraced(function*(raw: string) {
+      return yield* Result.match(parsePort(raw), { onFailure: Effect.fail, onSuccess: Effect.succeed })
+                    ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+    })
+    
+    // MUST TRIGGER: Result.match passed as a later data-first value argument roots its own flow.
+    export const dataFirstValueArgument = Effect.andThen(
+      Effect.void,
+      Result.match(result, { onFailure: Effect.fail, onSuccess: Effect.succeed })
+      ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+    )
+    
+    // MUST TRIGGER: match imported by name from the effect/Result subpath.
+    export const namedImport = matchResult(result, { onFailure: Effect.fail, onSuccess: Effect.succeed })
+                               ~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+    
+    // MUST TRIGGER: a local const alias of Result.match.
+    export const constAlias = matchAlias(result, { onFailure: Effect.fail, onSuccess: Effect.succeed })
+                              ~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+    
+    // MUST TRIGGER: parentheses around the handlers object and the handlers.
+    export const parenthesizedHandlers = Result.match(result, ({
+                                         ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: (Effect.fail),
+      onSuccess: ((value) => Effect.succeed(value))
+    }))
+    
+    // MUST TRIGGER: annotated handler parameters are still identity lifts.
+    export const annotatedHandlers = Result.match(result, {
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: (error: Error) => Effect.fail(error),
+      onSuccess: (value: number) => Effect.succeed(value)
+    })
+    
+    // MUST TRIGGER: handlers whose returned flow pipes the parameter into the lift.
+    export const pipedHandlers = Result.match(result, {
+                                 ~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      onFailure: (error) => pipe(error, Effect.fail),
+      onSuccess: (value) => pipe(value, Effect.succeed)
+    })
+    
+    // MUST TRIGGER: parentheses around the guard ternary branches and the tested Result.
+    export const parenthesizedTernary = Result.isSuccess(result)
+                                        ~~~~~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      ? (Effect.succeed((result).success))
+      : (Effect.fail(result.failure))
+    
+    // MUST TRIGGER: guard ternary branches written as pipe flows.
+    export const pipedTernaryBranches = Result.isSuccess(result)
+                                        ~~~~~~~~~~~~~~~~
+!!! suggestion TS377165: `Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)
+      ? pipe(result.success, Effect.succeed)
+      : pipe(result.failure, Effect.fail)
+    
+    // MUST NOT TRIGGER: the next-line directive turns the rule off for this match only.
+    // @effect-diagnostics-next-line resultMatchToFromResult:off
+    export const disabledByDirective = Result.match(result, { onFailure: Effect.fail, onSuccess: Effect.succeed })
+    
+    // MUST NOT TRIGGER: shorthand handler properties.
+    export const shorthand = Result.match(result, { onFailure, onSuccess })
+    
+    // MUST NOT TRIGGER: method handlers.
+    export const methodHandlers = Result.match(result, {
+      onFailure(error) {
+        return Effect.fail(error)
+      },
+      onSuccess(value) {
+        return Effect.succeed(value)
+      }
+    })
+    
+    // MUST NOT TRIGGER: a spread handler.
+    export const spreadHandler = Result.match(result, { ...{ onFailure: Effect.fail }, onSuccess: Effect.succeed })
+    
+    // MUST NOT TRIGGER: an extra property next to the handlers.
+    export const extraProperty = Result.match(
+      result,
+      { onFailure: Effect.fail, onSuccess: Effect.succeed, extra: 1 } as {
+        onFailure: typeof Effect.fail
+        onSuccess: typeof Effect.succeed
+      }
+    )
+    
+    // MUST NOT TRIGGER: a duplicate handler property.
+    export const duplicateHandler = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed,
+      // @ts-expect-error duplicate property
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: a generator handler returns a generator, not the lifted Effect.
+    export const generatorHandler = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: function*(value) {
+        return Effect.succeed(value)
+      }
+    })
+    
+    // MUST NOT TRIGGER: a default parameter value.
+    export const defaultParameter = Result.match(result, { onFailure: Effect.fail, onSuccess: (value = 1) => Effect.succeed(value) })
+    
+    // MUST NOT TRIGGER: a rest parameter.
+    export const restParameter = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: (...values: Array<number>) => Effect.succeed(values[0])
+    })
+    
+    // MUST NOT TRIGGER: a statement before the returned lift.
+    export const extraStatement = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: (value) => {
+        void value
+        return Effect.succeed(value)
+      }
+    })
+    
+    // MUST NOT TRIGGER: an instantiation expression pins the success type.
+    export const instantiationExpression = Result.match(result, { onFailure: Effect.fail, onSuccess: Effect.succeed<number> })
+    
+    // MUST NOT TRIGGER: explicit type arguments on Result.match.
+    export const matchTypeArguments = Result.match<number, Error, Effect.Effect<never, Error>, Effect.Effect<number>>(result, {
+      onFailure: Effect.fail,
+      onSuccess: Effect.succeed
+    })
+    
+    // MUST NOT TRIGGER: a handler flow that keeps going after the lift.
+    export const longerHandlerFlow = Result.match(result, {
+      onFailure: Effect.fail,
+      onSuccess: (value) => pipe(value, Effect.succeed, Effect.asVoid)
+    })
+    
+    // MUST NOT TRIGGER: a cast around a branch.
+    export const castBranch = Result.isSuccess(result)
+      ? (Effect.succeed(result.success) as Effect.Effect<number, Error>)
+      : Effect.fail(result.failure)
+    
+    // MUST NOT TRIGGER: a chained ternary has a third outcome.
+    export const chainedTernary = Result.isSuccess(result)
+      ? Effect.succeed(result.success)
+      : Result.isFailure(result)
+      ? Effect.fail(result.failure)
+      : Effect.die("unreachable")
+    
+    // MUST NOT TRIGGER: an optional chain in a branch.
+    export const optionalChain = Result.isSuccess(result)
+      ? Effect.succeed(result?.success)
+      : Effect.fail(result.failure)
+    
+    // MUST NOT TRIGGER: a _tag comparison is not a Result guard.
+    export const tagTernary = result._tag === "Success"
+      ? Effect.succeed(result.success)
+      : Effect.fail(result.failure)
+    
+    // MUST NOT TRIGGER: a negated guard.
+    export const negatedGuard = !Result.isSuccess(result)
+      ? Effect.fail(result.failure)
+      : Effect.succeed(result.success)
+    
