@@ -1,5 +1,307 @@
 # @effect/tsgo
 
+## 0.64.0
+
+### Minor Changes
+
+- e3b5db8: Add the `brandedSchemaClasses` plugin option, which lists the Schema class kinds that get a nominal brand (`{ readonly brand: unique symbol }`). The values are the Schema API names (`"Class"`, `"TaggedClass"`, `"Error"`, `"TaggedError"`, `"Opaque"`). The default is all five, so nothing changes unless the option is set. Like other per-file options, it can also be set in `overrides`.
+  
+  - `schemaClassMissingBrand` only reports classes whose kind is in the list.
+  - The `Schema.` extends-clause completions only insert the brand for kinds in the list.
+  - An empty list means the rule never reports and the completions never insert a brand.
+  
+  For example, to stop asking for a brand on tagged classes and tagged errors, whose literal `_tag` already keeps different classes apart:
+  
+  ```jsonc
+  {
+    "compilerOptions": {
+      "plugins": [
+        {
+          "name": "@effect/language-service",
+          "brandedSchemaClasses": ["Class", "Error", "Opaque"]
+        }
+      ]
+    }
+  }
+  ```
+  
+  ```ts
+  export class User extends Schema.Class<User>("User")({ name: Schema.String }) {}
+  //                                     ^^^^ Add `{ readonly brand: unique symbol }` as the second type argument. ...
+  export class Created extends Schema.TaggedClass<Created>()("Created", { id: Schema.String }) {}
+  // no diagnostic: TaggedClass is not in brandedSchemaClasses
+  ```
+- f2af3cd: Piping flows now treat calls that pass optional arguments as transformation steps. A call counts when its callee has a single call signature with exactly one required parameter and no rest parameter: the first argument is the subject and the remaining optional arguments are kept with the step. Effect runners with options, `Effect.all` with options, and decoders applied with parse options no longer break a flow.
+  
+  ```ts
+  Effect.runPromise(Effect.exit(program), { signal })
+  // before: the flow ended at Effect.exit(program)
+  // after:  program -> Effect.exit -> Effect.runPromise({ signal })
+  ```
+  
+  Rules built on piping flows pick this up:
+  
+  - `missedPipeableOpportunity` keeps a runner and its options outside the suggested pipe, and still reports the inner calls when the runner returns a function, as `Effect.runCallback` does.
+  
+    ```ts
+    Effect.runPromise(Effect.asVoid(Effect.orDie(program)), { signal })
+    // quick fix: Effect.runPromise(program.pipe(Effect.orDie, Effect.asVoid), { signal })
+    ```
+  
+  - `raceFirstWithSleepToTimeout` no longer reports `Effect.raceAllFirst` called with options such as `onWinner`, which `Effect.timeoutOrElse` cannot carry over.
+  - `runOfExitToRunExit`, `preferTypedSchemaDecoder`, `allOfMapToForEach` and `strictEffectProvide` now read piping flows instead of walking the whole file. Their results are unchanged, except that `strictEffectProvide` no longer reports a standalone `Effect.provide(layer)` that is not applied to an Effect, such as `const withLive = Effect.provide(AppLive)`.
+- d757902: Add `effectSucceedWithUndefined` (Effect v4, style, suggestion): suggests `Effect.undefined` instead of `Effect.succeed(undefined)` or `Effect.succeed(void 0)`, keeping the `Effect<undefined>` type that the `Effect.void` rewrite would widen to `Effect<void>`.
+  
+  `effectSucceedWithUndefined` and `effectSucceedWithVoid` now pick the replacement from the resolved success type instead of the spelling of the argument, so each quickfix keeps the type unchanged. Both also report the pipe form, and the quickfix keeps the later steps.
+  
+  ```ts
+  // Effect v4
+  Effect.succeed(undefined)                      // effectSucceedWithUndefined -> Effect.undefined
+  Effect.succeed(void 0)                         // effectSucceedWithUndefined -> Effect.undefined
+  pipe(undefined, Effect.succeed, Effect.as(1))  // effectSucceedWithUndefined -> pipe(Effect.undefined, Effect.as(1))
+  Effect.succeed<void>(undefined)                // effectSucceedWithVoid -> Effect.void
+  Effect.succeed<number | undefined>(undefined)  // not reported
+  
+  // Effect v3 (no Effect.undefined)
+  Effect.succeed(undefined)                      // effectSucceedWithVoid -> Effect.void
+  Effect.succeed<number | undefined>(undefined)  // no longer reported
+  ```
+  
+  Piping flow analysis now starts a new flow at each value argument of a data-first call, such as the second argument of `Effect.andThen(eff, Effect.succeed(1).pipe(Effect.map(f)))`. Before, these arguments were split into a truncated head and fake flows for their pipe steps, so flow-based diagnostics missed patterns there.
+- 75ff7a1: Add the `effectTryWithoutCatch` diagnostic (antipattern, off by default, Effect v3 and v4). It reports short-form `Effect.try(thunk)` / `Effect.tryPromise(thunk)` calls, whose failures surface as the generic `Cause.UnknownError` (v4) / `Cause.UnknownException` (v3), and points to the object form, which maps the cause to a typed, domain-specific error:
+  
+  ```ts
+  // reported
+  Effect.try(() => JSON.parse(text))
+  // preferred
+  Effect.try({ try: () => JSON.parse(text), catch: (cause) => new ParseError({ cause }) })
+  ```
+  
+  Calls are found through piping flows, so the call can also be a data-first argument, a pipe subject, a step inside `Effect.gen` / `Effect.fn`, or (on Effect v3, where it compiles) a pipe step such as `pipe(thunk, Effect.try)`.
+- 5fabef2: Add the `globalJson` and `globalJsonInEffect` diagnostics (Effect-native, off by default, Effect v3 and v4). Like `globalRandom` / `globalRandomInEffect`, they report calls to the global `JSON.parse` and `JSON.stringify` outside and inside Effect code (`Effect.gen`, `Effect.fn`, and thunks such as `Effect.sync`, `Effect.try` and `Effect.tryPromise`), with the Schema replacement for the Effect version in use. Aliases of `JSON` are reported; a shadowed local `JSON` is not.
+  
+  ```ts
+  // globalJson: JSON.parse throws instead of returning a failure
+  const parseUserResult = (text: string) => Schema.decodeUnknownResult(User)(JSON.parse(text))
+  //                                                                         ^^^^^^^^^^^^^^^^
+  // This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings.
+  
+  // globalJsonInEffect
+  const program = Effect.gen(function*() {
+    const json = JSON.parse(text)
+    //           ^^^^^^^^^^^^^^^ This Effect code uses `JSON.parse`, ...
+  })
+  ```
+  
+  `preferSchemaOverJson` is deprecated in favor of `globalJsonInEffect` and `globalJson`. It keeps working with its own message and reports what `globalJsonInEffect` reports, and the `effect-native` preset no longer includes it. Configuring a deprecated rule in `diagnosticSeverity` (or in an override) now reports the new `deprecatedRuleName` diagnostic on the tsconfig key, once per key:
+  
+  ```
+  Effect diagnostic rule `preferSchemaOverJson` is deprecated; use `globalJsonInEffect` or `globalJson` instead. effect(deprecatedRuleName)
+  ```
+  
+  Set `"deprecatedRuleName": "off"` to silence it or `"deprecatedRuleName": "error"` to raise its severity.
+- d79c97a: Add the `mapSomeCatchNoSuchElement` diagnostic and quick fix for Effect v4. It suggests `Effect.catchNoSuchElement` when a piping flow wraps successes with `Effect.asSome` / `Effect.map(Option.some)` and immediately catches `NoSuchElementError` into `Option.none()`. It only reports when every error that could carry the `"NoSuchElementError"` tag is the real `Cause.NoSuchElementError`, and the handler ignores the error.
+  
+  ```ts
+  // before
+  findUser(id).pipe(
+    Effect.map(Option.some),
+    Effect.catchTag("NoSuchElementError", () => Effect.succeed(Option.none()))
+  )
+  // after
+  findUser(id).pipe(Effect.catchNoSuchElement)
+  ```
+- 6e902fd: Add the `provideMergeAllToArray` style diagnostic (off by default, Effect v3 and v4). `Effect.provide` accepts an array of layers and merges them itself, so wrapping them in `Layer.mergeAll` adds nothing. The quick fix "Pass the layers as an array to Effect.provide" rewrites the argument to an array, keeping each layer's text, spreads, comments, and any v4 `options` argument.
+  
+  ```ts
+  // before
+  program.pipe(Effect.provide(Layer.mergeAll(ALayer, BLayer, CLayer)))
+  Effect.provide(program, Layer.mergeAll(ALayer, ...BCLayers))
+  
+  // after quick fix
+  program.pipe(Effect.provide([ALayer, BLayer, CLayer]))
+  Effect.provide(program, [ALayer, ...BCLayers])
+  
+  // not reported
+  const AppLayer = Layer.mergeAll(ALayer, BLayer)
+  program.pipe(Effect.provide(AppLayer))
+  ```
+- a5ad860: Add the `resultMatchToFromResult` style diagnostic (Effect v4). It suggests `Effect.fromResult` when `Result.match` or a `Result.isSuccess`/`Result.isFailure` ternary only lifts the success into `Effect.succeed` and the failure into `Effect.fail`, and offers a quick fix.
+  
+  ```ts
+  // before
+  const port = Result.match(parsePort("8080"), {
+    onFailure: (error) => Effect.fail(error),
+    onSuccess: (value) => Effect.succeed(value)
+  })
+  const port2 = Result.isSuccess(result) ? Effect.succeed(result.success) : Effect.fail(result.failure)
+  
+  // after
+  const port = Effect.fromResult(parsePort("8080"))
+  const port2 = Effect.fromResult(result)
+  ```
+  
+  Handlers and branches may also be written as pipe flows, such as `(value) => pipe(value, Effect.succeed)` or `pipe(result.success, Effect.succeed)`, and `Result.match` is found in every piping form: data-first, data-last, `pipe`, `.pipe`, as a data-first value argument, and inside `Effect.fn` bodies.
+  
+  The rule does not trigger when a handler changes the value or the error, uses explicit type arguments, recovers or swaps the channels, or when the handlers object isn't an inline literal.
+- bdd68f5: `runEffectInsideEffect` now reports `runMain` from `@effect/platform-node`, `@effect/platform-bun` and `@effect/platform-browser` when it is called inside an Effect, such as an `Effect.gen` body or an `Effect.sync` thunk. That call starts a second root runtime, so the outer program cannot interrupt it, see its failures, or close its scope. The `runMain` diagnostic has no quick fix: return the Effect and call `runMain` once at the application entry point.
+  
+  The rule now also reports runners in pipe position, for both `Effect.run*` and `runMain`. The quick fix for `Effect.run*` works in pipe position too, and keeps optional arguments such as `{ signal }`. In Effect v3 it now writes the curried `Runtime.runPromise(effectRuntime)(effect)` form.
+  
+  ```ts
+  import { NodeRuntime } from "@effect/platform-node"
+  import { Effect } from "effect"
+  
+  const serve = Effect.log("serving")
+  
+  // reported
+  export const handler = Effect.sync(() => {
+    NodeRuntime.runMain(serve)
+  })
+  
+  export const piped = Effect.gen(function*() {
+    yield* Effect.log("starting")
+    const run = () => serve.pipe(Effect.runFork)
+    // quick fix: serve.pipe(Effect.runForkWith(effectContext))
+    return run
+  })
+  
+  // not reported
+  NodeRuntime.runMain(serve)
+  ```
+- 001eb76: Add the `suspendFailToFailSync` diagnostic, which suggests `Effect.failSync` instead of an `Effect.suspend` whose thunk only returns `Effect.fail`. On Effect v3 it also suggests `Effect.dieSync` for a thunk that only returns `Effect.die`; Effect v4 has no `Effect.dieSync`. Both forms build the error lazily, so the quick fix keeps the behavior.
+  
+  ```ts
+  // before
+  Effect.suspend(() => Effect.fail(new ValidationError({ input })))
+  // after
+  Effect.failSync(() => new ValidationError({ input }))
+  ```
+  
+  It works on piping flows, so the suspend and the fail can each be a call or a pipe step, and the quick fix keeps the shape:
+  
+  ```ts
+  // before
+  pipe(() => pipe(error, Effect.fail), Effect.suspend)
+  // after
+  pipe(() => error, Effect.failSync)
+  ```
+  
+  The rule does not report thunks that do other work, such as a conditional or a statement before the return. When the rewrite would narrow the inferred error type, as with `Effect.fail(cond ? "A" : "B")`, it reports without a fix.
+- 73164fc: Add the `typeUnionToSchemaUnion` diagnostic (style group, off by default, Effect v3 and v4). It reports a type alias that is a union of Schema `.Type` (or `.Encoded`) types with no runtime schema behind it, and offers a "Convert to Schema.Union" quickfix:
+  
+  ```ts
+  // before
+  export type Shape = typeof Circle.Type | typeof Square.Type
+  // after (v4; v3 emits Schema.Union(Circle, Square))
+  export const Shape = Schema.Union([Circle, Square])
+  export type Shape = typeof Shape.Type
+  ```
+  
+  `Schema.Schema.Type<typeof S>`, `Schema.Schema.Encoded<typeof S>` (v3) and `Schema.Codec.Encoded<typeof S>` (v4) members are also recognized. No fix is offered when a member schema is declared later in the file.
+- f8c0a17: Add the `yieldInCallArgument` diagnostic (style, off by default). It reports a `yield*` passed directly as an argument of a call or `new` expression inside `Effect.gen`, `Effect.fn` or `Effect.fnUntraced`, and offers a quick fix that hoists the yield into a const:
+  
+  ```ts
+  // before
+  const result = transform(yield* load)
+  // after
+  const loaded = yield* load
+  const result = transform(loaded)
+  ```
+  
+  The fix is offered only when nothing evaluated before the `yield*` has side effects (identifiers, literals and property accesses count as safe), and not in conditional positions or loop conditions, optional calls or unbraced bodies. In those cases the diagnostic is still reported.
+
+### Patch Changes
+
+- d79c97a: Quick fixes that collapse several piping flow steps into one (`timeoutCatchTagToTimeoutOrElse`, `mapSomeCatchNoSuchElement`) now keep source comments. Comments on kept steps stay with them, and comments on the replaced steps move to the replacement.
+  
+  ```ts
+  // before
+  lookup.pipe(
+    // wrap successes
+    Effect.asSome,
+    Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+  )
+  // after the fix, the comment is kept
+  lookup.pipe(
+    // wrap successes
+    Effect.catchNoSuchElement
+  )
+  ```
+- cecfbd9: Speed up the test suite (about 2.3x on a 4-core CI runner) without changing any baseline:
+  
+  - the test VFS answers lookups of missing paths directly instead of scanning every mounted file, which module resolution does for each extension it probes;
+  - quick-fix baselines compute each fix's result locally instead of applying and undoing it on the language server, so a test keeps one program and checker;
+  - tests no longer force a full GC after every program; `repoctl test` bounds each test binary's heap with `GOMEMLIMIT=2GiB` instead;
+  - the diagnostics runner (Go and Rust) reads the Effect packages from a VFS shared by all tests, layered under each test's own files, instead of copying them into every test's VFS.
+- 6e822b3: Consolidate the Go test suite (about 14,000 fewer lines of Go test code) without changing any diagnostic behaviour:
+  
+  - move scenario-style Go tests into `testdata/tests` fixtures (about 50 new fixtures), so their behaviour is pinned by baselines and also runs against the Rust port; for example the `rules` and `rulerunner` shape tests of `flatMapToTap`, `mapConstToAs` or `apiStabilityLeak` now live in fixtures such as `flatMapToTap_malformedCallbacks.ts`;
+  - remove tests duplicated across `internal/rules`, `internal/rulerunner` and `internal/effecttest`, and tautological tests;
+  - merge near-identical tests into table tests and share one "each quick fix still compiles" helper;
+  - remove narrating comments from test files;
+  - remove the native Array/Object/String method inventory docs;
+  - move the Rust port documentation (`PORTING.md`, `TSRS_PORT.md`, `TSRS_API.md`, `DIVERGENCES.md`) from `docs/` to `porting/`.
+- a5ad860: `catchDieToOrDie`, `optionMatchToFromOption` and `mapSomeToAsSome` now recognize identity-forwarding handlers written as a pipe flow, not only as a direct call.
+  
+  ```ts
+  // now reported, like (error) => Effect.die(error)
+  failable.pipe(Effect.catch((error) => pipe(error, Effect.die)))
+  numberEffect.pipe(Effect.map((value) => pipe(value, Option.some)))
+  Option.match(option, { onNone: () => Effect.fail(new MissingValue()), onSome: (value) => pipe(value, Effect.succeed) })
+  ```
+- 9e38776: Detect `lazyPromiseInEffectSync` and `scopeInLayerEffect` through piping flows instead of a hand-rolled AST walk, so both rules now also report point-free, pipeable and curried forms.
+  
+  `lazyPromiseInEffectSync` now reports `Effect.sync` used point-free in a pipe:
+  
+  ```ts
+  // now reported, in addition to Effect.sync(() => Promise.resolve(1))
+  export const fromPointFree = pipe(() => Promise.resolve(1), Effect.sync)
+  export const fromPointFreeChain = pipe(1, (n) => () => Promise.resolve(n), Effect.sync)
+  ```
+  
+  `scopeInLayerEffect` now reports the pipeable and curried `Layer.effect` forms, and its "Use scoped for Layer creation" quick fix rewrites them to `Layer.scoped`:
+  
+  ```ts
+  // now reported, in addition to Layer.effect(MyService, eff)
+  export const pipeableLayer = eff.pipe(Layer.effect(MyService))
+  export const curriedLayer = Layer.effect(MyService)(eff)
+  ```
+- 1b70991: Remove the unused execution flow graph parser (`TypeParser.ExecutionFlow`) from the Go build and the Rust port. No rule, refactor or language service feature used it. The test runner no longer writes the `.flows.txt` and `.flows.*.mermaid` baselines. Diagnostics and other user-facing behavior do not change.
+- b1c0172: `strictEffectProvide` no longer reports `Effect.provide(layer)` when the next step of the piping flow runs the Effect, as an application entry point does. The recognized runners are `Effect.runPromise`, `runSync`, `runFork`, `runPromiseExit`, `runSyncExit`, `runCallback`, and `runMain` from `@effect/platform-node`, `@effect/platform-bun` and `@effect/platform-browser`.
+  
+  ```ts
+  // not reported
+  program.pipe(Effect.provide(AppLayer), Effect.runPromise)
+  program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
+  Effect.runPromise(program.pipe(Effect.provide(AppLayer)))
+  NodeRuntime.runMain(Effect.provide(program, AppLayer))
+  
+  // still reported
+  export const handler = program.pipe(Effect.provide(AppLayer))
+  Effect.runPromise(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
+  ```
+- 5b31a36: Refactor the internal type parser API around parse methods. Rules no longer pair a syntactic "can this node be an Effect library type" guard with `GetTypeAtLocation` by hand: new `XxxAtLocation(node)` parsers (`EffectTypeAtLocation`, `StrictEffectTypeAtLocation`, `LayerTypeAtLocation`, `StreamTypeAtLocation`, `EffectSchemaTypesAtLocation`, `ServiceTypeAtLocation`, `ContextTagAtLocation`, `EffectYieldableTypeAtLocation`, `HasEffectTypeIdAtLocation`) skip computing the type of literals, functions and other nodes that can never be one, and the guard is now private.
+  
+  ```go
+  // before
+  if tp.NodeCannotBeEffectLibraryType(arg) {
+  	continue
+  }
+  argType := tp.GetTypeAtLocation(arg)
+  if argType == nil || tp.LayerType(argType) == nil {
+  	continue
+  }
+  
+  // after
+  if tp.LayerTypeAtLocation(arg) == nil {
+  	continue
+  }
+  ```
+  
+  The boolean wrappers `IsEffectType`, `StrictIsEffectType`, `IsEffectSubtype`, `IsFiberType`, `IsLayerType`, `IsServiceType`, `IsContextTag` and `IsSchemaType` are removed in favour of their parse methods, and `IsArrayType`, `IsScopeType` and `IsYieldableErrorType` become `ArrayType` (returning the element type), `ScopeType` and `YieldableErrorType`. A new `typeatlocation` custom lint reports parsing the result of `GetTypeAtLocation` where an `AtLocation` parser can be used instead. Diagnostics are unchanged; rules that previously typed every candidate node now skip the ones that cannot match.
+- 20d1149: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261029.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/bdec15a7b3a4a82a076f93344fb6011d6ba309c3) commit `bdec15a7b3a4a82a076f93344fb6011d6ba309c3`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.63.0
 
 ### Minor Changes
