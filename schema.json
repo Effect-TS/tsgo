@@ -1619,6 +1619,11 @@
                                 "type": "array",
                                 "uniqueItems": true
                               },
+                              "experimentalLiteralTemplateStrings": {
+                                "default": false,
+                                "description": "Experimental: infer cooked tagged-template segments as a readonly literal tuple.",
+                                "type": "boolean"
+                              },
                               "extendedKeyDetection": {
                                 "default": false,
                                 "description": "Enables matching constructors with @effect-identifier annotations.",
@@ -3211,6 +3216,11 @@
           },
           "type": "array",
           "uniqueItems": true
+        },
+        "experimentalLiteralTemplateStrings": {
+          "default": false,
+          "description": "Experimental: infer cooked tagged-template segments as a readonly literal tuple.",
+          "type": "boolean"
         },
         "extendedKeyDetection": {
           "default": false,
