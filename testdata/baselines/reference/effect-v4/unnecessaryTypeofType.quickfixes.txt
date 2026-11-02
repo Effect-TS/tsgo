@@ -1,40 +1,45 @@
 === Quick Fix Inventory ===
 
-[D1] (5:7-5:8) TS6133: 'a' is declared but its value is never read.
+[D1] (6:7-6:8) TS6133: 'a' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (5:10-5:28) TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
+[D2] (6:10-6:28) TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
   Fix 0: "Disable unnecessaryTypeofType for this line"
   Fix 1: "Disable unnecessaryTypeofType for entire file"
   Fix 2: "Replace with 'UserId'"
 
-[D3] (6:7-6:8) TS6133: 'b' is declared but its value is never read.
+[D3] (7:7-7:8) TS6133: 'b' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (6:10-6:36) TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
+[D4] (7:10-7:36) TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
   Fix 0: "Disable unnecessaryTypeofType for this line"
   Fix 1: "Disable unnecessaryTypeofType for entire file"
   Fix 2: "Replace with 'UsersRepo.User'"
 
-[D5] (7:7-7:29) TS6133: 'namespaceImportTrigger' is declared but its value is never read.
+[D5] (8:7-8:29) TS6133: 'namespaceImportTrigger' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (7:31-7:65) TS377090: This `typeof ... .Type` query can be replaced with `Schemas.UsersRepo.User`. effect(unnecessaryTypeofType)
+[D6] (8:31-8:65) TS377090: This `typeof ... .Type` query can be replaced with `Schemas.UsersRepo.User`. effect(unnecessaryTypeofType)
   Fix 0: "Disable unnecessaryTypeofType for this line"
   Fix 1: "Disable unnecessaryTypeofType for entire file"
   Fix 2: "Replace with 'Schemas.UsersRepo.User'"
 
-[D7] (8:7-8:34) TS6133: 'shouldNotTriggerMissingType' is declared but its value is never read.
+[D7] (9:7-9:34) TS6133: 'shouldNotTriggerMissingType' is declared but its value is never read.
   (no quick fixes)
 
-[D8] (9:7-9:37) TS6133: 'shouldNotTriggerMismatchedType' is declared but its value is never read.
+[D8] (10:7-10:37) TS6133: 'shouldNotTriggerMismatchedType' is declared but its value is never read.
   (no quick fixes)
 
-[D9] (11:7-11:8) TS6133: 'c' is declared but its value is never read.
+[D9] (12:7-12:8) TS6133: 'c' is declared but its value is never read.
   (no quick fixes)
 
-[D10] (12:7-12:8) TS6133: 'd' is declared but its value is never read.
+[D10] (13:7-13:8) TS6133: 'd' is declared but its value is never read.
   (no quick fixes)
+
+[D11] (21:48-21:66) TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
+  Fix 0: "Disable unnecessaryTypeofType for this line"
+  Fix 1: "Disable unnecessaryTypeofType for entire file"
+  Fix 2: "Replace with 'UserId'"
 
 === Quick Fix Application Results ===
 
@@ -50,6 +55,7 @@ skipped by default
 // @effect-diagnostics unnecessaryTypeofType:warning
 import { OrdersRepo, SessionId, UserId, UsersRepo } from "./schemas"
 import * as Schemas from "./schemas"
+import { Schema } from "effect"
 
 const a: UserId = {}
 const b: typeof UsersRepo.User.Type = { id: 1 }
@@ -59,6 +65,14 @@ const shouldNotTriggerMismatchedType: typeof OrdersRepo.Order.Type = { id: 1 }
 
 const c: UserId = {}
 const d: UsersRepo.User = { id: 1 }
+
+// https://github.com/Effect-TS/tsgo/issues/991
+// an interface cannot extend itself, so this must not be reported
+export const IssueStruct = Schema.Struct({ flag: Schema.Literal(true) })
+export type Identity<A> = A
+export interface IssueStruct extends Identity<typeof IssueStruct.Type> {}
+// extending a different named type is still reported
+export interface ExtendsOther extends Identity<typeof UserId.Type> {}
 
 
 === [D4] Fix 0: "Disable unnecessaryTypeofType for this line" ===
@@ -73,6 +87,7 @@ skipped by default
 // @effect-diagnostics unnecessaryTypeofType:warning
 import { OrdersRepo, SessionId, UserId, UsersRepo } from "./schemas"
 import * as Schemas from "./schemas"
+import { Schema } from "effect"
 
 const a: typeof UserId.Type = {}
 const b: UsersRepo.User = { id: 1 }
@@ -82,6 +97,14 @@ const shouldNotTriggerMismatchedType: typeof OrdersRepo.Order.Type = { id: 1 }
 
 const c: UserId = {}
 const d: UsersRepo.User = { id: 1 }
+
+// https://github.com/Effect-TS/tsgo/issues/991
+// an interface cannot extend itself, so this must not be reported
+export const IssueStruct = Schema.Struct({ flag: Schema.Literal(true) })
+export type Identity<A> = A
+export interface IssueStruct extends Identity<typeof IssueStruct.Type> {}
+// extending a different named type is still reported
+export interface ExtendsOther extends Identity<typeof UserId.Type> {}
 
 
 === [D6] Fix 0: "Disable unnecessaryTypeofType for this line" ===
@@ -96,6 +119,7 @@ skipped by default
 // @effect-diagnostics unnecessaryTypeofType:warning
 import { OrdersRepo, SessionId, UserId, UsersRepo } from "./schemas"
 import * as Schemas from "./schemas"
+import { Schema } from "effect"
 
 const a: typeof UserId.Type = {}
 const b: typeof UsersRepo.User.Type = { id: 1 }
@@ -105,4 +129,44 @@ const shouldNotTriggerMismatchedType: typeof OrdersRepo.Order.Type = { id: 1 }
 
 const c: UserId = {}
 const d: UsersRepo.User = { id: 1 }
+
+// https://github.com/Effect-TS/tsgo/issues/991
+// an interface cannot extend itself, so this must not be reported
+export const IssueStruct = Schema.Struct({ flag: Schema.Literal(true) })
+export type Identity<A> = A
+export interface IssueStruct extends Identity<typeof IssueStruct.Type> {}
+// extending a different named type is still reported
+export interface ExtendsOther extends Identity<typeof UserId.Type> {}
+
+
+=== [D11] Fix 0: "Disable unnecessaryTypeofType for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with 'UserId'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics unnecessaryTypeofType:warning
+import { OrdersRepo, SessionId, UserId, UsersRepo } from "./schemas"
+import * as Schemas from "./schemas"
+import { Schema } from "effect"
+
+const a: typeof UserId.Type = {}
+const b: typeof UsersRepo.User.Type = { id: 1 }
+const namespaceImportTrigger: typeof Schemas.UsersRepo.User.Type = { id: 1 }
+const shouldNotTriggerMissingType: typeof SessionId.Type = {}
+const shouldNotTriggerMismatchedType: typeof OrdersRepo.Order.Type = { id: 1 }
+
+const c: UserId = {}
+const d: UsersRepo.User = { id: 1 }
+
+// https://github.com/Effect-TS/tsgo/issues/991
+// an interface cannot extend itself, so this must not be reported
+export const IssueStruct = Schema.Struct({ flag: Schema.Literal(true) })
+export type Identity<A> = A
+export interface IssueStruct extends Identity<typeof IssueStruct.Type> {}
+// extending a different named type is still reported
+export interface ExtendsOther extends Identity<UserId> {}
 
