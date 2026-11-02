@@ -148,7 +148,7 @@ func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.
 
 func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments readonly.Slice[*ast.Node]) bool {
 	for _, argument := range arguments.All() {
-		argument = ast.SkipParentheses(argument)
+		argument = schemaNumberSkipPredicateAnnotate(argument)
 		if argument.Kind != ast.KindCallExpression {
 			continue
 		}
@@ -162,6 +162,24 @@ func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments readonl
 		}
 	}
 	return false
+}
+
+// schemaNumberSkipPredicateAnnotate unwraps `X.annotate(...)` calls (any number of them)
+// and returns X, since annotating a filter keeps its validation predicate.
+func schemaNumberSkipPredicateAnnotate(node *ast.Node) *ast.Node {
+	node = ast.SkipParentheses(node)
+	for node.Kind == ast.KindCallExpression {
+		callee := node.AsCallExpression().Expression
+		if callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
+			break
+		}
+		access := callee.AsPropertyAccessExpression()
+		if access.Name() == nil || access.Name().Text() != "annotate" {
+			break
+		}
+		node = ast.SkipParentheses(access.Expression)
+	}
+	return node
 }
 
 func schemaNumberNodeContains(ancestor *ast.Node, target *ast.Node) bool {
