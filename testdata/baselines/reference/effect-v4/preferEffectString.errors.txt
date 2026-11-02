@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/preferEffectString.ts(6,7): warning TS377150: Consider effect/String.at instead of native String.at. Returns Option, with None replacing undefined. effect(preferEffectString)
 /.src/preferEffectString.ts(7,7): warning TS377150: Consider effect/String.charAt instead of native String.charAt. Returns Option, with None replacing the empty string for an out-of-range index. effect(preferEffectString)

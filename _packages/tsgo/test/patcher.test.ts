@@ -1,5 +1,6 @@
+import * as NodeCrypto from "@effect/platform-node/NodeCrypto"
 import * as NodeServices from "@effect/platform-node/NodeServices"
-import * as Crypto from "effect/Crypto"
+import * as Digest from "effect/crypto/Digest"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
@@ -34,8 +35,8 @@ const makeTemporaryDirectory = async () => {
   return directory
 }
 
-const run = <A, E>(effect: Effect.Effect<A, E, Crypto.Crypto | FileSystem.FileSystem | Path.Path | Scope.Scope>) =>
-  Effect.runPromise(Effect.scoped(effect).pipe(Effect.provide(NodeServices.layer)))
+const run = <A, E>(effect: Effect.Effect<A, E, Digest.Digest | FileSystem.FileSystem | Path.Path | Scope.Scope>) =>
+  Effect.runPromise(Effect.scoped(effect).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest])))
 
 afterEach(async () => {
   await Promise.all(temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })))

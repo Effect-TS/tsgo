@@ -315,11 +315,11 @@
         "category": "Warning",
         "code": 377073
     },
-    "This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)": {
+    "This code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUID)": {
         "category": "Warning",
         "code": 377078
     },
-    "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)": {
+    "This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)": {
         "category": "Warning",
         "code": 377079
     },

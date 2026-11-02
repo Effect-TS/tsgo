@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (4:24-4:43) TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+[D1] (4:24-4:43) TS377078: This code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUID)
   Fix 0: "Disable cryptoRandomUUID for this line"
   Fix 1: "Disable cryptoRandomUUID for entire file"
 

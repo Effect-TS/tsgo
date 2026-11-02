@@ -20,7 +20,7 @@ Warns when importing Node.js built-in modules that have Effect-native counterpar
 import { Effect } from "effect"
 import { randomUUID } from "node:crypto"
 /**
-                           ^^^^^^^^^^^^^ effecttsgo(node-builtin-import): This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`.
+                           ^^^^^^^^^^^^^ effecttsgo(node-builtin-import): This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`.
 */
 import fs from "node:fs"
 /**

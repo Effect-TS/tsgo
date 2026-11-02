@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/preferSchemaTypePropertyNamedImport.ts(6,24): error TS377104: Do not use `Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
 /.src/preferSchemaTypePropertyNamedImport.ts(7,27): error TS377104: Do not use `Codec.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)

@@ -1,14 +1,12 @@
-import * as Crypto from "effect/Crypto"
+import * as Digest from "effect/crypto/Digest"
 import * as Effect from "effect/Effect"
-import { Hex } from "effect/encoding"
 import * as FileSystem from "effect/FileSystem"
 
 const textEncoder = new TextEncoder()
 
 export const hashBytes = (contents: string | Uint8Array) => Effect.gen(function*() {
-  const crypto = yield* Crypto.Crypto
-  const digest = yield* crypto.digest("SHA-256", typeof contents === "string" ? textEncoder.encode(contents) : contents)
-  return Hex.encode(digest)
+  const digest = yield* Digest.Digest
+  return yield* digest.digestHex(Digest.sha256, typeof contents === "string" ? textEncoder.encode(contents) : contents)
 })
 
 export const hashFile = (filePath: string) => Effect.gen(function*() {
