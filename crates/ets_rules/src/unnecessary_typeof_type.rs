@@ -79,7 +79,7 @@ pub fn analyze_unnecessary_typeof_type(
     matches
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:65 analyzeUnnecessaryTypeofTypeNode a3de280768d625a6
+// go: internal/rules/unnecessary_typeof_type.go:65 analyzeUnnecessaryTypeofTypeNode e79d813fc024055f
 pub(crate) fn analyze_unnecessary_typeof_type_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -109,7 +109,7 @@ pub(crate) fn analyze_unnecessary_typeof_type_node(
     let (inner_symbol, inner_type) =
         resolve_entity_name_as_type(tp.checker(), Some(node), Some(qualified_name.left()));
     let inner_type = inner_type?;
-    if is_self_referential_type_alias_reference(inner_symbol, Some(node)) {
+    if is_self_referential_type_reference(inner_symbol, Some(node)) {
         return None;
     }
 
@@ -234,8 +234,11 @@ pub(crate) fn resolve_alias_symbol(
     symbol
 }
 
-// go: internal/rules/unnecessary_typeof_type.go:192 isSelfReferentialTypeAliasReference 61581e698e4a65e3
-pub(crate) fn is_self_referential_type_alias_reference(
+// go: internal/rules/unnecessary_typeof_type.go:195 isSelfReferentialTypeReference d4e9007482959db5
+/// Reports whether `location` sits where the named type cannot reference itself: inside its own
+/// type alias declaration, or in a heritage clause of its own interface declaration (an interface
+/// cannot extend itself).
+pub(crate) fn is_self_referential_type_reference(
     symbol: Option<P<Symbol>>,
     location: Option<P<Node>>,
 ) -> bool {
@@ -243,14 +246,24 @@ pub(crate) fn is_self_referential_type_alias_reference(
         return false;
     };
 
+    let mut in_heritage_clause = false;
     let mut current = location.parent();
     while let Some(node) = current {
         current = node.parent();
-        if node.kind() != Kind::TypeAliasDeclaration {
-            continue;
-        }
-        if symbol.declarations().contains(&node) {
-            return true;
+        match node.kind() {
+            Kind::HeritageClause => in_heritage_clause = true,
+            Kind::TypeAliasDeclaration => {
+                if symbol.declarations().contains(&node) {
+                    return true;
+                }
+            }
+            Kind::InterfaceDeclaration => {
+                if in_heritage_clause && symbol.declarations().contains(&node) {
+                    return true;
+                }
+                in_heritage_clause = false;
+            }
+            _ => {}
         }
     }
 
