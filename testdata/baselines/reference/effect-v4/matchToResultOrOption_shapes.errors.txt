@@ -7,10 +7,11 @@ Effect version: 4.0.2
 /.src/matchToResultOrOption_shapes.ts(47,9): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.map/catch` handlers only wrap the value and the error. effect(matchToResultOrOption)
 /.src/matchToResultOrOption_shapes.ts(55,3): warning TS377175: `Effect.option` reifies the outcome directly; these `Effect.map/catch` handlers only wrap the value and the error. effect(matchToResultOrOption)
 /.src/matchToResultOrOption_shapes.ts(59,36): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
-/.src/matchToResultOrOption_shapes.ts(74,3): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+/.src/matchToResultOrOption_shapes.ts(69,30): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.matchEffect` handlers only wrap the value and the error. effect(matchToResultOrOption)
+/.src/matchToResultOrOption_shapes.ts(80,3): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
 
 
-==== /.src/matchToResultOrOption_shapes.ts (7 errors) ====
+==== /.src/matchToResultOrOption_shapes.ts (8 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics matchToResultOrOption:warning
     import { Data, Effect, Option, pipe, Result } from "effect"
@@ -88,6 +89,14 @@ Effect version: 4.0.2
       onSuccess: function(user) {
         return Result.succeed(user)
       }
+    })
+    
+    // MUST TRIGGER: matchEffect branches spelled as pipe flows
+    export const pipedBranches = Effect.matchEffect(fetchUser("u1"), {
+                                 ~~~~~~~~~~~~~~~~~~
+!!! warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.matchEffect` handlers only wrap the value and the error. effect(matchToResultOrOption)
+      onFailure: (e) => Result.fail(e).pipe(Effect.succeed),
+      onSuccess: (user) => pipe(user, Result.succeed, Effect.succeed)
     })
     
     // MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type

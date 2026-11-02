@@ -65,6 +65,12 @@ export const functionExpressions = Effect.match(fetchUser("u1"), {
   }
 })
 
+// MUST TRIGGER: matchEffect branches spelled as pipe flows
+export const pipedBranches = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Result.fail(e).pipe(Effect.succeed),
+  onSuccess: (user) => pipe(user, Result.succeed, Effect.succeed)
+})
+
 // MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type
 export const typedPipe = pipe<
   Effect.Effect<User, UserNotFound>,
