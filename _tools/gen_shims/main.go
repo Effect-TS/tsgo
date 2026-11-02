@@ -1190,6 +1190,22 @@ func run() error {
 				return fmt.Sprintf("[%d]%s", ty.Len(), fieldTypeString(ty.Elem()))
 			case *types.Map:
 				return "map[" + fieldTypeString(ty.Key()) + "]" + fieldTypeString(ty.Elem())
+			case *types.Struct:
+				// Render field types recursively so unexported named types nested
+				// inside an inlined unexported struct are inlined as well.
+				fields := make([]string, 0, ty.NumFields())
+				for i := range ty.NumFields() {
+					field := ty.Field(i)
+					fieldString := fieldTypeString(field.Type())
+					if !field.Embedded() {
+						fieldString = field.Name() + " " + fieldString
+					}
+					if tag := ty.Tag(i); tag != "" {
+						fieldString += " " + strconv.Quote(tag)
+					}
+					fields = append(fields, fieldString)
+				}
+				return "struct{" + strings.Join(fields, "; ") + "}"
 			}
 
 			return types.TypeString(t, qualifierOnlyPackageName)

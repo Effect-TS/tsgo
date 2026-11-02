@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/floatingEffectInVitest.ts(10,20): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(11,23): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
@@ -11,6 +11,7 @@ Effect version: 4.0.2
 /.src/floatingEffectInVitest.ts(15,34): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(16,31): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(17,41): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(18,40): error TS2322: Type 'Effect<void, never, never>' is not assignable to type 'void | boolean'.
 /.src/floatingEffectInVitest.ts(18,40): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(19,22): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(21,10): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
@@ -20,8 +21,6 @@ Effect version: 4.0.2
 /.src/floatingEffectInVitest.ts(27,34): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(28,37): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(29,46): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
-/.src/floatingEffectInVitest.ts(31,17): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
-/.src/floatingEffectInVitest.ts(32,18): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(33,16): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(34,17): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(35,21): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
@@ -30,7 +29,7 @@ Effect version: 4.0.2
 /.src/floatingEffectInVitest.ts(49,39): error TS2769: No overload matches this call.
 
 
-==== /.src/floatingEffectInVitest.ts (27 errors) ====
+==== /.src/floatingEffectInVitest.ts (26 errors) ====
     import { afterAll, afterEach, beforeAll, beforeEach, describe, it, suite, test } from "@effect/vitest"
     import { Effect } from "effect"
     import { it as importedIt } from "vitest"
@@ -72,6 +71,9 @@ Effect version: 4.0.2
 !!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     it.prop("property", [arbitrary], () => Effect.void)
                                            ~~~~~~~~~~~
+!!! error TS2322: Type 'Effect<void, never, never>' is not assignable to type 'void | boolean'.
+!!! related TS6502 /node_modules/@effect/vitest/dist/index.d.ts(132,96): The expected type comes from the return type of this signature.
+                                           ~~~~~~~~~~~
 !!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     it("named callback", effectCallback)
                          ~~~~~~~~~~~~~~
@@ -102,11 +104,7 @@ Effect version: 4.0.2
 !!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     
     beforeAll(() => Effect.void)
-                    ~~~~~~~~~~~
-!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     beforeEach(() => Effect.void)
-                     ~~~~~~~~~~~
-!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     afterAll(() => Effect.void)
                    ~~~~~~~~~~~
 !!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)

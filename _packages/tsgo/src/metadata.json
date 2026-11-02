@@ -79,6 +79,7 @@
         "mapConstToAs": "suggestion",
         "mapSomeCatchNoSuchElement": "suggestion",
         "mapSomeToAsSome": "suggestion",
+        "matchBooleanToIsSuccess": "suggestion",
         "matchEffectToMapBoth": "suggestion",
         "matchEffectToMatch": "suggestion",
         "matchToResultOrOption": "suggestion",
@@ -104,6 +105,7 @@
         "redundantMapError": "suggestion",
         "redundantOrDie": "suggestion",
         "redundantSchemaTagIdentifier": "suggestion",
+        "resultMatchToFromResult": "suggestion",
         "returnEffectInGen": "suggestion",
         "runEffectInsideEffect": "suggestion",
         "runOfExitToRunExit": "suggestion",
@@ -180,6 +182,7 @@
         "mapConstToAs": "error",
         "mapSomeCatchNoSuchElement": "error",
         "mapSomeToAsSome": "error",
+        "matchBooleanToIsSuccess": "error",
         "matchEffectToMapBoth": "error",
         "matchEffectToMatch": "error",
         "matchToResultOrOption": "error",
@@ -205,6 +208,7 @@
         "redundantMapError": "error",
         "redundantOrDie": "error",
         "redundantSchemaTagIdentifier": "error",
+        "resultMatchToFromResult": "error",
         "returnEffectInGen": "error",
         "runEffectInsideEffect": "error",
         "runOfExitToRunExit": "error",
@@ -355,6 +359,7 @@
         "mapMapErrorToMapBoth": "warning",
         "mapSomeCatchNoSuchElement": "warning",
         "mapSomeToAsSome": "warning",
+        "matchBooleanToIsSuccess": "warning",
         "matchEffectToMapBoth": "warning",
         "matchEffectToMatch": "warning",
         "matchToResultOrOption": "warning",
@@ -377,6 +382,7 @@
         "redundantMapError": "warning",
         "redundantOrDie": "warning",
         "redundantSchemaTagIdentifier": "warning",
+        "resultMatchToFromResult": "warning",
         "runOfExitToRunExit": "warning",
         "schemaNumber": "warning",
         "schemaStructWithTag": "warning",
@@ -392,7 +398,8 @@
         "unnecessaryFailYieldableError": "warning",
         "unnecessaryPipe": "warning",
         "unnecessaryPipeChain": "warning",
-        "unnecessaryTypeofType": "warning"
+        "unnecessaryTypeofType": "warning",
+        "yieldInCallArgument": "warning"
       }
     },
     {
@@ -1589,7 +1596,7 @@
     {
       "name": "cryptoRandomUUID",
       "group": "effectNative",
-      "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module",
+      "description": "Warns when using crypto.randomUUID() outside Effect generators instead of SecureRandom from effect/crypto",
       "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [
@@ -1604,7 +1611,7 @@
           {
             "start": 24,
             "end": 43,
-            "text": "This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)"
+            "text": "This code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUID)"
           }
         ]
       }
@@ -1612,7 +1619,7 @@
     {
       "name": "cryptoRandomUUIDInEffect",
       "group": "effectNative",
-      "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module",
+      "description": "Warns when using crypto.randomUUID() inside Effect generators instead of SecureRandom from effect/crypto",
       "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [
@@ -1627,7 +1634,7 @@
           {
             "start": 90,
             "end": 109,
-            "text": "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)"
+            "text": "This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)"
           }
         ]
       }
@@ -2013,7 +2020,7 @@
           {
             "start": 59,
             "end": 72,
-            "text": "This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)"
+            "text": "This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)"
           },
           {
             "start": 88,
@@ -2941,6 +2948,31 @@
       }
     },
     {
+      "name": "matchBooleanToIsSuccess",
+      "group": "style",
+      "description": "Suggests Effect.isSuccess or Effect.isFailure when Effect.match or Effect.matchEager folds to complementary boolean literals",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377173,
+        377174
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const saveUser: Effect.Effect\u003cvoid, Error\u003e\n\nexport const saved = Effect.match(saveUser, {\n  onFailure: () =\u003e false,\n  onSuccess: () =\u003e true\n})\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 118,
+            "text": "`Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)"
+          }
+        ]
+      }
+    },
+    {
       "name": "matchEffectToMapBoth",
       "group": "style",
       "description": "Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels",
@@ -3471,6 +3503,29 @@
       }
     },
     {
+      "name": "resultMatchToFromResult",
+      "group": "style",
+      "description": "Suggests Effect.fromResult when Result.match or a Result guard conditional only converts Success to Effect.succeed and Failure to Effect.fail",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377165
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Result } from \"effect\"\n\ndeclare const parsePort: (raw: string) =\u003e Result.Result\u003cnumber, Error\u003e\n\nexport const port = Result.match(parsePort(\"8080\"), {\n  onFailure: (error) =\u003e Effect.fail(error),\n  onSuccess: (value) =\u003e Effect.succeed(value)\n})\n",
+        "diagnostics": [
+          {
+            "start": 133,
+            "end": 145,
+            "text": "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)"
+          }
+        ]
+      }
+    },
+    {
       "name": "runOfExitToRunExit",
       "group": "style",
       "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise",
@@ -3861,6 +3916,30 @@
             "start": 184,
             "end": 210,
             "text": "This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "yieldInCallArgument",
+      "group": "style",
+      "description": "Suggests yielding into a const before a call instead of passing a yield* directly as a call or new argument in Effect generators",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377171
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const load: Effect.Effect\u003cnumber\u003e\ndeclare function transform(n: number): string\n\nexport const preview = Effect.gen(function*() {\n  const result = transform(yield* load)\n  return result\n})\n",
+        "diagnostics": [
+          {
+            "start": 197,
+            "end": 202,
+            "text": "This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)"
           }
         ]
       }

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/schemaClassObjectLiteral.ts(7,25): warning TS377149: This object literal is checked as an instance of Schema class 'Plain' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'Plain.make(...)' or 'new Plain(...)' instead. effect(schemaClassObjectLiteral)
 /.src/schemaClassObjectLiteral.ts(10,10): warning TS377149: This object literal is checked as an instance of Schema class 'Plain' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'Plain.make(...)' or 'new Plain(...)' instead. effect(schemaClassObjectLiteral)

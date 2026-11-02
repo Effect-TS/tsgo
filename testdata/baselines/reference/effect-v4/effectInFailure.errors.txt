@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/effectInFailure.ts(5,29): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
 /.src/effectInFailure.ts(18,5): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)

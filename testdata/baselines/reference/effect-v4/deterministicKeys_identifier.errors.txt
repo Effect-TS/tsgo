@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/test.ts(6,62): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `KeybindingsConfigError`. effect(deterministicKeys)
 

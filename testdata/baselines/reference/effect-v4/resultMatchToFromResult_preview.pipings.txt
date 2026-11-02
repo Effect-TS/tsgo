@@ -1,0 +1,47 @@
+==== /.src/resultMatchToFromResult_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:20 - 9:3
+Node: Result.match(parsePort("8080"), {\n  onFailure: (error) => Effect.fail(error),\n  onSuccess: (value) => Effect.succeed(value)\n})
+Node Kind: KindCallExpression
+
+Subject: "8080"
+Subject Type: "8080"
+
+Transformations (2):
+  [0] kind: call
+      callee: parsePort
+      args: (constant)
+      outType: Result<number, Error>
+  [1] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: (error) => Effect.fail(error),\n  onSuccess: (value) => Effect.succeed(value)\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 7:24 - 7:43
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 8:24 - 8:46
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

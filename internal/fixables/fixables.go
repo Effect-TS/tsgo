@@ -28,6 +28,7 @@ var All = []fixable.Fixable{
 	FlatMapIdentityToFlattenFix,
 	MatchEffectToMatchFix,
 	MatchToResultOrOptionFix,
+	MatchBooleanToIsSuccessFix,
 	MatchEffectToMapBothFix,
 	MapMapErrorToMapBothFix,
 	FlatMapConditionalToFilterOrFailFix,
@@ -37,6 +38,7 @@ var All = []fixable.Fixable{
 	FailCauseToConstructorFix,
 	SuspendFailToFailSyncFix,
 	OptionMatchToFromOptionFix,
+	ResultMatchToFromResultFix,
 	SyncToSucceedFix,
 	EffectSleepZeroToYieldNowFix,
 	CatchToOrElseSucceedFix,
@@ -79,6 +81,7 @@ var All = []fixable.Fixable{
 	PreferTypedSchemaDecoderFix,
 	AcquireReleaseDisposableFix,
 	RunOfExitToRunExitFix,
+	YieldInCallArgumentFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

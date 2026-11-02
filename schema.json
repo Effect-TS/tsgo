@@ -2454,12 +2454,12 @@
         "cryptoRandomUUID": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module"
+          "description": "Warns when using crypto.randomUUID() outside Effect generators instead of SecureRandom from effect/crypto"
         },
         "cryptoRandomUUIDInEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module"
+          "description": "Warns when using crypto.randomUUID() inside Effect generators instead of SecureRandom from effect/crypto"
         },
         "deterministicKeys": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2716,6 +2716,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some"
         },
+        "matchBooleanToIsSuccess": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.isSuccess or Effect.isFailure when Effect.match or Effect.matchEager folds to complementary boolean literals"
+        },
         "matchEffectToMapBoth": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2931,6 +2936,11 @@
           "default": "suggestion",
           "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest"
         },
+        "resultMatchToFromResult": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.fromResult when Result.match or a Result guard conditional only converts Success to Effect.succeed and Failure to Effect.fail"
+        },
         "returnEffectInGen": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -3080,6 +3090,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
           "description": "Warns when using an API marked @stability unstable"
+        },
+        "yieldInCallArgument": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests yielding into a const before a call instead of passing a yield* directly as a call or new argument in Effect generators"
         }
       },
       "type": "object"

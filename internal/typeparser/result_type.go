@@ -17,11 +17,13 @@ var effectResultPackageSourceFileDescriptor = newPackageSourceFileDescriptor(mod
 			return false
 		}
 
-		// These exports identify the public Result module, which only Effect v4 ships.
+		// isResult keeps out Exit, which shares isSuccess, isFailure and match,
+		// while the guards and match keep out Workflow, which exports isResult.
 		return c.TryGetMemberInModuleExportsAndProperties("Result", moduleSym) != nil &&
-			c.TryGetMemberInModuleExportsAndProperties("succeed", moduleSym) != nil &&
-			c.TryGetMemberInModuleExportsAndProperties("fail", moduleSym) != nil &&
-			c.TryGetMemberInModuleExportsAndProperties("isResult", moduleSym) != nil
+			c.TryGetMemberInModuleExportsAndProperties("isResult", moduleSym) != nil &&
+			c.TryGetMemberInModuleExportsAndProperties("isSuccess", moduleSym) != nil &&
+			c.TryGetMemberInModuleExportsAndProperties("isFailure", moduleSym) != nil &&
+			c.TryGetMemberInModuleExportsAndProperties("match", moduleSym) != nil
 	},
 )
 

@@ -436,7 +436,7 @@ Transformations (1):
   [0] kind: call
       callee: Model.Class<ModelClass>("ModelClass")
       args: (constant)
-      outType: Class<ModelClass, { readonly value: String; }, Struct<ExtractFields<"select", { readonly value: String; }, true>>> & { readonly insert: Struct<{ readonly value: String; }>; readonly json: Struct<{ readonly value: String; }>; readonly jsonCreate: Struct<{ readonly value: String; }>; readonly jsonUpdate: Struct<{ readonly value: String; }>; readonly select: Struct<{ readonly value: String; }>; readonly update: Struct<{ readonly value: String; }>; }
+      outType: Class<ModelClass, { readonly value: String; }, Struct<ExtractFields<"select", { readonly value: String; }, true>>, "insert" | "json" | "jsonCreate" | "jsonUpdate" | "select" | "update", "select", {}> & { readonly insert: Struct<{ readonly value: String; }>; readonly json: Struct<{ readonly value: String; }>; readonly jsonCreate: Struct<{ readonly value: String; }>; readonly jsonUpdate: Struct<{ readonly value: String; }>; readonly select: Struct<{ readonly value: String; }>; readonly update: Struct<{ readonly value: String; }>; }
 
 === Piping Flow ===
 Location: 84:36 - 84:108

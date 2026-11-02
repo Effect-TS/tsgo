@@ -115,7 +115,6 @@ type IsArrayLikeTypeParams = api.IsArrayLikeTypeParams
 type IsTypeAssignableToParams = api.IsTypeAssignableToParams
 type JSDocTagInfo = api.JSDocTagInfo
 type LanguageServerSnapshotChanges = api.LanguageServerSnapshotChanges
-type MessagePackProtocol = api.MessagePackProtocol
 type MessageType = api.MessageType
 const MessageTypeCall = api.MessageTypeCall
 const MessageTypeCallError = api.MessageTypeCallError
@@ -319,7 +318,7 @@ func NewDiagnosticResponses(diags []*ast.Diagnostic) []*api.DiagnosticResponse
 //go:linkname NewLSPSession github.com/microsoft/TypeScript/tsc/internal/api.NewLSPSession
 func NewLSPSession(projectSession *project.Session, options *api.SessionOptions) *api.Session
 //go:linkname NewMessagePackProtocol github.com/microsoft/TypeScript/tsc/internal/api.NewMessagePackProtocol
-func NewMessagePackProtocol(rw io.ReadWriter) *api.MessagePackProtocol
+func NewMessagePackProtocol(rw io.ReadWriter) *api.TupleProtocol
 //go:linkname NewPackageId github.com/microsoft/TypeScript/tsc/internal/api.NewPackageId
 func NewPackageId(packageID module.PackageId) *api.PackageId
 //go:linkname NewProjectResponse github.com/microsoft/TypeScript/tsc/internal/api.NewProjectResponse
@@ -328,6 +327,8 @@ func NewProjectResponse(p *project.Project) *api.ProjectResponse
 func NewStandaloneSession(init *project.SessionInit, options *api.SessionOptions) *api.Session
 //go:linkname NewStdioServer github.com/microsoft/TypeScript/tsc/internal/api.NewStdioServer
 func NewStdioServer(options *api.StdioServerOptions) *api.StdioServer
+//go:linkname NewTupleProtocol github.com/microsoft/TypeScript/tsc/internal/api.NewTupleProtocol
+func NewTupleProtocol(t api.TupleTransport) *api.TupleProtocol
 type NodeHandle = api.NodeHandle
 type OpenedFileOperationResult = api.OpenedFileOperationResult
 type PackageId = api.PackageId
@@ -390,6 +391,8 @@ type TranspileFromFileParams = api.TranspileFromFileParams
 type TranspileOptions = api.TranspileOptions
 type TranspileOutputResponse = api.TranspileOutputResponse
 type TranspileParams = api.TranspileParams
+type TupleProtocol = api.TupleProtocol
+type TupleTransport = api.TupleTransport
 //go:linkname TypeHandle github.com/microsoft/TypeScript/tsc/internal/api.TypeHandle
 func TypeHandle(t *checker.Type) api.TypeID
 type TypeID = api.TypeID

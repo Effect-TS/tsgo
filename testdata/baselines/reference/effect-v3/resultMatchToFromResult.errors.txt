@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+
+
+==== /.src/resultMatchToFromResult.ts (0 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics resultMatchToFromResult:suggestion
+    import { Effect, Either, Exit } from "effect"
+    
+    declare const either: Either.Either<number, Error>
+    declare const exit: Exit.Exit<number, Error>
+    
+    // MUST NOT TRIGGER: the rule only supports Effect v4; v3 has no Result module and Either is out of scope.
+    export const eitherMatch = Either.match(either, { onLeft: Effect.fail, onRight: Effect.succeed })
+    
+    // MUST NOT TRIGGER: the Either guard ternary is out of scope on Effect v3.
+    export const eitherTernary = Either.isRight(either) ? Effect.succeed(either.right) : Effect.fail(either.left)
+    
+    // MUST NOT TRIGGER: Exit.match shares the handler names but is not the Result module.
+    export const exitMatch = Exit.match(exit, { onFailure: Effect.failCause, onSuccess: Effect.succeed })
+    

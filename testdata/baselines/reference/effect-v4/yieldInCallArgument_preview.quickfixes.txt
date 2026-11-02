@@ -1,0 +1,31 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:28-9:33) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare function transform(n: number): string
+
+export const preview = Effect.gen(function*() {
+  const loaded = yield* load;
+  const result = transform(loaded)
+  return result
+})
+

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/unnecessaryEffectGen_preview.ts(5,24): warning TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 

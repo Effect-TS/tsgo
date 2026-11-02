@@ -77,8 +77,8 @@ var moduleAlternativesV4 = map[string]moduleAlternative{
 	"node:stream/promises": {Alternative: "Stream", Module: "stream", Package: "effect"},
 	"stream/web":           {Alternative: "Stream", Module: "stream", Package: "effect"},
 	"node:stream/web":      {Alternative: "Stream", Module: "stream", Package: "effect"},
-	"crypto":               {Alternative: "Crypto", Module: "crypto", Package: "effect"},
-	"node:crypto":          {Alternative: "Crypto", Module: "crypto", Package: "effect"},
+	"crypto":               {Alternative: "crypto", Module: "crypto", Package: "effect"},
+	"node:crypto":          {Alternative: "crypto", Module: "crypto", Package: "effect"},
 }
 
 var NodeBuiltinImport = rule.Rule{

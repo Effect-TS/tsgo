@@ -3,7 +3,7 @@
 [D1] (4:28-4:41) TS2591: Cannot find name 'node:crypto'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
   (no quick fixes)
 
-[D2] (4:28-4:41) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+[D2] (4:28-4:41) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 

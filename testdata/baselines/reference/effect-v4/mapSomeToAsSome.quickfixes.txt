@@ -15,27 +15,32 @@
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D4] (28:39-28:49) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D4] (29:3-29:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D5] (33:3-33:9) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D5] (33:39-33:49) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D6] (38:3-38:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D6] (38:3-38:9) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D7] (83:3-83:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D7] (43:3-43:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D8] (90:3-90:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D8] (88:3-88:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+  Fix 0: "Disable mapSomeToAsSome for this line"
+  Fix 1: "Disable mapSomeToAsSome for entire file"
+  Fix 2: "Replace with Effect.asSome"
+
+[D9] (95:3-95:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
@@ -75,6 +80,11 @@ export const shouldTriggerPointFree = numberEffect.pipe(
 // Should trigger: exact eta-expansion
 export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
+)
+
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
 )
 
 // Should trigger: data-first form
@@ -181,6 +191,11 @@ export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
 )
 
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
+)
+
 // Should trigger: data-first form
 export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
 
@@ -283,6 +298,11 @@ export const shouldTriggerPointFree = numberEffect.pipe(
 // Should trigger: exact eta-expansion
 export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.asSome
+)
+
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
 )
 
 // Should trigger: data-first form
@@ -389,8 +409,13 @@ export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
 )
 
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.asSome
+)
+
 // Should trigger: data-first form
-export const shouldTriggerDataFirst = Effect.asSome(numberEffect)
+export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
 
 // Should trigger: function pipe form and aliased modules
 export const shouldTriggerAliases = pipe(
@@ -493,13 +518,18 @@ export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
 )
 
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
+)
+
 // Should trigger: data-first form
-export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
+export const shouldTriggerDataFirst = Effect.asSome(numberEffect)
 
 // Should trigger: function pipe form and aliased modules
 export const shouldTriggerAliases = pipe(
   numberEffect,
-  Effect.asSome
+  Fx.map(O.some)
 )
 
 // Should trigger: named Option.some import
@@ -597,18 +627,23 @@ export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
 )
 
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
+)
+
 // Should trigger: data-first form
 export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
 
 // Should trigger: function pipe form and aliased modules
 export const shouldTriggerAliases = pipe(
   numberEffect,
-  Fx.map(O.some)
+  Effect.asSome
 )
 
 // Should trigger: named Option.some import
 export const shouldTriggerNamedImport = numberEffect.pipe(
-  Effect.asSome
+  Effect.map(optionSome)
 )
 
 // Should NOT trigger: already using asSome
@@ -701,6 +736,120 @@ export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
 )
 
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
+)
+
+// Should trigger: data-first form
+export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
+
+// Should trigger: function pipe form and aliased modules
+export const shouldTriggerAliases = pipe(
+  numberEffect,
+  Fx.map(O.some)
+)
+
+// Should trigger: named Option.some import
+export const shouldTriggerNamedImport = numberEffect.pipe(
+  Effect.asSome
+)
+
+// Should NOT trigger: already using asSome
+export const shouldNotTriggerAsSome = numberEffect.pipe(Effect.asSome)
+
+// Should NOT trigger: Stream.map is a different API
+export const shouldNotTriggerStream = Stream.make(1).pipe(
+  Stream.map(Option.some)
+)
+
+// Should NOT trigger: Option.map is a different API
+export const shouldNotTriggerOption = Option.some(1).pipe(
+  Option.map(Option.some)
+)
+
+const localSome = <A>(value: A): Option.Option<A> => Option.some(value)
+
+// Should NOT trigger: mapper does not resolve to Effect's Option.some
+export const shouldNotTriggerLocalSome = numberEffect.pipe(
+  Effect.map(localSome)
+)
+
+// Should NOT trigger: argument is transformed
+export const shouldNotTriggerTransformed = numberEffect.pipe(
+  Effect.map((value) => Option.some(value + 1))
+)
+
+// Should NOT trigger: property access is not the untouched parameter
+export const shouldNotTriggerPropertyAccess = Effect.succeed({ value: 1 }).pipe(
+  Effect.map((input) => Option.some(input.value))
+)
+
+// Should NOT trigger: destructured parameter
+export const shouldNotTriggerDestructuring = Effect.succeed({ value: 1 }).pipe(
+  Effect.map(({ value }) => Option.some(value))
+)
+
+// Should NOT trigger: an annotation can intentionally widen the output type
+export const shouldNotTriggerAnnotated = Effect.succeed(1 as const).pipe(
+  Effect.map((value: number) => Option.some(value))
+)
+
+// Should trigger: ParseLazyExpression normalizes a single-return block body
+export const shouldTriggerBlockBody = numberEffect.pipe(
+  Effect.map((value) => {
+    return Option.some(value)
+  })
+)
+
+// Should trigger: function expressions forward the value unchanged too
+export const shouldTriggerFunctionExpression = numberEffect.pipe(
+  Effect.map(function (value) {
+    return Option.some(value)
+  })
+)
+
+
+=== [D8] Fix 0: "Disable mapSomeToAsSome for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.asSome" ===
+
+--- file:///.src/mapSomeToAsSome.ts ---
+import {
+  Effect,
+  Effect as Fx,
+  Option,
+  Option as O,
+  Stream,
+  pipe
+} from "effect"
+import { some as optionSome } from "effect/Option"
+
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
+
+// Should trigger: point-free mapper in a pipeable flow
+export const shouldTriggerPointFree = numberEffect.pipe(
+  Effect.map(Option.some)
+)
+
+// Should trigger: exact eta-expansion
+export const shouldTriggerEtaExpanded = numberEffect.pipe(
+  Effect.map((value) => Option.some(value))
+)
+
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
+)
+
 // Should trigger: data-first form
 export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
 
@@ -768,13 +917,13 @@ export const shouldTriggerFunctionExpression = numberEffect.pipe(
 )
 
 
-=== [D8] Fix 0: "Disable mapSomeToAsSome for this line" ===
+=== [D9] Fix 0: "Disable mapSomeToAsSome for this line" ===
 skipped by default
 
-=== [D8] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+=== [D9] Fix 1: "Disable mapSomeToAsSome for entire file" ===
 skipped by default
 
-=== [D8] Fix 2: "Replace with Effect.asSome" ===
+=== [D9] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
 import {
@@ -801,6 +950,11 @@ export const shouldTriggerPointFree = numberEffect.pipe(
 // Should trigger: exact eta-expansion
 export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
+)
+
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
 )
 
 // Should trigger: data-first form

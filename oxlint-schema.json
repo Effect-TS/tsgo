@@ -2458,6 +2458,9 @@
         "effecttsgo/map-some-to-as-some": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/match-boolean-to-is-success": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/match-effect-to-map-both": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2587,6 +2590,9 @@
         "effecttsgo/redundant-schema-tag-identifier": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/result-match-to-from-result": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/return-effect-in-gen": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2675,6 +2681,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/unstable-api-usage": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/yield-in-call-argument": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "eqeqeq": {

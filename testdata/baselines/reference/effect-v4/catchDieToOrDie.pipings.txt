@@ -1,4 +1,4 @@
-==== /.src/catchDieToOrDie.ts (22 flows) ====
+==== /.src/catchDieToOrDie.ts (24 flows) ====
 
 === Piping Flow ===
 Location: 9:26 - 9:66
@@ -71,7 +71,35 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 20:28 - 24:2
+Location: 22:29 - 24:2
+Node: failable.pipe(\n  Effect.catch((error) => pipe(error, Effect.die))\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => pipe(error, Effect.die)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:26 - 23:50
+Node: pipe(error, Effect.die)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 25:28 - 29:2
 Node: failable.pipe(\n  Effect.catch(function(error) {\n    return Effect.die(error)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -85,7 +113,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 22:11 - 22:29
+Location: 27:11 - 27:29
 Node: Effect.die(error)
 Node Kind: KindCallExpression
 
@@ -99,7 +127,7 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 27:28 - 27:69
+Location: 32:28 - 32:69
 Node: pipe(failable, Effect.catch(Effect.die))
 Node Kind: KindCallExpression
 
@@ -113,7 +141,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 28:25 - 28:60
+Location: 33:25 - 33:60
 Node: Effect.catch(failable, Effect.die)
 Node Kind: KindCallExpression
 
@@ -127,7 +155,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 29:24 - 29:59
+Location: 34:24 - 34:59
 Node: Effect.catch(Effect.die)(failable)
 Node Kind: KindCallExpression
 
@@ -141,7 +169,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 32:24 - 34:29
+Location: 37:24 - 39:29
 Node: Effect.fn(function*() {\n  return yield* failable\n}, Effect.catch(Effect.die))
 Node Kind: KindCallExpression
 
@@ -155,7 +183,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 37:23 - 39:2
+Location: 42:23 - 44:2
 Node: failable.pipe(\n  Effect.catch((error) => Effect.die(new Error(String(error))))\n)
 Node Kind: KindCallExpression
 
@@ -169,7 +197,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 38:26 - 38:63
+Location: 43:26 - 43:63
 Node: Effect.die(new Error(String(error)))
 Node Kind: KindCallExpression
 
@@ -183,7 +211,7 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 38:48 - 38:61
+Location: 43:48 - 43:61
 Node: String(error)
 Node Kind: KindCallExpression
 
@@ -197,7 +225,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 42:30 - 44:2
+Location: 47:30 - 49:2
 Node: failable.pipe(\n  Effect.catch((_error) => Effect.die("different"))\n)
 Node Kind: KindCallExpression
 
@@ -211,7 +239,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 43:27 - 43:51
+Location: 48:27 - 48:51
 Node: Effect.die("different")
 Node Kind: KindCallExpression
 
@@ -225,7 +253,7 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 47:26 - 49:2
+Location: 52:26 - 54:2
 Node: Effect.succeed(1).pipe(\n  Effect.catch(Effect.die)\n)
 Node Kind: KindCallExpression
 
@@ -243,7 +271,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 56:23 - 58:2
+Location: 61:23 - 63:2
 Node: tagged.pipe(\n  Effect.catchTag("TaggedError", Effect.die)\n)
 Node Kind: KindCallExpression
 
@@ -257,7 +285,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 66:24 - 66:74
+Location: 71:24 - 71:74
 Node: failable.pipe(LocalEffect.catch(LocalEffect.die))
 Node Kind: KindCallExpression
 
@@ -271,7 +299,7 @@ Transformations (1):
       outType: Effect<number, Error, never>
 
 === Piping Flow ===
-Location: 71:26 - 71:64
+Location: 76:26 - 76:64
 Node: failable.pipe(Effect.catch(dieAlias))
 Node Kind: KindCallExpression
 
@@ -285,7 +313,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 72:28 - 72:66
+Location: 77:28 - 77:66
 Node: failable.pipe(catchAlias(Effect.die))
 Node Kind: KindCallExpression
 
@@ -299,7 +327,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 73:27 - 73:63
+Location: 78:27 - 78:63
 Node: failable.pipe(catchAlias(dieAlias))
 Node Kind: KindCallExpression
 

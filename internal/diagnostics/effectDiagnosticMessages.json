@@ -315,11 +315,11 @@
         "category": "Warning",
         "code": 377073
     },
-    "This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)": {
+    "This code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUID)": {
         "category": "Warning",
         "code": 377078
     },
-    "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)": {
+    "This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)": {
         "category": "Warning",
         "code": 377079
     },
@@ -658,5 +658,21 @@
     "`Effect.{0}` reifies the outcome directly; these `Effect.{1}` handlers only wrap the value and the error. effect(matchToResultOrOption)": {
         "category": "Suggestion",
         "code": 377175
+    },
+    "`Effect.isSuccess` expresses this check more directly than `Effect.{0}` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)": {
+        "category": "Suggestion",
+        "code": 377173
+    },
+    "`Effect.isFailure` expresses this check more directly than `Effect.{0}` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)": {
+        "category": "Suggestion",
+        "code": 377174
+    },
+    "This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)": {
+        "category": "Warning",
+        "code": 377171
+    },
+    "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)": {
+        "category": "Suggestion",
+        "code": 377165
     }
 }

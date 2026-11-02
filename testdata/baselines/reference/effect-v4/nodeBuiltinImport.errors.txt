@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/nodeBuiltinImport.ts(5,16): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(6,22): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
@@ -27,14 +27,14 @@ Effect version: 4.0.2
 /.src/nodeBuiltinImport.ts(28,42): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(29,32): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(30,54): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(31,25): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(32,28): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(31,25): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(32,28): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(35,8): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(38,21): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(39,31): warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(40,30): warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(41,30): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(42,30): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(42,30): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -137,10 +137,10 @@ Effect version: 4.0.2
 !!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
     import * as crypto from "crypto"
                             ~~~~~~~~
-!!! warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
     import { randomUUID } from "node:crypto"
                                ~~~~~~~~~~~~~
-!!! warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
     
     // Flagged: side-effect import
     import "node:fs"
@@ -162,7 +162,7 @@ Effect version: 4.0.2
 !!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
     const cryptoModule = require("node:crypto")
                                  ~~~~~~~~~~~~~
-!!! warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
     
     // Not flagged: only explicitly covered subpaths match
     import { text } from "node:stream/consumers"

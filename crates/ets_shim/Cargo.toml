@@ -28,6 +28,7 @@ tsrs_lsproto = { path = "../../tsrs/crates/tsrs_lsproto" }
 tsrs_module = { path = "../../tsrs/crates/tsrs_module" }
 tsrs_modulespecifiers = { path = "../../tsrs/crates/tsrs_modulespecifiers" }
 tsrs_parser = { path = "../../tsrs/crates/tsrs_parser" }
+tsrs_printer = { path = "../../tsrs/crates/tsrs_printer" }
 tsrs_project = { path = "../../tsrs/crates/tsrs_project" }
 tsrs_scanner = { path = "../../tsrs/crates/tsrs_scanner" }
 tsrs_tsoptions = { path = "../../tsrs/crates/tsrs_tsoptions" }

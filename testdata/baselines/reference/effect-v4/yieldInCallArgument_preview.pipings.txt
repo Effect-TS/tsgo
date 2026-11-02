@@ -1,0 +1,29 @@
+==== /.src/yieldInCallArgument_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 11:3
+Node: Effect.gen(function*() {\n  const result = transform(yield* load)\n  return result\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const result = transform(yield* load)\n  return result\n}
+Subject Type: () => Generator<Effect<number, never, never>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 9:17 - 9:40
+Node: transform(yield* load)
+Node Kind: KindCallExpression
+
+Subject: yield* load
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: transform
+      args: (constant)
+      outType: string

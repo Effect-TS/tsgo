@@ -1,5 +1,5 @@
 {
   "ExtraMethods": {
-    "Tracker": ["getNonformattedText"]
+    "Tracker": ["getAdjustedStartPosition", "getNonformattedText"]
   }
 }

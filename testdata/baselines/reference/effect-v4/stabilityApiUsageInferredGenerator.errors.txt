@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/stabilityApiUsageInferredGenerator.ts(43,12): warning TS377135: `effect-v4-tests/stabilityApiUsageInferredGenerator` is an experimental API. effect(experimentalApiUsage)
 /.src/stabilityApiUsageInferredGenerator.ts(43,29): warning TS377136: `effect-v4-tests/stabilityApiUsageInferredGenerator` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
