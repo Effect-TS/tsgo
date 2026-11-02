@@ -1,8 +1,8 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
-/.src/cryptoRandomUUIDInEffect.ts(6,10): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
-/.src/cryptoRandomUUIDInEffect.ts(12,10): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
+/.src/cryptoRandomUUIDInEffect.ts(6,10): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)
+/.src/cryptoRandomUUIDInEffect.ts(12,10): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)
 
 
 ==== /.src/cryptoRandomUUIDInEffect.ts (2 errors) ====
@@ -13,7 +13,7 @@ Effect version: 4.0.2
     export const uuidInGen = Effect.gen(function*() {
       return crypto.randomUUID()
              ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
+!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)
     })
     
     // Should trigger - aliased crypto inside Effect.gen
@@ -21,7 +21,7 @@ Effect version: 4.0.2
       const globalCrypto = crypto
       return globalCrypto.randomUUID()
              ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
+!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)
     })
     
     // Should NOT trigger - crypto.randomUUID() at module level

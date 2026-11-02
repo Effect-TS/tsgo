@@ -1593,7 +1593,7 @@
     {
       "name": "cryptoRandomUUID",
       "group": "effectNative",
-      "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module",
+      "description": "Warns when using crypto.randomUUID() outside Effect generators instead of SecureRandom from effect/crypto",
       "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [
@@ -1608,7 +1608,7 @@
           {
             "start": 24,
             "end": 43,
-            "text": "This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)"
+            "text": "This code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUID)"
           }
         ]
       }
@@ -1616,7 +1616,7 @@
     {
       "name": "cryptoRandomUUIDInEffect",
       "group": "effectNative",
-      "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module",
+      "description": "Warns when using crypto.randomUUID() inside Effect generators instead of SecureRandom from effect/crypto",
       "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [
@@ -1631,7 +1631,7 @@
           {
             "start": 90,
             "end": 109,
-            "text": "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)"
+            "text": "This Effect code uses `crypto.randomUUID()`, prefer `SecureRandom` from `effect/crypto` instead. effect(cryptoRandomUUIDInEffect)"
           }
         ]
       }
@@ -2017,7 +2017,7 @@
           {
             "start": 59,
             "end": 72,
-            "text": "This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)"
+            "text": "This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)"
           },
           {
             "start": 88,

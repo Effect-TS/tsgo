@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/mapConstToAs_callbackShapes.ts(11,36): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 /.src/mapConstToAs_callbackShapes.ts(14,43): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)

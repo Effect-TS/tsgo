@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/matchBooleanToIsSuccess_shapes.ts(12,32): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)
 /.src/matchBooleanToIsSuccess_shapes.ts(15,35): suggestion TS377173: `Effect.isSuccess` expresses this check more directly than `Effect.match` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)

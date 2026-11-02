@@ -200,7 +200,7 @@ pub(crate) static MODULE_ALTERNATIVES_V3: LazyLock<FxHashMap<&'static str, Modul
         ])
     });
 
-// go: internal/rules/node_builtin_import.go:51 moduleAlternativesV4 d91cce1d153bd3b7
+// go: internal/rules/node_builtin_import.go:51 moduleAlternativesV4 ae60b30fed7a40e1
 pub(crate) static MODULE_ALTERNATIVES_V4: LazyLock<FxHashMap<&'static str, ModuleAlternative>> =
     LazyLock::new(|| {
         FxHashMap::from_iter([
@@ -339,11 +339,11 @@ pub(crate) static MODULE_ALTERNATIVES_V4: LazyLock<FxHashMap<&'static str, Modul
             ),
             (
                 "crypto",
-                ModuleAlternative { alternative: "Crypto", package: "effect", module: "crypto" },
+                ModuleAlternative { alternative: "crypto", package: "effect", module: "crypto" },
             ),
             (
                 "node:crypto",
-                ModuleAlternative { alternative: "Crypto", package: "effect", module: "crypto" },
+                ModuleAlternative { alternative: "crypto", package: "effect", module: "crypto" },
             ),
         ])
     });

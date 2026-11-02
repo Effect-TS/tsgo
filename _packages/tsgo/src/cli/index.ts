@@ -1,4 +1,5 @@
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
+import * as NodeCrypto from "@effect/platform-node/NodeCrypto"
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Console from "effect/Console"
 import * as Data from "effect/Data"
@@ -234,7 +235,7 @@ if (proxyInvocation !== undefined) {
 } else {
   rootCommand.pipe(
     Command.run({ version: pkgJson.version }),
-    Effect.provide(NodeServices.layer),
+    Effect.provide([NodeServices.layer, NodeCrypto.layerDigest]),
     NodeRuntime.runMain()
   )
 }

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/mapConstToAs.ts(18,45): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 /.src/mapConstToAs.ts(21,52): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)

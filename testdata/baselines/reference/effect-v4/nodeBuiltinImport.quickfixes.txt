@@ -188,14 +188,14 @@
 [D54] (31:13-31:19) TS6133: 'crypto' is declared but its value is never read.
   (no quick fixes)
 
-[D55] (31:25-31:33) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+[D55] (31:25-31:33) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D56] (32:10-32:20) TS6133: 'randomUUID' is declared but its value is never read.
   (no quick fixes)
 
-[D57] (32:28-32:41) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+[D57] (32:28-32:41) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
@@ -234,7 +234,7 @@
 [D67] (42:7-42:19) TS6133: 'cryptoModule' is declared but its value is never read.
   (no quick fixes)
 
-[D68] (42:30-42:43) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+[D68] (42:30-42:43) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `crypto` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/aliasFallback.ts(10,34): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 /.src/forms.ts(10,26): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)

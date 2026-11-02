@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/manualMetricTapToTrack_noTarget.ts(14,44): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
 /.src/manualMetricTapToTrack_noTarget.ts(17,30): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)

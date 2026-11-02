@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/mapSomeCatchNoSuchElement_preview.ts(13,5): warning TS377167: Use Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none. effect(mapSomeCatchNoSuchElement)
 

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto"
 import * as nodeModule from "node:module"
-import * as Crypto from "effect/Crypto"
+import * as Digest from "effect/crypto/Digest"
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
@@ -64,7 +64,7 @@ export type ReplacementResolver = (
 ) => Effect.Effect<
   ResolvedReplacement,
   PatcherError | ReplacementUnavailableError | UnsupportedTargetPackageVersionError,
-  Crypto.Crypto | FileSystem.FileSystem | Path.Path | Scope.Scope
+  Digest.Digest | FileSystem.FileSystem | Path.Path | Scope.Scope
 >
 
 export const supportedVersions = (component: Exclude<Component, "oxlint-dts">): ReadonlyArray<string> =>
@@ -139,11 +139,7 @@ const resolveOxlintDeclarations = (target: DiscoveredBinary) => Effect.gen(funct
       reason: `Unable to write generated Oxlint declarations at ${replacementPath}: ${error.message}`
     }))
   )
-  const fileHash = yield* hashBytes(replacement).pipe(
-    Effect.mapError((error) => new PatcherError({
-      reason: `Unable to hash generated Oxlint declarations: ${error.message}`
-    }))
-  )
+  const fileHash = yield* hashBytes(replacement)
   return { path: replacementPath, fileHash }
 })
 

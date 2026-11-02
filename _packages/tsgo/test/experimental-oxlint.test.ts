@@ -1,3 +1,4 @@
+import * as NodeCrypto from "@effect/platform-node/NodeCrypto"
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import { createHash } from "node:crypto"
@@ -96,7 +97,7 @@ describe("experimental Oxlint discovery", () => {
         writeBinary(join(tsgolintDirectory, "tsgolint"), "tsgolint")
       ])
 
-      const discovered = await Effect.runPromise(discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer)))
+      const discovered = await Effect.runPromise(discoverBinaries(directory).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest])))
       const typescript = selectComponents(discovered, new Set(["typescript"]))
       expect(typescript).toHaveLength(1)
       expect(typescript[0]?.binaryPath).toBe(typescriptPath)
@@ -105,17 +106,17 @@ describe("experimental Oxlint discovery", () => {
       expect(oxlint[0]?.packageName).toBe(`@oxlint/binding-linux-${process.arch}-musl`)
       for (const target of oxlint) {
         await expect(Effect.runPromise(
-          Effect.scoped(resolveReplacement(target)).pipe(Effect.provide(NodeServices.layer))
+          Effect.scoped(resolveReplacement(target)).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest]))
         )).rejects.toMatchObject({
           _tag: "ReplacementUnavailableError",
           reason: "Linux musl is not supported by the packaged Oxlint integration."
         })
       }
       await expect(Effect.runPromise(
-        Effect.scoped(preparePatch(oxlint, { skipMissing: false })).pipe(Effect.provide(NodeServices.layer))
+        Effect.scoped(preparePatch(oxlint, { skipMissing: false })).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest]))
       )).rejects.toBeInstanceOf(ReplacementUnavailableError)
       const skipped = await Effect.runPromise(
-        Effect.scoped(preparePatch(oxlint, { skipMissing: true })).pipe(Effect.provide(NodeServices.layer))
+        Effect.scoped(preparePatch(oxlint, { skipMissing: true })).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest]))
       )
       expect(skipped.operations).toEqual([])
       expect(skipped.skipped).toHaveLength(3)
@@ -124,7 +125,7 @@ describe("experimental Oxlint discovery", () => {
       const restored = await Effect.runPromise(unpatch({
         cwd: directory,
         components: new Set(["oxlint", "oxlint-tsgolint"])
-      }).pipe(Effect.provide(NodeServices.layer)))
+      }).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest])))
       expect(restored.changed).toHaveLength(3)
       expect(restored.skipped).toEqual([])
     }
@@ -147,7 +148,7 @@ describe("experimental Oxlint discovery", () => {
     ])
 
     const discovered = await Effect.runPromise(
-      discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer))
+      discoverBinaries(directory).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest]))
     )
     expect(discovered).toEqual([
       {
@@ -183,7 +184,7 @@ describe("experimental Oxlint discovery", () => {
     await writeBinary(binaryPath, "typescript")
 
     const discovered = await Effect.runPromise(
-      discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer))
+      discoverBinaries(directory).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest]))
     )
     expect(discovered).toContainEqual({
       component: "typescript",
@@ -216,7 +217,7 @@ describe("experimental Oxlint discovery", () => {
     ])
 
     const discovered = await Effect.runPromise(
-      discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer))
+      discoverBinaries(directory).pipe(Effect.provide([NodeServices.layer, NodeCrypto.layerDigest]))
     )
     expect(discovered).toEqual([
       {

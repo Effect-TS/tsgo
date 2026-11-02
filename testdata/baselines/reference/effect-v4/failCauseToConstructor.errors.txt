@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/failCauseToConstructor.ts(23,24): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
 /.src/failCauseToConstructor.ts(26,24): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)

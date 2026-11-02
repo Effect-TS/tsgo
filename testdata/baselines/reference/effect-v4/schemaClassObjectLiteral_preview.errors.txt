@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/schemaClassObjectLiteral_preview.ts(7,27): warning TS377149: This object literal is checked as an instance of Schema class 'User' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'User.make(...)' or 'new User(...)' instead. effect(schemaClassObjectLiteral)
 
