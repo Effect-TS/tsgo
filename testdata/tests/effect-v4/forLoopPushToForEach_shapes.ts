@@ -229,3 +229,14 @@ export const nextLineOff = Effect.gen(function*() {
   for (const item of items) out.push(yield* processItem(item))
   return out
 })
+
+// MUST NOT TRIGGER: yield* delegates to a plain generator, not an Effect, so
+// there is no Effect for Effect.forEach to run.
+const doubleDeclared = function*(item: number) {
+  return yield* Effect.succeed(item * 2)
+}
+export const delegatedGenerator = Effect.gen(function*() {
+  const out: Array<number> = []
+  for (const item of items) out.push(yield* doubleDeclared(item))
+  return out
+})

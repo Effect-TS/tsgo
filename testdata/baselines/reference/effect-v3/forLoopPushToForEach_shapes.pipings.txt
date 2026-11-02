@@ -1,4 +1,4 @@
-==== /.src/forLoopPushToForEach_shapes.ts (74 flows) ====
+==== /.src/forLoopPushToForEach_shapes.ts (78 flows) ====
 
 === Piping Flow ===
 Location: 10:9 - 10:38
@@ -1043,3 +1043,59 @@ Transformations (1):
       callee: processItem
       args: (constant)
       outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 236:16 - 236:41
+Node: Effect.succeed(item * 2)
+Node Kind: KindCallExpression
+
+Subject: item * 2
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 238:34 - 242:3
+Node: Effect.gen(function*() {\n  const out: Array<number> = []\n  for (const item of items) out.push(yield* doubleDeclared(item))\n  return out\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const out: Array<number> = []\n  for (const item of items) out.push(yield* doubleDeclared(item))\n  return out\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 240:28 - 240:66
+Node: out.push(yield* doubleDeclared(item))
+Node Kind: KindCallExpression
+
+Subject: yield* doubleDeclared(item)
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: out.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 240:44 - 240:65
+Node: doubleDeclared(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: doubleDeclared
+      args: (constant)
+      outType: Generator<YieldWrap<Effect<number, never, never>>, number, any>
