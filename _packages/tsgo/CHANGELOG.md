@@ -1,5 +1,35 @@
 # @effect/tsgo
 
+## 0.65.0
+
+### Minor Changes
+
+- df6e271: Add the `matchToResultOrOption` diagnostic (style, suggestion). It reports `Effect.match` / `Effect.matchEffect` calls whose handlers only wrap the value and the error, and adjacent `Effect.map` + `Effect.catch` steps (`catchAll` in v3) that do the same. When no explicit type argument depends on the old output type and an `Effect` namespace binding is in scope, the quick fix replaces them with `Effect.result` or `Effect.option` (v4), or `Effect.either` or `Effect.option` (v3). These combinators also carry the error type through precisely, instead of producing a wider union type.
+  
+  ```ts
+  // reported, fix: Effect.result(fetchUser("u1"))
+  Effect.match(fetchUser("u1"), { onFailure: Result.fail, onSuccess: Result.succeed })
+  // reported, fix: fetchUser("u1").pipe(Effect.option)
+  fetchUser("u1").pipe(Effect.map(Option.some), Effect.catch(() => Effect.succeed(Option.none())))
+  // not reported: the handler transforms the error
+  Effect.match(fetchUser("u1"), { onFailure: (e) => Result.fail(e.id), onSuccess: Result.succeed })
+  ```
+
+### Patch Changes
+
+- 2d8ffe3: Fix `unnecessaryTypeofType` reporting a `typeof X.Type` query in the `extends` clause of the interface `X` itself, where the suggested replacement would make the interface extend itself.
+  
+  ```ts
+  export const Person = Schema.Struct({ name: Schema.String })
+  export type Identity<A> = A
+  
+  // no longer reported: `extends Identity<Person>` would be a circular base
+  export interface Person extends Identity<typeof Person.Type> {}
+  
+  // still reported: can be replaced with `UserId`
+  export interface Other extends Identity<typeof UserId.Type> {}
+  ```
+
 ## 0.64.1
 
 ### Patch Changes
