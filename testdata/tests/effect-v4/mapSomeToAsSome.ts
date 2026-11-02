@@ -24,6 +24,11 @@ export const shouldTriggerEtaExpanded = numberEffect.pipe(
   Effect.map((value) => Option.some(value))
 )
 
+// Should trigger: eta-expansion written as a piping flow
+export const shouldTriggerEtaExpandedPipe = numberEffect.pipe(
+  Effect.map((value) => pipe(value, Option.some))
+)
+
 // Should trigger: data-first form
 export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
 

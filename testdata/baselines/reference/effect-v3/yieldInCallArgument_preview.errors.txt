@@ -1,0 +1,22 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/yieldInCallArgument_preview.ts(10,28): warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+
+
+==== /.src/yieldInCallArgument_preview.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics yieldInCallArgument:warning
+    import { Effect } from "effect"
+    
+    declare const load: Effect.Effect<number>
+    declare function transform(n: number): string
+    
+    export const preview = Effect.gen(function*() {
+      const result = transform(yield* load)
+                               ~~~~~
+!!! warning TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+      return result
+    })
+    

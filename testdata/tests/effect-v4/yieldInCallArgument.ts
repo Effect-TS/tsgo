@@ -1,0 +1,325 @@
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { ConfigProvider, Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const other: Effect.Effect<number>
+declare const loadMany: Effect.Effect<Array<number>>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const loadProvider: Effect.Effect<ConfigProvider.ConfigProvider>
+declare const services: { readonly config: Effect.Effect<number> }
+declare const config: { readonly prefix: string }
+declare const service: { process(n: number): string }
+declare const maybeTransform: ((n: number) => string) | undefined
+declare const cond: boolean
+declare let provider: ConfigProvider.ConfigProvider
+
+declare function transform(n: number): string
+declare function combine(...values: Array<unknown>): string
+declare function consume(n: number): void
+declare function check(n: number): boolean
+declare function sideEffect(): string
+declare function getService(): { process(n: number): string }
+declare function outer(value: unknown, ...rest: Array<unknown>): string
+declare function inner(n: number): string
+declare function sum(...ns: Array<number>): number
+declare function tag(strings: TemplateStringsArray, ...values: Array<unknown>): string
+
+class Wrapper {
+  constructor(readonly value: number) {}
+}
+
+function* numbers(): Generator<number, number> {
+  yield 1
+  return 2
+}
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix (hoist into a const before the enclosing statement)
+// ---------------------------------------------------------------------------
+
+export const basic = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the issue example, `load` -> `loaded`
+  const result = transform(yield* load)
+  return result
+})
+
+export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+  // MUST TRIGGER (fix): Effect.fn generator body
+  return transform(yield* load)
+})
+
+export const inEffectFnAnonymous = Effect.fn(function*() {
+  // MUST TRIGGER (fix): Effect.fn without a span name
+  return transform(yield* load)
+})
+
+export const inEffectFnWithPipeables = Effect.fn("inEffectFnWithPipeables")(
+  function*() {
+    // MUST TRIGGER (fix): Effect.fn with trailing pipeables
+    return transform(yield* load)
+  },
+  Effect.asVoid
+)
+
+export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+  // MUST TRIGGER (fix): Effect.fnUntraced generator body
+  return transform(yield* load)
+})
+
+export const reassignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the issue example, assignment statement; `provider` is an identifier so it is side-effect free
+  provider = ConfigProvider.orElse(provider, yield* loadProvider)
+})
+
+export const newExpression = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a `new` expression
+  return new Wrapper(yield* load)
+})
+
+export const expressionStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): call used as an expression statement
+  consume(yield* load)
+})
+
+export const sideEffectFreePrecedingArgs = Effect.gen(function*() {
+  const prefix = "p"
+  // MUST TRIGGER (fix): preceding arguments are an identifier, literals and a property access
+  return combine(prefix, "a", 1, true, null, config.prefix, yield* load)
+})
+
+export const methodCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the callee is a property access, free of side effects
+  return service.process(yield* load)
+})
+
+export const parenthesized = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parentheses around the yield* are transparent
+  return transform((yield* load))
+})
+
+export const ifCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): an `if` condition is evaluated once, before anything else in the statement
+  if (check(yield* load)) {
+    return 1
+  }
+  return 0
+})
+
+export const nestedCall = Effect.gen(function*() {
+  // MUST TRIGGER (fix): directly an argument of `inner`; nothing runs before it in `outer(...)` either
+  return outer(inner(yield* load))
+})
+
+export const fallbackName = Effect.gen(function*() {
+  // MUST TRIGGER (fix): no name derivable from a call, falls back to `value`
+  return transform(yield* Effect.succeed(1))
+})
+
+export const propertyAccessName = Effect.gen(function*() {
+  // MUST TRIGGER (fix): name derived from the yielded property access (`services.config`)
+  return transform(yield* services.config)
+})
+
+export const nameClash = Effect.gen(function*() {
+  const loaded = 1
+  const value = 2
+  // MUST TRIGGER (fix): `loaded` and `value` are taken, the hoisted name must not clash with them
+  return combine(loaded, value, transform(yield* load))
+})
+
+export const firstOfTwoYields = Effect.gen(function*() {
+  // MUST TRIGGER twice: `yield* load` (fix) and `yield* other` (no fix, `yield* load` runs before it)
+  return combine(yield* load, yield* other)
+})
+
+export const nestedEffectGenInCallback = Effect.gen(function*() {
+  const make = () =>
+    Effect.gen(function*() {
+      // MUST TRIGGER (fix): the inner Effect.gen is an Effect generator on its own
+      return transform(yield* load)
+    })
+  return yield* make()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix (hoisting would change evaluation order)
+// ---------------------------------------------------------------------------
+
+export const sideEffectBefore = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `sideEffect()` runs before the effect
+  return combine(sideEffect(), yield* load)
+})
+
+export const sideEffectCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): evaluating the callee calls `getService()` first
+  return getService().process(yield* load)
+})
+
+export const sideEffectInEnclosingCall = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `sideEffect()` of the enclosing `outer(...)` call runs before the effect
+  return outer(sideEffect(), inner(yield* load))
+})
+
+export const sideEffectEarlierInStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `sideEffect()` earlier in the same statement runs before the effect
+  return sideEffect() + transform(yield* load)
+})
+
+export const multipleDeclarators = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the first declarator runs `sideEffect()` before the effect
+  const a = sideEffect(), b = transform(yield* load)
+  return [a, b]
+})
+
+export const optionalCall = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when the callee is defined
+  return maybeTransform?.(yield* load)
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix (conditional or repeated position)
+// ---------------------------------------------------------------------------
+
+export const ternaryBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the issue example, ternary branch
+  const r = cond ? transform(yield* load) : null
+  return r
+})
+
+export const logicalAnd = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): right side of `&&`
+  return cond && transform(yield* load)
+})
+
+export const logicalOr = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): right side of `||`
+  return cond || check(yield* load)
+})
+
+export const nullishCoalescing = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): right side of `??`
+  return config.prefix ?? transform(yield* load)
+})
+
+export const whileCondition = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a loop condition runs on every iteration
+  while (check(yield* load)) {
+    yield* Effect.log("again")
+  }
+})
+
+export const doWhileCondition = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a loop condition runs on every iteration
+  do {
+    yield* Effect.log("again")
+  } while (check(yield* load))
+})
+
+export const forCondition = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a loop condition runs on every iteration
+  for (let i = 0; i < sum(yield* load); i++) {
+    yield* Effect.log("again")
+  }
+})
+
+export const elseIfCondition = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an `else if` condition only runs when the first condition is false
+  if (cond) {
+    return 1
+  } else if (check(yield* load)) {
+    return 2
+  }
+  return 0
+})
+
+export const unbracedIfBody = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the unbraced body of an `if`
+  if (cond) consume(yield* load)
+})
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const alreadyHoisted = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the issue example, yield first then call
+  const value = yield* load
+  return transform(value)
+})
+
+export const mappedEffect = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the issue example, map the effect instead
+  return yield* load.pipe(Effect.map(transform))
+})
+
+export const pipedEffect = Effect.gen(function*() {
+  // MUST NOT TRIGGER: pipe(...) is the yielded expression, not a call around the yield*
+  return yield* pipe(load, Effect.map(transform))
+})
+
+export const yieldOfCall = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the call is the operand of yield*, not the other way around
+  yield* Effect.log("message")
+  return yield* Effect.succeed(transform(1))
+})
+
+export const yieldAsCallee = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the yield* is the callee, not an argument
+  return (yield* loadFn)(1)
+})
+
+export const yieldAsReceiver = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the yield* is the receiver of a method call, not an argument
+  return (yield* load).toFixed(2)
+})
+
+export const nestedInArrayArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the yield* is an array element, not directly an argument
+  return combine([yield* load])
+})
+
+export const nestedInObjectArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the yield* is a property value, not directly an argument
+  return combine({ value: yield* load })
+})
+
+export const nestedInBinaryArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is a binary expression containing the yield*
+  return transform((yield* load) + 1)
+})
+
+export const nestedInTemplateArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the yield* is a template substitution, not directly an argument
+  return combine(`${yield* load}`)
+})
+
+export const spreadArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is a spread element, not the yield* itself
+  return sum(...(yield* loadMany))
+})
+
+export const taggedTemplate = Effect.gen(function*() {
+  // MUST NOT TRIGGER: a tagged template is not a call or `new` expression
+  return tag`${yield* load}`
+})
+
+export const nonEffectGeneratorInsideEffectGen = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the inner generator is not an Effect generator
+  const plain = function*() {
+    return transform(yield* numbers())
+  }
+  return Array.from(plain())
+})
+
+// MUST NOT TRIGGER: plain generator outside of any Effect generator
+export function* plainGenerator() {
+  return transform(yield* numbers())
+}
+
+// MUST NOT TRIGGER: a plain generator passed to a non-Effect API
+export const iterated = Array.from(
+  (function*() {
+    consume(yield* numbers())
+  })()
+)

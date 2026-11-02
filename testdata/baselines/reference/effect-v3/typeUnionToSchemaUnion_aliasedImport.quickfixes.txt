@@ -42,9 +42,9 @@ import { Schema as S } from "effect"
 export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Number })
 export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
 
+export const Shape = S.Union(Circle, Square);
 // MUST TRIGGER - the fix reuses the in-scope `Schema as S` named import
 // (`export const Shape = S.Union(Circle, Square)`) and adds no new import
-export const Shape = S.Union(Circle, Square);
 export type Shape = typeof Shape.Type
 
 // MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
@@ -78,8 +78,8 @@ export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
 // (`export const Shape = S.Union(Circle, Square)`) and adds no new import
 export type Shape = typeof Circle.Type | typeof Square.Type
 
-// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
 const Primitive = S.Union(S.String, S.Boolean);
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
 type Primitive = typeof Primitive.Encoded
 
 // MUST TRIGGER - `Schema.Schema.Encoded` reached through the aliased import; the fix
@@ -113,9 +113,9 @@ export type Shape = typeof Circle.Type | typeof Square.Type
 // MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
 type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
 
+const HelperShapeEncoded = S.Union(Circle, Square);
 // MUST TRIGGER - `Schema.Schema.Encoded` reached through the aliased import; the fix
 // uses `S.Union(Circle, Square)`
-const HelperShapeEncoded = S.Union(Circle, Square);
 type HelperShapeEncoded = typeof HelperShapeEncoded.Encoded
 
 // MUST NOT TRIGGER - mixed `.Type` and `.Encoded`

@@ -38,8 +38,10 @@
     "effecttsgo/map-map-error-to-map-both": "warn",
     "effecttsgo/map-some-catch-no-such-element": "warn",
     "effecttsgo/map-some-to-as-some": "warn",
+    "effecttsgo/match-boolean-to-is-success": "warn",
     "effecttsgo/match-effect-to-map-both": "warn",
     "effecttsgo/match-effect-to-match": "warn",
+    "effecttsgo/match-to-result-or-option": "warn",
     "effecttsgo/missed-pipeable-opportunity": "warn",
     "effecttsgo/missing-effect-service-dependency": "warn",
     "effecttsgo/missing-pipeable-signature": "warn",
@@ -59,6 +61,7 @@
     "effecttsgo/redundant-map-error": "warn",
     "effecttsgo/redundant-or-die": "warn",
     "effecttsgo/redundant-schema-tag-identifier": "warn",
+    "effecttsgo/result-match-to-from-result": "warn",
     "effecttsgo/run-of-exit-to-run-exit": "warn",
     "effecttsgo/schema-number": "warn",
     "effecttsgo/schema-struct-with-tag": "warn",
@@ -74,6 +77,7 @@
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
-    "effecttsgo/unnecessary-typeof-type": "warn"
+    "effecttsgo/unnecessary-typeof-type": "warn",
+    "effecttsgo/yield-in-call-argument": "warn"
   }
 }

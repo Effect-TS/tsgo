@@ -14,6 +14,8 @@ func TestUnwrapIdentityForwarder(t *testing.T) {
 declare const call: (value: unknown) => unknown
 declare const other: (value: unknown) => unknown
 declare const genericCall: <A>(value: unknown) => A
+declare const source: Pipeable
+interface Pipeable { pipe<B>(f: (self: Pipeable) => B): B; pipe<B, C>(f: (self: Pipeable) => B, g: (b: B) => C): C }
 
 const direct = call
 const arrow = (value: unknown) => call(value)
@@ -22,6 +24,7 @@ const functionExpression = function(value: unknown) { return call(value) }
 const parenthesized = (value: unknown) => (call)((value))
 const differentCallee = (value: unknown) => other(value)
 const typeArguments = (value: unknown) => genericCall<string>(value)
+const pipeable = (value: Pipeable) => value.pipe(call)
 
 const wrapped = (value: unknown) => call(String(value))
 const differentValue = (value: unknown) => call(undefined)
@@ -32,6 +35,8 @@ const twoParameters = (value: unknown, other: unknown) => call(value)
 const asynchronous = async (value: unknown) => call(value)
 const generator = function*(value: unknown) { return call(value) }
 const notACall = (value: unknown) => value
+const pipeableChain = (value: Pipeable) => value.pipe(call, other)
+const pipeableOtherSubject = (value: Pipeable) => source.pipe(call)
 `
 
 	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
@@ -50,6 +55,7 @@ const notACall = (value: unknown) => value
 		{name: "parenthesized", wantTarget: "call", wantUnwrap: true},
 		{name: "differentCallee", wantTarget: "other", wantUnwrap: true},
 		{name: "typeArguments", wantTarget: "genericCall", wantUnwrap: true, wantTypeArguments: 1},
+		{name: "pipeable", wantTarget: "call", wantUnwrap: true},
 		{name: "wrapped"},
 		{name: "differentValue"},
 		{name: "shadowed"},
@@ -59,6 +65,8 @@ const notACall = (value: unknown) => value
 		{name: "asynchronous"},
 		{name: "generator"},
 		{name: "notACall"},
+		{name: "pipeableChain"},
+		{name: "pipeableOtherSubject"},
 	}
 
 	for _, test := range tests {

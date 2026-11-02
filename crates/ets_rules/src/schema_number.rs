@@ -188,13 +188,13 @@ pub(crate) fn schema_number_has_finite_piping_check(
     false
 }
 
-// go: internal/rules/schema_number.go:149 schemaNumberHasFinitePredicate 35a944c2adbb1644
+// go: internal/rules/schema_number.go:149 schemaNumberHasFinitePredicate da0858fcb853d0d2
 pub(crate) fn schema_number_has_finite_predicate(
     tp: &mut TypeParser<'_>,
     arguments: Slice<'_, P<Node>>,
 ) -> bool {
     for (_, &argument) in arguments.all() {
-        let argument = ets_shim::ast::skip_parentheses(argument);
+        let argument = schema_number_skip_predicate_annotate(argument);
         if argument.kind() != Kind::CallExpression {
             continue;
         }
@@ -209,7 +209,24 @@ pub(crate) fn schema_number_has_finite_predicate(
     false
 }
 
-// go: internal/rules/schema_number.go:167 schemaNumberNodeContains 350bddadd8f7b38a
+// go: internal/rules/schema_number.go:169 schemaNumberSkipPredicateAnnotate cb6b7afdc73a2a58
+pub(crate) fn schema_number_skip_predicate_annotate(node: P<Node>) -> P<Node> {
+    let mut node = ets_shim::ast::skip_parentheses(node);
+    while node.kind() == Kind::CallExpression {
+        let callee = node.as_call_expression().expression();
+        if callee.kind() != Kind::PropertyAccessExpression {
+            break;
+        }
+        let access = callee.as_property_access_expression();
+        if access.name().text() != "annotate" {
+            break;
+        }
+        node = ets_shim::ast::skip_parentheses(access.expression());
+    }
+    node
+}
+
+// go: internal/rules/schema_number.go:185 schemaNumberNodeContains 350bddadd8f7b38a
 pub(crate) fn schema_number_node_contains(
     ancestor: Option<P<Node>>,
     target: Option<P<Node>>,
@@ -222,14 +239,14 @@ pub(crate) fn schema_number_node_contains(
     }
 }
 
-// go: internal/rules/schema_number.go:171 schemaNumberApi f91ebbd2865cb6e2
+// go: internal/rules/schema_number.go:189 schemaNumberApi f91ebbd2865cb6e2
 pub(crate) struct SchemaNumberApi {
     pub(crate) name: &'static str,
     pub(crate) replacement: &'static str,
     pub(crate) replacement_identifier: &'static str,
 }
 
-// go: internal/rules/schema_number.go:177 schemaNumberApis 6e402fd86f220f25
+// go: internal/rules/schema_number.go:195 schemaNumberApis 6e402fd86f220f25
 pub(crate) static SCHEMA_NUMBER_APIS: &[SchemaNumberApi] = &[
     SchemaNumberApi {
         name: "Number",
@@ -243,7 +260,7 @@ pub(crate) static SCHEMA_NUMBER_APIS: &[SchemaNumberApi] = &[
     },
 ];
 
-// go: internal/rules/schema_number.go:182 schemaNumberReferenceLocation 024604adbf3655ce
+// go: internal/rules/schema_number.go:200 schemaNumberReferenceLocation 024604adbf3655ce
 pub(crate) fn schema_number_reference_location(node: P<Node>) -> P<Node> {
     if node.kind() == Kind::PropertyAccessExpression {
         return node.as_property_access_expression().name();

@@ -4,7 +4,7 @@ use ets_rule::Rule;
 
 use crate::*;
 
-// go: internal/rules/rules.go:10 All 9ea4bbe31e16c76b
+// go: internal/rules/rules.go:10 All 48b582c59d34593a
 // All is the list of all diagnostic rules.
 // Add new rules here explicitly - no init() magic.
 //
@@ -102,6 +102,7 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*LAZY_PROMISE_IN_EFFECT_SYNC).clone(),
         (*PROMISE_IN_EFFECT_SUCCESS).clone(),
         (*NESTED_EFFECT_GEN_YIELD).clone(),
+        (*YIELD_IN_CALL_ARGUMENT).clone(),
         (*REDUNDANT_MAP_ERROR).clone(),
         (*REDUNDANT_OR_DIE).clone(),
         (*UNNECESSARY_ARROW_BLOCK).clone(),
@@ -138,10 +139,13 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*FLAT_MAP_IGNORED_PARAM_TO_AND_THEN).clone(),
         (*FLAT_MAP_IDENTITY_TO_FLATTEN).clone(),
         (*MATCH_EFFECT_TO_MATCH).clone(),
+        (*MATCH_TO_RESULT_OR_OPTION).clone(),
+        (*MATCH_BOOLEAN_TO_IS_SUCCESS).clone(),
         (*MATCH_EFFECT_TO_MAP_BOTH).clone(),
         (*MAP_MAP_ERROR_TO_MAP_BOTH).clone(),
         (*FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL).clone(),
         (*OPTION_MATCH_TO_FROM_OPTION).clone(),
+        (*RESULT_MATCH_TO_FROM_RESULT).clone(),
         (*SYNC_TO_SUCCEED).clone(),
         (*EFFECT_SLEEP_ZERO_TO_YIELD_NOW).clone(),
         (*EXTENDS_NATIVE_ERROR).clone(),

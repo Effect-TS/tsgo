@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/classSelfMismatch_schema.ts(4,52): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/classSelfMismatch_schema.ts(9,54): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)

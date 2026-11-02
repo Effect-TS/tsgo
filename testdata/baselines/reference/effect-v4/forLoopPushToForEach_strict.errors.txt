@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/forLoopPushToForEach_strict.ts(10,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
 

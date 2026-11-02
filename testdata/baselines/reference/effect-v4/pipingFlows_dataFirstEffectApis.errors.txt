@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/pipingFlows_dataFirstEffectApis.ts(8,21): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
 /.src/pipingFlows_dataFirstEffectApis.ts(9,21): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)

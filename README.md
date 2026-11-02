@@ -5,11 +5,11 @@ A wrapper for both [TSRS](https://github.com/oxc-project/tsrs) and [TypeScript-G
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.63.0`:
+The following target package versions are supported by `@effect/tsgo@0.64.1`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261028.1` |
+| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261101.1` |
 | tsrs | `0.20.1-ts7.1.0-beta` |
 | Oxlint | `1.88.0`, `1.89.0`, `1.90.0` |
 | oxlint-tsgolint | `7.0.2004`, `7.0.2005` |
@@ -129,8 +129,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td colspan="2"><strong>Effect-native</strong> <em>Prefer Effect-native APIs and abstractions when available.</em></td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/abort-controller-in-effect.md"><code>abortControllerInEffect</code></a></td><td>Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/async-function.md"><code>asyncFunction</code></a></td><td>Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow</td></tr>
-    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/crypto-random-uuid.md"><code>cryptoRandomUUID</code></a></td><td>Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module</td></tr>
-    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/crypto-random-uuid-in-effect.md"><code>cryptoRandomUUIDInEffect</code></a></td><td>Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/crypto-random-uuid.md"><code>cryptoRandomUUID</code></a></td><td>Warns when using crypto.randomUUID() outside Effect generators instead of SecureRandom from effect/crypto</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/crypto-random-uuid-in-effect.md"><code>cryptoRandomUUIDInEffect</code></a></td><td>Warns when using crypto.randomUUID() inside Effect generators instead of SecureRandom from effect/crypto</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/extends-native-error.md"><code>extendsNativeError</code></a></td><td>Warns when a class directly extends the native Error class</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/global-console.md"><code>globalConsole</code></a></td><td>Warns when using console methods outside Effect generators instead of Effect.log/Logger</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/global-console-in-effect.md"><code>globalConsoleInEffect</code></a></td><td>Warns when using console methods inside Effect generators instead of Effect.log/Logger</td></tr>
@@ -187,8 +187,10 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/map-map-error-to-map-both.md"><code>mapMapErrorToMapBoth</code></a></td><td>Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/map-some-catch-no-such-element.md"><code>mapSomeCatchNoSuchElement</code></a></td><td>Suggests Effect.catchNoSuchElement instead of wrapping successes in Option.some and catching NoSuchElementError into Option.none</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/map-some-to-as-some.md"><code>mapSomeToAsSome</code></a></td><td>Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-boolean-to-is-success.md"><code>matchBooleanToIsSuccess</code></a></td><td>Suggests Effect.isSuccess or Effect.isFailure when Effect.match or Effect.matchEager folds to complementary boolean literals</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-effect-to-map-both.md"><code>matchEffectToMapBoth</code></a></td><td>Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-effect-to-match.md"><code>matchEffectToMatch</code></a></td><td>Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-to-result-or-option.md"><code>matchToResultOrOption</code></a></td><td>Suggests Effect.result, Effect.option or Effect.either when match handlers, or a map step followed by a catch step, only reify the outcome</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missed-pipeable-opportunity.md"><code>missedPipeableOpportunity</code></a></td><td>Suggests using .pipe() for nested function calls</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missing-effect-service-dependency.md"><code>missingEffectServiceDependency</code></a></td><td>Checks that Effect.Service dependencies satisfy all required layer inputs</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missing-pipeable-signature.md"><code>missingPipeableSignature</code></a></td><td>Reports exported fixed-arity functions whose call signatures have no corresponding pipeable overload</td></tr>
@@ -208,6 +210,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-map-error.md"><code>redundantMapError</code></a></td><td>Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-or-die.md"><code>redundantOrDie</code></a></td><td>Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-schema-tag-identifier.md"><code>redundantSchemaTagIdentifier</code></a></td><td>Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/result-match-to-from-result.md"><code>resultMatchToFromResult</code></a></td><td>Suggests Effect.fromResult when Result.match or a Result guard conditional only converts Success to Effect.succeed and Failure to Effect.fail</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/run-of-exit-to-run-exit.md"><code>runOfExitToRunExit</code></a></td><td>Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-number.md"><code>schemaNumber</code></a></td><td>Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-struct-with-tag.md"><code>schemaStructWithTag</code></a></td><td>Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field</td></tr>
@@ -224,6 +227,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe.md"><code>unnecessaryPipe</code></a></td><td>Removes pipe calls with no arguments</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe-chain.md"><code>unnecessaryPipeChain</code></a></td><td>Simplifies chained pipe calls into a single pipe call</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-typeof-type.md"><code>unnecessaryTypeofType</code></a></td><td>Suggests replacing typeof Schema.Type style annotations with the matching named type when available</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/yield-in-call-argument.md"><code>yieldInCallArgument</code></a></td><td>Suggests yielding into a const before a call instead of passing a yield* directly as a call or new argument in Effect generators</td></tr>
     <tr><td colspan="2"><strong>Maintainers</strong> <em>Guard the public API surface and release hygiene of a package.</em></td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/api-stability-leak.md"><code>apiStabilityLeak</code></a></td><td>Reports exported APIs whose public surface exposes a less stable type</td></tr>
   </tbody>

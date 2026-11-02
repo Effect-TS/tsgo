@@ -1,0 +1,29 @@
+==== /.src/matchBooleanToIsSuccess_directives.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 7:21 - 7:95
+Node: Effect.match(saveUser, { onFailure: () => false, onSuccess: () => true })
+Node Kind: KindCallExpression
+
+Subject: saveUser
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: () => false, onSuccess: () => true }]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 10:22 - 10:96
+Node: Effect.match(saveUser, { onFailure: () => true, onSuccess: () => false })
+Node Kind: KindCallExpression
+
+Subject: saveUser
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: () => true, onSuccess: () => false }]
+      outType: Effect<boolean, never, never>

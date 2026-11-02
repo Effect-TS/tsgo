@@ -17,6 +17,11 @@ export const pipeArrowBlock = failable.pipe(
     return Effect.die(error)
   })
 )
+
+// Should trigger: an identity-forwarding function written as a piping flow.
+export const pipeArrowPipe = failable.pipe(
+  Effect.catch((error) => pipe(error, Effect.die))
+)
 export const pipeFunction = failable.pipe(
   Effect.catch(function(error) {
     return Effect.die(error)

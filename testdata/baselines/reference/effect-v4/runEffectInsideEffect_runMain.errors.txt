@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/main.ts(10,3): suggestion TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
 /.src/main.ts(15,3): suggestion TS377160: `BunRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BunRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)

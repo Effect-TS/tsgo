@@ -1,0 +1,1087 @@
+==== /.src/resultMatchToFromResult.ts (77 flows) ====
+
+=== Piping Flow ===
+Location: 23:25 - 26:3
+Node: Result.match(result, {\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 29:30 - 32:3
+Node: Result.match(parsePort("8080"), {\n  onFailure: (error) => Effect.fail(error),\n  onSuccess: (value) => Effect.succeed(value)\n})
+Node Kind: KindCallExpression
+
+Subject: "8080"
+Subject Type: "8080"
+
+Transformations (2):
+  [0] kind: call
+      callee: parsePort
+      args: (constant)
+      outType: Result<number, Error>
+  [1] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: (error) => Effect.fail(error),\n  onSuccess: (value) => Effect.succeed(value)\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 30:24 - 30:43
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 31:24 - 31:46
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 35:30 - 38:3
+Node: R.match(result, {\n  onSuccess: (value) => Fx.succeed(value),\n  onFailure: (error) => Fx.fail(error)\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: R.match
+      args: [{\n  onSuccess: (value) => Fx.succeed(value),\n  onFailure: (error) => Fx.fail(error)\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 36:24 - 36:42
+Node: Fx.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 37:24 - 37:39
+Node: Fx.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 41:29 - 44:3
+Node: Result.match(result, {\n  onFailure: (error) => Effect.fail(error),\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: (error) => Effect.fail(error),\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 42:24 - 42:43
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 47:30 - 50:3
+Node: Result.match(result, {\n  onFailure: fail,\n  onSuccess: succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: fail,\n  onSuccess: succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 53:27 - 60:3
+Node: Result.match(result, {\n  onFailure: function(error) {\n    return Effect.fail(error)\n  },\n  onSuccess: (value) => {\n    return Effect.succeed(value)\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: function(error) {\n    return Effect.fail(error)\n  },\n  onSuccess: (value) => {\n    return Effect.succeed(value)\n  }\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 55:11 - 55:30
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 58:11 - 58:33
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 63:29 - 66:3
+Node: ResultModule.match(result, {\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: ResultModule.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 69:24 - 74:2
+Node: result.pipe(\n  Result.match({\n    onFailure: Effect.fail,\n    onSuccess: Effect.succeed\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Result.match
+      args: [{\n    onFailure: Effect.fail,\n    onSuccess: Effect.succeed\n  }]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 77:28 - 83:2
+Node: pipe(\n  result,\n  Result.match({\n    onFailure: (error) => Effect.fail(error),\n    onSuccess: (value) => Effect.succeed(value)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Result.match
+      args: [{\n    onFailure: (error) => Effect.fail(error),\n    onSuccess: (value) => Effect.succeed(value)\n  }]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 80:26 - 80:45
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 81:26 - 81:48
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 86:24 - 89:11
+Node: Result.match({\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n})(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 92:76 - 97:8
+Node: Effect.flatMap(effect, (inner) =>\n    Result.match(inner, {\n      onFailure: Effect.fail,\n      onSuccess: Effect.succeed\n    }))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<Result<A, E>, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(inner) =>\n    Result.match(inner, {\n      onFailure: Effect.fail,\n      onSuccess: Effect.succeed\n    })]
+      outType: Effect<A, E, never>
+
+=== Piping Flow ===
+Location: 93:36 - 97:7
+Node: Result.match(inner, {\n      onFailure: Effect.fail,\n      onSuccess: Effect.succeed\n    })
+Node Kind: KindCallExpression
+
+Subject: inner
+Subject Type: Result<A, E>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n      onFailure: Effect.fail,\n      onSuccess: Effect.succeed\n    }]
+      outType: Effect<never, E, never> | Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 100:32 - 100:57
+Node: Result.isSuccess(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 101:4 - 101:35
+Node: Effect.succeed(result.success)
+Node Kind: KindCallExpression
+
+Subject: result.success
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 102:4 - 102:32
+Node: Effect.fail(result.failure)
+Node Kind: KindCallExpression
+
+Subject: result.failure
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 105:32 - 105:52
+Node: R.isFailure(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: R.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 106:4 - 106:28
+Node: Fx.fail(result.failure)
+Node Kind: KindCallExpression
+
+Subject: result.failure
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 107:4 - 107:31
+Node: Fx.succeed(result.success)
+Node Kind: KindCallExpression
+
+Subject: result.success
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 110:80 - 111:27
+Node: Result.isSuccess(parsed)
+Node Kind: KindCallExpression
+
+Subject: parsed
+Subject Type: Result<string, ParseError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 111:29 - 111:60
+Node: Effect.succeed(parsed.success)
+Node Kind: KindCallExpression
+
+Subject: parsed.success
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 111:62 - 111:90
+Node: Effect.fail(parsed.failure)
+Node Kind: KindCallExpression
+
+Subject: parsed.failure
+Subject Type: ParseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, ParseError, never>
+
+=== Piping Flow ===
+Location: 114:37 - 117:3
+Node: Result.match(result, {\n  onFailure: () => Effect.fail(new ParseError("invalid")),\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: () => Effect.fail(new ParseError("invalid")),\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, ParseError, never>
+
+=== Piping Flow ===
+Location: 115:19 - 115:58
+Node: Effect.fail(new ParseError("invalid"))
+Node Kind: KindCallExpression
+
+Subject: new ParseError("invalid")
+Subject Type: ParseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, ParseError, never>
+
+=== Piping Flow ===
+Location: 120:30 - 123:3
+Node: Result.match(result, {\n  onFailure: (error) => Effect.fail(new ParseError(error)),\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: (error) => Effect.fail(new ParseError(error)),\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, ParseError, never>
+
+=== Piping Flow ===
+Location: 121:24 - 121:59
+Node: Effect.fail(new ParseError(error))
+Node Kind: KindCallExpression
+
+Subject: new ParseError(error)
+Subject Type: ParseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, ParseError, never>
+
+=== Piping Flow ===
+Location: 126:34 - 129:3
+Node: Result.match(result, {\n  onFailure: Effect.fail,\n  onSuccess: (value) => Effect.succeed(value + 1)\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: (value) => Effect.succeed(value + 1)\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 128:24 - 128:50
+Node: Effect.succeed(value + 1)
+Node Kind: KindCallExpression
+
+Subject: value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 132:33 - 135:3
+Node: Result.match(result, {\n  onFailure: Effect.fail,\n  onSuccess: (_value) => Effect.succeed(fallback)\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: (_value) => Effect.succeed(fallback)\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 134:25 - 134:50
+Node: Effect.succeed(fallback)
+Node Kind: KindCallExpression
+
+Subject: fallback
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 138:37 - 141:3
+Node: Result.match(result, {\n  onFailure: (error) => Effect.fail<Error | ParseError>(error),\n  onSuccess: (value) => Effect.succeed<number | string>(value)\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: (error) => Effect.fail<Error | ParseError>(error),\n  onSuccess: (value) => Effect.succeed<number | string>(value)\n}]
+      outType: Effect<never, Error | ParseError, never> | Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 139:24 - 139:63
+Node: Effect.fail<Error | ParseError>(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error | ParseError, never>
+
+=== Piping Flow ===
+Location: 140:24 - 140:63
+Node: Effect.succeed<number | string>(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 144:29 - 147:3
+Node: Result.match(result, {\n  onFailure: Effect.die,\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Effect.die,\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 150:32 - 153:3
+Node: Result.match(result, {\n  onFailure: Effect.succeed,\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Effect.succeed,\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<Error, never, never>
+
+=== Piping Flow ===
+Location: 156:31 - 159:3
+Node: Result.match(result, {\n  onFailure: Effect.succeed,\n  onSuccess: Effect.fail\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Effect.succeed,\n  onSuccess: Effect.fail\n}]
+      outType: Effect<never, number, never> | Effect<Error, never, never>
+
+=== Piping Flow ===
+Location: 162:27 - 165:3
+Node: Result.match(result, {\n  onFailure: Effect.fail,\n  onSuccess: (value) => Effect.sync(() => value)\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: (value) => Effect.sync(() => value)\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 164:24 - 164:49
+Node: Effect.sync(() => value)
+Node Kind: KindCallExpression
+
+Subject: () => value
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 168:29 - 171:3
+Node: Result.match(result, {\n  onFailure: async (error) => Effect.fail(error),\n  onSuccess: async (value) => Effect.succeed(value)\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: async (error) => Effect.fail(error),\n  onSuccess: async (value) => Effect.succeed(value)\n}]
+      outType: Promise<Effect<number, never, never>> | Promise<Effect<never, Error, never>>
+
+=== Piping Flow ===
+Location: 169:30 - 169:49
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 170:30 - 170:52
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 174:34 - 177:3
+Node: Result.match(result, {\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n}]
+      outType: import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, Error>
+
+=== Piping Flow ===
+Location: 180:29 - 180:60
+Node: Result.match(result, handlers)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [handlers]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 183:25 - 186:3
+Node: Exit.match(exit, {\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Exit.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, Cause<Error>, never>
+
+=== Piping Flow ===
+Location: 189:27 - 192:3
+Node: Effect.match(Effect.succeed(1), {\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Effect.fail,\n  onSuccess: Effect.succeed\n}]
+      outType: Effect<Effect<number, never, never> | Effect<never, never, never>, never, never>
+
+=== Piping Flow ===
+Location: 195:28 - 195:50
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 196:25 - 196:44
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, E, never>
+
+=== Piping Flow ===
+Location: 200:14 - 200:38
+Node: Result.isSuccess(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: Result<A, E>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 200:40 - 200:73
+Node: options.onSuccess(value.success)
+Node Kind: KindCallExpression
+
+Subject: value.success
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: options.onSuccess
+      args: (constant)
+      outType: C
+
+=== Piping Flow ===
+Location: 200:75 - 200:108
+Node: options.onFailure(value.failure)
+Node Kind: KindCallExpression
+
+Subject: value.failure
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: options.onFailure
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 210:33 - 213:3
+Node: Result.match(result, {\n  onFailure: local.fail,\n  onSuccess: local.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: local.fail,\n  onSuccess: local.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 220:33 - 220:58
+Node: Result.isSuccess(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 221:4 - 221:41
+Node: Effect.succeed(otherSuccess.success)
+Node Kind: KindCallExpression
+
+Subject: otherSuccess.success
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 222:4 - 222:32
+Node: Effect.fail(result.failure)
+Node Kind: KindCallExpression
+
+Subject: result.failure
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 225:33 - 225:58
+Node: Result.isSuccess(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 226:4 - 226:35
+Node: Effect.succeed(result.success)
+Node Kind: KindCallExpression
+
+Subject: result.success
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 227:4 - 227:38
+Node: Effect.fail(otherFailure.failure)
+Node Kind: KindCallExpression
+
+Subject: otherFailure.failure
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 230:34 - 230:59
+Node: Result.isSuccess(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 231:4 - 231:35
+Node: Effect.succeed(result.success)
+Node Kind: KindCallExpression
+
+Subject: result.success
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 232:4 - 232:48
+Node: Effect.fail(new ParseError(result.failure))
+Node Kind: KindCallExpression
+
+Subject: new ParseError(result.failure)
+Subject Type: ParseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, ParseError, never>
+
+=== Piping Flow ===
+Location: 235:41 - 235:66
+Node: Result.isFailure(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 236:4 - 236:32
+Node: Effect.fail(result.failure)
+Node Kind: KindCallExpression
+
+Subject: result.failure
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 237:4 - 237:39
+Node: Effect.succeed(result.success * 2)
+Node Kind: KindCallExpression
+
+Subject: result.success * 2
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 240:37 - 240:69
+Node: Result.isSuccess(holder.result)
+Node Kind: KindCallExpression
+
+Subject: holder.result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 241:4 - 241:42
+Node: Effect.succeed(holder.result.success)
+Node Kind: KindCallExpression
+
+Subject: holder.result.success
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 242:4 - 242:39
+Node: Effect.fail(holder.result.failure)
+Node Kind: KindCallExpression
+
+Subject: holder.result.failure
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 245:30 - 246:38
+Node: ((value: Result.Result<number, Error>): value is Result.Success<number, Error> =>\n    value._tag === "Success")(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: ((value: Result.Result<number, Error>): value is Result.Success<number, Error> =>\n    value._tag === "Success")
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 247:4 - 247:35
+Node: Effect.succeed(result.success)
+Node Kind: KindCallExpression
+
+Subject: result.success
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 248:4 - 248:32
+Node: Effect.fail(result.failure)
+Node Kind: KindCallExpression
+
+Subject: result.failure
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>

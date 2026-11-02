@@ -1,0 +1,35 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Either } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+
+// MUST TRIGGER: curried application of the pipeable form -> Effect.either
+export const curried = Effect.match({
+  onFailure: Either.left,
+  onSuccess: Either.right
+})(fetchUser("u1"))
+
+// MUST TRIGGER: nested data-first map + catchAll -> Effect.either
+export const nestedDataFirst = Effect.catchAll(
+  Effect.map(fetchUser("u1"), Either.right),
+  (e) => Effect.succeed(Either.left(e))
+)
+
+// MUST NOT TRIGGER: v3 Effect.catch takes a discriminator, not a catch-all handler
+export const catchByTag = fetchUser("u1").pipe(
+  Effect.map(Either.right),
+  Effect.catch("_tag", {
+    failure: "UserNotFound",
+    onFailure: (e) => Effect.succeed(Either.left(e))
+  })
+)

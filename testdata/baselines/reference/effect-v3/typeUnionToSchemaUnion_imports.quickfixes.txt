@@ -30,9 +30,9 @@ skipped by default
 // @effect-diagnostics typeUnionToSchemaUnion:warning
 import { Circle, Shape, Square } from "./schemas"
 
+export const Figure = Schema.Union(Circle, Square);
 // MUST TRIGGER - members are imported and no Schema module is imported here: the fix
 // uses the `FindModuleReference` fallback `Schema` reference and adds no import
-export const Figure = Schema.Union(Circle, Square);
 export type Figure = typeof Figure.Type
 
 // MUST TRIGGER, no fix offered - `Hexagon` is declared after the alias in this file

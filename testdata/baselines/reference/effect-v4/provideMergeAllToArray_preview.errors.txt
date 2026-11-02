@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/provideMergeAllToArray_preview.ts(13,49): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 

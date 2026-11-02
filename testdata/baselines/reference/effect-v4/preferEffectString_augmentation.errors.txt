@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/preferEffectString_augmentation.ts(9,7): warning TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
 

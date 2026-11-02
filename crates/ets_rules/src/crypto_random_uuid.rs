@@ -8,16 +8,16 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::THIS_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_THE_EFFECT_CRYPTO_MODULE_INSTEAD_EFFECT_CRYPTO_RANDOM_UUID;
+static MESSAGE: &Message = &tsdiag::THIS_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_SECURE_RANDOM_FROM_EFFECT_SLASHCRYPTO_INSTEAD_EFFECT_CRYPTO_RANDOM_UUID;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE_IN_EFFECT: &Message = &tsdiag::THIS_EFFECT_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_THE_EFFECT_CRYPTO_MODULE_INSTEAD_EFFECT_CRYPTO_RANDOM_UUID_IN_EFFECT;
+static MESSAGE_IN_EFFECT: &Message = &tsdiag::THIS_EFFECT_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_SECURE_RANDOM_FROM_EFFECT_SLASHCRYPTO_INSTEAD_EFFECT_CRYPTO_RANDOM_UUID_IN_EFFECT;
 
-// go: internal/rules/crypto_random_uuid.go:12 CryptoRandomUUID 062373540fb780b3
+// go: internal/rules/crypto_random_uuid.go:12 CryptoRandomUUID 88330c3cf8a80c1e
 pub static CRYPTO_RANDOM_UUID: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "cryptoRandomUUID",
     group: "effectNative",
-    description: "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module",
+    description: "Warns when using crypto.randomUUID() outside Effect generators instead of SecureRandom from effect/crypto",
     default_severity: Severity::Off,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
@@ -25,11 +25,11 @@ pub static CRYPTO_RANDOM_UUID: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_crypto_random_uuid(ctx, false) },
 });
 
-// go: internal/rules/crypto_random_uuid.go:24 CryptoRandomUUIDInEffect c2875ac105c75437
+// go: internal/rules/crypto_random_uuid.go:24 CryptoRandomUUIDInEffect dcb885c3a5283e9f
 pub static CRYPTO_RANDOM_UUID_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "cryptoRandomUUIDInEffect",
     group: "effectNative",
-    description: "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module",
+    description: "Warns when using crypto.randomUUID() inside Effect generators instead of SecureRandom from effect/crypto",
     default_severity: Severity::Off,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE_IN_EFFECT.code()],
@@ -37,7 +37,7 @@ pub static CRYPTO_RANDOM_UUID_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule 
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_crypto_random_uuid(ctx, true) },
 });
 
-// go: internal/rules/crypto_random_uuid.go:36 runCryptoRandomUUID b09d4c170c6e8c8a
+// go: internal/rules/crypto_random_uuid.go:36 runCryptoRandomUUID ef529a1b3dd33784
 pub(crate) fn run_crypto_random_uuid(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

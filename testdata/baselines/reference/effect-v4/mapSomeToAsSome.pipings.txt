@@ -1,4 +1,4 @@
-==== /.src/mapSomeToAsSome.ts (25 flows) ====
+==== /.src/mapSomeToAsSome.ts (27 flows) ====
 
 === Piping Flow ===
 Location: 11:44 - 11:62
@@ -71,7 +71,35 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 28:38 - 28:76
+Location: 28:44 - 30:2
+Node: numberEffect.pipe(\n  Effect.map((value) => pipe(value, Option.some))\n)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(value) => pipe(value, Option.some)]
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 29:24 - 29:49
+Node: pipe(value, Option.some)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 33:38 - 33:76
 Node: Effect.map(numberEffect, Option.some)
 Node Kind: KindCallExpression
 
@@ -85,7 +113,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 31:36 - 34:2
+Location: 36:36 - 39:2
 Node: pipe(\n  numberEffect,\n  Fx.map(O.some)\n)
 Node Kind: KindCallExpression
 
@@ -99,7 +127,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 37:40 - 39:2
+Location: 42:40 - 44:2
 Node: numberEffect.pipe(\n  Effect.map(optionSome)\n)
 Node Kind: KindCallExpression
 
@@ -113,7 +141,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 42:38 - 42:71
+Location: 47:38 - 47:71
 Node: numberEffect.pipe(Effect.asSome)
 Node Kind: KindCallExpression
 
@@ -127,7 +155,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 45:38 - 47:2
+Location: 50:38 - 52:2
 Node: Stream.make(1).pipe(\n  Stream.map(Option.some)\n)
 Node Kind: KindCallExpression
 
@@ -145,7 +173,7 @@ Transformations (2):
       outType: Stream<Option<1>, never, never>
 
 === Piping Flow ===
-Location: 50:38 - 52:2
+Location: 55:38 - 57:2
 Node: Option.some(1).pipe(\n  Option.map(Option.some)\n)
 Node Kind: KindCallExpression
 
@@ -163,7 +191,7 @@ Transformations (2):
       outType: Option<Option<number>>
 
 === Piping Flow ===
-Location: 54:53 - 54:72
+Location: 59:53 - 59:72
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -177,7 +205,7 @@ Transformations (1):
       outType: Option<A>
 
 === Piping Flow ===
-Location: 57:41 - 59:2
+Location: 62:41 - 64:2
 Node: numberEffect.pipe(\n  Effect.map(localSome)\n)
 Node Kind: KindCallExpression
 
@@ -191,7 +219,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 62:43 - 64:2
+Location: 67:43 - 69:2
 Node: numberEffect.pipe(\n  Effect.map((value) => Option.some(value + 1))\n)
 Node Kind: KindCallExpression
 
@@ -205,7 +233,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 63:24 - 63:47
+Location: 68:24 - 68:47
 Node: Option.some(value + 1)
 Node Kind: KindCallExpression
 
@@ -219,7 +247,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 67:46 - 69:2
+Location: 72:46 - 74:2
 Node: Effect.succeed({ value: 1 }).pipe(\n  Effect.map((input) => Option.some(input.value))\n)
 Node Kind: KindCallExpression
 
@@ -237,7 +265,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 68:24 - 68:49
+Location: 73:24 - 73:49
 Node: Option.some(input.value)
 Node Kind: KindCallExpression
 
@@ -251,7 +279,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 72:45 - 74:2
+Location: 77:45 - 79:2
 Node: Effect.succeed({ value: 1 }).pipe(\n  Effect.map(({ value }) => Option.some(value))\n)
 Node Kind: KindCallExpression
 
@@ -269,7 +297,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 73:28 - 73:47
+Location: 78:28 - 78:47
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -283,7 +311,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 77:41 - 79:2
+Location: 82:41 - 84:2
 Node: Effect.succeed(1 as const).pipe(\n  Effect.map((value: number) => Option.some(value))\n)
 Node Kind: KindCallExpression
 
@@ -301,7 +329,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 78:32 - 78:51
+Location: 83:32 - 83:51
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -315,7 +343,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 82:38 - 86:2
+Location: 87:38 - 91:2
 Node: numberEffect.pipe(\n  Effect.map((value) => {\n    return Option.some(value)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -329,7 +357,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 84:11 - 84:30
+Location: 89:11 - 89:30
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -343,7 +371,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 89:47 - 93:2
+Location: 94:47 - 98:2
 Node: numberEffect.pipe(\n  Effect.map(function (value) {\n    return Option.some(value)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -357,7 +385,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 91:11 - 91:30
+Location: 96:11 - 96:30
 Node: Option.some(value)
 Node Kind: KindCallExpression
 

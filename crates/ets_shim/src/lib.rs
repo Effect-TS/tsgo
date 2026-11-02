@@ -17,6 +17,7 @@ pub use tsrs_lsproto as lsproto;
 pub use tsrs_module as module;
 pub use tsrs_modulespecifiers as modulespecifiers;
 pub use tsrs_parser as parser;
+pub use tsrs_printer as printer;
 pub use tsrs_project as project;
 pub use tsrs_scanner as scanner;
 pub use tsrs_tsoptions as tsoptions;

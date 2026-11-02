@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.2
+Effect version: 4.1.2
 
 /.src/effectTryWithoutCatch_handover.ts(9,23): warning TS377169: Effect.try is called without a `catch` handler, so failures surface as the generic `UnknownError`. The object form `{ try, catch }` maps the cause to a typed, domain-specific error. effect(effectTryWithoutCatch)
 /.src/effectTryWithoutCatch_handover.ts(14,22): warning TS377021: The `catch` callback in `Effect.try` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)

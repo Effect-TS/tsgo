@@ -1,0 +1,61 @@
+==== /.src/matchToResultOrOption_preview.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 5:27 - 5:60
+Node: Data.TaggedError("UserNotFound")
+Node Kind: KindCallExpression
+
+Subject: "UserNotFound"
+Subject Type: "UserNotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "UserNotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 12:26 - 15:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => Result.fail(e),\n  onSuccess: (user) => Result.succeed(user)\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => Result.fail(e),\n  onSuccess: (user) => Result.succeed(user)\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<{ readonly name: string; }, never>, never, never>
+
+=== Piping Flow ===
+Location: 13:20 - 13:35
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 14:23 - 14:44
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: { readonly name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<{ readonly name: string; }, never>

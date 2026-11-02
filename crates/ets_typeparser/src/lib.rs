@@ -51,6 +51,7 @@ mod effect_type;
 #[cfg(test)]
 mod effect_type_test;
 mod effect_yieldable_type;
+mod either_type;
 mod expected_and_real_type;
 #[cfg(test)]
 mod expected_and_real_type_test;
@@ -141,6 +142,7 @@ mod promise_type;
 mod readonly_results_test;
 mod reconstruct;
 mod result_dispatch;
+mod result_type;
 mod returning_dispatch;
 #[cfg(test)]
 mod returning_dispatch_test;
