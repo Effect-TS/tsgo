@@ -25,6 +25,18 @@ export const isWindowsCommandShim = (command: string, platform: NodeJS.Platform 
 export const resolveCommand = (command: string, platform: NodeJS.Platform = process.platform): string =>
   isWindowsCommandShim(command, platform) ? `${command}.cmd` : command
 
+// Windows .cmd shims must run through a shell, and the spawner rejects `shell` combined with an argument list,
+// so the arguments are joined into the command line (the same line Node built from them for `shell: true`).
+export const makeCommand = (
+  command: string,
+  args: ReadonlyArray<string>,
+  options: ChildProcess.CommandOptions,
+  platform: NodeJS.Platform = process.platform
+): ChildProcess.Command =>
+  isWindowsCommandShim(command, platform)
+    ? ChildProcess.make([resolveCommand(command, platform), ...args].join(" "), [], { ...options, shell: true })
+    : ChildProcess.make(command, args, options)
+
 export const runCommand = Effect.fnUntraced(function*(
   command: string,
   cwd: string,
@@ -33,14 +45,13 @@ export const runCommand = Effect.fnUntraced(function*(
   env?: Readonly<Record<string, string>>
 ) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
-  const exitCode = yield* spawner.exitCode(ChildProcess.make(resolveCommand(command), args, {
+  const exitCode = yield* spawner.exitCode(makeCommand(command, args, {
     cwd,
     stdin: "inherit",
     stdout: quiet ? "ignore" : "inherit",
     stderr: quiet ? "ignore" : "inherit",
     env,
-    extendEnv: true,
-    shell: isWindowsCommandShim(command)
+    extendEnv: true
   }))
   if (exitCode !== ChildProcessSpawner.ExitCode(0)) {
     return yield* new CommandError({ command, args, exitCode })
@@ -57,14 +68,13 @@ export const runCommandExitCode = Effect.fnUntraced(function*(
 ) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   return Number(
-    yield* spawner.exitCode(ChildProcess.make(resolveCommand(command), args, {
+    yield* spawner.exitCode(makeCommand(command, args, {
       cwd,
       stdin: "inherit",
       stdout: "ignore",
       stderr: "inherit",
       env,
-      extendEnv: true,
-      shell: isWindowsCommandShim(command)
+      extendEnv: true
     }))
   )
 })
@@ -89,10 +99,9 @@ export const runCommandCapture = Effect.fnUntraced(function*(
 ) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   return yield* Effect.scoped(Effect.gen(function*() {
-    const handle = yield* spawner.spawn(ChildProcess.make(resolveCommand(command), args, {
+    const handle = yield* spawner.spawn(makeCommand(command, args, {
       cwd,
-      stdin: "inherit",
-      shell: isWindowsCommandShim(command)
+      stdin: "inherit"
     }))
     const [output, exitCode] = yield* Effect.all([
       Stream.mkString(Stream.decodeText(handle.all)),
@@ -110,12 +119,11 @@ export const runCommandCaptureSplit = Effect.fnUntraced(function*(
 ) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   return yield* Effect.scoped(Effect.gen(function*() {
-    const handle = yield* spawner.spawn(ChildProcess.make(resolveCommand(command), args, {
+    const handle = yield* spawner.spawn(makeCommand(command, args, {
       cwd,
       stdin: "inherit",
       env,
-      extendEnv: true,
-      shell: isWindowsCommandShim(command)
+      extendEnv: true
     }))
     const [stdout, stderr, exitCode] = yield* Effect.all([
       Stream.mkString(Stream.decodeText(handle.stdout)),
