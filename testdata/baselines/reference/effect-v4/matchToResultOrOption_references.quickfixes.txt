@@ -1,0 +1,348 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:24-13:36) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D2] (16:22-16:34) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D3] (19:22-19:34) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D4] (24:3-24:15) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D5] (31:3-31:15) TS377175: `Effect.option` reifies the outcome directly; these `Effect.map/catch` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.option"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_references.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Effect, Exit, Option, Result } from "effect"
+import * as R from "effect/Result"
+import { fail as resultFail, succeed as resultSucceed } from "effect/Result"
+
+declare const source: Effect.Effect<number, string>
+
+const Local = { Result: { succeed: <A>(a: A) => a, fail: <E>(e: E) => e } }
+const succeedAlias = Result.succeed
+
+// MUST TRIGGER: Result constructors through the effect/Result subpath namespace
+export const subpath = Effect.result(source)
+
+// MUST TRIGGER: renamed named imports of the Result constructors
+export const named = Effect.match(source, { onFailure: resultFail, onSuccess: resultSucceed })
+
+// MUST TRIGGER: local constant alias of Result.succeed
+export const alias = Effect.match(source, { onFailure: Result.fail, onSuccess: succeedAlias })
+
+// MUST TRIGGER: the fold is a data-first argument of another call, so it roots its own flow
+export const nestedArgument = Effect.andThen(
+  Effect.log("start"),
+  Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+)
+
+// MUST TRIGGER: map + catch pair inside a longer flow; the fix keeps the other steps
+export const pairInLongerFlow = source.pipe(
+  Effect.tap((n) => Effect.log(n)),
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none())),
+  Effect.map(Option.isSome)
+)
+
+// MUST NOT TRIGGER: a local object with Result-shaped members is not the Result module
+export const lookalike = Effect.match(source, { onFailure: Local.Result.fail, onSuccess: Local.Result.succeed })
+
+// MUST NOT TRIGGER: Effect.fail is not Result.fail
+export const effectFail = Effect.match(source, { onFailure: Effect.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Exit.fail is not Result.fail
+export const exitFail = Effect.match(source, { onFailure: Exit.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: a generic handler is not an identity forwarder
+export const genericHandler = Effect.match(source, { onFailure: <E>(e: E) => Result.fail(e), onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Option.none on success discards the value
+export const noneOnSuccess = Effect.matchEffect(source, {
+  onFailure: () => Effect.succeed(Option.none()),
+  onSuccess: () => Effect.succeed(Option.none())
+})
+
+// MUST NOT TRIGGER: extra spread properties next to the handlers
+export const extraSpread = Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed, ...{} })
+
+
+=== [D2] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_references.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Effect, Exit, Option, Result } from "effect"
+import * as R from "effect/Result"
+import { fail as resultFail, succeed as resultSucceed } from "effect/Result"
+
+declare const source: Effect.Effect<number, string>
+
+const Local = { Result: { succeed: <A>(a: A) => a, fail: <E>(e: E) => e } }
+const succeedAlias = Result.succeed
+
+// MUST TRIGGER: Result constructors through the effect/Result subpath namespace
+export const subpath = Effect.match(source, { onFailure: R.fail, onSuccess: R.succeed })
+
+// MUST TRIGGER: renamed named imports of the Result constructors
+export const named = Effect.result(source)
+
+// MUST TRIGGER: local constant alias of Result.succeed
+export const alias = Effect.match(source, { onFailure: Result.fail, onSuccess: succeedAlias })
+
+// MUST TRIGGER: the fold is a data-first argument of another call, so it roots its own flow
+export const nestedArgument = Effect.andThen(
+  Effect.log("start"),
+  Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+)
+
+// MUST TRIGGER: map + catch pair inside a longer flow; the fix keeps the other steps
+export const pairInLongerFlow = source.pipe(
+  Effect.tap((n) => Effect.log(n)),
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none())),
+  Effect.map(Option.isSome)
+)
+
+// MUST NOT TRIGGER: a local object with Result-shaped members is not the Result module
+export const lookalike = Effect.match(source, { onFailure: Local.Result.fail, onSuccess: Local.Result.succeed })
+
+// MUST NOT TRIGGER: Effect.fail is not Result.fail
+export const effectFail = Effect.match(source, { onFailure: Effect.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Exit.fail is not Result.fail
+export const exitFail = Effect.match(source, { onFailure: Exit.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: a generic handler is not an identity forwarder
+export const genericHandler = Effect.match(source, { onFailure: <E>(e: E) => Result.fail(e), onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Option.none on success discards the value
+export const noneOnSuccess = Effect.matchEffect(source, {
+  onFailure: () => Effect.succeed(Option.none()),
+  onSuccess: () => Effect.succeed(Option.none())
+})
+
+// MUST NOT TRIGGER: extra spread properties next to the handlers
+export const extraSpread = Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed, ...{} })
+
+
+=== [D3] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_references.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Effect, Exit, Option, Result } from "effect"
+import * as R from "effect/Result"
+import { fail as resultFail, succeed as resultSucceed } from "effect/Result"
+
+declare const source: Effect.Effect<number, string>
+
+const Local = { Result: { succeed: <A>(a: A) => a, fail: <E>(e: E) => e } }
+const succeedAlias = Result.succeed
+
+// MUST TRIGGER: Result constructors through the effect/Result subpath namespace
+export const subpath = Effect.match(source, { onFailure: R.fail, onSuccess: R.succeed })
+
+// MUST TRIGGER: renamed named imports of the Result constructors
+export const named = Effect.match(source, { onFailure: resultFail, onSuccess: resultSucceed })
+
+// MUST TRIGGER: local constant alias of Result.succeed
+export const alias = Effect.result(source)
+
+// MUST TRIGGER: the fold is a data-first argument of another call, so it roots its own flow
+export const nestedArgument = Effect.andThen(
+  Effect.log("start"),
+  Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+)
+
+// MUST TRIGGER: map + catch pair inside a longer flow; the fix keeps the other steps
+export const pairInLongerFlow = source.pipe(
+  Effect.tap((n) => Effect.log(n)),
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none())),
+  Effect.map(Option.isSome)
+)
+
+// MUST NOT TRIGGER: a local object with Result-shaped members is not the Result module
+export const lookalike = Effect.match(source, { onFailure: Local.Result.fail, onSuccess: Local.Result.succeed })
+
+// MUST NOT TRIGGER: Effect.fail is not Result.fail
+export const effectFail = Effect.match(source, { onFailure: Effect.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Exit.fail is not Result.fail
+export const exitFail = Effect.match(source, { onFailure: Exit.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: a generic handler is not an identity forwarder
+export const genericHandler = Effect.match(source, { onFailure: <E>(e: E) => Result.fail(e), onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Option.none on success discards the value
+export const noneOnSuccess = Effect.matchEffect(source, {
+  onFailure: () => Effect.succeed(Option.none()),
+  onSuccess: () => Effect.succeed(Option.none())
+})
+
+// MUST NOT TRIGGER: extra spread properties next to the handlers
+export const extraSpread = Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed, ...{} })
+
+
+=== [D4] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_references.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Effect, Exit, Option, Result } from "effect"
+import * as R from "effect/Result"
+import { fail as resultFail, succeed as resultSucceed } from "effect/Result"
+
+declare const source: Effect.Effect<number, string>
+
+const Local = { Result: { succeed: <A>(a: A) => a, fail: <E>(e: E) => e } }
+const succeedAlias = Result.succeed
+
+// MUST TRIGGER: Result constructors through the effect/Result subpath namespace
+export const subpath = Effect.match(source, { onFailure: R.fail, onSuccess: R.succeed })
+
+// MUST TRIGGER: renamed named imports of the Result constructors
+export const named = Effect.match(source, { onFailure: resultFail, onSuccess: resultSucceed })
+
+// MUST TRIGGER: local constant alias of Result.succeed
+export const alias = Effect.match(source, { onFailure: Result.fail, onSuccess: succeedAlias })
+
+// MUST TRIGGER: the fold is a data-first argument of another call, so it roots its own flow
+export const nestedArgument = Effect.andThen(
+  Effect.log("start"),
+  Effect.result(source)
+)
+
+// MUST TRIGGER: map + catch pair inside a longer flow; the fix keeps the other steps
+export const pairInLongerFlow = source.pipe(
+  Effect.tap((n) => Effect.log(n)),
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none())),
+  Effect.map(Option.isSome)
+)
+
+// MUST NOT TRIGGER: a local object with Result-shaped members is not the Result module
+export const lookalike = Effect.match(source, { onFailure: Local.Result.fail, onSuccess: Local.Result.succeed })
+
+// MUST NOT TRIGGER: Effect.fail is not Result.fail
+export const effectFail = Effect.match(source, { onFailure: Effect.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Exit.fail is not Result.fail
+export const exitFail = Effect.match(source, { onFailure: Exit.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: a generic handler is not an identity forwarder
+export const genericHandler = Effect.match(source, { onFailure: <E>(e: E) => Result.fail(e), onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Option.none on success discards the value
+export const noneOnSuccess = Effect.matchEffect(source, {
+  onFailure: () => Effect.succeed(Option.none()),
+  onSuccess: () => Effect.succeed(Option.none())
+})
+
+// MUST NOT TRIGGER: extra spread properties next to the handlers
+export const extraSpread = Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed, ...{} })
+
+
+=== [D5] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.option" ===
+
+--- file:///.src/matchToResultOrOption_references.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Effect, Exit, Option, Result } from "effect"
+import * as R from "effect/Result"
+import { fail as resultFail, succeed as resultSucceed } from "effect/Result"
+
+declare const source: Effect.Effect<number, string>
+
+const Local = { Result: { succeed: <A>(a: A) => a, fail: <E>(e: E) => e } }
+const succeedAlias = Result.succeed
+
+// MUST TRIGGER: Result constructors through the effect/Result subpath namespace
+export const subpath = Effect.match(source, { onFailure: R.fail, onSuccess: R.succeed })
+
+// MUST TRIGGER: renamed named imports of the Result constructors
+export const named = Effect.match(source, { onFailure: resultFail, onSuccess: resultSucceed })
+
+// MUST TRIGGER: local constant alias of Result.succeed
+export const alias = Effect.match(source, { onFailure: Result.fail, onSuccess: succeedAlias })
+
+// MUST TRIGGER: the fold is a data-first argument of another call, so it roots its own flow
+export const nestedArgument = Effect.andThen(
+  Effect.log("start"),
+  Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+)
+
+// MUST TRIGGER: map + catch pair inside a longer flow; the fix keeps the other steps
+export const pairInLongerFlow = source.pipe(Effect.tap(n => Effect.log(n)), Effect.option, Effect.map(Option.isSome))
+
+// MUST NOT TRIGGER: a local object with Result-shaped members is not the Result module
+export const lookalike = Effect.match(source, { onFailure: Local.Result.fail, onSuccess: Local.Result.succeed })
+
+// MUST NOT TRIGGER: Effect.fail is not Result.fail
+export const effectFail = Effect.match(source, { onFailure: Effect.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Exit.fail is not Result.fail
+export const exitFail = Effect.match(source, { onFailure: Exit.fail, onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: a generic handler is not an identity forwarder
+export const genericHandler = Effect.match(source, { onFailure: <E>(e: E) => Result.fail(e), onSuccess: Result.succeed })
+
+// MUST NOT TRIGGER: Option.none on success discards the value
+export const noneOnSuccess = Effect.matchEffect(source, {
+  onFailure: () => Effect.succeed(Option.none()),
+  onSuccess: () => Effect.succeed(Option.none())
+})
+
+// MUST NOT TRIGGER: extra spread properties next to the handlers
+export const extraSpread = Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed, ...{} })
+

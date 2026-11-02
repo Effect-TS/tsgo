@@ -1,0 +1,57 @@
+==== /.src/matchToResultOrOption_directives.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 9:28 - 9:104
+Node: Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Result.fail, onSuccess: Result.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 12:33 - 12:109
+Node: Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Result.fail, onSuccess: Result.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 16:31 - 16:107
+Node: Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Result.fail, onSuccess: Result.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 20:28 - 20:104
+Node: Effect.match(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Result.fail, onSuccess: Result.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>

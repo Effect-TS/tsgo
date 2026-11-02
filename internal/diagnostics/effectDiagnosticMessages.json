@@ -655,6 +655,10 @@
         "category": "Warning",
         "code": 377169
     },
+    "`Effect.{0}` reifies the outcome directly; these `Effect.{1}` handlers only wrap the value and the error. effect(matchToResultOrOption)": {
+        "category": "Suggestion",
+        "code": 377175
+    },
     "`Effect.isSuccess` expresses this check more directly than `Effect.{0}` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)": {
         "category": "Suggestion",
         "code": 377173

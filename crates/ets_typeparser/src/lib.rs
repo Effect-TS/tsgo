@@ -51,6 +51,7 @@ mod effect_type;
 #[cfg(test)]
 mod effect_type_test;
 mod effect_yieldable_type;
+mod either_type;
 mod expected_and_real_type;
 #[cfg(test)]
 mod expected_and_real_type_test;

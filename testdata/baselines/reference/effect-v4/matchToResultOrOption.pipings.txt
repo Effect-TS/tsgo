@@ -1,0 +1,1775 @@
+==== /.src/matchToResultOrOption.ts (105 flows) ====
+
+=== Piping Flow ===
+Location: 9:27 - 9:60
+Node: Data.TaggedError("UserNotFound")
+Node Kind: KindCallExpression
+
+Subject: "UserNotFound"
+Subject Type: "UserNotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "UserNotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 30:37 - 33:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => Result.fail(e),\n  onSuccess: (user) => Result.succeed(user)\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => Result.fail(e),\n  onSuccess: (user) => Result.succeed(user)\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 31:20 - 31:35
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 32:23 - 32:44
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+
+=== Piping Flow ===
+Location: 36:41 - 39:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 42:30 - 47:2
+Node: fetchUser("u1").pipe(\n  Effect.match({\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.match
+      args: [{\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 50:34 - 56:2
+Node: pipe(\n  fetchUser("u1"),\n  Effect.match({\n    onFailure: (e) => Result.fail(e),\n    onSuccess: (user) => Result.succeed(user)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipe
+      callee: Effect.match
+      args: [{\n    onFailure: (e) => Result.fail(e),\n    onSuccess: (user) => Result.succeed(user)\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 53:22 - 53:37
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 54:25 - 54:46
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+
+=== Piping Flow ===
+Location: 59:37 - 62:3
+Node: Effect.match(fetchUser("u1"), {\n  onSuccess: Result.succeed,\n  onFailure: Result.fail\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onSuccess: Result.succeed,\n  onFailure: Result.fail\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 65:33 - 68:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: Result.fail,\n  onSuccess: (user) => Result.succeed(user)\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: (user) => Result.succeed(user)\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 67:23 - 67:44
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+
+=== Piping Flow ===
+Location: 71:35 - 74:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e: UserNotFound) => (Result.fail(e)),\n  onSuccess: (user: User) => (Result.succeed(user))\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e: UserNotFound) => (Result.fail(e)),\n  onSuccess: (user: User) => (Result.succeed(user))\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 72:36 - 72:50
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 73:31 - 73:51
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+
+=== Piping Flow ===
+Location: 77:34 - 84:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => {\n    return Result.fail(e)\n  },\n  onSuccess: (user) => {\n    return Result.succeed(user)\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => {\n    return Result.fail(e)\n  },\n  onSuccess: (user) => {\n    return Result.succeed(user)\n  }\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 79:11 - 79:26
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 82:11 - 82:32
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+
+=== Piping Flow ===
+Location: 87:32 - 90:3
+Node: Effect.match(fetchUser("u1"), {\n  "onFailure": Result.fail,\n  "onSuccess": Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  "onFailure": Result.fail,\n  "onSuccess": Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 93:37 - 98:2
+Node: withRequirements.pipe(\n  Effect.match({\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: withRequirements
+Subject Type: Effect<User, UserNotFound, "Db">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.match
+      args: [{\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, "Db">
+
+=== Piping Flow ===
+Location: 101:24 - 104:3
+Node: Effect.match(exitValue, {\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: exitValue
+Subject Type: Exit<User, UserNotFound>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 107:30 - 110:3
+Node: E.match(fetchUser("u1"), {\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: E.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 113:30 - 116:3
+Node: foldEffect(fetchUser("u1"), {\n  onFailure: (e) => failure(e),\n  onSuccess: success\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: foldEffect
+      args: [{\n  onFailure: (e) => failure(e),\n  onSuccess: success\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 114:20 - 114:31
+Node: failure(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: failure
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 120:29 - 125:2
+Node: fetchUser("u1").pipe(\n  matchAlias({\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: matchAlias
+      args: [{\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 128:34 - 135:2
+Node: fetchUser("u1").pipe(\n  Effect.tap((user) => Effect.log(user.name)),\n  Effect.match({\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  }),\n  Effect.map((result) => Result.isSuccess(result))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (4):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.tap
+      args: [(user) => Effect.log(user.name)]
+      outType: Effect<User, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.match
+      args: [{\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+  [3] kind: pipeable
+      callee: Effect.map
+      args: [(result) => Result.isSuccess(result)]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 129:23 - 129:45
+Node: Effect.log(user.name)
+Node Kind: KindCallExpression
+
+Subject: user.name
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 134:25 - 134:50
+Node: Result.isSuccess(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 138:25 - 144:3
+Node: Effect.gen(function*() {\n  const result = yield* Effect.match(fetchUser("u1"), {\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  })\n  return result\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const result = yield* Effect.match(fetchUser("u1"), {\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  })\n  return result\n}
+Subject Type: () => Generator<Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>, import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 139:24 - 142:5
+Node: Effect.match(fetchUser("u1"), {\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  })
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n    onFailure: Result.fail,\n    onSuccess: Result.succeed\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 151:31 - 154:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: () => Option.none(),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: () => Option.none(),\n  onSuccess: Option.some\n}]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 157:35 - 160:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: Option.none,\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Option.none,\n  onSuccess: Option.some\n}]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 163:30 - 168:2
+Node: fetchUser("u1").pipe(\n  Effect.match({\n    onFailure: () => Option.none(),\n    onSuccess: (user) => Option.some(user)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.match
+      args: [{\n    onFailure: () => Option.none(),\n    onSuccess: (user) => Option.some(user)\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 166:25 - 166:43
+Node: Option.some(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<User>
+
+=== Piping Flow ===
+Location: 171:39 - 174:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (_error) => Option.none(),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (_error) => Option.none(),\n  onSuccess: Option.some\n}]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 177:40 - 180:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: () => Option.none<User>(),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: () => Option.none<User>(),\n  onSuccess: Option.some\n}]
+      outType: Effect<Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 183:36 - 189:2
+Node: pipe(\n  fetchUser("u1"),\n  Effect.match({\n    onFailure: () => O.none(),\n    onSuccess: O.some\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipe
+      callee: Effect.match
+      args: [{\n    onFailure: () => O.none(),\n    onSuccess: O.some\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 196:33 - 199:3
+Node: Effect.matchEffect(fetchUser("u1"), {\n  onFailure: (e) => Effect.succeed(Result.fail(e)),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: (e) => Effect.succeed(Result.fail(e)),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 197:20 - 197:51
+Node: Effect.succeed(Result.fail(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 198:23 - 198:60
+Node: Effect.succeed(Result.succeed(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 202:33 - 207:2
+Node: fetchUser("u1").pipe(\n  Effect.matchEffect({\n    onFailure: () => Effect.succeed(Option.none()),\n    onSuccess: (user) => Effect.succeed(Option.some(user))\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.matchEffect
+      args: [{\n    onFailure: () => Effect.succeed(Option.none()),\n    onSuccess: (user) => Effect.succeed(Option.some(user))\n  }]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 204:21 - 204:51
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 205:25 - 205:59
+Node: Effect.succeed(Option.some(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<User>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 214:30 - 217:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Result.succeed),\n  Effect.catch((e) => Effect.succeed(Result.fail(e)))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catch
+      args: [(e) => Effect.succeed(Result.fail(e))]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 216:22 - 216:53
+Node: Effect.succeed(Result.fail(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 220:30 - 224:2
+Node: pipe(\n  fetchUser("u1"),\n  Effect.map((user) => Option.some(user)),\n  Effect.catch(() => Effect.succeed(Option.none()))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipe
+      callee: Effect.map
+      args: [(user) => Option.some(user)]
+      outType: Effect<Option<User>, UserNotFound, never>
+  [2] kind: pipe
+      callee: Effect.catch
+      args: [() => Effect.succeed(Option.none())]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 222:23 - 222:41
+Node: Option.some(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<User>
+
+=== Piping Flow ===
+Location: 223:21 - 223:51
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 227:39 - 230:2
+Node: Effect.catch(\n  Effect.map(fetchUser("u1"), Result.succeed),\n  (e) => Effect.succeed(Result.fail(e))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+  [2] kind: dataFirst
+      callee: Effect.catch
+      args: [(e) => Effect.succeed(Result.fail(e))]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 229:9 - 229:40
+Node: Effect.succeed(Result.fail(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 237:27 - 240:3
+Node: Result.match(resultValue, {\n  onFailure: () => Option.none(),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: resultValue
+Subject Type: Result<User, UserNotFound>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Result.match
+      args: [{\n  onFailure: () => Option.none(),\n  onSuccess: Option.some\n}]
+      outType: import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>
+
+=== Piping Flow ===
+Location: 243:25 - 246:3
+Node: Exit.match(exitValue, {\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: exitValue
+Subject Type: Exit<User, UserNotFound>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Exit.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n}]
+      outType: import("/node_modules/effect/dist/Result").Result<never, import("/node_modules/effect/dist/Cause").Cause<UserNotFound>> | import("/node_modules/effect/dist/Result").Result<User, never>
+
+=== Piping Flow ===
+Location: 253:8 - 253:37
+Node: Effect.match(self, handlers)
+Node Kind: KindCallExpression
+
+Subject: self
+Subject Type: Effect<A, E, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [handlers]
+      outType: Effect<B | C, never, never>
+
+=== Piping Flow ===
+Location: 255:39 - 255:54
+Node: fetchUser("u1")
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+
+=== Piping Flow ===
+Location: 261:31 - 264:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => Result.fail(e.id),\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => Result.fail(e.id),\n  onSuccess: Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, string> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 262:20 - 262:38
+Node: Result.fail(e.id)
+Node Kind: KindCallExpression
+
+Subject: e.id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, string>
+
+=== Piping Flow ===
+Location: 267:29 - 270:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: () => Result.fail(fallbackError),\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: () => Result.fail(fallbackError),\n  onSuccess: Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 268:19 - 268:46
+Node: Result.fail(fallbackError)
+Node Kind: KindCallExpression
+
+Subject: fallbackError
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 273:31 - 276:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: Result.fail,\n  onSuccess: (user) => Result.succeed(user.name)\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: (user) => Result.succeed(user.name)\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<string, never> | import("/node_modules/effect/dist/Result").Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 275:23 - 275:49
+Node: Result.succeed(user.name)
+Node Kind: KindCallExpression
+
+Subject: user.name
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<string, never>
+
+=== Piping Flow ===
+Location: 279:37 - 282:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: () => Option.none(),\n  onSuccess: (user) => Option.some(user.name)\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: () => Option.none(),\n  onSuccess: (user) => Option.some(user.name)\n}]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 281:23 - 281:46
+Node: Option.some(user.name)
+Node Kind: KindCallExpression
+
+Subject: user.name
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<string>
+
+=== Piping Flow ===
+Location: 285:28 - 288:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (_e) => Result.fail(fallbackError),\n  onSuccess: (user) => Result.succeed(user)\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (_e) => Result.fail(fallbackError),\n  onSuccess: (user) => Result.succeed(user)\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 286:21 - 286:48
+Node: Result.fail(fallbackError)
+Node Kind: KindCallExpression
+
+Subject: fallbackError
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 287:23 - 287:44
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+
+=== Piping Flow ===
+Location: 291:37 - 294:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: ({ id }) => Result.fail({ id }),\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: ({ id }) => Result.fail({ id }),\n  onSuccess: Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, { id: string; }> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 292:25 - 292:45
+Node: Result.fail({ id })
+Node Kind: KindCallExpression
+
+Subject: { id }
+Subject Type: { id: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, { id: string; }>
+
+=== Piping Flow ===
+Location: 297:35 - 300:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: Result.succeed,\n  onSuccess: Result.fail\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Result.succeed,\n  onSuccess: Result.fail\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, User> | import("/node_modules/effect/dist/Result").Result<UserNotFound, never>, never, never>
+
+=== Piping Flow ===
+Location: 303:31 - 306:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: Result.fail,\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: Option.some\n}]
+      outType: Effect<Option<User> | Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 309:38 - 312:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => (e.id === "guest" ? Option.some(guestUser) : Option.none()),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => (e.id === "guest" ? Option.some(guestUser) : Option.none()),\n  onSuccess: Option.some\n}]
+      outType: Effect<Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 310:40 - 310:63
+Node: Option.some(guestUser)
+Node Kind: KindCallExpression
+
+Subject: guestUser
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<User>
+
+=== Piping Flow ===
+Location: 315:39 - 321:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => {\n    record(e)\n    return Option.none()\n  },\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => {\n    record(e)\n    return Option.none()\n  },\n  onSuccess: Option.some\n}]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<never> | import("/node_modules/effect/dist/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 316:22 - 317:14
+Node: record(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 324:35 - 327:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => Option.some(e),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => Option.some(e),\n  onSuccess: Option.some\n}]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<User> | import("/node_modules/effect/dist/Option").Option<UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 325:20 - 325:35
+Node: Option.some(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<UserNotFound>
+
+=== Piping Flow ===
+Location: 334:36 - 334:76
+Node: Effect.match(fetchUser("u1"), handlers)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [handlers]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<unknown, never> | import("/node_modules/effect/dist/Result").Result<never, unknown>, never, never>
+
+=== Piping Flow ===
+Location: 337:30 - 339:3
+Node: Effect.match(fetchUser("u1"), {\n  ...handlers\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  ...handlers\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<unknown, never> | import("/node_modules/effect/dist/Result").Result<never, unknown>, never, never>
+
+=== Piping Flow ===
+Location: 347:9 - 350:5
+Node: Effect.match(fetchUser("u1"), {\n    onFailure: (e) => Result.fail(e),\n    onSuccess: (user) => Result.succeed(user)\n  })
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n    onFailure: (e) => Result.fail(e),\n    onSuccess: (user) => Result.succeed(user)\n  }]
+      outType: Effect<{ ok: true; a: User; } | { ok: false; e: UserNotFound; }, never, never>
+
+=== Piping Flow ===
+Location: 348:22 - 348:37
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: { ok: false; e: UserNotFound; }
+
+=== Piping Flow ===
+Location: 349:25 - 349:46
+Node: Result.succeed(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: { ok: true; a: User; }
+
+=== Piping Flow ===
+Location: 354:32 - 357:3
+Node: Effect.matchCause(fetchUser("u1"), {\n  onFailure: Exit.failCause,\n  onSuccess: Exit.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.matchCause
+      args: [{\n  onFailure: Exit.failCause,\n  onSuccess: Exit.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Exit").Exit<never, UserNotFound> | import("/node_modules/effect/dist/Exit").Exit<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 360:32 - 363:3
+Node: Effect.matchEager(fetchUser("u1"), {\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.matchEager
+      args: [{\n  onFailure: Result.fail,\n  onSuccess: Result.succeed\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 366:34 - 369:3
+Node: Effect.matchEffect(fetchUser("u1"), {\n  onFailure: (e) => Effect.fail(e),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: (e) => Effect.fail(e),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n}]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+
+=== Piping Flow ===
+Location: 367:20 - 367:35
+Node: Effect.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, UserNotFound, never>
+
+=== Piping Flow ===
+Location: 368:23 - 368:60
+Node: Effect.succeed(Result.succeed(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 372:35 - 375:3
+Node: Effect.matchEffect(fetchUser("u1"), {\n  onFailure: (e) => Effect.as(Effect.log(e.id), Result.fail(e)),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: (e) => Effect.as(Effect.log(e.id), Result.fail(e)),\n  onSuccess: (user) => Effect.succeed(Result.succeed(user))\n}]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 373:20 - 373:64
+Node: Effect.as(Effect.log(e.id), Result.fail(e))
+Node Kind: KindCallExpression
+
+Subject: e.id
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [Result.fail(e)]
+      outType: Effect<Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 373:48 - 373:63
+Node: Result.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 374:23 - 374:60
+Node: Effect.succeed(Result.succeed(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.succeed
+      args: (constant)
+      outType: Result<User, never>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 378:35 - 382:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Result.succeed),\n  Effect.tap(() => Effect.log("mapped")),\n  Effect.catch((e) => Effect.succeed(Result.fail(e)))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (4):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.tap
+      args: [() => Effect.log("mapped")]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+  [3] kind: pipeable
+      callee: Effect.catch
+      args: [(e) => Effect.succeed(Result.fail(e))]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 380:19 - 380:40
+Node: Effect.log("mapped")
+Node Kind: KindCallExpression
+
+Subject: "mapped"
+Subject Type: "mapped"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 381:22 - 381:53
+Node: Effect.succeed(Result.fail(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 385:28 - 388:2
+Node: fetchUser("u1").pipe(\n  Effect.catch((e) => Effect.succeed(e)),\n  Effect.map(Result.succeed)\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [(e) => Effect.succeed(e)]
+      outType: Effect<User | UserNotFound, never, never>
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User | UserNotFound, never>, never, never>
+
+=== Piping Flow ===
+Location: 386:22 - 386:40
+Node: Effect.succeed(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<UserNotFound, never, never>
+
+=== Piping Flow ===
+Location: 391:27 - 394:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Result.succeed),\n  Effect.catchTag("UserNotFound", (e) => Effect.succeed(Result.fail(e)))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catchTag
+      args: ["UserNotFound", (e) => Effect.succeed(Result.fail(e))]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, UserNotFound> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 393:41 - 393:72
+Node: Effect.succeed(Result.fail(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, UserNotFound>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 397:29 - 400:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Result.succeed),\n  Effect.catchCause((cause) => Effect.succeed(Result.fail(cause)))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catchCause
+      args: [(cause) => Effect.succeed(Result.fail(cause))]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, import("/node_modules/effect/dist/Cause").Cause<UserNotFound>> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 399:31 - 399:66
+Node: Effect.succeed(Result.fail(cause))
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: Cause<UserNotFound>
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, Cause<UserNotFound>>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, Cause<UserNotFound>>, never, never>
+
+=== Piping Flow ===
+Location: 403:39 - 406:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Result.succeed),\n  Effect.catch((e) => Effect.succeed(Result.fail(e.id)))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catch
+      args: [(e) => Effect.succeed(Result.fail(e.id))]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<never, string> | import("/node_modules/effect/dist/Result").Result<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 405:22 - 405:56
+Node: Effect.succeed(Result.fail(e.id))
+Node Kind: KindCallExpression
+
+Subject: e.id
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.fail
+      args: (constant)
+      outType: Result<never, string>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Result<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 409:31 - 412:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Option.some),\n  Effect.catch((e) => Effect.fail(e))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Option.some]
+      outType: Effect<Option<User>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catch
+      args: [(e) => Effect.fail(e)]
+      outType: Effect<Option<User>, UserNotFound, never>
+
+=== Piping Flow ===
+Location: 411:22 - 411:37
+Node: Effect.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, UserNotFound, never>
+
+=== Piping Flow ===
+Location: 415:23 - 415:72
+Node: fetchUser("u1").pipe(Effect.map(Result.succeed))
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Result.succeed]
+      outType: Effect<Result<User, never>, UserNotFound, never>
+
+=== Piping Flow ===
+Location: 418:29 - 418:60
+Node: Effect.result(fetchUser("u1"))
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: call
+      callee: Effect.result
+      args: (constant)
+      outType: Effect<Result<User, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 419:29 - 419:65
+Node: fetchUser("u1").pipe(Effect.option)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.option
+      args: (constant)
+      outType: Effect<Option<User>, never, never>

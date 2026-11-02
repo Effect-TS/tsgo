@@ -134,6 +134,7 @@ var All = []rule.Rule{
 	FlatMapIgnoredParamToAndThen,
 	FlatMapIdentityToFlatten,
 	MatchEffectToMatch,
+	MatchToResultOrOption,
 	MatchBooleanToIsSuccess,
 	MatchEffectToMapBoth,
 	MapMapErrorToMapBoth,

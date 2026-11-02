@@ -1,0 +1,30 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:22-10:26) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_namedResult.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import type { Effect } from "effect"
+import { Result } from "effect"
+import { match as fold, result as reify } from "effect/Effect"
+
+declare const source: Effect.Effect<number, string>
+
+// MUST TRIGGER: renamed named import of Effect.match; the fix reuses the renamed Effect.result binding
+export const value = reify(source)
+export const kept = reify
+
