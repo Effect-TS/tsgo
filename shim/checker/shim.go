@@ -296,7 +296,7 @@ type extra_Checker struct {
   layoutMemberInfos map[string]checker.MemberInfo
   freeTypeSets *extra_temporaryTypeSet
   freePropertyCounts *extra_temporaryPropertyCounts
-  mergedSymbols map[*ast.Symbol]*ast.Symbol
+  mergedSymbols struct{gen ast.SymbolIdGenerator; links core.LinkStore[uint64, *ast.Symbol]; pages core.PagedLinkStore[*ast.Symbol]}
   mergedExportsChecked collections.Set[*ast.Symbol]
   factory ast.NodeFactory
   nodeLinks core.LinkStore[*ast.Node, checker.NodeLinks]
@@ -524,7 +524,7 @@ type extra_Checker struct {
   ctx context.Context
   packagesMap map[string]bool
   activeMappers []*checker.TypeMapper
-  activeTypeMappersCaches []map[checker.CacheHashKey]*checker.Type
+  activeTypeMappersCaches []struct{entries []struct{key checker.CacheHashKey; value *checker.Type; generation uint32}; generation uint32; count int; shift uint8}
   ambientModulesOnce sync.Once
   ambientModules []*ast.Symbol
   withinUnreachableCode bool
@@ -751,6 +751,8 @@ func FormatTypeFlags(flags checker.TypeFlags) []string
 type FunctionTypeMapper = checker.FunctionTypeMapper
 //go:linkname GetDeclarationModifierFlagsFromSymbol github.com/microsoft/TypeScript/tsc/internal/checker.GetDeclarationModifierFlagsFromSymbol
 func GetDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags
+//go:linkname GetEndElementCount github.com/microsoft/TypeScript/tsc/internal/checker.GetEndElementCount
+func GetEndElementCount(t *checker.TupleType, flags checker.ElementFlags) int
 //go:linkname GetPropertyNameFromType github.com/microsoft/TypeScript/tsc/internal/checker.GetPropertyNameFromType
 func GetPropertyNameFromType(t *checker.Type) string
 //go:linkname GetResolvedSignatureForSignatureHelp github.com/microsoft/TypeScript/tsc/internal/checker.GetResolvedSignatureForSignatureHelp
