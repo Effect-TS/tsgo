@@ -655,6 +655,14 @@
         "category": "Warning",
         "code": 377169
     },
+    "`Effect.isSuccess` expresses this check more directly than `Effect.{0}` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)": {
+        "category": "Suggestion",
+        "code": 377173
+    },
+    "`Effect.isFailure` expresses this check more directly than `Effect.{0}` folding to complementary boolean literals. effect(matchBooleanToIsSuccess)": {
+        "category": "Suggestion",
+        "code": 377174
+    },
     "This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)": {
         "category": "Warning",
         "code": 377171

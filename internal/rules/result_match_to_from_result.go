@@ -80,7 +80,8 @@ func analyzeResultMatchStep(tp *typeparser.TypeParser, sf *ast.SourceFile, trans
 	handlers := ast.SkipParentheses(transformation.Args().At(0))
 	onFailure := typeparser.ObjectLiteralPropertyInitializer(handlers, "onFailure")
 	onSuccess := typeparser.ObjectLiteralPropertyInitializer(handlers, "onSuccess")
-	if onFailure == nil || onSuccess == nil || len(handlers.AsObjectLiteralExpression().Properties.Nodes) != 2 ||
+	if onFailure == nil || onSuccess == nil || !ast.IsObjectLiteralExpression(handlers) ||
+		len(handlers.AsObjectLiteralExpression().Properties.Nodes) != 2 ||
 		!tp.IsNodeReferenceToEffectResultModuleApi(callee, "match") ||
 		!isEffectLiftHandler(tp, onSuccess, "succeed") ||
 		!isEffectLiftHandler(tp, onFailure, "fail") {
