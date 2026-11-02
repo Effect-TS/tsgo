@@ -655,6 +655,10 @@
         "category": "Warning",
         "code": 377169
     },
+    "This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)": {
+        "category": "Warning",
+        "code": 377171
+    },
     "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)": {
         "category": "Suggestion",
         "code": 377165

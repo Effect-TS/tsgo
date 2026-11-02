@@ -224,6 +224,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe.md"><code>unnecessaryPipe</code></a></td><td>Removes pipe calls with no arguments</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe-chain.md"><code>unnecessaryPipeChain</code></a></td><td>Simplifies chained pipe calls into a single pipe call</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-typeof-type.md"><code>unnecessaryTypeofType</code></a></td><td>Suggests replacing typeof Schema.Type style annotations with the matching named type when available</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/yield-in-call-argument.md"><code>yieldInCallArgument</code></a></td><td>Suggests yielding into a const before a call instead of passing a yield* directly as a call or new argument in Effect generators</td></tr>
     <tr><td colspan="2"><strong>Maintainers</strong> <em>Guard the public API surface and release hygiene of a package.</em></td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/api-stability-leak.md"><code>apiStabilityLeak</code></a></td><td>Reports exported APIs whose public surface exposes a less stable type</td></tr>
   </tbody>

@@ -392,7 +392,8 @@
         "unnecessaryFailYieldableError": "warning",
         "unnecessaryPipe": "warning",
         "unnecessaryPipeChain": "warning",
-        "unnecessaryTypeofType": "warning"
+        "unnecessaryTypeofType": "warning",
+        "yieldInCallArgument": "warning"
       }
     },
     {
@@ -3860,6 +3861,30 @@
             "start": 184,
             "end": 210,
             "text": "This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "yieldInCallArgument",
+      "group": "style",
+      "description": "Suggests yielding into a const before a call instead of passing a yield* directly as a call or new argument in Effect generators",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377171
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const load: Effect.Effect\u003cnumber\u003e\ndeclare function transform(n: number): string\n\nexport const preview = Effect.gen(function*() {\n  const result = transform(yield* load)\n  return result\n})\n",
+        "diagnostics": [
+          {
+            "start": 197,
+            "end": 202,
+            "text": "This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)"
           }
         ]
       }

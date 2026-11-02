@@ -726,6 +726,7 @@ dependencies = [
  "tsrs_module",
  "tsrs_modulespecifiers",
  "tsrs_parser",
+ "tsrs_printer",
  "tsrs_project",
  "tsrs_scanner",
  "tsrs_tsoptions",

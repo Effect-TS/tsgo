@@ -127,9 +127,9 @@ import * as S from "effect/Schema"
 export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Number })
 export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
 
+export const Shape = S.Union([Circle, Square]);
 // MUST TRIGGER - the fix reuses the in-scope `S` namespace import
 // (`export const Shape = S.Union([Circle, Square])`) and adds no new import
-export const Shape = S.Union([Circle, Square]);
 export type Shape = typeof Shape.Type
 
 // MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
@@ -166,8 +166,8 @@ export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
 // (`export const Shape = S.Union([Circle, Square])`) and adds no new import
 export type Shape = typeof Circle.Type | typeof Square.Type
 
-// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
 const Primitive = S.Union([S.String, S.Boolean]);
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
 type Primitive = typeof Primitive.Encoded
 
 // MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
@@ -204,9 +204,9 @@ export type Shape = typeof Circle.Type | typeof Square.Type
 // MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
 type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
 
+const HelperShape = S.Union([Circle, Square]);
 // MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
 // uses `S.Union([Circle, Square])`
-const HelperShape = S.Union([Circle, Square]);
 type HelperShape = typeof HelperShape.Type
 
 // MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
@@ -243,9 +243,9 @@ type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
 // uses `S.Union([Circle, Square])`
 type HelperShape = S.Schema.Type<typeof Circle> | S.Schema.Type<typeof Square>
 
+const HelperShapeEncoded = S.Union([Circle, Square]);
 // MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
 // uses `S.Union([Circle, Square])` and the alias becomes `typeof HelperShapeEncoded.Encoded`
-const HelperShapeEncoded = S.Union([Circle, Square]);
 type HelperShapeEncoded = typeof HelperShapeEncoded.Encoded
 
 // MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
