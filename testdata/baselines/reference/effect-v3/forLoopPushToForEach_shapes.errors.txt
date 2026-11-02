@@ -1,25 +1,26 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/forLoopPushToForEach_shapes.ts(32,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(42,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(52,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(62,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(74,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(84,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(95,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(103,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(114,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(122,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(130,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(137,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(145,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(153,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
-/.src/forLoopPushToForEach_shapes.ts(161,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(33,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(43,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(53,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(63,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(75,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(85,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(96,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(104,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(115,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(123,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(131,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(138,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(146,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(154,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_shapes.ts(162,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
 
 
 ==== /.src/forLoopPushToForEach_shapes.ts (15 errors) ====
     // @effect-v3
+    // @effect-diagnostics forLoopPushToForEach:suggestion
     import { Effect, pipe } from "effect"
     
     declare const items: ReadonlyArray<number>

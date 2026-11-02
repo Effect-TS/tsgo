@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/forLoopPushToForEach_plainYield.ts(10,38): error TS2345: Argument of type '() => Generator<Effect.Effect<string, never, never>, unknown[], unknown>' is not assignable to parameter of type '(resume: Adapter) => Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
+/.src/forLoopPushToForEach_plainYield.ts(11,38): error TS2345: Argument of type '() => Generator<Effect.Effect<string, never, never>, unknown[], unknown>' is not assignable to parameter of type '(resume: Adapter) => Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
 
 
 ==== /.src/forLoopPushToForEach_plainYield.ts (1 errors) ====
     // @effect-v3
+    // @effect-diagnostics forLoopPushToForEach:suggestion
     // @effect-diagnostics missingStarInYieldEffectGen:off
     import { Effect } from "effect"
     

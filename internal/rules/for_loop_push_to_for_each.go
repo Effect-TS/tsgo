@@ -18,7 +18,7 @@ var ForLoopPushToForEach = rule.Rule{
 	Name:            "forLoopPushToForEach",
 	Group:           "style",
 	Description:     "Suggests Effect.forEach instead of a for-of loop that pushes yielded Effect results into an accumulator",
-	DefaultSeverity: etscore.SeveritySuggestion,
+	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
 		tsdiag.Effect_forEach_expresses_this_for_of_loop_that_pushes_yielded_results_into_an_accumulator_more_directly_and_makes_ordering_and_concurrency_explicit_effect_forLoopPushToForEach.Code(),

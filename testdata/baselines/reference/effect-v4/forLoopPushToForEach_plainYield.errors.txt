@@ -5,6 +5,7 @@ Effect version: 4.1.2
 
 ==== /.src/forLoopPushToForEach_plainYield.ts (0 errors) ====
     // @effect-v4
+    // @effect-diagnostics forLoopPushToForEach:suggestion
     // @effect-diagnostics missingStarInYieldEffectGen:off
     import { Effect } from "effect"
     

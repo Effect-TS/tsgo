@@ -1,7 +1,7 @@
 ==== /.src/forLoopPushToForEach.ts (142 flows) ====
 
 === Piping Flow ===
-Location: 15:24 - 15:49
+Location: 16:24 - 16:49
 Node: Context.Tag("Processor")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: <Self, Shape>() => TagClass<Self, "Processor", Shape>
 
 === Piping Flow ===
-Location: 23:25 - 29:3
+Location: 24:25 - 30:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 25:30 - 26:43
+Location: 26:30 - 27:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 26:24 - 26:42
+Location: 27:24 - 27:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 33:29 - 37:3
+Location: 34:29 - 38:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) results.push(yield* processItem(item))\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 35:28 - 35:67
+Location: 36:28 - 36:67
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 35:48 - 35:66
+Location: 36:48 - 36:66
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 41:32 - 47:3
+Location: 42:32 - 48:3
 Node: Effect.gen(function*() {\n  const results: Array<string> = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 43:30 - 44:43
+Location: 44:30 - 45:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 44:24 - 44:42
+Location: 45:24 - 45:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 51:32 - 57:3
+Location: 52:32 - 58:3
 Node: Effect.gen(function*() {\n  const doubled = []\n  for (const item of items) {\n    doubled.push(yield* Effect.succeed(item * 2))\n  }\n  return doubled\n})
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<number[], never, never>
 
 === Piping Flow ===
-Location: 53:30 - 54:50
+Location: 54:30 - 55:50
 Node: doubled.push(yield* Effect.succeed(item * 2))
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 54:24 - 54:49
+Location: 55:24 - 55:49
 Node: Effect.succeed(item * 2)
 Node Kind: KindCallExpression
 
@@ -183,7 +183,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 62:29 - 68:3
+Location: 63:29 - 69:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processIndexed(item, 0))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -197,7 +197,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 64:30 - 65:49
+Location: 65:30 - 66:49
 Node: results.push(yield* processIndexed(item, 0))
 Node Kind: KindCallExpression
 
@@ -211,7 +211,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 74:39 - 80:3
+Location: 75:39 - 81:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processWithOptions(item))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -225,7 +225,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 76:30 - 77:50
+Location: 77:30 - 78:50
 Node: results.push(yield* processWithOptions(item))
 Node Kind: KindCallExpression
 
@@ -239,7 +239,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 77:24 - 77:49
+Location: 78:24 - 78:49
 Node: processWithOptions(item)
 Node Kind: KindCallExpression
 
@@ -253,7 +253,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 85:26 - 91:3
+Location: 86:26 - 92:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* service.process(item))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -267,7 +267,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 87:30 - 88:47
+Location: 88:30 - 89:47
 Node: results.push(yield* service.process(item))
 Node Kind: KindCallExpression
 
@@ -281,7 +281,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 88:24 - 88:46
+Location: 89:24 - 89:46
 Node: service.process(item)
 Node Kind: KindCallExpression
 
@@ -295,7 +295,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 95:35 - 101:3
+Location: 96:35 - 102:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const [key, value] of entries) {\n    results.push(yield* processPair(key, value))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -309,7 +309,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 97:40 - 98:49
+Location: 98:40 - 99:49
 Node: results.push(yield* processPair(key, value))
 Node Kind: KindCallExpression
 
@@ -323,7 +323,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 105:27 - 111:3
+Location: 106:27 - 112:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const [key, value] of lookup) {\n    results.push(yield* processPair(key, value))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -337,7 +337,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 107:39 - 108:49
+Location: 108:39 - 109:49
 Node: results.push(yield* processPair(key, value))
 Node Kind: KindCallExpression
 
@@ -351,7 +351,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 120:37 - 128:3
+Location: 121:37 - 129:3
 Node: Effect.gen(function*() {\n  const results = []\n  const loaded = yield* loadItems\n  const offset = 1\n  for (const item of loaded) {\n    results.push(yield* Effect.succeed(item + offset))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -365,7 +365,7 @@ Transformations (1):
       outType: Effect<number[], never, never>
 
 === Piping Flow ===
-Location: 124:31 - 125:55
+Location: 125:31 - 126:55
 Node: results.push(yield* Effect.succeed(item + offset))
 Node Kind: KindCallExpression
 
@@ -379,7 +379,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 125:24 - 125:54
+Location: 126:24 - 126:54
 Node: Effect.succeed(item + offset)
 Node Kind: KindCallExpression
 
@@ -393,7 +393,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 132:30 - 139:3
+Location: 133:30 - 140:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  yield* Effect.log(results.length)\n  return results.join(",")\n})
 Node Kind: KindCallExpression
 
@@ -407,7 +407,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 134:30 - 135:43
+Location: 135:30 - 136:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -421,7 +421,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 135:24 - 135:42
+Location: 136:24 - 136:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -435,7 +435,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 137:9 - 137:36
+Location: 138:9 - 138:36
 Node: Effect.log(results.length)
 Node Kind: KindCallExpression
 
@@ -449,7 +449,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 138:9 - 138:27
+Location: 139:9 - 139:27
 Node: results.join(",")
 Node Kind: KindCallExpression
 
@@ -463,7 +463,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 143:34 - 149:3
+Location: 144:34 - 150:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* Effect.succeed("tick"))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -477,7 +477,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 145:30 - 146:48
+Location: 146:30 - 147:48
 Node: results.push(yield* Effect.succeed("tick"))
 Node Kind: KindCallExpression
 
@@ -491,7 +491,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 146:24 - 146:47
+Location: 147:24 - 147:47
 Node: Effect.succeed("tick")
 Node Kind: KindCallExpression
 
@@ -505,7 +505,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 153:27 - 162:3
+Location: 154:27 - 163:3
 Node: Effect.gen(function*() {\n  if (items.length > 0) {\n    const results = []\n    for (const item of items) {\n      results.push(yield* processItem(item))\n    }\n    return results\n  }\n  return []\n})
 Node Kind: KindCallExpression
 
@@ -519,7 +519,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 156:32 - 157:45
+Location: 157:32 - 158:45
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -533,7 +533,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 157:26 - 157:44
+Location: 158:26 - 158:44
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -547,7 +547,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 166:28 - 172:3
+Location: 167:28 - 173:3
 Node: Effect.fn("withEffectFn")(function*(input: ReadonlyArray<number>) {\n  const results = []\n  for (const item of input) {\n    results.push(yield* processItem(item))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -561,7 +561,7 @@ Transformations (1):
       outType: (input: readonly number[]) => Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 168:30 - 169:43
+Location: 169:30 - 170:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -575,7 +575,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 169:24 - 169:42
+Location: 170:24 - 170:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -589,7 +589,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 176:32 - 185:2
+Location: 177:32 - 186:2
 Node: Effect.fn("withEffectFnPipe")(\n  function*(input: ReadonlyArray<number>) {\n    const results = []\n    for (const item of input) {\n      results.push(yield* processItem(item))\n    }\n    return results\n  },\n  Effect.withSpan("withEffectFnPipe.span")\n)
 Node Kind: KindCallExpression
 
@@ -603,7 +603,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 179:32 - 180:45
+Location: 180:32 - 181:45
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -617,7 +617,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 180:26 - 180:44
+Location: 181:26 - 181:44
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -631,7 +631,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 189:36 - 195:3
+Location: 190:36 - 196:3
 Node: Effect.fnUntraced(function*(input: ReadonlyArray<number>) {\n  const results = []\n  for (const item of input) {\n    results.push(yield* processItem(item))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -645,7 +645,7 @@ Transformations (1):
       outType: (input: readonly number[]) => Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 191:30 - 192:43
+Location: 192:30 - 193:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -659,7 +659,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 192:24 - 192:42
+Location: 193:24 - 193:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -673,7 +673,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 199:25 - 208:3
+Location: 200:25 - 209:3
 Node: Effect.gen(function*() {\n  const inner = yield* Effect.gen(function*() {\n    const results = []\n    for (const item of items) {\n      results.push(yield* processItem(item))\n    }\n    return results\n  })\n  return inner\n})
 Node Kind: KindCallExpression
 
@@ -687,7 +687,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 200:23 - 206:5
+Location: 201:23 - 207:5
 Node: Effect.gen(function*() {\n    const results = []\n    for (const item of items) {\n      results.push(yield* processItem(item))\n    }\n    return results\n  })
 Node Kind: KindCallExpression
 
@@ -701,7 +701,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 202:32 - 203:45
+Location: 203:32 - 204:45
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -715,7 +715,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 203:26 - 203:44
+Location: 204:26 - 204:44
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -729,7 +729,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 212:30 - 218:3
+Location: 213:30 - 219:3
 Node: Effect.gen(function*() {\n  const services = []\n  for (const _ of items) {\n    services.push(yield* Processor)\n  }\n  return services\n})
 Node Kind: KindCallExpression
 
@@ -743,7 +743,7 @@ Transformations (1):
       outType: Effect<{ readonly prefix: string; }[], never, Processor>
 
 === Piping Flow ===
-Location: 214:27 - 215:36
+Location: 215:27 - 216:36
 Node: services.push(yield* Processor)
 Node Kind: KindCallExpression
 
@@ -757,7 +757,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 222:29 - 228:3
+Location: 223:29 - 229:3
 Node: Effect.gen(function*() {\n  const values = []\n  for (const item of items) {\n    values.push(yield* Option.some(item))\n  }\n  return values\n})
 Node Kind: KindCallExpression
 
@@ -771,7 +771,7 @@ Transformations (1):
       outType: Effect<number[], NoSuchElementException, never>
 
 === Piping Flow ===
-Location: 224:30 - 225:42
+Location: 225:30 - 226:42
 Node: values.push(yield* Option.some(item))
 Node Kind: KindCallExpression
 
@@ -785,7 +785,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 225:23 - 225:41
+Location: 226:23 - 226:41
 Node: Option.some(item)
 Node Kind: KindCallExpression
 
@@ -799,7 +799,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 235:32 - 242:3
+Location: 236:32 - 243:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  results.push("done")\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -813,7 +813,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 237:30 - 238:43
+Location: 238:30 - 239:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -827,7 +827,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 238:24 - 238:42
+Location: 239:24 - 239:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -841,7 +841,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 239:4 - 240:23
+Location: 240:4 - 241:23
 Node: results.push("done")
 Node Kind: KindCallExpression
 
@@ -855,7 +855,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 245:36 - 252:3
+Location: 246:36 - 253:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  results[0] = "first"\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -869,7 +869,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 247:30 - 248:43
+Location: 248:30 - 249:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -883,7 +883,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 248:24 - 248:42
+Location: 249:24 - 249:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -897,7 +897,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 255:33 - 262:3
+Location: 256:33 - 263:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  results.splice(0, 1)\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -911,7 +911,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 257:30 - 258:43
+Location: 258:30 - 259:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -925,7 +925,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 258:24 - 258:42
+Location: 259:24 - 259:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -939,7 +939,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 267:39 - 276:3
+Location: 268:39 - 277:3
 Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  for (const item of items) {\n    results.push(yield* processIndexed(item, 1))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -953,7 +953,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 269:30 - 270:43
+Location: 270:30 - 271:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -967,7 +967,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 270:24 - 270:42
+Location: 271:24 - 271:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -981,7 +981,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 272:30 - 273:49
+Location: 273:30 - 274:49
 Node: results.push(yield* processIndexed(item, 1))
 Node Kind: KindCallExpression
 
@@ -995,7 +995,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 283:25 - 289:3
+Location: 284:25 - 290:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    if (item > 0) out.push(yield* processItem(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1009,7 +1009,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 286:18 - 286:53
+Location: 287:18 - 287:53
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1023,7 +1023,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 286:34 - 286:52
+Location: 287:34 - 287:52
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1037,7 +1037,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 292:30 - 299:3
+Location: 293:30 - 300:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    yield* Effect.log(item)\n    out.push(yield* processItem(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1051,7 +1051,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 295:11 - 295:28
+Location: 296:11 - 296:28
 Node: Effect.log(item)
 Node Kind: KindCallExpression
 
@@ -1065,7 +1065,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 295:28 - 296:39
+Location: 296:28 - 297:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1079,7 +1079,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 296:20 - 296:38
+Location: 297:20 - 297:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1093,7 +1093,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 302:25 - 309:3
+Location: 303:25 - 310:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.push(yield* processItem(item))\n    break\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1107,7 +1107,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 304:30 - 305:39
+Location: 305:30 - 306:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1121,7 +1121,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 305:20 - 305:38
+Location: 306:20 - 306:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1135,7 +1135,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 312:28 - 319:3
+Location: 313:28 - 320:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.push(yield* processItem(item))\n    continue\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1149,7 +1149,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 314:30 - 315:39
+Location: 315:30 - 316:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1163,7 +1163,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 315:20 - 315:38
+Location: 316:20 - 316:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1177,7 +1177,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 322:26 - 329:3
+Location: 323:26 - 330:3
 Node: Effect.gen(function*() {\n  const out: Array<string> = []\n  for (const item of items) {\n    out.push(yield* processItem(item))\n    return out\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1191,7 +1191,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 324:30 - 325:39
+Location: 325:30 - 326:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1205,7 +1205,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 325:20 - 325:38
+Location: 326:20 - 326:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1219,7 +1219,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 332:32 - 338:3
+Location: 333:32 - 339:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.push((yield* processItem(item)).toUpperCase())\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1233,7 +1233,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 334:30 - 335:55
+Location: 335:30 - 336:55
 Node: out.push((yield* processItem(item)).toUpperCase())
 Node Kind: KindCallExpression
 
@@ -1247,7 +1247,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 335:21 - 335:39
+Location: 336:21 - 336:39
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1261,7 +1261,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 341:25 - 347:3
+Location: 342:25 - 348:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.push(item * 2)\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1275,7 +1275,7 @@ Transformations (1):
       outType: Effect<number[], never, never>
 
 === Piping Flow ===
-Location: 343:30 - 344:23
+Location: 344:30 - 345:23
 Node: out.push(item * 2)
 Node Kind: KindCallExpression
 
@@ -1289,7 +1289,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 350:37 - 356:3
+Location: 351:37 - 357:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.push(yield* processItem(item), yield* processItem(item + 1))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1303,7 +1303,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 353:20 - 353:38
+Location: 354:20 - 354:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1317,7 +1317,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 353:46 - 353:68
+Location: 354:46 - 354:68
 Node: processItem(item + 1)
 Node Kind: KindCallExpression
 
@@ -1331,7 +1331,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 359:26 - 365:3
+Location: 360:26 - 366:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.push(...(yield* Effect.succeed([item, item])))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1345,7 +1345,7 @@ Transformations (1):
       outType: Effect<number[], never, never>
 
 === Piping Flow ===
-Location: 362:24 - 362:53
+Location: 363:24 - 363:53
 Node: Effect.succeed([item, item])
 Node Kind: KindCallExpression
 
@@ -1359,7 +1359,7 @@ Transformations (1):
       outType: Effect<number[], never, never>
 
 === Piping Flow ===
-Location: 368:23 - 374:3
+Location: 369:23 - 375:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.unshift(yield* processItem(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1373,7 +1373,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 370:30 - 371:42
+Location: 371:30 - 372:42
 Node: out.unshift(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1387,7 +1387,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 371:23 - 371:41
+Location: 372:23 - 372:41
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1401,7 +1401,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 377:36 - 383:3
+Location: 378:36 - 384:3
 Node: Effect.gen(function*() {\n  const out: Array<string> = []\n  for (const item of items) {\n    out.push(yield* processIndexed(item, out.length))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1415,7 +1415,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 379:30 - 380:54
+Location: 380:30 - 381:54
 Node: out.push(yield* processIndexed(item, out.length))
 Node Kind: KindCallExpression
 
@@ -1429,7 +1429,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 386:35 - 392:3
+Location: 387:35 - 393:3
 Node: Effect.gen(function*() {\n  const out = ["header"]\n  for (const item of items) {\n    out.push(yield* processItem(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1443,7 +1443,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 388:30 - 389:39
+Location: 389:30 - 390:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1457,7 +1457,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 389:20 - 389:38
+Location: 390:20 - 390:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1471,7 +1471,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 395:32 - 401:3
+Location: 396:32 - 402:3
 Node: Effect.gen(function*() {\n  const out = new Array<string>()\n  for (const item of items) {\n    out.push(yield* processItem(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1485,7 +1485,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 397:30 - 398:39
+Location: 398:30 - 399:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1499,7 +1499,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 398:20 - 398:38
+Location: 399:20 - 399:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1513,7 +1513,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 404:30 - 411:3
+Location: 405:30 - 412:3
 Node: Effect.gen(function*() {\n  let out: Array<string> = []\n  for (const item of items) {\n    out.push(yield* processItem(item))\n  }\n  out = out.slice(1)\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1527,7 +1527,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 406:30 - 407:39
+Location: 407:30 - 408:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1541,7 +1541,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 407:20 - 407:38
+Location: 408:20 - 408:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1555,7 +1555,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 409:8 - 409:21
+Location: 410:8 - 410:21
 Node: out.slice(1)
 Node Kind: KindCallExpression
 
@@ -1569,7 +1569,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 415:26 - 420:3
+Location: 416:26 - 421:3
 Node: Effect.gen(function*() {\n  for (const item of items) {\n    outerAccumulator.push(yield* processItem(item))\n  }\n  return outerAccumulator\n})
 Node Kind: KindCallExpression
 
@@ -1583,7 +1583,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 416:30 - 417:52
+Location: 417:30 - 418:52
 Node: outerAccumulator.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1597,7 +1597,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 417:33 - 417:51
+Location: 418:33 - 418:51
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1611,7 +1611,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 423:34 - 430:3
+Location: 424:34 - 431:3
 Node: Effect.gen(function*() {\n  const out = []\n  yield* Effect.log("start")\n  for (const item of items) {\n    out.push(yield* processItem(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1625,7 +1625,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 425:9 - 425:29
+Location: 426:9 - 426:29
 Node: Effect.log("start")
 Node Kind: KindCallExpression
 
@@ -1639,7 +1639,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 426:30 - 427:39
+Location: 427:30 - 428:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1653,7 +1653,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 427:20 - 427:38
+Location: 428:20 - 428:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1667,7 +1667,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 433:48 - 441:3
+Location: 434:48 - 442:3
 Node: Effect.gen(function*() {\n  const out: Array<string> = []\n  const alias = out\n  for (const item of items) {\n    out.push(yield* processItem(item))\n  }\n  alias.push("done")\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1681,7 +1681,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 436:30 - 437:39
+Location: 437:30 - 438:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1695,7 +1695,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 437:20 - 437:38
+Location: 438:20 - 438:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1709,7 +1709,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 438:4 - 439:21
+Location: 439:4 - 440:21
 Node: alias.push("done")
 Node Kind: KindCallExpression
 
@@ -1723,7 +1723,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 444:30 - 450:3
+Location: 445:30 - 451:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (let item of items) {\n    out.push(yield* processItem(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1737,7 +1737,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 446:28 - 447:39
+Location: 447:28 - 448:39
 Node: out.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -1751,7 +1751,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 447:20 - 447:38
+Location: 448:20 - 448:38
 Node: processItem(item)
 Node Kind: KindCallExpression
 
@@ -1765,7 +1765,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 453:21 - 459:3
+Location: 454:21 - 460:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const key in lookup) {\n    out.push(yield* Effect.succeed(key))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1779,7 +1779,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 455:30 - 456:41
+Location: 456:30 - 457:41
 Node: out.push(yield* Effect.succeed(key))
 Node Kind: KindCallExpression
 
@@ -1793,7 +1793,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 456:20 - 456:40
+Location: 457:20 - 457:40
 Node: Effect.succeed(key)
 Node Kind: KindCallExpression
 
@@ -1807,7 +1807,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 462:26 - 468:3
+Location: 463:26 - 469:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (let i = 0; i < items.length; i++) {\n    out.push(yield* processItem(items[i]))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1821,7 +1821,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 464:43 - 465:43
+Location: 465:43 - 466:43
 Node: out.push(yield* processItem(items[i]))
 Node Kind: KindCallExpression
 
@@ -1835,7 +1835,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 465:20 - 465:42
+Location: 466:20 - 466:42
 Node: processItem(items[i])
 Node Kind: KindCallExpression
 
@@ -1849,7 +1849,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 471:32 - 477:3
+Location: 472:32 - 478:3
 Node: Effect.gen(function*() {\n  const out = []\n  for (const item of items) {\n    out.push(yield* plainGenerator(item))\n  }\n  return out\n})
 Node Kind: KindCallExpression
 
@@ -1863,7 +1863,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 473:30 - 474:42
+Location: 474:30 - 475:42
 Node: out.push(yield* plainGenerator(item))
 Node Kind: KindCallExpression
 
@@ -1877,7 +1877,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 474:20 - 474:41
+Location: 475:20 - 475:41
 Node: plainGenerator(item)
 Node Kind: KindCallExpression
 
@@ -1891,7 +1891,7 @@ Transformations (1):
       outType: Generator<never, string, unknown>
 
 === Piping Flow ===
-Location: 482:30 - 483:42
+Location: 483:30 - 484:42
 Node: out.push(yield* plainGenerator(item))
 Node Kind: KindCallExpression
 
@@ -1905,7 +1905,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 483:20 - 483:41
+Location: 484:20 - 484:41
 Node: plainGenerator(item)
 Node Kind: KindCallExpression
 
@@ -1919,7 +1919,7 @@ Transformations (1):
       outType: Generator<never, string, unknown>
 
 === Piping Flow ===
-Location: 489:36 - 498:3
+Location: 490:36 - 499:3
 Node: Effect.gen(function*() {\n  function* inner() {\n    const out = []\n    for (const item of items) {\n      out.push(yield* plainGenerator(item))\n    }\n    return out\n  }\n  return inner\n})
 Node Kind: KindCallExpression
 
@@ -1933,7 +1933,7 @@ Transformations (1):
       outType: Effect<() => Generator<never, string[], unknown>, never, never>
 
 === Piping Flow ===
-Location: 492:32 - 493:44
+Location: 493:32 - 494:44
 Node: out.push(yield* plainGenerator(item))
 Node Kind: KindCallExpression
 
@@ -1947,7 +1947,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 493:22 - 493:43
+Location: 494:22 - 494:43
 Node: plainGenerator(item)
 Node Kind: KindCallExpression
 
@@ -1961,7 +1961,7 @@ Transformations (1):
       outType: Generator<never, string, unknown>
 
 === Piping Flow ===
-Location: 501:30 - 504:3
+Location: 502:30 - 505:3
 Node: Effect.gen(function*() {\n  const results = yield* Effect.forEach(items, processItem)\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -1975,7 +1975,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 502:25 - 502:60
+Location: 503:25 - 503:60
 Node: Effect.forEach(items, processItem)
 Node Kind: KindCallExpression
 

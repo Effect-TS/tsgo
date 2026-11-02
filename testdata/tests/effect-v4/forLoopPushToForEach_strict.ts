@@ -2,6 +2,7 @@
 {"compilerOptions":{"strict":true,"plugins":[{"name":"@effect/language-service"}]}}
 
 // @filename: forLoopPushToForEach_strict.ts
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>

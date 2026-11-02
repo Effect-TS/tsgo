@@ -1,4 +1,5 @@
 // @effect-v3
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>

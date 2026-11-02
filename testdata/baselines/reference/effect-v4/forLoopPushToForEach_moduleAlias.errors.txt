@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 4.1.2
 
-/.src/forLoopPushToForEach_moduleAlias.ts(11,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+/.src/forLoopPushToForEach_moduleAlias.ts(12,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
 
 
 ==== /.src/forLoopPushToForEach_moduleAlias.ts (1 errors) ====
     // @effect-v4
+    // @effect-diagnostics forLoopPushToForEach:suggestion
     import * as Fx from "effect/Effect"
     
     declare const items: ReadonlyArray<number>

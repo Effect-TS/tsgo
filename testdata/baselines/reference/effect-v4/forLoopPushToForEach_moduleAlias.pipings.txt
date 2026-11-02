@@ -1,7 +1,7 @@
 ==== /.src/forLoopPushToForEach_moduleAlias.ts (3 flows) ====
 
 === Piping Flow ===
-Location: 9:27 - 15:3
+Location: 10:27 - 16:3
 Node: Fx.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 11:30 - 12:43
+Location: 12:30 - 13:43
 Node: results.push(yield* processItem(item))
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 12:24 - 12:42
+Location: 13:24 - 13:42
 Node: processItem(item)
 Node Kind: KindCallExpression
 

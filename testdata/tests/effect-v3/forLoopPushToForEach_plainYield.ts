@@ -1,4 +1,5 @@
 // @effect-v3
+// @effect-diagnostics forLoopPushToForEach:suggestion
 // @effect-diagnostics missingStarInYieldEffectGen:off
 import { Effect } from "effect"
 

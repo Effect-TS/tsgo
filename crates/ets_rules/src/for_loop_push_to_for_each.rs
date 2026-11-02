@@ -16,7 +16,7 @@ use rustc_hash::FxHashSet;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_FOR_EACH_EXPRESSES_THIS_FOR_OF_LOOP_THAT_PUSHES_YIELDED_RESULTS_INTO_AN_ACCUMULATOR_MORE_DIRECTLY_AND_MAKES_ORDERING_AND_CONCURRENCY_EXPLICIT_EFFECT_FOR_LOOP_PUSH_TO_FOR_EACH;
 
-// go: internal/rules/for_loop_push_to_for_each.go:17 ForLoopPushToForEach 1748cdb77fb82ef0
+// go: internal/rules/for_loop_push_to_for_each.go:17 ForLoopPushToForEach f481ba22c722878d
 // ForLoopPushToForEach suggests Effect.forEach instead of a for-of loop inside
 // an Effect generator that only pushes yielded Effect results into an empty
 // accumulator declared just before the loop.
@@ -24,7 +24,7 @@ pub static FOR_LOOP_PUSH_TO_FOR_EACH: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "forLoopPushToForEach",
     group: "style",
     description: "Suggests Effect.forEach instead of a for-of loop that pushes yielded Effect results into an accumulator",
-    default_severity: Severity::Suggestion,
+    default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
     replaced_by: vec![],

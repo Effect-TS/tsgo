@@ -1,49 +1,49 @@
 === Quick Fix Inventory ===
 
-[D1] (18:3-20:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D1] (19:3-21:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D2] (29:3-31:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D2] (30:3-32:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D3] (40:3-42:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D3] (41:3-43:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D4] (51:3-51:71) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D4] (52:3-52:71) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D5] (60:3-60:68) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D5] (61:3-61:68) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D6] (68:3-68:68) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D6] (69:3-69:68) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D7] (77:3-79:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D7] (78:3-80:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
 
-[D8] (91:3-93:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D8] (92:3-94:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
 
-[D9] (100:3-102:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D9] (101:3-103:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
 
-[D10] (111:3-113:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+[D10] (112:3-114:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
   Fix 0: "Disable forLoopPushToForEach for this line"
   Fix 1: "Disable forLoopPushToForEach for entire file"
   Fix 2: "Replace with Effect.forEach"
@@ -60,6 +60,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>
@@ -183,6 +184,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>
@@ -306,6 +308,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>
@@ -429,6 +432,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>
@@ -554,6 +558,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>
@@ -679,6 +684,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>
@@ -804,6 +810,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>
@@ -939,6 +946,7 @@ skipped by default
 
 --- file:///.src/forLoopPushToForEach_statementBoundary.ts ---
 // @effect-v4
+// @effect-diagnostics forLoopPushToForEach:suggestion
 import { Effect } from "effect"
 
 declare const items: ReadonlyArray<number>

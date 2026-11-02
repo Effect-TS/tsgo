@@ -7,7 +7,7 @@ Suggests Effect.forEach instead of a for-of loop that pushes yielded Effect resu
 | Property | Value |
 | --- | --- |
 | Category | Style |
-| Default severity | `suggestion` |
+| Default severity | `off` |
 | Fixable | Yes |
 | Effect versions | v3, v4 |
 | Diagnostic codes | `TS377170` |
