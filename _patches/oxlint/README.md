@@ -6,3 +6,8 @@ applies `*.patch` files in bytewise filename order.
 
 `001-effect-plugin.patch` registers the built-in Effect tsgo plugin and preserves
 qualified `effecttsgo/*` rule identities across the tsgolint protocol.
+
+`002-effect-tsgolint-path.patch` makes the binding run the tsgolint named by
+`EFFECT_TSGO_TSGOLINT_PATH` before `OXLINT_TSGOLINT_PATH`: the `effect-tsgo oxlint`
+and `effect-tsgo vp` proxies set it, and vite-plus overwrites `OXLINT_TSGOLINT_PATH`
+with the stock tsgolint for the Oxlint process it starts.

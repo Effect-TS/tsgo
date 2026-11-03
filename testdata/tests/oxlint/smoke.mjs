@@ -88,4 +88,14 @@ const recommendedOverride = run("--config", ".oxlintrc-recommended-override.json
 assert.equal(recommendedOverride.status, 0, recommendedOverride.stderr)
 assert.doesNotMatch(`${recommendedOverride.stdout}\n${recommendedOverride.stderr}`, /effecttsgo\(floating-effect\)/)
 
+// The effect-tsgo proxies select the patched tsgolint with EFFECT_TSGO_TSGOLINT_PATH, which wins over the
+// OXLINT_TSGOLINT_PATH that vite-plus sets.
+const proxied = spawnSync(process.execPath, [oxlint, "--type-aware", "--config", ".oxlintrc.json", "diagnostic.ts"], {
+  cwd: fixture,
+  encoding: "utf8",
+  env: { ...process.env, EFFECT_TSGO_TSGOLINT_PATH: tsgolint, OXLINT_TSGOLINT_PATH: join(fixture, "missing-tsgolint") }
+})
+assert.equal(proxied.status, 1, proxied.stderr)
+assert.match(`${proxied.stdout}\n${proxied.stderr}`, /effecttsgo\(floating-effect\)/)
+
 console.log("Oxlint profile smoke test passed")

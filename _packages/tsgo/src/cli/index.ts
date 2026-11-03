@@ -214,15 +214,17 @@ const rootCommand = Command.make("tsgo").pipe(
     "Effect Language Service for TypeScript-Go. "
       + "Besides the commands below, `effect-tsgo tsc[@<version|tag>] [args...]`, `effect-tsgo tsrs[@<version|tag>] [args...]` "
       + "and `effect-tsgo oxlint [args...]` run the Effect-patched tsc, tsrs and Oxlint straight from @effect/tsgo without "
-      + "patching node_modules, passing every argument after the tool through unchanged. Without a version, tsc and tsrs use "
-      + "the installed version when supported, else the latest supported one; oxlint uses the build of the installed oxlint."
+      + "patching node_modules, and `effect-tsgo vp [args...]` runs vite-plus with the Effect-patched Oxlint, passing every "
+      + "argument after the tool through unchanged. Without a version, tsc and tsrs use the installed version when "
+      + "supported, else the latest supported one; oxlint and vp use the build of the installed oxlint."
   ),
   Command.withExamples([
     { command: "effect-tsgo tsc -p tsconfig.json", description: "Type check with the Effect-patched tsc" },
     { command: "effect-tsgo tsc@7.0.2 --lsp --stdio", description: "Start the language server of a given TypeScript version" },
     { command: "effect-tsgo tsc@next --build", description: "Use the version behind an upstream tag (latest, beta, next)" },
     { command: "effect-tsgo tsrs --noEmit", description: "Type check with the Effect-patched tsrs" },
-    { command: "effect-tsgo oxlint --type-aware", description: "Lint with the Effect-patched Oxlint and tsgolint" }
+    { command: "effect-tsgo oxlint --type-aware", description: "Lint with the Effect-patched Oxlint and tsgolint" },
+    { command: "effect-tsgo vp check", description: "Run vite-plus checks with the Effect-patched Oxlint and tsgolint" }
   ]),
   Command.withSubcommands([patchCommand, unpatchCommand, getExePathCommand, diagnosticsCommand, setupCommand, configCommand])
 )
