@@ -28,13 +28,13 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:33 TypeParser.CachedObjectLiteralConstraintContextualType dd27385ffecd56b0
-    // CachedObjectLiteralConstraintContextualType returns the contextual type of an
-    // object literal inside a generic call argument, as if the argument contributed
+    // go: internal/typeparser/object_literal_contextual_type.go:33 TypeParser.CachedExpressionConstraintContextualType 17cb12b0bb2c9527
+    // CachedExpressionConstraintContextualType returns the contextual type of an
+    // expression inside a generic call argument, as if the argument contributed
     // no inferences to the call's resolved signature. Type parameters then take
     // their return type inferences, inferences from the other arguments, their
     // defaults, or their constraints, as the checker infers them. It returns nil
-    // when the literal is not inside a call argument or the signature is not
+    // when the expression is not inside a call argument or the signature is not
     // generic.
     //
     // The call is never resolved again. An inference-blocked contextual query
@@ -43,25 +43,25 @@ impl TypeParser<'_> {
     // the shared checker this can instantiate types the original check never
     // built, for example Match.when patterns over a wide union, and leak
     // TS2589 errors and error types into the program's diagnostics.
-    pub fn cached_object_literal_constraint_contextual_type(
+    pub fn cached_expression_constraint_contextual_type(
         &mut self,
         node: impl Into<Option<P<Node>>>,
     ) -> Option<P<Type>> {
         let node = node.into()?;
-        if node.kind() != Kind::ObjectLiteralExpression {
+        if !ets_shim::ast::is_expression(node) {
             return None;
         }
         cached(
             self,
-            |l| &mut l.object_literal_constraint_contextual_type,
+            |l| &mut l.expression_constraint_contextual_type,
             node,
-            |tp| tp.object_literal_constraint_contextual_type(node),
+            |tp| tp.expression_constraint_contextual_type(node),
         )
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:42 TypeParser.objectLiteralConstraintContextualType 3f8274b1facd276b
+    // go: internal/typeparser/object_literal_contextual_type.go:42 TypeParser.expressionConstraintContextualType e9be415642733f12
     // Rust: Go's deferred pops run on every exit, a panic included (the panic is re-raised after them).
-    pub(crate) fn object_literal_constraint_contextual_type(
+    pub(crate) fn expression_constraint_contextual_type(
         &mut self,
         node: P<Node>,
     ) -> Option<P<Type>> {
@@ -256,7 +256,7 @@ impl TypeParser<'_> {
         Some(self.checker.instantiate_type(parameter_type, mapper))
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:173 TypeParser.CachedObjectLiteralBareConstraintContextualType 0857378aab5ac596
+    // go: internal/typeparser/object_literal_contextual_type.go:173 TypeParser.CachedObjectLiteralBareConstraintContextualType 2275cd1beaadd7c8
     // CachedObjectLiteralBareConstraintContextualType returns the contextual type of
     // an object literal inside a generic call argument, as if each constrained type
     // parameter of the call's resolved signature were its constraint. Constraints
@@ -264,7 +264,7 @@ impl TypeParser<'_> {
     // inferences. An unconstrained type parameter may have been inferred from the
     // literal, so it becomes unknown. It returns nil when the literal is not inside
     // a call argument or no type parameter is constrained. Like
-    // CachedObjectLiteralConstraintContextualType, it never resolves the call
+    // CachedExpressionConstraintContextualType, it never resolves the call
     // again.
     pub fn cached_object_literal_bare_constraint_contextual_type(
         &mut self,

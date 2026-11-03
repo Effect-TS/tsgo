@@ -137,7 +137,7 @@ pub fn analyze_is_tagged_on_tagged_union(
     matches
 }
 
-// go: internal/rules/is_tagged_on_tagged_union.go:112 isTaggedCallbackParameterType a0fc0ef091176e19
+// go: internal/rules/is_tagged_on_tagged_union.go:112 isTaggedCallbackParameterType 21036b77f7c36072
 // isTaggedCallbackParameterType returns the first parameter type of the
 // callback signature an unapplied isTagged(tag) call is contextually typed by.
 pub(crate) fn is_tagged_callback_parameter_type(
@@ -148,7 +148,14 @@ pub(crate) fn is_tagged_callback_parameter_type(
     if !ast::is_call_expression(call) || call.as_call_expression().expression() != callee {
         return None;
     }
-    let contextual_type = tp.get_contextual_type(call, ContextFlags::None)?;
+    // isTagged's own unknown parameter takes part in inferring the call it is
+    // passed to: Effect's data-first Array.filter infers unknown elements from
+    // it. The contextual type without the argument's inferences comes first.
+    let mut contextual_type = tp.cached_expression_constraint_contextual_type(call);
+    if contextual_type.is_none() {
+        contextual_type = tp.get_contextual_type(call, ContextFlags::None);
+    }
+    let contextual_type = contextual_type?;
     let signatures =
         tp.checker().get_signatures_of_type_exported(contextual_type, SignatureKind::Call);
     if signatures.len() != 1 || signatures[0].parameters().is_empty() {
