@@ -492,6 +492,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "ets_etsoxlintrunner"
+version = "0.0.0"
+dependencies = [
+ "ets_effectconfigraw",
+ "ets_etscore",
+ "ets_fixable",
+ "ets_fixables",
+ "ets_pluginoptions",
+ "ets_rulerunner",
+ "ets_shim",
+ "ets_typeparser",
+ "rustc-hash",
+]
+
+[[package]]
 name = "ets_etstesthooks"
 version = "0.0.0"
 dependencies = [
@@ -741,8 +756,12 @@ dependencies = [
  "ets_etsdiagnostics",
  "ets_etsexecutehooks",
  "ets_etslshooks",
+ "ets_etsoxlintrunner",
+ "ets_rules",
  "ets_shim",
+ "rustc-hash",
  "tsrs_cli",
+ "tsrs_lint",
 ]
 
 [[package]]
@@ -1129,6 +1148,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
 
 [[package]]
+name = "regress"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "32eef8b209c3c1c15dbad02c1f30f9539f00dc7253e0cbcdaae442a50a09d7c1"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "rustc-hash"
 version = "2.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1303,7 +1331,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_api"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_api_codec",
@@ -1327,7 +1355,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_api_codec"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_ast",
@@ -1336,7 +1364,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_api_transport"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "base64",
  "rustc-hash",
@@ -1349,7 +1377,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_ast"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "hashbrown",
@@ -1362,7 +1390,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_astnav"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "tsrs_ast",
  "tsrs_core",
@@ -1371,7 +1399,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_binder"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "rustc-hash",
@@ -1383,7 +1411,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_checker"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "hashbrown",
@@ -1407,7 +1435,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_cli"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "libc",
  "mimalloc-safe",
@@ -1416,13 +1444,14 @@ dependencies = [
  "tsrs_compiler",
  "tsrs_core",
  "tsrs_execute",
+ "tsrs_lint",
  "tsrs_lsp",
  "tsrs_vfs",
 ]
 
 [[package]]
 name = "tsrs_compiler"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rayon",
  "rustc-hash",
@@ -1447,7 +1476,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_contentmapper"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_ast",
@@ -1462,7 +1491,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_core"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "dragonbox_ecma",
  "ets_etscore",
@@ -1480,7 +1509,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_declarations"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_ast",
@@ -1496,7 +1525,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_diagnostics"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "serde_json",
@@ -1504,7 +1533,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_execute"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "ets_etscore",
  "libc",
@@ -1523,7 +1552,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_fourslash_server"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "tsrs_core",
  "tsrs_lsp",
@@ -1534,7 +1563,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_fswatch"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "libc",
  "rustc-hash",
@@ -1543,7 +1572,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_incremental"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "ets_etscore",
@@ -1564,15 +1593,33 @@ dependencies = [
 
 [[package]]
 name = "tsrs_ipc"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_core",
 ]
 
 [[package]]
+name = "tsrs_lint"
+version = "0.21.0"
+dependencies = [
+ "mimalloc-safe",
+ "regex",
+ "regress",
+ "rustc-hash",
+ "tsrs_api_transport",
+ "tsrs_ast",
+ "tsrs_checker",
+ "tsrs_compiler",
+ "tsrs_core",
+ "tsrs_scanner",
+ "tsrs_tsoptions",
+ "tsrs_vfs",
+]
+
+[[package]]
 name = "tsrs_ls"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "indexmap",
@@ -1599,7 +1646,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_lsp"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_api",
@@ -1617,7 +1664,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_lsproto"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_core",
@@ -1626,7 +1673,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_module"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "hashbrown",
@@ -1639,7 +1686,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_modulespecifiers"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "regex",
  "rustc-hash",
@@ -1651,7 +1698,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_parser"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "rustc-hash",
@@ -1663,7 +1710,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_printer"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "rustc-hash",
@@ -1675,7 +1722,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_project"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_ast",
@@ -1697,7 +1744,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_projectutil"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_core",
@@ -1705,7 +1752,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_pseudochecker"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "tsrs_ast",
  "tsrs_core",
@@ -1713,7 +1760,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_scanner"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "memchr",
@@ -1725,7 +1772,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_sourcemap"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "rustc-hash",
  "tsrs_ast",
@@ -1735,7 +1782,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_spanmap"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "tsrs_core",
@@ -1743,7 +1790,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_testrunner"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "indexmap",
  "mimalloc-safe",
@@ -1767,7 +1814,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_transformers"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "rustc-hash",
@@ -1782,7 +1829,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_tsoptions"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "ets_etscore",
  "rustc-hash",
@@ -1798,7 +1845,7 @@ dependencies = [
 
 [[package]]
 name = "tsrs_vfs"
-version = "0.20.1"
+version = "0.21.0"
 dependencies = [
  "bitflags",
  "rayon",

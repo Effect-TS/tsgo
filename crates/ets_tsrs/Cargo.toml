@@ -12,19 +12,26 @@ workspace = true
 
 # Rust-only glue, not a port of a Go package: like the patched cmd/tsc/main.go, it reaches the compiler's entry point
 # directly (`tsrs_cli::main`, exposed by the `effect-main` feature that _patches/tsrs/001-cmd-tsgo-main.patch adds).
+# Like the patched tsgolint (`_patches/tsgolint/001-effect-rules.patch`, `repoctl codegen tsgolint`), it also adapts the
+# Effect rules to the rule interface of tsrs's linter and registers them there (`tsrs_lint::registry::
+# register_external_rules`, added by _patches/tsrs/170-lint-effect-rules.patch), which `tsrs --lint` runs.
 # Effect crates still reach tsrs only through ets_shim.
 [dependencies]
 ets_etscheckerhooks.workspace = true
 ets_etsdiagnostics.workspace = true
 ets_etsexecutehooks.workspace = true
 ets_etslshooks.workspace = true
+ets_etsoxlintrunner.workspace = true
+ets_rules.workspace = true
 ets_shim.workspace = true
+rustc-hash.workspace = true
 tsrs_cli = { path = "../../tsrs/crates/tsrs_cli", optional = true }
+tsrs_lint = { path = "../../tsrs/crates/tsrs_lint", optional = true }
 
 [features]
 # tsrs's CLI links mimalloc, whose build needs CMake. It is opt-in so that `cargo check/clippy/test --workspace` work
 # without CMake; `repoctl test` builds the binary with it (`cargo build -p ets_tsrs --features cli`).
-cli = ["dep:tsrs_cli", "tsrs_cli/effect-main"]
+cli = ["dep:tsrs_cli", "tsrs_cli/effect-main", "dep:tsrs_lint"]
 
 [[bin]]
 name = "tsrs"
