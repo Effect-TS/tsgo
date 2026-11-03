@@ -41,4 +41,10 @@ impl TypeParser<'_> {
             member_name,
         )
     }
+
+    // go: internal/typeparser/either_type.go:35 TypeParser.IsExpressionEffectEitherModule 091c5cbc3662ea42
+    // IsExpressionEffectEitherModule reports whether node resolves to the Either module namespace.
+    pub fn is_expression_effect_either_module(&mut self, node: P<Node>) -> bool {
+        self.is_node_reference_to_module(node, &EFFECT_EITHER_PACKAGE_SOURCE_FILE_DESCRIPTOR)
+    }
 }

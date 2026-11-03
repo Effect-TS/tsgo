@@ -4,7 +4,7 @@ use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
 use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile, Symbol};
-use ets_shim::checker::{LiteralValue, TypeFlags};
+use ets_shim::checker::{LiteralValue, Type, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{PipingFlowTransformation, ResultDispatch, TypeParser};
@@ -174,12 +174,23 @@ pub(crate) fn analyze_catch_all_tag_dispatch_handler(
     Some((parameter_name.as_identifier().text().to_string(), branches, can_fix))
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:131 literalTaggedUnionTags 931ed3a1363bb4f2
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:131 literalTaggedUnionTags 45a4154e71127a58
 pub(crate) fn literal_tagged_union_tags(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
 ) -> Option<FxHashSet<String>> {
-    let type_ = tp.get_type_at_location(node)?;
+    let type_ = tp.get_type_at_location(node);
+    literal_tagged_union_type_tags(tp, type_)
+}
+
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:137 literalTaggedUnionTypeTags c9b756202e995bd5
+// literalTaggedUnionTypeTags returns the tags of a union whose every member
+// has a string literal _tag.
+pub(crate) fn literal_tagged_union_type_tags(
+    tp: &mut TypeParser<'_>,
+    type_: Option<P<Type>>,
+) -> Option<FxHashSet<String>> {
+    let type_ = type_?;
     if !type_.flags().intersects(TypeFlags::Union) {
         return None;
     }
@@ -201,7 +212,7 @@ pub(crate) fn literal_tagged_union_tags(
     if tags.is_empty() { None } else { Some(tags) }
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:157 isBareParameterTagReference 499ac373ad000a8a
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:162 isBareParameterTagReference 499ac373ad000a8a
 pub(crate) fn is_bare_parameter_tag_reference(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
