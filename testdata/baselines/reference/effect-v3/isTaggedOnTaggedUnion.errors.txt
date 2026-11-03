@@ -8,10 +8,11 @@ Effect version: 3.19.19
 /.src/isTaggedOnTaggedUnion.ts(22,25): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
 /.src/isTaggedOnTaggedUnion.ts(23,45): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
 /.src/isTaggedOnTaggedUnion.ts(24,56): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
-/.src/isTaggedOnTaggedUnion.ts(27,27): warning TS377182: `Cirle` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion.ts(25,55): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion.ts(28,27): warning TS377182: `Cirle` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
 
 
-==== /.src/isTaggedOnTaggedUnion.ts (8 errors) ====
+==== /.src/isTaggedOnTaggedUnion.ts (9 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics isTaggedOnTaggedUnion:warning
@@ -50,6 +51,9 @@ Effect version: 3.19.19
     export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
                                                            ~~~~~~~~~~~~~~~~~~
 !!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+    export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
+                                                          ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
     
     // reported without a fix: the tag is not one of the union's
     export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -59,7 +63,9 @@ Effect version: 3.19.19
     // not reported
     declare const unknownValue: unknown
     declare const optional: Shape | undefined
+    declare const unknownValues: ReadonlyArray<unknown>
     export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
     export const onOptional = Predicate.isTagged(optional, "Circle")
     export const unbound = Predicate.isTagged("Circle")
+    export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
     

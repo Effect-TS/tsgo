@@ -16,12 +16,12 @@ func (tp *TypeParser) CachedObjectLiteralContextualType(node *ast.Node) *checker
 	})
 }
 
-// CachedObjectLiteralConstraintContextualType returns the contextual type of an
-// object literal inside a generic call argument, as if the argument contributed
+// CachedExpressionConstraintContextualType returns the contextual type of an
+// expression inside a generic call argument, as if the argument contributed
 // no inferences to the call's resolved signature. Type parameters then take
 // their return type inferences, inferences from the other arguments, their
 // defaults, or their constraints, as the checker infers them. It returns nil
-// when the literal is not inside a call argument or the signature is not
+// when the expression is not inside a call argument or the signature is not
 // generic.
 //
 // The call is never resolved again. An inference-blocked contextual query
@@ -30,16 +30,16 @@ func (tp *TypeParser) CachedObjectLiteralContextualType(node *ast.Node) *checker
 // the shared checker this can instantiate types the original check never
 // built, for example Match.when patterns over a wide union, and leak
 // TS2589 errors and error types into the program's diagnostics.
-func (tp *TypeParser) CachedObjectLiteralConstraintContextualType(node *ast.Node) *checker.Type {
-	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindObjectLiteralExpression {
+func (tp *TypeParser) CachedExpressionConstraintContextualType(node *ast.Node) *checker.Type {
+	if tp == nil || tp.checker == nil || node == nil || !ast.IsExpression(node) {
 		return nil
 	}
-	return Cached(&tp.links.ObjectLiteralConstraintContextualType, node, func() *checker.Type {
-		return tp.objectLiteralConstraintContextualType(node)
+	return Cached(&tp.links.ExpressionConstraintContextualType, node, func() *checker.Type {
+		return tp.expressionConstraintContextualType(node)
 	})
 }
 
-func (tp *TypeParser) objectLiteralConstraintContextualType(node *ast.Node) *checker.Type {
+func (tp *TypeParser) expressionConstraintContextualType(node *ast.Node) *checker.Type {
 	levels := tp.inferenceReplayLevels(node)
 	if len(levels) == 0 {
 		return nil
@@ -168,7 +168,7 @@ func (tp *TypeParser) argumentTypeWithoutOwnInferences(level inferenceReplayLeve
 // inferences. An unconstrained type parameter may have been inferred from the
 // literal, so it becomes unknown. It returns nil when the literal is not inside
 // a call argument or no type parameter is constrained. Like
-// CachedObjectLiteralConstraintContextualType, it never resolves the call
+// CachedExpressionConstraintContextualType, it never resolves the call
 // again.
 func (tp *TypeParser) CachedObjectLiteralBareConstraintContextualType(node *ast.Node) *checker.Type {
 	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindObjectLiteralExpression {

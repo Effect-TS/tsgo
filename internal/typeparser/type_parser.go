@@ -33,7 +33,7 @@ type EffectLinks struct {
 	checkedExpressionTypeSourceFile *ast.SourceFile
 
 	ObjectLiteralContextualType               core.LinkStore[*ast.Node, *checker.Type]
-	ObjectLiteralConstraintContextualType     core.LinkStore[*ast.Node, *checker.Type]
+	ExpressionConstraintContextualType        core.LinkStore[*ast.Node, *checker.Type]
 	ObjectLiteralBareConstraintContextualType core.LinkStore[*ast.Node, *checker.Type]
 
 	EffectType             core.LinkStore[*checker.Type, *Effect]

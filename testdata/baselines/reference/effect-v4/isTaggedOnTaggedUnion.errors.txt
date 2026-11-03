@@ -16,12 +16,13 @@ Effect version: 4.1.2
 /.src/isTaggedOnTaggedUnion.ts(40,54): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
 /.src/isTaggedOnTaggedUnion.ts(41,44): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
 /.src/isTaggedOnTaggedUnion.ts(42,55): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
-/.src/isTaggedOnTaggedUnion.ts(43,75): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
-/.src/isTaggedOnTaggedUnion.ts(46,27): warning TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
-/.src/isTaggedOnTaggedUnion.ts(47,48): warning TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion.ts(43,54): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion.ts(44,75): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion.ts(47,27): warning TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion.ts(48,48): warning TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
 
 
-==== /.src/isTaggedOnTaggedUnion.ts (18 errors) ====
+==== /.src/isTaggedOnTaggedUnion.ts (19 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics isTaggedOnTaggedUnion:warning
     import { Array, Data, pipe, Predicate, Schema } from "effect"
@@ -94,6 +95,9 @@ Effect version: 4.1.2
     export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
                                                           ~~~~~~~~~~~~~~~~~~
 !!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+    export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+                                                         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
     export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
                                                                               ~~~~~~~~~~~~~~~~~~
 !!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
@@ -109,6 +113,7 @@ Effect version: 4.1.2
     // not reported
     declare const unknownValue: unknown
     declare const anyValue: any
+    declare const unknownValues: ReadonlyArray<unknown>
     declare const mixed: Size | string
     declare const dynamicTag: "Auto" | "Px"
     export const onUnknown = Predicate.isTagged(unknownValue, "Px")
@@ -117,9 +122,7 @@ Effect version: 4.1.2
     export const onMixed = Predicate.isTagged(mixed, "Px")
     export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
     export const unbound = Predicate.isTagged("Px")
+    export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Px"))
     const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
     export const notPredicate = lookalike.isTagged(size, "Px")
-    // isTagged's own unknown parameter makes Array.filter infer unknown elements,
-    // so the callback's contextual parameter is not the union.
-    export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
     

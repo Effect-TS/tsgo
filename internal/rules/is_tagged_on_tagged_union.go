@@ -114,7 +114,13 @@ func isTaggedCallbackParameterType(tp *typeparser.TypeParser, c *checker.Checker
 	if call == nil || !ast.IsCallExpression(call) || call.AsCallExpression().Expression != callee {
 		return nil
 	}
-	contextualType := tp.GetContextualType(call, checker.ContextFlagsNone)
+	// isTagged's own unknown parameter takes part in inferring the call it is
+	// passed to: Effect's data-first Array.filter infers unknown elements from
+	// it. The contextual type without the argument's inferences comes first.
+	contextualType := tp.CachedExpressionConstraintContextualType(call)
+	if contextualType == nil {
+		contextualType = tp.GetContextualType(call, checker.ContextFlagsNone)
+	}
 	if contextualType == nil {
 		return nil
 	}

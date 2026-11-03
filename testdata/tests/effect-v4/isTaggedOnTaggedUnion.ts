@@ -40,6 +40,7 @@ export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
 export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
 export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
 export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
 export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
 
 // reported without a fix: the tag is not one of the union's
@@ -49,6 +50,7 @@ export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
 // not reported
 declare const unknownValue: unknown
 declare const anyValue: any
+declare const unknownValues: ReadonlyArray<unknown>
 declare const mixed: Size | string
 declare const dynamicTag: "Auto" | "Px"
 export const onUnknown = Predicate.isTagged(unknownValue, "Px")
@@ -57,8 +59,6 @@ export const onOptional = Predicate.isTagged(optional, "Px")
 export const onMixed = Predicate.isTagged(mixed, "Px")
 export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
 export const unbound = Predicate.isTagged("Px")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Px"))
 const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
 export const notPredicate = lookalike.isTagged(size, "Px")
-// isTagged's own unknown parameter makes Array.filter infer unknown elements,
-// so the callback's contextual parameter is not the union.
-export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))

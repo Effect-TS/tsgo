@@ -35,7 +35,12 @@
   Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
   Fix 2: "Replace with a _tag comparison"
 
-[D8] (27:27-27:45) TS377182: `Cirle` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+[D8] (25:55-25:73) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D9] (28:27-28:45) TS377182: `Cirle` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
   Fix 0: "Disable isTaggedOnTaggedUnion for this line"
   Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
 
@@ -74,6 +79,7 @@ export const namedImport = isTagged(handwritten, "Off")
 export const negated = !Predicate.isTagged(shape, "Circle")
 export const nativeCallback = shapes.filter(Predicate.isTagged("Square"))
 export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
+export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
 
 // reported without a fix: the tag is not one of the union's
 export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -81,9 +87,11 @@ export const misspelled = Predicate.isTagged(shape, "Cirle")
 // not reported
 declare const unknownValue: unknown
 declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
 export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
 export const onOptional = Predicate.isTagged(optional, "Circle")
 export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
 
 
 === [D2] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
@@ -119,6 +127,7 @@ export const namedImport = isTagged(handwritten, "Off")
 export const negated = !Predicate.isTagged(shape, "Circle")
 export const nativeCallback = shapes.filter(Predicate.isTagged("Square"))
 export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
+export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
 
 // reported without a fix: the tag is not one of the union's
 export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -126,9 +135,11 @@ export const misspelled = Predicate.isTagged(shape, "Cirle")
 // not reported
 declare const unknownValue: unknown
 declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
 export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
 export const onOptional = Predicate.isTagged(optional, "Circle")
 export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
 
 
 === [D3] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
@@ -164,6 +175,7 @@ export const namedImport = isTagged(handwritten, "Off")
 export const negated = !Predicate.isTagged(shape, "Circle")
 export const nativeCallback = shapes.filter(Predicate.isTagged("Square"))
 export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
+export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
 
 // reported without a fix: the tag is not one of the union's
 export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -171,9 +183,11 @@ export const misspelled = Predicate.isTagged(shape, "Cirle")
 // not reported
 declare const unknownValue: unknown
 declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
 export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
 export const onOptional = Predicate.isTagged(optional, "Circle")
 export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
 
 
 === [D4] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
@@ -209,6 +223,7 @@ export const namedImport = handwritten._tag === "Off"
 export const negated = !Predicate.isTagged(shape, "Circle")
 export const nativeCallback = shapes.filter(Predicate.isTagged("Square"))
 export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
+export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
 
 // reported without a fix: the tag is not one of the union's
 export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -216,9 +231,11 @@ export const misspelled = Predicate.isTagged(shape, "Cirle")
 // not reported
 declare const unknownValue: unknown
 declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
 export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
 export const onOptional = Predicate.isTagged(optional, "Circle")
 export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
 
 
 === [D5] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
@@ -254,6 +271,7 @@ export const namedImport = isTagged(handwritten, "Off")
 export const negated = shape._tag !== "Circle"
 export const nativeCallback = shapes.filter(Predicate.isTagged("Square"))
 export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
+export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
 
 // reported without a fix: the tag is not one of the union's
 export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -261,9 +279,11 @@ export const misspelled = Predicate.isTagged(shape, "Cirle")
 // not reported
 declare const unknownValue: unknown
 declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
 export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
 export const onOptional = Predicate.isTagged(optional, "Circle")
 export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
 
 
 === [D6] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
@@ -299,6 +319,7 @@ export const namedImport = isTagged(handwritten, "Off")
 export const negated = !Predicate.isTagged(shape, "Circle")
 export const nativeCallback = shapes.filter(value => value._tag === "Square")
 export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
+export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
 
 // reported without a fix: the tag is not one of the union's
 export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -306,9 +327,11 @@ export const misspelled = Predicate.isTagged(shape, "Cirle")
 // not reported
 declare const unknownValue: unknown
 declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
 export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
 export const onOptional = Predicate.isTagged(optional, "Circle")
 export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
 
 
 === [D7] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
@@ -344,6 +367,7 @@ export const namedImport = isTagged(handwritten, "Off")
 export const negated = !Predicate.isTagged(shape, "Circle")
 export const nativeCallback = shapes.filter(Predicate.isTagged("Square"))
 export const pipedCallback = pipe(shapes, Array.filter(value => value._tag === "Square"))
+export const dataFirstCallback = Array.filter(shapes, Predicate.isTagged("Square"))
 
 // reported without a fix: the tag is not one of the union's
 export const misspelled = Predicate.isTagged(shape, "Cirle")
@@ -351,13 +375,63 @@ export const misspelled = Predicate.isTagged(shape, "Cirle")
 // not reported
 declare const unknownValue: unknown
 declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
 export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
 export const onOptional = Predicate.isTagged(optional, "Circle")
 export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
 
 
 === [D8] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
 skipped by default
 
 === [D8] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate } from "effect"
+import { isTagged } from "effect/Predicate"
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+declare const shapes: ReadonlyArray<Shape>
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+// reported
+export const dataFirst = Predicate.isTagged(shape, "Circle")
+export const curried = Predicate.isTagged("Circle")(shape)
+export const piped = pipe(shape, Predicate.isTagged("Square"))
+export const namedImport = isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(shape, "Circle")
+export const nativeCallback = shapes.filter(Predicate.isTagged("Square"))
+export const pipedCallback = pipe(shapes, Array.filter(Predicate.isTagged("Square")))
+export const dataFirstCallback = Array.filter(shapes, value => value._tag === "Square")
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(shape, "Cirle")
+
+// not reported
+declare const unknownValue: unknown
+declare const optional: Shape | undefined
+declare const unknownValues: ReadonlyArray<unknown>
+export const onUnknown = Predicate.isTagged(unknownValue, "Circle")
+export const onOptional = Predicate.isTagged(optional, "Circle")
+export const unbound = Predicate.isTagged("Circle")
+export const unknownElements = Array.filter(unknownValues, Predicate.isTagged("Circle"))
+
+
+=== [D9] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
 skipped by default
