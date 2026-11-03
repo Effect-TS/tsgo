@@ -2674,7 +2674,7 @@
         "isTaggedOnTaggedUnion": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
-          "description": "Reports Predicate.isTagged on a value already typed as a tagged union, where a _tag comparison checks the tag and narrows"
+          "description": "Reports Predicate.isTagged on a value already typed as a tagged union, where Predicate.isTaggedStrict checks the tag and narrows"
         },
         "layerMergeAllWithDependencies": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

@@ -126,3 +126,92 @@ func (r *moduleMemberReference) expression(tracker *rewriter.Tracker, member mod
 	}
 	return tracker.NewPropertyAccessPath(r.path...)
 }
+
+// calleeModuleMemberReference keeps the qualifier a callee is written with:
+// Q.f gives Q.<member>, and a named import of f gives a bare <member> from the
+// same import. When the bare name has to be imported, namedImports is the list
+// to add it to. Otherwise it falls back to module, the file's reference to the
+// member's module.
+func calleeModuleMemberReference(ctx *fixable.Context, callee *ast.Node, module typeparser.ModuleReference, member moduleMember) (reference *moduleMemberReference, namedImports *ast.Node) {
+	if qualifier := calleeModuleQualifier(callee, member); qualifier != nil {
+		if reference := importedModuleMember(ctx, callee, qualifier, member); reference != nil {
+			return reference, nil
+		}
+	}
+	if reference, namedImports := namedImportModuleMember(ctx, callee, member); reference != nil {
+		return reference, namedImports
+	}
+	return resolveModuleMember(ctx, callee, module, member), nil
+}
+
+// calleeModuleQualifier returns the module path of a Q.f callee whose Q is
+// member's module.
+func calleeModuleQualifier(callee *ast.Node, member moduleMember) typeparser.ModuleReference {
+	callee = ast.SkipParentheses(callee)
+	if !ast.IsPropertyAccessExpression(callee) {
+		return nil
+	}
+	qualifier := callee.Expression()
+	if !member.isModule(qualifier) {
+		return nil
+	}
+	return identifierPath(qualifier)
+}
+
+// identifierPath returns the names of an identifier or a chain of property
+// accesses on identifiers, or nil for any other expression.
+func identifierPath(node *ast.Node) typeparser.ModuleReference {
+	switch {
+	case ast.IsIdentifier(node):
+		return typeparser.ModuleReference{node.Text()}
+	case ast.IsPropertyAccessExpression(node) && ast.IsIdentifier(node.Name()):
+		if path := identifierPath(node.Expression()); path != nil {
+			return path.Append(node.Name().Text())
+		}
+	}
+	return nil
+}
+
+// namedImportModuleMember handles a callee that is a named import binding of
+// member's module: it reuses a bare member binding already in scope, or returns
+// the bare member name with the callee's NamedImports to add it to when the
+// name is free and the imported module exports it.
+func namedImportModuleMember(ctx *fixable.Context, callee *ast.Node, member moduleMember) (*moduleMemberReference, *ast.Node) {
+	callee = ast.SkipParentheses(callee)
+	if !ast.IsIdentifier(callee) {
+		return nil, nil
+	}
+	binding := importBindingName(ctx, callee, ctx.Checker.ResolveName(callee.Text(), callee, ast.SymbolFlagsValue|ast.SymbolFlagsAlias, false))
+	if binding == nil || binding.Parent == nil || !ast.IsImportSpecifier(binding.Parent) {
+		return nil, nil
+	}
+	namedImports := binding.Parent.Parent
+	if namedImports == nil || !ast.IsNamedImports(namedImports) || namedImports.Parent == nil || namedImports.Parent.Parent == nil ||
+		!ast.IsImportDeclaration(namedImports.Parent.Parent) {
+		return nil, nil
+	}
+	moduleSymbol := ctx.TypeParser.GetSymbolAtLocation(namedImports.Parent.Parent.AsImportDeclaration().ModuleSpecifier)
+	if moduleSymbol == nil {
+		return nil, nil
+	}
+	export := ctx.Checker.TryGetMemberInModuleExports(member.name, moduleSymbol)
+	if export == nil {
+		return nil, nil
+	}
+	if ast.TSGetSymbolFlags(export)&ast.SymbolFlagsAlias != 0 {
+		export = ctx.Checker.GetAliasedSymbol(export)
+	}
+	exportDeclaration := ast.TSGetSymbolValueDeclaration(export)
+	if exportDeclaration == nil || exportDeclaration.Name() == nil || !member.isMember(exportDeclaration.Name()) {
+		return nil, nil
+	}
+
+	existing := ctx.Checker.ResolveName(member.name, callee, ast.SymbolFlagsValue|ast.SymbolFlagsAlias, false)
+	if existing == nil {
+		return &moduleMemberReference{path: typeparser.ModuleReference{member.name}}, namedImports
+	}
+	if name := importBindingName(ctx, callee, existing); name != nil && member.isMember(name) {
+		return &moduleMemberReference{path: typeparser.ModuleReference{name.Text()}}, nil
+	}
+	return nil, nil
+}

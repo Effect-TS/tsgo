@@ -15,15 +15,16 @@ import (
 // already a union of tagged members. isTagged accepts unknown, so a misspelled
 // tag compiles, a member with no field but its _tag survives a failed test, and
 // a refinement passed as a callback replaces the element type with { _tag: K }.
-// A `_tag` comparison has none of these problems.
+// Predicate.isTaggedStrict, which takes only its input's tags, has none of
+// these problems.
 var IsTaggedOnTaggedUnion = rule.Rule{
 	Name:            "isTaggedOnTaggedUnion",
 	Group:           "antipattern",
-	Description:     "Reports Predicate.isTagged on a value already typed as a tagged union, where a _tag comparison checks the tag and narrows",
+	Description:     "Reports Predicate.isTagged on a value already typed as a tagged union, where Predicate.isTaggedStrict checks the tag and narrows",
 	DefaultSeverity: etscore.SeverityWarning,
-	SupportedEffect: []string{"v3", "v4"},
+	SupportedEffect: []string{"v4"},
 	Codes: []int32{
-		tsdiag.Predicate_isTagged_accepts_any_value_so_on_this_tagged_union_it_neither_checks_the_tag_against_the_members_nor_narrows_as_a_tag_comparison_does_effect_isTaggedOnTaggedUnion.Code(),
+		tsdiag.Predicate_isTagged_accepts_any_value_so_on_this_tagged_union_it_does_not_check_the_tag_against_the_members_and_narrows_less_than_Predicate_isTaggedStrict_effect_isTaggedOnTaggedUnion.Code(),
 		tsdiag.X_0_is_not_a_tag_of_this_tagged_union_so_this_Predicate_isTagged_test_is_always_false_effect_isTaggedOnTaggedUnion.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
@@ -31,7 +32,7 @@ var IsTaggedOnTaggedUnion = rule.Rule{
 		diagnostics := make([]*ast.Diagnostic, len(matches))
 		for i, match := range matches {
 			if match.KnownTag {
-				diagnostics[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.Predicate_isTagged_accepts_any_value_so_on_this_tagged_union_it_neither_checks_the_tag_against_the_members_nor_narrows_as_a_tag_comparison_does_effect_isTaggedOnTaggedUnion, nil)
+				diagnostics[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.Predicate_isTagged_accepts_any_value_so_on_this_tagged_union_it_does_not_check_the_tag_against_the_members_and_narrows_less_than_Predicate_isTaggedStrict_effect_isTaggedOnTaggedUnion, nil)
 			} else {
 				diagnostics[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.X_0_is_not_a_tag_of_this_tagged_union_so_this_Predicate_isTagged_test_is_always_false_effect_isTaggedOnTaggedUnion, nil, match.Tag)
 			}

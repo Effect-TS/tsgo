@@ -13,11 +13,10 @@ var taggedDataTypeModules = []struct {
 	{"Option", effectOptionPackageSourceFileDescriptor},
 	{"Exit", effectExitPackageSourceFileDescriptor},
 	{"Result", effectResultPackageSourceFileDescriptor},
-	{"Either", effectEitherPackageSourceFileDescriptor},
 }
 
-// TaggedDataTypeModule returns "Option", "Exit", "Result" or "Either" when
-// that Effect module declares every member of the union t, and "" otherwise.
+// TaggedDataTypeModule returns "Option", "Exit" or "Result" when that Effect
+// module declares every member of the union t, and "" otherwise.
 func (tp *TypeParser) TaggedDataTypeModule(t *checker.Type) string {
 	if t == nil || t.Flags()&checker.TypeFlagsUnion == 0 {
 		return ""

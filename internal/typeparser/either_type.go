@@ -30,8 +30,3 @@ var effectEitherPackageSourceFileDescriptor = newPackageSourceFileDescriptor(mod
 func (tp *TypeParser) IsNodeReferenceToEffectEitherModuleApi(node *ast.Node, memberName string) bool {
 	return tp.IsNodeReferenceToModuleExport(node, effectEitherPackageSourceFileDescriptor, memberName)
 }
-
-// IsExpressionEffectEitherModule reports whether node resolves to the Either module namespace.
-func (tp *TypeParser) IsExpressionEffectEitherModule(node *ast.Node) bool {
-	return tp.IsNodeReferenceToModule(node, effectEitherPackageSourceFileDescriptor)
-}

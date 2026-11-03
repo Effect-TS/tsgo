@@ -1,4 +1,4 @@
-==== /.src/isTaggedOnTaggedUnion.ts (28 flows) ====
+==== /.src/isTaggedOnTaggedUnion.ts (24 flows) ====
 
 === Piping Flow ===
 Location: 6:13 - 10:3
@@ -131,67 +131,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 36:24 - 36:57
-Node: Predicate.isTagged(size, "Auto")
-Node Kind: KindCallExpression
-
-Subject: size
-Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
-
-Transformations (1):
-  [0] kind: dataFirst
-      callee: Predicate.isTagged
-      args: ["Auto"]
-      outType: boolean
-
-=== Piping Flow ===
-Location: 37:24 - 37:57
-Node: Predicate.isTagged(size, "Auto")
-Node Kind: KindCallExpression
-
-Subject: size
-Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
-
-Transformations (1):
-  [0] kind: dataFirst
-      callee: Predicate.isTagged
-      args: ["Auto"]
-      outType: boolean
-
-=== Piping Flow ===
-Location: 38:27 - 38:66
-Node: String(Predicate.isTagged(size, "Px"))
-Node Kind: KindCallExpression
-
-Subject: size
-Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
-
-Transformations (2):
-  [0] kind: dataFirst
-      callee: Predicate.isTagged
-      args: ["Px"]
-      outType: boolean
-  [1] kind: call
-      callee: String
-      args: (constant)
-      outType: string
-
-=== Piping Flow ===
-Location: 39:34 - 39:77
-Node: Predicate.isTagged(optional ?? size, "Px")
-Node Kind: KindCallExpression
-
-Subject: optional ?? size
-Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
-
-Transformations (1):
-  [0] kind: dataFirst
-      callee: Predicate.isTagged
-      args: ["Px"]
-      outType: boolean
-
-=== Piping Flow ===
-Location: 40:53 - 40:85
+Location: 36:53 - 36:85
 Node: Predicate.isTagged(value, "Px")
 Node Kind: KindCallExpression
 
@@ -205,7 +145,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 41:30 - 41:69
+Location: 37:30 - 37:69
 Node: sizes.filter(Predicate.isTagged("Px"))
 Node Kind: KindCallExpression
 
@@ -223,7 +163,7 @@ Transformations (2):
       outType: ({ readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; })[]
 
 === Piping Flow ===
-Location: 42:29 - 42:81
+Location: 38:29 - 38:81
 Node: pipe(sizes, Array.filter(Predicate.isTagged("Px")))
 Node Kind: KindCallExpression
 
@@ -237,7 +177,7 @@ Transformations (1):
       outType: ({ readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; })[]
 
 === Piping Flow ===
-Location: 42:55 - 42:79
+Location: 38:55 - 38:79
 Node: Predicate.isTagged("Px")
 Node Kind: KindCallExpression
 
@@ -251,7 +191,7 @@ Transformations (1):
       outType: (self: unknown) => self is { _tag: "Px"; }
 
 === Piping Flow ===
-Location: 43:53 - 43:78
+Location: 39:53 - 39:78
 Node: Predicate.isTagged("Px")
 Node Kind: KindCallExpression
 
@@ -265,7 +205,7 @@ Transformations (1):
       outType: (self: unknown) => self is { _tag: "Px"; }
 
 === Piping Flow ===
-Location: 44:74 - 44:99
+Location: 40:74 - 40:99
 Node: Predicate.isTagged("Px")
 Node Kind: KindCallExpression
 
@@ -279,7 +219,7 @@ Transformations (1):
       outType: (self: unknown) => self is { _tag: "Px"; }
 
 === Piping Flow ===
-Location: 47:26 - 47:59
+Location: 43:26 - 43:59
 Node: Predicate.isTagged(size, "Atuo")
 Node Kind: KindCallExpression
 
@@ -293,7 +233,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 48:34 - 48:75
+Location: 44:34 - 44:75
 Node: sizes.filter(Predicate.isTagged("Atuo"))
 Node Kind: KindCallExpression
 
@@ -311,7 +251,7 @@ Transformations (2):
       outType: ({ readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; })[]
 
 === Piping Flow ===
-Location: 56:25 - 56:64
+Location: 52:25 - 52:64
 Node: Predicate.isTagged(unknownValue, "Px")
 Node Kind: KindCallExpression
 
@@ -325,7 +265,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 57:21 - 57:56
+Location: 53:21 - 53:56
 Node: Predicate.isTagged(anyValue, "Px")
 Node Kind: KindCallExpression
 
@@ -339,7 +279,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 58:26 - 58:61
+Location: 54:26 - 54:61
 Node: Predicate.isTagged(optional, "Px")
 Node Kind: KindCallExpression
 
@@ -353,7 +293,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 59:23 - 59:55
+Location: 55:23 - 55:55
 Node: Predicate.isTagged(mixed, "Px")
 Node Kind: KindCallExpression
 
@@ -367,7 +307,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 60:28 - 60:65
+Location: 56:28 - 56:65
 Node: Predicate.isTagged(size, dynamicTag)
 Node Kind: KindCallExpression
 
@@ -381,7 +321,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 61:23 - 61:48
+Location: 57:23 - 57:48
 Node: Predicate.isTagged("Px")
 Node Kind: KindCallExpression
 
@@ -395,7 +335,7 @@ Transformations (1):
       outType: (self: unknown) => self is { _tag: "Px"; }
 
 === Piping Flow ===
-Location: 62:59 - 62:84
+Location: 58:59 - 58:84
 Node: Predicate.isTagged("Px")
 Node Kind: KindCallExpression
 

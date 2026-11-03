@@ -2,14 +2,14 @@
 
 # `isTaggedOnTaggedUnion`
 
-Reports Predicate.isTagged on a value already typed as a tagged union, where a _tag comparison checks the tag and narrows
+Reports Predicate.isTagged on a value already typed as a tagged union, where Predicate.isTaggedStrict checks the tag and narrows
 
 | Property | Value |
 | --- | --- |
 | Category | Anti-pattern |
 | Default severity | `warning` |
 | Fixable | Yes |
-| Effect versions | v3, v4 |
+| Effect versions | v4 |
 | Diagnostic codes | `TS377181`, `TS377182` |
 | Language Service name | `isTaggedOnTaggedUnion` |
 | Oxlint name | `effecttsgo/is-tagged-on-tagged-union` |
@@ -27,7 +27,7 @@ const Size = Schema.TaggedUnion({
 export const width = (size: typeof Size.Type): number =>
   Predicate.isTagged(size, "Auto") ? 0 : size.value
 /**
-  ^^^^^^^^^^^^^^^^^^ effecttsgo(is-tagged-on-tagged-union): `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does.
+  ^^^^^^^^^^^^^^^^^^ effecttsgo(is-tagged-on-tagged-union): `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`.
 */
 ```
 

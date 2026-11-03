@@ -33,10 +33,6 @@ export const namedImport = isTagged(shape, "Circle")
 export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
 export const negated = !Predicate.isTagged(size, "Auto")
 export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
-export const inBinary = Predicate.isTagged(size, "Auto") === expected
-export const asserted = Predicate.isTagged(size, "Auto") as boolean
-export const nestedInput = String(Predicate.isTagged(size, "Px"))
-export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
 export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
 export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
 export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))

@@ -1240,11 +1240,10 @@
     {
       "name": "isTaggedOnTaggedUnion",
       "group": "antipattern",
-      "description": "Reports Predicate.isTagged on a value already typed as a tagged union, where a _tag comparison checks the tag and narrows",
+      "description": "Reports Predicate.isTagged on a value already typed as a tagged union, where Predicate.isTaggedStrict checks the tag and narrows",
       "defaultSeverity": "warning",
       "fixable": true,
       "supportedEffect": [
-        "v3",
         "v4"
       ],
       "codes": [
@@ -1257,7 +1256,7 @@
           {
             "start": 184,
             "end": 202,
-            "text": "`Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)"
+            "text": "`Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)"
           }
         ]
       }
