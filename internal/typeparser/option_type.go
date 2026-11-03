@@ -30,3 +30,8 @@ var effectOptionPackageSourceFileDescriptor = newPackageSourceFileDescriptor(mod
 func (tp *TypeParser) IsNodeReferenceToEffectOptionModuleApi(node *ast.Node, memberName string) bool {
 	return tp.IsNodeReferenceToModuleExport(node, effectOptionPackageSourceFileDescriptor, memberName)
 }
+
+// IsExpressionEffectOptionModule reports whether node resolves to the Option module namespace.
+func (tp *TypeParser) IsExpressionEffectOptionModule(node *ast.Node) bool {
+	return tp.IsNodeReferenceToModule(node, effectOptionPackageSourceFileDescriptor)
+}

@@ -1,0 +1,34 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:3-11:21) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D2] (11:47-11:52) TS2339: Property 'value' does not exist on type '{ readonly _tag: "Auto"; } | { readonly _tag: "Px"; readonly value: number; }'.
+  Property 'value' does not exist on type '{ readonly _tag: "Auto"; }'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Predicate, Schema } from "effect"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite }
+})
+
+export const width = (size: typeof Size.Type): number =>
+  size._tag === "Auto" ? 0 : size.value
+

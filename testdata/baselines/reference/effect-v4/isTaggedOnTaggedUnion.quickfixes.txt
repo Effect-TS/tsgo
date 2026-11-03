@@ -1,0 +1,1303 @@
+=== Quick Fix Inventory ===
+
+[D1] (28:26-28:44) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D2] (29:24-29:42) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D3] (30:33-30:51) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D4] (31:64-31:82) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D5] (32:28-32:36) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D6] (33:33-33:51) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D7] (34:25-34:43) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D8] (35:55-35:73) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D9] (36:25-36:43) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D10] (37:25-37:43) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D11] (38:35-38:53) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D12] (39:35-39:53) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D13] (40:54-40:72) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D14] (41:44-41:62) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D15] (42:55-42:73) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D16] (43:75-43:93) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+[D17] (46:27-46:45) TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D18] (47:48-47:66) TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = size._tag === "Auto"
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D2] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = size._tag === "Auto"
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D3] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = size._tag === "Px"
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D4] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, value => value._tag === "Px")
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D5] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = shape._tag === "Circle"
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D6] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = handwritten._tag === "Off"
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D7] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = size._tag !== "Auto"
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D8] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => current._tag === "Auto" ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D9] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = (size._tag === "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D10] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = (size._tag === "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D11] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(size._tag === "Px")
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D12] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = (optional ?? size)._tag === "Px"
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D13] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => value._tag === "Px"
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D14] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D14] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(value => value._tag === "Px")
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D15] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D15] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(value => value._tag === "Px"))
+export const conditionalCallback: (current: Size) => boolean = expected ? Predicate.isTagged("Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D16] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Data, pipe, Predicate, Schema } from "effect"
+import { isTagged } from "effect/Predicate"
+
+const Size = Schema.TaggedUnion({
+  Auto: {},
+  Px: { value: Schema.Finite },
+  Percent: { value: Schema.Finite }
+})
+type Size = typeof Size.Type
+declare const size: Size
+declare const sizes: ReadonlyArray<Size>
+declare const expected: boolean
+
+type Shape = Data.TaggedEnum<{
+  Circle: { readonly radius: number }
+  Square: { readonly side: number }
+}>
+declare const shape: Shape
+
+type Handwritten = { readonly _tag: "On" } | { readonly _tag: "Off"; readonly since: number }
+declare const handwritten: Handwritten
+
+declare const optional: Size | undefined
+
+// reported
+export const dataFirst = Predicate.isTagged(size, "Auto")
+export const curried = Predicate.isTagged("Auto")(size)
+export const piped = pipe(size, Predicate.isTagged("Px"))
+export const pipedAfterStep = pipe(size, (current) => current, Predicate.isTagged("Px"))
+export const namedImport = isTagged(shape, "Circle")
+export const handwrittenUnion = Predicate.isTagged(handwritten, "Off")
+export const negated = !Predicate.isTagged(size, "Auto")
+export const inCondition = (current: Size): number => Predicate.isTagged(current, "Auto") ? 0 : 1
+export const inBinary = Predicate.isTagged(size, "Auto") === expected
+export const asserted = Predicate.isTagged(size, "Auto") as boolean
+export const nestedInput = String(Predicate.isTagged(size, "Px"))
+export const parenthesizedInput = Predicate.isTagged(optional ?? size, "Px")
+export const generic = <S extends Size>(value: S) => Predicate.isTagged(value, "Px")
+export const nativeCallback = sizes.filter(Predicate.isTagged("Px"))
+export const pipedCallback = pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+export const conditionalCallback: (current: Size) => boolean = expected ? (value => value._tag === "Px") : () => false
+
+// reported without a fix: the tag is not one of the union's
+export const misspelled = Predicate.isTagged(size, "Atuo")
+export const misspelledCallback = sizes.filter(Predicate.isTagged("Atuo"))
+
+// not reported
+declare const unknownValue: unknown
+declare const anyValue: any
+declare const mixed: Size | string
+declare const dynamicTag: "Auto" | "Px"
+export const onUnknown = Predicate.isTagged(unknownValue, "Px")
+export const onAny = Predicate.isTagged(anyValue, "Px")
+export const onOptional = Predicate.isTagged(optional, "Px")
+export const onMixed = Predicate.isTagged(mixed, "Px")
+export const onDynamicTag = Predicate.isTagged(size, dynamicTag)
+export const unbound = Predicate.isTagged("Px")
+const lookalike = { isTagged: (_value: unknown, _tag: string) => false }
+export const notPredicate = lookalike.isTagged(size, "Px")
+// isTagged's own unknown parameter makes Array.filter infer unknown elements,
+// so the callback's contextual parameter is not the union.
+export const dataFirstCallback = Array.filter(sizes, Predicate.isTagged("Px"))
+
+
+=== [D17] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default

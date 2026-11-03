@@ -2671,6 +2671,11 @@
           "default": "off",
           "description": "Suggests using Schema.is instead of instanceof for Effect Schema types"
         },
+        "isTaggedOnTaggedUnion": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Reports Predicate.isTagged on a value already typed as a tagged union, where a _tag comparison checks the tag and narrows"
+        },
         "layerMergeAllWithDependencies": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",

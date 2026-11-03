@@ -1,0 +1,123 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:21-11:39) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isSome"
+
+[D2] (12:37-12:55) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isSome"
+
+[D3] (13:24-13:42) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Exit.isFailure"
+
+[D4] (14:22-14:40) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Either.isRight"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Option.isSome" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Either, Exit, Option, Predicate } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const either: Either.Either<number, string>
+
+export const some = Option.isSome(option)
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const right = Predicate.isTagged(either, "Right")
+
+
+=== [D2] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Option.isSome" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Either, Exit, Option, Predicate } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const either: Either.Either<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const somes = options.filter(Option.isSome)
+export const failure = Predicate.isTagged(exit, "Failure")
+export const right = Predicate.isTagged(either, "Right")
+
+
+=== [D3] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Exit.isFailure" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Either, Exit, Option, Predicate } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const either: Either.Either<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const failure = Exit.isFailure(exit)
+export const right = Predicate.isTagged(either, "Right")
+
+
+=== [D4] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Either.isRight" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Either, Exit, Option, Predicate } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const either: Either.Either<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const right = Either.isRight(either)
+

@@ -1,0 +1,33 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(11,21): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(12,37): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(13,24): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(14,22): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+
+
+==== /.src/isTaggedOnTaggedUnion_dataTypes.ts (4 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics isTaggedOnTaggedUnion:warning
+    import { Either, Exit, Option, Predicate } from "effect"
+    
+    declare const option: Option.Option<number>
+    declare const options: ReadonlyArray<Option.Option<number>>
+    declare const exit: Exit.Exit<number, string>
+    declare const either: Either.Either<number, string>
+    
+    export const some = Predicate.isTagged(option, "Some")
+                        ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+    export const somes = options.filter(Predicate.isTagged("Some"))
+                                        ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+    export const failure = Predicate.isTagged(exit, "Failure")
+                           ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+    export const right = Predicate.isTagged(either, "Right")
+                         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+    

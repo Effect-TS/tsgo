@@ -71,6 +71,7 @@
         "genericEffectServices": "warning",
         "globalErrorInEffectCatch": "warning",
         "globalErrorInEffectFailure": "warning",
+        "isTaggedOnTaggedUnion": "warning",
         "layerMergeAllWithDependencies": "warning",
         "lazyEffect": "suggestion",
         "lazyPromiseInEffectSync": "warning",
@@ -174,6 +175,7 @@
         "genericEffectServices": "error",
         "globalErrorInEffectCatch": "error",
         "globalErrorInEffectFailure": "error",
+        "isTaggedOnTaggedUnion": "error",
         "layerMergeAllWithDependencies": "error",
         "lazyEffect": "error",
         "lazyPromiseInEffectSync": "error",
@@ -277,6 +279,7 @@
         "effectTryWithoutCatch": "warning",
         "globalErrorInEffectCatch": "warning",
         "globalErrorInEffectFailure": "warning",
+        "isTaggedOnTaggedUnion": "warning",
         "layerMergeAllWithDependencies": "warning",
         "lazyEffect": "warning",
         "lazyPromiseInEffectSync": "warning",
@@ -1230,6 +1233,31 @@
             "start": 68,
             "end": 85,
             "text": "Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "isTaggedOnTaggedUnion",
+      "group": "antipattern",
+      "description": "Reports Predicate.isTagged on a value already typed as a tagged union, where a _tag comparison checks the tag and narrows",
+      "defaultSeverity": "warning",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377181,
+        377182
+      ],
+      "preview": {
+        "sourceText": "import { Predicate, Schema } from \"effect\"\n\nconst Size = Schema.TaggedUnion({\n  Auto: {},\n  Px: { value: Schema.Finite }\n})\n\nexport const width = (size: typeof Size.Type): number =\u003e\n  Predicate.isTagged(size, \"Auto\") ? 0 : size.value\n",
+        "diagnostics": [
+          {
+            "start": 184,
+            "end": 202,
+            "text": "`Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)"
           }
         ]
       }

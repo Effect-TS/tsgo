@@ -1,0 +1,24 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/isTaggedOnTaggedUnion_preview.ts(11,3): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_preview.ts(11,47): error TS2339: Property 'value' does not exist on type '{ readonly _tag: "Auto"; } | { readonly _tag: "Px"; readonly value: number; }'.
+
+
+==== /.src/isTaggedOnTaggedUnion_preview.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics isTaggedOnTaggedUnion:warning
+    import { Predicate, Schema } from "effect"
+    
+    const Size = Schema.TaggedUnion({
+      Auto: {},
+      Px: { value: Schema.Finite }
+    })
+    
+    export const width = (size: typeof Size.Type): number =>
+      Predicate.isTagged(size, "Auto") ? 0 : size.value
+      ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+                                                  ~~~~~
+!!! error TS2339: Property 'value' does not exist on type '{ readonly _tag: "Auto"; } | { readonly _tag: "Px"; readonly value: number; }'.
+    

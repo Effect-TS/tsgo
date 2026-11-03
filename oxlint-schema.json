@@ -2431,6 +2431,9 @@
         "effecttsgo/instance-of-schema": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/is-tagged-on-tagged-union": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/layer-merge-all-with-dependencies": {
           "$ref": "#/definitions/RuleNoConfig"
         },

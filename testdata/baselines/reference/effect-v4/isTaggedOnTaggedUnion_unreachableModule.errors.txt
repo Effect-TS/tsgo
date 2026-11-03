@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/isTaggedOnTaggedUnion_unreachableModule.ts(8,21): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+
+
+==== /.src/isTaggedOnTaggedUnion_unreachableModule.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics isTaggedOnTaggedUnion:warning
+    import { Effect, Predicate } from "effect"
+    
+    // Option is not imported, so the fix compares the tag instead of using Option.isSome.
+    const option = Effect.runSync(Effect.option(Effect.succeed(1)))
+    
+    export const some = Predicate.isTagged(option, "Some")
+                        ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+    

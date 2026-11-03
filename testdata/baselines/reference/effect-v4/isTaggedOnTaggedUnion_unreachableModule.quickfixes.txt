@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:21-8:39) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it neither checks the tag against the members nor narrows as a `_tag` comparison does. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with a _tag comparison"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with a _tag comparison" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_unreachableModule.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Effect, Predicate } from "effect"
+
+// Option is not imported, so the fix compares the tag instead of using Option.isSome.
+const option = Effect.runSync(Effect.option(Effect.succeed(1)))
+
+export const some = option._tag === "Some"
+
