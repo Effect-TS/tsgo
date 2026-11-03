@@ -13,7 +13,10 @@
 //! and adds `--effect-cli-diagnostics` (`etsdiagnostics.Run`) to the commands. Rust has no `init()`: `register_hooks`
 //! calls each hook crate's `pub fn init()` in that order; `--effect-cli-diagnostics` runs `ets_etsdiagnostics::run`,
 //! anything else runs tsrs's CLI (`tsrs_cli::main`, which
-//! dispatches `--lsp`, `--api` and the command line as Go's `runMain` does).
+//! dispatches `--lsp`, `--api` and the command line as Go's `runMain` does, and `--lint`, tsrs's type-aware linter,
+//! with the Effect rules `lint::register` adds, as the patched tsgolint does).
+
+mod lint;
 
 /// Rust-only: Go's `init()`s of the hook packages `cmd/tsc/main.go` imports, in import order.
 fn register_hooks() {
@@ -46,6 +49,7 @@ fn run_effect_cli_diagnostics() {
 #[cfg(feature = "cli")]
 fn main() -> std::process::ExitCode {
     register_hooks();
+    lint::register();
     run_effect_cli_diagnostics();
     tsrs_cli::main()
 }

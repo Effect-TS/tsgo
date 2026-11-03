@@ -76,3 +76,62 @@ jobs:
         env:
           TSGOLINT_PATH: ${{ steps.tsgolint.outputs.artifact_path }}
         run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE" "$TSGOLINT_PATH"
+
+  # `effect-tsgo --tsrs-lint`: the patched Oxlint runs the type-aware rules, Effect ones included, on the patched tsrs
+  # (`tsrs --lint`) that EFFECT_TSGO_TSGOLINT_PATH and EFFECT_TSGO_TSGOLINT_MODE=tsrs select.
+  validate-tsrs-lint:
+    name: Validate Oxlint on tsrs
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    # A cold release build of tsrs and of the Oxlint binding.
+    timeout-minutes: 60
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Resolve versions
+        id: versions
+        run: |
+          echo "tsrs=$(node -p "require('./_packages/tsgo/upstream.json').tags.tsrs.latest")" >> "$GITHUB_OUTPUT"
+          echo "oxlint=$(node -p "require('./_packages/tsgo/upstream.json').tags.oxlint.latest")" >> "$GITHUB_OUTPUT"
+
+      - name: Setup tsrs ${{ steps.versions.outputs.tsrs }}
+        uses: ./.github/actions/setup-repo
+        with:
+          component: tsrs
+          version: ${{ steps.versions.outputs.tsrs }}
+
+      - name: Build tsrs
+        id: tsrs
+        run: >
+          pnpm exec repoctl build artifact
+          --component tsrs
+          --version "${{ steps.versions.outputs.tsrs }}"
+          --target linux-x64
+
+      - name: Setup oxlint ${{ steps.versions.outputs.oxlint }}
+        uses: ./.github/actions/setup-repo
+        with:
+          component: oxlint
+          version: ${{ steps.versions.outputs.oxlint }}
+          target: linux-x64
+
+      - name: Build Oxlint binding
+        env:
+          TARGET_CC: clang
+        run: >
+          pnpm exec repoctl build artifact
+          --component oxlint
+          --version "${{ steps.versions.outputs.oxlint }}"
+          --target linux-x64
+
+      - name: Build @effect/tsgo package
+        run: pnpm --filter @effect/tsgo build
+
+      - name: Smoke test Oxlint runtime on tsrs
+        env:
+          TSRS_PATH: ${{ steps.tsrs.outputs.artifact_path }}/tsrs
+        run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE" "$TSRS_PATH" tsrs

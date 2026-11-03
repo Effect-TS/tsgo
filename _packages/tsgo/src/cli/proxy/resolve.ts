@@ -20,7 +20,7 @@ import {
   tsrsReplacementTargets,
   tsrsTarget
 } from "../../patcher/index.js"
-import type { ProxyInvocation, ProxyTool } from "./argv.js"
+import { type ProxyInvocation, type ProxyTool, tsrsLintFlag, type TsrsLintSelection } from "./argv.js"
 import type { ProxyCommand } from "./exec.js"
 
 export class ProxyError extends Data.TaggedError("ProxyError")<{ readonly reason: string }> {
@@ -149,6 +149,7 @@ export const tsrsExecutable = (context: ProxyContext, version: string) =>
   packagedComponentPath(context.packageDirectory, "tsrs", version, tsrsExecutableName(context.platform))
 
 const resolveTsc = (context: ProxyContext, invocation: ProxyInvocation) => Effect.gen(function*() {
+  yield* rejectTsrsLint(invocation)
   const installed = invocation.version === undefined ? yield* installedTypescriptVersion(context) : undefined
   const version = yield* selectVersion("tsc", "typescript", invocation.version, installed)
   const executable = yield* requireArtifact(yield* tscExecutable(context, version))
@@ -160,7 +161,9 @@ const resolveTsc = (context: ProxyContext, invocation: ProxyInvocation) => Effec
   } satisfies ProxyCommand
 })
 
-const resolveTsrs = (context: ProxyContext, invocation: ProxyInvocation) => Effect.gen(function*() {
+// The packaged tsrs binary of the requested version or tag, else of the installed tsrs version when a build of it
+// ships, else of the latest one.
+const packagedTsrs = (context: ProxyContext, requested: string | undefined) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   if (context.platform === "linux" && !context.isGlibc()) {
@@ -176,8 +179,8 @@ const resolveTsrs = (context: ProxyContext, invocation: ProxyInvocation) => Effe
       }.`
     })
   }
-  const installed = invocation.version === undefined ? yield* installedTsrsVersion(context) : undefined
-  const version = yield* selectVersion("tsrs", "tsrs", invocation.version, installed)
+  const installed = requested === undefined ? yield* installedTsrsVersion(context) : undefined
+  const version = yield* selectVersion("tsrs", "tsrs", requested, installed)
   const executable = yield* requireArtifact(yield* tsrsExecutable(context, version))
   // tsrs loads its lib*.d.ts files from the directory of its binary.
   const libraryPath = path.join(path.dirname(executable), "lib.d.ts")
@@ -188,8 +191,16 @@ const resolveTsrs = (context: ProxyContext, invocation: ProxyInvocation) => Effe
     })
   }
   yield* ensureExecutable(executable, context.platform)
-  return { file: executablePath(executable, context.platform), args: invocation.args, env: context.env } satisfies
-    ProxyCommand
+  return executablePath(executable, context.platform)
+})
+
+const resolveTsrs = (context: ProxyContext, invocation: ProxyInvocation) => Effect.gen(function*() {
+  yield* rejectTsrsLint(invocation)
+  return {
+    file: yield* packagedTsrs(context, invocation.version),
+    args: invocation.args,
+    env: context.env
+  } satisfies ProxyCommand
 })
 
 export interface OxlintInstallation {
@@ -240,14 +251,47 @@ const supportedInstalledVersion = (component: "oxlint" | "oxlint-tsgolint", inst
     )
 }
 
-export interface OxlintArtifacts {
-  readonly binding: string
-  readonly tsgolint: string | undefined
+// The type-aware linter the patched Oxlint binding runs: the packaged tsgolint, or the packaged tsrs in its lint mode.
+export interface TypeAwareLinter {
+  readonly kind: "tsgolint" | "tsrs"
+  readonly executable: string
 }
 
-// The packaged Oxlint binding of the installed oxlint version and, when oxlint-tsgolint is installed, the packaged
-// tsgolint of its version.
-export const oxlintArtifacts = (context: ProxyContext, installation: OxlintInstallation) => Effect.gen(function*() {
+export interface OxlintArtifacts {
+  readonly binding: string
+  readonly linter: TypeAwareLinter | undefined
+}
+
+// The packaged tsgolint of the installed oxlint-tsgolint version, undefined when oxlint-tsgolint is not installed.
+const packagedTsgolint = (
+  context: ProxyContext,
+  installation: OxlintInstallation,
+  target: ReturnType<typeof experimentalOxlintTarget>
+) => Effect.gen(function*() {
+  if (installation.tsgolint === undefined) return undefined
+  const tsgolintVersion = yield* supportedInstalledVersion("oxlint-tsgolint", installation.tsgolint)
+  const tsgolint = yield* requireArtifact(
+    yield* packagedComponentPath(context.packageDirectory, "oxlint-tsgolint", tsgolintVersion, target.tsgolintExecutable)
+  )
+  yield* ensureExecutable(tsgolint, context.platform)
+  return { kind: "tsgolint", executable: tsgolint } satisfies TypeAwareLinter
+})
+
+// The packaged tsrs of `--tsrs-lint[=<version|tag>]`, which replaces tsgolint: an installed oxlint-tsgolint is not used.
+const packagedTsrsLint = (context: ProxyContext, selection: TsrsLintSelection) => Effect.gen(function*() {
+  if (selection.version === "") {
+    return yield* new ProxyError({ reason: `Expected a tsrs version or tag after ${tsrsLintFlag}=.` })
+  }
+  return { kind: "tsrs", executable: yield* packagedTsrs(context, selection.version) } satisfies TypeAwareLinter
+})
+
+// The packaged Oxlint binding of the installed oxlint version and the type-aware linter it runs: the packaged tsrs
+// with `--tsrs-lint`, else the packaged tsgolint of the installed oxlint-tsgolint version, else none.
+export const oxlintArtifacts = (
+  context: ProxyContext,
+  installation: OxlintInstallation,
+  tsrsLint: TsrsLintSelection | undefined
+) => Effect.gen(function*() {
   const target = yield* Effect.try({
     try: () => experimentalOxlintTarget(context.platform, context.arch, context.platform === "linux" && context.isGlibc()),
     catch: (error) => new ProxyError({ reason: error instanceof Error ? error.message : String(error) })
@@ -256,15 +300,10 @@ export const oxlintArtifacts = (context: ProxyContext, installation: OxlintInsta
   const binding = yield* requireArtifact(
     yield* packagedComponentPath(context.packageDirectory, "oxlint", oxlintVersion, target.oxlintBinding)
   )
-  let tsgolint: string | undefined
-  if (installation.tsgolint !== undefined) {
-    const tsgolintVersion = yield* supportedInstalledVersion("oxlint-tsgolint", installation.tsgolint)
-    tsgolint = yield* requireArtifact(
-      yield* packagedComponentPath(context.packageDirectory, "oxlint-tsgolint", tsgolintVersion, target.tsgolintExecutable)
-    )
-    yield* ensureExecutable(tsgolint, context.platform)
-  }
-  return { binding, tsgolint } satisfies OxlintArtifacts
+  const linter = tsrsLint === undefined
+    ? yield* packagedTsgolint(context, installation, target)
+    : yield* packagedTsrsLint(context, tsrsLint)
+  return { binding, linter } satisfies OxlintArtifacts
 })
 
 // The bridge path as written into NODE_OPTIONS and BUN_OPTIONS. Node.js unescapes backslashes inside quotes and Bun
@@ -284,19 +323,32 @@ export const preloadPath = (bridge: string, platform: NodeJS.Platform) => {
 const prependOption = (options: string | undefined, option: string, preload: string) =>
   options === undefined || options.trim() === "" ? option : options.includes(preload) ? options : `${option} ${options}`
 
+// The variables that select the type-aware linter of the patched binding: EFFECT_TSGO_TSGOLINT_PATH names it, and
+// EFFECT_TSGO_TSGOLINT_MODE=tsrs makes the binding run it as `tsrs --lint headless ...`. Without a linter both stay as
+// inherited, so that a nested run keeps its parent's pair; with one, the mode always matches the path.
+const linterEnv = (env: NodeJS.ProcessEnv, linter: TypeAwareLinter | undefined): NodeJS.ProcessEnv => {
+  if (linter === undefined) return env
+  const { EFFECT_TSGO_TSGOLINT_MODE: _mode, ...rest } = env
+  return {
+    ...rest,
+    EFFECT_TSGO_TSGOLINT_PATH: linter.executable,
+    ...(linter.kind === "tsrs" ? { EFFECT_TSGO_TSGOLINT_MODE: "tsrs" } : {})
+  }
+}
+
 // The environment that loads the patched Oxlint in every Node.js and Bun process started with it: the bridge maps the
-// stock binding to the patched one at process.dlopen, and the patched binding runs the tsgolint of
+// stock binding to the patched one at process.dlopen, and the patched binding runs the type-aware linter of
 // EFFECT_TSGO_TSGOLINT_PATH (vite-plus overwrites OXLINT_TSGOLINT_PATH). Bun reads BUN_OPTIONS instead of NODE_OPTIONS
 // and needs the `--preload=` form under `bun run`.
 export const oxlintBridgeEnv = (context: ProxyContext, artifacts: OxlintArtifacts) => Effect.gen(function*() {
   const preload = yield* preloadPath(context.oxlintBridge, context.platform)
-  return {
-    ...context.env,
+  const env: NodeJS.ProcessEnv = {
+    ...linterEnv(context.env, artifacts.linter),
     NODE_OPTIONS: prependOption(context.env.NODE_OPTIONS, `--require "${preload}"`, preload),
     BUN_OPTIONS: prependOption(context.env.BUN_OPTIONS, `"--preload=${preload}"`, preload),
-    EFFECT_TSGO_OXLINT_BINDING: artifacts.binding,
-    ...(artifacts.tsgolint === undefined ? {} : { EFFECT_TSGO_TSGOLINT_PATH: artifacts.tsgolint })
-  } satisfies NodeJS.ProcessEnv
+    EFFECT_TSGO_OXLINT_BINDING: artifacts.binding
+  }
+  return env
 })
 
 // Oxlint runs its own CLI with the patched binding and tsgolint, through the bridge environment. The CLI runs without
@@ -304,9 +356,10 @@ export const oxlintBridgeEnv = (context: ProxyContext, artifacts: OxlintArtifact
 export const oxlintCommand = (
   context: ProxyContext,
   args: ReadonlyArray<string>,
-  installation: OxlintInstallation
+  installation: OxlintInstallation,
+  tsrsLint: TsrsLintSelection | undefined = undefined
 ) => Effect.gen(function*() {
-  const artifacts = yield* oxlintArtifacts(context, installation)
+  const artifacts = yield* oxlintArtifacts(context, installation, tsrsLint)
   return {
     file: context.execPath,
     args: [yield* oxlintBinPath(installation.oxlint), ...args],
@@ -319,6 +372,15 @@ const rejectVersion = (tool: "oxlint" | "vp", version: string | undefined) =>
     new ProxyError({
       reason: `${tool}@${version} is not supported: the packaged Oxlint build is selected by the installed `
         + `oxlint version. Run effect-tsgo ${tool} instead.`
+    })
+  )
+
+// `--tsrs-lint` selects the linter of Oxlint, so it only goes with the tools that run Oxlint.
+const rejectTsrsLint = (invocation: ProxyInvocation) =>
+  invocation.tsrsLint === undefined ? Effect.void : Effect.fail(
+    new ProxyError({
+      reason: `${tsrsLintFlag} selects the type-aware linter of Oxlint: use it with effect-tsgo ${tsrsLintFlag} oxlint `
+        + `or effect-tsgo ${tsrsLintFlag} vp.`
     })
   )
 
@@ -336,7 +398,7 @@ const resolveOxlint = (context: ProxyContext, invocation: ProxyInvocation) => Ef
       reason: `Unable to resolve oxlint from ${context.cwd}. Install oxlint (or vite-plus) in the project.`
     })
   }
-  return yield* oxlintCommand(context, invocation.args, installation)
+  return yield* oxlintCommand(context, invocation.args, installation, invocation.tsrsLint)
 })
 
 // vite-plus runs Oxlint as a child process from its own native core, so the CLI runs with the bridge environment,
@@ -355,7 +417,7 @@ const resolveVitePlus = (context: ProxyContext, invocation: ProxyInvocation) => 
   if (installation === undefined) {
     return yield* new ProxyError({ reason: `Unable to resolve the oxlint package of vite-plus from ${context.cwd}.` })
   }
-  const artifacts = yield* oxlintArtifacts(context, installation)
+  const artifacts = yield* oxlintArtifacts(context, installation, invocation.tsrsLint)
   return {
     file: context.execPath,
     args: [yield* packageBinPath(vitePlus, "vp"), ...invocation.args],
