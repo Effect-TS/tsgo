@@ -32,6 +32,7 @@
       "types": "./lib/getExePath.d.ts",
       "default": "./lib/getExePath.js"
     },
+    "./oxlint-bridge": "./lib/oxlint-bridge.cjs",
     "./oxlint-presets": {
       "types": "./oxlint-presets/index.d.ts",
       "default": "./oxlint-presets/index.js"

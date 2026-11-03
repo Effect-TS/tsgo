@@ -1,4 +1,4 @@
-export const proxyTools = ["tsc", "tsrs", "oxlint"] as const
+export const proxyTools = ["tsc", "tsrs", "oxlint", "vp"] as const
 
 export type ProxyTool = typeof proxyTools[number]
 
