@@ -40,4 +40,10 @@ impl TypeParser<'_> {
             member_name,
         )
     }
+
+    // go: internal/typeparser/predicate_type.go:33 TypeParser.IsExpressionEffectPredicateModule b0d7db705102f8f2
+    // IsExpressionEffectPredicateModule reports whether node resolves to the Predicate module namespace.
+    pub fn is_expression_effect_predicate_module(&mut self, node: P<Node>) -> bool {
+        self.is_node_reference_to_module(node, &EFFECT_PREDICATE_PACKAGE_SOURCE_FILE_DESCRIPTOR)
+    }
 }

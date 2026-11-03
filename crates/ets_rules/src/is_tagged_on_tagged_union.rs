@@ -12,23 +12,24 @@ use ets_typeparser::{PipingFlow, TypeParser};
 use crate::*;
 
 /// Rust-only: the rule's message for a tag of the union (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::PREDICATE_IS_TAGGED_ACCEPTS_ANY_VALUE_SO_ON_THIS_TAGGED_UNION_IT_NEITHER_CHECKS_THE_TAG_AGAINST_THE_MEMBERS_NOR_NARROWS_AS_A_TAG_COMPARISON_DOES_EFFECT_IS_TAGGED_ON_TAGGED_UNION;
+static MESSAGE: &Message = &tsdiag::PREDICATE_IS_TAGGED_ACCEPTS_ANY_VALUE_SO_ON_THIS_TAGGED_UNION_IT_DOES_NOT_CHECK_THE_TAG_AGAINST_THE_MEMBERS_AND_NARROWS_LESS_THAN_PREDICATE_IS_TAGGED_STRICT_EFFECT_IS_TAGGED_ON_TAGGED_UNION;
 
 /// Rust-only: the rule's message for a tag outside the union (Go spells it out at each use).
 static UNKNOWN_TAG_MESSAGE: &Message = &tsdiag::X_0_IS_NOT_A_TAG_OF_THIS_TAGGED_UNION_SO_THIS_PREDICATE_IS_TAGGED_TEST_IS_ALWAYS_FALSE_EFFECT_IS_TAGGED_ON_TAGGED_UNION;
 
-// go: internal/rules/is_tagged_on_tagged_union.go:19 IsTaggedOnTaggedUnion 6017daf2aaa392e6
+// go: internal/rules/is_tagged_on_tagged_union.go:20 IsTaggedOnTaggedUnion 2c9cae4d380f7722
 // IsTaggedOnTaggedUnion reports Predicate.isTagged on a value whose type is
 // already a union of tagged members. isTagged accepts unknown, so a misspelled
 // tag compiles, a member with no field but its _tag survives a failed test, and
 // a refinement passed as a callback replaces the element type with { _tag: K }.
-// A `_tag` comparison has none of these problems.
+// Predicate.isTaggedStrict, which takes only its input's tags, has none of
+// these problems.
 pub static IS_TAGGED_ON_TAGGED_UNION: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "isTaggedOnTaggedUnion",
     group: "antipattern",
-    description: "Reports Predicate.isTagged on a value already typed as a tagged union, where a _tag comparison checks the tag and narrows",
+    description: "Reports Predicate.isTagged on a value already typed as a tagged union, where Predicate.isTaggedStrict checks the tag and narrows",
     default_severity: Severity::Warning,
-    supported_effect: vec!["v3", "v4"],
+    supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code(), UNKNOWN_TAG_MESSAGE.code()],
     replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
@@ -51,7 +52,7 @@ pub static IS_TAGGED_ON_TAGGED_UNION: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/is_tagged_on_tagged_union.go:44 IsTaggedOnTaggedUnionMatch 5f9c61bfddf17e3e
+// go: internal/rules/is_tagged_on_tagged_union.go:45 IsTaggedOnTaggedUnionMatch 5f9c61bfddf17e3e
 // IsTaggedOnTaggedUnionMatch holds the nodes needed by the diagnostic and quick fix.
 //
 // Rust: the flow is never nil (a non-optional field).
@@ -73,7 +74,7 @@ pub struct IsTaggedOnTaggedUnionMatch {
     pub module: &'static str,
 }
 
-// go: internal/rules/is_tagged_on_tagged_union.go:63 AnalyzeIsTaggedOnTaggedUnion acfe4d314a33ebab
+// go: internal/rules/is_tagged_on_tagged_union.go:64 AnalyzeIsTaggedOnTaggedUnion acfe4d314a33ebab
 // AnalyzeIsTaggedOnTaggedUnion finds Predicate.isTagged steps whose tested
 // value is typed as a union of members with string literal tags.
 //
@@ -137,7 +138,7 @@ pub fn analyze_is_tagged_on_tagged_union(
     matches
 }
 
-// go: internal/rules/is_tagged_on_tagged_union.go:112 isTaggedCallbackParameterType 21036b77f7c36072
+// go: internal/rules/is_tagged_on_tagged_union.go:113 isTaggedCallbackParameterType 21036b77f7c36072
 // isTaggedCallbackParameterType returns the first parameter type of the
 // callback signature an unapplied isTagged(tag) call is contextually typed by.
 pub(crate) fn is_tagged_callback_parameter_type(
