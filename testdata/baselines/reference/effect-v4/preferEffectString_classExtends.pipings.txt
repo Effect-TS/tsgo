@@ -1,0 +1,43 @@
+==== /.src/preferEffectString_classExtends.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 7:27 - 11:3
+Node: Context.Service<Upper, { readonly upper: string }>()("Upper", {\n  make: Effect.gen(function*() {\n    return { upper: value.toUpperCase() }\n  })\n})
+Node Kind: KindCallExpression
+
+Subject: "Upper"
+Subject Type: "Upper"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Context.Service<Upper, { readonly upper: string }>()
+      args: [{\n  make: Effect.gen(function*() {\n    return { upper: value.toUpperCase() }\n  })\n}]
+      outType: ServiceClass<Upper, "Upper", { readonly upper: string; }> & { readonly make: Effect<{ readonly upper: string; }, never, never>; }
+
+=== Piping Flow ===
+Location: 8:8 - 10:5
+Node: Effect.gen(function*() {\n    return { upper: value.toUpperCase() }\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return { upper: value.toUpperCase() }\n  }
+Subject Type: () => Generator<never, { upper: string; }, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ upper: string; }, never, never>
+
+=== Piping Flow ===
+Location: 15:31 - 15:56
+Node: base(() => value.trim())
+Node Kind: KindCallExpression
+
+Subject: () => value.trim()
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: base
+      args: (constant)
+      outType: typeof (Anonymous class)
