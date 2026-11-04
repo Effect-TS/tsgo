@@ -8,6 +8,7 @@ import "github.com/microsoft/TypeScript/tsc/internal/collections"
 import "github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 import "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+import "github.com/microsoft/TypeScript/tsc/internal/json"
 import "github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -142,4 +143,6 @@ type TSConfig = tsoptions.TSConfig
 func TargetToLibMap() map[core.ScriptTarget]string
 type TsConfigSourceFile = tsoptions.TsConfigSourceFile
 var TscBuildOption = tsoptions.TscBuildOption
+//go:linkname UnmarshalRawCompilerOptions github.com/microsoft/TypeScript/tsc/internal/tsoptions.UnmarshalRawCompilerOptions
+func UnmarshalRawCompilerOptions(dec *json.Decoder, values *collections.OrderedMap[string, any]) error
 var ValidateCompilerOptionsCallback = tsoptions.ValidateCompilerOptionsCallback

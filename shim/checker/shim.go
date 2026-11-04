@@ -449,6 +449,7 @@ type extra_Checker struct {
   awaitedTypeStack []*checker.Type
   reverseMappedSourceStack []*checker.Type
   reverseMappedTargetStack []*checker.Type
+  resolvingObjectTypeStack []checker.ResolvingObjectType
   reverseExpandingFlags checker.ExpandingFlags
   freeRelater *checker.Relater
   subtypeRelation *checker.Relation
@@ -1125,6 +1126,7 @@ const RelationComparisonResultReportsUnmeasurable = checker.RelationComparisonRe
 const RelationComparisonResultReportsUnreliable = checker.RelationComparisonResultReportsUnreliable
 const RelationComparisonResultSucceeded = checker.RelationComparisonResultSucceeded
 type RelationError = checker.RelationError
+type ResolvingObjectType = checker.ResolvingObjectType
 type ReverseMappedSymbolLinks = checker.ReverseMappedSymbolLinks
 type ReverseMappedType = checker.ReverseMappedType
 type ReverseMappedTypeKey = checker.ReverseMappedTypeKey

@@ -35,9 +35,11 @@ legacy provider (`_patches/typescript-go-<gitHead>/`,
 suffix makes an override, so `_patches/typescript-go` is the legacy provider's
 own folder. Today:
 
-- `typescript-3e9236361fa97a9e6c685f4833ac457ae2d8c50a` (shims only):
-  `7.1.0-beta`, which is also the TypeScript the pinned tsrs ports (tsrs 0.20.0;
-  this folder's patches apply to it unchanged).
+- `typescript-3e9236361fa97a9e6c685f4833ac457ae2d8c50a` (patches and shims):
+  `7.1.0-beta`, which is also the TypeScript the pinned tsrs ports. Its patches
+  are this folder's, except `028-incremental-effect-options.patch`, which keeps
+  the pre-`BuildInfoCompilerOptions` / `||`-chain form of `buildInfo.go` and
+  `options_generated.go` that the beta still has.
 
 Rules, enforced by `repoctl check` where they can be:
 
