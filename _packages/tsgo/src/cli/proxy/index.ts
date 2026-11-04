@@ -14,7 +14,7 @@ export * from "./argv.js"
 
 // Only the services resolution needs. NodeServices.layer would also build NodeTerminal, which reads process.stdin and
 // process.stdout; on pipes that sets O_NONBLOCK, which execve hands to the tool and truncates its output.
-export const proxyLayer = Layer.mergeAll(NodeFileSystem.layer, NodePath.layer)
+const proxyLayer = Layer.mergeAll(NodeFileSystem.layer, NodePath.layer)
 
 // Runs a packaged tool for `effect-tsgo <tool>[@<version>] [args...]`. Resolution runs outside NodeRuntime.runMain so
 // that its signal handling does not interfere with the signals forwarded to the tool.
