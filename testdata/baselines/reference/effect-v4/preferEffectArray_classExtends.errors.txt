@@ -1,10 +1,12 @@
 === Metadata ===
 Effect version: 4.1.2
 
+/.src/preferEffectArray_classExtends.ts(9,22): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray_classExtends.ts(15,46): warning TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
 /.src/preferEffectArray_classExtends.ts(16,24): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
 
 
-==== /.src/preferEffectArray_classExtends.ts (1 errors) ====
+==== /.src/preferEffectArray_classExtends.ts (3 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectArray:warning
     import { Context, Effect } from "effect"
@@ -14,12 +16,16 @@ Effect version: 4.1.2
     export class Doubled extends Context.Service<Doubled, { readonly all: ReadonlyArray<number> }>()("Doubled", {
       make: Effect.gen(function*() {
         return { all: xs.map((n) => n * 2) }
+                         ~~~
+!!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
       })
     }) {}
     
     const base = <T>(make: () => T) => class { static make = make }
     
     export class InExtends extends base(() => xs.find((n) => n > 1)) {
+                                                 ~~~~
+!!! warning TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
       readonly inBody = xs.filter((n) => n > 1)
                            ~~~~~~
 !!! warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)

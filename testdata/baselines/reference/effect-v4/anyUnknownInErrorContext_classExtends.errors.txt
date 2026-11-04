@@ -1,11 +1,15 @@
 === Metadata ===
 Effect version: 4.1.2
 
+/.src/anyUnknownInErrorContext_classExtends.ts(7,12): warning TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext_classExtends.ts(14,43): warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
 /.src/anyUnknownInErrorContext_classExtends.ts(15,21): warning TS377030: This has any in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
 
 
-==== /.src/anyUnknownInErrorContext_classExtends.ts (1 errors) ====
+==== /.src/anyUnknownInErrorContext_classExtends.ts (3 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics anyUnknownInErrorContext:warning
     import { Context, Effect } from "effect"
@@ -13,6 +17,9 @@ Having an unknown or any error type is not useful. Consider instead using specif
     export class Failing extends Context.Service<Failing, { readonly run: () => void }>()("Failing", {
       make: Effect.gen(function*() {
         yield* Effect.fail<unknown>(42)
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
         return { run: () => {} }
       })
     }) {}
@@ -20,6 +27,9 @@ Having an unknown or any error type is not useful. Consider instead using specif
     const base = <T>(make: () => T) => class { static make = make }
     
     export class InExtends extends base(() => Effect.fail<any>(42)) {
+                                              ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
       readonly inBody = Effect.fail<any>(42)
                         ~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377030: This has any in the error channel which is not recommended.

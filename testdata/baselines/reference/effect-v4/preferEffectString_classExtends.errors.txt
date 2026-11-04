@@ -1,10 +1,12 @@
 === Metadata ===
 Effect version: 4.1.2
 
+/.src/preferEffectString_classExtends.ts(9,27): warning TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
+/.src/preferEffectString_classExtends.ts(15,49): warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
 /.src/preferEffectString_classExtends.ts(16,27): warning TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)
 
 
-==== /.src/preferEffectString_classExtends.ts (1 errors) ====
+==== /.src/preferEffectString_classExtends.ts (3 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectString:warning
     import { Context, Effect } from "effect"
@@ -14,12 +16,16 @@ Effect version: 4.1.2
     export class Upper extends Context.Service<Upper, { readonly upper: string }>()("Upper", {
       make: Effect.gen(function*() {
         return { upper: value.toUpperCase() }
+                              ~~~~~~~~~~~
+!!! warning TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
       })
     }) {}
     
     const base = <T>(make: () => T) => class { static make = make }
     
     export class InExtends extends base(() => value.trim()) {
+                                                    ~~~~
+!!! warning TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
       readonly inBody = value.toLowerCase()
                               ~~~~~~~~~~~
 !!! warning TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)

@@ -49,6 +49,9 @@ var AnyUnknownInErrorContext = rule.Rule{
 
 			// Skip type nodes
 			if ast.IsTypeNode(node) {
+				if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(node) {
+					pushChild(node.Expression())
+				}
 				continue
 			}
 			// Skip type alias declarations

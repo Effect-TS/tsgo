@@ -237,8 +237,12 @@ func (tp *TypeParser) isFunctionReferencedBeforeDeclaration(node *ast.Node) bool
 
 	var visit ast.Visitor
 	visit = func(current *ast.Node) bool {
-		if current.Pos() >= node.Pos() || ast.IsTypeNode(current) || current.Kind == ast.KindExportDeclaration {
+		if current.Pos() >= node.Pos() || current.Kind == ast.KindExportDeclaration {
 			return false
+		}
+		if ast.IsTypeNode(current) {
+			// A class extends expression is evaluated when the class is defined.
+			return ast.IsExpressionWithTypeArgumentsInClassExtendsClause(current) && visit(current.Expression())
 		}
 		if current.Kind == ast.KindShorthandPropertyAssignment && current.Name().Text() == name.Text() {
 			if sameSymbolReference(tp.checker, tp.checker.GetShorthandAssignmentValueSymbol(current), symbol) {

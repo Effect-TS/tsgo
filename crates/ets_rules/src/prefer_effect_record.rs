@@ -118,7 +118,7 @@ impl RecordMethodPreference {
     }
 }
 
-// go: internal/rules/prefer_effect_record.go:66 runPreferEffectRecord c7729ec697fe5452
+// go: internal/rules/prefer_effect_record.go:66 runPreferEffectRecord 8de2071b228d34cd
 pub(crate) fn run_prefer_effect_record(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     let mut diagnostics = Vec::new();
     // Rust: Go's recursive `walk` closure is a nested function.
@@ -128,6 +128,9 @@ pub(crate) fn run_prefer_effect_record(ctx: &mut Context<'_, '_>) -> Vec<P<Diagn
         diagnostics: &mut Vec<P<Diagnostic>>,
     ) -> bool {
         if ast::is_type_node(node) {
+            if ast::is_expression_with_type_arguments_in_class_extends_clause(node) {
+                walk(ctx, node.expression().unwrap(), diagnostics);
+            }
             return false;
         }
         let mut name: Option<P<Node>> = None;

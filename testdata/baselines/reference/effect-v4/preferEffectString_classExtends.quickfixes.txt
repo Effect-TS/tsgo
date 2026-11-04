@@ -1,6 +1,14 @@
 === Quick Fix Inventory ===
 
-[D1] (16:27-16:38) TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)
+[D1] (9:27-9:38) TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
+  Fix 0: "Disable preferEffectString for this line"
+  Fix 1: "Disable preferEffectString for entire file"
+
+[D2] (15:49-15:53) TS377150: Consider effect/String.trim instead of native String.trim. Same runtime behavior; the literal result type only removes spaces, \n, \t, and \r. effect(preferEffectString)
+  Fix 0: "Disable preferEffectString for this line"
+  Fix 1: "Disable preferEffectString for entire file"
+
+[D3] (16:27-16:38) TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)
   Fix 0: "Disable preferEffectString for this line"
   Fix 1: "Disable preferEffectString for entire file"
 
@@ -10,4 +18,16 @@
 skipped by default
 
 === [D1] Fix 1: "Disable preferEffectString for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferEffectString for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferEffectString for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferEffectString for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferEffectString for entire file" ===
 skipped by default

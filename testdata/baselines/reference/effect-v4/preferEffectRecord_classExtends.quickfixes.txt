@@ -1,6 +1,14 @@
 === Quick Fix Inventory ===
 
-[D1] (16:28-16:34) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+[D1] (9:27-9:31) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D2] (15:50-15:57) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D3] (16:28-16:34) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
   Fix 0: "Disable preferEffectRecord for this line"
   Fix 1: "Disable preferEffectRecord for entire file"
 
@@ -10,4 +18,16 @@
 skipped by default
 
 === [D1] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferEffectRecord for entire file" ===
 skipped by default

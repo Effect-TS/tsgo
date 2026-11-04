@@ -1,8 +1,6 @@
 === Metadata ===
 Effect version: 4.1.2
 
-/.src/effectFnOpportunity_classExtendsHoisting.ts(9,10): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_classExtendsHoisting.ts(21,10): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_classExtendsHoisting.ts(34,10): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
 
 
@@ -19,7 +17,7 @@ Effect version: 4.1.2
     }
     
 
-==== /.src/effectFnOpportunity_classExtendsHoisting.ts (3 errors) ====
+==== /.src/effectFnOpportunity_classExtendsHoisting.ts (1 errors) ====
     import { Context, Effect } from "effect"
     
     // A class extends expression runs when the class is defined, so it relies on
@@ -29,8 +27,6 @@ Effect version: 4.1.2
     }) {}
     
     function makeEarly(n: number) {
-             ~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function* () {
         const value = yield* Effect.succeed(n)
         return { value: value + 1 }
@@ -43,8 +39,6 @@ Effect version: 4.1.2
     export class EarlyBase extends base(viaBase(1)) {}
     
     function viaBase(n: number) {
-             ~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function* () {
         const value = yield* Effect.succeed(n)
         return value + 1

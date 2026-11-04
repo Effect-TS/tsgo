@@ -1,6 +1,16 @@
 === Quick Fix Inventory ===
 
-[D1] (15:21-15:41) TS377030: This has any in the error channel which is not recommended.
+[D1] (7:12-7:36) TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D2] (14:43-14:63) TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D3] (15:21-15:41) TS377030: This has any in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
@@ -11,4 +21,16 @@ Having an unknown or any error type is not useful. Consider instead using specif
 skipped by default
 
 === [D1] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
 skipped by default

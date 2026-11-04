@@ -1,6 +1,14 @@
 === Quick Fix Inventory ===
 
-[D1] (16:24-16:30) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+[D1] (9:22-9:25) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D2] (15:46-15:50) TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+[D3] (16:24-16:30) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
@@ -10,4 +18,16 @@
 skipped by default
 
 === [D1] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferEffectArray for entire file" ===
 skipped by default

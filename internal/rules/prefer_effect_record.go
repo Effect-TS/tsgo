@@ -68,6 +68,9 @@ func runPreferEffectRecord(ctx *rule.Context) []*ast.Diagnostic {
 	var walk ast.Visitor
 	walk = func(node *ast.Node) bool {
 		if ast.IsTypeNode(node) {
+			if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(node) {
+				walk(node.Expression())
+			}
 			return false
 		}
 		var name, receiver *ast.Node
