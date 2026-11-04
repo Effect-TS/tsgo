@@ -119,6 +119,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup ${{ matrix.component }} ${{ matrix.version }}
+        id: setup
         uses: ./.github/actions/setup-repo
         with:
           component: ${{ matrix.component }}
@@ -162,6 +163,11 @@ jobs:
           name: ${{ matrix.artifactName }}
           path: ${{ steps.build.outputs.artifact_path || steps.build-tsrs.outputs.artifact_path }}
           if-no-files-found: error
+
+      # Go never caps GOCACHE by size (it only trims entries unused for 5 days); cap what the cache post-step saves.
+      - name: Trim Go build cache
+        if: runner.os == 'Linux' && github.ref == 'refs/heads/main' && steps.setup.outputs.go-cache-save == 'true'
+        run: pnpm exec repoctl go-cache trim --max-size 2GB
 
   pack:
     name: Pack Packages
