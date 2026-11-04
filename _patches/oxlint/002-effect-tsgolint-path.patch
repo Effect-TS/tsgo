@@ -1,0 +1,70 @@
+diff --git a/crates/oxc_linter/src/tsgolint.rs b/crates/oxc_linter/src/tsgolint.rs
+index a45e00a..1422f8e 100644
+--- a/crates/oxc_linter/src/tsgolint.rs
++++ b/crates/oxc_linter/src/tsgolint.rs
+@@ -367,6 +367,18 @@ impl TsGoLintState {
+     /// Spawn the tsgolint process with the given input.
+     fn spawn_tsgolint(&self, json_input: &Payload) -> Result<std::process::Child, String> {
+         let mut cmd = std::process::Command::new(&self.executable_path);
++        // The effect-tsgo proxies set EFFECT_TSGO_TSGOLINT_MODE=tsrs with EFFECT_TSGO_TSGOLINT_PATH naming the
++        // packaged tsrs, whose linter runs as `tsrs --lint headless ...` and has no Go profiling flags.
++        if effect_tsgo_tsrs_lint_mode() {
++            if let Some(name) =
++                TSGOLINT_PROFILING_VARIABLES.iter().find(|name| std::env::var_os(name).is_some())
++            {
++                return Err(format!(
++                    "{name} is not supported by the tsrs linter (EFFECT_TSGO_TSGOLINT_MODE=tsrs): Go profiling needs tsgolint"
++                ));
++            }
++            cmd.arg("--lint");
++        }
+         cmd.arg("headless")
+             .stdin(std::process::Stdio::piped())
+             .stdout(std::process::Stdio::piped())
+@@ -1402,14 +1414,44 @@ fn parse_single_message(
+     }
+ }
+ 
++/// The variables that make tsgolint write Go profiles (`-trace`, `-cpuprof`, `-heap`, `-allocs`).
++const TSGOLINT_PROFILING_VARIABLES: [&str; 4] = [
++    "OXLINT_TSGOLINT_TRACE",
++    "OXLINT_TSGOLINT_CPU",
++    "OXLINT_TSGOLINT_HEAP",
++    "OXLINT_TSGOLINT_ALLOCS",
++];
++
++/// Whether the linter of `EFFECT_TSGO_TSGOLINT_PATH` is tsrs, which runs it as `tsrs --lint`: the effect-tsgo proxies
++/// set `EFFECT_TSGO_TSGOLINT_MODE=tsrs` with it. The mode is ignored without `EFFECT_TSGO_TSGOLINT_PATH`, so that it
++/// never applies to a tsgolint found otherwise.
++fn effect_tsgo_tsrs_lint_mode() -> bool {
++    std::env::var_os("EFFECT_TSGO_TSGOLINT_PATH").is_some_and(|path| !path.is_empty())
++        && std::env::var("EFFECT_TSGO_TSGOLINT_MODE").is_ok_and(|mode| mode == "tsrs")
++}
++
+ /// Tries to find the `tsgolint` executable. In priority order, this will check:
+-/// 1. The `OXLINT_TSGOLINT_PATH` environment variable.
+-/// 2. The `tsgolint` binary in the current working directory's `node_modules/.bin` directory.
++/// 1. The `EFFECT_TSGO_TSGOLINT_PATH` environment variable.
++/// 2. The `OXLINT_TSGOLINT_PATH` environment variable.
++/// 3. The `tsgolint` binary in the current working directory's `node_modules/.bin` directory.
+ ///
+ /// # Errors
++/// Returns an error if `EFFECT_TSGO_TSGOLINT_PATH` is set but is not a file.
+ /// Returns an error if `OXLINT_TSGOLINT_PATH` is set but does not exist or is not a file.
+ /// Returns an error if the tsgolint executable could not be found.
+ pub fn try_find_tsgolint_executable(cwd: &Path) -> Result<PathBuf, String> {
++    // The effect-tsgo proxies select the Effect-patched tsgolint through this variable: vite-plus sets
++    // OXLINT_TSGOLINT_PATH to the stock tsgolint for the Oxlint process it starts.
++    if let Some(path_str) = std::env::var("EFFECT_TSGO_TSGOLINT_PATH").ok().filter(|path| !path.is_empty()) {
++        let path = PathBuf::from(&path_str);
++        if path.is_file() {
++            return Ok(path);
++        }
++        return Err(format!(
++            "Failed to find tsgolint executable: EFFECT_TSGO_TSGOLINT_PATH points to '{path_str}' which is not a file"
++        ));
++    }
++
+     // Check the environment variable first
+     if let Ok(path_str) = std::env::var("OXLINT_TSGOLINT_PATH") {
+         let path = PathBuf::from(&path_str);

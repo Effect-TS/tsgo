@@ -4,16 +4,16 @@
     "typescript": {
       "latest": "7.0.2",
       "beta": "7.1.0-beta",
-      "next": "7.1.0-dev.20261102.1"
+      "next": "7.1.0-dev.20261103.1"
     },
     "oxlint": {
-      "latest": "1.90.0"
+      "latest": "1.91.0"
     },
     "oxlint-tsgolint": {
       "latest": "7.0.2005"
     },
     "tsrs": {
-      "latest": "0.20.1-ts7.1.0-beta"
+      "latest": "0.21.0-ts7.1.0-beta"
     }
   },
   "components": {
@@ -26,8 +26,8 @@
         "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a",
         "provider": "typescript"
       },
-      "7.1.0-dev.20261102.1": {
-        "gitHead": "6161772c1370bdd4a82f808e6823bd755eb1870d",
+      "7.1.0-dev.20261103.1": {
+        "gitHead": "042e0fb9574980bd67964165df295e629f834fe3",
         "provider": "typescript"
       }
     },
@@ -54,11 +54,14 @@
       },
       "1.90.0": {
         "gitHead": "9b6fff42fa6edf0bec55861b6f0764c7b9acd86b"
+      },
+      "1.91.0": {
+        "gitHead": "f3fcdcc61b08e9880476279ba21a363967940fa4"
       }
     },
     "tsrs": {
-      "0.20.1-ts7.1.0-beta": {
-        "gitHead": "77d3cddb44540734abc33a42ccca4d3f33bee527",
+      "0.21.0-ts7.1.0-beta": {
+        "gitHead": "38931a58019107ba31581791e26a7aa414c9e015",
         "typescript": {
           "version": "7.1.0-beta",
           "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a"
@@ -76,6 +79,14 @@
       }
     },
     {
+      "name": "oxlint@1.91.0",
+      "description": "Oxlint 1.91.0 compatibility runtime",
+      "dependencies": {
+        "oxlint": "1.91.0",
+        "oxlint-tsgolint": "7.0.2005"
+      }
+    },
+    {
       "name": "oxlint@1.90.0",
       "description": "Oxlint 1.90.0 compatibility runtime",
       "dependencies": {
@@ -88,14 +99,6 @@
       "description": "Oxlint 1.89.0 compatibility runtime",
       "dependencies": {
         "oxlint": "1.89.0",
-        "oxlint-tsgolint": "7.0.2005"
-      }
-    },
-    {
-      "name": "oxlint@1.88.0",
-      "description": "Oxlint 1.88.0 compatibility runtime",
-      "dependencies": {
-        "oxlint": "1.88.0",
         "oxlint-tsgolint": "7.0.2005"
       }
     },

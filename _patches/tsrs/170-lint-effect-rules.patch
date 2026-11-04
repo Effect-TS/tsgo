@@ -1,0 +1,50 @@
+tsrs-only: tsrs's type-aware linter (crates/tsrs_lint, the Rust port of tsgolint's headless linter,
+oxc-project/tsrs#624, run as `tsrs --lint` since oxc-project/tsrs#857) is the counterpart of the tsgolint binary that
+`_patches/tsgolint/001-effect-rules.patch` extends with the Effect rules.
+
+Go appends the generated `effectRules` to tsgolint's `allRules`. The linter's registry is a closed `match`, so this
+adds `registry::register_external_rules`: a factory that `require_implemented` and `create_rule` consult for names the
+registry does not know. crates/ets_tsrs registers the Effect rules before it runs tsrs's CLI, whose `--lint` mode
+reaches the registry.
+
+diff --git a/crates/tsrs_lint/src/registry.rs b/crates/tsrs_lint/src/registry.rs
+index d3bf81e..24d7fb7 100644
+--- a/crates/tsrs_lint/src/registry.rs
++++ b/crates/tsrs_lint/src/registry.rs
+@@ -67,7 +67,26 @@ pub const BASELINE_RULES: &[&str] = &[
+     "use-unknown-in-catch-callback-variable",
+ ];
+ 
++// effect-tsgo: rules registered by another crate before the linter runs (crates/ets_tsrs registers the Effect
++// rules), as effect-tsgo's patched tsgolint appends `effectRules` to `allRules`. The factory returns `None` for a name
++// it does not know.
++pub type ExternalRuleFactory = fn(&str) -> Option<Box<dyn crate::rule::Rule>>;
++
++static EXTERNAL_RULES: std::sync::OnceLock<ExternalRuleFactory> = std::sync::OnceLock::new();
++
++/// effect-tsgo: registers the factory of external rules; only the first registration is kept.
++pub fn register_external_rules(factory: ExternalRuleFactory) {
++    let _ = EXTERNAL_RULES.set(factory);
++}
++
++fn create_external_rule(name: &str) -> Option<Box<dyn crate::rule::Rule>> {
++    EXTERNAL_RULES.get().and_then(|factory| factory(name))
++}
++
+ pub fn require_implemented(name: &str) -> Result<(), String> {
++    if create_external_rule(name).is_some() {
++        return Ok(());
++    }
+     if matches!(
+         name,
+         "await-thenable"
+@@ -252,6 +271,9 @@ pub fn create_rule(
+             .map(|rule| Box::new(rule) as Box<dyn crate::rule::Rule>),
+         "use-unknown-in-catch-callback-variable" => Ok(Box::new(crate::rules::use_unknown_in_catch_callback_variable::UseUnknownInCatchCallbackVariable)),
+         name => {
++            if let Some(rule) = create_external_rule(name) {
++                return Ok(rule);
++            }
+             require_implemented(name)?;
+             unreachable!("registered rule factory")
+         }

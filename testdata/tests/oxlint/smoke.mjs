@@ -9,13 +9,20 @@ assert.ok(repositoryRoot, "repository root argument is required")
 const tsgolint = process.argv[3]
 assert.ok(tsgolint, "tsgolint path argument is required")
 assert.ok(existsSync(tsgolint), `tsgolint executable does not exist: ${tsgolint}`)
+// `tsrs`: the linter is the patched tsrs, which the binding runs as `tsrs --lint headless` when
+// EFFECT_TSGO_TSGOLINT_MODE=tsrs comes with EFFECT_TSGO_TSGOLINT_PATH, as `effect-tsgo --tsrs-lint` sets them.
+const mode = process.argv[4] ?? "tsgolint"
+assert.ok(mode === "tsgolint" || mode === "tsrs", `unknown linter mode: ${mode}`)
 
 const fixture = dirname(fileURLToPath(import.meta.url))
 const oxlint = join(repositoryRoot, "oxlint", "apps", "oxlint", "dist", "cli.js")
 const packageDirectory = join(repositoryRoot, "_packages", "tsgo")
+const linterEnv = mode === "tsrs"
+  ? { EFFECT_TSGO_TSGOLINT_PATH: tsgolint, EFFECT_TSGO_TSGOLINT_MODE: "tsrs" }
+  : { OXLINT_TSGOLINT_PATH: tsgolint }
 const env = {
   ...process.env,
-  OXLINT_TSGOLINT_PATH: tsgolint
+  ...linterEnv
 }
 
 const run = (...args) => spawnSync(process.execPath, [oxlint, ...args], {
@@ -88,4 +95,30 @@ const recommendedOverride = run("--config", ".oxlintrc-recommended-override.json
 assert.equal(recommendedOverride.status, 0, recommendedOverride.stderr)
 assert.doesNotMatch(`${recommendedOverride.stdout}\n${recommendedOverride.stderr}`, /effecttsgo\(floating-effect\)/)
 
-console.log("Oxlint profile smoke test passed")
+// The effect-tsgo proxies select the patched tsgolint with EFFECT_TSGO_TSGOLINT_PATH, which wins over the
+// OXLINT_TSGOLINT_PATH that vite-plus sets.
+const proxied = spawnSync(process.execPath, [oxlint, "--type-aware", "--config", ".oxlintrc.json", "diagnostic.ts"], {
+  cwd: fixture,
+  encoding: "utf8",
+  env: {
+    ...process.env,
+    EFFECT_TSGO_TSGOLINT_PATH: tsgolint,
+    ...(mode === "tsrs" ? { EFFECT_TSGO_TSGOLINT_MODE: "tsrs" } : {}),
+    OXLINT_TSGOLINT_PATH: join(fixture, "missing-tsgolint")
+  }
+})
+assert.equal(proxied.status, 1, proxied.stderr)
+assert.match(`${proxied.stdout}\n${proxied.stderr}`, /effecttsgo\(floating-effect\)/)
+
+if (mode === "tsrs") {
+  // tsrs's linter has no Go profiling flags: the binding refuses them instead of passing them on.
+  const profiled = spawnSync(process.execPath, [oxlint, "--type-aware", "--config", ".oxlintrc.json", "diagnostic.ts"], {
+    cwd: fixture,
+    encoding: "utf8",
+    env: { ...env, OXLINT_TSGOLINT_TRACE: join(fixture, "trace.out") }
+  })
+  assert.notEqual(profiled.status, 0, profiled.stderr)
+  assert.match(`${profiled.stdout}\n${profiled.stderr}`, /OXLINT_TSGOLINT_TRACE is not supported by the tsrs linter/)
+}
+
+console.log(`Oxlint profile smoke test passed (${mode})`)

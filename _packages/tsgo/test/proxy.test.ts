@@ -2,10 +2,12 @@ import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
+import { spawnSync } from "node:child_process"
 import { EventEmitter } from "node:events"
 import { chmod, mkdir, mkdtemp, rm, stat, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
+import { fileURLToPath } from "node:url"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import * as pkgJson from "../package.json" with { type: "json" }
 import upstreamJson from "../upstream.json" with { type: "json" }
@@ -14,7 +16,9 @@ import { type ExecHost, execProxyCommand, forwardedSignals, type ProxyCommand } 
 import {
   executablePath,
   findOxlintInstallation,
+  oxlintBridgeEnv,
   oxlintCommand,
+  preloadPath,
   type ProxyContext,
   resolveProxyCommand,
   selectVersion,
@@ -55,7 +59,19 @@ const makeContext = async (overrides: Partial<ProxyContext> = {}): Promise<Proxy
   arch: "x64",
   isGlibc: () => true,
   packageDirectory: await makeTemporaryDirectory(),
+  oxlintBridge: "/pkg/lib/oxlint-bridge.cjs",
   ...overrides
+})
+
+const bridgeEnv = (
+  preload: string,
+  artifacts: { readonly binding: string; readonly tsgolint?: string; readonly tsrs?: string }
+) => ({
+  NODE_OPTIONS: `--require "${preload}"`,
+  BUN_OPTIONS: `"--preload=${preload}"`,
+  EFFECT_TSGO_OXLINT_BINDING: artifacts.binding,
+  ...(artifacts.tsgolint === undefined ? {} : { EFFECT_TSGO_TSGOLINT_PATH: artifacts.tsgolint }),
+  ...(artifacts.tsrs === undefined ? {} : { EFFECT_TSGO_TSGOLINT_PATH: artifacts.tsrs, EFFECT_TSGO_TSGOLINT_MODE: "tsrs" })
 })
 
 const typescriptTags = upstreamJson.tags.typescript
@@ -89,6 +105,7 @@ describe("proxy argv dispatch", () => {
       version: undefined,
       args: ["--type-aware"]
     })
+    expect(parseProxyInvocation(["vp", "check", "--fix"])).toEqual({ tool: "vp", version: undefined, args: ["check", "--fix"] })
     expect(parseProxyInvocation(["tsc@"])).toEqual({ tool: "tsc", version: "", args: [] })
   })
 
@@ -96,6 +113,30 @@ describe("proxy argv dispatch", () => {
     const args = ["--version", "-p", "tsconfig.json", "--lsp", "--stdio", "--help", "--build", "tsc", "patch", ""]
     expect(parseProxyInvocation(["tsc", ...args])?.args).toEqual(args)
     expect(parseProxyInvocation(["oxlint", ...args])?.args).toEqual(args)
+  })
+
+  it("recognizes --tsrs-lint with an optional version or tag in front of the tool", () => {
+    expect(parseProxyInvocation(["--tsrs-lint", "oxlint", "--type-aware"])).toEqual({
+      tool: "oxlint",
+      version: undefined,
+      tsrsLint: { version: undefined },
+      args: ["--type-aware"]
+    })
+    expect(parseProxyInvocation(["--tsrs-lint=latest", "vp", "lint"])).toEqual({
+      tool: "vp",
+      version: undefined,
+      tsrsLint: { version: "latest" },
+      args: ["lint"]
+    })
+    expect(parseProxyInvocation([`--tsrs-lint=${tsrsVersion}`, "oxlint"])?.tsrsLint).toEqual({ version: tsrsVersion })
+    expect(parseProxyInvocation(["--tsrs-lint=", "oxlint"])?.tsrsLint).toEqual({ version: "" })
+    // Only in front of the tool: after it, the flag is one of the tool's own arguments.
+    expect(parseProxyInvocation(["oxlint", "--tsrs-lint"])).toEqual({
+      tool: "oxlint",
+      version: undefined,
+      args: ["--tsrs-lint"]
+    })
+    expect(parseProxyInvocation(["oxlint", "--tsrs-lint"])?.tsrsLint).toBeUndefined()
   })
 
   it("leaves subcommands and global flags to the Effect CLI", () => {
@@ -107,6 +148,9 @@ describe("proxy argv dispatch", () => {
     expect(parseProxyInvocation(["tscx"])).toBeUndefined()
     expect(parseProxyInvocation(["@tsc"])).toBeUndefined()
     expect(parseProxyInvocation(["TSC"])).toBeUndefined()
+    expect(parseProxyInvocation(["--tsrs-lint"])).toBeUndefined()
+    expect(parseProxyInvocation(["--tsrs-lint", "patch"])).toBeUndefined()
+    expect(parseProxyInvocation(["--tsrs-lintx", "oxlint"])).toBeUndefined()
   })
 })
 
@@ -239,6 +283,18 @@ describe("proxy tsc and tsrs resolution", () => {
     })
   })
 
+  it("rejects --tsrs-lint for the tools that do not run Oxlint", async () => {
+    const context = await makeContext()
+    for (const tool of ["tsc", "tsrs"] as const) {
+      await expect(run(resolveProxyCommand({ tool, version: undefined, tsrsLint: { version: undefined }, args: [] }, context)))
+        .rejects.toMatchObject({
+          _tag: "ProxyError",
+          reason: "--tsrs-lint selects the type-aware linter of Oxlint: use it with effect-tsgo --tsrs-lint oxlint "
+            + "or effect-tsgo --tsrs-lint vp."
+        })
+    }
+  })
+
   it("rejects tsrs on hosts without a packaged build", async () => {
     const musl = await makeContext({ isGlibc: () => false })
     await expect(run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, musl))).rejects.toMatchObject({
@@ -292,13 +348,100 @@ describe("proxy oxlint resolution", () => {
     expect(command).toEqual({
       file: "/usr/bin/node",
       args: [bin, "--type-aware"],
-      env: { PATH: "/usr/bin", NAPI_RS_NATIVE_LIBRARY_PATH: binding, OXLINT_TSGOLINT_PATH: tsgolint }
+      env: { PATH: "/usr/bin", ...bridgeEnv("/pkg/lib/oxlint-bridge.cjs", { binding, tsgolint }) }
     })
     expect((await stat(tsgolint)).mode & 0o777).toBe(0o755)
   })
 
-  it("leaves OXLINT_TSGOLINT_PATH alone without oxlint-tsgolint", async () => {
-    const context = await makeContext({ platform: "win32", arch: "arm64", env: { OXLINT_TSGOLINT_PATH: "custom" } })
+  // The packaged tsrs of the requested, installed or latest version, with lib.d.ts next to it.
+  const writeTsrs = async (context: ProxyContext, version: string) => {
+    const tsrs = await writeArtifact(join(context.packageDirectory, "artifacts", "tsrs", version, "tsrs"), 0o644)
+    await writeFile(join(dirname(tsrs), "lib.d.ts"), "lib")
+    return tsrs
+  }
+
+  it("runs the type-aware rules on the packaged tsrs with --tsrs-lint, instead of the packaged tsgolint", async () => {
+    const context = await makeContext({ env: { PATH: "/usr/bin", EFFECT_TSGO_TSGOLINT_MODE: "stale" } })
+    const bin = await installOxlint(context.cwd, { tsgolint: true })
+    const binding = await writeArtifact(
+      join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.linux-x64-gnu.node"),
+      0o644
+    )
+    const tsrs = await writeTsrs(context, tsrsVersion)
+    for (const version of [undefined, "latest", tsrsVersion]) {
+      const command = await run(resolveProxyCommand({
+        tool: "oxlint",
+        version: undefined,
+        tsrsLint: { version },
+        args: ["--type-aware"]
+      }, context))
+      expect(command).toEqual({
+        file: "/usr/bin/node",
+        args: [bin, "--type-aware"],
+        env: { PATH: "/usr/bin", ...bridgeEnv("/pkg/lib/oxlint-bridge.cjs", { binding, tsrs }) }
+      })
+    }
+    expect((await stat(tsrs)).mode & 0o777).toBe(0o755)
+  })
+
+  it("selects tsrs without oxlint-tsgolint and ignores an unsupported oxlint-tsgolint", async () => {
+    const context = await makeContext()
+    const bin = await installOxlint(context.cwd)
+    await writePackage(context.cwd, "oxlint-tsgolint", { version: "0.0.1" })
+    await writePackage(context.cwd, "tsrs", { version: tsrsVersion })
+    const binding = await writeArtifact(
+      join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.linux-x64-gnu.node")
+    )
+    const tsrs = await writeTsrs(context, tsrsVersion)
+    const installation = (await run(findOxlintInstallation(context.cwd)))!
+    expect(await run(oxlintCommand(context, [], installation, { version: undefined }))).toEqual({
+      file: "/usr/bin/node",
+      args: [bin],
+      env: { PATH: "/usr/bin", ...bridgeEnv("/pkg/lib/oxlint-bridge.cjs", { binding, tsrs }) }
+    })
+  })
+
+  it("rejects --tsrs-lint without a version after =, an unknown version, or an unsupported host", async () => {
+    const context = await makeContext()
+    await installOxlint(context.cwd)
+    await writeArtifact(join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.linux-x64-gnu.node"))
+    const invocation = (version: string | undefined) => ({
+      tool: "oxlint" as const,
+      version: undefined,
+      tsrsLint: { version },
+      args: []
+    })
+    await expect(run(resolveProxyCommand(invocation(""), context))).rejects.toMatchObject({
+      _tag: "ProxyError",
+      reason: "Expected a tsrs version or tag after --tsrs-lint=."
+    })
+    await expect(run(resolveProxyCommand(invocation("0.0.1"), context))).rejects.toMatchObject({
+      _tag: "UnsupportedProxyVersionError",
+      packageName: "tsrs",
+      version: "0.0.1",
+      source: "requested"
+    })
+    await expect(run(resolveProxyCommand(invocation(undefined), context))).rejects.toMatchObject({
+      _tag: "ProxyError",
+      reason: `Missing packaged artifact ${join(context.packageDirectory, "artifacts", "tsrs", tsrsVersion, "tsrs")}.`
+    })
+    const windowsArm = await makeContext({ platform: "win32", arch: "arm64" })
+    await installOxlint(windowsArm.cwd)
+    await writeArtifact(
+      join(windowsArm.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.win32-arm64-msvc.node")
+    )
+    await expect(run(resolveProxyCommand(invocation(undefined), windowsArm))).rejects.toMatchObject({
+      reason: expect.stringContaining("The packaged tsrs integration is not available for win32-arm64")
+    })
+  })
+
+  it("leaves the tsgolint variables alone without oxlint-tsgolint and preloads Windows paths with forward slashes", async () => {
+    const context = await makeContext({
+      platform: "win32",
+      arch: "arm64",
+      env: { OXLINT_TSGOLINT_PATH: "custom", EFFECT_TSGO_TSGOLINT_PATH: "parent", EFFECT_TSGO_TSGOLINT_MODE: "tsrs" },
+      oxlintBridge: "C:\\Program Files\\pkg\\lib\\oxlint-bridge.cjs"
+    })
     const oxlint = await writePackage(context.cwd, "oxlint", { version: oxlintVersion, bin: "bin/cli.js" })
     const binding = await writeArtifact(
       join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.win32-arm64-msvc.node")
@@ -307,7 +450,12 @@ describe("proxy oxlint resolution", () => {
     expect(await run(oxlintCommand(context, [], installation))).toEqual({
       file: "/usr/bin/node",
       args: [join(oxlint, "bin", "cli.js")],
-      env: { OXLINT_TSGOLINT_PATH: "custom", NAPI_RS_NATIVE_LIBRARY_PATH: binding }
+      env: {
+        OXLINT_TSGOLINT_PATH: "custom",
+        EFFECT_TSGO_TSGOLINT_PATH: "parent",
+        EFFECT_TSGO_TSGOLINT_MODE: "tsrs",
+        ...bridgeEnv("C:/Program Files/pkg/lib/oxlint-bridge.cjs", { binding })
+      }
     })
   })
 
@@ -330,6 +478,145 @@ describe("proxy oxlint resolution", () => {
     const empty = await makeContext()
     await expect(run(resolveProxyCommand({ tool: "oxlint", version: undefined, args: [] }, empty))).rejects
       .toMatchObject({ reason: `Unable to resolve oxlint from ${empty.cwd}. Install oxlint (or vite-plus) in the project.` })
+  })
+})
+
+describe("proxy oxlint bridge environment", () => {
+  const artifacts = { binding: "/pkg/oxlint.node", linter: { kind: "tsgolint", executable: "/pkg/tsgolint" } } as const
+
+  it("puts the bridge in front of the caller's NODE_OPTIONS and BUN_OPTIONS, once", async () => {
+    const context = await makeContext({
+      env: { NODE_OPTIONS: "--max-old-space-size=4096", BUN_OPTIONS: "--smol" }
+    })
+    const env = await run(oxlintBridgeEnv(context, artifacts))
+    expect(env.NODE_OPTIONS).toBe(`--require "/pkg/lib/oxlint-bridge.cjs" --max-old-space-size=4096`)
+    expect(env.BUN_OPTIONS).toBe(`"--preload=/pkg/lib/oxlint-bridge.cjs" --smol`)
+    expect(env.EFFECT_TSGO_OXLINT_BINDING).toBe("/pkg/oxlint.node")
+    expect(env.EFFECT_TSGO_TSGOLINT_PATH).toBe("/pkg/tsgolint")
+
+    const nested = await run(oxlintBridgeEnv({ ...context, env }, artifacts))
+    expect(nested.NODE_OPTIONS).toBe(env.NODE_OPTIONS)
+    expect(nested.BUN_OPTIONS).toBe(env.BUN_OPTIONS)
+  })
+
+  it("sets the tsrs mode with the packaged tsrs and clears an inherited mode with the packaged tsgolint", async () => {
+    const context = await makeContext()
+    const tsrs = await run(oxlintBridgeEnv(context, { binding: "/pkg/oxlint.node", linter: { kind: "tsrs", executable: "/pkg/tsrs" } }))
+    expect(tsrs.EFFECT_TSGO_TSGOLINT_PATH).toBe("/pkg/tsrs")
+    expect(tsrs.EFFECT_TSGO_TSGOLINT_MODE).toBe("tsrs")
+
+    const nested = await run(oxlintBridgeEnv({ ...context, env: tsrs }, artifacts))
+    expect(nested.EFFECT_TSGO_TSGOLINT_PATH).toBe("/pkg/tsgolint")
+    expect(nested).not.toHaveProperty("EFFECT_TSGO_TSGOLINT_MODE")
+  })
+
+  it("rejects a bridge path that the options cannot carry", async () => {
+    const context = await makeContext({ oxlintBridge: `/odd"dir/lib/oxlint-bridge.cjs` })
+    await expect(run(oxlintBridgeEnv(context, artifacts))).rejects.toMatchObject({
+      reason: `Unable to preload /odd"dir/lib/oxlint-bridge.cjs: NODE_OPTIONS and BUN_OPTIONS cannot carry a path with quotes or backslashes.`
+    })
+    expect(await run(preloadPath("C:\\pkg\\lib\\oxlint-bridge.cjs", "win32"))).toBe("C:/pkg/lib/oxlint-bridge.cjs")
+  })
+})
+
+describe("proxy oxlint bridge", () => {
+  const bridge = fileURLToPath(new URL("../lib/oxlint-bridge.cjs", import.meta.url))
+
+  // Records the filename each process.dlopen call reaches after the bridge, in a fresh Node.js process.
+  const loadThroughBridge = (filenames: ReadonlyArray<string>, env: NodeJS.ProcessEnv) => {
+    const script = `
+      const seen = [];
+      process.dlopen = (module, filename, ...rest) => seen.push({ filename, rest: rest.length });
+      require(${JSON.stringify(bridge)});
+      for (const filename of ${JSON.stringify(filenames)}) process.dlopen({ exports: {} }, filename);
+      process.dlopen({ exports: {} }, ${JSON.stringify(filenames[0])}, 1);
+      process.stdout.write(JSON.stringify(seen));
+    `
+    const result = spawnSync(process.execPath, ["-e", script], { encoding: "utf8", env: { ...env, NODE_OPTIONS: "" } })
+    expect(result.status, result.stderr).toBe(0)
+    return JSON.parse(result.stdout) as ReadonlyArray<{ readonly filename: string; readonly rest: number }>
+  }
+
+  it("maps only the stock Oxlint binding to the patched one and forwards the flags it is given", () => {
+    const stock = "/project/node_modules/@oxlint/binding-linux-x64-gnu/oxlint.linux-x64-gnu.node"
+    const windowsStock = "\\\\?\\C:\\project\\node_modules\\@oxlint\\binding-win32-x64-msvc\\oxlint.win32-x64-msvc.node"
+    const other = "/project/node_modules/@voidzero-dev/vite-plus-linux-x64-gnu/vite-plus.linux-x64-gnu.node"
+    const seen = loadThroughBridge([stock, windowsStock, other], { EFFECT_TSGO_OXLINT_BINDING: "/pkg/oxlint.node" })
+    expect(seen).toEqual([
+      { filename: "/pkg/oxlint.node", rest: 0 },
+      { filename: "/pkg/oxlint.node", rest: 0 },
+      { filename: other, rest: 0 },
+      { filename: "/pkg/oxlint.node", rest: 1 }
+    ])
+  })
+
+  it("does nothing without a patched binding", () => {
+    const stock = "/project/node_modules/@oxlint/binding-linux-x64-gnu/oxlint.linux-x64-gnu.node"
+    expect(loadThroughBridge([stock], {}).map(({ filename }) => filename)).toEqual([stock, stock])
+  })
+})
+
+describe("proxy vite-plus resolution", () => {
+  const installVitePlus = async (directory: string) => {
+    const vitePlus = await writePackage(directory, "vite-plus", { version: "1.4.0", bin: { vp: "./bin/vp" } })
+    await writePackage(vitePlus, "oxlint", { version: oxlintVersion, bin: { oxlint: "bin/oxlint" } })
+    await writePackage(vitePlus, "oxlint-tsgolint", { version: tsgolintVersion })
+    return join(vitePlus, "bin", "vp")
+  }
+
+  it("runs the vp CLI with the patched binding and tsgolint of its oxlint", async () => {
+    const context = await makeContext({ execPath: "/usr/bin/bun" })
+    const vp = await installVitePlus(context.cwd)
+    const binding = await writeArtifact(
+      join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.linux-x64-gnu.node"),
+      0o644
+    )
+    const tsgolint = await writeArtifact(
+      join(context.packageDirectory, "artifacts", "oxlint-tsgolint", tsgolintVersion, "tsgolint")
+    )
+    const command = await run(resolveProxyCommand({ tool: "vp", version: undefined, args: ["check", "--fix"] }, context))
+    expect(command).toEqual({
+      file: "/usr/bin/bun",
+      args: [vp, "check", "--fix"],
+      env: { PATH: "/usr/bin", ...bridgeEnv("/pkg/lib/oxlint-bridge.cjs", { binding, tsgolint }) }
+    })
+  })
+
+  it("runs the vp CLI with the packaged tsrs as the linter of its oxlint with --tsrs-lint", async () => {
+    const context = await makeContext()
+    const vp = await installVitePlus(context.cwd)
+    const binding = await writeArtifact(
+      join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.linux-x64-gnu.node")
+    )
+    const tsrs = await writeArtifact(join(context.packageDirectory, "artifacts", "tsrs", tsrsVersion, "tsrs"))
+    await writeFile(join(dirname(tsrs), "lib.d.ts"), "lib")
+    const command = await run(resolveProxyCommand({
+      tool: "vp",
+      version: undefined,
+      tsrsLint: { version: "latest" },
+      args: ["lint"]
+    }, context))
+    expect(command).toEqual({
+      file: "/usr/bin/node",
+      args: [vp, "lint"],
+      env: { PATH: "/usr/bin", ...bridgeEnv("/pkg/lib/oxlint-bridge.cjs", { binding, tsrs }) }
+    })
+  })
+
+  it("rejects missing installs, versions and musl", async () => {
+    const empty = await makeContext()
+    await expect(run(resolveProxyCommand({ tool: "vp", version: undefined, args: [] }, empty))).rejects
+      .toMatchObject({ reason: `Unable to resolve vite-plus from ${empty.cwd}. Install vite-plus in the project.` })
+    const withoutOxlint = await makeContext()
+    await writePackage(withoutOxlint.cwd, "vite-plus", { version: "1.4.0", bin: { vp: "./bin/vp" } })
+    await expect(run(resolveProxyCommand({ tool: "vp", version: undefined, args: [] }, withoutOxlint))).rejects
+      .toMatchObject({ reason: `Unable to resolve the oxlint package of vite-plus from ${withoutOxlint.cwd}.` })
+    await expect(run(resolveProxyCommand({ tool: "vp", version: "1.4.0", args: [] }, withoutOxlint))).rejects
+      .toMatchObject({ reason: expect.stringContaining("vp@1.4.0 is not supported") })
+    await expect(run(resolveProxyCommand({ tool: "vp", version: undefined, args: [] }, {
+      ...withoutOxlint,
+      isGlibc: () => false
+    }))).rejects.toMatchObject({ reason: "Linux musl is not supported by the packaged Oxlint integration." })
   })
 })
 

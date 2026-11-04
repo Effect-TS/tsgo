@@ -1,5 +1,38 @@
 # @effect/tsgo
 
+## 0.67.0
+
+### Minor Changes
+
+- 45e777b: Run Oxlint's type-aware rules, including the Effect rules, on tsrs with `effect-tsgo --tsrs-lint`.
+  
+  tsrs 0.21.0 ships its port of tsgolint as `tsrs --lint`. The Effect-patched tsrs now registers the Effect rules there,
+  and `--tsrs-lint[=<version|tag>]` in front of `effect-tsgo oxlint` or `effect-tsgo vp` makes the patched Oxlint run
+  them on it instead of the patched tsgolint:
+  
+  ```sh
+  effect-tsgo --tsrs-lint oxlint --type-aware   # the installed tsrs version when it ships, else the latest
+  effect-tsgo --tsrs-lint=latest vp lint        # or a tsrs version or tag
+  ```
+  
+  The packaged tsrs is updated to 0.21.0.
+
+## 0.66.0
+
+### Minor Changes
+
+- 35b3f1c: Add `effect-tsgo vp [args...]`, which runs vite-plus with the Effect-patched Oxlint without patching `node_modules`, under Node.js and Bun:
+  
+  ```sh
+  effect-tsgo vp check
+  effect-tsgo vp lint src
+  effect-tsgo vp run check
+  ```
+  
+  `vp check`, `vp lint` and the scripts run through `vp run` report the `effecttsgo/*` rules configured in `vite.config.ts`, using the Effect-patched binding and `tsgolint` of the oxlint version vite-plus resolves.
+  
+  `effect-tsgo oxlint` now loads the patched binding the same way, through a `process.dlopen` bridge preloaded with `NODE_OPTIONS` and `BUN_OPTIONS` in front of the options already set there, instead of `NAPI_RS_NATIVE_LIBRARY_PATH`. This fixes `effect-tsgo oxlint` with an `oxlint.config.ts` that imports vite-plus, which failed with `TypeError: Class extends value undefined` because that variable also redirected the other native addons of the process.
+
 ## 0.65.0
 
 ### Minor Changes
