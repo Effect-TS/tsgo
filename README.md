@@ -5,7 +5,7 @@ A wrapper for both [TSRS](https://github.com/oxc-project/tsrs) and [TypeScript-G
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.67.1`:
+The following target package versions are supported by `@effect/tsgo@0.67.2`:
 
 | Component | Supported versions |
 |---|---|
