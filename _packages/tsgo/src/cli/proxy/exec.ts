@@ -37,7 +37,20 @@ export interface ExecHost {
 
 export const nodeExecHost: ExecHost = {
   platform: process.platform,
-  execve: typeof process.execve === "function" ? (file, args, env) => process.execve!(file, args, env) : undefined,
+  execve: typeof process.execve === "function" ? (file, args, env) => {
+    // Native tools inherit Node's non-blocking pipe descriptors across execve.
+    for (const stream of [process.stdin, process.stdout, process.stderr]) {
+      if (stream.isTTY || !("_handle" in stream)) continue
+      const handle = stream._handle
+      if (
+        typeof handle === "object" && handle !== null &&
+        "setBlocking" in handle && typeof handle.setBlocking === "function"
+      ) {
+        handle.setBlocking(true)
+      }
+    }
+    return process.execve!(file, args, env)
+  } : undefined,
   spawn: (file, args, options) => childProcess.spawn(file, args, options),
   parent: process,
   reportError: (message) => process.stderr.write(`${message}\n`)
