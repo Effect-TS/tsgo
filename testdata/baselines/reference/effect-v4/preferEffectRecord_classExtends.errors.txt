@@ -1,0 +1,27 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/preferEffectRecord_classExtends.ts(16,28): warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+
+
+==== /.src/preferEffectRecord_classExtends.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectRecord:warning
+    import { Context, Effect } from "effect"
+    
+    const data = { a: 1, b: 2 }
+    
+    export class Keys extends Context.Service<Keys, { readonly keys: ReadonlyArray<string> }>()("Keys", {
+      make: Effect.gen(function*() {
+        return { keys: Object.keys(data) }
+      })
+    }) {}
+    
+    const base = <T>(make: () => T) => class { static make = make }
+    
+    export class InExtends extends base(() => Object.entries(data)) {
+      readonly inBody = Object.values(data)
+                               ~~~~~~
+!!! warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    }
+    

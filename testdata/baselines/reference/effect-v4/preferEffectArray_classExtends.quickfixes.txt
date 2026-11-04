@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (16:24-16:30) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default

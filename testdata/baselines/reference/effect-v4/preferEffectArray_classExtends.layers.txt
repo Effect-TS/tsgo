@@ -1,0 +1,1 @@
+==== /.src/preferEffectArray_classExtends.ts (0 layer exports) ====

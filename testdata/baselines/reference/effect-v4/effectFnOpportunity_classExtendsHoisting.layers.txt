@@ -1,0 +1,1 @@
+==== /.src/effectFnOpportunity_classExtendsHoisting.ts (0 layer exports) ====

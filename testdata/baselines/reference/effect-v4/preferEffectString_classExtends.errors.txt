@@ -1,0 +1,27 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/preferEffectString_classExtends.ts(16,27): warning TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)
+
+
+==== /.src/preferEffectString_classExtends.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectString:warning
+    import { Context, Effect } from "effect"
+    
+    declare const value: string
+    
+    export class Upper extends Context.Service<Upper, { readonly upper: string }>()("Upper", {
+      make: Effect.gen(function*() {
+        return { upper: value.toUpperCase() }
+      })
+    }) {}
+    
+    const base = <T>(make: () => T) => class { static make = make }
+    
+    export class InExtends extends base(() => value.trim()) {
+      readonly inBody = value.toLowerCase()
+                              ~~~~~~~~~~~
+!!! warning TS377150: Consider effect/String.toLowerCase instead of native String.toLowerCase. Same runtime behavior; literal inputs keep a Lowercase<T> type. effect(preferEffectString)
+    }
+    
