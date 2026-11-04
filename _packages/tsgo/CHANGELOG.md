@@ -1,5 +1,16 @@
 # @effect/tsgo
 
+## 0.67.1
+
+### Patch Changes
+
+- 71b16e4: CI: cap the Go build cache saved by the TypeScript validation and release jobs at 2 GB. The cache had grown to about 3.5 GB compressed per TypeScript version, and jobs that restore it were running out of disk. The new `repoctl go-cache trim` command keeps the most recently used files of `go env GOCACHE` up to the size limit and removes the rest:
+  
+  ```sh
+  repoctl go-cache trim --max-size 2GB
+  ```
+- 3922483: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261103.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/042e0fb9574980bd67964165df295e629f834fe3) commit `042e0fb9574980bd67964165df295e629f834fe3`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
 ## 0.67.0
 
 ### Minor Changes
