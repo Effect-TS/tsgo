@@ -106,7 +106,7 @@ func NewTextRange(pos int, end int) core.TextRange
 //go:linkname NewThrottleGroup github.com/microsoft/TypeScript/tsc/internal/core.NewThrottleGroup
 func NewThrottleGroup(ctx context.Context, semaphore chan struct{}) *core.ThrottleGroup
 //go:linkname NewWorkGroup github.com/microsoft/TypeScript/tsc/internal/core.NewWorkGroup
-func NewWorkGroup(singleThreaded bool) core.WorkGroup
+func NewWorkGroup(concurrency int) core.WorkGroup
 var NodeCoreModules = core.NodeCoreModules
 //go:linkname NonRelativeModuleNameForTypingCache github.com/microsoft/TypeScript/tsc/internal/core.NonRelativeModuleNameForTypingCache
 func NonRelativeModuleNameForTypingCache(moduleName string) string
@@ -183,3 +183,5 @@ func WithCheckerLifetime(ctx context.Context, lifetime core.CheckerLifetime) con
 //go:linkname WithRequestID github.com/microsoft/TypeScript/tsc/internal/core.WithRequestID
 func WithRequestID(ctx context.Context, id string) context.Context
 type WorkGroup = core.WorkGroup
+//go:linkname WorkGroupConcurrency github.com/microsoft/TypeScript/tsc/internal/core.WorkGroupConcurrency
+func WorkGroupConcurrency(singleThreaded bool) int
