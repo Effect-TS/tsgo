@@ -1018,10 +1018,10 @@ index 467db16..a732f62 100644
      }
  
 diff --git a/crates/tsrs_ls/src/lsconv/converters.rs b/crates/tsrs_ls/src/lsconv/converters.rs
-index 74f8ea4..fba292c 100644
+index 7ebfe58..e2d95ec 100644
 --- a/crates/tsrs_ls/src/lsconv/converters.rs
 +++ b/crates/tsrs_ls/src/lsconv/converters.rs
-@@ -159,7 +159,7 @@ impl Converters {
+@@ -157,7 +157,7 @@ impl Converters {
      // through the file's span map and the fidelity of that mapping is returned. For normal files, the second
      // return value is FidelityExact.
      // converters.go:66
@@ -1030,7 +1030,7 @@ index 74f8ea4..fba292c 100644
          &self,
          script: &dyn Script,
          text_range: TextRange,
-@@ -442,7 +442,7 @@ impl Converters {
+@@ -440,7 +440,7 @@ impl Converters {
          clippy::wrong_self_convention,
          reason = "The method name and mutable receiver match the upstream Go operation."
      )]
@@ -1040,7 +1040,7 @@ index 74f8ea4..fba292c 100644
          script: &dyn Script,
          text_range: lsproto::Range,
 diff --git a/crates/tsrs_lsp/src/lib.rs b/crates/tsrs_lsp/src/lib.rs
-index de46173..013c109 100644
+index 62a1b4e..5726959 100644
 --- a/crates/tsrs_lsp/src/lib.rs
 +++ b/crates/tsrs_lsp/src/lib.rs
 @@ -9,6 +9,15 @@ pub mod server;
@@ -1057,8 +1057,8 @@ index de46173..013c109 100644
 +pub mod lsptestutil;
 +
  pub use server::{
-     NpmInstallFunc, Reader, Server, ServerOptions, Writer, new_server, to_reader, to_writer,
- };
+     NpmInstallFunc, Reader, Server, ServerOptions, SpawnFunc, Writer, new_server, to_reader,
+     to_writer,
 diff --git a/crates/tsrs_lsproto/src/lsp_generated.rs b/crates/tsrs_lsproto/src/lsp_generated.rs
 index 442add5..0ebd102 100644
 --- a/crates/tsrs_lsproto/src/lsp_generated.rs

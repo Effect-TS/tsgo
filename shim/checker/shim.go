@@ -293,7 +293,8 @@ type extra_Checker struct {
   structuredTypeExtraArena core.Arena[struct{signatures []*checker.Signature; callSignatureCount int; indexInfos []*checker.IndexInfo; objectTypeWithoutAbstractConstructSignatures *checker.Type}]
   lazyStateArena core.Arena[checker.LazyState]
   memberLayoutArena core.Arena[checker.MemberLayout]
-  layoutMemberInfos map[string]checker.MemberInfo
+  layoutMembers ast.SymbolTable
+  layoutBaseIndices []int32
   freeTypeSets *extra_temporaryTypeSet
   freePropertyCounts *extra_temporaryPropertyCounts
   mergedSymbols struct{gen ast.SymbolIdGenerator; links core.LinkStore[uint64, *ast.Symbol]; pages core.PagedLinkStore[*ast.Symbol]}
@@ -969,7 +970,6 @@ const MappedTypeNameTypeKindFiltering = checker.MappedTypeNameTypeKindFiltering
 const MappedTypeNameTypeKindNone = checker.MappedTypeNameTypeKindNone
 const MappedTypeNameTypeKindRemapping = checker.MappedTypeNameTypeKindRemapping
 type MarkedAssignmentSymbolLinks = checker.MarkedAssignmentSymbolLinks
-type MemberInfo = checker.MemberInfo
 type MemberLayout = checker.MemberLayout
 type MemberOverrideStatus = checker.MemberOverrideStatus
 const MemberOverrideStatusHasInvalidOverride = checker.MemberOverrideStatusHasInvalidOverride

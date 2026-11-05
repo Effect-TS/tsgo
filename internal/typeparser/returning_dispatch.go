@@ -210,11 +210,11 @@ func parseResultDispatchSwitch(node *ast.Node) *resultDispatchSyntax {
 		if clauseNode == nil || (clauseNode.Kind != ast.KindCaseClause && clauseNode.Kind != ast.KindDefaultClause) {
 			return nil
 		}
-		clause := clauseNode.AsCaseOrDefaultClause()
-		if clause == nil || clause.Statements == nil {
+		statements := clauseNode.StatementList()
+		if statements == nil {
 			return nil
 		}
-		result := singleResultDispatchReturn(clause.Statements.Nodes)
+		result := singleResultDispatchReturn(statements.Nodes)
 		if result == nil {
 			return nil
 		}
@@ -226,11 +226,12 @@ func parseResultDispatchSwitch(node *ast.Node) *resultDispatchSyntax {
 			dispatch.fallback = result
 			continue
 		}
-		if clause.Expression == nil {
+		caseExpression := clauseNode.Expression()
+		if caseExpression == nil {
 			return nil
 		}
 		dispatch.branches = append(dispatch.branches, ResultDispatchBranch{
-			condition: newDispatchCondition(DispatchConditionSwitchCase, clauseNode, statement.Expression, clause.Expression),
+			condition: newDispatchCondition(DispatchConditionSwitchCase, clauseNode, statement.Expression, caseExpression),
 			result:    result,
 		})
 	}

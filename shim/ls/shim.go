@@ -164,5 +164,6 @@ const SourceThisProperty = ls.SourceThisProperty
 const SourceTypeOnlyAlias = ls.SourceTypeOnlyAlias
 type SymbolAndEntries = ls.SymbolAndEntries
 type SymbolAndEntriesData = ls.SymbolAndEntriesData
+type WorkspaceFolder = ls.WorkspaceFolder
 //go:linkname GetJSDocOrTag github.com/microsoft/TypeScript/tsc/internal/ls.getJSDocOrTag
 func GetJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.Set[*ast.Symbol]) *ast.Node
