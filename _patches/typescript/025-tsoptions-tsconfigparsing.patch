@@ -1,8 +1,8 @@
 diff --git a/tsc/internal/tsoptions/tsconfigparsing.go b/tsc/internal/tsoptions/tsconfigparsing.go
-index d08c8a9a9..d8fbc402a 100644
+index ae4dda1931..43c3735a47 100644
 --- a/tsc/internal/tsoptions/tsconfigparsing.go
 +++ b/tsc/internal/tsoptions/tsconfigparsing.go
-@@ -23,6 +23,14 @@ import (
+@@ -24,6 +24,14 @@ import (
  	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
  )
  
@@ -15,9 +15,9 @@ index d08c8a9a9..d8fbc402a 100644
 +}
 +
  type extendsResult struct {
- 	options             *parsedCompilerOptions
- 	include             []any
-@@ -1056,7 +1064,7 @@ func parseConfig(
+ 	options                  *parsedCompilerOptions
+ 	include                  []any
+@@ -1098,7 +1106,7 @@ func parseConfig(
  					result.compileOnSave = compileOnSave
  				}
  			}
@@ -26,7 +26,7 @@ index d08c8a9a9..d8fbc402a 100644
  		}
  	}
  
-@@ -1094,7 +1102,7 @@ func parseConfig(
+@@ -1137,7 +1145,7 @@ func parseConfig(
  				}
  			}
  		}
@@ -35,7 +35,7 @@ index d08c8a9a9..d8fbc402a 100644
  	}
  	return ownConfig, errors
  }
-@@ -1140,7 +1148,7 @@ func parseJsonConfigFileContentWorker(
+@@ -1184,7 +1192,7 @@ func parseJsonConfigFileContentWorker(
  
  	var errors []*ast.Diagnostic
  	parsedConfig, errors := parseConfig(json, sourceFile, fs, baseDirectory, configFileName, resolutionStack, extendedConfigCache)
@@ -44,7 +44,7 @@ index d08c8a9a9..d8fbc402a 100644
  	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
  	rawConfig := parseJsonToStringKey(parsedConfig.raw)
  	if configFileName != "" && parsedConfig.options != nil {
-@@ -1440,6 +1448,10 @@ func parseJsonConfigFileContentWorker(
+@@ -1495,6 +1503,10 @@ func parseJsonConfigFileContentWorker(
  		return projectReferences
  	}
  
