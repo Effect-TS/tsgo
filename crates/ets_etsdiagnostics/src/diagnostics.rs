@@ -234,6 +234,9 @@ pub(crate) fn collect(
         logger: None,
         npm_executor: None,
         parse_cache: None,
+        spawner: None,
+        content_mapper_logger: None,
+        content_mapped_parse_cache: None,
     });
     let _close = CloseSession(&session);
 

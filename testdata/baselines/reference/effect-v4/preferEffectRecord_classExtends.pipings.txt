@@ -1,0 +1,85 @@
+==== /.src/preferEffectRecord_classExtends.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 7:26 - 11:3
+Node: Context.Service<Keys, { readonly keys: ReadonlyArray<string> }>()("Keys", {\n  make: Effect.gen(function*() {\n    return { keys: Object.keys(data) }\n  })\n})
+Node Kind: KindCallExpression
+
+Subject: "Keys"
+Subject Type: "Keys"
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Context.Service<Keys, { readonly keys: ReadonlyArray<string> }>()
+      args: [{\n  make: Effect.gen(function*() {\n    return { keys: Object.keys(data) }\n  })\n}]
+      outType: ServiceClass<Keys, "Keys", { readonly keys: readonly string[]; }> & { readonly make: Effect<{ readonly keys: readonly string[]; }, never, never>; }
+
+=== Piping Flow ===
+Location: 8:8 - 10:5
+Node: Effect.gen(function*() {\n    return { keys: Object.keys(data) }\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return { keys: Object.keys(data) }\n  }
+Subject Type: () => Generator<never, { keys: string[]; }, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ keys: string[]; }, never, never>
+
+=== Piping Flow ===
+Location: 9:19 - 9:37
+Node: Object.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 15:31 - 15:64
+Node: base(() => Object.entries(data))
+Node Kind: KindCallExpression
+
+Subject: () => Object.entries(data)
+Subject Type: () => [string, number][]
+
+Transformations (1):
+  [0] kind: call
+      callee: base
+      args: (constant)
+      outType: typeof (Anonymous class)
+
+=== Piping Flow ===
+Location: 15:42 - 15:63
+Node: Object.entries(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.entries
+      args: (constant)
+      outType: [string, number][]
+
+=== Piping Flow ===
+Location: 16:20 - 16:40
+Node: Object.values(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.values
+      args: (constant)
+      outType: number[]

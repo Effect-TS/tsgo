@@ -271,7 +271,7 @@ impl TypeParser<'_> {
         None
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:220 TypeParser.isFunctionReferencedBeforeDeclaration ee07b9dc69275ce2
+    // go: internal/typeparser/effect_fn_opportunity.go:220 TypeParser.isFunctionReferencedBeforeDeclaration 9a386fb9cc55b84b
     // isFunctionReferencedBeforeDeclaration checks the preceding syntax in the
     // declaration's scope. Earlier closures are conservatively included: they may
     // be invoked before the replacement const is initialized.
@@ -300,11 +300,14 @@ impl TypeParser<'_> {
             symbol: P<Symbol>,
             current: P<Node>,
         ) -> bool {
-            if current.pos() >= node.pos()
-                || ets_shim::ast::is_type_node(current)
-                || current.kind() == Kind::ExportDeclaration
-            {
+            if current.pos() >= node.pos() || current.kind() == Kind::ExportDeclaration {
                 return false;
+            }
+            if ets_shim::ast::is_type_node(current) {
+                // A class extends expression is evaluated when the class is defined.
+                return ets_shim::ast::is_expression_with_type_arguments_in_class_extends_clause(
+                    current,
+                ) && visit(tp, node, name, symbol, current.expression().unwrap());
             }
             if current.kind() == Kind::ShorthandPropertyAssignment
                 && current.name().is_some_and(|n| n.text() == name.text())
@@ -326,7 +329,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:258 hasReturnTypeAnnotation 165679d2f5576319
+// go: internal/typeparser/effect_fn_opportunity.go:262 hasReturnTypeAnnotation 165679d2f5576319
 // hasReturnTypeAnnotation checks if a function node has an explicit return type annotation.
 pub(crate) fn has_return_type_annotation(node: P<Node>) -> bool {
     match node.kind() {
@@ -337,7 +340,7 @@ pub(crate) fn has_return_type_annotation(node: P<Node>) -> bool {
     }
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:280 genOpportunityResult c99580015a7326a7
+// go: internal/typeparser/effect_fn_opportunity.go:284 genOpportunityResult c99580015a7326a7
 // genOpportunityResult holds the parsed gen opportunity data.
 pub(crate) struct GenOpportunityResult {
     effect_module: Option<P<Node>>,
@@ -347,7 +350,7 @@ pub(crate) struct GenOpportunityResult {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_fn_opportunity.go:290 TypeParser.tryParseGenOpportunity b676eceac439dd26
+    // go: internal/typeparser/effect_fn_opportunity.go:294 TypeParser.tryParseGenOpportunity b676eceac439dd26
     // tryParseGenOpportunity attempts to parse a function as a gen opportunity.
     // The function body must contain a single return statement (or expression body for arrows)
     // that is an Effect.gen call (possibly piped).
@@ -403,7 +406,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:347 getBodyExpression c10fdf79c8fd1f7b
+// go: internal/typeparser/effect_fn_opportunity.go:351 getBodyExpression c10fdf79c8fd1f7b
 // getBodyExpression gets the single return expression from a function body.
 // For arrow functions with expression bodies, returns the expression directly.
 // For block bodies, requires exactly one return statement.
@@ -426,7 +429,7 @@ pub(crate) fn get_body_expression(fn_node: P<Node>) -> Option<P<Node>> {
     }
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:377 findSingleReturnExpression e81477af83a2f18a
+// go: internal/typeparser/effect_fn_opportunity.go:381 findSingleReturnExpression e81477af83a2f18a
 // findSingleReturnExpression finds the expression from a single return statement in a block.
 pub(crate) fn find_single_return_expression(body: Option<P<Node>>) -> Option<P<Node>> {
     let body = body?;
@@ -444,7 +447,7 @@ pub(crate) fn find_single_return_expression(body: Option<P<Node>>) -> Option<P<N
     stmt.as_return_statement().expression()
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:395 tryParseRegularOpportunity bff43e98b7a38a81
+// go: internal/typeparser/effect_fn_opportunity.go:399 tryParseRegularOpportunity bff43e98b7a38a81
 // tryParseRegularOpportunity checks if a function has a block body with more than 5 statements.
 // When hasStrictLayerInferredName is true, the >5 statement requirement and the block body
 // requirement for arrow functions are relaxed (any Effect-returning function in Layer context qualifies).
@@ -495,7 +498,7 @@ pub(crate) fn try_parse_regular_opportunity(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_fn_opportunity.go:439 TypeParser.tryExtractWithSpanExpression 81996f20119ac4ff
+    // go: internal/typeparser/effect_fn_opportunity.go:443 TypeParser.tryExtractWithSpanExpression 81996f20119ac4ff
     // tryExtractWithSpanExpression checks if an expression is a call to Effect.withSpan
     // and extracts the span name expression (the first argument).
     pub(crate) fn try_extract_with_span_expression(
@@ -522,7 +525,7 @@ impl TypeParser<'_> {
         Some(arguments[0])
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:463 TypeParser.areParametersReferencedIn 02355aee337b643b
+    // go: internal/typeparser/effect_fn_opportunity.go:467 TypeParser.areParametersReferencedIn 02355aee337b643b
     // areParametersReferencedIn checks if any of the function's parameter symbols
     // are referenced within the given nodes. Uses declaration position range checking.
     pub(crate) fn are_parameters_referenced_in(
@@ -577,7 +580,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:522 isSymbolDeclaredInRange c5d21a16957b8807
+// go: internal/typeparser/effect_fn_opportunity.go:526 isSymbolDeclaredInRange c5d21a16957b8807
 // isSymbolDeclaredInRange checks if any of the symbol's declarations fall within the given range.
 pub(crate) fn is_symbol_declared_in_range(sym: P<Symbol>, start: TextPos, end: TextPos) -> bool {
     for decl in sym.declarations() {
@@ -588,7 +591,7 @@ pub(crate) fn is_symbol_declared_in_range(sym: P<Symbol>, start: TextPos, end: T
     false
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:532 getFunctionParameters f6b0b43f3377e49f
+// go: internal/typeparser/effect_fn_opportunity.go:536 getFunctionParameters f6b0b43f3377e49f
 // getFunctionParameters returns the parameter nodes of a function.
 pub(crate) fn get_function_parameters(fn_node: P<Node>) -> &'static [P<Node>] {
     let parameters = match fn_node.kind() {
@@ -601,7 +604,7 @@ pub(crate) fn get_function_parameters(fn_node: P<Node>) -> &'static [P<Node>] {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_fn_opportunity.go:555 TypeParser.tryGetLayerApiMethod 3c388754aa3a24a0
+    // go: internal/typeparser/effect_fn_opportunity.go:559 TypeParser.tryGetLayerApiMethod 3c388754aa3a24a0
     // tryGetLayerApiMethod checks if a node references Layer.effect, Layer.succeed, or Layer.sync.
     // Returns the method name ("effect", "succeed", "sync") or empty string.
     pub(crate) fn try_get_layer_api_method(&mut self, node: P<Node>) -> &'static str {
@@ -618,7 +621,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/effect_fn_opportunity.go:574 layerServiceNameFromExpression b87d391426119c29
+// go: internal/typeparser/effect_fn_opportunity.go:578 layerServiceNameFromExpression b87d391426119c29
 // layerServiceNameFromExpression resolves an expression to a service name string.
 // When the expression is the `this` keyword, it walks up the AST to find the enclosing
 // class declaration and returns the class name instead of literal "this".
@@ -633,7 +636,7 @@ pub(crate) fn layer_service_name_from_expression(expr: P<Node>) -> String {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_fn_opportunity.go:591 TypeParser.verifyLayerMethodAtCall 67ead27cc2e4b039
+    // go: internal/typeparser/effect_fn_opportunity.go:595 TypeParser.verifyLayerMethodAtCall 67ead27cc2e4b039
     // verifyLayerMethodAtCall checks if a call expression is a Layer method call (direct or curried)
     // and returns the tag text (e.g., "MyService") or empty string.
     // Direct form: Layer.method(tag, impl) where impl === implementationExpr
@@ -671,7 +674,7 @@ impl TypeParser<'_> {
         String::new()
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:619 TypeParser.tryMatchLayerSucceedInference db8611b77e88f2cb
+    // go: internal/typeparser/effect_fn_opportunity.go:623 TypeParser.tryMatchLayerSucceedInference db8611b77e88f2cb
     // tryMatchLayerSucceedInference checks if an object literal is a direct argument to Layer.succeed.
     // Returns the service tag text or empty string.
     pub(crate) fn try_match_layer_succeed_inference(&mut self, object_literal: P<Node>) -> String {
@@ -684,7 +687,7 @@ impl TypeParser<'_> {
         self.verify_layer_method_at_call(parent, "succeed", object_literal)
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:633 TypeParser.tryMatchLayerSyncInference 4a22f67222a99e3e
+    // go: internal/typeparser/effect_fn_opportunity.go:637 TypeParser.tryMatchLayerSyncInference 4a22f67222a99e3e
     // tryMatchLayerSyncInference checks if an object literal is returned from a lazy function
     // that is passed to Layer.sync.
     // Pattern: Layer.sync(tag)(() => { return { ... } }) or Layer.sync(tag, () => { return { ... } })
@@ -720,7 +723,7 @@ impl TypeParser<'_> {
         self.verify_layer_method_at_call(call_node, "sync", lazy_fn)
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:667 TypeParser.tryMatchLayerEffectInference 89e701d93e7ef3b8
+    // go: internal/typeparser/effect_fn_opportunity.go:671 TypeParser.tryMatchLayerEffectInference 89e701d93e7ef3b8
     // tryMatchLayerEffectInference checks if an object literal is returned from a generator
     // inside Effect.gen that is passed to Layer.effect.
     // Pattern: Layer.effect(tag)(Effect.gen(function*() { return { ... } }))
@@ -773,7 +776,7 @@ impl TypeParser<'_> {
         self.verify_layer_method_at_call(layer_call_node, "effect", gen_call_node)
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:714 TypeParser.tryGetLayerInferredTraceName 9a3c0d8db18befc2
+    // go: internal/typeparser/effect_fn_opportunity.go:718 TypeParser.tryGetLayerInferredTraceName 9a3c0d8db18befc2
     // tryGetLayerInferredTraceName checks if a function is inside a property assignment within
     // an object literal that is a Layer service definition, returning "ServiceTag.memberName" format.
     pub(crate) fn try_get_layer_inferred_trace_name(
@@ -827,7 +830,7 @@ impl TypeParser<'_> {
         String::new()
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:754 TypeParser.tryMatchOfInference 044d5078d01686c0
+    // go: internal/typeparser/effect_fn_opportunity.go:758 TypeParser.tryMatchOfInference 044d5078d01686c0
     // tryMatchOfInference checks if an object literal is the first argument to a Service.of({ ... }) call,
     // where the service expression is a ContextTag or ServiceType.
     // Returns the service tag text or empty string.
@@ -871,7 +874,7 @@ impl TypeParser<'_> {
         layer_service_name_from_expression(service_tag_expression)
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:795 TypeParser.tryMatchServiceMapMakeInference 5ea9ac1a17972475
+    // go: internal/typeparser/effect_fn_opportunity.go:799 TypeParser.tryMatchServiceMapMakeInference 5ea9ac1a17972475
     // tryMatchServiceMapMakeInference checks if an object literal is returned from a generator
     // inside Effect.gen that is the "make" property of a class extending Context.Service.
     // Returns the class name or empty string.
@@ -952,7 +955,7 @@ impl TypeParser<'_> {
         get_text_of_node(class_name)
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:864 TypeParser.getInferredTraceName ec558d4318ba96ab
+    // go: internal/typeparser/effect_fn_opportunity.go:868 TypeParser.getInferredTraceName ec558d4318ba96ab
     // getInferredTraceName computes a context-aware inferred trace name for a function.
     // It checks (in priority order):
     // 1. Layer service context (ServiceTag.memberName)

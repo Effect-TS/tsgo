@@ -1,0 +1,108 @@
+diff --git a/tsc/internal/ast/nodeflags.go b/tsc/internal/ast/nodeflags.go
+index 2c808601..dd85eadd 100644
+--- a/tsc/internal/ast/nodeflags.go
++++ b/tsc/internal/ast/nodeflags.go
+@@ -45,6 +45,7 @@ const (
+ 	NodeFlagsPossiblyContainsDeprecatedTag NodeFlags = 1 << 26 // Set during parse if comment text contains '@deprecated'; must confirm via JSDoc lookup
+ 	NodeFlagsUnreachable                   NodeFlags = 1 << 27 // If node is unreachable according to the binder
+ 	NodeFlagsReparserTransformedLiteral    NodeFlags = 1 << 28 // If node was transformed during parsing, making its' naive text source not match the AST
++	NodeFlagsPossiblyContainsStabilityTag  NodeFlags = 1 << 29 // Set during parse if comment text contains '@stability'; must confirm via JSDoc lookup
+ 
+ 	NodeFlagsBlockScoped = NodeFlagsLet | NodeFlagsConst | NodeFlagsUsing
+ 	NodeFlagsConstant    = NodeFlagsConst | NodeFlagsUsing
+diff --git a/tsc/internal/ast/tokenflags.go b/tsc/internal/ast/tokenflags.go
+index 82b64492..4027d8cf 100644
+--- a/tsc/internal/ast/tokenflags.go
++++ b/tsc/internal/ast/tokenflags.go
+@@ -23,6 +23,7 @@ const (
+ 	TokenFlagsSingleQuote                    TokenFlags = 1 << 16 // e.g. `'abc'`
+ 	TokenFlagsPrecedingJSDocWithDeprecated   TokenFlags = 1 << 17 // Preceding JSDoc comment contains @deprecated
+ 	TokenFlagsPrecedingJSDocWithSeeOrLink    TokenFlags = 1 << 18 // Preceding JSDoc comment contains @see or @link
++	TokenFlagsPrecedingJSDocWithStability    TokenFlags = 1 << 19 // Preceding JSDoc comment contains @stability
+ 	TokenFlagsBinaryOrOctalSpecifier         TokenFlags = TokenFlagsBinarySpecifier | TokenFlagsOctalSpecifier
+ 	TokenFlagsWithSpecifier                  TokenFlags = TokenFlagsHexSpecifier | TokenFlagsBinaryOrOctalSpecifier
+ 	TokenFlagsStringLiteralFlags             TokenFlags = TokenFlagsUnterminated | TokenFlagsHexEscape | TokenFlagsUnicodeEscape | TokenFlagsExtendedUnicodeEscape | TokenFlagsContainsInvalidEscape | TokenFlagsSingleQuote
+diff --git a/tsc/internal/parser/jsdoc.go b/tsc/internal/parser/jsdoc.go
+index 6d239d2f..97fd0b71 100644
+--- a/tsc/internal/parser/jsdoc.go
++++ b/tsc/internal/parser/jsdoc.go
+@@ -67,6 +67,9 @@ func (p *Parser) withJSDoc(node *ast.Node, info jsdocScannerInfo) []*ast.Node {
+ 		if info&jsdocScannerInfoHasDeprecated != 0 {
+ 			node.Flags |= ast.NodeFlagsPossiblyContainsDeprecatedTag
+ 		}
++		if info&jsdocScannerInfoHasStability != 0 {
++			node.Flags |= ast.NodeFlagsPossiblyContainsStabilityTag
++		}
+ 		if info&jsdocScannerInfoHasSeeOrLink == 0 {
+ 			return nil
+ 		}
+@@ -88,6 +91,9 @@ func (p *Parser) withJSDoc(node *ast.Node, info jsdocScannerInfo) []*ast.Node {
+ 		}
+ 	}
+ 	if len(jsdoc) != 0 {
++		if info&jsdocScannerInfoHasStability != 0 {
++			node.Flags |= ast.NodeFlagsPossiblyContainsStabilityTag
++		}
+ 		if node.Flags&ast.NodeFlagsHasJSDoc == 0 {
+ 			node.Flags |= ast.NodeFlagsHasJSDoc
+ 		}
+diff --git a/tsc/internal/parser/parser.go b/tsc/internal/parser/parser.go
+index f54b4bce..8d0e08d5 100644
+--- a/tsc/internal/parser/parser.go
++++ b/tsc/internal/parser/parser.go
+@@ -60,6 +60,7 @@ type jsdocScannerInfo uint8
+ const (
+ 	jsdocScannerInfoHasJSDoc jsdocScannerInfo = 1 << iota
+ 	jsdocScannerInfoHasDeprecated
++	jsdocScannerInfoHasStability
+ 	jsdocScannerInfoHasSeeOrLink
+ )
+ 
+@@ -422,6 +423,9 @@ func (p *Parser) jsdocScannerInfo() jsdocScannerInfo {
+ 	if p.scanner.HasPrecedingJSDocWithDeprecatedTag() {
+ 		info |= jsdocScannerInfoHasDeprecated
+ 	}
++	if p.scanner.HasPrecedingJSDocWithStabilityTag() {
++		info |= jsdocScannerInfoHasStability
++	}
+ 	if p.scanner.HasPrecedingJSDocWithSeeOrLink() {
+ 		info |= jsdocScannerInfoHasSeeOrLink
+ 	}
+diff --git a/tsc/internal/scanner/scanner.go b/tsc/internal/scanner/scanner.go
+index 55c81643..39e29846 100644
+--- a/tsc/internal/scanner/scanner.go
++++ b/tsc/internal/scanner/scanner.go
+@@ -349,11 +349,15 @@ func (s *Scanner) HasPrecedingJSDocWithDeprecatedTag() bool {
+ 	return s.tokenFlags&ast.TokenFlagsPrecedingJSDocWithDeprecated != 0
+ }
+ 
++func (s *Scanner) HasPrecedingJSDocWithStabilityTag() bool {
++	return s.tokenFlags&ast.TokenFlagsPrecedingJSDocWithStability != 0
++}
++
+ func (s *Scanner) HasPrecedingJSDocWithSeeOrLink() bool {
+ 	return s.tokenFlags&ast.TokenFlagsPrecedingJSDocWithSeeOrLink != 0
+ }
+ 
+-// scanJSDocCommentForTags scans a JSDoc comment for @deprecated, @see, and @link tags,
++// scanJSDocCommentForTags scans a JSDoc comment for @deprecated, @stability, @see, and @link tags,
+ // setting the appropriate token flags. Called during scanning when a JSDoc comment is detected.
+ func (s *Scanner) scanJSDocCommentForTags(commentText string) {
+ 	for {
+@@ -365,11 +369,14 @@ func (s *Scanner) scanJSDocCommentForTags(commentText string) {
+ 		if s.tokenFlags&ast.TokenFlagsPrecedingJSDocWithDeprecated == 0 && hasJSDocTag(commentText, "deprecated") {
+ 			s.tokenFlags |= ast.TokenFlagsPrecedingJSDocWithDeprecated
+ 		}
++		if s.tokenFlags&ast.TokenFlagsPrecedingJSDocWithStability == 0 && hasJSDocTag(commentText, "stability") {
++			s.tokenFlags |= ast.TokenFlagsPrecedingJSDocWithStability
++		}
+ 		if s.tokenFlags&ast.TokenFlagsPrecedingJSDocWithSeeOrLink == 0 && hasJSDocTag(commentText, "see", "link", "linkcode", "linkplain") {
+ 			s.tokenFlags |= ast.TokenFlagsPrecedingJSDocWithSeeOrLink
+ 		}
+-		if s.tokenFlags&(ast.TokenFlagsPrecedingJSDocWithDeprecated|ast.TokenFlagsPrecedingJSDocWithSeeOrLink) ==
+-			(ast.TokenFlagsPrecedingJSDocWithDeprecated | ast.TokenFlagsPrecedingJSDocWithSeeOrLink) {
++		if s.tokenFlags&(ast.TokenFlagsPrecedingJSDocWithDeprecated|ast.TokenFlagsPrecedingJSDocWithSeeOrLink|ast.TokenFlagsPrecedingJSDocWithStability) ==
++			(ast.TokenFlagsPrecedingJSDocWithDeprecated | ast.TokenFlagsPrecedingJSDocWithSeeOrLink | ast.TokenFlagsPrecedingJSDocWithStability) {
+ 			return
+ 		}
+ 	}

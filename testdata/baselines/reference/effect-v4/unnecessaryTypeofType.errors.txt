@@ -1,9 +1,10 @@
 === Metadata ===
 Effect version: 4.1.2
 
-/.src/test.ts(5,10): warning TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
-/.src/test.ts(6,10): warning TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
-/.src/test.ts(7,31): warning TS377090: This `typeof ... .Type` query can be replaced with `Schemas.UsersRepo.User`. effect(unnecessaryTypeofType)
+/.src/test.ts(6,10): warning TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
+/.src/test.ts(7,10): warning TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
+/.src/test.ts(8,31): warning TS377090: This `typeof ... .Type` query can be replaced with `Schemas.UsersRepo.User`. effect(unnecessaryTypeofType)
+/.src/test.ts(21,48): warning TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -35,10 +36,11 @@ Effect version: 4.1.2
       export type Order = { readonly id: string }
     }
 
-==== /.src/test.ts (3 errors) ====
+==== /.src/test.ts (4 errors) ====
     // @effect-diagnostics unnecessaryTypeofType:warning
     import { OrdersRepo, SessionId, UserId, UsersRepo } from "./schemas"
     import * as Schemas from "./schemas"
+    import { Schema } from "effect"
     
     const a: typeof UserId.Type = {}
              ~~~~~~~~~~~~~~~~~~
@@ -54,4 +56,14 @@ Effect version: 4.1.2
     
     const c: UserId = {}
     const d: UsersRepo.User = { id: 1 }
+    
+    // https://github.com/Effect-TS/tsgo/issues/991
+    // an interface cannot extend itself, so this must not be reported
+    export const IssueStruct = Schema.Struct({ flag: Schema.Literal(true) })
+    export type Identity<A> = A
+    export interface IssueStruct extends Identity<typeof IssueStruct.Type> {}
+    // extending a different named type is still reported
+    export interface ExtendsOther extends Identity<typeof UserId.Type> {}
+                                                   ~~~~~~~~~~~~~~~~~~
+!!! warning TS377090: This `typeof ... .Type` query can be replaced with `UserId`. effect(unnecessaryTypeofType)
     

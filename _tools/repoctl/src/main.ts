@@ -19,6 +19,7 @@ import {
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
+import { parseByteSize, trimGoCache } from "./goCache.ts"
 import { runLint } from "./lint.ts"
 import {
   printOxlintTestMatrix,
@@ -254,6 +255,20 @@ const completeGithubCheck = Command.make("complete-check", {
 const github = Command.make("github").pipe(
   Command.withDescription("Manage GitHub automation"),
   Command.withSubcommands([completeGithubCheck, openPrIfChanged])
+)
+
+const goCacheTrim = Command.make("trim", {
+  maxSize: Flag.String("max-size").pipe(
+    Flag.filterMap(parseByteSize, (input) => `Expected a byte size such as 2GB or 500MiB, got ${input}`),
+    Flag.withDescription("Size budget: the most recently used files are kept up to this size (e.g. 2GB)")
+  )
+}, ({ maxSize }) => trimGoCache(repositoryRoot, maxSize)).pipe(
+  Command.withDescription("Remove the least recently used files of the Go build cache (go env GOCACHE) above a size")
+)
+
+const goCache = Command.make("go-cache").pipe(
+  Command.withDescription("Maintain the Go build cache"),
+  Command.withSubcommands([goCacheTrim])
 )
 
 const updateUpstreamCommand = Command.make("update", {}, () => updateUpstream(repositoryRoot)).pipe(
@@ -571,6 +586,7 @@ Command.make("repoctl").pipe(
     codegen,
     flake,
     github,
+    goCache,
     lint,
     matrix,
     packages,

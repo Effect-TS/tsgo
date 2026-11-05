@@ -87,7 +87,8 @@ test("parses the scope.toml subset", () => {
 test("parses the committed scope.toml", () => {
   const scope = parseScope(readFileSync(join(repositoryRoot, "porting", "scope.toml"), "utf8"))
   assert.ok(scope.include.includes("internal/..."))
-  assert.equal(classifyPackage(scope, "etsoxlintrunner"), "excluded")
+  assert.equal(classifyPackage(scope, "etsoxlintrunner"), "included")
+  assert.equal(classifyPackage(scope, "shim/checker"), "excluded")
   assert.equal(classifyPackage(scope, "internal/typeparser"), "included")
   assert.equal(scope.requireNew, true)
 })

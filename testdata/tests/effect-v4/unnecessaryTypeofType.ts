@@ -29,6 +29,7 @@ export namespace OrdersRepo {
 // @effect-diagnostics unnecessaryTypeofType:warning
 import { OrdersRepo, SessionId, UserId, UsersRepo } from "./schemas"
 import * as Schemas from "./schemas"
+import { Schema } from "effect"
 
 const a: typeof UserId.Type = {}
 const b: typeof UsersRepo.User.Type = { id: 1 }
@@ -38,3 +39,11 @@ const shouldNotTriggerMismatchedType: typeof OrdersRepo.Order.Type = { id: 1 }
 
 const c: UserId = {}
 const d: UsersRepo.User = { id: 1 }
+
+// https://github.com/Effect-TS/tsgo/issues/991
+// an interface cannot extend itself, so this must not be reported
+export const IssueStruct = Schema.Struct({ flag: Schema.Literal(true) })
+export type Identity<A> = A
+export interface IssueStruct extends Identity<typeof IssueStruct.Type> {}
+// extending a different named type is still reported
+export interface ExtendsOther extends Identity<typeof UserId.Type> {}

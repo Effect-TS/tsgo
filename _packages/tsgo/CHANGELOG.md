@@ -1,5 +1,119 @@
 # @effect/tsgo
 
+## 0.67.3
+
+### Patch Changes
+
+- 1477f2e: Fix `preferEffectArray`, `preferEffectRecord`, `preferEffectString`, `promiseInEffectSuccess` and `anyUnknownInErrorContext` skipping everything inside a class `extends` expression. Their walks stop at type nodes, and the `extends` clause of a class is an `ExpressionWithTypeArguments`, which counts as one, so the `make` of a service class was never checked. The walks now visit the expression of a class `extends` clause; its type arguments, `implements` clauses and interface `extends` clauses are still skipped.
+  
+  ```ts
+  import { Context, Effect } from "effect"
+  
+  const xs: ReadonlyArray<number> = [1, 2, 3]
+  
+  export class Doubled extends Context.Service<Doubled, { readonly all: ReadonlyArray<number> }>()("Doubled", {
+    make: Effect.gen(function*() {
+      // now reported by preferEffectArray
+      return { all: xs.map((n) => n * 2) }
+    })
+  }) {}
+  ```
+  
+  `effectFnOpportunity` had the same blind spot when checking whether a function declaration is used before it is declared: a call inside an earlier class `extends` expression was ignored, so it offered to convert a hoisted function into a `const` that the class would then read before initialization. That opportunity is no longer offered.
+  
+  ```ts
+  export class Early extends Context.Service<Early, { readonly value: number }>()("Early", {
+    make: makeEarly(1) // runs when the class is defined
+  }) {}
+  
+  // no longer suggested as Effect.fn: the const would not be initialized yet
+  function makeEarly(n: number) {
+    return Effect.gen(function*() {
+      return { value: n }
+    })
+  }
+  ```
+
+## 0.67.2
+
+### Patch Changes
+
+- 87042ed: Fix truncated output from tools run through the CLI proxy (`effect-tsgo tsc`, `tsrs`, `oxlint`, `vp`) when their stdio is a pipe. The proxy built `NodeServices.layer` to resolve the tool, and its `NodeTerminal` read `process.stdin` and `process.stdout`, which leaves piped stdio non-blocking; `execve` handed that to the tool, whose writes then failed once the pipe filled, sometimes with exit code 0. For example, `effect-tsgo tsrs --listFilesOnly` captured by another process stopped after 64 KiB. The proxy now provides only the `FileSystem` and `Path` services it needs.
+
+## 0.67.1
+
+### Patch Changes
+
+- 71b16e4: CI: cap the Go build cache saved by the TypeScript validation and release jobs at 2 GB. The cache had grown to about 3.5 GB compressed per TypeScript version, and jobs that restore it were running out of disk. The new `repoctl go-cache trim` command keeps the most recently used files of `go env GOCACHE` up to the size limit and removes the rest:
+  
+  ```sh
+  repoctl go-cache trim --max-size 2GB
+  ```
+- 3922483: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261103.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/042e0fb9574980bd67964165df295e629f834fe3) commit `042e0fb9574980bd67964165df295e629f834fe3`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
+## 0.67.0
+
+### Minor Changes
+
+- 45e777b: Run Oxlint's type-aware rules, including the Effect rules, on tsrs with `effect-tsgo --tsrs-lint`.
+  
+  tsrs 0.21.0 ships its port of tsgolint as `tsrs --lint`. The Effect-patched tsrs now registers the Effect rules there,
+  and `--tsrs-lint[=<version|tag>]` in front of `effect-tsgo oxlint` or `effect-tsgo vp` makes the patched Oxlint run
+  them on it instead of the patched tsgolint:
+  
+  ```sh
+  effect-tsgo --tsrs-lint oxlint --type-aware   # the installed tsrs version when it ships, else the latest
+  effect-tsgo --tsrs-lint=latest vp lint        # or a tsrs version or tag
+  ```
+  
+  The packaged tsrs is updated to 0.21.0.
+
+## 0.66.0
+
+### Minor Changes
+
+- 35b3f1c: Add `effect-tsgo vp [args...]`, which runs vite-plus with the Effect-patched Oxlint without patching `node_modules`, under Node.js and Bun:
+  
+  ```sh
+  effect-tsgo vp check
+  effect-tsgo vp lint src
+  effect-tsgo vp run check
+  ```
+  
+  `vp check`, `vp lint` and the scripts run through `vp run` report the `effecttsgo/*` rules configured in `vite.config.ts`, using the Effect-patched binding and `tsgolint` of the oxlint version vite-plus resolves.
+  
+  `effect-tsgo oxlint` now loads the patched binding the same way, through a `process.dlopen` bridge preloaded with `NODE_OPTIONS` and `BUN_OPTIONS` in front of the options already set there, instead of `NAPI_RS_NATIVE_LIBRARY_PATH`. This fixes `effect-tsgo oxlint` with an `oxlint.config.ts` that imports vite-plus, which failed with `TypeError: Class extends value undefined` because that variable also redirected the other native addons of the process.
+
+## 0.65.0
+
+### Minor Changes
+
+- df6e271: Add the `matchToResultOrOption` diagnostic (style, suggestion). It reports `Effect.match` / `Effect.matchEffect` calls whose handlers only wrap the value and the error, and adjacent `Effect.map` + `Effect.catch` steps (`catchAll` in v3) that do the same. When no explicit type argument depends on the old output type and an `Effect` namespace binding is in scope, the quick fix replaces them with `Effect.result` or `Effect.option` (v4), or `Effect.either` or `Effect.option` (v3). These combinators also carry the error type through precisely, instead of producing a wider union type.
+  
+  ```ts
+  // reported, fix: Effect.result(fetchUser("u1"))
+  Effect.match(fetchUser("u1"), { onFailure: Result.fail, onSuccess: Result.succeed })
+  // reported, fix: fetchUser("u1").pipe(Effect.option)
+  fetchUser("u1").pipe(Effect.map(Option.some), Effect.catch(() => Effect.succeed(Option.none())))
+  // not reported: the handler transforms the error
+  Effect.match(fetchUser("u1"), { onFailure: (e) => Result.fail(e.id), onSuccess: Result.succeed })
+  ```
+
+### Patch Changes
+
+- 2d8ffe3: Fix `unnecessaryTypeofType` reporting a `typeof X.Type` query in the `extends` clause of the interface `X` itself, where the suggested replacement would make the interface extend itself.
+  
+  ```ts
+  export const Person = Schema.Struct({ name: Schema.String })
+  export type Identity<A> = A
+  
+  // no longer reported: `extends Identity<Person>` would be a circular base
+  export interface Person extends Identity<typeof Person.Type> {}
+  
+  // still reported: can be replaced with `UserId`
+  export interface Other extends Identity<typeof UserId.Type> {}
+  ```
+
 ## 0.64.1
 
 ### Patch Changes

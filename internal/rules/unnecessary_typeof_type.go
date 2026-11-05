@@ -95,7 +95,7 @@ func analyzeUnnecessaryTypeofTypeNode(tp *typeparser.TypeParser, c *checker.Chec
 	if innerType == nil {
 		return nil
 	}
-	if isSelfReferentialTypeAliasReference(innerSymbol, node) {
+	if isSelfReferentialTypeReference(innerSymbol, node) {
 		return nil
 	}
 
@@ -189,17 +189,28 @@ func resolveAliasSymbol(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
 	return symbol
 }
 
-func isSelfReferentialTypeAliasReference(symbol *ast.Symbol, location *ast.Node) bool {
+// isSelfReferentialTypeReference reports whether location sits where the named
+// type cannot reference itself: inside its own type alias declaration, or in a
+// heritage clause of its own interface declaration (an interface cannot extend itself).
+func isSelfReferentialTypeReference(symbol *ast.Symbol, location *ast.Node) bool {
 	if symbol == nil || location == nil {
 		return false
 	}
 
+	inHeritageClause := false
 	for current := location.Parent; current != nil; current = current.Parent {
-		if current.Kind != ast.KindTypeAliasDeclaration {
-			continue
-		}
-		if slices.Contains(ast.TSGetSymbolDeclarations(symbol), current) {
-			return true
+		switch current.Kind {
+		case ast.KindHeritageClause:
+			inHeritageClause = true
+		case ast.KindTypeAliasDeclaration:
+			if slices.Contains(ast.TSGetSymbolDeclarations(symbol), current) {
+				return true
+			}
+		case ast.KindInterfaceDeclaration:
+			if inHeritageClause && slices.Contains(ast.TSGetSymbolDeclarations(symbol), current) {
+				return true
+			}
+			inHeritageClause = false
 		}
 	}
 

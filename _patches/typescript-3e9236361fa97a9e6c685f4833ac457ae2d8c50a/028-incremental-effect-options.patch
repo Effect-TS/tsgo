@@ -1,0 +1,92 @@
+diff --git a/tsc/internal/execute/incremental/buildInfo.go b/tsc/internal/execute/incremental/buildInfo.go
+index 4e248c77a..bdd474675 100644
+--- a/tsc/internal/execute/incremental/buildInfo.go
++++ b/tsc/internal/execute/incremental/buildInfo.go
+@@ -5,6 +5,7 @@ import (
+ 	"iter"
+ 	"slices"
+ 
++	"github.com/effect-ts/tsgo/etscore"
+ 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+ 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+ 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+@@ -486,6 +487,7 @@ type BuildInfo struct {
+ 	FileInfos                  []*BuildInfoFileInfo                 `json:"fileInfos,omitzero"`
+ 	FileIdsList                [][]BuildInfoFileId                  `json:"fileIdsList,omitzero"`
+ 	Options                    *collections.OrderedMap[string, any] `json:"options,omitzero"`
++	Effect                     *etscore.EffectPluginOptions         `json:"effect,omitzero"`
+ 	ReferencedMap              []*BuildInfoReferenceMapEntry        `json:"referencedMap,omitzero"`
+ 	SemanticDiagnosticsPerFile []*BuildInfoSemanticDiagnostic       `json:"semanticDiagnosticsPerFile,omitzero"`
+ 	EmitDiagnosticsPerFile     []*BuildInfoDiagnosticsOfFile        `json:"emitDiagnosticsPerFile,omitzero"`
+@@ -572,6 +574,7 @@ func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory tspath.RootedDirectory
+ 		tsoptions.ParseCompilerOptions(option, value, options)
+ 
+ 	}
++	options.Effect = b.Effect
+ 	return options
+ }
+ 
+diff --git a/tsc/internal/execute/incremental/snapshottobuildinfo.go b/tsc/internal/execute/incremental/snapshottobuildinfo.go
+index ee592a5ee..fb72e1ec2 100644
+--- a/tsc/internal/execute/incremental/snapshottobuildinfo.go
++++ b/tsc/internal/execute/incremental/snapshottobuildinfo.go
+@@ -22,6 +22,7 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInf
+ 	buildInfo := &BuildInfo{
+ 		Version:                 core.Version(),
+ 		ContentMapperIdentities: contentMapperIdentities,
++		Effect:                  snapshot.options.Effect,
+ 	}
+ 	to := &toBuildInfo{
+ 		snapshot:                snapshot,
+diff --git a/tsc/internal/tsoptions/options_generated.go b/tsc/internal/tsoptions/options_generated.go
+index 975913279..a01d71ecb 100644
+--- a/tsc/internal/tsoptions/options_generated.go
++++ b/tsc/internal/tsoptions/options_generated.go
+@@ -6,6 +6,7 @@ import (
+ 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+ 	"github.com/microsoft/TypeScript/tsc/internal/core"
+ 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
++	"reflect"
+ )
+ 
+ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOptions) (foundKey bool) {
+@@ -372,7 +373,8 @@ func CompilerOptionsAffectSemanticDiagnostics(oldOptions *core.CompilerOptions,
+ 	if oldOptions == nil || newOptions == nil {
+ 		return true
+ 	}
+-	return oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions ||
++	return !reflect.DeepEqual(oldOptions.Effect, newOptions.Effect) ||
++		oldOptions.AllowImportingTsExtensions != newOptions.AllowImportingTsExtensions ||
+ 		oldOptions.AllowUmdGlobalAccess != newOptions.AllowUmdGlobalAccess ||
+ 		oldOptions.AllowUnreachableCode != newOptions.AllowUnreachableCode ||
+ 		oldOptions.AllowUnusedLabels != newOptions.AllowUnusedLabels ||
+diff --git a/tsc/internal/tsoptions/effect_options_test.go b/tsc/internal/tsoptions/effect_options_test.go
+new file mode 100644
+--- /dev/null
++++ b/tsc/internal/tsoptions/effect_options_test.go
+@@ -0,0 +1,25 @@
++package tsoptions
++
++import (
++	"github.com/effect-ts/tsgo/etscore"
++	"github.com/microsoft/TypeScript/tsc/internal/core"
++	"testing"
++)
++
++func TestEffectOptionsInvalidateSemanticDiagnostics(t *testing.T) {
++	oldOptions := &core.CompilerOptions{Effect: &etscore.EffectPluginOptions{Diagnostics: true}}
++	newOptions := &core.CompilerOptions{Effect: &etscore.EffectPluginOptions{Diagnostics: true}}
++	if CompilerOptionsAffectSemanticDiagnostics(oldOptions, newOptions) {
++		t.Fatal("equal Effect options must retain semantic diagnostics")
++	}
++	newOptions.Effect.Diagnostics = false
++	if !CompilerOptionsAffectSemanticDiagnostics(oldOptions, newOptions) {
++		t.Fatal("changed Effect options must invalidate semantic diagnostics")
++	}
++	if CompilerOptionsAffectSemanticDiagnostics(nil, nil) {
++		t.Fatal("nil options must compare safely")
++	}
++	if !CompilerOptionsAffectSemanticDiagnostics(oldOptions, nil) {
++		t.Fatal("removing options must invalidate semantic diagnostics")
++	}
++}

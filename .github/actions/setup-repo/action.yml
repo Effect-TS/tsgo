@@ -19,6 +19,14 @@ inputs:
     required: false
     default: ""
 
+outputs:
+  go-cache-save:
+    description: >-
+      "true" when this job persists the Go build cache ("Cache Go build" saves it on main, Linux). A composite
+      action cannot add an end-of-job step, so callers run `repoctl go-cache trim` as their last step when it is set,
+      before the cache post-step saves it.
+    value: ${{ inputs.materialize == 'true' && steps.upstream-component.outputs.go-cache-save == 'true' }}
+
 runs:
   using: composite
   steps:

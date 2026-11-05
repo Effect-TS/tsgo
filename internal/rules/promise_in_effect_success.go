@@ -42,6 +42,9 @@ var PromiseInEffectSuccess = rule.Rule{
 
 			if !entry.visited {
 				if ast.IsTypeNode(node) {
+					if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(node) {
+						pushChild(node.Expression())
+					}
 					continue
 				}
 				stack = append(stack, stackEntry{node: node, visited: true})

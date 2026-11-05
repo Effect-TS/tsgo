@@ -1021,6 +1021,26 @@
       "markdownDescription": "The rule takes a single option - an array of possible callback names - which may include object methods. The default callback names are `callback`, `cb`, `next`.",
       "type": "array"
     },
+    "CapitalizedCallsConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "allow": {
+          "default": [],
+          "description": "Exact names of capitalized functions that may be called directly.\nForwarded to the React Compiler's `validateNoCapitalizedCalls`\nenvironment option.",
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Exact names of capitalized functions that may be called directly.\nForwarded to the React Compiler's `validateNoCapitalizedCalls`\nenvironment option.",
+          "type": "array"
+        },
+        "allowPattern": {
+          "description": "A regex pattern; capitalized functions whose name matches may be called\ndirectly, checked alongside `allow`. Useful when a codebase has a\nnaming convention for capitalized non-component factories, such as\ngenerated event or schema builders (e.g. `\"Event$\"`).",
+          "markdownDescription": "A regex pattern; capitalized functions whose name matches may be called\ndirectly, checked alongside `allow`. Useful when a codebase has a\nnaming convention for capitalized non-component factories, such as\ngenerated event or schema builders (e.g. `\"Event$\"`).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "CapitalizedCommentsOptions": {
       "description": "Configuration for the capitalized-comments rule.\n\nThe first element specifies whether comments should `\"always\"` or `\"never\"`\nbegin with a capital letter. The second element is an optional object\ncontaining additional options.",
       "items": [
@@ -6875,7 +6895,24 @@
           ]
         },
         "react/capitalized-calls": {
-          "$ref": "#/definitions/RuleNoConfig"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/RuleNoConfig"
+            },
+            {
+              "items": [
+                {
+                  "$ref": "#/definitions/AllowWarnDeny"
+                },
+                {
+                  "$ref": "#/definitions/CapitalizedCallsConfig"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
         },
         "react/checked-requires-onchange-or-readonly": {
           "anyOf": [

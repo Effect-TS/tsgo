@@ -247,6 +247,7 @@ pub fn new_fourslash(
 
         parse_cache: Some(Arc::clone(&PARSE_CACHE)),
         npm_install: None,
+        spawn: None,
         progress_delay: Duration::ZERO,
         set_parent_process_id: None,
     };

@@ -293,7 +293,8 @@ type extra_Checker struct {
   structuredTypeExtraArena core.Arena[struct{signatures []*checker.Signature; callSignatureCount int; indexInfos []*checker.IndexInfo; objectTypeWithoutAbstractConstructSignatures *checker.Type}]
   lazyStateArena core.Arena[checker.LazyState]
   memberLayoutArena core.Arena[checker.MemberLayout]
-  layoutMemberInfos map[string]checker.MemberInfo
+  layoutMembers ast.SymbolTable
+  layoutBaseIndices []int32
   freeTypeSets *extra_temporaryTypeSet
   freePropertyCounts *extra_temporaryPropertyCounts
   mergedSymbols struct{gen ast.SymbolIdGenerator; links core.LinkStore[uint64, *ast.Symbol]; pages core.PagedLinkStore[*ast.Symbol]}
@@ -449,6 +450,7 @@ type extra_Checker struct {
   awaitedTypeStack []*checker.Type
   reverseMappedSourceStack []*checker.Type
   reverseMappedTargetStack []*checker.Type
+  resolvingObjectTypeStack []checker.ResolvingObjectType
   reverseExpandingFlags checker.ExpandingFlags
   freeRelater *checker.Relater
   subtypeRelation *checker.Relation
@@ -968,7 +970,6 @@ const MappedTypeNameTypeKindFiltering = checker.MappedTypeNameTypeKindFiltering
 const MappedTypeNameTypeKindNone = checker.MappedTypeNameTypeKindNone
 const MappedTypeNameTypeKindRemapping = checker.MappedTypeNameTypeKindRemapping
 type MarkedAssignmentSymbolLinks = checker.MarkedAssignmentSymbolLinks
-type MemberInfo = checker.MemberInfo
 type MemberLayout = checker.MemberLayout
 type MemberOverrideStatus = checker.MemberOverrideStatus
 const MemberOverrideStatusHasInvalidOverride = checker.MemberOverrideStatusHasInvalidOverride
@@ -1125,6 +1126,7 @@ const RelationComparisonResultReportsUnmeasurable = checker.RelationComparisonRe
 const RelationComparisonResultReportsUnreliable = checker.RelationComparisonResultReportsUnreliable
 const RelationComparisonResultSucceeded = checker.RelationComparisonResultSucceeded
 type RelationError = checker.RelationError
+type ResolvingObjectType = checker.ResolvingObjectType
 type ReverseMappedSymbolLinks = checker.ReverseMappedSymbolLinks
 type ReverseMappedType = checker.ReverseMappedType
 type ReverseMappedTypeKey = checker.ReverseMappedTypeKey

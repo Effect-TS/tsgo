@@ -5,13 +5,13 @@ A wrapper for both [TSRS](https://github.com/oxc-project/tsrs) and [TypeScript-G
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.64.1`:
+The following target package versions are supported by `@effect/tsgo@0.67.3`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261101.1` |
-| tsrs | `0.20.1-ts7.1.0-beta` |
-| Oxlint | `1.88.0`, `1.89.0`, `1.90.0` |
+| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261103.1` |
+| tsrs | `0.21.0-ts7.1.0-beta` |
+| Oxlint | `1.88.0`, `1.89.0`, `1.90.0`, `1.91.0` |
 | oxlint-tsgolint | `7.0.2004`, `7.0.2005` |
 <!-- supported-components:end -->
 
@@ -45,12 +45,18 @@ effect-tsgo tsc@7.0.2 --lsp --stdio      # a specific TypeScript version
 effect-tsgo tsc@next --build             # or an upstream tag: latest, beta, next
 effect-tsgo tsrs --noEmit                # the Effect-patched tsrs (tsrs@<version> and tsrs@latest work too)
 effect-tsgo oxlint --type-aware          # Oxlint with the Effect rules
+effect-tsgo vp check                     # vite-plus (vp check, vp lint, vp run ...) with the Effect rules
+effect-tsgo --tsrs-lint oxlint --type-aware   # the type-aware rules on tsrs instead of tsgolint (experimental)
+effect-tsgo --tsrs-lint=latest vp lint        # with a tsrs version or tag
 ```
 
 Every argument after the tool is passed through unchanged, so the commands work as drop-in replacements in `package.json` scripts and editor settings that launch `tsc`.
 
 - `tsc` and `tsrs` run the requested version or tag; without one they run the build of the installed `typescript`/`@typescript/native` (>= 7) or `tsrs` version when this release ships it, and otherwise the latest supported version. They do not require TypeScript or tsrs to be installed.
 - `oxlint` runs the CLI of the installed `oxlint` package (installed directly or through `vite-plus`) with the Effect-patched native binding and, when `oxlint-tsgolint` is installed, the Effect-patched `tsgolint` of the installed versions. It does not accept a version.
+- `vp` runs the CLI of the installed `vite-plus` package, so that the Oxlint it starts (for `vp check`, `vp lint`, and scripts run through `vp run`) uses the Effect-patched binding and `tsgolint` of the oxlint version vite-plus resolves. It does not accept a version.
+- `--tsrs-lint[=<version|tag>]`, in front of `oxlint` or `vp`, runs Oxlint's type-aware rules, including the Effect ones, on the Effect-patched `tsrs` (`tsrs --lint`, tsrs's port of tsgolint) instead of the patched `tsgolint`; `oxlint-tsgolint` does not need to be installed. The tsrs version is picked as for `effect-tsgo tsrs`: the requested version or tag, else the installed `tsrs` version when this release ships it, else the latest supported one. tsrs does not support tsgolint's Go profiling variables (`OXLINT_TSGOLINT_TRACE`, `OXLINT_TSGOLINT_CPU`, `OXLINT_TSGOLINT_HEAP`, `OXLINT_TSGOLINT_ALLOCS`).
+- `oxlint` and `vp` work under Node.js and Bun: they preload `@effect/tsgo/oxlint-bridge` through `NODE_OPTIONS` and `BUN_OPTIONS`, in front of any options already set there, so every process they start loads the patched Oxlint binding in place of the stock one and every other native addon unchanged.
 - As with `patch`, the packaged `tsrs` and `oxlint` builds do not support Linux musl.
 
 Prefer these commands whenever you cannot or do not want to modify `node_modules`; prefer `patch` when other tools must keep launching the stock binaries (for example `npx tsc`, or editor extensions that resolve the TypeScript package). Note that the type augmentation that adds the `effecttsgo` plugin and rules to Oxlint's config types (for `oxlint.config.ts`) is applied only by `patch`.

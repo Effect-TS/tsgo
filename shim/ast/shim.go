@@ -88,10 +88,12 @@ func CanHaveModifiers(node *ast.Node) bool
 func CanHaveSymbol(node *ast.Node) bool
 type CaseBlock = ast.CaseBlock
 type CaseBlockNode = ast.CaseBlockNode
+type CaseClause = ast.CaseClause
+type CaseClauseNode = ast.CaseClauseNode
 type CaseClausesList = ast.CaseClausesList
 type CaseKeyword = ast.CaseKeyword
 type CaseOrDefaultClause = ast.CaseOrDefaultClause
-type CaseOrDefaultClauseNode = ast.CaseOrDefaultClauseNode
+type CaseOrDefaultClauseBase = ast.CaseOrDefaultClauseBase
 type CatchClause = ast.CatchClause
 type CatchClauseNode = ast.CatchClauseNode
 type CheckFlags = ast.CheckFlags
@@ -190,6 +192,8 @@ type DeclarationName = ast.DeclarationName
 type DeclareKeyword = ast.DeclareKeyword
 type Decorator = ast.Decorator
 type DecoratorNode = ast.DecoratorNode
+type DefaultClause = ast.DefaultClause
+type DefaultClauseNode = ast.DefaultClauseNode
 type DefaultKeyword = ast.DefaultKeyword
 type DeleteExpression = ast.DeleteExpression
 type DeleteExpressionNode = ast.DeleteExpressionNode
