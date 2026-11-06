@@ -1,0 +1,62 @@
+diff --git a/tsc/internal/checker/checker.go b/tsc/internal/checker/checker.go
+--- a/tsc/internal/checker/checker.go
++++ b/tsc/internal/checker/checker.go
+@@ -30739,6 +30739,34 @@
+ 	return c.getTypeOfPropertyOfContextualType(c.getGlobalImportAttributesType(), node.Name().Text())
+ }
+ 
++// getTaggedTemplateStringsType refines only the synthetic argument; emitted JavaScript is unchanged.
++func (c *Checker) getTaggedTemplateStringsType(template *ast.Node) *Type {
++	base := c.getGlobalTemplateStringsArrayType()
++	if c.compilerOptions.Effect == nil || !c.compilerOptions.Effect.ExperimentalLiteralTemplateStrings {
++		return base
++	}
++	literals := []*ast.Node{template}
++	if ast.IsTemplateExpression(template) {
++		expression := template.AsTemplateExpression()
++		literals = make([]*ast.Node, len(expression.TemplateSpans.Nodes)+1)
++		literals[0] = expression.Head
++		for i, span := range expression.TemplateSpans.Nodes {
++			literals[i+1] = span.AsTemplateSpan().Literal
++		}
++	}
++	types := make([]*Type, len(literals))
++	infos := make([]TupleElementInfo, len(literals))
++	for i, literal := range literals {
++		// Invalid escapes produce undefined cooked values, not string literals.
++		if literal.TemplateLiteralLikeData().TemplateFlags&ast.TokenFlagsContainsInvalidEscape != 0 {
++			return base
++		}
++		types[i] = c.getStringLiteralType(literal.Text())
++		infos[i] = TupleElementInfo{flags: ElementFlagsRequired}
++	}
++	return c.getIntersectionType([]*Type{base, c.createTupleTypeEx(types, infos, true /*readonly*/)})
++}
++
+ // Returns the effective arguments for an expression that works like a function invocation.
+ func (c *Checker) getEffectiveCallArguments(node *ast.Node) []*ast.Node {
+ 	switch {
+@@ -30747,7 +30775,7 @@
+ 		return []*ast.Node{c.createSyntheticExpression(node, c.emptyFreshJsxObjectType, false, nil)}
+ 	case ast.IsTaggedTemplateExpression(node):
+ 		template := node.AsTaggedTemplateExpression().Template
+-		firstArg := c.createSyntheticExpression(template, c.getGlobalTemplateStringsArrayType(), false, nil)
++		firstArg := c.createSyntheticExpression(template, c.getTaggedTemplateStringsType(template), false, nil)
+ 		if !ast.IsTemplateExpression(template) {
+ 			return []*ast.Node{firstArg}
+ 		}
+diff --git a/tsc/internal/tsoptions/options_generated.go b/tsc/internal/tsoptions/options_generated.go
+--- a/tsc/internal/tsoptions/options_generated.go
++++ b/tsc/internal/tsoptions/options_generated.go
+@@ -432,7 +432,10 @@
+ 	if oldOptions == nil || newOptions == nil {
+ 		return true
+ 	}
+-	return oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies ||
++	oldLiteralTemplates := oldOptions.Effect != nil && oldOptions.Effect.ExperimentalLiteralTemplateStrings
++	newLiteralTemplates := newOptions.Effect != nil && newOptions.Effect.ExperimentalLiteralTemplateStrings
++	return oldLiteralTemplates != newLiteralTemplates ||
++		oldOptions.AssumeChangesOnlyAffectDirectDependencies != newOptions.AssumeChangesOnlyAffectDirectDependencies ||
+ 		oldOptions.EmitBOM != newOptions.EmitBOM ||
+ 		oldOptions.EmitDecoratorMetadata != newOptions.EmitDecoratorMetadata ||
+ 		oldOptions.DeclarationDir != newOptions.DeclarationDir ||
