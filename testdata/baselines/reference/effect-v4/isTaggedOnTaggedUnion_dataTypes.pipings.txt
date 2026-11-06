@@ -1,0 +1,121 @@
+==== /.src/isTaggedOnTaggedUnion_dataTypes.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 10:20 - 10:55
+Node: Predicate.isTagged(option, "Some")
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Some"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 11:22 - 11:56
+Node: Predicate.isTagged(option, "None")
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["None"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 12:21 - 12:64
+Node: options.filter(Predicate.isTagged("Some"))
+Node Kind: KindCallExpression
+
+Subject: "Some"
+Subject Type: "Some"
+
+Transformations (2):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Some"; }
+  [1] kind: call
+      callee: options.filter
+      args: (constant)
+      outType: Option<number>[]
+
+=== Piping Flow ===
+Location: 13:49 - 13:76
+Node: Predicate.isTagged("Some")
+Node Kind: KindCallExpression
+
+Subject: "Some"
+Subject Type: "Some"
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Some"; }
+
+=== Piping Flow ===
+Location: 14:23 - 14:59
+Node: Predicate.isTagged(exit, "Failure")
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Failure"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 15:23 - 15:61
+Node: Predicate.isTagged(result, "Success")
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, string>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Success"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 16:24 - 16:64
+Node: option.pipe(Predicate.isTagged("Some"))
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Predicate.isTagged
+      args: ["Some"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 17:30 - 17:93
+Node: pipe(option, (current) => current, Predicate.isTagged("Some"))
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: (current) => current
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipe
+      callee: Predicate.isTagged
+      args: ["Some"]
+      outType: boolean

@@ -46,7 +46,7 @@ impl TypeParser<'_> {
 // go: internal/typeparser/type_parser.go:19 denseNodeStore e1e5b8a5ab011678
 pub type DenseNodeStore<V> = FxHashMap<P<Node>, V>;
 
-// go: internal/typeparser/type_parser.go:23 EffectLinks 8d56369a0fd73a22
+// go: internal/typeparser/type_parser.go:23 EffectLinks c0b990d68083e8d0
 // EffectLinks holds per-checker cached type-parser results.
 // One instance is lazily created per Checker and cached on TypeParser.
 //
@@ -69,7 +69,7 @@ pub struct EffectLinks {
     pub(crate) checked_expression_type_source_file: Option<P<SourceFile>>,
 
     pub object_literal_contextual_type: FxHashMap<P<Node>, Option<P<Type>>>,
-    pub object_literal_constraint_contextual_type: FxHashMap<P<Node>, Option<P<Type>>>,
+    pub expression_constraint_contextual_type: FxHashMap<P<Node>, Option<P<Type>>>,
     pub object_literal_bare_constraint_contextual_type: FxHashMap<P<Node>, Option<P<Type>>>,
 
     pub effect_type: FxHashMap<P<Type>, Option<Effect>>,

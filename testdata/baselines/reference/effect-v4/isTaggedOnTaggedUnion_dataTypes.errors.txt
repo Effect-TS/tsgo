@@ -1,0 +1,48 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(10,21): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(11,22): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(12,37): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(13,50): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(14,24): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(15,24): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(16,37): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+/.src/isTaggedOnTaggedUnion_dataTypes.ts(17,66): warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+
+
+==== /.src/isTaggedOnTaggedUnion_dataTypes.ts (8 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics isTaggedOnTaggedUnion:warning
+    import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+    
+    declare const option: Option.Option<number>
+    declare const options: ReadonlyArray<Option.Option<number>>
+    declare const exit: Exit.Exit<number, string>
+    declare const result: Result.Result<number, string>
+    
+    export const some = Predicate.isTagged(option, "Some")
+                        ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    export const none = !Predicate.isTagged(option, "None")
+                         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    export const somes = options.filter(Predicate.isTagged("Some"))
+                                        ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+                                                     ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    export const failure = Predicate.isTagged(exit, "Failure")
+                           ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    export const success = Predicate.isTagged(result, "Success")
+                           ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    export const pipeable = option.pipe(Predicate.isTagged("Some"))
+                                        ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+                                                                     ~~~~~~~~~~~~~~~~~~
+!!! warning TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+    

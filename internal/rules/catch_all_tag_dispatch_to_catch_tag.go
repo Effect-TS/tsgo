@@ -129,7 +129,12 @@ func analyzeCatchAllTagDispatchHandler(tp *typeparser.TypeParser, c *checker.Che
 }
 
 func literalTaggedUnionTags(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) (map[string]struct{}, bool) {
-	type_ := tp.GetTypeAtLocation(node)
+	return literalTaggedUnionTypeTags(tp, c, tp.GetTypeAtLocation(node))
+}
+
+// literalTaggedUnionTypeTags returns the tags of a union whose every member
+// has a string literal _tag.
+func literalTaggedUnionTypeTags(tp *typeparser.TypeParser, c *checker.Checker, type_ *checker.Type) (map[string]struct{}, bool) {
 	if type_ == nil || type_.Flags()&checker.TypeFlagsUnion == 0 {
 		return nil, false
 	}

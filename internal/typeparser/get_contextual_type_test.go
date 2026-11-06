@@ -76,28 +76,28 @@ const gen = function* () { const options: Options = { value: 42 }; };`)
 			defer done()
 			node := findIdentifierByText(t, sf, "options", 0).Parent.Initializer()
 			if constraintFirst {
-				if got := tp.CachedObjectLiteralConstraintContextualType(node); got != nil {
+				if got := tp.CachedExpressionConstraintContextualType(node); got != nil {
 					t.Fatalf("constraint context = %s, want nil", c.TypeToString(got))
 				}
 			}
 			if got := tp.CachedObjectLiteralContextualType(node); got == nil || c.TypeToString(got) != "Options" {
 				t.Fatalf("normal context = %v, want Options", got)
 			}
-			if got := tp.CachedObjectLiteralConstraintContextualType(node); got != nil {
+			if got := tp.CachedExpressionConstraintContextualType(node); got != nil {
 				t.Fatalf("constraint context = %s, want nil", c.TypeToString(got))
 			}
-			if entry := tp.links.ObjectLiteralConstraintContextualType.TryGet(node); entry == nil || *entry != nil {
+			if entry := tp.links.ExpressionConstraintContextualType.TryGet(node); entry == nil || *entry != nil {
 				t.Fatal("skipped constraint lookup must cache a present nil")
 			}
 			_ = c.GetDiagnostics(context.Background(), sf)
 			other := NewTypeParser(c.Program(), c)
-			if other.links.ObjectLiteralConstraintContextualType.TryGet(node) != tp.links.ObjectLiteralConstraintContextualType.TryGet(node) {
+			if other.links.ExpressionConstraintContextualType.TryGet(node) != tp.links.ExpressionConstraintContextualType.TryGet(node) {
 				t.Fatal("parsers over one checker must share the negative cache entry")
 			}
 			if got := other.CachedObjectLiteralContextualType(node); got == nil || c.TypeToString(got) != "Options" {
 				t.Fatalf("shared normal context = %v, want Options", got)
 			}
-			if got := other.CachedObjectLiteralConstraintContextualType(node); got != nil {
+			if got := other.CachedExpressionConstraintContextualType(node); got != nil {
 				t.Fatalf("shared constraint context after checking = %s, want nil", c.TypeToString(got))
 			}
 		})

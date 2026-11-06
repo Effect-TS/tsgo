@@ -53,7 +53,7 @@ pub(crate) struct DeclarationStabilityInfo {
     pub(crate) declaration: Option<P<Node>>,
 }
 
-// go: internal/rules/stability_api_usage.go:45 runStabilityApiUsage 447658b63971c6d6
+// go: internal/rules/stability_api_usage.go:45 runStabilityApiUsage 87fb64189a97b615
 //
 // Rust: Go's closures (`readSymbol`, `readSignature`, `report`, `walk`) are nested functions that take what they
 // capture (the rule context and a `StabilityApiUsageState` for `wanted`, the allow-list and the diagnostics).
@@ -152,7 +152,7 @@ pub(crate) fn run_stability_api_usage(
                 let is_own = |symbol: &P<Symbol>| symbol.value_declaration() == Some(node);
                 if properties.iter().any(is_own) {
                     let lookups: [fn(&mut TypeParser<'_>, P<Node>) -> Option<P<Type>>; 2] = [
-                        |tp, n| tp.cached_object_literal_constraint_contextual_type(n),
+                        |tp, n| tp.cached_expression_constraint_contextual_type(n),
                         |tp, n| tp.cached_object_literal_bare_constraint_contextual_type(n),
                     ];
                     for lookup in lookups {

@@ -1,0 +1,349 @@
+==== /.src/isTaggedOnTaggedUnion.ts (24 flows) ====
+
+=== Piping Flow ===
+Location: 6:13 - 10:3
+Node: Schema.TaggedUnion({\n  Auto: {},\n  Px: { value: Schema.Finite },\n  Percent: { value: Schema.Finite }\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  Auto: {},\n  Px: { value: Schema.Finite },\n  Percent: { value: Schema.Finite }\n}
+Subject Type: { Auto: {}; Px: { value: Finite; }; Percent: { value: Finite; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedUnion
+      args: (constant)
+      outType: TaggedUnion<{ readonly Auto: TaggedStruct<"Auto", {}>; readonly Percent: TaggedStruct<"Percent", { readonly value: Finite; }>; readonly Px: TaggedStruct<"Px", { readonly value: Finite; }>; }>
+
+=== Piping Flow ===
+Location: 28:25 - 28:58
+Node: Predicate.isTagged(size, "Auto")
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Auto"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 29:23 - 29:56
+Node: Predicate.isTagged("Auto")(size)
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: ["Auto"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 30:21 - 30:58
+Node: pipe(size, Predicate.isTagged("Px"))
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Predicate.isTagged
+      args: ["Px"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 31:30 - 31:89
+Node: pipe(size, (current) => current, Predicate.isTagged("Px"))
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (2):
+  [0] kind: pipe
+      callee: (current) => current
+      args: (constant)
+      outType: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+  [1] kind: pipe
+      callee: Predicate.isTagged
+      args: ["Px"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 32:27 - 32:53
+Node: isTagged(shape, "Circle")
+Node Kind: KindCallExpression
+
+Subject: shape
+Subject Type: { readonly _tag: "Circle"; readonly radius: number; } | { readonly _tag: "Square"; readonly side: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: isTagged
+      args: ["Circle"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 33:32 - 33:71
+Node: Predicate.isTagged(handwritten, "Off")
+Node Kind: KindCallExpression
+
+Subject: handwritten
+Subject Type: Handwritten
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Off"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 34:25 - 34:57
+Node: Predicate.isTagged(size, "Auto")
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Auto"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 35:54 - 35:90
+Node: Predicate.isTagged(current, "Auto")
+Node Kind: KindCallExpression
+
+Subject: current
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Auto"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 36:53 - 36:85
+Node: Predicate.isTagged(value, "Px")
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Px"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 37:30 - 37:69
+Node: sizes.filter(Predicate.isTagged("Px"))
+Node Kind: KindCallExpression
+
+Subject: "Px"
+Subject Type: "Px"
+
+Transformations (2):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Px"; }
+  [1] kind: call
+      callee: sizes.filter
+      args: (constant)
+      outType: ({ readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; })[]
+
+=== Piping Flow ===
+Location: 38:29 - 38:81
+Node: pipe(sizes, Array.filter(Predicate.isTagged("Px")))
+Node Kind: KindCallExpression
+
+Subject: sizes
+Subject Type: readonly ({ readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; })[]
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Array.filter
+      args: [Predicate.isTagged("Px")]
+      outType: ({ readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; })[]
+
+=== Piping Flow ===
+Location: 38:55 - 38:79
+Node: Predicate.isTagged("Px")
+Node Kind: KindCallExpression
+
+Subject: "Px"
+Subject Type: "Px"
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Px"; }
+
+=== Piping Flow ===
+Location: 39:53 - 39:78
+Node: Predicate.isTagged("Px")
+Node Kind: KindCallExpression
+
+Subject: "Px"
+Subject Type: "Px"
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Px"; }
+
+=== Piping Flow ===
+Location: 40:74 - 40:99
+Node: Predicate.isTagged("Px")
+Node Kind: KindCallExpression
+
+Subject: "Px"
+Subject Type: "Px"
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Px"; }
+
+=== Piping Flow ===
+Location: 43:26 - 43:59
+Node: Predicate.isTagged(size, "Atuo")
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Atuo"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 44:34 - 44:75
+Node: sizes.filter(Predicate.isTagged("Atuo"))
+Node Kind: KindCallExpression
+
+Subject: "Atuo"
+Subject Type: "Atuo"
+
+Transformations (2):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Atuo"; }
+  [1] kind: call
+      callee: sizes.filter
+      args: (constant)
+      outType: ({ readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; })[]
+
+=== Piping Flow ===
+Location: 52:25 - 52:64
+Node: Predicate.isTagged(unknownValue, "Px")
+Node Kind: KindCallExpression
+
+Subject: unknownValue
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Px"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 53:21 - 53:56
+Node: Predicate.isTagged(anyValue, "Px")
+Node Kind: KindCallExpression
+
+Subject: anyValue
+Subject Type: any
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Px"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 54:26 - 54:61
+Node: Predicate.isTagged(optional, "Px")
+Node Kind: KindCallExpression
+
+Subject: optional
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; } | undefined
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Px"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 55:23 - 55:55
+Node: Predicate.isTagged(mixed, "Px")
+Node Kind: KindCallExpression
+
+Subject: mixed
+Subject Type: string | { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Px"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 56:28 - 56:65
+Node: Predicate.isTagged(size, dynamicTag)
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Percent"; readonly value: number; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: [dynamicTag]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 57:23 - 57:48
+Node: Predicate.isTagged("Px")
+Node Kind: KindCallExpression
+
+Subject: "Px"
+Subject Type: "Px"
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Px"; }
+
+=== Piping Flow ===
+Location: 58:59 - 58:84
+Node: Predicate.isTagged("Px")
+Node Kind: KindCallExpression
+
+Subject: "Px"
+Subject Type: "Px"
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: (constant)
+      outType: (self: unknown) => self is { _tag: "Px"; }

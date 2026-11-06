@@ -28,3 +28,8 @@ var effectPredicatePackageSourceFileDescriptor = newPackageSourceFileDescriptor(
 func (tp *TypeParser) IsNodeReferenceToEffectPredicateModuleApi(node *ast.Node, memberName string) bool {
 	return tp.IsNodeReferenceToModuleExport(node, effectPredicatePackageSourceFileDescriptor, memberName)
 }
+
+// IsExpressionEffectPredicateModule reports whether node resolves to the Predicate module namespace.
+func (tp *TypeParser) IsExpressionEffectPredicateModule(node *ast.Node) bool {
+	return tp.IsNodeReferenceToModule(node, effectPredicatePackageSourceFileDescriptor)
+}
