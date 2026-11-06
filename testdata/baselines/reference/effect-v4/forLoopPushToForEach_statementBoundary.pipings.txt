@@ -1,0 +1,505 @@
+==== /.src/forLoopPushToForEach_statementBoundary.ts (36 flows) ====
+
+=== Piping Flow ===
+Location: 17:37 - 24:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  [1, 2].forEach((n) => n)\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  [1, 2].forEach((n) => n)\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 19:30 - 20:43
+Node: results.push(yield* processItem(item))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(item)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 20:24 - 20:42
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 21:4 - 22:27
+Node: [1, 2].forEach((n) => n)
+Node Kind: KindCallExpression
+
+Subject: (n) => n
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: [1, 2].forEach
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 28:35 - 35:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  (results as Array<string>).join(",")\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  (results as Array<string>).join(",")\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 30:30 - 31:43
+Node: results.push(yield* processItem(item))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(item)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 31:24 - 31:42
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 32:4 - 33:39
+Node: (results as Array<string>).join(",")
+Node Kind: KindCallExpression
+
+Subject: ","
+Subject Type: ","
+
+Transformations (1):
+  [0] kind: call
+      callee: (results as Array<string>).join
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 39:38 - 46:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  `${results.length}`.trim()\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  `${results.length}`.trim()\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 41:30 - 42:43
+Node: results.push(yield* processItem(item))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(item)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 42:24 - 42:42
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 50:34 - 54:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) { results.push(yield* processItem(item)) } yield* Effect.log(results.length)\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const item of items) { results.push(yield* processItem(item)) } yield* Effect.log(results.length)\n  return results\n}
+Subject Type: () => Generator<Effect<void, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 52:30 - 52:69
+Node: results.push(yield* processItem(item))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(item)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 52:50 - 52:68
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 52:78 - 52:105
+Node: Effect.log(results.length)
+Node Kind: KindCallExpression
+
+Subject: results.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 59:38 - 63:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) results.push(yield* processItem(item)); yield* Effect.log(results.length)\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const item of items) results.push(yield* processItem(item)); yield* Effect.log(results.length)\n  return results\n}
+Subject Type: () => Generator<Effect<void, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 61:28 - 61:67
+Node: results.push(yield* processItem(item))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(item)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 61:48 - 61:66
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 61:75 - 61:102
+Node: Effect.log(results.length)
+Node Kind: KindCallExpression
+
+Subject: results.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 67:30 - 71:3
+Node: Effect.gen(function*() {\n  const results = [];\n  for (const item of items) results.push(yield* processItem(item));\n  return results;\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = [];\n  for (const item of items) results.push(yield* processItem(item));\n  return results;\n}
+Subject Type: () => Generator<Effect<string, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 69:28 - 69:67
+Node: results.push(yield* processItem(item))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(item)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 69:48 - 69:66
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 76:35 - 82:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* { effect: processItem(item) }.effect)\n  }\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* { effect: processItem(item) }.effect)\n  }\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 78:30 - 79:62
+Node: results.push(yield* { effect: processItem(item) }.effect)
+Node Kind: KindCallExpression
+
+Subject: yield* { effect: processItem(item) }.effect
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 79:34 - 79:52
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 90:35 - 96:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const { value = yield* Effect.succeed(1) } of objects) {\n    results.push(yield* processItem(value))\n  }\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const { value = yield* Effect.succeed(1) } of objects) {\n    results.push(yield* processItem(value))\n  }\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never> | Effect<number, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 92:30 - 92:48
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 92:64 - 93:44
+Node: results.push(yield* processItem(value))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(value)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 93:24 - 93:43
+Node: processItem(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 99:34 - 105:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const [value = yield* Effect.succeed(1)] of pairs) {\n    results.push(yield* processItem(value))\n  }\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const [value = yield* Effect.succeed(1)] of pairs) {\n    results.push(yield* processItem(value))\n  }\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never> | Effect<number, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 101:29 - 101:47
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 101:60 - 102:44
+Node: results.push(yield* processItem(value))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(value)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 102:24 - 102:43
+Node: processItem(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 110:40 - 116:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const { value = [...(function*() { yield 1 })()][0] } of objects) {\n    results.push(yield* processItem(value))\n  }\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const { value = [...(function*() { yield 1 })()][0] } of objects) {\n    results.push(yield* processItem(value))\n  }\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 112:75 - 113:44
+Node: results.push(yield* processItem(value))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(value)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 113:24 - 113:43
+Node: processItem(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>
