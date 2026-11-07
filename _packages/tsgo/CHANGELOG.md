@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.67.5
+
+### Patch Changes
+
+- 689b96f: Finish the tsrs 0.23.0 bump: refresh `Cargo.lock` for the new tsrs crate versions, and update the release parity check in `repoctl tsrs check` to read tsrs's new matrix-based `build-windows` job (same target, runner and build flags, now written as `${{ matrix.target }}`). Rework the Oxlint `002-effect-tsgolint-path.patch` so it applies to Oxlint 1.92.0 as well as 1.88–1.91: `EFFECT_TSGO_TSGOLINT_PATH` is now resolved by a wrapper around upstream's `try_find_tsgolint_executable` instead of an edit inside it (same behavior).
+- c7f44a4: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261106.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/a59fafb8e7b5b2efef0568149fea03caad02356a) commit `a59fafb8e7b5b2efef0568149fea03caad02356a`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
 ## 0.67.4
 
 ### Patch Changes
