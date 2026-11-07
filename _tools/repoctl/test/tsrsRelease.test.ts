@@ -169,12 +169,14 @@ const workflow = (rows: ReadonlyArray<string>, windowsRunner = "windows-latest")
     "        include:",
     ...rows.map((row) => `          - ${row}`),
     "    steps:",
-    ...tsrsReleaseWorkflowSnippets.filter((snippet) => !snippet.startsWith("runs-on: ")).map((snippet) =>
-      `      ${snippet}`),
+    ...tsrsReleaseWorkflowSnippets.map((snippet) => `      ${snippet}`),
     "",
     "  build-windows:",
-    "    name: build x86_64-pc-windows-msvc",
-    `    runs-on: ${windowsRunner}`,
+    "    strategy:",
+    "      matrix:",
+    "        include:",
+    `          - { target: x86_64-pc-windows-msvc, os: ${windowsRunner} }`,
+    "          # - { target: aarch64-pc-windows-msvc, os: windows-11-arm }",
     "",
     "  build-musl:",
     "    strategy:",
@@ -197,8 +199,8 @@ test("matches tsrs's release targets, runners and build settings", () => {
     ["x86_64-apple-darwin", "macos-26-intel"],
     ["x86_64-unknown-linux-gnu", "ubuntu-22.04"],
     ["aarch64-unknown-linux-gnu", "ubuntu-22.04-arm"],
-    ["x86_64-unknown-linux-musl", "ubuntu-latest"],
-    ["x86_64-pc-windows-msvc", "windows-latest"]
+    ["x86_64-pc-windows-msvc", "windows-latest"],
+    ["x86_64-unknown-linux-musl", "ubuntu-latest"]
   ])
   assert.deepEqual(tsrsReleaseParityProblems(workflow(upstreamRows)), [])
   assert.equal(Object.keys(tsrsBuildTargets).length, 5)
@@ -215,7 +217,6 @@ test("reports how tsrs's release workflow moved away from the mirrored build", (
     .replace("    steps:\n", "    env:\n      TARGET_CC: clang\n    steps:\n")
   assert.deepEqual(tsrsReleaseParityProblems(changed), [
     "no longer contains: RUSTFLAGS: -Cprofile-generate=${{ runner.temp }}/pgo/raw -Clto=thin",
-    "no longer contains: runs-on: windows-latest",
     "sets a C compiler (CC or TARGET_CC)",
     "builds aarch64-apple-darwin on macos-27, tsrsBuildTargets on macos-latest",
     "builds riscv64gc-unknown-linux-gnu (on ubuntu-24.04-riscv), which tsrsBuildTargets lacks",
