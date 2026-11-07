@@ -14,3 +14,7 @@ with the stock tsgolint for the Oxlint process it starts. With `EFFECT_TSGO_TSGO
 (set by `effect-tsgo --tsrs-lint oxlint|vp`), the binary of `EFFECT_TSGO_TSGOLINT_PATH` is the
 packaged tsrs, which the binding runs as `tsrs --lint headless ...`; the Go profiling variables
 (`OXLINT_TSGOLINT_TRACE`, `_CPU`, `_HEAP`, `_ALLOCS`) are rejected in that mode.
+The lookup is a wrapper (`effect_tsgo_find_tsgolint_executable`) used by the two `TsGoLintState`
+constructors, so the patch never edits upstream's `try_find_tsgolint_executable`, which changes between
+Oxlint releases (1.92 added `tsrs-lint` discovery): one patch applies to every Oxlint version in the
+compatibility matrix.

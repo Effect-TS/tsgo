@@ -467,26 +467,21 @@ export const tsrsReleaseWorkflowSnippets = [
   "curl -fsSL \"https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/$name.tar.zst\" |",
   "run: .github/scripts/bolt.sh \"target/${{ matrix.target }}/release\" \"$RUNNER_TEMP/bolt\" \"$RUNNER_TEMP/pgo/bench\"",
   // `build-windows`
-  "name: build x86_64-pc-windows-msvc",
-  "runs-on: windows-latest",
   "CARGO_PROFILE_RELEASE_STRIP: symbols",
   "$env:CARGO_ENCODED_RUSTFLAGS = @(\"-Cprofile-generate=$raw\", \"-Clto=thin\") -join [char]31",
-  "cargo build --release --locked -p tsrs_cli -p tsrs_testrunner --bins --features tsrs_cli/noembed --target x86_64-pc-windows-msvc",
+  "cargo build --release --locked -p tsrs_cli -p tsrs_testrunner --bins --features tsrs_cli/noembed --target ${{ matrix.target }}",
   "& ./.github/scripts/pgo-train-windows.ps1 -BinDir $bin -RawDir $raw",
   "$env:CARGO_ENCODED_RUSTFLAGS = \"-Cprofile-use=$env:PROFILE_PATH\"",
-  "cargo build --release --locked -p tsrs_cli --features tsrs_cli/noembed --target x86_64-pc-windows-msvc"
+  "cargo build --release --locked -p tsrs_cli --features tsrs_cli/noembed --target ${{ matrix.target }}"
 ] as const
 
-// The `{ target: ..., os: ... }` rows of the `build` and `build-musl` matrices and the target of `build-windows`.
+// The `{ target: ..., os: ... }` rows of the `build`, `build-windows` and `build-musl` matrices (commented-out rows
+// are not built).
 export const parseTsrsReleaseTargets = (workflow: string) => {
   const targets = new Map<string, string>()
   for (const match of workflow.matchAll(/^\s*- \{ target: ([\w-]+), os: ([\w.-]+)/gm)) {
     targets.set(match[1]!, match[2]!)
   }
-  const windows = /^ {2}build-windows:\n(?: {4}.*\n|\n)*/m.exec(workflow)?.[0]
-  const windowsTarget = windows === undefined ? undefined : /name: build ([\w-]+)/.exec(windows)?.[1]
-  const windowsRunner = windows === undefined ? undefined : /runs-on: ([\w.-]+)/.exec(windows)?.[1]
-  if (windowsTarget !== undefined && windowsRunner !== undefined) targets.set(windowsTarget, windowsRunner)
   return targets
 }
 
