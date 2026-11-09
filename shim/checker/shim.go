@@ -1116,7 +1116,6 @@ func RegisterAfterCheckSourceFileCallback(cb func(context.Context, checker.Progr
 func RegisterExpressionCheckedCallback(cb func(*checker.Checker, *ast.Node, checker.CheckMode, *checker.Type))
 type Relater = checker.Relater
 type Relation = checker.Relation
-type RelationCacheSizes = checker.RelationCacheSizes
 type RelationComparisonResult = checker.RelationComparisonResult
 const RelationComparisonResultComplexityOverflow = checker.RelationComparisonResultComplexityOverflow
 const RelationComparisonResultFailed = checker.RelationComparisonResultFailed
