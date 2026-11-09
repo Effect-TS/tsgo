@@ -19,6 +19,10 @@ Flag:
 
 A fixable whose match holds a flow edits it with `ReplacePipingFlowPrefix`, `ReplacePipingFlowTransformation`, `CollapsePipingFlowTransformations` or `RemoveTrailingPipingFlowTransformation`. These keep the steps around the edit and every spelling of the input. `tracker.ReplaceNode` or raw text edits on step nodes are right only when no flow edit expresses the change, or when a flow edit would lose comments the fix must keep; the code says which. If no fix can be written well, the rule ships as a diagnostic only.
 
+## Fix work stays in the fixable
+
+A rule's analysis computes only what the diagnostic needs: whether to report, and where. Its match may also return what detection already collected along the way (the flow, the transformation, the callback, the branch nodes) so the fixable can find what to rewrite without searching again. It must not compute anything new just for the fix: scans of a callback body, fresh names, whether the rewrite is safe, replacement nodes. That work runs only when the fixable asks for it, for the match in the requested span. Analysis runs on every check of every file; fix code runs only when the editor asks for actions at that position. Flag match fields and `Analyze…` work that exist only to serve the fix. When the fix cannot be made safely, the fixable returns no action and the diagnostic stays.
+
 ## Primitive gaps go to the user
 
 A **primitive gap** is something flows or the rewriter cannot express yet: a missing step kind, a nil input node, an edit that drops arguments, a scan more than one rule would need. When an implementation hits one, the agent stops and raises it with the user before writing a workaround. It says what is missing, which rules would use it, and whether it looks like a parser bug or a new shared helper. The user decides whether to fix the parser, add the helper, or accept a local workaround.
