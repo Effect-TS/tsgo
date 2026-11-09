@@ -79,7 +79,7 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
             if args.len() != 1 || !tp.is_node_reference_to_effect_module_api(callee, "flatMap") {
                 continue;
             }
-            let Some(parsed) = tp.parse_returning_dispatch(*args.at(0)) else {
+            let Some(parsed) = tp.parse_returning_dispatch_exported(*args.at(0)) else {
                 continue;
             };
             let dispatch = parsed.dispatch();

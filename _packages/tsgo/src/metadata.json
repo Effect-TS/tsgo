@@ -93,6 +93,7 @@
         "nonObjectEffectServiceType": "error",
         "obsoleteMatchImport": "warning",
         "obsoleteSchemaImport": "warning",
+        "onExitFailureToOnError": "suggestion",
         "optionMatchToFromOption": "suggestion",
         "outdatedApi": "warning",
         "overriddenSchemaConstructor": "error",
@@ -196,6 +197,7 @@
         "nonObjectEffectServiceType": "error",
         "obsoleteMatchImport": "error",
         "obsoleteSchemaImport": "error",
+        "onExitFailureToOnError": "error",
         "optionMatchToFromOption": "error",
         "outdatedApi": "error",
         "overriddenSchemaConstructor": "error",
@@ -369,6 +371,7 @@
         "multipleCatchTag": "warning",
         "nestedEffectGenYield": "warning",
         "newSchemaClass": "warning",
+        "onExitFailureToOnError": "warning",
         "optionMatchToFromOption": "warning",
         "preferBarrelImport": "warning",
         "preferNamespaceImport": "warning",
@@ -3182,6 +3185,30 @@
             "start": 135,
             "end": 139,
             "text": "This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "onExitFailureToOnError",
+      "group": "style",
+      "description": "Suggests Effect.onError when an Effect.onExit callback only acts on failure",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377184
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Exit } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(\n  Effect.onExit((exit) =\u003e\n    Exit.isFailure(exit)\n      ? Effect.logError(\"failed\", { cause: exit.cause })\n      : Effect.void\n  )\n)\n",
+        "diagnostics": [
+          {
+            "start": 109,
+            "end": 122,
+            "text": "Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)"
           }
         ]
       }

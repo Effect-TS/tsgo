@@ -127,7 +127,7 @@ pub(crate) fn analyze_catch_all_tag_dispatch_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
 ) -> Option<(String, Vec<CatchAllTagDispatchBranch>, bool)> {
-    let returning = tp.parse_returning_dispatch(handler_node)?;
+    let returning = tp.parse_returning_dispatch_exported(handler_node)?;
     let dispatch: &ResultDispatch = returning.dispatch();
     if returning.params().len() != 1 || dispatch.branches().len() == 0 {
         return None;

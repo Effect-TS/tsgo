@@ -184,20 +184,41 @@ impl TypeParser<'_> {
         Some(ResultDispatch { node, branches: syntax.branches, fallback: syntax.fallback })
     }
 
-    // go: internal/typeparser/returning_dispatch.go:123 TypeParser.ParseReturningDispatch 1e02a195cb21f4d7
+    // go: internal/typeparser/returning_dispatch.go:123 TypeParser.ParseReturningDispatch 1abe6442b051ce79
     // ParseReturningDispatch decodes an arrow function or function expression into
     // source-ordered result branches and an optional fallback. It recognizes
     // conditional expressions, returned conditional expressions, if/else-if,
     // sequential returning if statements, and returning switch cases.
-    pub fn parse_returning_dispatch(
+    //
+    // Rust: `_exported` tells it apart from `parseReturningDispatch` (porting/PORTING.md, "Naming").
+    pub fn parse_returning_dispatch_exported(
         &mut self,
         node: impl Into<Option<P<Node>>>,
     ) -> Option<ParsedReturningDispatch> {
-        let node = unwrap_result_dispatch_expression(node.into())?;
+        self.parse_returning_dispatch(node.into(), false)
+    }
+
+    // go: internal/typeparser/returning_dispatch.go:127 TypeParser.ParseReturningDispatchAllowingTypeParameters a2e7f2d916e64fe1
+    pub fn parse_returning_dispatch_allowing_type_parameters(
+        &mut self,
+        node: impl Into<Option<P<Node>>>,
+    ) -> Option<ParsedReturningDispatch> {
+        self.parse_returning_dispatch(node.into(), true)
+    }
+
+    // go: internal/typeparser/returning_dispatch.go:131 TypeParser.parseReturningDispatch b78f716190773995
+    fn parse_returning_dispatch(
+        &mut self,
+        node: Option<P<Node>>,
+        allow_type_parameters: bool,
+    ) -> Option<ParsedReturningDispatch> {
+        let node = unwrap_result_dispatch_expression(node)?;
         if node.kind() != Kind::ArrowFunction && node.kind() != Kind::FunctionExpression {
             return None;
         }
-        if get_function_like_type_parameters(node).is_some_and(|tps| !tps.nodes().is_empty()) {
+        if !allow_type_parameters
+            && get_function_like_type_parameters(node).is_some_and(|tps| !tps.nodes().is_empty())
+        {
             return None;
         }
         let body = get_function_like_body(node)?;
@@ -208,7 +229,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/returning_dispatch.go:154 parseResultDispatchBody 17575a655a8d668c
+// go: internal/typeparser/returning_dispatch.go:162 parseResultDispatchBody 17575a655a8d668c
 pub(crate) fn parse_result_dispatch_body(node: Option<P<Node>>) -> Option<ResultDispatchSyntax> {
     let node = unwrap_result_dispatch_expression(node)?;
     match node.kind() {
@@ -218,7 +239,7 @@ pub(crate) fn parse_result_dispatch_body(node: Option<P<Node>>) -> Option<Result
     }
 }
 
-// go: internal/typeparser/returning_dispatch.go:169 parseResultDispatchBlock 2b7b8f624490bbef
+// go: internal/typeparser/returning_dispatch.go:177 parseResultDispatchBlock 2b7b8f624490bbef
 pub(crate) fn parse_result_dispatch_block(node: Option<P<Node>>) -> Option<ResultDispatchSyntax> {
     let node = node?;
     if node.kind() != Kind::Block {
@@ -242,7 +263,7 @@ pub(crate) fn parse_result_dispatch_block(node: Option<P<Node>>) -> Option<Resul
     parse_result_dispatch_sequential_ifs(statements)
 }
 
-// go: internal/typeparser/returning_dispatch.go:195 parseResultDispatchSwitch 389a701a1889c26d
+// go: internal/typeparser/returning_dispatch.go:203 parseResultDispatchSwitch 135ca07d1b899b73
 pub(crate) fn parse_result_dispatch_switch(node: Option<P<Node>>) -> Option<ResultDispatchSyntax> {
     let node = node?;
     if node.kind() != Kind::SwitchStatement {
@@ -254,22 +275,20 @@ pub(crate) fn parse_result_dispatch_switch(node: Option<P<Node>>) -> Option<Resu
     }
     let clauses = statement.case_block().as_case_block().clauses().nodes();
 
-    let mut dispatch = ResultDispatchSyntax::default();
-    for (index, &clause_node) in clauses.iter().enumerate() {
+    let fallback = switch_default_clause_result(clauses)?;
+    let mut dispatch = ResultDispatchSyntax { fallback, ..Default::default() };
+    for &clause_node in clauses {
         if clause_node.kind() != Kind::CaseClause && clause_node.kind() != Kind::DefaultClause {
             return None;
         }
-        let statements = clause_node.statement_list()?;
-        let result = single_result_dispatch_return(statements.nodes())?;
-
         if clause_node.kind() == Kind::DefaultClause {
-            if index != clauses.len() - 1 || dispatch.fallback.is_some() {
-                return None;
-            }
-            dispatch.fallback = Some(result);
             continue;
         }
-        let case_expression = clause_node.expression()?;
+        let result = switch_clause_result(clause_node);
+        let case_expression = clause_node.expression();
+        let (Some(result), Some(case_expression)) = (result, case_expression) else {
+            return None;
+        };
         dispatch.branches.push(ResultDispatchBranch {
             condition: new_dispatch_condition(
                 DispatchConditionKind::SwitchCase,
@@ -286,7 +305,31 @@ pub(crate) fn parse_result_dispatch_switch(node: Option<P<Node>>) -> Option<Resu
     Some(dispatch)
 }
 
-// go: internal/typeparser/returning_dispatch.go:244 parseResultDispatchConditional bd906754639d6bc3
+// go: internal/typeparser/returning_dispatch.go:245 switchDefaultClauseResult f063df8bc23d98be
+// Rust: Go's `(*ast.Node, bool)` is `Option<Option<P<Node>>>`: `None` for Go's `false`, the inner option for the
+// (possibly nil) fallback.
+#[expect(clippy::option_option, reason = "Go's (node, ok) with a node that may be nil when ok")]
+pub(crate) fn switch_default_clause_result(clauses: &[P<Node>]) -> Option<Option<P<Node>>> {
+    let mut fallback: Option<P<Node>> = None;
+    for &clause_node in clauses {
+        if clause_node.kind() != Kind::DefaultClause {
+            continue;
+        }
+        if fallback.is_some() {
+            return None;
+        }
+        fallback = Some(switch_clause_result(clause_node)?);
+    }
+    Some(fallback)
+}
+
+// go: internal/typeparser/returning_dispatch.go:262 switchClauseResult 8773ed21433e7f3e
+pub(crate) fn switch_clause_result(clause_node: P<Node>) -> Option<P<Node>> {
+    let statements = clause_node.statement_list()?;
+    single_result_dispatch_return(statements.nodes())
+}
+
+// go: internal/typeparser/returning_dispatch.go:270 parseResultDispatchConditional bd906754639d6bc3
 pub(crate) fn parse_result_dispatch_conditional(
     node: Option<P<Node>>,
 ) -> Option<ResultDispatchSyntax> {
@@ -331,7 +374,7 @@ pub(crate) fn parse_result_dispatch_conditional(
     Some(dispatch)
 }
 
-// go: internal/typeparser/returning_dispatch.go:280 parseResultDispatchIfElse 454d14d7f989eaba
+// go: internal/typeparser/returning_dispatch.go:306 parseResultDispatchIfElse 454d14d7f989eaba
 pub(crate) fn parse_result_dispatch_if_else(node: Option<P<Node>>) -> Option<ResultDispatchSyntax> {
     let node = node?;
     if node.kind() != Kind::IfStatement {
@@ -372,7 +415,7 @@ pub(crate) fn parse_result_dispatch_if_else(node: Option<P<Node>>) -> Option<Res
     Some(dispatch)
 }
 
-// go: internal/typeparser/returning_dispatch.go:320 parseResultDispatchSequentialIfs 57b271a3c2c211cb
+// go: internal/typeparser/returning_dispatch.go:346 parseResultDispatchSequentialIfs 57b271a3c2c211cb
 pub(crate) fn parse_result_dispatch_sequential_ifs(
     statements: &[P<Node>],
 ) -> Option<ResultDispatchSyntax> {
@@ -413,7 +456,7 @@ pub(crate) fn parse_result_dispatch_sequential_ifs(
     Some(dispatch)
 }
 
-// go: internal/typeparser/returning_dispatch.go:359 newDispatchCondition 5e27c355d7b77a7a
+// go: internal/typeparser/returning_dispatch.go:385 newDispatchCondition 5e27c355d7b77a7a
 pub(crate) fn new_dispatch_condition(
     kind: DispatchConditionKind,
     source: P<Node>,
@@ -424,7 +467,7 @@ pub(crate) fn new_dispatch_condition(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/returning_dispatch.go:368 TypeParser.dispatchConditionTagNodes cf5d4c3dc82a67ed
+    // go: internal/typeparser/returning_dispatch.go:394 TypeParser.dispatchConditionTagNodes cf5d4c3dc82a67ed
     pub(crate) fn dispatch_condition_tag_nodes(
         &mut self,
         condition: DispatchCondition,
@@ -440,7 +483,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/returning_dispatch.go:384 TypeParser.ParseTagMatch c7f123ff6c81f97c
+    // go: internal/typeparser/returning_dispatch.go:410 TypeParser.ParseTagMatch c7f123ff6c81f97c
     // ParseTagMatch decodes a positive `_tag` equality or an Effect
     // Predicate.isTagged call, returning the original subject and tag expressions.
     pub fn parse_tag_match(
@@ -488,7 +531,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/returning_dispatch.go:410 resultDispatchCall 67fc3f4d0e077dd5
+// go: internal/typeparser/returning_dispatch.go:436 resultDispatchCall 67fc3f4d0e077dd5
 // Rust: the call expression node (Go's `*ast.CallExpression`).
 pub(crate) fn result_dispatch_call(node: Option<P<Node>>) -> Option<P<Node>> {
     let node = unwrap_result_dispatch_expression(node)?;
@@ -510,7 +553,7 @@ pub(crate) fn result_dispatch_call(node: Option<P<Node>>) -> Option<P<Node>> {
     Some(node)
 }
 
-// go: internal/typeparser/returning_dispatch.go:429 parseTagEqualityMatch cbbd0719d8ad4283
+// go: internal/typeparser/returning_dispatch.go:455 parseTagEqualityMatch cbbd0719d8ad4283
 pub(crate) fn parse_tag_equality_match(
     node: Option<P<Node>>,
 ) -> (Option<P<Node>>, Option<P<Node>>) {
@@ -535,7 +578,7 @@ pub(crate) fn parse_tag_equality_match(
     (None, None)
 }
 
-// go: internal/typeparser/returning_dispatch.go:449 dispatchTagSubject a55552c1b65ce986
+// go: internal/typeparser/returning_dispatch.go:475 dispatchTagSubject a55552c1b65ce986
 // Rust: Go's `(subject, ok)`; `ok` with a nil subject (an unwrapped expression that is nil) cannot happen, as a
 // property access always has an expression, so the pair is an `Option`.
 pub(crate) fn dispatch_tag_subject(node: Option<P<Node>>) -> Option<P<Node>> {
@@ -550,7 +593,7 @@ pub(crate) fn dispatch_tag_subject(node: Option<P<Node>>) -> Option<P<Node>> {
     unwrap_result_dispatch_expression(Some(access.expression()))
 }
 
-// go: internal/typeparser/returning_dispatch.go:461 singleResultDispatchEmbeddedReturn 067cc501a539c5b0
+// go: internal/typeparser/returning_dispatch.go:487 singleResultDispatchEmbeddedReturn 067cc501a539c5b0
 pub(crate) fn single_result_dispatch_embedded_return(
     statement: Option<P<Node>>,
 ) -> Option<P<Node>> {
@@ -564,7 +607,7 @@ pub(crate) fn single_result_dispatch_embedded_return(
     single_result_dispatch_return(statement.as_block().statements().nodes())
 }
 
-// go: internal/typeparser/returning_dispatch.go:482 singleResultDispatchReturn 0be84e0bcee051a5
+// go: internal/typeparser/returning_dispatch.go:508 singleResultDispatchReturn 0be84e0bcee051a5
 pub(crate) fn single_result_dispatch_return(statements: &[P<Node>]) -> Option<P<Node>> {
     if statements.len() != 1 || statements[0].kind() != Kind::ReturnStatement {
         return None;
@@ -572,7 +615,7 @@ pub(crate) fn single_result_dispatch_return(statements: &[P<Node>]) -> Option<P<
     statements[0].as_return_statement().expression()
 }
 
-// go: internal/typeparser/returning_dispatch.go:493 unwrapResultDispatchExpression 80b0d29f8598b596
+// go: internal/typeparser/returning_dispatch.go:519 unwrapResultDispatchExpression 80b0d29f8598b596
 pub(crate) fn unwrap_result_dispatch_expression(node: Option<P<Node>>) -> Option<P<Node>> {
     let mut node = node;
     while let Some(n) = node {

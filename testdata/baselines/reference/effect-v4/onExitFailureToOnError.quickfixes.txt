@@ -1,0 +1,263 @@
+=== Quick Fix Inventory ===
+
+[D1] (19:3-19:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D2] (29:3-29:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D3] (33:26-33:39) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D4] (40:3-40:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D5] (45:3-45:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D6] (53:3-53:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D7] (58:3-58:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D8] (70:3-70:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D9] (75:3-75:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D10] (80:3-80:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D11] (85:3-85:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D12] (91:3-91:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D13] (96:3-96:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D14] (101:3-101:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D15] (106:3-106:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D16] (111:3-111:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D17] (122:3-122:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D18] (129:3-129:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D19] (141:3-141:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D20] (153:3-153:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D21] (165:3-165:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D22] (170:3-170:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D23] (178:3-178:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D24] (186:3-186:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D25] (194:3-194:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+[D26] (199:3-199:16) TS377184: Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)
+  Fix 0: "Disable onExitFailureToOnError for this line"
+  Fix 1: "Disable onExitFailureToOnError for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D19] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D22] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D25] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default
+
+=== [D26] Fix 0: "Disable onExitFailureToOnError for this line" ===
+skipped by default
+
+=== [D26] Fix 1: "Disable onExitFailureToOnError for entire file" ===
+skipped by default

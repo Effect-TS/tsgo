@@ -2821,6 +2821,11 @@
           "default": "warning",
           "description": "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package"
         },
+        "onExitFailureToOnError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.onError when an Effect.onExit callback only acts on failure"
+        },
         "optionMatchToFromOption": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

@@ -139,6 +139,7 @@ var All = []rule.Rule{
 	MatchEffectToMapBoth,
 	MapMapErrorToMapBoth,
 	FlatMapConditionalToFilterOrFail,
+	OnExitFailureToOnError,
 	OptionMatchToFromOption,
 	ResultMatchToFromResult,
 	SyncToSucceed,
