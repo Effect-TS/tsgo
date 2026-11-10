@@ -215,7 +215,7 @@ func isConditionalRefailPredicate(tp *typeparser.TypeParser, c *checker.Checker,
 
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindTypeOfExpression:
-		return conditionalRefailNodeContainsParameter(tp, c, node, parameterSymbol)
+		return ConditionalRefailNodeContainsParameter(tp, c, node, parameterSymbol)
 	case ast.KindPrefixUnaryExpression:
 		prefix := node.AsPrefixUnaryExpression()
 		return prefix != nil && prefix.Operator == ast.KindExclamationToken && isConditionalRefailPredicate(tp, c, prefix.Operand, parameterSymbol)
@@ -228,21 +228,21 @@ func isConditionalRefailPredicate(tp *typeparser.TypeParser, c *checker.Checker,
 		case ast.KindAmpersandAmpersandToken, ast.KindBarBarToken:
 			return isConditionalRefailPredicate(tp, c, binary.Left, parameterSymbol) || isConditionalRefailPredicate(tp, c, binary.Right, parameterSymbol)
 		case ast.KindInstanceOfKeyword:
-			return conditionalRefailNodeContainsParameter(tp, c, binary.Left, parameterSymbol)
+			return ConditionalRefailNodeContainsParameter(tp, c, binary.Left, parameterSymbol)
 		case ast.KindInKeyword:
-			return conditionalRefailNodeContainsParameter(tp, c, binary.Right, parameterSymbol)
+			return ConditionalRefailNodeContainsParameter(tp, c, binary.Right, parameterSymbol)
 		case ast.KindEqualsEqualsToken, ast.KindEqualsEqualsEqualsToken,
 			ast.KindExclamationEqualsToken, ast.KindExclamationEqualsEqualsToken,
 			ast.KindLessThanToken, ast.KindLessThanEqualsToken,
 			ast.KindGreaterThanToken, ast.KindGreaterThanEqualsToken:
-			return conditionalRefailNodeContainsParameter(tp, c, node, parameterSymbol)
+			return ConditionalRefailNodeContainsParameter(tp, c, node, parameterSymbol)
 		}
 	}
 
 	return false
 }
 
-func conditionalRefailNodeContainsParameter(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, parameterSymbol *ast.Symbol) bool {
+func ConditionalRefailNodeContainsParameter(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, parameterSymbol *ast.Symbol) bool {
 	if node == nil || parameterSymbol == nil {
 		return false
 	}

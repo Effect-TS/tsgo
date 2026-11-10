@@ -22,7 +22,8 @@ var EffectSleepZeroToYieldNowFix = fixable.Fixable{
 
 func runEffectSleepZeroToYieldNowFix(ctx *fixable.Context) []ls.CodeAction {
 	for _, match := range rules.AnalyzeEffectSleepZeroToYieldNow(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
-		if match.EffectModule == nil || (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) {
+		if (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) ||
+			!effectSleepZeroCalledOnEffectModule(ctx.TypeParser, match.Call) {
 			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{
@@ -39,4 +40,15 @@ func runEffectSleepZeroToYieldNowFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 	}
 	return nil
+}
+
+// effectSleepZeroCalledOnEffectModule reports whether the sleep call is written
+// on an imported Effect module, the only spelling the fix rewrites.
+func effectSleepZeroCalledOnEffectModule(tp *typeparser.TypeParser, call *ast.Node) bool {
+	callee := rules.UnwrapZeroDurationExpression(call.AsCallExpression().Expression)
+	if callee.Kind != ast.KindPropertyAccessExpression {
+		return false
+	}
+	receiver := callee.AsPropertyAccessExpression().Expression
+	return rules.IsImportedModuleReceiver(tp, receiver) && tp.IsExpressionEffectModule(rules.UnwrapZeroDurationExpression(receiver))
 }

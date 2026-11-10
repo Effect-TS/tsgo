@@ -32,7 +32,7 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 
-		if match.ExplicitReturn || match.SuccessIsVoid {
+		if match.ExplicitReturn || rules.UnnecessaryEffectGenSuccessIsVoid(ctx.TypeParser, match.YieldedExpression) {
 			// Simple unwrap: delete the prefix and suffix around the yielded expression
 			if action := ctx.NewFixAction(fixable.FixAction{
 				Description: "Remove the Effect.gen, and keep the body",

@@ -31,7 +31,14 @@ func runSchemaUnionOfLiteralsFix(ctx *fixable.Context) []ls.CodeAction {
 		// Capture loop variables for the closure
 		unionCallNode := match.UnionCallNode
 		firstLiteralExpression := match.FirstLiteralExpression
-		allLiteralArgs := match.AllLiteralArgs
+		// Every argument of the union is a Schema.Literal(...) call; the
+		// replacement takes all of their arguments, in order.
+		var allLiteralArgs []*ast.Node
+		for _, arg := range unionCallNode.AsCallExpression().Arguments.Nodes {
+			if literalArgs := arg.AsCallExpression().Arguments; literalArgs != nil {
+				allLiteralArgs = append(allLiteralArgs, literalArgs.Nodes...)
+			}
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with a single Schema.Literal call",

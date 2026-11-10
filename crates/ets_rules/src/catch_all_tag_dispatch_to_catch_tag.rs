@@ -42,15 +42,14 @@ pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|
     },
 });
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:33 CatchAllTagDispatchBranch 6fe15dd4096f1fbe
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:33 CatchAllTagDispatchBranch 3c811f0141133bec
 #[derive(Clone)]
 pub struct CatchAllTagDispatchBranch {
     pub tag: String,
     pub result: P<Node>,
-    pub uses_parameter: bool,
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:39 CatchAllTagDispatchMatch 0e5c00caf0b28b4c
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:38 CatchAllTagDispatchMatch 1cb268ebd7137abb
 #[derive(Clone)]
 pub struct CatchAllTagDispatchMatch {
     pub source_file: P<SourceFile>,
@@ -60,10 +59,13 @@ pub struct CatchAllTagDispatchMatch {
     pub parameter_name: String,
     pub catch_method_name: &'static str,
     pub branches: Vec<CatchAllTagDispatchBranch>,
-    pub can_fix: bool,
+    // Handler is the dispatching handler function.
+    pub handler: P<Node>,
+    // ParameterSymbol is the symbol of the handler's error parameter.
+    pub parameter_symbol: P<Symbol>,
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:50 AnalyzeCatchAllTagDispatchToCatchTag ce281d04e7a98615
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:52 AnalyzeCatchAllTagDispatchToCatchTag 481bdb770357d90f
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), never nil.
 pub fn analyze_catch_all_tag_dispatch_to_catch_tag(
@@ -86,7 +88,7 @@ pub fn analyze_catch_all_tag_dispatch_to_catch_tag(
             else {
                 continue;
             };
-            let Some((parameter_name, branches, can_fix)) =
+            let Some(handler) =
                 analyze_catch_all_tag_dispatch_handler(tp, *transformation.args().at(0))
             else {
                 continue;
@@ -96,17 +98,18 @@ pub fn analyze_catch_all_tag_dispatch_to_catch_tag(
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 callee: transformation.callee(),
                 transformation,
-                parameter_name,
+                parameter_name: handler.parameter_name,
                 catch_method_name: catch_method,
-                branches,
-                can_fix,
+                branches: handler.branches,
+                handler: handler.node,
+                parameter_symbol: handler.parameter_symbol,
             });
         }
     }
     matches
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:81 catchAllTagDispatchMethod 5ddf7f07ba2bfb30
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:83 catchAllTagDispatchMethod 5ddf7f07ba2bfb30
 pub(crate) fn catch_all_tag_dispatch_method(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,
@@ -120,13 +123,21 @@ pub(crate) fn catch_all_tag_dispatch_method(
     None
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:91 analyzeCatchAllTagDispatchHandler b747896c4d1082e0
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:93 catchAllTagDispatchHandler de338dd740c90fb4
+pub(crate) struct CatchAllTagDispatchHandler {
+    node: P<Node>,
+    parameter_name: String,
+    parameter_symbol: P<Symbol>,
+    branches: Vec<CatchAllTagDispatchBranch>,
+}
+
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:100 analyzeCatchAllTagDispatchHandler 8e006950494f0089
 //
-// Rust: Go's `(name, branches, canFix, ok)` result is `Some((name, branches, canFix))` when ok.
+// Rust: Go's `(handler, ok)` result is `Some(handler)` when ok.
 pub(crate) fn analyze_catch_all_tag_dispatch_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
-) -> Option<(String, Vec<CatchAllTagDispatchBranch>, bool)> {
+) -> Option<CatchAllTagDispatchHandler> {
     let returning = tp.parse_returning_dispatch_exported(handler_node)?;
     let dispatch: &ResultDispatch = returning.dispatch();
     if returning.params().len() != 1 || dispatch.branches().len() == 0 {
@@ -158,23 +169,18 @@ pub(crate) fn analyze_catch_all_tag_dispatch_handler(
             return None;
         }
         seen.insert(tag.clone());
-        branches.push(CatchAllTagDispatchBranch {
-            tag,
-            result: branch.result(),
-            uses_parameter: conditional_refail_node_contains_parameter(
-                tp,
-                Some(branch.result()),
-                Some(parameter_symbol),
-            ),
-        });
+        branches.push(CatchAllTagDispatchBranch { tag, result: branch.result() });
     }
     catch_tag_re_fail_parameter(tp, Some(fallback), Some(parameter_symbol))?;
-    let can_fix = returning.node().kind() == Kind::ArrowFunction
-        && !tp.checker().is_symbol_assigned(parameter_symbol);
-    Some((parameter_name.as_identifier().text().to_string(), branches, can_fix))
+    Some(CatchAllTagDispatchHandler {
+        node: returning.node(),
+        parameter_name: parameter_name.as_identifier().text().to_string(),
+        parameter_symbol,
+        branches,
+    })
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:131 literalTaggedUnionTags 931ed3a1363bb4f2
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:145 literalTaggedUnionTags 931ed3a1363bb4f2
 pub(crate) fn literal_tagged_union_tags(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -201,7 +207,7 @@ pub(crate) fn literal_tagged_union_tags(
     if tags.is_empty() { None } else { Some(tags) }
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:157 isBareParameterTagReference 499ac373ad000a8a
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:171 isBareParameterTagReference 499ac373ad000a8a
 pub(crate) fn is_bare_parameter_tag_reference(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

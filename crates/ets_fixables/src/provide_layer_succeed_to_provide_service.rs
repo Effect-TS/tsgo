@@ -18,7 +18,7 @@ pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE_FIX: LazyLock<Fixable> =
         run: run_provide_layer_succeed_to_provide_service_fix,
     });
 
-// go: internal/fixables/provide_layer_succeed_to_provide_service.go:23 runProvideLayerSucceedToProvideServiceFix 9c6dbd5b081e0d01
+// go: internal/fixables/provide_layer_succeed_to_provide_service.go:23 runProvideLayerSucceedToProvideServiceFix 22793ca54ed2c6ff
 //
 // Rust: the match's transformation is never nil (an owned copy), so Go's nil check drops. The implementation node
 // is the inline layer's piping subject, which the rule requires to be set.
@@ -28,6 +28,9 @@ fn run_provide_layer_succeed_to_provide_service_fix(ctx: &mut Context<'_, '_>) -
         ets_rules::analyze_provide_layer_succeed_to_provide_service(&mut ctx.type_parser, Some(sf))
     {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
+            continue;
+        }
+        if ets_rules::has_explicit_type_arguments(Some(&m.layer_transformation)) {
             continue;
         }
         if let Some(action) = ctx.new_fix_action(FixAction {

@@ -42,6 +42,9 @@ type ProvideLayerSucceedToProvideServiceMatch struct {
 	ProvideTransformation *typeparser.PipingFlowTransformation
 	ServiceNode           *ast.Node
 	ImplementationNode    *ast.Node
+	// LayerTransformation is the Layer.succeed or Layer.effect step; the fix
+	// cannot carry its explicit type arguments over.
+	LayerTransformation   *typeparser.PipingFlowTransformation
 	ReplacementMethodName string
 }
 
@@ -59,7 +62,7 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 				continue
 			}
 
-			service, implementation, replacement, ok := inlineSingleServiceLayer(tp, provide.Args().At(0))
+			layer, service, implementation, replacement, ok := inlineSingleServiceLayer(tp, provide.Args().At(0))
 			if !ok || (tp.ServiceTypeAtLocation(service) == nil && tp.ContextTagAtLocation(service) == nil) {
 				continue
 			}
@@ -70,6 +73,7 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 				ProvideTransformation: &provide,
 				ServiceNode:           service,
 				ImplementationNode:    implementation,
+				LayerTransformation:   layer,
 				ReplacementMethodName: replacement,
 			})
 		}
@@ -77,17 +81,16 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 	return matches
 }
 
-func inlineSingleServiceLayer(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, *ast.Node, string, bool) {
+func inlineSingleServiceLayer(tp *typeparser.TypeParser, node *ast.Node) (*typeparser.PipingFlowTransformation, *ast.Node, *ast.Node, string, bool) {
 	node = ast.SkipParentheses(node)
 	flow := tp.LongestPipingFlowAt(node, false)
 	if flow == nil || flow.Node() != node || !flow.MatchesExactly(
 		func(subject typeparser.PipingFlowSubject) bool { return subject.Node() != nil },
 		func(transformation typeparser.PipingFlowTransformation) bool {
-			return transformation.Callee() != nil && transformation.Args().Len() == 1 &&
-				(transformation.TypeArguments() == nil || len(transformation.TypeArguments().Nodes) == 0)
+			return transformation.Callee() != nil && transformation.Args().Len() == 1
 		},
 	) {
-		return nil, nil, "", false
+		return nil, nil, nil, "", false
 	}
 	transformation := flow.Transformations().At(0)
 	replacement := ""
@@ -97,7 +100,7 @@ func inlineSingleServiceLayer(tp *typeparser.TypeParser, node *ast.Node) (*ast.N
 	case tp.IsNodeReferenceToEffectLayerModuleApi(transformation.Callee(), "effect"):
 		replacement = "provideServiceEffect"
 	default:
-		return nil, nil, "", false
+		return nil, nil, nil, "", false
 	}
-	return transformation.Args().At(0), flow.Subject().Node(), replacement, true
+	return &transformation, transformation.Args().At(0), flow.Subject().Node(), replacement, true
 }

@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, CallExpression, Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind, TypeParser};
@@ -33,25 +33,24 @@ pub static ALL_OF_MAP_TO_FOR_EACH: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/all_of_map_to_for_each.go:43 AllOfMapToForEachMatch 6a31c08276b47bac
+// go: internal/rules/all_of_map_to_for_each.go:43 AllOfMapToForEachMatch b3ddbe0f6440e39a
 // AllOfMapToForEachMatch holds the nodes needed by the diagnostic and its fix.
 #[derive(Clone)]
 pub struct AllOfMapToForEachMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
+    // CallNode is the standalone Effect.all call the quick fix rewrites. It is
+    // nil for data-last Effect.all references inside piping flows, which are
+    // diagnostic-only, since the fix would have to restructure the surrounding
+    // pipe.
     pub call_node: Option<P<Node>>,
     pub receiver: P<Node>,
+    // Callback is the argument of the Array#map call.
     pub callback: P<Node>,
     pub options: Option<P<Node>>,
-    pub has_type_arguments: bool,
-    // CanFix reports whether the match is a standalone Effect.all call the
-    // quick fix can rewrite. Data-last Effect.all references inside piping
-    // flows are diagnostic-only, since the fix would have to restructure the
-    // surrounding pipe.
-    pub can_fix: bool,
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:61 AnalyzeAllOfMapToForEach f8945c590573f832
+// go: internal/rules/all_of_map_to_for_each.go:60 AnalyzeAllOfMapToForEach a0cded4af8ecd8d8
 // AnalyzeAllOfMapToForEach finds Effect.all over an effectful Array#map whose
 // receiver is array-like, in both the direct data-first form and the data-last
 // form expressed through piping flows (e.g. pipe(xs.map(f), Effect.all)).
@@ -103,7 +102,6 @@ pub fn analyze_all_of_map_to_for_each(
                 transformation.callee(),
                 map_node,
                 None,
-                false,
             ) {
                 matches.push(m);
             }
@@ -116,7 +114,7 @@ pub fn analyze_all_of_map_to_for_each(
     matches
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:104 transformationApplicationNode 1ea2e5b5ff68153d
+// go: internal/rules/all_of_map_to_for_each.go:103 transformationApplicationNode 1ea2e5b5ff68153d
 // transformationApplicationNode returns the call expression that applies the
 // transformation's callee, when that application is represented in the tree.
 // Bare pipeable references have no application of their own and return nil.
@@ -135,7 +133,7 @@ pub(crate) fn transformation_application_node(
     Some(parent)
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:116 analyzeAllOfMapToForEachCall 9e8b1e4ff76cd8be
+// go: internal/rules/all_of_map_to_for_each.go:115 analyzeAllOfMapToForEachCall 75400ef36a5b32c1
 pub(crate) fn analyze_all_of_map_to_for_each_call(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -165,14 +163,12 @@ pub(crate) fn analyze_all_of_map_to_for_each_call(
         all_call.expression(),
         Some(args[0]),
         options,
-        has_call_type_arguments(Some(all_call)),
     )?;
     m.call_node = Some(node);
-    m.can_fix = true;
     Some(m)
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:143 analyzeAllOfMapToForEachReceiver 596489fb76dd3f98
+// go: internal/rules/all_of_map_to_for_each.go:141 analyzeAllOfMapToForEachReceiver 10f0382805f3d508
 // analyzeAllOfMapToForEachReceiver validates the xs.map(f) shape feeding an
 // Effect.all node and assembles the match.
 pub(crate) fn analyze_all_of_map_to_for_each_receiver(
@@ -181,7 +177,6 @@ pub(crate) fn analyze_all_of_map_to_for_each_receiver(
     all_node: P<Node>,
     map_node: Option<P<Node>>,
     options: Option<P<Node>>,
-    all_type_arguments: bool,
 ) -> Option<AllOfMapToForEachMatch> {
     let map_node = ast::skip_parentheses(map_node?);
     if map_node.kind() != Kind::CallExpression {
@@ -223,12 +218,10 @@ pub(crate) fn analyze_all_of_map_to_for_each_receiver(
         receiver: map_access.expression(),
         callback,
         options,
-        has_type_arguments: all_type_arguments || has_call_type_arguments(Some(map_call)),
-        can_fix: false,
     })
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:192 containsSpreadElement 5bbb24f7dcb59299
+// go: internal/rules/all_of_map_to_for_each.go:188 containsSpreadElement 5bbb24f7dcb59299
 pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
     for node in nodes {
         if node.kind() == Kind::SpreadElement {
@@ -236,9 +229,4 @@ pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
         }
     }
     false
-}
-
-// go: internal/rules/all_of_map_to_for_each.go:201 hasCallTypeArguments 26b3e9eb8b75eeae
-pub(crate) fn has_call_type_arguments(call: Option<&CallExpression>) -> bool {
-    call.is_some_and(|call| call.type_arguments().is_some_and(|t| !t.nodes().is_empty()))
 }

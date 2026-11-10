@@ -34,15 +34,11 @@ var ServiceNotAsClass = rule.Rule{
 // ServiceNotAsClassMatch holds the data needed by both the diagnostic and the quickfix.
 type ServiceNotAsClassMatch struct {
 	SourceFile     *ast.SourceFile
-	Location       core.TextRange    // Error range for the call expression
-	SuggestedUsage string            // The full suggested class declaration string for the diagnostic message
-	CallExprNode   *ast.Node         // The call expression node (ServiceMap.Service<...>(...) or Context.Service<...>(...))
-	VariableName   string            // The variable/class name
-	TypeArgsText   string            // Text of original type arguments (e.g. "ConfigService")
-	ArgsText       string            // Text of original call arguments (e.g. `"Config"`)
-	ServiceModule  string            // Service namespace identifier (e.g. "ServiceMap" or "Context")
-	TargetNode     *ast.Node         // The node to replace (variable statement or declaration list)
-	ModifierNodes  *ast.ModifierList // Modifiers from the variable statement (e.g. export)
+	Location       core.TextRange // Error range for the call expression
+	SuggestedUsage string         // The full suggested class declaration string for the diagnostic message
+	CallExprNode   *ast.Node      // The call expression node (ServiceMap.Service<...>(...) or Context.Service<...>(...)), the initializer of a const declaration
+	VariableName   string         // The variable/class name
+	ServiceModule  string         // Service namespace identifier (e.g. "ServiceMap" or "Context")
 }
 
 // AnalyzeServiceNotAsClass finds all const variable declarations using the v4 service constructor
@@ -142,28 +138,13 @@ func checkServiceNotAsClass(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 		suggestedUsage = fmt.Sprintf("class %s extends %s.Service<%s, %s>() {}", variableName, serviceModule, variableName, typeArgsText)
 	}
 
-	// Determine target node and modifiers
-	variableStatement := declList.Parent
-	var targetNode *ast.Node
-	var modifierNodes *ast.ModifierList
-	if variableStatement != nil && variableStatement.Kind == ast.KindVariableStatement {
-		targetNode = variableStatement
-		modifierNodes = variableStatement.Modifiers()
-	} else {
-		targetNode = declList
-	}
-
 	return &ServiceNotAsClassMatch{
 		SourceFile:     sf,
 		Location:       scanner.GetErrorRangeForNode(sf, varDecl.Initializer),
 		SuggestedUsage: suggestedUsage,
 		CallExprNode:   varDecl.Initializer,
 		VariableName:   variableName,
-		TypeArgsText:   typeArgsText,
-		ArgsText:       argsText,
 		ServiceModule:  serviceModule,
-		TargetNode:     targetNode,
-		ModifierNodes:  modifierNodes,
 	}
 }
 

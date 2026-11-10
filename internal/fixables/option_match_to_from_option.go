@@ -25,14 +25,16 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if !match.CanFix ||
+		// A function expression thunk can read its own this or arguments, which
+		// the arrow function the fix writes would not bind.
+		if match.FailureHandler != nil && match.FailureHandler.Kind != ast.KindArrowFunction ||
 			match.Transformation == nil && (match.ReplacementNode == nil || match.OptionNode == nil) {
 			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.fromOption",
 			Run: func(tracker *rewriter.Tracker) {
-				callee, arguments := buildFromOptionReplacement(tracker, ctx.SourceFile, match)
+				callee, arguments := buildFromOptionReplacement(tracker, ctx.TypeParser, ctx.SourceFile, match)
 				if callee == nil {
 					return
 				}
@@ -59,10 +61,11 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildFromOptionReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.OptionMatchToFromOptionMatch) (*ast.Node, *ast.NodeList) {
+func buildFromOptionReplacement(tracker *rewriter.Tracker, tp *typeparser.TypeParser, sf *ast.SourceFile, match rules.OptionMatchToFromOptionMatch) (*ast.Node, *ast.NodeList) {
 	fromOption := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("fromOption")...)
 
-	if match.DefaultFailure {
+	// Effect.fromOption fails with a new NoSuchElementError by default.
+	if isDefaultNoSuchElementError(tp, match.FailureNode) {
 		return fromOption, nil
 	}
 
@@ -77,4 +80,18 @@ func buildFromOptionReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, m
 			tracker.DeepCloneNode(match.FailureNode),
 		),
 	})
+}
+
+func isDefaultNoSuchElementError(tp *typeparser.TypeParser, node *ast.Node) bool {
+	node = ast.SkipParentheses(node)
+	if node == nil || node.Kind != ast.KindNewExpression {
+		return false
+	}
+	expression := node.AsNewExpression()
+	if expression == nil || expression.Expression == nil ||
+		expression.TypeArguments != nil && len(expression.TypeArguments.Nodes) > 0 ||
+		expression.Arguments != nil && len(expression.Arguments.Nodes) > 0 {
+		return false
+	}
+	return tp.IsNodeReferenceToEffectCauseModuleApi(expression.Expression, "NoSuchElementError")
 }

@@ -45,7 +45,7 @@ func runRemoveUnnecessaryEffectGen(ctx *refactor.Context) []ls.CodeAction {
 			// Found a matching unnecessary Effect.gen call at cursor
 			sf := ctx.SourceFile
 
-			if match.ExplicitReturn || match.SuccessIsVoid {
+			if match.ExplicitReturn || rules.UnnecessaryEffectGenSuccessIsVoid(ctx.TypeParser, match.YieldedExpression) {
 				// Simple unwrap: delete the prefix and suffix around the yielded expression
 				action := ctx.NewRefactorAction(refactor.RefactorAction{
 					Description: "Remove unnecessary Effect.gen",

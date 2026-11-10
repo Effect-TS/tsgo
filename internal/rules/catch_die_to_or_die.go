@@ -40,11 +40,10 @@ var CatchDieToOrDie = rule.Rule{
 
 // CatchDieToOrDieMatch holds the nodes needed by the diagnostic and fix.
 type CatchDieToOrDieMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange
-	Transformation   *typeparser.PipingFlowTransformation
-	CatchMethodName  string
-	HasTypeArguments bool
+	SourceFile      *ast.SourceFile
+	Location        core.TextRange
+	Transformation  *typeparser.PipingFlowTransformation
+	CatchMethodName string
 }
 
 // AnalyzeCatchDieToOrDie finds Effect.catch/catchAll transformations whose
@@ -71,11 +70,10 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 			inputEffect := tp.StrictEffectType(flow.TransformationInputType(i))
 			if inputEffect != nil && inputEffect.E() != nil && inputEffect.E().Flags()&checker.TypeFlagsNever == 0 {
 				matches = append(matches, CatchDieToOrDieMatch{
-					SourceFile:       sf,
-					Location:         scanner.GetErrorRangeForNode(sf, callee),
-					Transformation:   &transformation,
-					CatchMethodName:  methodName,
-					HasTypeArguments: hasExplicitTypeArguments(&transformation),
+					SourceFile:      sf,
+					Location:        scanner.GetErrorRangeForNode(sf, callee),
+					Transformation:  &transformation,
+					CatchMethodName: methodName,
 				})
 			}
 		}

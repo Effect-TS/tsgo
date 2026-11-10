@@ -18,7 +18,7 @@ pub static SCHEMA_STRUCT_WITH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_schema_struct_with_tag_fix,
 });
 
-// go: internal/fixables/schema_struct_with_tag.go:21 runSchemaStructWithTagFix 7ce68f499b969426
+// go: internal/fixables/schema_struct_with_tag.go:21 runSchemaStructWithTagFix 3294ded6455f4629
 fn run_schema_struct_with_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -29,9 +29,27 @@ fn run_schema_struct_with_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         }
 
         // Capture loop variables for the closure
-        let tag_value = m.tag_value;
-        let other_properties = m.other_properties;
         let call_node = m.call_node;
+        let tag_value = m
+            .tag_property
+            .as_property_assignment()
+            .initializer()
+            .as_call_expression()
+            .arguments()
+            .nodes()[0]
+            .text()
+            .to_string();
+        // Every property but _tag moves to the TaggedStruct fields.
+        let mut other_properties = Vec::new();
+        for &prop in call_node.as_call_expression().arguments().nodes()[0]
+            .as_object_literal_expression()
+            .properties()
+            .nodes()
+        {
+            if prop != m.tag_property {
+                other_properties.push(prop);
+            }
+        }
 
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Rewrite as Schema.TaggedStruct".to_string(),

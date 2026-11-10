@@ -19,7 +19,7 @@ pub static UNNECESSARY_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_unnecessary_effect_gen_fix,
 });
 
-// go: internal/fixables/unnecessary_effect_gen.go:22 runUnnecessaryEffectGenFix 0afb6a3402c36b61
+// go: internal/fixables/unnecessary_effect_gen.go:22 runUnnecessaryEffectGenFix 10cff8ee7b532a11
 fn run_unnecessary_effect_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -32,7 +32,12 @@ fn run_unnecessary_effect_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
 
         let call_node = m.call_node;
         let yielded_expression = m.yielded_expression;
-        if m.explicit_return || m.success_is_void {
+        if m.explicit_return
+            || ets_rules::unnecessary_effect_gen_success_is_void(
+                &mut ctx.type_parser,
+                yielded_expression,
+            )
+        {
             // Simple unwrap: delete the prefix and suffix around the yielded expression
             if let Some(action) = ctx.new_fix_action(FixAction {
                 description: "Remove the Effect.gen, and keep the body".to_string(),

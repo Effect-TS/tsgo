@@ -24,7 +24,7 @@ func runCatchDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.Transformation == nil || match.HasTypeArguments {
+		if match.Transformation == nil || rules.HasExplicitTypeArguments(match.Transformation) {
 			continue
 		}
 

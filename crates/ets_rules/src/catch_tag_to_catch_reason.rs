@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile, Symbol, SymbolFlags};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile, Symbol};
 use ets_shim::checker::{LiteralValue, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
@@ -15,7 +15,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_REASON_TAG_INSIDE_EFFECT_1_HAND_ROLLS_REASON_DISPATCH_USE_EFFECT_CATCH_REASON_OR_EFFECT_CATCH_REASONS_WHICH_RE_FAIL_UNMATCHED_REASONS_AUTOMATICALLY_EFFECT_CATCH_TAG_TO_CATCH_REASON;
 
-// go: internal/rules/catch_tag_to_catch_reason.go:16 CatchTagToCatchReason c4ab7d33fe04fb61
+// go: internal/rules/catch_tag_to_catch_reason.go:14 CatchTagToCatchReason c4ab7d33fe04fb61
 pub static CATCH_TAG_TO_CATCH_REASON: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "catchTagToCatchReason",
     group: "style",
@@ -41,16 +41,17 @@ pub static CATCH_TAG_TO_CATCH_REASON: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_tag_to_catch_reason.go:35 CatchTagToCatchReasonBranch 0633f280e89b4084
+// go: internal/rules/catch_tag_to_catch_reason.go:33 CatchTagToCatchReasonBranch 8f788cc021ea7613
 #[derive(Clone, Default)]
 pub struct CatchTagToCatchReasonBranch {
     pub reason_tag: String,
     pub result: Option<P<Node>>,
+    // UsesParameter reports whether Result reads the caught error parameter;
+    // the parameter-use scan that validates the handler collects it.
     pub uses_parameter: bool,
-    pub reason_parameter_name: String,
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:42 CatchTagToCatchReasonMatch d945e2934cf07c77
+// go: internal/rules/catch_tag_to_catch_reason.go:41 CatchTagToCatchReasonMatch 8cc25c606f1afca2
 #[derive(Clone)]
 pub struct CatchTagToCatchReasonMatch {
     pub source_file: P<SourceFile>,
@@ -61,18 +62,22 @@ pub struct CatchTagToCatchReasonMatch {
     pub parameter_name: String,
     pub catch_method_name: &'static str,
     pub branches: Vec<CatchTagToCatchReasonBranch>,
-    pub can_fix: bool,
+    // Handler is the dispatching handler function.
+    pub handler: P<Node>,
+    // ParameterSymbol is the symbol of the handler's error parameter.
+    pub parameter_symbol: P<Symbol>,
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:54 catchTagToCatchReasonHandler 32f593d30b39c520
+// go: internal/rules/catch_tag_to_catch_reason.go:56 catchTagToCatchReasonHandler 4bd89eb2aa856d04
 #[derive(Clone)]
 pub(crate) struct CatchTagToCatchReasonHandler {
+    node: P<Node>,
     parameter_name: String,
+    parameter_symbol: P<Symbol>,
     branches: Vec<CatchTagToCatchReasonBranch>,
-    can_fix: bool,
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:62 AnalyzeCatchTagToCatchReason 7572b0837add8d47
+// go: internal/rules/catch_tag_to_catch_reason.go:65 AnalyzeCatchTagToCatchReason 7572b0837add8d47
 // AnalyzeCatchTagToCatchReason finds canonical reason-tag dispatch inside exact
 // Effect.catchTag and Effect.catchTags transformations.
 //
@@ -106,7 +111,7 @@ pub fn analyze_catch_tag_to_catch_reason(
     matches
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:92 analyzeCatchTagTransformation 8d291c7e7d856fb5
+// go: internal/rules/catch_tag_to_catch_reason.go:95 analyzeCatchTagTransformation e88dbd76e82ba0c2
 pub(crate) fn analyze_catch_tag_transformation(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -132,11 +137,12 @@ pub(crate) fn analyze_catch_tag_transformation(
         parameter_name: handler.parameter_name,
         catch_method_name: "catchTag",
         branches: handler.branches,
-        can_fix: handler.can_fix,
+        handler: handler.node,
+        parameter_symbol: handler.parameter_symbol,
     })
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:125 analyzeCatchTagsTransformation a05c4d7242c19882
+// go: internal/rules/catch_tag_to_catch_reason.go:129 analyzeCatchTagsTransformation f082f7ae4a43ef47
 pub(crate) fn analyze_catch_tags_transformation(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -180,11 +186,12 @@ pub(crate) fn analyze_catch_tags_transformation(
         parameter_name: candidate.parameter_name,
         catch_method_name: "catchTags",
         branches: candidate.branches,
-        can_fix: false,
+        handler: candidate.node,
+        parameter_symbol: candidate.parameter_symbol,
     })
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:180 analyzeCatchTagToCatchReasonHandler 676809ae6a62a973
+// go: internal/rules/catch_tag_to_catch_reason.go:185 analyzeCatchTagToCatchReasonHandler 82b61415516d41f9
 pub(crate) fn analyze_catch_tag_to_catch_reason_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
@@ -259,23 +266,17 @@ pub(crate) fn analyze_catch_tag_to_catch_reason_handler(
     )?;
     for (i, branch) in branches.iter_mut().enumerate() {
         branch.uses_parameter = branch_parameter_uses[i];
-        if branch.uses_parameter {
-            branch.reason_parameter_name = unique_catch_reason_parameter_name(
-                tp,
-                branch.result.expect("a branch has a result"),
-            );
-        }
     }
 
     Some(CatchTagToCatchReasonHandler {
+        node: handler_node,
         parameter_name: parameter_name.as_identifier().text().to_string(),
+        parameter_symbol,
         branches,
-        can_fix: handler_node.kind() == Kind::ArrowFunction
-            && !tp.checker().is_symbol_assigned(parameter_symbol),
     })
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:248 catchReasonLiteralTags 90b8883133940cee
+// go: internal/rules/catch_tag_to_catch_reason.go:251 catchReasonLiteralTags 90b8883133940cee
 pub(crate) fn catch_reason_literal_tags(
     tp: &mut TypeParser<'_>,
     parameter_name: P<Node>,
@@ -309,7 +310,7 @@ pub(crate) fn catch_reason_literal_tags(
     if tags.is_empty() { None } else { Some(tags) }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:285 catchReasonTagReference 41f7c220b804fe84
+// go: internal/rules/catch_tag_to_catch_reason.go:288 catchReasonTagReference 41f7c220b804fe84
 pub(crate) fn catch_reason_tag_reference(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
@@ -332,7 +333,7 @@ pub(crate) fn catch_reason_tag_reference(
     Some(root)
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:301 catchTagReFailParameter d4bec453f20f8e56
+// go: internal/rules/catch_tag_to_catch_reason.go:304 catchTagReFailParameter d4bec453f20f8e56
 pub(crate) fn catch_tag_re_fail_parameter(
     tp: &mut TypeParser<'_>,
     expression: Option<P<Node>>,
@@ -357,7 +358,7 @@ pub(crate) fn catch_tag_re_fail_parameter(
     None
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:319 validateCatchTagParameterUses 84d1c31cf7f6c690
+// go: internal/rules/catch_tag_to_catch_reason.go:322 validateCatchTagParameterUses 84d1c31cf7f6c690
 //
 // Rust: Go's `(uses, valid)` result is `Some(uses)` when valid.
 pub(crate) fn validate_catch_tag_parameter_uses(
@@ -415,7 +416,7 @@ pub(crate) fn validate_catch_tag_parameter_uses(
     if valid { Some(branch_uses) } else { None }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:362 catchReasonRecoveryBranchIndex f8e06d3875c7560a
+// go: internal/rules/catch_tag_to_catch_reason.go:365 catchReasonRecoveryBranchIndex f8e06d3875c7560a
 pub(crate) fn catch_reason_recovery_branch_index(
     node: P<Node>,
     branches: &[CatchTagToCatchReasonBranch],
@@ -431,35 +432,12 @@ pub(crate) fn catch_reason_recovery_branch_index(
     -1
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:372 uniqueCatchReasonParameterName ee0886775d3e2d0a
-pub(crate) fn unique_catch_reason_parameter_name(
-    tp: &mut TypeParser<'_>,
-    location: P<Node>,
-) -> String {
-    let mut used: FxHashSet<String> = FxHashSet::default();
-    let c = tp.checker();
-    for symbol in c.get_symbols_in_scope_exported(location, SymbolFlags::Value) {
-        used.insert(c.symbol_to_string_exported(symbol));
-    }
-    let mut i: i64 = -1;
-    loop {
-        let mut name = "_".to_string();
-        if i >= 0 {
-            name = format!("_{i}");
-        }
-        if !used.contains(&name) {
-            return name;
-        }
-        i += 1;
-    }
-}
-
-// go: internal/rules/catch_tag_to_catch_reason.go:388 isEffectExpression b7a91be637846585
+// go: internal/rules/catch_tag_to_catch_reason.go:375 isEffectExpression b7a91be637846585
 pub(crate) fn is_effect_expression(tp: &mut TypeParser<'_>, expression: Option<P<Node>>) -> bool {
     tp.effect_type_at_location(expression).is_some()
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:392 catchTagsPropertyName d37709e4bd52b4db
+// go: internal/rules/catch_tag_to_catch_reason.go:379 catchTagsPropertyName d37709e4bd52b4db
 pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> {
     let name = name?;
     match name.kind() {
@@ -469,7 +447,7 @@ pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> 
     }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:406 sameCatchReasonSymbol 8011d80abd7bf5f0
+// go: internal/rules/catch_tag_to_catch_reason.go:393 sameCatchReasonSymbol 8011d80abd7bf5f0
 pub(crate) fn same_catch_reason_symbol(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

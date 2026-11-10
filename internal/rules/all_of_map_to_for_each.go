@@ -41,18 +41,17 @@ var AllOfMapToForEach = rule.Rule{
 
 // AllOfMapToForEachMatch holds the nodes needed by the diagnostic and its fix.
 type AllOfMapToForEachMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange
-	CallNode         *ast.Node
-	Receiver         *ast.Node
-	Callback         *ast.Node
-	Options          *ast.Node
-	HasTypeArguments bool
-	// CanFix reports whether the match is a standalone Effect.all call the
-	// quick fix can rewrite. Data-last Effect.all references inside piping
-	// flows are diagnostic-only, since the fix would have to restructure the
-	// surrounding pipe.
-	CanFix bool
+	SourceFile *ast.SourceFile
+	Location   core.TextRange
+	// CallNode is the standalone Effect.all call the quick fix rewrites. It is
+	// nil for data-last Effect.all references inside piping flows, which are
+	// diagnostic-only, since the fix would have to restructure the surrounding
+	// pipe.
+	CallNode *ast.Node
+	Receiver *ast.Node
+	// Callback is the argument of the Array#map call.
+	Callback *ast.Node
+	Options  *ast.Node
 }
 
 // AnalyzeAllOfMapToForEach finds Effect.all over an effectful Array#map whose
@@ -86,7 +85,7 @@ func AnalyzeAllOfMapToForEach(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		for _, sequence := range sequences.All() {
 			transformation := flow.Transformations().At(sequence.Start() + 1)
 			mapNode := transformationApplicationNode(new(flow.Transformations().At(sequence.Start())))
-			if match, ok := analyzeAllOfMapToForEachReceiver(tp, c, sf, transformation.Callee(), mapNode, nil, false); ok {
+			if match, ok := analyzeAllOfMapToForEachReceiver(tp, c, sf, transformation.Callee(), mapNode, nil); ok {
 				matches = append(matches, match)
 			}
 		}
@@ -129,12 +128,11 @@ func analyzeAllOfMapToForEachCall(tp *typeparser.TypeParser, c *checker.Checker,
 	if len(allCall.Arguments.Nodes) == 2 {
 		options = allCall.Arguments.Nodes[1]
 	}
-	match, ok := analyzeAllOfMapToForEachReceiver(tp, c, sf, allCall.Expression, allCall.Arguments.Nodes[0], options, hasCallTypeArguments(allCall))
+	match, ok := analyzeAllOfMapToForEachReceiver(tp, c, sf, allCall.Expression, allCall.Arguments.Nodes[0], options)
 	if !ok {
 		return AllOfMapToForEachMatch{}, false
 	}
 	match.CallNode = node
-	match.CanFix = true
 	return match, true
 }
 
@@ -147,7 +145,6 @@ func analyzeAllOfMapToForEachReceiver(
 	allNode *ast.Node,
 	mapNode *ast.Node,
 	options *ast.Node,
-	allTypeArguments bool,
 ) (AllOfMapToForEachMatch, bool) {
 	mapNode = ast.SkipParentheses(mapNode)
 	if mapNode == nil || mapNode.Kind != ast.KindCallExpression {
@@ -181,12 +178,11 @@ func analyzeAllOfMapToForEachReceiver(
 	}
 
 	return AllOfMapToForEachMatch{
-		SourceFile:       sf,
-		Location:         scanner.GetErrorRangeForNode(sf, allNode),
-		Receiver:         mapAccess.Expression,
-		Callback:         callback,
-		Options:          options,
-		HasTypeArguments: allTypeArguments || hasCallTypeArguments(mapCall),
+		SourceFile: sf,
+		Location:   scanner.GetErrorRangeForNode(sf, allNode),
+		Receiver:   mapAccess.Expression,
+		Callback:   callback,
+		Options:    options,
 	}, true
 }
 func containsSpreadElement(nodes []*ast.Node) bool {
@@ -196,8 +192,4 @@ func containsSpreadElement(nodes []*ast.Node) bool {
 		}
 	}
 	return false
-}
-
-func hasCallTypeArguments(call *ast.CallExpression) bool {
-	return call != nil && call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0
 }

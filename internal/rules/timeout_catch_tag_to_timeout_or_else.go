@@ -65,9 +65,12 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 			if tag.Kind != ast.KindStringLiteral || tag.AsStringLiteral().Text != "TimeoutError" {
 				continue
 			}
+			// Type arguments on Effect.timeout map onto timeoutOrElse and
+			// timeoutOption, so only the fix refuses them; those on the later
+			// steps may have no equivalent.
 			hasTypeArgs := false
-			for j := i; j <= end; j++ {
-				hasTypeArgs = hasTypeArgs || hasExplicitTypeArguments(new(flow.Transformations().At(j)))
+			for j := i + 1; j <= end; j++ {
+				hasTypeArgs = hasTypeArgs || HasExplicitTypeArguments(new(flow.Transformations().At(j)))
 			}
 			if hasTypeArgs {
 				continue

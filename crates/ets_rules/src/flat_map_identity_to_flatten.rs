@@ -34,19 +34,16 @@ pub static FLAT_MAP_IDENTITY_TO_FLATTEN: LazyLock<Rule> = LazyLock::new(|| Rule 
     },
 });
 
-// go: internal/rules/flat_map_identity_to_flatten.go:34 FlatMapIdentityToFlattenMatch ed6efa4c4f195fd6
+// go: internal/rules/flat_map_identity_to_flatten.go:34 FlatMapIdentityToFlattenMatch 52e142442ff11032
 #[derive(Clone)]
 pub struct FlatMapIdentityToFlattenMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub callee: P<Node>,
     pub transformation: PipingFlowTransformation,
-    // EffectModuleNode is the receiver of Callee when it is an Effect module
-    // property access, nil when flatMap is referenced without a module.
-    pub effect_module_node: Option<P<Node>>,
 }
 
-// go: internal/rules/flat_map_identity_to_flatten.go:47 AnalyzeFlatMapIdentityToFlatten 25bc4b45342038ee
+// go: internal/rules/flat_map_identity_to_flatten.go:44 AnalyzeFlatMapIdentityToFlatten e7a40716f898163d
 // AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback is
 // Effect's identity export referenced directly, or an unannotated arrow
 // function or function expression returning its own parameter.
@@ -82,27 +79,19 @@ pub fn analyze_flat_map_identity_to_flatten(
             {
                 continue;
             }
-            let mut effect_module_node = None;
-            if callee.kind() == Kind::PropertyAccessExpression {
-                let receiver = callee.as_property_access_expression().expression();
-                if tp.is_expression_effect_module(receiver) {
-                    effect_module_node = Some(receiver);
-                }
-            }
             let transformation = step.clone();
             matches.push(FlatMapIdentityToFlattenMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                 callee,
                 transformation,
-                effect_module_node,
             });
         }
     }
     matches
 }
 
-// go: internal/rules/flat_map_identity_to_flatten.go:93 isIdentityCallback 486079f3d322bf8a
+// go: internal/rules/flat_map_identity_to_flatten.go:82 isIdentityCallback 486079f3d322bf8a
 // isIdentityCallback reports whether callback names Effect's identity export
 // without a local variable in between, or is an arrow function or function
 // expression without type annotations whose body returns its single parameter. Annotations and typed

@@ -50,7 +50,6 @@ type FlatMapConditionalToFilterOrFailMatch struct {
 	FallbackNode        *ast.Node
 	PreferredMethodName string
 	NegatePredicate     bool
-	CanFix              bool
 }
 
 // AnalyzeFlatMapConditionalToFilterOrFail finds flatMap transformations whose
@@ -122,7 +121,6 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 				FallbackNode:        fallbackNode,
 				PreferredMethodName: preferredMethod,
 				NegatePredicate:     negatePredicate,
-				CanFix:              true,
 			}
 
 			matches = append(matches, match)

@@ -215,6 +215,7 @@ pub use option_match_to_from_option::*;
 pub use outdated_api::*;
 pub use outdated_api_db::*;
 pub use overridden_schema_constructor::*;
+pub use piping_flow::{has_explicit_type_arguments, is_piping_flow_argument_kind};
 pub use prefer_barrel_import::*;
 pub use prefer_effect_array::*;
 pub use prefer_effect_record::*;

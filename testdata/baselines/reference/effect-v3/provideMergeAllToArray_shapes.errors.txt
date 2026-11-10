@@ -4,9 +4,11 @@ Effect version: 3.19.19
 /.src/provideMergeAllToArray_shapes.ts(16,76): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 /.src/provideMergeAllToArray_shapes.ts(21,19): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 /.src/provideMergeAllToArray_shapes.ts(26,19): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
+/.src/provideMergeAllToArray_shapes.ts(34,18): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
+/.src/provideMergeAllToArray_shapes.ts(38,90): warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
 
 
-==== /.src/provideMergeAllToArray_shapes.ts (3 errors) ====
+==== /.src/provideMergeAllToArray_shapes.ts (5 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics provideMergeAllToArray:warning
@@ -43,13 +45,18 @@ Effect version: 3.19.19
     // MUST NOT TRIGGER: the curried Effect.provide is never applied to an effect
     export const unapplied = Effect.provide(Layer.mergeAll(ALayer, BLayer))
     
-    // MUST NOT TRIGGER: explicit type arguments on Layer.mergeAll
+    // MUST TRIGGER without a fix: Effect.provide<[Layer.Layer<A>, Layer.Layer<B>]>([ALayer, BLayer]) can be
+    // written by hand, but the fix does not carry type arguments over
     export const explicitMergeAllTypeArguments = program.pipe(
       Effect.provide(Layer.mergeAll<[Layer.Layer<A>, Layer.Layer<B>]>(ALayer, BLayer))
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
     )
     
-    // MUST NOT TRIGGER: explicit type arguments on Effect.provide
+    // MUST TRIGGER without a fix: explicit type arguments on Effect.provide, which the fix does not carry over
     export const explicitProvideTypeArguments = program.pipe(Effect.provide<A, never, never>(Layer.mergeAll(ALayer)))
+                                                                                             ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
     
     // MUST NOT TRIGGER: Layer.mergeAll without arguments
     // @ts-expect-error mergeAll requires at least one layer

@@ -26,7 +26,8 @@ func runFlatMapIdentityToFlattenFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 		// Only offer the fix when the step is called through an Effect module receiver.
-		if match.EffectModuleNode == nil {
+		if match.Callee.Kind != ast.KindPropertyAccessExpression ||
+			!ctx.TypeParser.IsExpressionEffectModule(match.Callee.AsPropertyAccessExpression().Expression) {
 			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{

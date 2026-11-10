@@ -30,13 +30,12 @@ var PreferSchemaTypeProperty = rule.Rule{
 }
 
 type PreferSchemaTypePropertyMatch struct {
-	SourceFile     *ast.SourceFile
-	Location       core.TextRange
-	TypeReference  *ast.Node
-	SchemaName     *ast.Node
-	SchemaNameText string
-	HelperText     string
-	PropertyName   string
+	SourceFile    *ast.SourceFile
+	Location      core.TextRange
+	TypeReference *ast.Node
+	SchemaName    *ast.Node
+	HelperText    string
+	PropertyName  string
 }
 
 // Each helper extracts the schema property of the same name; Encoded lives on
@@ -112,12 +111,11 @@ func analyzePreferSchemaTypePropertyNode(tp *typeparser.TypeParser, sf *ast.Sour
 	}
 
 	return &PreferSchemaTypePropertyMatch{
-		SourceFile:     sf,
-		Location:       scanner.GetErrorRangeForNode(sf, node),
-		TypeReference:  node,
-		SchemaName:     query.ExprName.AsNode(),
-		SchemaNameText: scanner.GetTextOfNode(query.ExprName.AsNode()),
-		HelperText:     scanner.GetTextOfNode(typeName),
-		PropertyName:   propertyName,
+		SourceFile:    sf,
+		Location:      scanner.GetErrorRangeForNode(sf, node),
+		TypeReference: node,
+		SchemaName:    query.ExprName.AsNode(),
+		HelperText:    scanner.GetTextOfNode(typeName),
+		PropertyName:  propertyName,
 	}
 }

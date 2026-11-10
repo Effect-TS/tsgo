@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::PipingFlowTransformationReplacement;
-use ets_shim::ast;
+use ets_shim::ast::{self, Kind};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
@@ -18,7 +18,7 @@ pub static FLAT_MAP_IDENTITY_TO_FLATTEN_FIX: LazyLock<Fixable> = LazyLock::new(|
     run: run_flat_map_identity_to_flatten_fix,
 });
 
-// go: internal/fixables/flat_map_identity_to_flatten.go:23 runFlatMapIdentityToFlattenFix e7383ab6838b588c
+// go: internal/fixables/flat_map_identity_to_flatten.go:23 runFlatMapIdentityToFlattenFix 8ee29c95edaedbbc
 fn run_flat_map_identity_to_flatten_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_flat_map_identity_to_flatten(&mut ctx.type_parser, source_file) {
@@ -26,7 +26,11 @@ fn run_flat_map_identity_to_flatten_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAc
             continue;
         }
         // Only offer the fix when the step is called through an Effect module receiver.
-        if m.effect_module_node.is_none() {
+        if m.callee.kind() != Kind::PropertyAccessExpression
+            || !ctx
+                .type_parser
+                .is_expression_effect_module(m.callee.as_property_access_expression().expression())
+        {
             continue;
         }
         if let Some(action) = ctx.new_fix_action(FixAction {

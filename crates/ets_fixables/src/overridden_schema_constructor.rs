@@ -19,7 +19,7 @@ pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(
     run: run_overridden_schema_constructor_fix,
 });
 
-// go: internal/fixables/overridden_schema_constructor.go:23 runOverriddenSchemaConstructorFix 54d761f8a08c6088
+// go: internal/fixables/overridden_schema_constructor.go:23 runOverriddenSchemaConstructorFix c576b18e441cfb04
 fn run_overridden_schema_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -32,7 +32,10 @@ fn run_overridden_schema_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeA
         let mut actions = Vec::new();
 
         // _static action: Rewrite using the static 'new' pattern (only when body exists)
-        if m.has_body && constructor_supports_static_rewrite(m.constructor_node) {
+        let body = m.constructor_node.body();
+        if body.is_some_and(|body| body.kind() == Kind::Block)
+            && constructor_supports_static_rewrite(m.constructor_node)
+        {
             let constructor_node = m.constructor_node;
             if let Some(action) = ctx.new_fix_action(FixAction {
                 description: "Rewrite using the static 'new' pattern".to_string(),
@@ -136,7 +139,7 @@ fn run_overridden_schema_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeA
     Vec::new()
 }
 
-// go: internal/fixables/overridden_schema_constructor.go:135 constructorSupportsStaticRewrite 5f47205b2587306f
+// go: internal/fixables/overridden_schema_constructor.go:136 constructorSupportsStaticRewrite 5f47205b2587306f
 pub(crate) fn constructor_supports_static_rewrite(ctor_node: P<Node>) -> bool {
     let ctor = ctor_node.as_constructor_declaration();
     let Some(parameters) = ctor.parameters() else {

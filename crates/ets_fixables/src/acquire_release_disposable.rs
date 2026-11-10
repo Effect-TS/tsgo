@@ -5,6 +5,8 @@ use ets_shim::ast::{self, NodeFlags};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
+use crate::all_of_map_to_for_each::has_call_type_arguments;
+
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_ACQUIRE_DISPOSABLE_EXPRESSES_THIS_DISPOSABLE_RESOURCE_ACQUISITION_MORE_DIRECTLY_THAN_EFFECT_ACQUIRE_RELEASE_WITH_A_MANUAL_DISPOSAL_FINALIZER_EFFECT_ACQUIRE_RELEASE_DISPOSABLE;
 
@@ -17,7 +19,7 @@ pub static ACQUIRE_RELEASE_DISPOSABLE_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_acquire_release_disposable_fix,
 });
 
-// go: internal/fixables/acquire_release_disposable.go:23 runAcquireReleaseDisposableFix e35812d6dc7ccfae
+// go: internal/fixables/acquire_release_disposable.go:23 runAcquireReleaseDisposableFix b8e7ba3c1c194f4d
 fn run_acquire_release_disposable_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_acquire_release_disposable(&mut ctx.type_parser, Some(source_file))
@@ -25,7 +27,7 @@ fn run_acquire_release_disposable_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
-        if m.has_type_arguments {
+        if has_call_type_arguments(Some(m.call_node.as_call_expression())) {
             continue;
         }
 

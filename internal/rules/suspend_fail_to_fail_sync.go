@@ -54,11 +54,6 @@ type SuspendFailToFailSyncMatch struct {
 	// Inner is the flow of the thunk's returned expression, which it covers
 	// whole; its last step is Effect.fail or Effect.die.
 	Inner *typeparser.PipingFlow
-	// Value is the input of that last step, when it is a standalone node.
-	Value              *ast.Node
-	ValueTypeArguments *ast.NodeList
-	// Fixable is false when the rewrite would change the inferred error type.
-	Fixable bool
 }
 
 // AnalyzeSuspendFailToFailSync finds piping flows that apply Effect.suspend to
@@ -104,52 +99,25 @@ func AnalyzeSuspendFailToFailSync(tp *typeparser.TypeParser, c *checker.Checker,
 		if inner == nil || inner.Node() != ast.SkipParentheses(thunk.Expression()) || inner.Transformations().Len() == 0 {
 			continue
 		}
-		lastIndex := inner.Transformations().Len() - 1
-		last := inner.Transformations().At(lastIndex)
+		last := inner.Transformations().At(inner.Transformations().Len() - 1)
 
 		suspend := flow.Transformations().At(0)
 		match := SuspendFailToFailSyncMatch{
-			SourceFile:         sf,
-			Location:           scanner.GetErrorRangeForNode(sf, suspend.Callee()),
-			Suspend:            suspend,
-			Thunk:              thunk,
-			Inner:              inner,
-			Value:              inner.TransformationInputNode(lastIndex),
-			ValueTypeArguments: last.TypeArguments(),
+			SourceFile: sf,
+			Location:   scanner.GetErrorRangeForNode(sf, suspend.Callee()),
+			Suspend:    suspend,
+			Thunk:      thunk,
+			Inner:      inner,
 		}
 		switch {
 		case isEffectApi("fail")(last):
 			match.ReplacementName, match.Kind, match.InnerName = "failSync", "error", "fail"
-			// Explicit type arguments pin the error type in both forms.
-			match.Fixable = !noTypeArguments(last) ||
-				failSyncKeepsErrorType(tp, c, last, inner.TransformationInputType(lastIndex))
 		case allowDie && isEffectApi("die")(last):
 			match.ReplacementName, match.Kind, match.InnerName = "dieSync", "defect", "die"
-			match.Fixable = true
 		default:
 			continue
 		}
 		matches = append(matches, match)
 	}
 	return matches
-}
-
-// failSyncKeepsErrorType reports whether Effect.failSync(() => value) infers the
-// same error type as Effect.fail(value). Effect.fail infers its error from a
-// call argument, which widens literal unions, while a failSync thunk returns the
-// value against LazyArg<E>, which keeps them: for `cond ? "A" : "B"` the first
-// infers string and the second "A" | "B". A single literal widens in both forms.
-// The input type of a flow step is a regular literal type, which only the base
-// type of a literal widens.
-func failSyncKeepsErrorType(tp *typeparser.TypeParser, c *checker.Checker, failStep typeparser.PipingFlowTransformation, valueType *checker.Type) bool {
-	effect := tp.EffectType(failStep.OutType())
-	if effect == nil || effect.E() == nil || valueType == nil {
-		return false
-	}
-	sameType := func(t *checker.Type) bool {
-		return checker.Checker_isTypeAssignableTo(c, t, effect.E()) &&
-			checker.Checker_isTypeAssignableTo(c, effect.E(), t)
-	}
-	return sameType(valueType) ||
-		valueType.Flags()&checker.TypeFlagsUnit != 0 && sameType(c.GetBaseTypeOfLiteralType(valueType))
 }

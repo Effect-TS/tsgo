@@ -39,19 +39,18 @@ pub static PREFER_SCHEMA_TYPE_PROPERTY: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/prefer_schema_type_property.go:32 PreferSchemaTypePropertyMatch 53e3ee9be2179cb5
+// go: internal/rules/prefer_schema_type_property.go:32 PreferSchemaTypePropertyMatch 5bb5d6178f7ff0c7
 #[derive(Clone)]
 pub struct PreferSchemaTypePropertyMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub type_reference: P<Node>,
     pub schema_name: P<Node>,
-    pub schema_name_text: String,
     pub helper_text: String,
     pub property_name: &'static str,
 }
 
-// go: internal/rules/prefer_schema_type_property.go:44 schemaPropertyHelperNamespaces 1b4d5712dc4b0d0c
+// go: internal/rules/prefer_schema_type_property.go:43 schemaPropertyHelperNamespaces 1b4d5712dc4b0d0c
 pub(crate) static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
     FxHashMap<&'static str, &'static [&'static str]>,
 > = LazyLock::new(|| {
@@ -64,7 +63,7 @@ pub(crate) static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
     ])
 });
 
-// go: internal/rules/prefer_schema_type_property.go:52 AnalyzePreferSchemaTypeProperty e7c41852f6919645
+// go: internal/rules/prefer_schema_type_property.go:51 AnalyzePreferSchemaTypeProperty e7c41852f6919645
 pub fn analyze_prefer_schema_type_property(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -92,7 +91,7 @@ pub fn analyze_prefer_schema_type_property(
     matches
 }
 
-// go: internal/rules/prefer_schema_type_property.go:73 analyzePreferSchemaTypePropertyNode 1a8eefa661bba717
+// go: internal/rules/prefer_schema_type_property.go:72 analyzePreferSchemaTypePropertyNode d3f1de4ef2254a76
 pub(crate) fn analyze_prefer_schema_type_property_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -139,7 +138,6 @@ pub(crate) fn analyze_prefer_schema_type_property_node(
         location: ets_shim::scanner::get_error_range_for_node(sf, node),
         type_reference: node,
         schema_name: query.expr_name(),
-        schema_name_text: ets_shim::scanner::get_text_of_node(query.expr_name()),
         helper_text: ets_shim::scanner::get_text_of_node(type_name),
         property_name,
     })
