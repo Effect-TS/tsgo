@@ -32,3 +32,8 @@ var effectResultPackageSourceFileDescriptor = newPackageSourceFileDescriptor(mod
 func (tp *TypeParser) IsNodeReferenceToEffectResultModuleApi(node *ast.Node, memberName string) bool {
 	return tp.IsNodeReferenceToModuleExport(node, effectResultPackageSourceFileDescriptor, memberName)
 }
+
+// IsExpressionEffectResultModule reports whether node resolves to the Result module namespace.
+func (tp *TypeParser) IsExpressionEffectResultModule(node *ast.Node) bool {
+	return tp.IsNodeReferenceToModule(node, effectResultPackageSourceFileDescriptor)
+}

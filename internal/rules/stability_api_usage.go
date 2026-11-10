@@ -104,7 +104,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 					isOwn := func(symbol *ast.Symbol) bool { return ast.TSGetSymbolValueDeclaration(symbol) == node }
 					if slices.ContainsFunc(properties, isOwn) {
 						for _, lookup := range []func(*ast.Node) *checker.Type{
-							ctx.TypeParser.CachedObjectLiteralConstraintContextualType,
+							ctx.TypeParser.CachedExpressionConstraintContextualType,
 							ctx.TypeParser.CachedObjectLiteralBareConstraintContextualType,
 						} {
 							if constraintType := lookup(node.Parent); constraintType != nil {

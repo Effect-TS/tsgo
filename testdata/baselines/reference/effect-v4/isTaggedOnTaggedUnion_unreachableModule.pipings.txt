@@ -1,0 +1,37 @@
+==== /.src/isTaggedOnTaggedUnion_unreachableModule.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:15 - 6:64
+Node: Effect.runSync(Effect.option(Effect.succeed(1)))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.option
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+  [2] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 8:20 - 8:55
+Node: Predicate.isTagged(option, "Some")
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Some"]
+      outType: boolean

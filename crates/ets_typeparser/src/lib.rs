@@ -52,6 +52,7 @@ mod effect_type;
 mod effect_type_test;
 mod effect_yieldable_type;
 mod either_type;
+mod exit_type;
 mod expected_and_real_type;
 #[cfg(test)]
 mod expected_and_real_type_test;
@@ -153,6 +154,7 @@ mod service_type;
 mod service_type_test;
 mod sql_model_type;
 mod stream_type;
+mod tagged_data_type;
 #[cfg(test)]
 mod tsrs_patches_test;
 mod type_equivalent_node;

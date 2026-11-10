@@ -1,0 +1,267 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:21-10:39) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isSome"
+
+[D2] (11:22-11:40) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isNone"
+
+[D3] (12:37-12:55) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isSome"
+
+[D4] (13:50-13:68) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isSome"
+
+[D5] (14:24-14:42) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Exit.isFailure"
+
+[D6] (15:24-15:42) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Result.isSuccess"
+
+[D7] (16:37-16:55) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isSome"
+
+[D8] (17:66-17:84) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+  Fix 2: "Replace with Option.isSome"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Option.isSome" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Option.isSome(option)
+export const none = !Predicate.isTagged(option, "None")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const success = Predicate.isTagged(result, "Success")
+export const pipeable = option.pipe(Predicate.isTagged("Some"))
+export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+
+
+=== [D2] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Option.isNone" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const none = !Option.isNone(option)
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const success = Predicate.isTagged(result, "Success")
+export const pipeable = option.pipe(Predicate.isTagged("Some"))
+export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+
+
+=== [D3] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Option.isSome" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const none = !Predicate.isTagged(option, "None")
+export const somes = options.filter(Option.isSome)
+export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const success = Predicate.isTagged(result, "Success")
+export const pipeable = option.pipe(Predicate.isTagged("Some"))
+export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+
+
+=== [D4] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Option.isSome" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const none = !Predicate.isTagged(option, "None")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const effectSomes = Array.filter(options, Option.isSome)
+export const failure = Predicate.isTagged(exit, "Failure")
+export const success = Predicate.isTagged(result, "Success")
+export const pipeable = option.pipe(Predicate.isTagged("Some"))
+export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+
+
+=== [D5] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Exit.isFailure" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const none = !Predicate.isTagged(option, "None")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+export const failure = Exit.isFailure(exit)
+export const success = Predicate.isTagged(result, "Success")
+export const pipeable = option.pipe(Predicate.isTagged("Some"))
+export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+
+
+=== [D6] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Result.isSuccess" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const none = !Predicate.isTagged(option, "None")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const success = Result.isSuccess(result)
+export const pipeable = option.pipe(Predicate.isTagged("Some"))
+export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+
+
+=== [D7] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Option.isSome" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const none = !Predicate.isTagged(option, "None")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const success = Predicate.isTagged(result, "Success")
+export const pipeable = option.pipe(Option.isSome)
+export const pipedAfterStep = pipe(option, (current) => current, Predicate.isTagged("Some"))
+
+
+=== [D8] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Option.isSome" ===
+
+--- file:///.src/isTaggedOnTaggedUnion_dataTypes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics isTaggedOnTaggedUnion:warning
+import { Array, Exit, Option, pipe, Predicate, Result } from "effect"
+
+declare const option: Option.Option<number>
+declare const options: ReadonlyArray<Option.Option<number>>
+declare const exit: Exit.Exit<number, string>
+declare const result: Result.Result<number, string>
+
+export const some = Predicate.isTagged(option, "Some")
+export const none = !Predicate.isTagged(option, "None")
+export const somes = options.filter(Predicate.isTagged("Some"))
+export const effectSomes = Array.filter(options, Predicate.isTagged("Some"))
+export const failure = Predicate.isTagged(exit, "Failure")
+export const success = Predicate.isTagged(result, "Success")
+export const pipeable = option.pipe(Predicate.isTagged("Some"))
+export const pipedAfterStep = pipe(option, (current) => current, Option.isSome)
+

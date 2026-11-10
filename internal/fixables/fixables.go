@@ -20,6 +20,7 @@ var All = []fixable.Fixable{
 	CatchAllToMapErrorFix,
 	CatchAllTagDispatchToCatchTagFix,
 	CatchIfTagToCatchTagFix,
+	IsTaggedOnTaggedUnionFix,
 	CatchTagToCatchReasonFix,
 	AllOfMapToForEachFix,
 	FlatMapToMapFix,

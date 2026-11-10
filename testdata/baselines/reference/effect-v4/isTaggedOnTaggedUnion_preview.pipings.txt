@@ -1,0 +1,29 @@
+==== /.src/isTaggedOnTaggedUnion_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:13 - 8:3
+Node: Schema.TaggedUnion({\n  Auto: {},\n  Px: { value: Schema.Finite }\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  Auto: {},\n  Px: { value: Schema.Finite }\n}
+Subject Type: { Auto: {}; Px: { value: Finite; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedUnion
+      args: (constant)
+      outType: TaggedUnion<{ readonly Auto: TaggedStruct<"Auto", {}>; readonly Px: TaggedStruct<"Px", { readonly value: Finite; }>; }>
+
+=== Piping Flow ===
+Location: 10:57 - 11:35
+Node: Predicate.isTagged(size, "Auto")
+Node Kind: KindCallExpression
+
+Subject: size
+Subject Type: { readonly _tag: "Auto"; } | { readonly _tag: "Px"; readonly value: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["Auto"]
+      outType: boolean

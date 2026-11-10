@@ -1,0 +1,17 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:3-11:21) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D2] (11:47-11:52) TS2339: Property 'value' does not exist on type '{ readonly _tag: "Auto"; } | { readonly _tag: "Px"; readonly value: number; }'.
+  Property 'value' does not exist on type '{ readonly _tag: "Auto"; }'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default

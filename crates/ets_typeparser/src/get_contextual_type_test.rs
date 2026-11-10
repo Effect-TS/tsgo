@@ -140,7 +140,7 @@ accept(function* () { yield 1; });",
     });
 }
 
-// go test: internal/typeparser/get_contextual_type_test.go:69 TestInferredGeneratorContextualCaches 74b043dbe9b97134
+// go test: internal/typeparser/get_contextual_type_test.go:69 TestInferredGeneratorContextualCaches f5fdc7a64631c786
 // Rust: Go's second parser over the checker (`NewTypeParser(c.Program(), c)`) is made after the first is dropped
 // (each borrows the checker); both use the checker's links, which the test compares by identity.
 #[test]
@@ -161,7 +161,7 @@ const gen = function* () { const options: Options = { value: 42 }; };",
                     .expect("the options initializer");
                 let mut tp = compiled.type_parser();
                 if constraint_first
-                    && let Some(got) = tp.cached_object_literal_constraint_contextual_type(node)
+                    && let Some(got) = tp.cached_expression_constraint_contextual_type(node)
                 {
                     t.fatal(sprintf!(
                         "constraint context = %s, want nil",
@@ -175,13 +175,13 @@ const gen = function* () { const options: Options = { value: 42 }; };",
                         got.map(|got| type_string(&mut tp, got)).unwrap_or_default()
                     ));
                 }
-                if let Some(got) = tp.cached_object_literal_constraint_contextual_type(node) {
+                if let Some(got) = tp.cached_expression_constraint_contextual_type(node) {
                     t.fatal(sprintf!(
                         "constraint context = %s, want nil",
                         type_string(&mut tp, got)
                     ));
                 }
-                if tp.links().object_literal_constraint_contextual_type.get(&node) != Some(&None) {
+                if tp.links().expression_constraint_contextual_type.get(&node) != Some(&None) {
                     t.fatal("skipped constraint lookup must cache a present nil");
                 }
                 let links = Arc::clone(&tp.links);
@@ -189,8 +189,7 @@ const gen = function* () { const options: Options = { value: 42 }; };",
                 let _ = compiled.checker.get_diagnostics_exported(&Context::background(), sf);
                 let mut other = compiled.type_parser();
                 if !Arc::ptr_eq(&other.links, &links)
-                    || other.links().object_literal_constraint_contextual_type.get(&node)
-                        != Some(&None)
+                    || other.links().expression_constraint_contextual_type.get(&node) != Some(&None)
                 {
                     t.fatal("parsers over one checker must share the negative cache entry");
                 }
@@ -201,7 +200,7 @@ const gen = function* () { const options: Options = { value: 42 }; };",
                         got.map(|got| type_string(&mut other, got)).unwrap_or_default()
                     ));
                 }
-                if let Some(got) = other.cached_object_literal_constraint_contextual_type(node) {
+                if let Some(got) = other.cached_expression_constraint_contextual_type(node) {
                     t.fatal(sprintf!(
                         "shared constraint context after checking = %s, want nil",
                         type_string(&mut other, got)

@@ -179,3 +179,151 @@ impl ModuleMemberReference {
         tracker.new_property_access_path(&self.path)
     }
 }
+
+// go: internal/fixables/module_member_reference.go:135 calleeModuleMemberReference 189854cf13ee3100
+// calleeModuleMemberReference keeps the qualifier a callee is written with:
+// Q.f gives Q.<member>, and a named import of f gives a bare <member> from the
+// same import. When the bare name has to be imported, namedImports is the list
+// to add it to. Otherwise it falls back to module, the file's reference to the
+// member's module.
+pub(crate) fn callee_module_member_reference(
+    ctx: &mut Context<'_, '_>,
+    callee: P<Node>,
+    module: &ModuleReference,
+    member: &ModuleMember,
+) -> (Option<ModuleMemberReference>, Option<P<Node>>) {
+    if let Some(qualifier) = callee_module_qualifier(ctx, callee, member)
+        && let Some(reference) = imported_module_member(ctx, callee, &qualifier, member)
+    {
+        return (Some(reference), None);
+    }
+    if let (Some(reference), named_imports) = named_import_module_member(ctx, callee, member) {
+        return (Some(reference), named_imports);
+    }
+    (resolve_module_member(ctx, callee, module, member), None)
+}
+
+// go: internal/fixables/module_member_reference.go:149 calleeModuleQualifier 81e14d2672dd2fd6
+// calleeModuleQualifier returns the module path of a Q.f callee whose Q is
+// member's module.
+//
+// Rust: Go's nil `ModuleReference` is `None`; the context is passed for the predicate's parser.
+fn callee_module_qualifier(
+    ctx: &mut Context<'_, '_>,
+    callee: P<Node>,
+    member: &ModuleMember,
+) -> Option<ModuleReference> {
+    let callee = ast::skip_parentheses(callee);
+    if !ast::is_property_access_expression(callee) {
+        return None;
+    }
+    let qualifier = callee.expression()?;
+    if !(member.is_module)(&mut ctx.type_parser, qualifier) {
+        return None;
+    }
+    identifier_path(qualifier)
+}
+
+// go: internal/fixables/module_member_reference.go:163 identifierPath 63de0494736b1d00
+// identifierPath returns the names of an identifier or a chain of property
+// accesses on identifiers, or nil for any other expression.
+//
+// Rust: Go's nil `ModuleReference` is `None`.
+fn identifier_path(node: P<Node>) -> Option<ModuleReference> {
+    if ast::is_identifier(node) {
+        return Some(ModuleReference(vec![node.text().to_string()]));
+    } else if ast::is_property_access_expression(node)
+        && let Some(name) = node.name()
+        && ast::is_identifier(name)
+        && let Some(path) = node.expression().and_then(identifier_path)
+    {
+        return Some(path.append(&[name.text()]));
+    }
+    None
+}
+
+// go: internal/fixables/module_member_reference.go:179 namedImportModuleMember bebf88d4055c2fc9
+// namedImportModuleMember handles a callee that is a named import binding of
+// member's module: it reuses a bare member binding already in scope, or returns
+// the bare member name with the callee's NamedImports to add it to when the
+// name is free and the imported module exports it.
+fn named_import_module_member(
+    ctx: &mut Context<'_, '_>,
+    callee: P<Node>,
+    member: &ModuleMember,
+) -> (Option<ModuleMemberReference>, Option<P<Node>>) {
+    let callee = ast::skip_parentheses(callee);
+    if !ast::is_identifier(callee) {
+        return (None, None);
+    }
+    let symbol = ctx.checker().resolve_name_exported(
+        callee.text(),
+        callee,
+        SymbolFlags::Value | SymbolFlags::Alias,
+        false,
+    );
+    let binding = import_binding_name(ctx, callee, symbol);
+    let Some(binding_parent) = binding.and_then(|binding| binding.parent()) else {
+        return (None, None);
+    };
+    if !ast::is_import_specifier(binding_parent) {
+        return (None, None);
+    }
+    let Some(named_imports) = binding_parent.parent() else {
+        return (None, None);
+    };
+    let Some(import_declaration) = named_imports.parent().and_then(|clause| clause.parent()) else {
+        return (None, None);
+    };
+    if !ast::is_named_imports(named_imports) || !ast::is_import_declaration(import_declaration) {
+        return (None, None);
+    }
+    let module_symbol = ctx
+        .type_parser
+        .get_symbol_at_location(import_declaration.as_import_declaration().module_specifier());
+    let Some(module_symbol) = module_symbol else {
+        return (None, None);
+    };
+    let export = ctx.checker().try_get_member_in_module_exports(member.name, module_symbol);
+    let Some(mut export) = export else {
+        return (None, None);
+    };
+    if export.flags().intersects(SymbolFlags::Alias) {
+        export = ctx.checker().get_aliased_symbol(export);
+    }
+    let export_name = export.value_declaration().and_then(|declaration| declaration.name());
+    let Some(export_name) = export_name else {
+        return (None, None);
+    };
+    if !(member.is_member)(&mut ctx.type_parser, export_name) {
+        return (None, None);
+    }
+
+    let existing = ctx.checker().resolve_name_exported(
+        member.name,
+        callee,
+        SymbolFlags::Value | SymbolFlags::Alias,
+        false,
+    );
+    if existing.is_none() {
+        return (
+            Some(ModuleMemberReference {
+                path: ModuleReference(vec![member.name.to_string()]),
+                via_module: false,
+            }),
+            Some(named_imports),
+        );
+    }
+    if let Some(name) = import_binding_name(ctx, callee, existing)
+        && (member.is_member)(&mut ctx.type_parser, name)
+    {
+        return (
+            Some(ModuleMemberReference {
+                path: ModuleReference(vec![name.text().to_string()]),
+                via_module: false,
+            }),
+            None,
+        );
+    }
+    (None, None)
+}

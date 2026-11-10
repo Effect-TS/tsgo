@@ -41,4 +41,10 @@ impl TypeParser<'_> {
             member_name,
         )
     }
+
+    // go: internal/typeparser/option_type.go:35 TypeParser.IsExpressionEffectOptionModule 69b211090a3caf5e
+    // IsExpressionEffectOptionModule reports whether node resolves to the Option module namespace.
+    pub fn is_expression_effect_option_module(&mut self, node: P<Node>) -> bool {
+        self.is_node_reference_to_module(node, &EFFECT_OPTION_PACKAGE_SOURCE_FILE_DESCRIPTOR)
+    }
 }

@@ -1,0 +1,153 @@
+=== Quick Fix Inventory ===
+
+[D1] (28:26-28:44) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D2] (29:24-29:42) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D3] (30:33-30:51) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D4] (31:64-31:82) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D5] (32:28-32:36) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D6] (33:33-33:51) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D7] (34:25-34:43) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D8] (35:55-35:73) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D9] (36:54-36:72) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D10] (37:44-37:62) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D11] (38:55-38:73) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D12] (39:54-39:72) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D13] (40:75-40:93) TS377181: `Predicate.isTagged` accepts any value, so on this tagged union it does not check the tag against the members and narrows less than `Predicate.isTaggedStrict`. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D14] (43:27-43:45) TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+[D15] (44:48-44:66) TS377182: `Atuo` is not a tag of this tagged union, so this `Predicate.isTagged` test is always false. effect(isTaggedOnTaggedUnion)
+  Fix 0: "Disable isTaggedOnTaggedUnion for this line"
+  Fix 1: "Disable isTaggedOnTaggedUnion for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable isTaggedOnTaggedUnion for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable isTaggedOnTaggedUnion for entire file" ===
+skipped by default

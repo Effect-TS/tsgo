@@ -25,6 +25,7 @@ var All = []rule.Rule{
 	CatchRefailToTapError,
 	CatchAllTagDispatchToCatchTag,
 	CatchIfTagToCatchTag,
+	IsTaggedOnTaggedUnion,
 	CatchConditionalRefailToCatchIf,
 	CatchTagToCatchReason,
 	CatchToOrElseSucceed,
