@@ -3,7 +3,6 @@ package rules
 import (
 	"strings"
 
-	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -48,14 +47,16 @@ var MissedPipeableOpportunity = rule.Rule{
 // MissedPipeableOpportunityMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the missedPipeableOpportunity pattern.
 type MissedPipeableOpportunityMatch struct {
-	SourceFile              *ast.SourceFile
-	Location                core.TextRange
-	PipeableStartIndex      int
-	PipeableTransformations []typeparser.PipingFlowTransformation
-	Flow                    *typeparser.PipingFlow
-	Node                    *ast.Node // The expression replaced by the fix; may be inner to Flow.Node()
-	SubjectText             string
-	AfterTransformations    readonly.Slice[typeparser.PipingFlowTransformation]
+	SourceFile *ast.SourceFile
+	Location   core.TextRange
+	// PipeableStartIndex and PipeableEndIndex bound the steps that join the
+	// pipe; the steps from PipeableEndIndex up to ReportedCount wrap it.
+	PipeableStartIndex int
+	PipeableEndIndex   int
+	ReportedCount      int
+	Flow               *typeparser.PipingFlow
+	Node               *ast.Node // The expression replaced by the fix; may be inner to Flow.Node()
+	SubjectText        string
 }
 
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
@@ -81,25 +82,17 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			if run.callCount < minArgCount || !isPipeableAtIndex(tp, flow, firstPipeableIndex) {
 				continue
 			}
-			var pipeableTransformations []typeparser.PipingFlowTransformation
-			for i := firstPipeableIndex; i < firstPipeableIndex+run.length; i++ {
-				pipeableTransformations = append(pipeableTransformations, flow.Transformations().At(i))
-			}
-			pipeableEndIndex := firstPipeableIndex + len(pipeableTransformations)
-
 			subjectText := trimmedNodeText(sf, flow.TransformationInputNode(firstPipeableIndex))
 
-			afterTransformations := flow.Transformations().Slice(pipeableEndIndex, reportedCount)
-
 			matches = append(matches, MissedPipeableOpportunityMatch{
-				SourceFile:              sf,
-				Location:                scanner.GetErrorRangeForNode(sf, reportedNode),
-				Node:                    reportedNode,
-				PipeableStartIndex:      firstPipeableIndex,
-				PipeableTransformations: pipeableTransformations,
-				Flow:                    flow,
-				SubjectText:             subjectText,
-				AfterTransformations:    afterTransformations,
+				SourceFile:         sf,
+				Location:           scanner.GetErrorRangeForNode(sf, reportedNode),
+				Node:               reportedNode,
+				PipeableStartIndex: firstPipeableIndex,
+				PipeableEndIndex:   firstPipeableIndex + run.length,
+				ReportedCount:      reportedCount,
+				Flow:               flow,
+				SubjectText:        subjectText,
 			})
 
 			// Found and reported a valid segment, move past it (no overlapping diagnostics)

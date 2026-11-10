@@ -264,7 +264,7 @@ pub(crate) fn is_conditional_refail_expression(
     tp.checker().get_symbol_if_same_reference(actual_symbol, parameter_symbol).is_some()
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:210 isConditionalRefailPredicate 3917a5a0da49e28a
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:210 isConditionalRefailPredicate 50af2694f8735167
 pub(crate) fn is_conditional_refail_predicate(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
@@ -326,8 +326,8 @@ pub(crate) fn is_conditional_refail_predicate(
     }
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:245 conditionalRefailNodeContainsParameter b70e6bfeb64a1eb8
-pub(crate) fn conditional_refail_node_contains_parameter(
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:245 ConditionalRefailNodeContainsParameter 91fbda64695884e8
+pub fn conditional_refail_node_contains_parameter(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
     parameter_symbol: Option<P<Symbol>>,

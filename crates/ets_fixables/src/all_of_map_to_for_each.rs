@@ -1,7 +1,7 @@
 use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
-use ets_shim::ast::{self, NodeFlags};
+use ets_shim::ast::{self, CallExpression, NodeFlags};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
@@ -17,11 +17,11 @@ pub static ALL_OF_MAP_TO_FOR_EACH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_all_of_map_to_for_each_fix,
 });
 
-// go: internal/fixables/all_of_map_to_for_each.go:23 runAllOfMapToForEachFix ae0ac2637d074bfa
+// go: internal/fixables/all_of_map_to_for_each.go:23 runAllOfMapToForEachFix 092805e4f38f335d
 fn run_all_of_map_to_for_each_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_all_of_map_to_for_each(&mut ctx.type_parser, source_file) {
-        if !m.can_fix {
+        if m.call_node.is_none() {
             continue;
         }
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
@@ -29,7 +29,11 @@ fn run_all_of_map_to_for_each_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         }
         // The generic parameter lists of Array#map, Effect.all, and Effect.forEach
         // differ, so an explicit type argument cannot be moved safely.
-        if m.has_type_arguments {
+        if has_call_type_arguments(m.call_node.map(|call_node| call_node.as_call_expression()))
+            || has_call_type_arguments(
+                m.callback.parent().map(|parent| parent.as_call_expression()),
+            )
+        {
             continue;
         }
 
@@ -62,4 +66,9 @@ fn run_all_of_map_to_for_each_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         }
     }
     Vec::new()
+}
+
+// go: internal/fixables/all_of_map_to_for_each.go:61 hasCallTypeArguments 26b3e9eb8b75eeae
+pub(crate) fn has_call_type_arguments(call: Option<&CallExpression>) -> bool {
+    call.is_some_and(|call| call.type_arguments().is_some_and(|t| !t.nodes().is_empty()))
 }

@@ -21,7 +21,11 @@ var MatchToResultOrOptionFix = fixable.Fixable{
 
 func runMatchToResultOrOptionFix(ctx *fixable.Context) []ls.CodeAction {
 	for _, match := range rules.AnalyzeMatchToResultOrOption(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
-		if !match.Fixable || (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) {
+		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
+			continue
+		}
+		// Collapsing the steps changes the input type of every call between them.
+		if mapMapErrorPathHasTypeArguments(match.Flow.Transformations().At(match.Start), match.Flow.Transformations().At(match.End)) {
 			continue
 		}
 		member := effectModuleMember(ctx, match.ReplacementName)

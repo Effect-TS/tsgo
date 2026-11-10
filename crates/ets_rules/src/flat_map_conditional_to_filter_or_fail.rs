@@ -44,7 +44,7 @@ pub static FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL: LazyLock<Rule> = LazyLock::ne
     },
 });
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:44 FlatMapConditionalToFilterOrFailMatch bc2d58ade002a195
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:44 FlatMapConditionalToFilterOrFailMatch 3543eab93b2d9673
 // FlatMapConditionalToFilterOrFailMatch holds the source evidence needed by
 // the diagnostic and its quick fix.
 #[derive(Clone)]
@@ -57,10 +57,9 @@ pub struct FlatMapConditionalToFilterOrFailMatch {
     pub fallback_node: P<Node>,
     pub preferred_method_name: &'static str,
     pub negate_predicate: bool,
-    pub can_fix: bool,
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:58 AnalyzeFlatMapConditionalToFilterOrFail 48f32eba59461529
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:57 AnalyzeFlatMapConditionalToFilterOrFail 711bc0bc9148b908
 // AnalyzeFlatMapConditionalToFilterOrFail finds flatMap transformations whose
 // callback is a two-way conditional with one identity Effect.succeed branch.
 //
@@ -144,7 +143,6 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
                 fallback_node,
                 preferred_method_name: preferred_method,
                 negate_predicate,
-                can_fix: true,
             };
 
             matches.push(m);
@@ -153,7 +151,7 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
     matches
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:134 isIdentitySucceed 002a49d8d61b7181
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:132 isIdentitySucceed 002a49d8d61b7181
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn is_identity_succeed(
@@ -185,7 +183,7 @@ pub(crate) fn is_identity_succeed(
     })
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:153 effectFailArgument 9e6e7c4cf93bfd84
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:151 effectFailArgument 9e6e7c4cf93bfd84
 pub(crate) fn effect_fail_argument(
     tp: &mut TypeParser<'_>,
     expression: Option<P<Node>>,

@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 static MESSAGE: &Message =
     &tsdiag::DO_NOT_USE_0_TYPEOF_X_USE_TYPEOF_X_1_INSTEAD_EFFECT_PREFER_SCHEMA_TYPE_PROPERTY;
 
-// go: internal/fixables/prefer_schema_type_property.go:11 PreferSchemaTypePropertyFix 2557d3b99bf607ec
+// go: internal/fixables/prefer_schema_type_property.go:12 PreferSchemaTypePropertyFix 2557d3b99bf607ec
 pub static PREFER_SCHEMA_TYPE_PROPERTY_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "preferSchemaTypeProperty",
     description: "Replace with typeof X.Type or typeof X.Encoded",
@@ -17,7 +17,7 @@ pub static PREFER_SCHEMA_TYPE_PROPERTY_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_prefer_schema_type_property_fix,
 });
 
-// go: internal/fixables/prefer_schema_type_property.go:19 runPreferSchemaTypePropertyFix 490aa7cd75ecc2a2
+// go: internal/fixables/prefer_schema_type_property.go:20 runPreferSchemaTypePropertyFix 9481515712cff131
 fn run_prefer_schema_type_property_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let matches = ets_rules::analyze_prefer_schema_type_property(&mut ctx.type_parser, sf);
@@ -31,7 +31,7 @@ fn run_prefer_schema_type_property_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
         let property_name = m.property_name;
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with 'typeof ".to_string()
-                + &m.schema_name_text
+                + &ets_shim::scanner::get_text_of_node(schema_name)
                 + "."
                 + property_name
                 + "'",

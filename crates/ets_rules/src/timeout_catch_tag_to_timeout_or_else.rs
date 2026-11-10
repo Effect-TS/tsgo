@@ -56,7 +56,7 @@ pub struct TimeoutCatchTagToTimeoutOrElseMatch {
     pub handler: P<Node>,
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:38 AnalyzeTimeoutCatchTagToTimeoutOrElse a64bea026d0b488b
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:38 AnalyzeTimeoutCatchTagToTimeoutOrElse bb21fc4b5ad5b0ce
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and checker are never nil.
 pub fn analyze_timeout_catch_tag_to_timeout_or_else(
@@ -106,8 +106,11 @@ pub fn analyze_timeout_catch_tag_to_timeout_or_else(
                 i += 1;
                 continue;
             }
+            // Type arguments on Effect.timeout map onto timeoutOrElse and
+            // timeoutOption, so only the fix refuses them; those on the later
+            // steps may have no equivalent.
             let mut has_type_args = false;
-            for j in i..=end {
+            for j in i + 1..=end {
                 has_type_args =
                     has_type_args || has_explicit_type_arguments(Some(transformations.at(j)));
             }
@@ -153,7 +156,7 @@ pub fn analyze_timeout_catch_tag_to_timeout_or_else(
     matches
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:95 timeoutAsSome 94c0859b4ab529c6
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:98 timeoutAsSome 94c0859b4ab529c6
 pub(crate) fn timeout_as_some(tp: &mut TypeParser<'_>, step: &PipingFlowTransformation) -> bool {
     step.args().len() == 0 && tp.is_node_reference_to_effect_module_api(step.callee(), "asSome")
         || step.args().len() == 1
@@ -161,7 +164,7 @@ pub(crate) fn timeout_as_some(tp: &mut TypeParser<'_>, step: &PipingFlowTransfor
             && tp.is_node_reference_to_effect_option_module_api(*step.args().at(0), "some")
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:102 timeoutErrorExcluded c039a64d005e6e1e
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:105 timeoutErrorExcluded c039a64d005e6e1e
 // Fail closed for unknown, generic, or broadly tagged errors: catchTag matches
 // structurally by tag, so checking only the canonical TimeoutError is unsafe.
 pub(crate) fn timeout_error_excluded(tp: &mut TypeParser<'_>, error_type: Option<P<Type>>) -> bool {

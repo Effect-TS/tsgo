@@ -28,6 +28,15 @@ func runServiceNotAsClassFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 
+		// The fix replaces the variable statement, keeping its modifiers (e.g.
+		// export), or the declaration list when it is not in a statement.
+		targetNode := match.CallExprNode.Parent.Parent
+		var modifierNodes *ast.ModifierList
+		if variableStatement := targetNode.Parent; variableStatement != nil && variableStatement.Kind == ast.KindVariableStatement {
+			targetNode = variableStatement
+			modifierNodes = variableStatement.Modifiers()
+		}
+
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to class declaration",
 			Run: func(tracker *rewriter.Tracker) {
@@ -85,9 +94,9 @@ func runServiceNotAsClassFix(ctx *fixable.Context) []ls.CodeAction {
 
 				// Build modifiers for the class declaration
 				var modifiers *ast.ModifierList
-				if match.ModifierNodes != nil && len(match.ModifierNodes.Nodes) > 0 {
-					modNodes := make([]*ast.Node, len(match.ModifierNodes.Nodes))
-					for i, mod := range match.ModifierNodes.Nodes {
+				if modifierNodes != nil && len(modifierNodes.Nodes) > 0 {
+					modNodes := make([]*ast.Node, len(modifierNodes.Nodes))
+					for i, mod := range modifierNodes.Nodes {
 						modNodes[i] = tracker.NewModifier(mod.Kind)
 					}
 					modifiers = tracker.NewModifierList(modNodes)
@@ -103,7 +112,7 @@ func runServiceNotAsClassFix(ctx *fixable.Context) []ls.CodeAction {
 				)
 
 				ast.SetParentInChildren(classDecl)
-				tracker.ReplaceNode(sf, match.TargetNode, classDecl, nil)
+				tracker.ReplaceNode(sf, targetNode, classDecl, nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

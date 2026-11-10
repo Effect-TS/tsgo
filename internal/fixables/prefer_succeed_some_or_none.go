@@ -25,8 +25,24 @@ func runPreferSucceedSomeOrNoneFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.Flow == nil || match.TransformationCount <= 0 || match.ReplacementName == "succeedSome" && match.ValueNode == nil {
+		if match.Flow == nil || match.TransformationCount <= 0 {
 			continue
+		}
+		succeed := match.Flow.Transformations().At(match.TransformationCount - 1)
+		if succeed.Kind() != typeparser.TransformationKindCall &&
+			succeed.Kind() != typeparser.TransformationKindPipe &&
+			succeed.Kind() != typeparser.TransformationKindPipeable {
+			continue
+		}
+		var value *ast.Node
+		var valueTypeArguments *ast.NodeList
+		if match.ReplacementName == "succeedSome" {
+			optionIndex := match.TransformationCount - 2
+			value = match.Flow.TransformationInputNode(optionIndex)
+			valueTypeArguments = match.Flow.Transformations().At(optionIndex).TypeArguments()
+			if value == nil {
+				continue
+			}
 		}
 
 		description := "Replace with Effect." + match.ReplacementName
@@ -35,11 +51,11 @@ func runPreferSucceedSomeOrNoneFix(ctx *fixable.Context) []ls.CodeAction {
 			Run: func(tracker *rewriter.Tracker) {
 				callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append(match.ReplacementName)...)
 				replacement := callee
-				if match.ValueNode != nil {
+				if value != nil {
 					var typeArguments *ast.NodeList
-					if match.ValueTypeArguments != nil && len(match.ValueTypeArguments.Nodes) > 0 {
-						arguments := make([]*ast.Node, len(match.ValueTypeArguments.Nodes))
-						for i, argument := range match.ValueTypeArguments.Nodes {
+					if valueTypeArguments != nil && len(valueTypeArguments.Nodes) > 0 {
+						arguments := make([]*ast.Node, len(valueTypeArguments.Nodes))
+						for i, argument := range valueTypeArguments.Nodes {
 							arguments[i] = tracker.DeepCloneNode(argument)
 						}
 						typeArguments = tracker.NewNodeList(arguments)
@@ -48,7 +64,7 @@ func runPreferSucceedSomeOrNoneFix(ctx *fixable.Context) []ls.CodeAction {
 						callee,
 						nil,
 						typeArguments,
-						tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.ValueNode)}),
+						tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(value)}),
 						ast.NodeFlagsNone,
 					)
 				}

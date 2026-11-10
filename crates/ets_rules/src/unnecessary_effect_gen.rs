@@ -39,7 +39,7 @@ pub static UNNECESSARY_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/unnecessary_effect_gen.go:34 UnnecessaryEffectGenMatch 9e2935b0ae0331de
+// go: internal/rules/unnecessary_effect_gen.go:34 UnnecessaryEffectGenMatch bcb41b843144d6dd
 // UnnecessaryEffectGenMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the unnecessaryEffectGen pattern.
 #[derive(Clone)]
@@ -49,10 +49,9 @@ pub struct UnnecessaryEffectGenMatch {
     pub call_node: P<Node>,         // The Effect.gen(...) call expression (replacement target)
     pub yielded_expression: P<Node>, // The expression being yield*-ed (the replacement value)
     pub explicit_return: bool,      // Whether the statement had an explicit return
-    pub success_is_void: bool,      // Whether the yielded Effect's success type is void-like
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:45 AnalyzeUnnecessaryEffectGen edf311e8928f728f
+// go: internal/rules/unnecessary_effect_gen.go:44 AnalyzeUnnecessaryEffectGen edf311e8928f728f
 // AnalyzeUnnecessaryEffectGen finds all Effect.gen calls that contain only a single
 // yield* statement and can be replaced with the yielded expression directly.
 //
@@ -84,7 +83,7 @@ pub fn analyze_unnecessary_effect_gen(
     matches
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:69 analyzeUnnecessaryEffectGenNode da05dbdef3a18943
+// go: internal/rules/unnecessary_effect_gen.go:68 analyzeUnnecessaryEffectGenNode 4c68f4f6cdea4bfd
 pub(crate) fn analyze_unnecessary_effect_gen_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -127,23 +126,31 @@ pub(crate) fn analyze_unnecessary_effect_gen_node(
         return None;
     }
 
-    // Determine if the success type is void-like
-    let mut success_is_void = false;
-    if let Some(effect) = tp.effect_type_at_location(yielded_expr) {
-        success_is_void = effect.a().flags().intersects(TypeFlags::VoidLike);
-    }
-
     Some(UnnecessaryEffectGenMatch {
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, n),
         call_node: n,
         yielded_expression: yielded_expr,
         explicit_return,
-        success_is_void,
     })
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:139 isYieldStarExpression d06aa13bfcca8545
+// go: internal/rules/unnecessary_effect_gen.go:135 UnnecessaryEffectGenSuccessIsVoid b6de08db8a73847e
+// UnnecessaryEffectGenSuccessIsVoid reports whether the success type of the
+// yielded Effect is void-like, so a bare yield* statement can be unwrapped
+// without Effect.asVoid. The quick fix and the refactor ask for it only when the
+// statement has no explicit return.
+//
+// Rust: Go's `effect.A() != nil` check drops (non-optional here).
+pub fn unnecessary_effect_gen_success_is_void(
+    tp: &mut TypeParser<'_>,
+    yielded_expression: P<Node>,
+) -> bool {
+    tp.effect_type_at_location(yielded_expression)
+        .is_some_and(|effect| effect.a().flags().intersects(TypeFlags::VoidLike))
+}
+
+// go: internal/rules/unnecessary_effect_gen.go:140 isYieldStarExpression d06aa13bfcca8545
 pub(crate) fn is_yield_star_expression(expr: P<Node>) -> bool {
     expr.as_yield_expression().asterisk_token().is_some()
 }

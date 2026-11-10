@@ -27,6 +27,11 @@ func runProvideMergeAllToArrayFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
+		// Explicit type arguments on either call describe the merged layer and
+		// cannot be carried over to the array form.
+		if rules.HasExplicitTypeArguments(match.Provide) || hasCallTypeArguments(match.MergeAll.AsCallExpression()) {
+			continue
+		}
 		// Only the call syntax around the layers is replaced, so the layer
 		// expressions, spreads, comments and trailing comma stay as written.
 		arguments := match.MergeAll.AsCallExpression().Arguments

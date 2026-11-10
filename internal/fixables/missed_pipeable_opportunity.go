@@ -66,8 +66,9 @@ func buildMissedPipeableReplacement(tracker *rewriter.Tracker, sf *ast.SourceFil
 	subjectNode := tracker.DeepCloneNode(subjectInput)
 
 	// Build pipe arguments from transformations
-	pipeArgs := make([]*ast.Node, 0, len(match.PipeableTransformations))
-	for _, t := range match.PipeableTransformations {
+	pipeableTransformations := flow.Transformations().Slice(match.PipeableStartIndex, match.PipeableEndIndex)
+	pipeArgs := make([]*ast.Node, 0, pipeableTransformations.Len())
+	for _, t := range pipeableTransformations.All() {
 		var arg *ast.Node
 		if t.Args().Len() > 0 {
 			// It's a function call like Effect.map((x) => x + 1) -> create callee(args...)
@@ -89,9 +90,10 @@ func buildMissedPipeableReplacement(tracker *rewriter.Tracker, sf *ast.SourceFil
 	pipeCall := tracker.NewCallExpression(pipeAccess, nil, nil, tracker.NewNodeList(pipeArgs), ast.NodeFlagsNone)
 
 	// Wrap with "after" transformations if any
+	afterTransformations := flow.Transformations().Slice(match.PipeableEndIndex, match.ReportedCount)
 	var replacementNode *ast.Node
-	if match.AfterTransformations.Len() > 0 {
-		replacementNode = wrapWithAfterTransformations(tracker, pipeCall, match.AfterTransformations)
+	if afterTransformations.Len() > 0 {
+		replacementNode = wrapWithAfterTransformations(tracker, pipeCall, afterTransformations)
 	} else {
 		replacementNode = pipeCall
 	}

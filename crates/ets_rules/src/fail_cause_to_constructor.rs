@@ -3,12 +3,12 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, NodeList, SourceFile};
+use ets_shim::ast::{Diagnostic, Kind, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
-    EffectMajorVersion, LazyExpressionFlags, PipingFlow, PipingFlowSubject,
-    PipingFlowTransformation, TransformationKind, TypeParser,
+    EffectMajorVersion, LazyExpressionFlags, ParsedLazyExpression, PipingFlow, PipingFlowSubject,
+    PipingFlowTransformation, TypeParser,
 };
 
 /// Rust-only: the rule's message (Go spells it out at each use).
@@ -43,7 +43,7 @@ pub static FAIL_CAUSE_TO_CONSTRUCTOR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/fail_cause_to_constructor.go:45 FailCauseToConstructorMatch 7b1ae6cc70061555
+// go: internal/rules/fail_cause_to_constructor.go:45 FailCauseToConstructorMatch 66dee876026e00f2
 // FailCauseToConstructorMatch holds the nodes needed by the diagnostic and quick fix.
 //
 // Rust: Go's `*PipingFlow` is an owned copy.
@@ -54,21 +54,19 @@ pub struct FailCauseToConstructorMatch {
     pub replacement_name: String,       // fail, die, failSync or dieSync
     pub source_name: &'static str,      // failCause or failCauseSync
     pub constructor_name: &'static str, // fail or die
-    pub value_node: Option<P<Node>>,    // The value passed to Cause.fail / Cause.die
-    pub value_type_arguments: Option<P<NodeList>>,
-    // Eager fix: the flow prefix up to and including Effect.failCause is
-    // replaced. A nil Flow means the match is reported without a fix.
+    // Flow's first TransformationCount steps end in Effect.failCause, after
+    // Cause.fail or Cause.die, or are the single Effect.failCauseSync step
+    // applied to Lazy.
     pub flow: Option<PipingFlow>,
     pub transformation_count: i64,
-    // Lazy fix: the Cause constructor call in the thunk is replaced by its
-    // value and the failCauseSync callee is renamed. A nil LazyCauseNode means
-    // the match is reported without a fix.
-    pub lazy_callee: Option<P<Node>>,
-    pub lazy_cause_node: Option<P<Node>>,
-    pub lazy_expression_body: bool,
+    // Lazy is the failCauseSync thunk, and Inner the flow of its returned
+    // expression, which ends in Cause.fail or Cause.die; both are nil for
+    // Effect.failCause.
+    pub lazy: Option<ParsedLazyExpression>,
+    pub inner: Option<PipingFlow>,
 }
 
-// go: internal/rules/fail_cause_to_constructor.go:69 AnalyzeFailCauseToConstructor 6277e3462181d23c
+// go: internal/rules/fail_cause_to_constructor.go:67 AnalyzeFailCauseToConstructor 936414918167cead
 // AnalyzeFailCauseToConstructor finds piping flows in which Cause.fail or
 // Cause.die feeds directly into Effect.failCause, and Effect.failCauseSync
 // thunks whose returned flow ends in Cause.fail (or Cause.die on Effect v3,
@@ -113,33 +111,18 @@ pub fn analyze_fail_cause_to_constructor(
                 &[&is_cause_constructor(constructor_name), &is_effect_api("failCause")],
             );
             for sequence in sequences.iter().flatten() {
-                let cause_index = sequence.start();
-                let cause_step = flow.transformations().at(cause_index);
-                let fail_step = flow.transformations().at(cause_index + 1);
-                let value = PipingFlow::transformation_input_node(Some(flow), cause_index);
-                let mut m = FailCauseToConstructorMatch {
+                let fail_step = flow.transformations().at(sequence.start() + 1);
+                matches.push(FailCauseToConstructorMatch {
                     source_file: sf,
                     location: ets_shim::scanner::get_error_range_for_node(sf, fail_step.callee()),
                     replacement_name: constructor_name.to_string(),
                     source_name: "failCause",
                     constructor_name,
-                    value_node: value,
-                    value_type_arguments: cause_step.type_arguments(),
-                    flow: None,
-                    transformation_count: 0,
-                    lazy_callee: None,
-                    lazy_cause_node: None,
-                    lazy_expression_body: false,
-                };
-                if value.is_some()
-                    && (fail_step.kind() == TransformationKind::Call
-                        || fail_step.kind() == TransformationKind::Pipe
-                        || fail_step.kind() == TransformationKind::Pipeable)
-                {
-                    m.flow = Some(flow.clone());
-                    m.transformation_count = cause_index + 2;
-                }
-                matches.push(m);
+                    flow: Some(flow.clone()),
+                    transformation_count: sequence.start() + 2,
+                    lazy: None,
+                    inner: None,
+                });
             }
         }
 
@@ -176,8 +159,7 @@ pub fn analyze_fail_cause_to_constructor(
         if inner.transformations().len() == 0 {
             continue;
         }
-        let last_index = inner.transformations().len() - 1;
-        let last = inner.transformations().at(last_index);
+        let last = inner.transformations().at(inner.transformations().len() - 1);
         let constructor_name = if is_cause_constructor("fail")(tp, last) {
             "fail"
         } else if allow_lazy_die && is_cause_constructor("die")(tp, last) {
@@ -186,60 +168,20 @@ pub fn analyze_fail_cause_to_constructor(
             continue;
         };
 
-        let fail_step = flow.transformations().at(0);
-        let mut m = FailCauseToConstructorMatch {
+        matches.push(FailCauseToConstructorMatch {
             source_file: sf,
-            location: ets_shim::scanner::get_error_range_for_node(sf, fail_step.callee()),
+            location: ets_shim::scanner::get_error_range_for_node(
+                sf,
+                flow.transformations().at(0).callee(),
+            ),
             replacement_name: constructor_name.to_string() + "Sync",
             source_name: "failCauseSync",
             constructor_name,
-            value_node: None,
-            value_type_arguments: None,
-            flow: None,
-            transformation_count: 0,
-            lazy_callee: None,
-            lazy_cause_node: None,
-            lazy_expression_body: false,
-        };
-        let body = ast::skip_parentheses(lazy.expression());
-        let value = PipingFlow::transformation_input_node(Some(&inner), last_index);
-        if fail_step.kind() == TransformationKind::Call
-            && no_type_arguments(last)
-            && let Some(value) = value
-            && body.kind() == Kind::CallExpression
-            && body.as_call_expression().expression() == last.callee()
-            && (constructor_name == "die" || lazy_fail_keeps_error_type(tp, fail_step, value))
-        {
-            m.value_node = Some(value);
-            m.lazy_callee = Some(fail_step.callee());
-            m.lazy_cause_node = Some(body);
-            m.lazy_expression_body = !ast::is_block(lazy.body()) && lazy.expression() == body;
-        }
-        matches.push(m);
+            flow: Some(flow.clone()),
+            transformation_count: 1,
+            lazy: Some(lazy),
+            inner: Some(inner),
+        });
     }
     matches
-}
-
-// go: internal/rules/fail_cause_to_constructor.go:178 lazyFailKeepsErrorType 07e14f43ac97c387
-// lazyFailKeepsErrorType reports whether Effect.failSync(() => value) infers the
-// same error type as Effect.failCauseSync(() => Cause.fail(value)). Cause.fail
-// infers its error from a call argument, which widens literal unions, while a
-// failSync thunk returns the value against LazyArg<E>, which keeps them: for
-// `cond ? "A" : "B"` the first infers string and the second "A" | "B". The fix
-// is only offered when the value's own type already is the inferred error type.
-//
-// Rust: Go's checker argument is `tp.checker()`; Go's `effect.E() == nil` check drops (non-optional here).
-pub(crate) fn lazy_fail_keeps_error_type(
-    tp: &mut TypeParser<'_>,
-    fail_step: &PipingFlowTransformation,
-    value: P<Node>,
-) -> bool {
-    let out_type = fail_step.out_type(tp);
-    let effect = tp.effect_type(out_type);
-    let value_type = tp.get_type_at_location(value);
-    let (Some(effect), Some(value_type)) = (effect, value_type) else {
-        return false;
-    };
-    tp.checker().is_type_assignable_to(value_type, effect.e())
-        && tp.checker().is_type_assignable_to(effect.e(), value_type)
 }

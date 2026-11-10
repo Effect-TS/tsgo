@@ -18,12 +18,21 @@ pub static PROVIDE_MERGE_ALL_TO_ARRAY_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_provide_merge_all_to_array_fix,
 });
 
-// go: internal/fixables/provide_merge_all_to_array.go:23 runProvideMergeAllToArrayFix a18610d4b75cf6c6
+// go: internal/fixables/provide_merge_all_to_array.go:23 runProvideMergeAllToArrayFix e8ae73d1fe1f1624
 fn run_provide_merge_all_to_array_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let text = sf.text();
     for m in ets_rules::analyze_provide_merge_all_to_array(&mut ctx.type_parser, Some(sf)) {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
+            continue;
+        }
+        // Explicit type arguments on either call describe the merged layer and
+        // cannot be carried over to the array form.
+        if ets_rules::has_explicit_type_arguments(Some(&m.provide))
+            || crate::all_of_map_to_for_each::has_call_type_arguments(Some(
+                m.merge_all.as_call_expression(),
+            ))
+        {
             continue;
         }
         // Only the call syntax around the layers is replaced, so the layer

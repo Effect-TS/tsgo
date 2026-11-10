@@ -4,6 +4,7 @@ use ets_fixable::{Context, FixAction, Fixable};
 use ets_shim::ast::NodeFlags;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
+use ets_typeparser::{PipingFlow, TransformationKind};
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message =
@@ -18,18 +19,35 @@ pub static PREFER_SUCCEED_SOME_OR_NONE_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_prefer_succeed_some_or_none_fix,
 });
 
-// go: internal/fixables/prefer_succeed_some_or_none.go:23 runPreferSucceedSomeOrNoneFix ecaca4280a3b6134
+// go: internal/fixables/prefer_succeed_some_or_none.go:23 runPreferSucceedSomeOrNoneFix 22fd490db9108a73
 fn run_prefer_succeed_some_or_none_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_prefer_succeed_some_or_none(&mut ctx.type_parser, Some(sf)) {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
-        if m.flow.is_none()
-            || m.transformation_count <= 0
-            || m.replacement_name == "succeedSome" && m.value_node.is_none()
+        let Some(flow) = &m.flow else {
+            continue;
+        };
+        if m.transformation_count <= 0 {
+            continue;
+        }
+        let succeed = flow.transformations().at(m.transformation_count - 1);
+        if succeed.kind() != TransformationKind::Call
+            && succeed.kind() != TransformationKind::Pipe
+            && succeed.kind() != TransformationKind::Pipeable
         {
             continue;
+        }
+        let mut value = None;
+        let mut value_type_arguments = None;
+        if m.replacement_name == "succeedSome" {
+            let option_index = m.transformation_count - 2;
+            value = PipingFlow::transformation_input_node(Some(flow), option_index);
+            value_type_arguments = flow.transformations().at(option_index).type_arguments();
+            if value.is_none() {
+                continue;
+            }
         }
 
         let description = "Replace with Effect.".to_string() + m.replacement_name;
@@ -41,9 +59,9 @@ fn run_prefer_succeed_some_or_none_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
                         .append(&[m.replacement_name]),
                 );
                 let mut replacement = callee;
-                if let Some(value_node) = m.value_node {
+                if let Some(value) = value {
                     let mut type_arguments = None;
-                    if let Some(value_type_arguments) = m.value_type_arguments
+                    if let Some(value_type_arguments) = value_type_arguments
                         && !value_type_arguments.nodes().is_empty()
                     {
                         let arguments = value_type_arguments
@@ -57,9 +75,7 @@ fn run_prefer_succeed_some_or_none_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
                         callee,
                         None,
                         type_arguments,
-                        tracker.new_node_list(vec![
-                            tracker.deep_clone_node(Some(value_node)).unwrap(),
-                        ]),
+                        tracker.new_node_list(vec![tracker.deep_clone_node(Some(value)).unwrap()]),
                         NodeFlags::None,
                     );
                 }

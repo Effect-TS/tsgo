@@ -44,11 +44,10 @@ const (
 )
 
 type EffectSleepZeroToYieldNowMatch struct {
-	SourceFile   *ast.SourceFile
-	Location     core.TextRange
-	Call         *ast.Node
-	EffectModule *ast.Node
-	Form         YieldNowForm
+	SourceFile *ast.SourceFile
+	Location   core.TextRange
+	Call       *ast.Node
+	Form       YieldNowForm
 }
 
 func AnalyzeEffectSleepZeroToYieldNow(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectSleepZeroToYieldNowMatch {
@@ -68,23 +67,15 @@ func AnalyzeEffectSleepZeroToYieldNow(tp *typeparser.TypeParser, _ *checker.Chec
 	walk = func(node *ast.Node) bool {
 		if node.Kind == ast.KindCallExpression && isOrdinarySingleArgumentCall(node) {
 			call := node.AsCallExpression()
-			callee := unwrapZeroDurationExpression(call.Expression)
+			callee := UnwrapZeroDurationExpression(call.Expression)
 			if callee.Flags&ast.NodeFlagsOptionalChain == 0 &&
 				tp.IsNodeReferenceToEffectModuleApi(callee, "sleep") &&
 				isRemovableZeroDuration(tp, call.Arguments.Nodes[0], version) {
-				var receiver *ast.Node
-				if callee.Kind == ast.KindPropertyAccessExpression {
-					candidate := callee.AsPropertyAccessExpression().Expression
-					if isImportedModuleReceiver(tp, candidate) && tp.IsExpressionEffectModule(unwrapZeroDurationExpression(candidate)) {
-						receiver = candidate
-					}
-				}
 				matches = append(matches, EffectSleepZeroToYieldNowMatch{
-					SourceFile:   sf,
-					Location:     scanner.GetErrorRangeForNode(sf, call.Expression),
-					Call:         node,
-					EffectModule: receiver,
-					Form:         form,
+					SourceFile: sf,
+					Location:   scanner.GetErrorRangeForNode(sf, call.Expression),
+					Call:       node,
+					Form:       form,
 				})
 			}
 		}
@@ -96,7 +87,7 @@ func AnalyzeEffectSleepZeroToYieldNow(tp *typeparser.TypeParser, _ *checker.Chec
 	return matches
 }
 
-func unwrapZeroDurationExpression(node *ast.Node) *ast.Node {
+func UnwrapZeroDurationExpression(node *ast.Node) *ast.Node {
 	return ast.SkipOuterExpressions(node, ast.OEKParentheses|ast.OEKTypeAssertions|ast.OEKSatisfies)
 }
 
@@ -107,10 +98,12 @@ func isOrdinarySingleArgumentCall(node *ast.Node) bool {
 		call.Arguments.Nodes[0].Kind != ast.KindSpreadElement
 }
 
-func isImportedModuleReceiver(tp *typeparser.TypeParser, node *ast.Node) bool {
-	node = unwrapZeroDurationExpression(node)
+// IsImportedModuleReceiver reports whether node is a namespace or named import
+// binding, or a property of a namespace import, so it names a module directly.
+func IsImportedModuleReceiver(tp *typeparser.TypeParser, node *ast.Node) bool {
+	node = UnwrapZeroDurationExpression(node)
 	if node.Kind == ast.KindPropertyAccessExpression && node.Flags&ast.NodeFlagsOptionalChain == 0 {
-		root := unwrapZeroDurationExpression(node.AsPropertyAccessExpression().Expression)
+		root := UnwrapZeroDurationExpression(node.AsPropertyAccessExpression().Expression)
 		if root.Kind != ast.KindIdentifier {
 			return false
 		}
@@ -131,7 +124,7 @@ func isImportedModuleReceiver(tp *typeparser.TypeParser, node *ast.Node) bool {
 var zeroDurationString = regexp.MustCompile(`^(-?0+(?:\.0+)?)[ \t]+(nanos?|micros?|millis?|seconds?|minutes?|hours?|days?|weeks?)$`)
 
 func isRemovableZeroDuration(tp *typeparser.TypeParser, node *ast.Node, version typeparser.EffectMajorVersion) bool {
-	node = unwrapZeroDurationExpression(node)
+	node = UnwrapZeroDurationExpression(node)
 	if isZeroDurationNumber(node, false) || isZeroDurationNumber(node, true) {
 		return true
 	}
@@ -150,19 +143,19 @@ func isRemovableZeroDuration(tp *typeparser.TypeParser, node *ast.Node, version 
 	case ast.KindPropertyAccessExpression:
 		receiver := node.AsPropertyAccessExpression().Expression
 		return node.Flags&ast.NodeFlagsOptionalChain == 0 &&
-			isImportedModuleReceiver(tp, receiver) && tp.IsExpressionEffectDurationModule(unwrapZeroDurationExpression(receiver)) &&
+			IsImportedModuleReceiver(tp, receiver) && tp.IsExpressionEffectDurationModule(UnwrapZeroDurationExpression(receiver)) &&
 			tp.IsNodeReferenceToEffectDurationModuleApi(node, "zero")
 	case ast.KindCallExpression:
 		if !isOrdinarySingleArgumentCall(node) {
 			return false
 		}
 		call := node.AsCallExpression()
-		callee := unwrapZeroDurationExpression(call.Expression)
+		callee := UnwrapZeroDurationExpression(call.Expression)
 		if callee.Kind != ast.KindPropertyAccessExpression || callee.Flags&ast.NodeFlagsOptionalChain != 0 {
 			return false
 		}
 		receiver := callee.AsPropertyAccessExpression().Expression
-		if !isImportedModuleReceiver(tp, receiver) || !tp.IsExpressionEffectDurationModule(unwrapZeroDurationExpression(receiver)) {
+		if !IsImportedModuleReceiver(tp, receiver) || !tp.IsExpressionEffectDurationModule(UnwrapZeroDurationExpression(receiver)) {
 			return false
 		}
 		unit := callee.AsPropertyAccessExpression().Name().Text()
@@ -177,13 +170,13 @@ func isRemovableZeroDuration(tp *typeparser.TypeParser, node *ast.Node, version 
 }
 
 func isZeroDurationNumber(node *ast.Node, bigint bool) bool {
-	node = unwrapZeroDurationExpression(node)
+	node = UnwrapZeroDurationExpression(node)
 	if node.Kind == ast.KindPrefixUnaryExpression {
 		unary := node.AsPrefixUnaryExpression()
 		if unary.Operator != ast.KindMinusToken && (bigint || unary.Operator != ast.KindPlusToken) {
 			return false
 		}
-		node = unwrapZeroDurationExpression(unary.Operand)
+		node = UnwrapZeroDurationExpression(unary.Operand)
 	}
 	if bigint {
 		if node.Kind != ast.KindBigIntLiteral {

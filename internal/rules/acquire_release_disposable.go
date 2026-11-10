@@ -41,11 +41,10 @@ var AcquireReleaseDisposable = rule.Rule{
 // AcquireReleaseDisposableMatch holds the nodes needed by the diagnostic and
 // its quick fix.
 type AcquireReleaseDisposableMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange
-	CallNode         *ast.Node
-	Acquire          *ast.Node
-	HasTypeArguments bool
+	SourceFile *ast.SourceFile
+	Location   core.TextRange
+	CallNode   *ast.Node
+	Acquire    *ast.Node
 }
 
 // AnalyzeAcquireReleaseDisposable finds Effect.acquireRelease calls whose
@@ -129,11 +128,10 @@ func analyzeAcquireReleaseDisposableCall(
 	}
 
 	return AcquireReleaseDisposableMatch{
-		SourceFile:       sf,
-		Location:         scanner.GetErrorRangeForNode(sf, call.Expression),
-		CallNode:         node,
-		Acquire:          call.Arguments.Nodes[0],
-		HasTypeArguments: hasCallTypeArguments(call),
+		SourceFile: sf,
+		Location:   scanner.GetErrorRangeForNode(sf, call.Expression),
+		CallNode:   node,
+		Acquire:    call.Arguments.Nodes[0],
 	}, true
 }
 

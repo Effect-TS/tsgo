@@ -92,7 +92,7 @@ func analyzeEffectSucceedConstant(tp *typeparser.TypeParser, sf *ast.SourceFile)
 			func(subject typeparser.PipingFlowSubject) bool { return isUndefinedConstant(tp, subject.Node()) },
 			func(transformation typeparser.PipingFlowTransformation) bool {
 				if transformation.Callee() == nil || transformation.Args().Len() != 0 ||
-					!tp.IsNodeReferenceToEffectModuleApi(unwrapZeroDurationExpression(transformation.Callee()), "succeed") {
+					!tp.IsNodeReferenceToEffectModuleApi(UnwrapZeroDurationExpression(transformation.Callee()), "succeed") {
 					return false
 				}
 				member = effectSucceedConstantMember(tp, tp.StrictEffectType(transformation.OutType()))

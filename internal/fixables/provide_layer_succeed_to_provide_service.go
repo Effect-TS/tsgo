@@ -25,7 +25,7 @@ func runProvideLayerSucceedToProvideServiceFix(ctx *fixable.Context) []ls.CodeAc
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.ProvideTransformation == nil {
+		if match.ProvideTransformation == nil || rules.HasExplicitTypeArguments(match.LayerTransformation) {
 			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{

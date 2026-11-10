@@ -6,6 +6,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -20,11 +21,16 @@ var CatchAllTagDispatchToCatchTagFix = fixable.Fixable{
 
 func runCatchAllTagDispatchToCatchTagFix(ctx *fixable.Context) []ls.CodeAction {
 	for _, match := range rules.AnalyzeCatchAllTagDispatchToCatchTag(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
-		if !match.CanFix || (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) {
+		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
+			continue
+		}
+		// The new handlers rebind the parameter per branch, which only holds for
+		// an arrow function whose parameter is never reassigned.
+		if match.Handler == nil || match.Handler.Kind != ast.KindArrowFunction || checker.Checker_isSymbolAssigned(ctx.Checker, match.ParameterSymbol) {
 			continue
 		}
 		action := ctx.NewFixAction(fixable.FixAction{Description: "Replace with Effect.catchTag or Effect.catchTags", Run: func(tracker *rewriter.Tracker) {
-			callee, arguments := buildCatchAllTagDispatchReplacement(tracker, ctx.SourceFile, match)
+			callee, arguments := buildCatchAllTagDispatchReplacement(tracker, ctx, match)
 			if callee != nil && arguments != nil {
 				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{Callee: callee, Arguments: arguments})
 			}
@@ -36,7 +42,7 @@ func runCatchAllTagDispatchToCatchTagFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.CatchAllTagDispatchMatch) (*ast.Node, *ast.NodeList) {
+func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, ctx *fixable.Context, match rules.CatchAllTagDispatchMatch) (*ast.Node, *ast.NodeList) {
 	if tracker == nil || match.Callee == nil || len(match.Branches) == 0 {
 		return nil, nil
 	}
@@ -44,10 +50,10 @@ func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, sf *ast.Sour
 	if len(match.Branches) > 1 {
 		methodName = "catchTags"
 	}
-	callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append(methodName)...)
+	callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append(methodName)...)
 	if len(match.Branches) == 1 {
 		branch := match.Branches[0]
-		return callee, tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(branch.Tag, 0), newCatchTagHandler(tracker, match.ParameterName, branch)})
+		return callee, tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(branch.Tag, 0), newCatchTagHandler(tracker, ctx, match, branch)})
 	}
 	properties := make([]*ast.Node, 0, len(match.Branches))
 	for _, branch := range match.Branches {
@@ -55,15 +61,17 @@ func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, sf *ast.Sour
 		if scanner.IsIdentifierText(branch.Tag, core.LanguageVariantStandard) {
 			name = tracker.NewIdentifier(branch.Tag)
 		}
-		properties = append(properties, tracker.NewPropertyAssignment(nil, name, nil, nil, newCatchTagHandler(tracker, match.ParameterName, branch)))
+		properties = append(properties, tracker.NewPropertyAssignment(nil, name, nil, nil, newCatchTagHandler(tracker, ctx, match, branch)))
 	}
 	return callee, tracker.NewNodeList([]*ast.Node{tracker.NewObjectLiteralExpression(tracker.NewNodeList(properties), false)})
 }
 
-func newCatchTagHandler(tracker *rewriter.Tracker, parameterName string, branch rules.CatchAllTagDispatchBranch) *ast.Node {
+// newCatchTagHandler builds a branch handler that keeps the error parameter
+// only when the branch result reads it.
+func newCatchTagHandler(tracker *rewriter.Tracker, ctx *fixable.Context, match rules.CatchAllTagDispatchMatch, branch rules.CatchAllTagDispatchBranch) *ast.Node {
 	var parameters []*ast.Node
-	if branch.UsesParameter {
-		parameters = []*ast.Node{tracker.NewParameterDeclaration(nil, nil, tracker.NewIdentifier(parameterName), nil, nil, nil)}
+	if rules.ConditionalRefailNodeContainsParameter(ctx.TypeParser, ctx.Checker, branch.Result, match.ParameterSymbol) {
+		parameters = []*ast.Node{tracker.NewParameterDeclaration(nil, nil, tracker.NewIdentifier(match.ParameterName), nil, nil, nil)}
 	}
 	return tracker.NewArrowFunction(nil, nil, tracker.NewNodeList(parameters), nil, nil, tracker.NewToken(ast.KindEqualsGreaterThanToken), tracker.DeepCloneNode(branch.Result))
 }

@@ -28,12 +28,13 @@ export const effectFnUntraced = Effect.fnUntraced(function*() {
 // MUST NOT TRIGGER: the curried Effect.provide is never applied to an effect
 export const unapplied = Effect.provide(Layer.mergeAll(ALayer, BLayer))
 
-// MUST NOT TRIGGER: explicit type arguments on Layer.mergeAll
+// MUST TRIGGER without a fix: Effect.provide<[Layer.Layer<A>, Layer.Layer<B>]>([ALayer, BLayer]) can be
+// written by hand, but the fix does not carry type arguments over
 export const explicitMergeAllTypeArguments = program.pipe(
   Effect.provide(Layer.mergeAll<[Layer.Layer<A>, Layer.Layer<B>]>(ALayer, BLayer))
 )
 
-// MUST NOT TRIGGER: explicit type arguments on Effect.provide
+// MUST TRIGGER without a fix: explicit type arguments on Effect.provide, which the fix does not carry over
 export const explicitProvideTypeArguments = program.pipe(Effect.provide<A, never, never>(Layer.mergeAll(ALayer)))
 
 // MUST NOT TRIGGER: Layer.mergeAll without arguments

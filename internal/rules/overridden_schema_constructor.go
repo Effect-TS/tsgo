@@ -34,7 +34,6 @@ type OverriddenSchemaConstructorMatch struct {
 	SourceFile      *ast.SourceFile
 	Location        core.TextRange // The error range for the constructor node
 	ConstructorNode *ast.Node      // The constructor declaration AST node
-	HasBody         bool           // Whether the constructor has a body (the static fix is only available when true)
 }
 
 // AnalyzeOverriddenSchemaConstructor finds all class declarations extending Schema
@@ -102,13 +101,10 @@ func checkOverriddenSchemaConstructor(tp *typeparser.TypeParser, _ *checker.Chec
 			if isAllowedConstructor(member) {
 				continue
 			}
-			ctor := member.AsConstructorDeclaration()
-			hasBody := ctor.Body != nil && ctor.Body.Kind == ast.KindBlock
 			return &OverriddenSchemaConstructorMatch{
 				SourceFile:      sf,
 				Location:        scanner.GetErrorRangeForNode(sf, member),
 				ConstructorNode: member,
-				HasBody:         hasBody,
 			}
 		}
 	}

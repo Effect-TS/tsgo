@@ -13,7 +13,7 @@ use ets_shim::scanner;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_TAG_INSIDE_EFFECT_1_HAND_ROLLS_TAGGED_ERROR_DISPATCH_USE_EFFECT_CATCH_TAG_OR_EFFECT_CATCH_TAGS_WHICH_RE_FAIL_UNMATCHED_ERRORS_AUTOMATICALLY_EFFECT_CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG;
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:15 CatchAllTagDispatchToCatchTagFix f506792fa2f3559e
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:16 CatchAllTagDispatchToCatchTagFix f506792fa2f3559e
 pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchAllTagDispatchToCatchTag",
     description: "Replace hand-rolled tagged error dispatch with Effect.catchTag or Effect.catchTags",
@@ -22,21 +22,47 @@ pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock
     run: run_catch_all_tag_dispatch_to_catch_tag_fix,
 });
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:21 runCatchAllTagDispatchToCatchTagFix 7cba469b0aa3a0ad
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:22 runCatchAllTagDispatchToCatchTagFix fcc20ab3d72176e2
+//
+// Rust: Go's edit closure asks the type parser, per branch, whether the branch result reads the parameter. The
+// parser is borrowed mutably by the context, which `new_fix_action` borrows, so those scans (which read only the
+// source and the checker, never the tracker) run just before `new_fix_action`, in branch order.
 fn run_catch_all_tag_dispatch_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_catch_all_tag_dispatch_to_catch_tag(
         &mut ctx.type_parser,
         Some(source_file),
     ) {
-        if !m.can_fix || (!m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location)) {
+        if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
+        // The new handlers rebind the parameter per branch, which only holds for
+        // an arrow function whose parameter is never reassigned.
+        if m.handler.kind() != Kind::ArrowFunction
+            || ctx.checker().is_symbol_assigned(m.parameter_symbol)
+        {
+            continue;
+        }
+        let uses_parameter: Vec<bool> = m
+            .branches
+            .iter()
+            .map(|branch| {
+                ets_rules::conditional_refail_node_contains_parameter(
+                    &mut ctx.type_parser,
+                    Some(branch.result),
+                    Some(m.parameter_symbol),
+                )
+            })
+            .collect();
         let action = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.catchTag or Effect.catchTags".to_string(),
             run: Box::new(move |tracker| {
-                let (callee, arguments) =
-                    build_catch_all_tag_dispatch_replacement(tracker, source_file, &m);
+                let (callee, arguments) = build_catch_all_tag_dispatch_replacement(
+                    tracker,
+                    source_file,
+                    &m,
+                    &uses_parameter,
+                );
                 if callee.is_some() && arguments.is_some() {
                     tracker.replace_piping_flow_transformation(
                         Some(source_file),
@@ -57,13 +83,16 @@ fn run_catch_all_tag_dispatch_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec
     Vec::new()
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:39 buildCatchAllTagDispatchReplacement 15a636ebb6e35af5
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:45 buildCatchAllTagDispatchReplacement f143328b41352638
 //
-// Rust: the tracker and the match's callee cannot be nil, so only Go's empty-branches check remains.
+// Rust: the tracker and the match's callee cannot be nil, so only Go's empty-branches check remains. Go's `ctx`
+// parameter is the source file plus `uses_parameter`, each branch's precomputed parameter scan (see
+// `run_catch_all_tag_dispatch_to_catch_tag_fix`).
 fn build_catch_all_tag_dispatch_replacement(
     tracker: &Tracker,
     sf: P<SourceFile>,
     m: &CatchAllTagDispatchMatch,
+    uses_parameter: &[bool],
 ) -> (Option<P<Node>>, Option<P<NodeList>>) {
     if m.branches.is_empty() {
         return (None, None);
@@ -81,12 +110,12 @@ fn build_catch_all_tag_dispatch_replacement(
             Some(callee),
             Some(tracker.new_node_list(vec![
                 tracker.new_string_literal(alloc_str(&branch.tag), TokenFlags::None),
-                new_catch_tag_handler(tracker, &m.parameter_name, branch),
+                new_catch_tag_handler(tracker, m, branch, uses_parameter[0]),
             ])),
         );
     }
     let mut properties = Vec::with_capacity(m.branches.len());
-    for branch in &m.branches {
+    for (index, branch) in m.branches.iter().enumerate() {
         let mut name = tracker.new_string_literal(alloc_str(&branch.tag), TokenFlags::None);
         if scanner::is_identifier_text(&branch.tag, LanguageVariant::Standard) {
             name = tracker.new_identifier(alloc_str(&branch.tag));
@@ -96,7 +125,7 @@ fn build_catch_all_tag_dispatch_replacement(
             name,
             None,
             None,
-            new_catch_tag_handler(tracker, &m.parameter_name, branch),
+            new_catch_tag_handler(tracker, m, branch, uses_parameter[index]),
         ));
     }
     (
@@ -107,18 +136,24 @@ fn build_catch_all_tag_dispatch_replacement(
     )
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:63 newCatchTagHandler 2c37a49d830c9b68
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:71 newCatchTagHandler a40080adf9dfc3ea
+// newCatchTagHandler builds a branch handler that keeps the error parameter
+// only when the branch result reads it.
+//
+// Rust: Go's `ctx` parameter is `uses_parameter`, the branch's precomputed
+// `ConditionalRefailNodeContainsParameter` result.
 fn new_catch_tag_handler(
     tracker: &Tracker,
-    parameter_name: &str,
+    m: &CatchAllTagDispatchMatch,
     branch: &CatchAllTagDispatchBranch,
+    uses_parameter: bool,
 ) -> P<Node> {
     let mut parameters = Vec::new();
-    if branch.uses_parameter {
+    if uses_parameter {
         parameters = vec![tracker.new_parameter_declaration(
             None,
             None,
-            tracker.new_identifier(alloc_str(parameter_name)),
+            tracker.new_identifier(alloc_str(&m.parameter_name)),
             None,
             None,
             None,

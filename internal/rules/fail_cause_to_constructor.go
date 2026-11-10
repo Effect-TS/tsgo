@@ -43,23 +43,21 @@ var FailCauseToConstructor = rule.Rule{
 
 // FailCauseToConstructorMatch holds the nodes needed by the diagnostic and quick fix.
 type FailCauseToConstructorMatch struct {
-	SourceFile         *ast.SourceFile
-	Location           core.TextRange
-	ReplacementName    string    // fail, die, failSync or dieSync
-	SourceName         string    // failCause or failCauseSync
-	ConstructorName    string    // fail or die
-	ValueNode          *ast.Node // The value passed to Cause.fail / Cause.die
-	ValueTypeArguments *ast.NodeList
-	// Eager fix: the flow prefix up to and including Effect.failCause is
-	// replaced. A nil Flow means the match is reported without a fix.
+	SourceFile      *ast.SourceFile
+	Location        core.TextRange
+	ReplacementName string // fail, die, failSync or dieSync
+	SourceName      string // failCause or failCauseSync
+	ConstructorName string // fail or die
+	// Flow's first TransformationCount steps end in Effect.failCause, after
+	// Cause.fail or Cause.die, or are the single Effect.failCauseSync step
+	// applied to Lazy.
 	Flow                *typeparser.PipingFlow
 	TransformationCount int
-	// Lazy fix: the Cause constructor call in the thunk is replaced by its
-	// value and the failCauseSync callee is renamed. A nil LazyCauseNode means
-	// the match is reported without a fix.
-	LazyCallee         *ast.Node
-	LazyCauseNode      *ast.Node
-	LazyExpressionBody bool
+	// Lazy is the failCauseSync thunk, and Inner the flow of its returned
+	// expression, which ends in Cause.fail or Cause.die; both are nil for
+	// Effect.failCause.
+	Lazy  *typeparser.ParsedLazyExpression
+	Inner *typeparser.PipingFlow
 }
 
 // AnalyzeFailCauseToConstructor finds piping flows in which Cause.fail or
@@ -93,26 +91,16 @@ func AnalyzeFailCauseToConstructor(tp *typeparser.TypeParser, c *checker.Checker
 		for _, constructorName := range []string{"fail", "die"} {
 			sequences := flow.FindTransformationSequences(isCauseConstructor(constructorName), isEffectApi("failCause"))
 			for _, sequence := range sequences.All() {
-				causeIndex := sequence.Start()
-				causeStep := flow.Transformations().At(causeIndex)
-				failStep := flow.Transformations().At(causeIndex + 1)
-				value := flow.TransformationInputNode(causeIndex)
-				match := FailCauseToConstructorMatch{
-					SourceFile:         sf,
-					Location:           scanner.GetErrorRangeForNode(sf, failStep.Callee()),
-					ReplacementName:    constructorName,
-					SourceName:         "failCause",
-					ConstructorName:    constructorName,
-					ValueNode:          value,
-					ValueTypeArguments: causeStep.TypeArguments(),
-				}
-				if value != nil && (failStep.Kind() == typeparser.TransformationKindCall ||
-					failStep.Kind() == typeparser.TransformationKindPipe ||
-					failStep.Kind() == typeparser.TransformationKindPipeable) {
-					match.Flow = flow
-					match.TransformationCount = causeIndex + 2
-				}
-				matches = append(matches, match)
+				failStep := flow.Transformations().At(sequence.Start() + 1)
+				matches = append(matches, FailCauseToConstructorMatch{
+					SourceFile:          sf,
+					Location:            scanner.GetErrorRangeForNode(sf, failStep.Callee()),
+					ReplacementName:     constructorName,
+					SourceName:          "failCause",
+					ConstructorName:     constructorName,
+					Flow:                flow,
+					TransformationCount: sequence.Start() + 2,
+				})
 			}
 		}
 
@@ -134,8 +122,7 @@ func AnalyzeFailCauseToConstructor(tp *typeparser.TypeParser, c *checker.Checker
 		if inner == nil || inner.Transformations().Len() == 0 {
 			continue
 		}
-		lastIndex := inner.Transformations().Len() - 1
-		last := inner.Transformations().At(lastIndex)
+		last := inner.Transformations().At(inner.Transformations().Len() - 1)
 		var constructorName string
 		switch {
 		case isCauseConstructor("fail")(last):
@@ -146,41 +133,17 @@ func AnalyzeFailCauseToConstructor(tp *typeparser.TypeParser, c *checker.Checker
 			continue
 		}
 
-		failStep := flow.Transformations().At(0)
-		match := FailCauseToConstructorMatch{
-			SourceFile:      sf,
-			Location:        scanner.GetErrorRangeForNode(sf, failStep.Callee()),
-			ReplacementName: constructorName + "Sync",
-			SourceName:      "failCauseSync",
-			ConstructorName: constructorName,
-		}
-		body := ast.SkipParentheses(lazy.Expression())
-		value := inner.TransformationInputNode(lastIndex)
-		if failStep.Kind() == typeparser.TransformationKindCall && noTypeArguments(last) && value != nil &&
-			body.Kind == ast.KindCallExpression && body.AsCallExpression().Expression == last.Callee() &&
-			(constructorName == "die" || lazyFailKeepsErrorType(tp, c, failStep, value)) {
-			match.ValueNode = value
-			match.LazyCallee = failStep.Callee()
-			match.LazyCauseNode = body
-			match.LazyExpressionBody = !ast.IsBlock(lazy.Body()) && lazy.Expression() == body
-		}
-		matches = append(matches, match)
+		matches = append(matches, FailCauseToConstructorMatch{
+			SourceFile:          sf,
+			Location:            scanner.GetErrorRangeForNode(sf, flow.Transformations().At(0).Callee()),
+			ReplacementName:     constructorName + "Sync",
+			SourceName:          "failCauseSync",
+			ConstructorName:     constructorName,
+			Flow:                flow,
+			TransformationCount: 1,
+			Lazy:                lazy,
+			Inner:               inner,
+		})
 	}
 	return matches
-}
-
-// lazyFailKeepsErrorType reports whether Effect.failSync(() => value) infers the
-// same error type as Effect.failCauseSync(() => Cause.fail(value)). Cause.fail
-// infers its error from a call argument, which widens literal unions, while a
-// failSync thunk returns the value against LazyArg<E>, which keeps them: for
-// `cond ? "A" : "B"` the first infers string and the second "A" | "B". The fix
-// is only offered when the value's own type already is the inferred error type.
-func lazyFailKeepsErrorType(tp *typeparser.TypeParser, c *checker.Checker, failStep typeparser.PipingFlowTransformation, value *ast.Node) bool {
-	effect := tp.EffectType(failStep.OutType())
-	valueType := tp.GetTypeAtLocation(value)
-	if effect == nil || effect.E() == nil || valueType == nil {
-		return false
-	}
-	return checker.Checker_isTypeAssignableTo(c, valueType, effect.E()) &&
-		checker.Checker_isTypeAssignableTo(c, effect.E(), valueType)
 }
