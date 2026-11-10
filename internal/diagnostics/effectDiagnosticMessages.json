@@ -674,5 +674,9 @@
     "`Effect.fromResult` expresses this Result-to-Effect conversion more directly than `Result.match` or a Result guard conditional. effect(resultMatchToFromResult)": {
         "category": "Suggestion",
         "code": 377165
+    },
+    "Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)": {
+        "category": "Suggestion",
+        "code": 377184
     }
 }

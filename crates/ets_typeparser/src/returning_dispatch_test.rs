@@ -82,7 +82,8 @@ fn test_parse_returning_dispatch_accepted_shapes() {
                 t.parallel();
                 let (sf, function) = parse_returning_dispatch_test_function(t, tt.function);
                 let mut nil_program = nil_type_parser_program(t);
-                let Some(dispatch) = nil_program.type_parser().parse_returning_dispatch(function)
+                let Some(dispatch) =
+                    nil_program.type_parser().parse_returning_dispatch_exported(function)
                 else {
                     t.fatal("expected returning dispatch");
                 };
@@ -258,7 +259,8 @@ fn test_parse_result_dispatch_tag_hints() {
                 t.parallel();
                 let (sf, function) = parse_returning_dispatch_test_function(t, tt.function);
                 let mut nil_program = nil_type_parser_program(t);
-                let Some(parsed) = nil_program.type_parser().parse_returning_dispatch(function)
+                let Some(parsed) =
+                    nil_program.type_parser().parse_returning_dispatch_exported(function)
                 else {
                     t.fatal("expected returning dispatch");
                 };
@@ -410,7 +412,7 @@ fn test_result_dispatch_common_tag_subject() {
         ];
         for (name, want_subject) in tests {
             let function = find_returning_dispatch_test_function(t, sf, name);
-            let Some(parsed) = tp.parse_returning_dispatch(function) else {
+            let Some(parsed) = tp.parse_returning_dispatch_exported(function) else {
                 t.fatal(sprintf!("%s: expected returning dispatch", name));
             };
             let subject = ResultDispatch::common_tag_subject(Some(&parsed.dispatch), &mut tp);
@@ -471,7 +473,7 @@ fn test_parse_returning_dispatch_input_contract() {
             let Some(node) = node else {
                 t.fatal(sprintf!("%s fixture was not found", name));
             };
-            if let Some(dispatch) = tp.parse_returning_dispatch(node) {
+            if let Some(dispatch) = tp.parse_returning_dispatch_exported(node) {
                 t.fatal(format!("{name}: expected parse rejection, got {dispatch:?}"));
             }
         }

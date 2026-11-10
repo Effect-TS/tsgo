@@ -189,7 +189,7 @@ pub(crate) fn analyze_catch_tag_to_catch_reason_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
 ) -> Option<CatchTagToCatchReasonHandler> {
-    let returning = tp.parse_returning_dispatch(handler_node)?;
+    let returning = tp.parse_returning_dispatch_exported(handler_node)?;
     if returning.params().len() != 1 {
         return None;
     }

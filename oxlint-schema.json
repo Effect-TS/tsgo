@@ -2541,6 +2541,9 @@
         "effecttsgo/obsolete-schema-import": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/on-exit-failure-to-on-error": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/option-match-to-from-option": {
           "$ref": "#/definitions/RuleNoConfig"
         },

@@ -1,0 +1,29 @@
+==== /.src/onExitFailureToOnError_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 4:53 - 12:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit)\n      ? Effect.logError("failed", { cause: exit.cause })\n      : Effect.void\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit)\n      ? Effect.logError("failed", { cause: exit.cause })\n      : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 7:26 - 8:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean

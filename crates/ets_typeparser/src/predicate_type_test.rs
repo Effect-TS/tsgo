@@ -265,7 +265,7 @@ fn test_parse_result_dispatch_predicate_hints() {
                     Test { name: "partlyUntagged", subject: "" },
                 ] {
                     let function = find_returning_dispatch_test_function(t, sf, tt.name);
-                    let Some(returning) = tp.parse_returning_dispatch(function) else {
+                    let Some(returning) = tp.parse_returning_dispatch_exported(function) else {
                         t.fatal(sprintf!("%s: expected returning dispatch", tt.name));
                     };
                     let dispatches =
@@ -319,7 +319,7 @@ fn test_parse_result_dispatch_predicate_hints() {
                     let original =
                         get_function_like_body(function).unwrap().as_conditional_expression().condition();
                     let condition =
-                        tp.parse_returning_dispatch(function).unwrap().dispatch.branches[0].condition;
+                        tp.parse_returning_dispatch_exported(function).unwrap().dispatch.branches[0].condition;
                     let call =
                         unwrap_result_dispatch_expression(Some(original)).unwrap().as_call_expression();
                     let arguments = call.arguments().nodes();

@@ -142,7 +142,7 @@ pub(crate) fn analyze_conditional_refail_handler(
     handler_node: P<Node>,
     methods: ConditionalRefailCatchMethods,
 ) -> Option<&'static str> {
-    let dispatch = tp.parse_returning_dispatch(handler_node)?;
+    let dispatch = tp.parse_returning_dispatch_exported(handler_node)?;
     let result_dispatch: &ResultDispatch = dispatch.dispatch();
     if dispatch.params().len() != 1 || result_dispatch.branches().len() != 1 {
         return None;

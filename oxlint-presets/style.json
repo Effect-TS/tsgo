@@ -47,6 +47,7 @@
     "effecttsgo/multiple-catch-tag": "warn",
     "effecttsgo/nested-effect-gen-yield": "warn",
     "effecttsgo/new-schema-class": "warn",
+    "effecttsgo/on-exit-failure-to-on-error": "warn",
     "effecttsgo/option-match-to-from-option": "warn",
     "effecttsgo/prefer-barrel-import": "warn",
     "effecttsgo/prefer-namespace-import": "warn",

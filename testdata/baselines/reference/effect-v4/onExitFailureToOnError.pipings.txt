@@ -1,0 +1,1531 @@
+==== /.src/onExitFailureToOnError.ts (109 flows) ====
+
+=== Piping Flow ===
+Location: 18:31 - 24:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit)\n      ? Effect.logError("failed", { cause: exit.cause })\n      : Effect.void\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit)\n      ? Effect.logError("failed", { cause: exit.cause })\n      : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 19:26 - 20:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 27:27 - 30:2
+Node: pipe(\n  program,\n  Effect.onExit((exit) => Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 29:26 - 29:47
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 33:25 - 36:2
+Node: Effect.onExit(\n  program,\n  (exit) => Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 35:12 - 35:33
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 39:27 - 41:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isSuccess(exit) ? Effect.void : Effect.logError("failed", { cause: exit.cause }))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isSuccess(exit) ? Effect.void : Effect.logError("failed", { cause: exit.cause })]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 40:26 - 40:47
+Node: Exit.isSuccess(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 44:38 - 49:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    if (!Exit.isSuccess(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    if (!Exit.isSuccess(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 46:10 - 46:30
+Node: Exit.isSuccess(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 52:34 - 54:2
+Node: program.pipe(\n  Effect.onExit((exit) => !Exit.isFailure(exit) ? Effect.void : Effect.logError("failed", { cause: exit.cause }))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => !Exit.isFailure(exit) ? Effect.void : Effect.logError("failed", { cause: exit.cause })]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 53:28 - 53:48
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 57:37 - 66:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit) === true\n      ? Effect.gen(function*() {\n        const now = yield* Clock.currentTimeMillis\n        yield* Effect.logError("readiness failed", { elapsedMs: now - started })\n      })\n      : Effect.void\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit) === true\n      ? Effect.gen(function*() {\n        const now = yield* Clock.currentTimeMillis\n        yield* Effect.logError("readiness failed", { elapsedMs: now - started })\n      })\n      : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 58:26 - 59:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 60:8 - 63:9
+Node: Effect.gen(function*() {\n        const now = yield* Clock.currentTimeMillis\n        yield* Effect.logError("readiness failed", { elapsedMs: now - started })\n      })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n        const now = yield* Clock.currentTimeMillis\n        yield* Effect.logError("readiness failed", { elapsedMs: now - started })\n      }
+Subject Type: () => Generator<Effect<void, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 69:34 - 71:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isSuccess(exit) === false ? Effect.logError("failed", { cause: exit.cause }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isSuccess(exit) === false ? Effect.logError("failed", { cause: exit.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 70:26 - 70:47
+Node: Exit.isSuccess(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 74:38 - 76:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isFailure(exit) === false ? Effect.void : Effect.logError("failed", { cause: exit.cause }))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) === false ? Effect.void : Effect.logError("failed", { cause: exit.cause })]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 75:26 - 75:47
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 79:29 - 81:2
+Node: program.pipe(\n  Effect.onExit((exit) => (Exit.isFailure(exit)) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => (Exit.isFailure(exit)) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 80:28 - 80:48
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 84:42 - 86:2
+Node: program.pipe(\n  Effect.onExit((exit) => !(Exit.isSuccess(exit) === true) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => !(Exit.isSuccess(exit) === true) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 85:29 - 85:49
+Node: Exit.isSuccess(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 90:28 - 92:2
+Node: program.pipe(\n  Effect.onExit((exit) => pipe(exit, Exit.isFailure) ? Effect.logError("failed") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => pipe(exit, Exit.isFailure) ? Effect.logError("failed") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 91:26 - 91:53
+Node: pipe(exit, Exit.isFailure)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 91:55 - 91:81
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 95:32 - 97:2
+Node: program.pipe(\n  Effect.onExit((exit) => exit.pipe(Exit.isSuccess) ? Effect.void : Effect.logError("failed"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => exit.pipe(Exit.isSuccess) ? Effect.void : Effect.logError("failed")]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 96:26 - 96:52
+Node: exit.pipe(Exit.isSuccess)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Exit.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 96:68 - 96:94
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 100:26 - 102:2
+Node: program.pipe(\n  Effect.onExit((exit) => exit._tag === "Failure" ? Effect.logError("failed", { cause: exit.cause }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => exit._tag === "Failure" ? Effect.logError("failed", { cause: exit.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 105:30 - 107:2
+Node: program.pipe(\n  Effect.onExit((exit) => exit._tag === "Success" ? Effect.void : Effect.logError("failed", { cause: exit.cause }))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => exit._tag === "Success" ? Effect.void : Effect.logError("failed", { cause: exit.cause })]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 110:22 - 118:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    if (Exit.isFailure(exit)) {\n      return Effect.logError("failed", { cause: exit.cause })\n    } else {\n      return Effect.void\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    if (Exit.isFailure(exit)) {\n      return Effect.logError("failed", { cause: exit.cause })\n    } else {\n      return Effect.void\n    }\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 112:9 - 112:29
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 121:31 - 125:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    return Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    return Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 123:11 - 123:32
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 128:29 - 137:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    switch (exit._tag) {\n      case "Failure":\n        return Effect.logError("failed", { cause: exit.cause })\n      default:\n        return Effect.void\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    switch (exit._tag) {\n      case "Failure":\n        return Effect.logError("failed", { cause: exit.cause })\n      default:\n        return Effect.void\n    }\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 140:33 - 149:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    switch (exit._tag) {\n      case "Success":\n        return Effect.void\n      default:\n        return Effect.logError("failed", { cause: exit.cause })\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    switch (exit._tag) {\n      case "Success":\n        return Effect.void\n      default:\n        return Effect.logError("failed", { cause: exit.cause })\n    }\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 152:34 - 161:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    switch (exit._tag) {\n      default:\n        return Effect.void\n      case "Failure":\n        return Effect.logError("failed", { cause: exit.cause })\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    switch (exit._tag) {\n      default:\n        return Effect.void\n      case "Failure":\n        return Effect.logError("failed", { cause: exit.cause })\n    }\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 164:31 - 166:2
+Node: program.pipe(\n  Effect.onExit(<A>(exit: Exit.Exit<A, string>) => Exit.isFailure(exit) ? Effect.logError(exit.cause) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [<A>(exit: Exit.Exit<A, string>) => Exit.isFailure(exit) ? Effect.logError(exit.cause) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 165:51 - 165:72
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<A, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 165:74 - 165:102
+Node: Effect.logError(exit.cause)
+Node Kind: KindCallExpression
+
+Subject: exit.cause
+Subject Type: Cause<string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 169:41 - 174:2
+Node: program.pipe(\n  Effect.onExit(function<A>(exit: Exit.Exit<A, string>) {\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [function<A>(exit: Exit.Exit<A, string>) {\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 171:9 - 171:29
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<A, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 177:34 - 182:2
+Node: program.pipe(\n  Effect.onExit(function(exit) {\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [function(exit) {\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 179:9 - 179:29
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 185:34 - 187:2
+Node: program.pipe(\n  Effect.onExit((result) => Exit.isFailure(result) ? Effect.logError("failed", { cause: result.cause }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(result) => Exit.isFailure(result) ? Effect.logError("failed", { cause: result.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 186:28 - 186:51
+Node: Exit.isFailure(result)
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 190:30 - 195:2
+Node: Effect.fn("insideEffectFn")(\n  function*() {\n    return yield* program\n  },\n  Effect.onExit((exit) => Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("insideEffectFn")(\n  function*() {\n    return yield* program\n  },\n  Effect.onExit((exit) => Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void)\n)
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 194:26 - 194:47
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 198:32 - 200:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isFailure(exit) ? Effect.logError("failed", { exit }) : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) ? Effect.logError("failed", { exit }) : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 199:26 - 199:47
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 207:30 - 209:2
+Node: program.pipe(\n  Effect.onError((cause) => Effect.logError("failed", { cause }))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onError
+      args: [(cause) => Effect.logError("failed", { cause })]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 212:24 - 214:2
+Node: program.pipe(\n  Effect.tapCause((cause) => Effect.logError("failed", { cause }))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tapCause
+      args: [(cause) => Effect.logError("failed", { cause })]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 217:27 - 219:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isFailure(exit) ? Effect.logError("failed") : Effect.log("done"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) ? Effect.logError("failed") : Effect.log("done")]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 218:26 - 218:47
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 218:49 - 218:75
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 218:77 - 218:96
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 222:30 - 228:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit) && Cause.hasInterruptsOnly(exit.cause)\n      ? Effect.log("interrupted")\n      : Effect.void\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit) && Cause.hasInterruptsOnly(exit.cause)\n      ? Effect.log("interrupted")\n      : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 223:26 - 224:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 224:28 - 224:64
+Node: Cause.hasInterruptsOnly(exit.cause)
+Node Kind: KindCallExpression
+
+Subject: exit.cause
+Subject Type: Cause<string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.hasInterruptsOnly
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 225:8 - 225:34
+Node: Effect.log("interrupted")
+Node Kind: KindCallExpression
+
+Subject: "interrupted"
+Subject Type: "interrupted"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 231:29 - 233:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isSuccess(exit) ? Effect.log("done") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isSuccess(exit) ? Effect.log("done") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 232:26 - 232:47
+Node: Exit.isSuccess(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isSuccess
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 232:49 - 232:68
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 236:40 - 238:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isFailure(exit) ? Effect.void : Effect.log("done"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) ? Effect.void : Effect.log("done")]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 237:26 - 237:47
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 237:63 - 237:82
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 241:34 - 243:2
+Node: program.pipe(\n  Effect.onExit((exit) => !Exit.isFailure(exit) ? Effect.log("done") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => !Exit.isFailure(exit) ? Effect.log("done") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 242:28 - 242:48
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 242:50 - 242:69
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 246:38 - 248:2
+Node: program.pipe(\n  Effect.onExit((exit) => Exit.isFailure(exit) === false ? Effect.log("done") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => Exit.isFailure(exit) === false ? Effect.log("done") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 247:26 - 247:47
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 247:59 - 247:78
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 251:30 - 253:2
+Node: program.pipe(\n  Effect.onExit((exit) => exit._tag === "Success" ? Effect.log("done") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => exit._tag === "Success" ? Effect.log("done") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 252:52 - 252:71
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 256:33 - 265:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    switch (exit._tag) {\n      case "Success":\n        return Effect.log("done")\n      default:\n        return Effect.void\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    switch (exit._tag) {\n      case "Success":\n        return Effect.log("done")\n      default:\n        return Effect.void\n    }\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 260:15 - 260:34
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 268:23 - 272:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.log("done")\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.log("done")]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 269:26 - 270:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 270:78 - 270:97
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 275:31 - 279:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.succeed(undefined)\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.succeed(undefined)]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 276:26 - 277:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 277:78 - 277:104
+Node: Effect.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 282:30 - 286:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.asVoid(Effect.log("done"))\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.asVoid(Effect.log("done"))]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 283:26 - 284:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 284:78 - 284:112
+Node: Effect.asVoid(Effect.log("done"))
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 289:32 - 291:2
+Node: program.pipe(\n  Effect.onExit((_exit) => Exit.isFailure(otherExit) ? Effect.logError("failed") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(_exit) => Exit.isFailure(otherExit) ? Effect.logError("failed") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 290:27 - 290:53
+Node: Exit.isFailure(otherExit)
+Node Kind: KindCallExpression
+
+Subject: otherExit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 290:55 - 290:81
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 294:34 - 296:2
+Node: program.pipe(\n  Effect.onExit((_exit) => enabled ? Effect.logError("failed") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(_exit) => enabled ? Effect.logError("failed") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 295:37 - 295:63
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 299:31 - 301:2
+Node: program.pipe(\n  Effect.onExit((exit) => isFailed(exit) ? Effect.logError("failed") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => isFailed(exit) ? Effect.logError("failed") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 300:26 - 300:41
+Node: isFailed(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: isFailed
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 300:43 - 300:69
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 304:27 - 312:2
+Node: program.pipe(\n  Effect.onExit((exit) =>\n    Exit.isFailure(exit)\n      ? Effect.logError("failed")\n      : enabled\n      ? Effect.log("done")\n      : Effect.void\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) =>\n    Exit.isFailure(exit)\n      ? Effect.logError("failed")\n      : enabled\n      ? Effect.log("done")\n      : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 305:26 - 306:25
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 307:8 - 307:34
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 309:8 - 309:27
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 315:30 - 324:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    switch (exit._tag) {\n      case "Failure":\n        return Effect.logError("failed", { cause: exit.cause })\n      case "Success":\n        return Effect.void\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    switch (exit._tag) {\n      case "Failure":\n        return Effect.logError("failed", { cause: exit.cause })\n      case "Success":\n        return Effect.void\n    }\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 327:32 - 333:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    counter++\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    counter++\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 330:9 - 330:29
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 336:26 - 342:2
+Node: program.pipe(\n  Effect.onExit((exit) => {\n    exit = otherExit\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit) => {\n    exit = otherExit\n    if (Exit.isFailure(exit)) return Effect.logError("failed", { cause: exit.cause })\n    return Effect.void\n  }]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 339:9 - 339:29
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 345:25 - 347:2
+Node: program.pipe(\n  Effect.onExit((exit = otherExit) => Exit.isFailure(exit) ? Effect.logError("failed") : Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [(exit = otherExit) => Exit.isFailure(exit) ? Effect.logError("failed") : Effect.void]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 346:38 - 346:59
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 346:61 - 346:87
+Node: Effect.logError("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 350:28 - 350:65
+Node: program.pipe(Effect.onExit(handler))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [handler]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 353:27 - 353:81
+Node: program.pipe(Effect.onExit(() => Effect.log("done")))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.onExit
+      args: [() => Effect.log("done")]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 353:60 - 353:79
+Node: Effect.log("done")
+Node Kind: KindCallExpression
+
+Subject: "done"
+Subject Type: "done"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

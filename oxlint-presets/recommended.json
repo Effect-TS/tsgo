@@ -68,6 +68,7 @@
     "effecttsgo/non-object-effect-service-type": "error",
     "effecttsgo/obsolete-match-import": "warn",
     "effecttsgo/obsolete-schema-import": "warn",
+    "effecttsgo/on-exit-failure-to-on-error": "warn",
     "effecttsgo/option-match-to-from-option": "warn",
     "effecttsgo/outdated-api": "warn",
     "effecttsgo/overridden-schema-constructor": "error",
