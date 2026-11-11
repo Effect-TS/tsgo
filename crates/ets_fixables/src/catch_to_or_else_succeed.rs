@@ -16,7 +16,7 @@ pub static CATCH_TO_OR_ELSE_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_catch_to_or_else_succeed_fix,
 });
 
-// go: internal/fixables/catch_to_or_else_succeed.go:20 runCatchToOrElseSucceedFix 76b28b2a6be50fd2
+// go: internal/fixables/catch_to_or_else_succeed.go:20 runCatchToOrElseSucceedFix 1f6f619af0de92c0
 fn run_catch_to_or_else_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -41,12 +41,12 @@ fn run_catch_to_or_else_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
                     None,
                 );
 
-                tracker.replace_node(
-                    sf,
-                    Some(m.succeed_call_expression),
-                    Some(m.succeed_argument),
-                    None,
+                let replacement = crate::replacement_for_expression(
+                    tracker,
+                    m.succeed_call_expression,
+                    m.succeed_argument,
                 );
+                tracker.replace_node(sf, Some(m.succeed_call_expression), Some(replacement), None);
             }),
         }) {
             return vec![action];
