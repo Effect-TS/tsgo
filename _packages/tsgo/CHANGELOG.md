@@ -1,5 +1,30 @@
 # @effect/tsgo
 
+## 0.68.1
+
+### Patch Changes
+
+- e2593ac: Fix the `catchToOrElseSucceed` and `flatMapToMap` quick fixes emitting code that does not parse when `Effect.succeed` receives an object literal inside a concise arrow body. The value is now parenthesized, including when the object literal is followed by `as const` or `satisfies T`:
+  
+  ```ts
+  // before
+  Effect.catch(() => Effect.succeed({ ok: false } as const))
+  Effect.flatMap((n) => Effect.succeed({ value: n }))
+  
+  // after the fix (previously `() => { ok: false } as const` and `(n) => { value: n }`)
+  Effect.orElseSucceed(() => ({ ok: false } as const))
+  Effect.map((n) => ({ value: n }))
+  ```
+- 732dd03: Stop `--tsrs-lint ... --type-check` from reporting Effect suggestions as errors (#1025).
+  
+  Oxlint showed every type-check diagnostic as an error, so suggestion-level Effect diagnostics such as `schemaClassMissingBrand` made the lint fail even though `effect-tsgo tsrs --noEmit` passed. tsrs-lint now forwards only errors and warnings to `--type-check`. This backports oxc-project/tsrs#959 as a tsrs patch until it lands upstream.
+  
+  ```sh
+  # before: suggestions reported as errors, exit 1
+  # after: exits 0, like `effect-tsgo tsrs --noEmit`
+  effect-tsgo --tsrs-lint vp lint --type-aware --type-check
+  ```
+
 ## 0.68.0
 
 ### Minor Changes
