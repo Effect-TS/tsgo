@@ -678,5 +678,9 @@
     "Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)": {
         "category": "Suggestion",
         "code": 377184
+    },
+    "`Effect.{0}` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)": {
+        "category": "Warning",
+        "code": 377188
     }
 }

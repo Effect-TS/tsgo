@@ -19,6 +19,7 @@ type pipeableSignatureShapeCacheKey struct {
 	dataFirst    *checker.Signature
 	candidate    *checker.Signature
 	subjectIndex int
+	selfDual     bool
 }
 
 type pipeableTypePair struct {
@@ -33,20 +34,42 @@ func rawSignature(signature *checker.Signature) *checker.Signature {
 	return signature
 }
 
+type pipeableShapeMatch uint8
+
+const (
+	pipeableShapeMismatch pipeableShapeMatch = iota
+	pipeableShapeExact
+	pipeableShapeSelfDualUnconfirmed
+)
+
+func pipeableSignatureShape(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) pipeableShapeMatch {
+	if pipeableSignatureShapesMatch(tp, dataFirst, candidate, subjectIndex) {
+		return pipeableShapeExact
+	}
+	if cachedPipeableSignatureComparison(tp, dataFirst, candidate, subjectIndex, true) {
+		return pipeableShapeSelfDualUnconfirmed
+	}
+	return pipeableShapeMismatch
+}
+
 func pipeableSignatureShapesMatch(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+	return cachedPipeableSignatureComparison(tp, dataFirst, candidate, subjectIndex, false)
+}
+
+func cachedPipeableSignatureComparison(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, selfDual bool) bool {
 	dataFirst = rawSignature(dataFirst)
 	candidate = rawSignature(candidate)
 	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
 	c := tp.checker
-	key := pipeableSignatureShapeCacheKey{dataFirst: dataFirst, candidate: candidate, subjectIndex: subjectIndex}
+	key := pipeableSignatureShapeCacheKey{dataFirst: dataFirst, candidate: candidate, subjectIndex: subjectIndex, selfDual: selfDual}
 	if links, ok := c.EffectLinks.(*EffectLinks); ok && links != nil {
 		return Cached(&links.PipeableSignatureShape, key, func() bool {
-			return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex)
+			return comparePipeableSignatureTypesWith(tp, dataFirst, candidate, subjectIndex, selfDual)
 		})
 	}
-	return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex)
+	return comparePipeableSignatureTypesWith(tp, dataFirst, candidate, subjectIndex, selfDual)
 }
 
 // signatureTypeMatcher zips existing, uninstantiated compiler type graphs. It
@@ -62,15 +85,27 @@ type signatureTypeMatcher struct {
 	active       map[pipeableTypePair]struct{}
 	work         *int
 	unionSearch  *int
+	selfDual     bool
+
+	extraBinder           *checker.Type
+	extraBinderTarget     *checker.Type
+	extraBinderMatchesAny bool
 }
 
 func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+	return comparePipeableSignatureTypesWith(tp, dataFirst, candidate, subjectIndex, false)
+}
+
+func comparePipeableSignatureTypesWith(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, selfDual bool) bool {
 	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
 	c := tp.checker
 	leftParameters := dataFirst.Parameters()
 	if subjectIndex < 0 || subjectIndex >= len(leftParameters) {
+		return false
+	}
+	if selfDual && !isLikelySelfParameter(leftParameters[subjectIndex]) {
 		return false
 	}
 	rightParameters := candidate.Parameters()
@@ -92,6 +127,9 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 	if len(returned.Parameters()) != 1 || returned.HasRestParameter() {
 		return false
 	}
+	if selfDual && !isLikelySelfParameter(returned.Parameters()[0]) {
+		return false
+	}
 
 	work, unionSearch := 0, 0
 	m := &signatureTypeMatcher{
@@ -103,11 +141,16 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 		active:       make(map[pipeableTypePair]struct{}),
 		work:         &work,
 		unionSearch:  &unionSearch,
+		selfDual:     selfDual,
 	}
 	m.registerBinders(dataFirst.TypeParameters(), true)
 	m.registerBinders(candidate.TypeParameters(), false)
 	m.registerBinders(returned.TypeParameters(), false)
-	if len(m.leftBinders) != len(m.rightBinders) {
+	if selfDual {
+		if len(m.rightBinders) != len(m.leftBinders)+1 {
+			return false
+		}
+	} else if len(m.leftBinders) != len(m.rightBinders) {
 		return false
 	}
 
@@ -127,7 +170,7 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 		}
 		rightIndex++
 	}
-	if !m.compareParameter(leftParameters[subjectIndex], false, returned.Parameters()[0], false, 0) {
+	if !m.compareSubjectParameter(leftParameters[subjectIndex], returned.Parameters()[0]) {
 		return false
 	}
 	if !m.compareType(c.GetReturnTypeOfSignature(dataFirst), c.GetReturnTypeOfSignature(returned), 0) {
@@ -156,6 +199,21 @@ func (m *signatureTypeMatcher) compareParameter(left *ast.Symbol, leftRest bool,
 	return m.compareType(m.tp.checker.GetTypeOfSymbol(left), m.tp.checker.GetTypeOfSymbol(right), depth+1)
 }
 
+func (m *signatureTypeMatcher) compareSubjectParameter(left *ast.Symbol, right *ast.Symbol) bool {
+	if !m.selfDual || left == nil || right == nil || symbolIsOptional(left) != symbolIsOptional(right) {
+		return m.compareParameter(left, false, right, false, 0)
+	}
+	rightType := selfTypeIgnoringGuard(m.tp.checker, m.tp.checker.GetTypeOfSymbol(right))
+	return m.compareType(m.tp.checker.GetTypeOfSymbol(left), rightType, 1)
+}
+
+func selfTypeIgnoringGuard(c *checker.Checker, selfType *checker.Type) *checker.Type {
+	if selfType != nil && selfType.Flags()&checker.TypeFlagsConditional != 0 && selfType.Alias() == nil {
+		return c.GetFalseTypeOfConditionalType(selfType)
+	}
+	return selfType
+}
+
 func symbolIsOptional(symbol *ast.Symbol) bool {
 	return symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsOptional != 0
 }
@@ -179,6 +237,9 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 	}
 	if base := noInferBaseType(m.tp, right); base != nil {
 		return m.compareType(left, base, depth+1)
+	}
+	if matched, handled := m.compareExtraBinder(left, right); handled {
+		return matched
 	}
 
 	pair := pipeableTypePair{left: left, right: right}
@@ -248,7 +309,30 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 	}
 }
 
+func (m *signatureTypeMatcher) compareExtraBinder(left *checker.Type, right *checker.Type) (matched bool, handled bool) {
+	if !m.selfDual || right.Flags()&checker.TypeFlagsTypeParameter == 0 || left.Flags()&checker.TypeFlagsTypeParameter != 0 {
+		return false, false
+	}
+	if _, local := m.rightBinders[right]; !local {
+		return false, false
+	}
+	if _, paired := m.rightToLeft[right]; paired {
+		return false, false
+	}
+	if m.extraBinderMatchesAny {
+		return right == m.extraBinder, true
+	}
+	if m.extraBinder != nil {
+		return right == m.extraBinder && left == m.extraBinderTarget, true
+	}
+	m.extraBinder, m.extraBinderTarget = right, left
+	return true, true
+}
+
 func (m *signatureTypeMatcher) compareTypeParameter(left *checker.Type, right *checker.Type) bool {
+	if right == m.extraBinder {
+		return false
+	}
 	_, leftLocal := m.leftBinders[left]
 	_, rightLocal := m.rightBinders[right]
 	if leftLocal || rightLocal {
@@ -470,26 +554,61 @@ func (m *signatureTypeMatcher) commit(branch *signatureTypeMatcher) {
 	m.rightToLeft = branch.rightToLeft
 	m.leftBinders = branch.leftBinders
 	m.rightBinders = branch.rightBinders
+	m.extraBinder = branch.extraBinder
+	m.extraBinderTarget = branch.extraBinderTarget
 }
 
 func (m *signatureTypeMatcher) validateBinders() bool {
-	if len(m.leftBinders) != len(m.rightBinders) || len(m.leftToRight) != len(m.leftBinders) {
+	if len(m.leftBinders) != len(m.rightBinders)-m.extraBinderCount() || len(m.leftToRight) != len(m.leftBinders) {
 		return false
 	}
+	if m.selfDual && !m.hasUnconstrainedExtraBinder() {
+		return false
+	}
+	bounds := m.boundsComparer()
 	for left, right := range m.leftToRight {
 		if checker.Checker_getTypeParameterModifiers(m.tp.checker, left) != checker.Checker_getTypeParameterModifiers(m.tp.checker, right) {
 			return false
 		}
 		leftConstraint, rightConstraint := m.tp.checker.GetConstraintOfTypeParameter(left), m.tp.checker.GetConstraintOfTypeParameter(right)
-		if !m.compareOptionalType(leftConstraint, rightConstraint) {
+		if !bounds.compareOptionalType(leftConstraint, rightConstraint) {
 			return false
 		}
 		leftDefault, rightDefault := m.tp.checker.GetDefaultFromTypeParameter(left), m.tp.checker.GetDefaultFromTypeParameter(right)
-		if !m.compareOptionalType(leftDefault, rightDefault) {
+		if m.selfDual && (leftDefault == nil) != (rightDefault == nil) {
+			leftDefault, rightDefault = defaultOrConstraint(leftDefault, leftConstraint), defaultOrConstraint(rightDefault, rightConstraint)
+		}
+		if !bounds.compareOptionalType(leftDefault, rightDefault) {
 			return false
 		}
 	}
 	return true
+}
+
+func (m *signatureTypeMatcher) extraBinderCount() int {
+	if m.extraBinder == nil {
+		return 0
+	}
+	return 1
+}
+
+func (m *signatureTypeMatcher) hasUnconstrainedExtraBinder() bool {
+	return m.extraBinder != nil &&
+		m.tp.checker.GetConstraintOfTypeParameter(m.extraBinder) == nil &&
+		m.tp.checker.GetDefaultFromTypeParameter(m.extraBinder) == nil
+}
+
+func (m *signatureTypeMatcher) boundsComparer() *signatureTypeMatcher {
+	bounds := *m
+	bounds.extraBinderMatchesAny = true
+	return &bounds
+}
+
+func defaultOrConstraint(defaultType *checker.Type, constraint *checker.Type) *checker.Type {
+	if defaultType != nil {
+		return defaultType
+	}
+	return constraint
 }
 
 func (m *signatureTypeMatcher) compareOptionalType(left *checker.Type, right *checker.Type) bool {

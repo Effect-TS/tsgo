@@ -81,7 +81,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/data_first_signature.go:54 TypeParser.parseDataFirstOrLastCall defc3a835b4f4c4d
+    // go: internal/typeparser/data_first_signature.go:54 TypeParser.parseDataFirstOrLastCall afb5d0160aef21b4
     // Rust: Go's `call` argument is `node.AsCallExpression()`.
     pub(crate) fn parse_data_first_or_last_call(
         &mut self,
@@ -160,12 +160,13 @@ impl TypeParser<'_> {
                         continue;
                     }
                 }
-                if !pipeable_signature_shapes_match(
+                if pipeable_signature_shape(
                     self,
                     Some(resolved),
                     Some(candidate),
                     subject_index as i64,
-                ) {
+                ) == PipeableShapeMatch::Mismatch
+                {
                     continue;
                 }
                 let Some(witness_value) = Lazy::get(Some(&witness), self) else {
@@ -206,10 +207,9 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/data_first_signature.go:155 MatchesPipeableSignature d83e38822858ac10
+// go: internal/typeparser/data_first_signature.go:154 MatchesPipeableSignature aad36ce5e7b9bb79
 // MatchesPipeableSignature reports whether candidate is the pipeable form of
 // dataFirst with the parameter at subjectIndex moved into a returned unary function.
-// When witness is nil, parameter types from dataFirst are used for comparison.
 pub fn matches_pipeable_signature(
     tp: &mut TypeParser<'_>,
     data_first: Option<P<Signature>>,
@@ -220,36 +220,52 @@ pub fn matches_pipeable_signature(
     let (Some(data_first), Some(candidate)) = (data_first, candidate) else {
         return false;
     };
-    let params = data_first.parameters();
-    if subject_index < 0 || subject_index >= params.len() as i64 {
+    if subject_index < 0 || subject_index >= data_first.parameters().len() as i64 {
         return false;
     }
+    let Some(witness) = witness else {
+        return matches_pipeable_signature_by_declaration(tp, data_first, candidate, subject_index);
+    };
+    matches_pipeable_signature_at_call(tp, data_first, candidate, subject_index, witness)
+}
 
-    let argument_types;
-    let subject_type;
-    if let Some(witness) = witness {
-        argument_types = witness.argument_types.clone();
-        subject_type = witness.subject_type;
-    } else {
-        let mut types = Vec::with_capacity(params.len() - 1);
-        let mut subject = None;
-        for (i, &param) in params.iter().enumerate() {
-            if i as i64 == subject_index {
-                subject = Some(tp.checker.get_type_of_symbol_exported(param));
-                continue;
-            }
-            types.push(Some(tp.checker.get_type_of_symbol_exported(param)));
+// go: internal/typeparser/data_first_signature.go:167 matchesPipeableSignatureByDeclaration 7f4cb4e618ed92dd
+pub(crate) fn matches_pipeable_signature_by_declaration(
+    tp: &mut TypeParser<'_>,
+    data_first: P<Signature>,
+    candidate: P<Signature>,
+    subject_index: i64,
+) -> bool {
+    let params = data_first.parameters();
+    let mut argument_types = Vec::with_capacity(params.len() - 1);
+    let mut subject_type = None;
+    for (i, &param) in params.iter().enumerate() {
+        if i as i64 == subject_index {
+            subject_type = Some(tp.checker.get_type_of_symbol_exported(param));
+            continue;
         }
-        argument_types = types;
-        subject_type = subject;
+        argument_types.push(Some(tp.checker.get_type_of_symbol_exported(param)));
     }
-
     argument_types_match_parameters(tp.checker, &argument_types, Some(candidate))
         && candidate_accepts_subject(tp.checker, Some(candidate), subject_type)
         && pipeable_signature_shapes_match(tp, Some(data_first), Some(candidate), subject_index)
 }
 
-// go: internal/typeparser/data_first_signature.go:186 argumentTypesMatchParameters bf343d1c0a71879d
+// go: internal/typeparser/data_first_signature.go:184 matchesPipeableSignatureAtCall 335abbd3829c0df1
+pub(crate) fn matches_pipeable_signature_at_call(
+    tp: &mut TypeParser<'_>,
+    data_first: P<Signature>,
+    candidate: P<Signature>,
+    subject_index: i64,
+    witness: &PipeableSignatureWitness,
+) -> bool {
+    argument_types_match_parameters(tp.checker, &witness.argument_types, Some(candidate))
+        && candidate_accepts_subject(tp.checker, Some(candidate), witness.subject_type)
+        && pipeable_signature_shape(tp, Some(data_first), Some(candidate), subject_index)
+            != PipeableShapeMatch::Mismatch
+}
+
+// go: internal/typeparser/data_first_signature.go:191 argumentTypesMatchParameters bf343d1c0a71879d
 pub(crate) fn argument_types_match_parameters(
     c: &mut Checker,
     args: &[Option<P<Type>>],
@@ -284,7 +300,7 @@ pub(crate) fn argument_types_match_parameters(
     true
 }
 
-// go: internal/typeparser/data_first_signature.go:210 candidateAcceptsSubject e1f29169c8a9285b
+// go: internal/typeparser/data_first_signature.go:215 candidateAcceptsSubject e1f29169c8a9285b
 pub(crate) fn candidate_accepts_subject(
     c: &mut Checker,
     candidate: Option<P<Signature>>,
@@ -309,7 +325,7 @@ pub(crate) fn candidate_accepts_subject(
     false
 }
 
-// go: internal/typeparser/data_first_signature.go:231 hasCompatibleCallShape a70bd0311fe326bb
+// go: internal/typeparser/data_first_signature.go:236 hasCompatibleCallShape a70bd0311fe326bb
 pub(crate) fn has_compatible_call_shape(
     c: &mut Checker,
     left: Option<P<Type>>,
@@ -323,7 +339,7 @@ pub(crate) fn has_compatible_call_shape(
     left_callable == right_callable
 }
 
-// go: internal/typeparser/data_first_signature.go:240 typeAcceptsArgument 5b927248530928b3
+// go: internal/typeparser/data_first_signature.go:245 typeAcceptsArgument 5b927248530928b3
 pub(crate) fn type_accepts_argument(
     c: &mut Checker,
     argument: Option<P<Type>>,
@@ -341,7 +357,7 @@ pub(crate) fn type_accepts_argument(
         || c.is_type_assignable_to(argument, parameter)
 }
 
-// go: internal/typeparser/data_first_signature.go:251 sameShallowTypeOrigin ddee47897b1d1fe6
+// go: internal/typeparser/data_first_signature.go:256 sameShallowTypeOrigin ddee47897b1d1fe6
 pub(crate) fn same_shallow_type_origin(
     c: &mut Checker,
     left: Option<P<Type>>,
@@ -388,7 +404,7 @@ pub(crate) fn same_shallow_type_origin(
     left.flags() == right.flags() && left.flags().intersects(TypeFlags::Singleton)
 }
 
-// go: internal/typeparser/data_first_signature.go:279 sameSymbolReference 4dcf04f307e4dade
+// go: internal/typeparser/data_first_signature.go:284 sameSymbolReference 4dcf04f307e4dade
 pub(crate) fn same_symbol_reference(
     c: &mut Checker,
     left: Option<P<Symbol>>,
@@ -397,7 +413,7 @@ pub(crate) fn same_symbol_reference(
     left.is_some() && right.is_some() && get_symbol_if_same_reference(c, left, right).is_some()
 }
 
-// go: internal/typeparser/data_first_signature.go:283 isLikelySelfParameter 8ef23c8d4686debe
+// go: internal/typeparser/data_first_signature.go:288 isLikelySelfParameter 8ef23c8d4686debe
 pub(crate) fn is_likely_self_parameter(sym: Option<P<Symbol>>) -> bool {
     let Some(sym) = sym else {
         return false;
@@ -415,7 +431,7 @@ fn go_to_lower(s: &str) -> String {
         .collect()
 }
 
-// go: internal/typeparser/data_first_signature.go:291 omitArgAt a7472eff4597285f
+// go: internal/typeparser/data_first_signature.go:296 omitArgAt a7472eff4597285f
 pub(crate) fn omit_arg_at(nodes: &[P<Node>], index: usize) -> Vec<P<Node>> {
     let mut result = Vec::with_capacity(nodes.len().saturating_sub(1));
     for (i, &node) in nodes.iter().enumerate() {

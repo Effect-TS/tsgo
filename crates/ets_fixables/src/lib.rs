@@ -114,6 +114,7 @@ mod match_effect_to_map_both;
 mod match_effect_to_match;
 mod match_to_result_or_option;
 mod missed_pipeable_opportunity;
+mod missing_concurrency_option;
 mod missing_effect_error_catch;
 pub use acquire_release_disposable::*;
 pub use all_of_map_to_for_each::*;
@@ -151,6 +152,7 @@ pub use match_effect_to_map_both::*;
 pub use match_effect_to_match::*;
 pub use match_to_result_or_option::*;
 pub use missed_pipeable_opportunity::*;
+pub use missing_concurrency_option::*;
 pub use missing_effect_error_catch::*;
 
 #[cfg(test)]

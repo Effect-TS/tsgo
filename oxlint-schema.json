@@ -2493,6 +2493,9 @@
         "effecttsgo/missed-pipeable-opportunity": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/missing-concurrency-option": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/missing-effect-context": {
           "$ref": "#/definitions/RuleNoConfig"
         },

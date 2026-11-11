@@ -2741,6 +2741,11 @@
           "default": "off",
           "description": "Suggests using .pipe() for nested function calls"
         },
+        "missingConcurrencyOption": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports Effect.all and Effect.forEach calls without an explicit concurrency option, which run sequentially by default"
+        },
         "missingEffectContext": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",
