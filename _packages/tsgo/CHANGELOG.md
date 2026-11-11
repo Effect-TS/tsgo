@@ -1,5 +1,37 @@
 # @effect/tsgo
 
+## 0.68.0
+
+### Minor Changes
+
+- a764f17: Add `onExitFailureToOnError` style suggestion: it reports an `Effect.onExit` callback that only acts on failure (`Exit.isFailure`, `Exit.isSuccess`, `exit._tag` checks, in a conditional, `if` or `switch`, with `Effect.void` on the other side) and recommends `Effect.onError`, which expresses the same intent more directly.
+  
+  ```ts
+  program.pipe(
+    Effect.onExit((exit) =>
+      Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void
+    )
+  )
+  // can be written as
+  program.pipe(Effect.onError((cause) => Effect.logError("failed", { cause })))
+  ```
+
+### Patch Changes
+
+- ec499f2: Move fix-only work out of rule analysis into the quick fixes, so it runs only when the editor asks for code actions instead of on every check. This covers 27 rules, among them `yieldInCallArgument`, `failCauseToConstructor`, `suspendFailToFailSync`, `catchTagToCatchReason`, `mapMapErrorToMapBoth` and `unnecessaryEffectGen`. Their diagnostics are unchanged.
+  
+  Three rules now report explicitly typed calls that they used to skip, because those calls can still be rewritten by hand. They get no quick fix:
+  
+  - `provideLayerSucceedToProvideService`: `Effect.provide(Layer.succeed<I, S>(Service, implementation))` (rewrite: `Effect.provideService<I, S>(Service, implementation)`), and the same for `Layer.effect<…>`
+  - `provideMergeAllToArray`: `Effect.provide<…>(Layer.mergeAll(...))` and `Effect.provide(Layer.mergeAll<…>(...))`
+  - `timeoutCatchTagToTimeoutOrElse`: explicit type arguments on the `Effect.timeout` step
+  
+  ```ts
+  // now reported, without a quick fix
+  program.pipe(Effect.provide(Layer.succeed<Service, { readonly value: number }>(Service, implementation)))
+  ```
+- 7aacb7d: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261110.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/b7917e5e4c278f132ed19f777d968b6b1180fc24) commit `b7917e5e4c278f132ed19f777d968b6b1180fc24`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.67.7
 
 ### Patch Changes
