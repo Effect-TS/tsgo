@@ -7,9 +7,13 @@ Effect version: 3.19.19
 /.src/catchToOrElseSucceed.ts(25,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 /.src/catchToOrElseSucceed.ts(37,25): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/catchToOrElseSucceed.ts(51,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchToOrElseSucceed.ts(60,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchToOrElseSucceed.ts(65,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchToOrElseSucceed.ts(70,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchToOrElseSucceed.ts(75,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 
 
-==== /.src/catchToOrElseSucceed.ts (6 errors) ====
+==== /.src/catchToOrElseSucceed.ts (10 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
     import { pipe } from "effect/Function"
@@ -73,5 +77,39 @@ Effect version: 3.19.19
       catchAlias(() => Effect.succeed(42))
       ~~~~~~~~~~
 !!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+    )
+    
+    interface Result {
+      readonly ok: boolean
+    }
+    
+    // Should trigger: object literal in a concise arrow body needs parentheses after the fix
+    export const shouldTriggerObjectLiteral = Effect.fail("error").pipe(
+      Effect.catchAll(() => Effect.succeed({ ok: false }))
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+    )
+    
+    // Should trigger: object literal with `as const` in a concise arrow body
+    export const shouldTriggerObjectLiteralAsConst = Effect.fail("error").pipe(
+      Effect.catchAll(() => Effect.succeed({ ok: false } as const))
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+    )
+    
+    // Should trigger: object literal with `satisfies` in a concise arrow body
+    export const shouldTriggerObjectLiteralSatisfies = Effect.fail("error").pipe(
+      Effect.catchAll(() => Effect.succeed({ ok: false } satisfies Result))
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+    )
+    
+    // Should trigger: object literal in a block body needs no parentheses
+    export const shouldTriggerObjectLiteralBlock = Effect.fail("error").pipe(
+      Effect.catchAll(() => {
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+        return Effect.succeed({ ok: false })
+      })
     )
     

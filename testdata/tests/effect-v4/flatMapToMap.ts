@@ -49,3 +49,29 @@ const unrelated = {
   succeed: <A>(value: A): A => value
 }
 export const shouldNotTriggerUnrelated = unrelated.flatMap(1, (n) => unrelated.succeed(n + 1))
+
+interface Wrapped {
+  readonly value: number
+}
+
+// Should trigger: object literal in a concise arrow body needs parentheses after the fix
+export const shouldTriggerObjectLiteral = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.succeed({ value: n }))
+)
+
+// Should trigger: object literal with `as const` in a concise arrow body
+export const shouldTriggerObjectLiteralAsConst = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.succeed({ value: n } as const))
+)
+
+// Should trigger: object literal with `satisfies` in a concise arrow body
+export const shouldTriggerObjectLiteralSatisfies = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.succeed({ value: n } satisfies Wrapped))
+)
+
+// Should trigger: object literal in a block body needs no parentheses
+export const shouldTriggerObjectLiteralBlock = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => {
+    return Effect.succeed({ value: n })
+  })
+)

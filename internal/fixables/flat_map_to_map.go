@@ -31,7 +31,7 @@ func runFlatMapToMapFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Replace with Effect.map",
 			Run: func(tracker *rewriter.Tracker) {
 				tracker.ReplaceNode(sf, match.Callee, tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("map")...), nil)
-				tracker.ReplaceNode(sf, match.SucceedCallExpression, match.SucceedArgument, nil)
+				tracker.ReplaceNode(sf, match.SucceedCallExpression, replacementForExpression(tracker, match.SucceedCallExpression, match.SucceedArgument), nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

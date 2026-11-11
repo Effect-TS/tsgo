@@ -16,7 +16,7 @@ pub static FLAT_MAP_TO_MAP_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_flat_map_to_map_fix,
 });
 
-// go: internal/fixables/flat_map_to_map.go:22 runFlatMapToMapFix 90c5618768b94f0d
+// go: internal/fixables/flat_map_to_map.go:22 runFlatMapToMapFix 5229b8ff3e23ccf2
 fn run_flat_map_to_map_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -36,12 +36,12 @@ fn run_flat_map_to_map_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
                     )),
                     None,
                 );
-                tracker.replace_node(
-                    sf,
-                    Some(m.succeed_call_expression),
-                    Some(m.succeed_argument),
-                    None,
+                let replacement = crate::replacement_for_expression(
+                    tracker,
+                    m.succeed_call_expression,
+                    m.succeed_argument,
                 );
+                tracker.replace_node(sf, Some(m.succeed_call_expression), Some(replacement), None);
             }),
         }) {
             return vec![action];
