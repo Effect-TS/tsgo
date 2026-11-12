@@ -16,22 +16,24 @@ Effect version: 4.1.2
 /.src/missingConcurrencyOption.ts(70,34): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
 /.src/missingConcurrencyOption.ts(73,35): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
 /.src/missingConcurrencyOption.ts(76,31): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(79,30): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(82,27): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(89,33): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(92,29): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(93,25): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(98,27): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(99,31): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(107,10): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(109,26): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(119,10): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(121,10): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(127,23): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
-/.src/missingConcurrencyOption.ts(127,52): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(79,34): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(80,40): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(83,30): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(86,27): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(93,33): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(96,29): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(97,25): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(102,27): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(103,31): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(111,10): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(113,26): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(123,10): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(125,10): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(131,23): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+/.src/missingConcurrencyOption.ts(131,52): warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
 
 
-==== /.src/missingConcurrencyOption.ts (28 errors) ====
+==== /.src/missingConcurrencyOption.ts (30 errors) ====
     // @effect-v4
     // @effect-diagnostics *:off
     // @effect-diagnostics missingConcurrencyOption:warning
@@ -138,6 +140,14 @@ Effect version: 4.1.2
     export const allDiscardOnly = Effect.all(checks, { discard: true })
                                   ~~~~~~~~~~
 !!! warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+    
+    // MUST TRIGGER: options literal without `concurrency` under `as const` or `satisfies` (no `concurrency: 1` fix under `satisfies`).
+    export const allDiscardAsConst = Effect.all(checks, { discard: true } as const)
+                                     ~~~~~~~~~~
+!!! warning TS377188: `Effect.all` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+    export const forEachDiscardSatisfies = Effect.forEach(items, save, { discard: true } satisfies { readonly discard: boolean })
+                                           ~~~~~~~~~~~~~~
+!!! warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
     
     // MUST TRIGGER: `mode` without `concurrency`.
     export const allResultMode = Effect.all(checks, { mode: "result" })

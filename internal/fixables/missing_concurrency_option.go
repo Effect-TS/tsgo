@@ -26,6 +26,9 @@ func runMissingConcurrencyOptionFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
+		if match.OptionsUnderSatisfies {
+			continue
+		}
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Add `concurrency: 1`",
 			Run: func(tracker *rewriter.Tracker) {

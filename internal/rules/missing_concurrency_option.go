@@ -52,6 +52,9 @@ type MissingConcurrencyOptionMatch struct {
 	Flow           *typeparser.PipingFlow
 	StepIndex      int
 	OptionsLiteral *ast.Node
+	// OptionsUnderSatisfies is set when a `satisfies` wraps the options
+	// literal: adding `concurrency` there may break the satisfies check.
+	OptionsUnderSatisfies bool
 }
 
 func AnalyzeMissingConcurrencyOption(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []MissingConcurrencyOptionMatch {
@@ -75,19 +78,22 @@ func AnalyzeMissingConcurrencyOption(tp *typeparser.TypeParser, c *checker.Check
 				continue
 			}
 			var literal *ast.Node
+			underSatisfies := false
 			if options != nil {
-				literal = ast.SkipParentheses(options)
-				if literal.Kind != ast.KindObjectLiteralExpression || objectLiteralStatesConcurrency(literal) {
+				if _, flags := typeparser.ObjectLiteralProperty(options, "concurrency"); flags != typeparser.ObjectLiteralPropertyNone {
 					continue
 				}
+				literal = ast.SkipOuterExpressions(options, ast.OEKAll)
+				underSatisfies = isUnderSatisfies(options)
 			}
 			matches = append(matches, MissingConcurrencyOptionMatch{
-				SourceFile:     sf,
-				Location:       scanner.GetErrorRangeForNode(sf, callee),
-				Api:            api,
-				Flow:           flow,
-				StepIndex:      index,
-				OptionsLiteral: literal,
+				SourceFile:            sf,
+				Location:              scanner.GetErrorRangeForNode(sf, callee),
+				Api:                   api,
+				Flow:                  flow,
+				StepIndex:             index,
+				OptionsLiteral:        literal,
+				OptionsUnderSatisfies: underSatisfies,
 			})
 		}
 	}
@@ -148,19 +154,12 @@ func forEachTakesCallbackArgument(kind typeparser.TransformationKind) bool {
 	return false
 }
 
-func objectLiteralStatesConcurrency(literal *ast.Node) bool {
-	for _, property := range literal.AsObjectLiteralExpression().Properties.Nodes {
-		if property.Kind == ast.KindSpreadAssignment {
+func isUnderSatisfies(node *ast.Node) bool {
+	for ast.IsOuterExpression(node, ast.OEKAll) {
+		if ast.IsSatisfiesExpression(node) {
 			return true
 		}
-		name := property.Name()
-		if name == nil {
-			continue
-		}
-		switch ast.GetPropertyNameForPropertyNameNode(name) {
-		case "concurrency", ast.InternalSymbolNameMissing:
-			return true
-		}
+		node = node.Expression()
 	}
 	return false
 }

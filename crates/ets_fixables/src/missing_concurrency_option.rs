@@ -21,11 +21,14 @@ pub static MISSING_CONCURRENCY_OPTION_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_missing_concurrency_option_fix,
 });
 
-// go: internal/fixables/missing_concurrency_option.go:23 runMissingConcurrencyOptionFix 6e83041f4f095a5c
+// go: internal/fixables/missing_concurrency_option.go:23 runMissingConcurrencyOptionFix 5713c9d72907c488
 fn run_missing_concurrency_option_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_missing_concurrency_option(&mut ctx.type_parser, sf) {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
+            continue;
+        }
+        if m.options_under_satisfies {
             continue;
         }
         if let Some(action) = ctx.new_fix_action(FixAction {
@@ -40,7 +43,7 @@ fn run_missing_concurrency_option_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
     Vec::new()
 }
 
-// go: internal/fixables/missing_concurrency_option.go:41 newSequentialConcurrencyProperty 1a55dc675ddd38bf
+// go: internal/fixables/missing_concurrency_option.go:44 newSequentialConcurrencyProperty 1a55dc675ddd38bf
 fn new_sequential_concurrency_property(tracker: &NodeFactory) -> P<Node> {
     tracker.new_property_assignment(
         None,
@@ -51,7 +54,7 @@ fn new_sequential_concurrency_property(tracker: &NodeFactory) -> P<Node> {
     )
 }
 
-// go: internal/fixables/missing_concurrency_option.go:45 newSequentialConcurrencyOptions d31a4cff7966b000
+// go: internal/fixables/missing_concurrency_option.go:48 newSequentialConcurrencyOptions d31a4cff7966b000
 fn new_sequential_concurrency_options(tracker: &NodeFactory) -> P<Node> {
     tracker.new_object_literal_expression(
         tracker.new_node_list(vec![new_sequential_concurrency_property(tracker)]),
@@ -59,7 +62,7 @@ fn new_sequential_concurrency_options(tracker: &NodeFactory) -> P<Node> {
     )
 }
 
-// go: internal/fixables/missing_concurrency_option.go:49 addSequentialConcurrency 41b9fd78de4a5c90
+// go: internal/fixables/missing_concurrency_option.go:52 addSequentialConcurrency 41b9fd78de4a5c90
 fn add_sequential_concurrency(
     tracker: &mut Tracker,
     sf: P<SourceFile>,
@@ -113,7 +116,7 @@ fn add_sequential_concurrency(
     }
 }
 
-// go: internal/fixables/missing_concurrency_option.go:87 addSequentialConcurrencyToLiteral c18c0c7b5889a53c
+// go: internal/fixables/missing_concurrency_option.go:90 addSequentialConcurrencyToLiteral c18c0c7b5889a53c
 // Rust: tsrs's object literal properties are never nil, so Go's nil check drops.
 fn add_sequential_concurrency_to_literal(
     tracker: &mut Tracker,
@@ -132,7 +135,7 @@ fn add_sequential_concurrency_to_literal(
     tracker.insert_node_in_list_after(sf, after, new_node, Some(properties));
 }
 
-// go: internal/fixables/missing_concurrency_option.go:98 cloneTypeArguments 9705f21a2638bce8
+// go: internal/fixables/missing_concurrency_option.go:101 cloneTypeArguments 9705f21a2638bce8
 fn clone_type_arguments(
     tracker: &NodeFactory,
     type_arguments: Option<P<NodeList>>,

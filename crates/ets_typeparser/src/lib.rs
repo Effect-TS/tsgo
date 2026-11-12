@@ -123,6 +123,8 @@ mod node_cannot_be_effect_library_type;
 mod node_cannot_be_effect_library_type_test;
 mod object_literal;
 mod object_literal_contextual_type;
+#[cfg(test)]
+mod object_literal_test;
 mod option_type;
 mod packagejson;
 mod pipeable;

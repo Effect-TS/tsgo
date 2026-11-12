@@ -3,10 +3,13 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind, TypeParser};
+use ets_typeparser::{
+    ObjectLiteralPropertyFlags, PipingFlow, PipingFlowTransformation, TransformationKind,
+    TypeParser,
+};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_RUNS_SEQUENTIALLY_UNLESS_CONCURRENCY_IS_SET_PASS_CONCURRENCY_COLON_1_TO_KEEP_SEQUENTIAL_EXECUTION_OR_SET_THE_CONCURRENCY_YOU_INTEND_EFFECT_MISSING_CONCURRENCY_OPTION;
@@ -56,7 +59,7 @@ impl ConcurrencyApi {
     }
 }
 
-// go: internal/rules/missing_concurrency_option.go:48 MissingConcurrencyOptionMatch 64fb25b3ca698177
+// go: internal/rules/missing_concurrency_option.go:48 MissingConcurrencyOptionMatch e3f37409367a6eaf
 //
 // Rust: Go's `*typeparser.PipingFlow` (into the parser's cached flows) is a clone of the flow.
 #[derive(Clone)]
@@ -67,9 +70,12 @@ pub struct MissingConcurrencyOptionMatch {
     pub flow: PipingFlow,
     pub step_index: i64,
     pub options_literal: Option<P<Node>>,
+    // OptionsUnderSatisfies is set when a `satisfies` wraps the options
+    // literal: adding `concurrency` there may break the satisfies check.
+    pub options_under_satisfies: bool,
 }
 
-// go: internal/rules/missing_concurrency_option.go:57 AnalyzeMissingConcurrencyOption a8ac318c5b182e82
+// go: internal/rules/missing_concurrency_option.go:60 AnalyzeMissingConcurrencyOption 44f7dfdbb6f89036
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and the source file are never
 // nil.
@@ -92,14 +98,15 @@ pub fn analyze_missing_concurrency_option(
                 continue;
             };
             let mut literal = None;
+            let mut under_satisfies = false;
             if let Some(options) = options {
-                let skipped = ast::skip_parentheses(options);
-                if skipped.kind() != Kind::ObjectLiteralExpression
-                    || object_literal_states_concurrency(skipped)
-                {
+                let (_, flags) = ets_typeparser::object_literal_property(options, "concurrency");
+                if flags != ObjectLiteralPropertyFlags::None {
                     continue;
                 }
-                literal = Some(skipped);
+                literal =
+                    Some(ast::skip_outer_expressions(options, ast::OuterExpressionKinds::All));
+                under_satisfies = is_under_satisfies(options);
             }
             matches.push(MissingConcurrencyOptionMatch {
                 source_file: sf,
@@ -108,6 +115,7 @@ pub fn analyze_missing_concurrency_option(
                 flow: flow.clone(),
                 step_index: index,
                 options_literal: literal,
+                options_under_satisfies: under_satisfies,
             });
         }
     }
@@ -116,7 +124,7 @@ pub fn analyze_missing_concurrency_option(
     matches
 }
 
-// go: internal/rules/missing_concurrency_option.go:100 isInvokedCallee 8b98c73a54a76a1e
+// go: internal/rules/missing_concurrency_option.go:106 isInvokedCallee 8b98c73a54a76a1e
 pub(crate) fn is_invoked_callee(callee: Option<P<Node>>) -> bool {
     let Some(callee) = callee else {
         return false;
@@ -126,7 +134,7 @@ pub(crate) fn is_invoked_callee(callee: Option<P<Node>>) -> bool {
     })
 }
 
-// go: internal/rules/missing_concurrency_option.go:105 concurrencyApiOf 46fdaf8422780adb
+// go: internal/rules/missing_concurrency_option.go:111 concurrencyApiOf 46fdaf8422780adb
 pub(crate) fn concurrency_api_of(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,
@@ -136,15 +144,15 @@ pub(crate) fn concurrency_api_of(
         .find(|&api| tp.is_node_reference_to_effect_module_api(callee, api.as_str()))
 }
 
-// go: internal/rules/missing_concurrency_option.go:114 IsInputOnlyCall 9750f86a4b57a2f3
+// go: internal/rules/missing_concurrency_option.go:120 IsInputOnlyCall 9750f86a4b57a2f3
 pub fn is_input_only_call(step: &PipingFlowTransformation) -> bool {
     step.kind() == TransformationKind::Call && step.args().len() == 0
 }
 
-// go: internal/rules/missing_concurrency_option.go:118 forEachOptionsIndex 008351c4a7779782
+// go: internal/rules/missing_concurrency_option.go:124 forEachOptionsIndex 008351c4a7779782
 pub(crate) const FOR_EACH_OPTIONS_INDEX: i64 = 1;
 
-// go: internal/rules/missing_concurrency_option.go:120 missingConcurrencyOptionsArgument 67b27644afa59231
+// go: internal/rules/missing_concurrency_option.go:126 missingConcurrencyOptionsArgument 67b27644afa59231
 // Rust: Go's `(*ast.Node, bool)` is `Option<Option<P<Node>>>`: `None` when Go returns false, `Some(None)` for its
 // nil node.
 #[expect(
@@ -172,7 +180,7 @@ pub(crate) fn missing_concurrency_options_argument(
     None
 }
 
-// go: internal/rules/missing_concurrency_option.go:140 forEachTakesCallbackArgument f47d7b292552146f
+// go: internal/rules/missing_concurrency_option.go:146 forEachTakesCallbackArgument f47d7b292552146f
 pub(crate) const fn for_each_takes_callback_argument(kind: TransformationKind) -> bool {
     matches!(
         kind,
@@ -183,19 +191,13 @@ pub(crate) const fn for_each_takes_callback_argument(kind: TransformationKind) -
     )
 }
 
-// go: internal/rules/missing_concurrency_option.go:151 objectLiteralStatesConcurrency ec518fe6bbf7fa02
-pub(crate) fn object_literal_states_concurrency(literal: P<Node>) -> bool {
-    for &property in literal.as_object_literal_expression().properties.nodes() {
-        if property.kind() == Kind::SpreadAssignment {
+// go: internal/rules/missing_concurrency_option.go:157 isUnderSatisfies 033775c6f81a0a6e
+pub(crate) fn is_under_satisfies(mut node: P<Node>) -> bool {
+    while ast::is_outer_expression(node, ast::OuterExpressionKinds::All) {
+        if ast::is_satisfies_expression(node) {
             return true;
         }
-        let Some(name) = property.name() else {
-            continue;
-        };
-        let property_name = ast::get_property_name_for_property_name_node(name);
-        if property_name == "concurrency" || property_name == ast::INTERNAL_SYMBOL_NAME_MISSING {
-            return true;
-        }
+        node = node.expression().unwrap();
     }
     false
 }

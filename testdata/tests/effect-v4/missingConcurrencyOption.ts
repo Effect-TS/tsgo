@@ -75,6 +75,10 @@ export const allStructNoOptions = Effect.all({ a: check, b: check })
 // MUST TRIGGER: object literal options without `concurrency`.
 export const allDiscardOnly = Effect.all(checks, { discard: true })
 
+// MUST TRIGGER: options literal without `concurrency` under `as const` or `satisfies` (no `concurrency: 1` fix under `satisfies`).
+export const allDiscardAsConst = Effect.all(checks, { discard: true } as const)
+export const forEachDiscardSatisfies = Effect.forEach(items, save, { discard: true } satisfies { readonly discard: boolean })
+
 // MUST TRIGGER: `mode` without `concurrency`.
 export const allResultMode = Effect.all(checks, { mode: "result" })
 

@@ -1,4 +1,4 @@
-==== /.src/missingConcurrencyOption.ts (67 flows) ====
+==== /.src/missingConcurrencyOption.ts (69 flows) ====
 
 === Piping Flow ===
 Location: 21:32 - 21:60
@@ -243,7 +243,35 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 79:29 - 79:68
+Location: 79:33 - 79:80
+Node: Effect.all(checks, { discard: true } as const)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ discard: true } as const]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 80:39 - 80:126
+Node: Effect.forEach(items, save, { discard: true } satisfies { readonly discard: boolean })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { discard: true } satisfies { readonly discard: boolean }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 83:29 - 83:68
 Node: Effect.all(checks, { mode: "result" })
 Node Kind: KindCallExpression
 
@@ -257,7 +285,7 @@ Transformations (1):
       outType: Effect<Result<boolean, never>[], never, never>
 
 === Piping Flow ===
-Location: 82:26 - 82:81
+Location: 86:26 - 86:81
 Node: Effect.all(checks).pipe(Effect.map((xs) => xs.length))
 Node Kind: KindCallExpression
 
@@ -275,7 +303,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 89:32 - 89:57
+Location: 93:32 - 93:57
 Node: Eff.forEach(items, save)
 Node Kind: KindCallExpression
 
@@ -289,7 +317,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 92:28 - 92:54
+Location: 96:28 - 96:54
 Node: forEachNamed(items, save)
 Node Kind: KindCallExpression
 
@@ -303,7 +331,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 93:24 - 93:41
+Location: 97:24 - 97:41
 Node: allNamed(checks)
 Node Kind: KindCallExpression
 
@@ -317,7 +345,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 98:26 - 98:43
+Location: 102:26 - 102:43
 Node: allAlias(checks)
 Node Kind: KindCallExpression
 
@@ -331,7 +359,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 99:30 - 99:56
+Location: 103:30 - 103:56
 Node: forEachAlias(items, save)
 Node Kind: KindCallExpression
 
@@ -345,7 +373,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 105:27 - 115:3
+Location: 109:27 - 119:3
 Node: Effect.gen(function*() {\n  // MUST TRIGGER\n  yield* Effect.forEach(items, save)\n  // MUST TRIGGER\n  const results = yield* Effect.all(checks)\n  // MUST NOT TRIGGER: sequential intent stated explicitly.\n  yield* Effect.forEach(items, save, { concurrency: 1 })\n  // MUST NOT TRIGGER: explicit bounded concurrency.\n  yield* Effect.all(checks, { concurrency: 4 })\n  return results\n})
 Node Kind: KindCallExpression
 
@@ -359,7 +387,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 107:9 - 107:37
+Location: 111:9 - 111:37
 Node: Effect.forEach(items, save)
 Node Kind: KindCallExpression
 
@@ -373,7 +401,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 109:25 - 109:44
+Location: 113:25 - 113:44
 Node: Effect.all(checks)
 Node Kind: KindCallExpression
 
@@ -387,7 +415,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 111:9 - 111:57
+Location: 115:9 - 115:57
 Node: Effect.forEach(items, save, { concurrency: 1 })
 Node Kind: KindCallExpression
 
@@ -401,7 +429,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 113:9 - 113:48
+Location: 117:9 - 117:48
 Node: Effect.all(checks, { concurrency: 4 })
 Node Kind: KindCallExpression
 
@@ -415,7 +443,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 117:26 - 124:3
+Location: 121:26 - 128:3
 Node: Effect.fn("inEffectFn")(function*() {\n  // MUST TRIGGER\n  yield* Effect.forEach(items, save)\n  // MUST TRIGGER\n  yield* Effect.all(checks, { discard: true })\n  // MUST NOT TRIGGER: explicit concurrency.\n  yield* Effect.forEach(items, save, { concurrency: 2 })\n})
 Node Kind: KindCallExpression
 
@@ -429,7 +457,7 @@ Transformations (1):
       outType: () => Effect<void, never, never>
 
 === Piping Flow ===
-Location: 119:9 - 119:37
+Location: 123:9 - 123:37
 Node: Effect.forEach(items, save)
 Node Kind: KindCallExpression
 
@@ -443,7 +471,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 121:9 - 121:47
+Location: 125:9 - 125:47
 Node: Effect.all(checks, { discard: true })
 Node Kind: KindCallExpression
 
@@ -457,7 +485,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 123:9 - 123:57
+Location: 127:9 - 127:57
 Node: Effect.forEach(items, save, { concurrency: 2 })
 Node Kind: KindCallExpression
 
@@ -471,7 +499,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 127:22 - 127:87
+Location: 131:22 - 131:87
 Node: Effect.forEach(items, (n) => Effect.all([save(n), save(n + 1)]))
 Node Kind: KindCallExpression
 
@@ -485,7 +513,7 @@ Transformations (1):
       outType: Effect<[void, void][], never, never>
 
 === Piping Flow ===
-Location: 127:51 - 127:86
+Location: 131:51 - 131:86
 Node: Effect.all([save(n), save(n + 1)])
 Node Kind: KindCallExpression
 
@@ -499,7 +527,7 @@ Transformations (1):
       outType: Effect<[void, void], never, never>
 
 === Piping Flow ===
-Location: 127:64 - 127:71
+Location: 131:64 - 131:71
 Node: save(n)
 Node Kind: KindCallExpression
 
@@ -513,7 +541,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 127:72 - 127:84
+Location: 131:72 - 131:84
 Node: save(n + 1)
 Node Kind: KindCallExpression
 
@@ -527,7 +555,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 134:33 - 134:81
+Location: 138:33 - 138:81
 Node: Effect.forEach(items, save, { concurrency: 1 })
 Node Kind: KindCallExpression
 
@@ -541,7 +569,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 137:30 - 137:93
+Location: 141:30 - 141:93
 Node: Effect.forEach(items, save, { concurrency: 4, discard: true })
 Node Kind: KindCallExpression
 
@@ -555,7 +583,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 140:32 - 140:90
+Location: 144:32 - 144:90
 Node: Effect.forEach(items, save, { concurrency: "unbounded" })
 Node Kind: KindCallExpression
 
@@ -569,7 +597,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 143:31 - 143:74
+Location: 147:31 - 147:74
 Node: Effect.all(checks, { concurrency: limit })
 Node Kind: KindCallExpression
 
@@ -583,7 +611,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 147:32 - 147:77
+Location: 151:32 - 151:77
 Node: Effect.forEach(items, save, { concurrency })
 Node Kind: KindCallExpression
 
@@ -597,7 +625,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 150:32 - 150:82
+Location: 154:32 - 154:82
 Node: Effect.forEach(items, save, { "concurrency": 2 })
 Node Kind: KindCallExpression
 
@@ -611,7 +639,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 153:42 - 153:94
+Location: 157:42 - 157:94
 Node: Effect.forEach(items, save, { [`concurrency`]: 2 })
 Node Kind: KindCallExpression
 
@@ -625,7 +653,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 155:38 - 155:82
+Location: 159:38 - 159:82
 Node: Effect.all(checks, { [concurrencyKey]: 2 })
 Node Kind: KindCallExpression
 
@@ -639,7 +667,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 158:40 - 158:96
+Location: 162:40 - 162:96
 Node: Effect.forEach(items, save, { concurrency: undefined })
 Node Kind: KindCallExpression
 
@@ -653,7 +681,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 161:26 - 161:74
+Location: 165:26 - 165:74
 Node: Effect.all(checks, { concurrency: 2 } as const)
 Node Kind: KindCallExpression
 
@@ -667,7 +695,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 164:39 - 164:93
+Location: 168:39 - 168:93
 Node: pipe(items, Effect.forEach(save, { concurrency: 2 }))
 Node Kind: KindCallExpression
 
@@ -681,7 +709,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 165:38 - 165:86
+Location: 169:38 - 169:86
 Node: Effect.forEach(save, { concurrency: 1 })(items)
 Node Kind: KindCallExpression
 
@@ -695,7 +723,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 168:28 - 168:76
+Location: 172:28 - 172:76
 Node: Effect.forEach(items, save, { concurrency: 1 })
 Node Kind: KindCallExpression
 
@@ -709,7 +737,7 @@ Transformations (1):
       outType: Effect<void[], never, never>
 
 === Piping Flow ===
-Location: 169:24 - 169:63
+Location: 173:24 - 173:63
 Node: Effect.all(checks, { concurrency: 4 })
 Node Kind: KindCallExpression
 
@@ -723,7 +751,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 176:38 - 176:82
+Location: 180:38 - 180:82
 Node: Effect.forEach(items, save, runtimeOptions)
 Node Kind: KindCallExpression
 
@@ -737,7 +765,7 @@ Transformations (1):
       outType: Effect<void | void[], never, never>
 
 === Piping Flow ===
-Location: 179:38 - 179:79
+Location: 183:38 - 183:79
 Node: Effect.forEach(items, save, discardOnly)
 Node Kind: KindCallExpression
 
@@ -751,7 +779,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 183:37 - 186:2
+Location: 187:37 - 190:2
 Node: Effect.all(\n  checks,\n  parallel ? { concurrency: "unbounded" } : { concurrency: 1 }\n)
 Node Kind: KindCallExpression
 
@@ -765,7 +793,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 189:36 - 189:87
+Location: 193:36 - 193:87
 Node: Effect.forEach(items, save, { ...runtimeOptions })
 Node Kind: KindCallExpression
 
@@ -779,7 +807,7 @@ Transformations (1):
       outType: Effect<void | void[], never, never>
 
 === Piping Flow ===
-Location: 190:36 - 190:99
+Location: 194:36 - 194:99
 Node: Effect.forEach(items, save, { ...discardOnly, discard: true })
 Node Kind: KindCallExpression
 
@@ -793,7 +821,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 198:32 - 198:57
+Location: 202:32 - 202:57
 Node: pipe(checks, Effect.all)
 Node Kind: KindCallExpression
 
@@ -807,7 +835,7 @@ Transformations (1):
       outType: Effect<boolean[], never, never>
 
 === Piping Flow ===
-Location: 202:24 - 202:75
+Location: 206:24 - 206:75
 Node: Effect.filter(items, (n) => Effect.succeed(n > 0))
 Node Kind: KindCallExpression
 
@@ -821,7 +849,7 @@ Transformations (1):
       outType: Effect<number[], never, never>
 
 === Piping Flow ===
-Location: 202:52 - 202:74
+Location: 206:52 - 206:74
 Node: Effect.succeed(n > 0)
 Node Kind: KindCallExpression
 
@@ -835,7 +863,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 205:25 - 205:70
+Location: 209:25 - 209:70
 Node: Option.all([Option.some(1), Option.some(2)])
 Node Kind: KindCallExpression
 
@@ -849,7 +877,7 @@ Transformations (1):
       outType: Option<[number, number]>
 
 === Piping Flow ===
-Location: 205:38 - 205:52
+Location: 209:38 - 209:52
 Node: Option.some(1)
 Node Kind: KindCallExpression
 
@@ -863,7 +891,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 205:53 - 205:68
+Location: 209:53 - 209:68
 Node: Option.some(2)
 Node Kind: KindCallExpression
 
@@ -877,7 +905,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 205:70 - 208:28
+Location: 209:70 - 212:28
 Node: items.forEach((n) => n + 1)
 Node Kind: KindCallExpression
 
@@ -891,7 +919,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 209:24 - 209:58
+Location: 213:24 - 213:58
 Node: Promise.all([Promise.resolve(1)])
 Node Kind: KindCallExpression
 
@@ -905,7 +933,7 @@ Transformations (1):
       outType: Promise<[number]>
 
 === Piping Flow ===
-Location: 209:38 - 209:56
+Location: 213:38 - 213:56
 Node: Promise.resolve(1)
 Node Kind: KindCallExpression
 
@@ -919,7 +947,7 @@ Transformations (1):
       outType: Promise<number>
 
 === Piping Flow ===
-Location: 214:63 - 214:81
+Location: 218:63 - 218:81
 Node: values.forEach(f)
 Node Kind: KindCallExpression
 
@@ -933,7 +961,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 216:24 - 216:41
+Location: 220:24 - 220:41
 Node: local.all(items)
 Node Kind: KindCallExpression
 

@@ -10,6 +10,6 @@ yield* Effect.forEach(items, save, { concurrency: 1 })  // ok
 yield* Effect.all(checks, { concurrency: 4 })           // ok
 ```
 
-A quick fix adds `concurrency: 1`, which keeps the current behaviour: `Effect.forEach(items, save)` becomes `Effect.forEach(items, save, { concurrency: 1 })`, and `Effect.all(checks, { discard: true })` becomes `Effect.all(checks, { discard: true, concurrency: 1 })`. Options that are not an object literal, or that use a spread, are not reported. The rule defaults to off and supports Effect v3 and v4.
+A quick fix adds `concurrency: 1`, which keeps the current behaviour: `Effect.forEach(items, save)` becomes `Effect.forEach(items, save, { concurrency: 1 })`, and `Effect.all(checks, { discard: true })` becomes `Effect.all(checks, { discard: true, concurrency: 1 })`. Options that are not an object literal, or that use a spread, are not reported. A literal under `as const`, `as` or `satisfies` is checked like a bare one; under `satisfies` the call is reported without the quick fix, since adding `concurrency` may not satisfy the type. The rule defaults to off and supports Effect v3 and v4.
 
 Piping flows now recognize Effect v4's `forEach` as a dual, so `Effect.forEach(items, f)` and `Effect.forEach(f)(items)` normalize like they do on v3.
