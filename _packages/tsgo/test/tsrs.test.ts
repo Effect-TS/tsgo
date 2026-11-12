@@ -101,7 +101,7 @@ describe("tsrs component", () => {
     expect(tsrsTarget("linux", "arm64", false)).toBe("linux-arm64-musl")
     expect(tsrsTarget("darwin", "x64", false)).toBe("darwin-x64")
     expect(tsrsTarget("win32", "x64", false)).toBe("win32-x64")
-    expect(tsrsTarget("win32", "arm64", false)).toBeUndefined()
+    expect(tsrsTarget("win32", "arm64", false)).toBe("win32-arm64")
     expect(tsrsTarget("linux", "arm", true)).toBeUndefined()
   })
 
@@ -130,7 +130,7 @@ describe("tsrs component", () => {
     expect(discovered).toEqual([])
     await expect(run(requireComponents(discovered, new Set(["tsrs"])))).rejects.toThrow(
       "Unable to discover an installed tsrs binary. Install the tsrs package; its binary is published for "
-        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-x64-musl, linux-arm64-gnu, linux-arm64-musl, win32-x64."
+        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-x64-musl, linux-arm64-gnu, linux-arm64-musl, win32-x64, win32-arm64."
     )
   })
 
@@ -175,7 +175,7 @@ describe("tsrs component", () => {
       await expect(run(resolveReplacement(target!))).rejects.toMatchObject({
         _tag: "ReplacementUnavailableError",
         reason: "Linux musl is not supported by the packaged tsrs integration; it is built for "
-          + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64."
+          + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64, win32-arm64."
       })
       await expect(run(preparePatch([target!], { skipMissing: false }))).rejects.toBeInstanceOf(
         ReplacementUnavailableError
