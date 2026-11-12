@@ -167,7 +167,8 @@ export const tsrsReplacementTargets = [
   "darwin-x64",
   "linux-x64-gnu",
   "linux-arm64-gnu",
-  "win32-x64"
+  "win32-x64",
+  "win32-arm64"
 ] as const
 
 // The packaged build of a component version: the latest TypeScript compiler ships in lib/, everything else in

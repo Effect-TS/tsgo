@@ -176,7 +176,7 @@ const workflow = (rows: ReadonlyArray<string>, windowsRunner = "windows-latest")
     "      matrix:",
     "        include:",
     `          - { target: x86_64-pc-windows-msvc, os: ${windowsRunner} }`,
-    "          # - { target: aarch64-pc-windows-msvc, os: windows-11-arm }",
+    "          - { target: aarch64-pc-windows-msvc, os: windows-11-arm }",
     "",
     "  build-musl:",
     "    strategy:",
@@ -200,10 +200,11 @@ test("matches tsrs's release targets, runners and build settings", () => {
     ["x86_64-unknown-linux-gnu", "ubuntu-22.04"],
     ["aarch64-unknown-linux-gnu", "ubuntu-22.04-arm"],
     ["x86_64-pc-windows-msvc", "windows-latest"],
+    ["aarch64-pc-windows-msvc", "windows-11-arm"],
     ["x86_64-unknown-linux-musl", "ubuntu-latest"]
   ])
   assert.deepEqual(tsrsReleaseParityProblems(workflow(upstreamRows)), [])
-  assert.equal(Object.keys(tsrsBuildTargets).length, 5)
+  assert.equal(Object.keys(tsrsBuildTargets).length, 6)
 })
 
 test("reports how tsrs's release workflow moved away from the mirrored build", () => {
