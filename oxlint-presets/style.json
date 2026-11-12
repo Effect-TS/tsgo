@@ -42,6 +42,7 @@
     "effecttsgo/match-effect-to-match": "warn",
     "effecttsgo/match-to-result-or-option": "warn",
     "effecttsgo/missed-pipeable-opportunity": "warn",
+    "effecttsgo/missing-concurrency-option": "warn",
     "effecttsgo/missing-effect-service-dependency": "warn",
     "effecttsgo/missing-pipeable-signature": "warn",
     "effecttsgo/multiple-catch-tag": "warn",

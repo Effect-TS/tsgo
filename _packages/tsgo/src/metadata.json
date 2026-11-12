@@ -366,6 +366,7 @@
         "matchEffectToMatch": "warning",
         "matchToResultOrOption": "warning",
         "missedPipeableOpportunity": "warning",
+        "missingConcurrencyOption": "warning",
         "missingEffectServiceDependency": "warning",
         "missingPipeableSignature": "warning",
         "multipleCatchTag": "warning",
@@ -3067,6 +3068,30 @@
             "start": 116,
             "end": 172,
             "text": "This nested call structure has a pipeable form. `Schema.decodeEffect(User)({ id: 1 }).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missingConcurrencyOption",
+      "group": "style",
+      "description": "Reports Effect.all and Effect.forEach calls without an explicit concurrency option, which run sequentially by default",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377188
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const items: ReadonlyArray\u003cnumber\u003e\ndeclare const save: (n: number) =\u003e Effect.Effect\u003cvoid\u003e\n\nexport const program = Effect.forEach(items, save)\n",
+        "diagnostics": [
+          {
+            "start": 155,
+            "end": 169,
+            "text": "`Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)"
           }
         ]
       }

@@ -119,7 +119,7 @@ func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExp
 					continue
 				}
 			}
-			if !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex) {
+			if pipeableSignatureShape(tp, resolved, candidate, subjectIndex) == pipeableShapeMismatch {
 				continue
 			}
 			if witness.get() == nil {
@@ -151,36 +151,41 @@ func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExp
 
 // MatchesPipeableSignature reports whether candidate is the pipeable form of
 // dataFirst with the parameter at subjectIndex moved into a returned unary function.
-// When witness is nil, parameter types from dataFirst are used for comparison.
 func MatchesPipeableSignature(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness) bool {
 	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
-	c := tp.checker
-	params := dataFirst.Parameters()
-	if subjectIndex < 0 || subjectIndex >= len(params) {
+	if subjectIndex < 0 || subjectIndex >= len(dataFirst.Parameters()) {
 		return false
 	}
-
-	var argumentTypes []*checker.Type
-	var subjectType *checker.Type
-	if witness != nil {
-		argumentTypes = witness.ArgumentTypes
-		subjectType = witness.SubjectType
-	} else {
-		argumentTypes = make([]*checker.Type, 0, len(params)-1)
-		for i, param := range params {
-			if i == subjectIndex {
-				subjectType = c.GetTypeOfSymbol(param)
-				continue
-			}
-			argumentTypes = append(argumentTypes, c.GetTypeOfSymbol(param))
-		}
+	if witness == nil {
+		return matchesPipeableSignatureByDeclaration(tp, dataFirst, candidate, subjectIndex)
 	}
+	return matchesPipeableSignatureAtCall(tp, dataFirst, candidate, subjectIndex, witness)
+}
 
+func matchesPipeableSignatureByDeclaration(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+	c := tp.checker
+	params := dataFirst.Parameters()
+	argumentTypes := make([]*checker.Type, 0, len(params)-1)
+	var subjectType *checker.Type
+	for i, param := range params {
+		if i == subjectIndex {
+			subjectType = c.GetTypeOfSymbol(param)
+			continue
+		}
+		argumentTypes = append(argumentTypes, c.GetTypeOfSymbol(param))
+	}
 	return argumentTypesMatchParameters(c, argumentTypes, candidate) &&
 		candidateAcceptsSubject(c, candidate, subjectType) &&
 		pipeableSignatureShapesMatch(tp, dataFirst, candidate, subjectIndex)
+}
+
+func matchesPipeableSignatureAtCall(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness) bool {
+	c := tp.checker
+	return argumentTypesMatchParameters(c, witness.ArgumentTypes, candidate) &&
+		candidateAcceptsSubject(c, candidate, witness.SubjectType) &&
+		pipeableSignatureShape(tp, dataFirst, candidate, subjectIndex) != pipeableShapeMismatch
 }
 
 func argumentTypesMatchParameters(c *checker.Checker, args []*checker.Type, sig *checker.Signature) bool {

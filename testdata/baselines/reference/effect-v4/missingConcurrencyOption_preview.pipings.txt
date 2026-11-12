@@ -1,0 +1,15 @@
+==== /.src/missingConcurrencyOption_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 8:51
+Node: Effect.forEach(items, save)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save]
+      outType: Effect<void[], never, never>

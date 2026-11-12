@@ -124,6 +124,7 @@ var All = []rule.Rule{
 	EffectDoNotation,
 	EffectMapFlatten,
 	AllOfMapToForEach,
+	MissingConcurrencyOption,
 	MapSomeToAsSome,
 	MapConstToAs,
 	ManualMetricTapToTrack,

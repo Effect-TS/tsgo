@@ -1,0 +1,80 @@
+// Dual APIs shaped like Effect v4's forEach: the pipeable overload declares one
+// extra element binder (A) and a conditional `self` type, so the strict shape
+// matcher rejects the pair. With `self`-named subjects the self-dual fallback
+// pairs them, and the call-site witness still has to fit the pipeable overload.
+interface Box<A> { readonly value: A }
+type Infer<S extends Iterable<any>> = S extends ReadonlyArray<infer A> ? A : S extends Iterable<infer A> ? A : never
+type Options<D> = { readonly concurrency?: number | undefined; readonly discard?: D | undefined }
+
+declare const traverse: {
+  <A, B, S extends Iterable<A> = Iterable<A>, const D extends boolean = false>(
+    f: (a: A, i: number) => Box<B>,
+    options?: Options<D> | undefined
+  ): (self: [S] extends [never] ? Iterable<A> : S) => Box<D extends false ? Array<B> : void>
+  <B, S extends Iterable<any>, const D extends boolean = false>(
+    self: S,
+    f: (a: Infer<S>, i: number) => Box<B>,
+    options?: Options<D> | undefined
+  ): Box<D extends false ? Array<B> : void>
+}
+
+// Same overload pair, but the subject is not `self`-named: stays unmatched.
+declare const traverseUnnamed: {
+  <A, B, S extends Iterable<A> = Iterable<A>, const D extends boolean = false>(
+    f: (a: A, i: number) => Box<B>,
+    options?: Options<D> | undefined
+  ): (input: [S] extends [never] ? Iterable<A> : S) => Box<D extends false ? Array<B> : void>
+  <B, S extends Iterable<any>, const D extends boolean = false>(
+    input: S,
+    f: (a: Infer<S>, i: number) => Box<B>,
+    options?: Options<D> | undefined
+  ): Box<D extends false ? Array<B> : void>
+}
+
+// `self`-named pair whose pipeable overload takes a different callback than the
+// data-first one: the call-site arguments do not fit it, so it stays unmatched.
+declare const traverseMismatched: {
+  <A, B, S extends Iterable<A> = Iterable<A>>(
+    f: (a: A, i: number) => Box<B>,
+    label: string
+  ): (self: [S] extends [never] ? Iterable<A> : S) => Box<Array<B>>
+  <B, S extends Iterable<any>>(
+    self: S,
+    f: (a: Infer<S>, i: number) => Box<B>,
+    label: number
+  ): Box<Array<B>>
+}
+
+// `self`-named pair whose extra element binder is constrained: the pipeable
+// overload would reject inputs the data-first one accepts, so it stays unmatched.
+declare const traverseConstrained: {
+  <A extends string, B, S extends Iterable<A> = Iterable<A>>(
+    f: (a: A, i: number) => Box<B>
+  ): (self: [S] extends [never] ? Iterable<A> : S) => Box<Array<B>>
+  <B, S extends Iterable<any>>(
+    self: S,
+    f: (a: Infer<S>, i: number) => Box<B>
+  ): Box<Array<B>>
+}
+
+declare const items: ReadonlyArray<number>
+declare const wrap: (n: number) => Box<string>
+
+// Normalizes: data-first.
+export const dataFirst = traverse(items, wrap)
+// Normalizes: data-first with options.
+export const dataFirstWithOptions = traverse(items, wrap, { discard: true })
+// Normalizes: curried application of the pipeable overload.
+export const curried = traverse(wrap)(items)
+// Normalizes: curried application with options.
+export const curriedWithOptions = traverse(wrap, { concurrency: 2 })(items)
+
+// Stays unmatched: no `self` naming.
+export const unnamedDataFirst = traverseUnnamed(items, wrap)
+export const unnamedCurried = traverseUnnamed(wrap)(items)
+
+// Stays unmatched: the call-site arguments do not fit the pipeable overload.
+export const mismatchedDataFirst = traverseMismatched(items, wrap, 1)
+
+// Stays unmatched: the extra element binder is constrained.
+export const constrainedDataFirst = traverseConstrained(items, wrap)

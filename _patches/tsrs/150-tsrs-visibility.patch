@@ -1,7 +1,8 @@
 tsrs-only: tsrs 0.20.0 narrowed the visibility of much of its API ("apply Hawk visibility fixes", oxc-project/tsrs#761:
 `pub` items became `pub(crate)` or private). This restores `pub` on the items the Effect crates use, and only on
 those: checker type fields (`IndexInfo`, `MappedType`, `ConditionalType`, `SubstitutionType`, ...), `Checker` fields
-and methods the type parser and rules call, the change tracker's `NodeOptions` and methods, the code fix provider and
+and methods the type parser and rules call, the change tracker's `NodeOptions` and methods (`insert_node_in_list_after` for Go's exported
+`change.Tracker.InsertNodeInListAfter`, used by internal/fixables missingConcurrencyOption), the code fix provider and
 context fields, autoimport's `ExportID::export_name`, `Fix::type_only_alias_declaration`, `ModuleID::as_str` and
 `ModuleID::as_file`, and a few others (see the diff). Each line keeps tsrs's code; only the visibility changes (and
 rustfmt reflows the signatures that now fit on one line).
@@ -812,7 +813,7 @@ index 807f810..47c775c 100644
          export: &Export,
          for_jsx: bool,
 diff --git a/crates/tsrs_ls/src/change/tracker.rs b/crates/tsrs_ls/src/change/tracker.rs
-index a71d607..9ee37a3 100644
+index a71d607..afd3e56 100644
 --- a/crates/tsrs_ls/src/change/tracker.rs
 +++ b/crates/tsrs_ls/src/change/tracker.rs
 @@ -23,10 +23,10 @@ use crate::spanmap::{self, Feature};
@@ -934,6 +935,15 @@ index a71d607..9ee37a3 100644
          self.replace_text_range_with_text(source_file, text_range, "");
      }
  
+@@ -684,7 +677,7 @@ impl Tracker {
+      * i.e. arguments in arguments lists, parameters in parameter lists etc.
+      * Note that separators are part of the node in statements and class elements.
+      */
+-    pub(crate) fn insert_node_in_list_after(
++    pub fn insert_node_in_list_after(
+         &mut self,
+         source_file: P<SourceFile>,
+         after: P<Node>,
 @@ -857,7 +850,7 @@ impl Tracker {
  
      // tracker.go:522

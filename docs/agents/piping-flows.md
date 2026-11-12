@@ -24,6 +24,8 @@ Each step has a `Kind()`, a `Callee()`, `Args()` (empty for a bare operator) and
 | `Effect.fn(() => ..., Effect.map(f))` | the whole `Effect.fn(...)` call | `effectFn` `Effect.map` [`f`] |
 | `Effect.fnUntraced(function*() {...}, Effect.map(f))` | the whole call | `effectFnUntraced` `Effect.map` [`f`] |
 
+A dual is recognized when its data-first and pipeable overloads have the same types up to binder renaming. When the subject parameter and the returned function's parameter are both named `self`, the pipeable overload may also declare one extra unconstrained element binder and a conditional `self` type, as Effect v4's `forEach` does, so `Effect.forEach(xs, f)` is a `dataFirst` step and `Effect.forEach(f)(xs)` a `call` step with `Args()` `[f]`; this looser match is only used with the call site's argument types.
+
 Flattening joins nested and chained forms into one flow:
 
 - `addOne(5).pipe(double, toString)` has subject `5` and steps `call addOne`, `pipeable double`, `pipeable toString`.
@@ -92,6 +94,7 @@ These live on `*rewriter.Tracker` and keep every step outside the edit untouched
 Record new ones here once the user agrees they belong in the parser or rewriter.
 
 - `TransformationInputNode` has no node for `pipe`/`pipeable` steps after index 0 (above).
+- A data-last factory called with two or more arguments and not applied in place (`Effect.flatMap(Effect.forEach(f, { discard: true }))`) is not a step.
 - A step does not record instantiation type arguments or optional-chain (`?.`) calls.
 - The rewriter's lookup of a step's enclosing pipe call is not exported.
 - Edits other than `CollapsePipingFlowTransformations` may drop comments or re-indent the nodes they move.

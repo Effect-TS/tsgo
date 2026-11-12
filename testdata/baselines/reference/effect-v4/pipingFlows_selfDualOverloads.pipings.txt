@@ -1,0 +1,71 @@
+==== /.src/pipingFlows_selfDualOverloads.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 64:25 - 64:47
+Node: traverse(items, wrap)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: traverse
+      args: [wrap]
+      outType: Box<string[]>
+
+=== Piping Flow ===
+Location: 66:36 - 66:77
+Node: traverse(items, wrap, { discard: true })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: traverse
+      args: [wrap, { discard: true }]
+      outType: Box<void>
+
+=== Piping Flow ===
+Location: 68:23 - 68:45
+Node: traverse(wrap)(items)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: traverse
+      args: [wrap]
+      outType: Box<string[]>
+
+=== Piping Flow ===
+Location: 70:34 - 70:76
+Node: traverse(wrap, { concurrency: 2 })(items)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: traverse
+      args: [wrap, { concurrency: 2 }]
+      outType: Box<string[]>
+
+=== Piping Flow ===
+Location: 74:30 - 74:59
+Node: traverseUnnamed(wrap)(items)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: traverseUnnamed(wrap)
+      args: (constant)
+      outType: Box<string[]>
