@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.68.2
+
+### Patch Changes
+
+- 4f8b181: Ship the patched tsrs binary for Windows ARM64 (`win32-arm64`), now that tsrs 0.25.0 publishes `@tsrs/win32-arm64`.
+
 ## 0.68.1
 
 ### Patch Changes
