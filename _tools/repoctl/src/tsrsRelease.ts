@@ -38,7 +38,8 @@ export const tsrsBuildTargets = {
   "darwin-x64": { rustTarget: "x86_64-apple-darwin", runner: "macos-26-intel", optimization: "pgo" },
   "linux-x64": { rustTarget: "x86_64-unknown-linux-gnu", runner: "ubuntu-22.04", optimization: "pgo-bolt" },
   "linux-arm64": { rustTarget: "aarch64-unknown-linux-gnu", runner: "ubuntu-22.04-arm", optimization: "pgo-bolt" },
-  "win32-x64": { rustTarget: "x86_64-pc-windows-msvc", runner: "windows-latest", optimization: "pgo" }
+  "win32-x64": { rustTarget: "x86_64-pc-windows-msvc", runner: "windows-latest", optimization: "pgo" },
+  "win32-arm64": { rustTarget: "aarch64-pc-windows-msvc", runner: "windows-11-arm", optimization: "pgo" }
 } as const satisfies Partial<
   Record<BuildTarget, { readonly rustTarget: string; readonly runner: string; readonly optimization: TsrsOptimization }>
 >
@@ -369,6 +370,7 @@ export const buildOptimizedTsrsBinary = Effect.fnUntraced(function*(
   yield* runCommand("rustup", repositoryRoot, ["component", "add", "llvm-tools"])
   yield* runCommand("rustup", repositoryRoot, ["target", "add", rustTarget])
   const reference = yield* prepareTypeScriptReference(repositoryRoot)
+  const linker = yield* windowsArm64Linker(repositoryRoot, rustTarget)
   const libraries = { TSRS_LIB_PATH: path.join(tsrsDirectory, "crates", "tsrs_vfs", "libs") }
 
   // Instrumented build, training and merge, from fresh profiles.
@@ -380,11 +382,14 @@ export const buildOptimizedTsrsBinary = Effect.fnUntraced(function*(
     repositoryRoot,
     tsrsCargoBuildArgs(target, true),
     false,
-    tsrsCargoEnvironment({
-      target,
-      optimization,
-      phase: { kind: "generate", rawProfiles: layout.rawProfiles, targetDirectory: layout.instrumentedTarget }
-    })
+    {
+      ...tsrsCargoEnvironment({
+        target,
+        optimization,
+        phase: { kind: "generate", rawProfiles: layout.rawProfiles, targetDirectory: layout.instrumentedTarget }
+      }),
+      ...linker
+    }
   )
   const instrumented = path.join(layout.instrumentedTarget, rustTarget, "release")
   yield* Console.log("Training run")
@@ -417,7 +422,7 @@ export const buildOptimizedTsrsBinary = Effect.fnUntraced(function*(
     repositoryRoot,
     tsrsCargoBuildArgs(target, usesBolt(optimization)),
     false,
-    tsrsCargoEnvironment({ target, optimization, phase: { kind: "use", profile } })
+    { ...tsrsCargoEnvironment({ target, optimization, phase: { kind: "use", profile } }), ...linker }
   )
   const targetDirectory = process.env.CARGO_TARGET_DIR ?? path.join(repositoryRoot, "target")
   const dist = path.join(targetDirectory, rustTarget, "release")
@@ -446,8 +451,24 @@ export const buildOptimizedTsrsBinary = Effect.fnUntraced(function*(
   return path.join(dist, `tsrs${exe}`)
 })
 
+// tsrs's "Select linker for Windows ARM64 profiles" step: link.exe pads LLVM's one-byte profile section markers on
+// ARM64, corrupting the profiles, so the aarch64-pc-windows-msvc builds link with the toolchain's rust-lld.
+const windowsArm64Linker = Effect.fnUntraced(function*(repositoryRoot: string, rustTarget: string) {
+  const environment: Record<string, string> = {}
+  if (rustTarget !== "aarch64-pc-windows-msvc") return environment
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const host = (yield* runCommandString("rustc", repositoryRoot, ["-vV"])).match(/^host: (.+)$/m)?.[1]?.trim()
+  const sysroot = (yield* runCommandString("rustc", repositoryRoot, ["--print", "sysroot"])).trim()
+  if (host === undefined) return yield* new TsrsReleaseError({ reason: "rustc -vV reports no host" })
+  const linker = path.join(sysroot, "lib", "rustlib", host, "bin", "rust-lld.exe")
+  if (!(yield* fs.exists(linker))) return yield* new TsrsReleaseError({ reason: `missing rust-lld at ${linker}` })
+  environment.CARGO_TARGET_AARCH64_PC_WINDOWS_MSVC_LINKER = linker
+  return environment
+})
+
 // The settings of tsrs's release workflow that `tsrsBuildTargets`, `tsrsCargoEnvironment`, `tsrsCargoBuildArgs` and
-// `buildOptimizedTsrsBinary` mirror, verbatim: when tsrs changes one of them, `repoctl tsrs check` fails and this
+// `buildOptimizedTsrsBinary` (with `windowsArm64Linker`) mirror, verbatim: when tsrs changes one of them, `repoctl tsrs check` fails and this
 // module is updated to match (then this list).
 export const tsrsReleaseWorkflowSnippets = [
   // `build`
@@ -471,6 +492,9 @@ export const tsrsReleaseWorkflowSnippets = [
   "$env:CARGO_ENCODED_RUSTFLAGS = @(\"-Cprofile-generate=$raw\", \"-Clto=thin\") -join [char]31",
   "cargo build --release --locked -p tsrs_cli -p tsrs_testrunner --bins --features tsrs_cli/noembed --target ${{ matrix.target }}",
   "& ./.github/scripts/pgo-train-windows.ps1 -BinDir $bin -RawDir $raw",
+  "if: matrix.target == 'aarch64-pc-windows-msvc'",
+  "$linker = Join-Path (rustc --print sysroot) \"lib/rustlib/$hostTriple/bin/rust-lld.exe\"",
+  "\"CARGO_TARGET_AARCH64_PC_WINDOWS_MSVC_LINKER=$linker\" >> $env:GITHUB_ENV",
   "$env:CARGO_ENCODED_RUSTFLAGS = \"-Cprofile-use=$env:PROFILE_PATH\"",
   "cargo build --release --locked -p tsrs_cli --features tsrs_cli/noembed --target ${{ matrix.target }}"
 ] as const

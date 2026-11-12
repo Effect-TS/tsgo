@@ -130,7 +130,7 @@ test("prepares versioned platform artifacts and executable manifests", async() =
     assert.deepEqual(
       readdirSync(artifactsDirectory).filter((name) => name.includes("__tsrs__")).sort(),
       tsrsVersions.flatMap((version) =>
-        ["darwin-arm64", "darwin-x64", "linux-arm64", "linux-x64", "win32-x64"].map((target) =>
+        ["darwin-arm64", "darwin-x64", "linux-arm64", "linux-x64", "win32-x64", "win32-arm64"].map((target) =>
           `${target}__tsrs__${version}`)).sort()
     )
 
@@ -220,11 +220,11 @@ test("prepares versioned platform artifacts and executable manifests", async() =
     }
 
     await Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer)))
-    const strayTsrs = join(repository, "_packages", "tsgo-win32-arm64", "artifacts", "tsrs")
+    const strayTsrs = join(repository, "_packages", "tsgo-linux-arm", "artifacts", "tsrs")
     mkdirSync(strayTsrs)
     await assert.rejects(
       Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer))),
-      /tsrs is not built for win32-arm64/
+      /tsrs is not built for linux-arm/
     )
     rmSync(strayTsrs, { recursive: true })
     const linuxTsrs = join(repository, "_packages", "tsgo-linux-x64", "artifacts", "tsrs", tsrsVersion, "tsrs")
