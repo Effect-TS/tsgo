@@ -7,12 +7,13 @@ Effect version: 4.1.2
 /.src/schemaNumber.ts(16,23): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
 /.src/schemaNumber.ts(20,13): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
 /.src/schemaNumber.ts(21,11): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
-/.src/schemaNumber.ts(59,35): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
-/.src/schemaNumber.ts(60,32): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
-/.src/schemaNumber.ts(61,40): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(67,35): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(68,32): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(69,39): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(70,40): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
 
 
-==== /.src/schemaNumber.ts (9 errors) ====
+==== /.src/schemaNumber.ts (10 errors) ====
     // @effect-diagnostics schemaNumber:warning
     
     import { Schema } from "effect"
@@ -72,8 +73,16 @@ Effect version: 4.1.2
       mixedWrappers: Schema.Number.check(
         Schema.isInt().annotate({ expected: "an integer" }).abort().and(Schema.isGreaterThan(0)).annotate({ title: "a" })
       ),
+      andArgumentInt: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isInt())),
+      andArgumentAnnotatedAbort: Schema.Number.check(
+        Schema.isGreaterThan(0).and(Schema.isFinite().annotate({ expected: "a finite number" }).abort())
+      ),
+      andArgumentNested: Schema.Number.check(
+        Schema.isGreaterThan(0).and(Schema.isLessThan(10).and(integer())).annotate({ title: "a" })
+      ),
       pipedAbortMethod: Schema.Number.pipe(Schema.check(Schema.isInt().abort())),
       pipedAndMethod: Schema.Number.pipe(refine(isFinite().and(Schema.isGreaterThan(0)))),
+      pipedAndArgument: Schema.Number.pipe(Schema.check(Schema.isGreaterThan(0).and(Schema.isInt()))),
       pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),
       pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),
       pipedImported: Schema.Number.pipe(refine(integer())),
@@ -86,8 +95,11 @@ Effect version: 4.1.2
       abortNonFinitePredicate: Schema.Number.check(Schema.isGreaterThan(0).abort()),
                                       ~~~~~~
 !!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
-      andNonFiniteReceiver: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isLessThan(10))),
+      andNonFiniteOperands: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isLessThan(10))),
                                    ~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+      andNonFiniteOperandsAborted: Schema.Number.check(Schema.isGreaterThan(0).abort().and(Schema.isLessThan(10).abort())),
+                                          ~~~~~~
 !!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
       pipedAbortNonFinitePredicate: Schema.Number.pipe(Schema.check(Schema.isGreaterThan(0).abort()))
                                            ~~~~~~
