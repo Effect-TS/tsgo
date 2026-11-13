@@ -1,0 +1,38 @@
+import { Context, Effect } from "effect"
+
+interface Connection { readonly query: string }
+const Database = Context.Service<Connection>("Database")
+declare const acquire: Effect.Effect<Connection>
+const program = Effect.as(Database, 1)
+
+// MUST TRIGGER: explicit pipe type arguments do not change the acquisition or result types.
+// The fix rebuilds the acquisition prefix and replaces flatMap with provideServiceEffect.
+export const typedAcquisitionPrefix = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<Connection>, Effect.Effect<number>>(
+  Effect.map((conn) => conn),
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn))
+)
+
+// MUST TRIGGER: explicit pipe type arguments on self must preserve its earlier steps in the fix.
+export const typedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>, Effect.Effect<number>>(
+    Effect.map((n) => n + 1),
+    Effect.provideService(Database, conn)
+  ))
+)
+
+// MUST TRIGGER: a later step must remain valid after the prefix is replaced.
+// The fix drops the pipe type arguments when it removes a step.
+export const typedOuterLaterStep = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<number>, Effect.Effect<number>>(
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn)),
+  Effect.map((n) => n + 1)
+)
+
+// MUST TRIGGER: pipe type arguments that widen `self` to number | string are kept, sliced to the
+// remaining positions, so the fix keeps the widened type and the later step still type-checks.
+export const widenedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>, Effect.Effect<number | string>>(
+    Effect.map((n) => n),
+    Effect.provideService(Database, conn)
+  )),
+  Effect.map((value) => typeof value === "string" ? value.toUpperCase() : value)
+)

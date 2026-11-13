@@ -2571,6 +2571,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value"
         },
+        "flatMapProvideServiceToProvideServiceEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.provideServiceEffect when a flatMap or andThen callback only forwards its parameter to Effect.provideService"
+        },
         "flatMapToMap": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

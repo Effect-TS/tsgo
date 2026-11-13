@@ -1,0 +1,421 @@
+=== Quick Fix Inventory ===
+
+[D1] (21:3-21:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+[D2] (29:3-29:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+[D3] (34:29-36:2) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+  Fix 0: "Disable unnecessaryPipeChain for this line"
+  Fix 1: "Disable unnecessaryPipeChain for entire file"
+  Fix 2: "Rewrite as single pipe call"
+
+[D4] (35:3-35:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+[D5] (41:3-41:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+[D6] (46:3-46:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_prefixes.ts ---
+// @effect-v3
+import { Context, Effect, pipe } from "effect"
+
+class CurrentMeta extends Context.Reference<CurrentMeta>()("CurrentMeta", {
+  defaultValue: (): { readonly attempt: number } => ({ attempt: 0 })
+}) {}
+
+declare const makeMeta: Effect.Effect<{ readonly attempt: number }>
+
+const metaProgram = Effect.gen(function*() {
+  const meta = yield* CurrentMeta
+  return meta.attempt
+})
+const bump = (meta: { readonly attempt: number }) => ({ attempt: meta.attempt + 1 })
+
+// MUST TRIGGER: the acquisition is a function-pipe prefix.
+// Fix: Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump)))
+export const functionPipePrefix = Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump)))
+
+// MUST TRIGGER: a function-pipe prefix with a later step, which stays in the pipe.
+export const functionPipePrefixLaterStep = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta)),
+  Effect.map((attempt) => attempt * 2)
+)
+
+// MUST TRIGGER: chained pipes; the acquisition is the receiver of the second pipe.
+export const chainedPipes = makeMeta.pipe(Effect.map(bump)).pipe(
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: `self` has function-pipe steps before provideService.
+// Fix: Effect.provideServiceEffect(pipe(metaProgram, Effect.map(...)), CurrentMeta, makeMeta)
+export const selfFunctionPipeSteps = makeMeta.pipe(
+  Effect.flatMap((meta) => pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta)))
+)
+
+// MUST TRIGGER: `self` has two pipeable steps before provideService.
+export const selfTwoSteps = makeMeta.pipe(
+  Effect.flatMap((meta) =>
+    metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))
+  )
+)
+
+// MUST NOT TRIGGER: a function-expression callback whose `self` uses its own `this`,
+// which would change meaning once `self` leaves the callback.
+export const usesThis = makeMeta.pipe(
+  Effect.flatMap(function(this: unknown, meta) {
+    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)
+  })
+)
+
+
+=== [D2] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_prefixes.ts ---
+// @effect-v3
+import { Context, Effect, pipe } from "effect"
+
+class CurrentMeta extends Context.Reference<CurrentMeta>()("CurrentMeta", {
+  defaultValue: (): { readonly attempt: number } => ({ attempt: 0 })
+}) {}
+
+declare const makeMeta: Effect.Effect<{ readonly attempt: number }>
+
+const metaProgram = Effect.gen(function*() {
+  const meta = yield* CurrentMeta
+  return meta.attempt
+})
+const bump = (meta: { readonly attempt: number }) => ({ attempt: meta.attempt + 1 })
+
+// MUST TRIGGER: the acquisition is a function-pipe prefix.
+// Fix: Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump)))
+export const functionPipePrefix = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: a function-pipe prefix with a later step, which stays in the pipe.
+export const functionPipePrefixLaterStep = pipe(Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump), Effect.map(bump))), Effect.map(attempt => attempt * 2))
+
+// MUST TRIGGER: chained pipes; the acquisition is the receiver of the second pipe.
+export const chainedPipes = makeMeta.pipe(Effect.map(bump)).pipe(
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: `self` has function-pipe steps before provideService.
+// Fix: Effect.provideServiceEffect(pipe(metaProgram, Effect.map(...)), CurrentMeta, makeMeta)
+export const selfFunctionPipeSteps = makeMeta.pipe(
+  Effect.flatMap((meta) => pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta)))
+)
+
+// MUST TRIGGER: `self` has two pipeable steps before provideService.
+export const selfTwoSteps = makeMeta.pipe(
+  Effect.flatMap((meta) =>
+    metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))
+  )
+)
+
+// MUST NOT TRIGGER: a function-expression callback whose `self` uses its own `this`,
+// which would change meaning once `self` leaves the callback.
+export const usesThis = makeMeta.pipe(
+  Effect.flatMap(function(this: unknown, meta) {
+    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)
+  })
+)
+
+
+=== [D3] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_prefixes.ts ---
+// @effect-v3
+import { Context, Effect, pipe } from "effect"
+
+class CurrentMeta extends Context.Reference<CurrentMeta>()("CurrentMeta", {
+  defaultValue: (): { readonly attempt: number } => ({ attempt: 0 })
+}) {}
+
+declare const makeMeta: Effect.Effect<{ readonly attempt: number }>
+
+const metaProgram = Effect.gen(function*() {
+  const meta = yield* CurrentMeta
+  return meta.attempt
+})
+const bump = (meta: { readonly attempt: number }) => ({ attempt: meta.attempt + 1 })
+
+// MUST TRIGGER: the acquisition is a function-pipe prefix.
+// Fix: Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump)))
+export const functionPipePrefix = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: a function-pipe prefix with a later step, which stays in the pipe.
+export const functionPipePrefixLaterStep = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta)),
+  Effect.map((attempt) => attempt * 2)
+)
+
+// MUST TRIGGER: chained pipes; the acquisition is the receiver of the second pipe.
+export const chainedPipes = makeMeta.pipe(Effect.map(bump), Effect.flatMap(meta => Effect.provideService(metaProgram, CurrentMeta, meta)))
+
+// MUST TRIGGER: `self` has function-pipe steps before provideService.
+// Fix: Effect.provideServiceEffect(pipe(metaProgram, Effect.map(...)), CurrentMeta, makeMeta)
+export const selfFunctionPipeSteps = makeMeta.pipe(
+  Effect.flatMap((meta) => pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta)))
+)
+
+// MUST TRIGGER: `self` has two pipeable steps before provideService.
+export const selfTwoSteps = makeMeta.pipe(
+  Effect.flatMap((meta) =>
+    metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))
+  )
+)
+
+// MUST NOT TRIGGER: a function-expression callback whose `self` uses its own `this`,
+// which would change meaning once `self` leaves the callback.
+export const usesThis = makeMeta.pipe(
+  Effect.flatMap(function(this: unknown, meta) {
+    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)
+  })
+)
+
+
+=== [D4] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_prefixes.ts ---
+// @effect-v3
+import { Context, Effect, pipe } from "effect"
+
+class CurrentMeta extends Context.Reference<CurrentMeta>()("CurrentMeta", {
+  defaultValue: (): { readonly attempt: number } => ({ attempt: 0 })
+}) {}
+
+declare const makeMeta: Effect.Effect<{ readonly attempt: number }>
+
+const metaProgram = Effect.gen(function*() {
+  const meta = yield* CurrentMeta
+  return meta.attempt
+})
+const bump = (meta: { readonly attempt: number }) => ({ attempt: meta.attempt + 1 })
+
+// MUST TRIGGER: the acquisition is a function-pipe prefix.
+// Fix: Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump)))
+export const functionPipePrefix = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: a function-pipe prefix with a later step, which stays in the pipe.
+export const functionPipePrefixLaterStep = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta)),
+  Effect.map((attempt) => attempt * 2)
+)
+
+// MUST TRIGGER: chained pipes; the acquisition is the receiver of the second pipe.
+export const chainedPipes = Effect.provideServiceEffect(metaProgram, CurrentMeta, makeMeta.pipe(Effect.map(bump)))
+
+// MUST TRIGGER: `self` has function-pipe steps before provideService.
+// Fix: Effect.provideServiceEffect(pipe(metaProgram, Effect.map(...)), CurrentMeta, makeMeta)
+export const selfFunctionPipeSteps = makeMeta.pipe(
+  Effect.flatMap((meta) => pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta)))
+)
+
+// MUST TRIGGER: `self` has two pipeable steps before provideService.
+export const selfTwoSteps = makeMeta.pipe(
+  Effect.flatMap((meta) =>
+    metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))
+  )
+)
+
+// MUST NOT TRIGGER: a function-expression callback whose `self` uses its own `this`,
+// which would change meaning once `self` leaves the callback.
+export const usesThis = makeMeta.pipe(
+  Effect.flatMap(function(this: unknown, meta) {
+    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)
+  })
+)
+
+
+=== [D5] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_prefixes.ts ---
+// @effect-v3
+import { Context, Effect, pipe } from "effect"
+
+class CurrentMeta extends Context.Reference<CurrentMeta>()("CurrentMeta", {
+  defaultValue: (): { readonly attempt: number } => ({ attempt: 0 })
+}) {}
+
+declare const makeMeta: Effect.Effect<{ readonly attempt: number }>
+
+const metaProgram = Effect.gen(function*() {
+  const meta = yield* CurrentMeta
+  return meta.attempt
+})
+const bump = (meta: { readonly attempt: number }) => ({ attempt: meta.attempt + 1 })
+
+// MUST TRIGGER: the acquisition is a function-pipe prefix.
+// Fix: Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump)))
+export const functionPipePrefix = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: a function-pipe prefix with a later step, which stays in the pipe.
+export const functionPipePrefixLaterStep = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta)),
+  Effect.map((attempt) => attempt * 2)
+)
+
+// MUST TRIGGER: chained pipes; the acquisition is the receiver of the second pipe.
+export const chainedPipes = makeMeta.pipe(Effect.map(bump)).pipe(
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: `self` has function-pipe steps before provideService.
+// Fix: Effect.provideServiceEffect(pipe(metaProgram, Effect.map(...)), CurrentMeta, makeMeta)
+export const selfFunctionPipeSteps = Effect.provideServiceEffect(pipe(metaProgram, Effect.map(n => n + 1)), CurrentMeta, makeMeta)
+
+// MUST TRIGGER: `self` has two pipeable steps before provideService.
+export const selfTwoSteps = makeMeta.pipe(
+  Effect.flatMap((meta) =>
+    metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))
+  )
+)
+
+// MUST NOT TRIGGER: a function-expression callback whose `self` uses its own `this`,
+// which would change meaning once `self` leaves the callback.
+export const usesThis = makeMeta.pipe(
+  Effect.flatMap(function(this: unknown, meta) {
+    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)
+  })
+)
+
+
+=== [D6] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_prefixes.ts ---
+// @effect-v3
+import { Context, Effect, pipe } from "effect"
+
+class CurrentMeta extends Context.Reference<CurrentMeta>()("CurrentMeta", {
+  defaultValue: (): { readonly attempt: number } => ({ attempt: 0 })
+}) {}
+
+declare const makeMeta: Effect.Effect<{ readonly attempt: number }>
+
+const metaProgram = Effect.gen(function*() {
+  const meta = yield* CurrentMeta
+  return meta.attempt
+})
+const bump = (meta: { readonly attempt: number }) => ({ attempt: meta.attempt + 1 })
+
+// MUST TRIGGER: the acquisition is a function-pipe prefix.
+// Fix: Effect.provideServiceEffect(metaProgram, CurrentMeta, pipe(makeMeta, Effect.map(bump)))
+export const functionPipePrefix = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: a function-pipe prefix with a later step, which stays in the pipe.
+export const functionPipePrefixLaterStep = pipe(
+  makeMeta,
+  Effect.map(bump),
+  Effect.map(bump),
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta)),
+  Effect.map((attempt) => attempt * 2)
+)
+
+// MUST TRIGGER: chained pipes; the acquisition is the receiver of the second pipe.
+export const chainedPipes = makeMeta.pipe(Effect.map(bump)).pipe(
+  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))
+)
+
+// MUST TRIGGER: `self` has function-pipe steps before provideService.
+// Fix: Effect.provideServiceEffect(pipe(metaProgram, Effect.map(...)), CurrentMeta, makeMeta)
+export const selfFunctionPipeSteps = makeMeta.pipe(
+  Effect.flatMap((meta) => pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta)))
+)
+
+// MUST TRIGGER: `self` has two pipeable steps before provideService.
+export const selfTwoSteps = Effect.provideServiceEffect(metaProgram.pipe(Effect.map(n => n + 1), Effect.map(n => n * 2)), CurrentMeta, makeMeta)
+
+// MUST NOT TRIGGER: a function-expression callback whose `self` uses its own `this`,
+// which would change meaning once `self` leaves the callback.
+export const usesThis = makeMeta.pipe(
+  Effect.flatMap(function(this: unknown, meta) {
+    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)
+  })
+)
+

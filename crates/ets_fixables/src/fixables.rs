@@ -8,7 +8,7 @@ use rustc_hash::FxHashSet;
 
 use crate::*;
 
-// go: internal/fixables/fixables.go:9 All ca3987fff66ca9ee
+// go: internal/fixables/fixables.go:9 All e26bb8539c1b9bd0
 // All is the list of all code fix providers.
 // Add new fixables here explicitly - no init() magic.
 //
@@ -34,6 +34,7 @@ pub static ALL: LazyLock<Vec<Fixable>> = LazyLock::new(|| {
         (*MISSING_CONCURRENCY_OPTION_FIX).clone(),
         (*FLAT_MAP_TO_MAP_FIX).clone(),
         (*FLAT_MAP_TO_TAP_FIX).clone(),
+        (*FLAT_MAP_PROVIDE_SERVICE_TO_PROVIDE_SERVICE_EFFECT_FIX).clone(),
         (*FLAT_MAP_IGNORED_PARAM_TO_AND_THEN_FIX).clone(),
         (*FLAT_MAP_IDENTITY_TO_FLATTEN_FIX).clone(),
         (*MATCH_EFFECT_TO_MATCH_FIX).clone(),
@@ -95,7 +96,7 @@ pub static ALL: LazyLock<Vec<Fixable>> = LazyLock::new(|| {
     ]
 });
 
-// go: internal/fixables/fixables.go:89 ByErrorCode d1322bcc42651f81
+// go: internal/fixables/fixables.go:90 ByErrorCode d1322bcc42651f81
 // ByErrorCode finds all fixables that handle a given error code.
 pub fn by_error_code(code: i32) -> Vec<&'static Fixable> {
     let mut results = Vec::new();
@@ -107,7 +108,7 @@ pub fn by_error_code(code: i32) -> Vec<&'static Fixable> {
     results
 }
 
-// go: internal/fixables/fixables.go:100 AllErrorCodes 2c00dbacf4f1ceaf
+// go: internal/fixables/fixables.go:101 AllErrorCodes 2c00dbacf4f1ceaf
 // AllErrorCodes returns all unique error codes handled by any fixable.
 pub fn all_error_codes() -> Vec<i32> {
     let mut seen: FxHashSet<i32> = FxHashSet::default();
@@ -122,7 +123,7 @@ pub fn all_error_codes() -> Vec<i32> {
     codes
 }
 
-// go: internal/fixables/fixables.go:115 AllFixIDs 561f930f95495e38
+// go: internal/fixables/fixables.go:116 AllFixIDs 561f930f95495e38
 // AllFixIDs returns all unique fix IDs from all fixables.
 pub fn all_fix_ids() -> Vec<&'static str> {
     let mut seen: FxHashSet<&'static str> = FxHashSet::default();

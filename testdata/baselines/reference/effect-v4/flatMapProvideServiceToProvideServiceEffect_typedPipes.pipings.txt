@@ -1,0 +1,161 @@
+==== /.src/flatMapProvideServiceToProvideServiceEffect_typedPipes.ts (10 flows) ====
+
+=== Piping Flow ===
+Location: 4:17 - 4:57
+Node: Context.Service<Connection>("Database")
+Node Kind: KindCallExpression
+
+Subject: "Database"
+Subject Type: "Database"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service
+      args: (constant)
+      outType: Service<Connection, Connection>
+
+=== Piping Flow ===
+Location: 6:16 - 6:39
+Node: Effect.as(Database, 1)
+Node Kind: KindCallExpression
+
+Subject: Database
+Subject Type: Service<Connection, Connection>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [1]
+      outType: Effect<number, never, Connection>
+
+=== Piping Flow ===
+Location: 10:38 - 13:2
+Node: acquire.pipe<Effect.Effect<Connection>, Effect.Effect<Connection>, Effect.Effect<number>>(\n  Effect.map((conn) => conn),\n  Effect.flatMap((conn) => Effect.provideService(program, Database, conn))\n)
+Node Kind: KindCallExpression
+
+Subject: acquire
+Subject Type: Effect<Connection, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(conn) => conn]
+      outType: Effect<Connection, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(conn) => Effect.provideService(program, Database, conn)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:27 - 12:74
+Node: Effect.provideService(program, Database, conn)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Connection>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [Database, conn]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 16:31 - 21:2
+Node: acquire.pipe(\n  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>, Effect.Effect<number>>(\n    Effect.map((n) => n + 1),\n    Effect.provideService(Database, conn)\n  ))\n)
+Node Kind: KindCallExpression
+
+Subject: acquire
+Subject Type: Effect<Connection, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>, Effect.Effect<number>>(\n    Effect.map((n) => n + 1),\n    Effect.provideService(Database, conn)\n  )]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 17:27 - 20:4
+Node: program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>, Effect.Effect<number>>(\n    Effect.map((n) => n + 1),\n    Effect.provideService(Database, conn)\n  )
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Connection>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, Connection>
+  [1] kind: pipeable
+      callee: Effect.provideService
+      args: [Database, conn]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 25:35 - 28:2
+Node: acquire.pipe<Effect.Effect<Connection>, Effect.Effect<number>, Effect.Effect<number>>(\n  Effect.flatMap((conn) => Effect.provideService(program, Database, conn)),\n  Effect.map((n) => n + 1)\n)
+Node Kind: KindCallExpression
+
+Subject: acquire
+Subject Type: Effect<Connection, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(conn) => Effect.provideService(program, Database, conn)]
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 26:27 - 26:74
+Node: Effect.provideService(program, Database, conn)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Connection>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [Database, conn]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 32:33 - 38:2
+Node: acquire.pipe(\n  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>, Effect.Effect<number | string>>(\n    Effect.map((n) => n),\n    Effect.provideService(Database, conn)\n  )),\n  Effect.map((value) => typeof value === "string" ? value.toUpperCase() : value)\n)
+Node Kind: KindCallExpression
+
+Subject: acquire
+Subject Type: Effect<Connection, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>, Effect.Effect<number | string>>(\n    Effect.map((n) => n),\n    Effect.provideService(Database, conn)\n  )]
+      outType: Effect<string | number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(value) => typeof value === "string" ? value.toUpperCase() : value]
+      outType: Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 33:27 - 36:4
+Node: program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>, Effect.Effect<number | string>>(\n    Effect.map((n) => n),\n    Effect.provideService(Database, conn)\n  )
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Connection>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n]
+      outType: Effect<string | number, never, Connection>
+  [1] kind: pipeable
+      callee: Effect.provideService
+      args: [Database, conn]
+      outType: Effect<string | number, never, never>

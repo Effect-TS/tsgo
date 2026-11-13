@@ -1,0 +1,219 @@
+==== /.src/flatMapProvideServiceToProvideServiceEffect_prefixes.ts (13 flows) ====
+
+=== Piping Flow ===
+Location: 10:20 - 13:3
+Node: Effect.gen(function*() {\n  const meta = yield* CurrentMeta\n  return meta.attempt\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const meta = yield* CurrentMeta\n  return meta.attempt\n}
+Subject Type: () => Generator<YieldWrap<Reference<CurrentMeta, { readonly attempt: number; }>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:34 - 22:2
+Node: pipe(\n  makeMeta,\n  Effect.map(bump),\n  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))\n)
+Node Kind: KindCallExpression
+
+Subject: makeMeta
+Subject Type: Effect<{ readonly attempt: number; }, never, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [bump]
+      outType: Effect<{ attempt: number; }, never, never>
+  [1] kind: pipe
+      callee: Effect.flatMap
+      args: [(meta) => Effect.provideService(metaProgram, CurrentMeta, meta)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 21:27 - 21:81
+Node: Effect.provideService(metaProgram, CurrentMeta, meta)
+Node Kind: KindCallExpression
+
+Subject: metaProgram
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [CurrentMeta, meta]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 25:43 - 31:2
+Node: pipe(\n  makeMeta,\n  Effect.map(bump),\n  Effect.map(bump),\n  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta)),\n  Effect.map((attempt) => attempt * 2)\n)
+Node Kind: KindCallExpression
+
+Subject: makeMeta
+Subject Type: Effect<{ readonly attempt: number; }, never, never>
+
+Transformations (4):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [bump]
+      outType: Effect<{ attempt: number; }, never, never>
+  [1] kind: pipe
+      callee: Effect.map
+      args: [bump]
+      outType: Effect<{ attempt: number; }, never, never>
+  [2] kind: pipe
+      callee: Effect.flatMap
+      args: [(meta) => Effect.provideService(metaProgram, CurrentMeta, meta)]
+      outType: Effect<number, never, never>
+  [3] kind: pipe
+      callee: Effect.map
+      args: [(attempt) => attempt * 2]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 29:27 - 29:81
+Node: Effect.provideService(metaProgram, CurrentMeta, meta)
+Node Kind: KindCallExpression
+
+Subject: metaProgram
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [CurrentMeta, meta]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:28 - 36:2
+Node: makeMeta.pipe(Effect.map(bump)).pipe(\n  Effect.flatMap((meta) => Effect.provideService(metaProgram, CurrentMeta, meta))\n)
+Node Kind: KindCallExpression
+
+Subject: makeMeta
+Subject Type: Effect<{ readonly attempt: number; }, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [bump]
+      outType: Effect<{ attempt: number; }, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(meta) => Effect.provideService(metaProgram, CurrentMeta, meta)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 35:27 - 35:81
+Node: Effect.provideService(metaProgram, CurrentMeta, meta)
+Node Kind: KindCallExpression
+
+Subject: metaProgram
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [CurrentMeta, meta]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 40:37 - 42:2
+Node: makeMeta.pipe(\n  Effect.flatMap((meta) => pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta)))\n)
+Node Kind: KindCallExpression
+
+Subject: makeMeta
+Subject Type: Effect<{ readonly attempt: number; }, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(meta) => pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta))]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 41:27 - 41:113
+Node: pipe(metaProgram, Effect.map((n) => n + 1), Effect.provideService(CurrentMeta, meta))
+Node Kind: KindCallExpression
+
+Subject: metaProgram
+Subject Type: Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+  [1] kind: pipe
+      callee: Effect.provideService
+      args: [CurrentMeta, meta]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 45:28 - 49:2
+Node: makeMeta.pipe(\n  Effect.flatMap((meta) =>\n    metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: makeMeta
+Subject Type: Effect<{ readonly attempt: number; }, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(meta) =>\n    metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 46:27 - 47:115
+Node: metaProgram.pipe(Effect.map((n) => n + 1), Effect.map((n) => n * 2), Effect.provideService(CurrentMeta, meta))
+Node Kind: KindCallExpression
+
+Subject: metaProgram
+Subject Type: Effect<number, never, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n * 2]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.provideService
+      args: [CurrentMeta, meta]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 53:24 - 57:2
+Node: makeMeta.pipe(\n  Effect.flatMap(function(this: unknown, meta) {\n    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: makeMeta
+Subject Type: Effect<{ readonly attempt: number; }, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(this: unknown, meta) {\n    return Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)\n  }]
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 55:11 - 55:82
+Node: Effect.provideService(Effect.as(metaProgram, this), CurrentMeta, meta)
+Node Kind: KindCallExpression
+
+Subject: metaProgram
+Subject Type: Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [this]
+      outType: Effect<unknown, never, never>
+  [1] kind: dataFirst
+      callee: Effect.provideService
+      args: [CurrentMeta, meta]
+      outType: Effect<unknown, never, never>

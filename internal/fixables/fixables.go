@@ -25,6 +25,7 @@ var All = []fixable.Fixable{
 	MissingConcurrencyOptionFix,
 	FlatMapToMapFix,
 	FlatMapToTapFix,
+	FlatMapProvideServiceToProvideServiceEffectFix,
 	FlatMapIgnoredParamToAndThenFix,
 	FlatMapIdentityToFlattenFix,
 	MatchEffectToMatchFix,

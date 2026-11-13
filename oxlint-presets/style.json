@@ -30,6 +30,7 @@
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-identity-to-flatten": "warn",
     "effecttsgo/flat-map-ignored-param-to-and-then": "warn",
+    "effecttsgo/flat-map-provide-service-to-provide-service-effect": "warn",
     "effecttsgo/flat-map-to-map": "warn",
     "effecttsgo/flat-map-to-tap": "warn",
     "effecttsgo/manual-metric-tap-to-track": "warn",
