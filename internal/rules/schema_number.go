@@ -148,38 +148,43 @@ func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.
 
 func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments readonly.Slice[*ast.Node]) bool {
 	for _, argument := range arguments.All() {
-		argument = schemaNumberSkipPredicateAnnotate(argument)
-		if argument.Kind != ast.KindCallExpression {
-			continue
-		}
-		predicateCall := argument.AsCallExpression()
-		if predicateCall.Expression == nil {
-			continue
-		}
-		if tp.IsNodeReferenceToEffectSchemaModuleApi(predicateCall.Expression, "isFinite") ||
-			tp.IsNodeReferenceToEffectSchemaModuleApi(predicateCall.Expression, "isInt") {
+		if schemaNumberIsFinitePredicate(tp, argument) {
 			return true
 		}
 	}
 	return false
 }
 
-// schemaNumberSkipPredicateAnnotate unwraps `X.annotate(...)` calls (any number of them)
-// and returns X, since annotating a filter keeps its validation predicate.
-func schemaNumberSkipPredicateAnnotate(node *ast.Node) *ast.Node {
+// schemaNumberIsFinitePredicate reports whether node is a `Schema.isFinite(...)` or
+// `Schema.isInt(...)` filter, possibly wrapped in `.annotate(...)`, `.abort()` or `.and(...)`
+// calls: annotating or aborting a filter keeps its validation predicate, and `X.and(Y)`
+// builds a filter group that runs both X and Y, so it is finite when either is.
+func schemaNumberIsFinitePredicate(tp *typeparser.TypeParser, node *ast.Node) bool {
 	node = ast.SkipParentheses(node)
-	for node.Kind == ast.KindCallExpression {
-		callee := node.AsCallExpression().Expression
-		if callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
-			break
-		}
-		access := callee.AsPropertyAccessExpression()
-		if access.Name() == nil || access.Name().Text() != "annotate" {
-			break
-		}
-		node = ast.SkipParentheses(access.Expression)
+	if node.Kind != ast.KindCallExpression {
+		return false
 	}
-	return node
+	call := node.AsCallExpression()
+	if call.Expression == nil {
+		return false
+	}
+	if call.Expression.Kind == ast.KindPropertyAccessExpression {
+		access := call.Expression.AsPropertyAccessExpression()
+		if access.Name() != nil {
+			switch access.Name().Text() {
+			case "annotate", "abort":
+				return schemaNumberIsFinitePredicate(tp, access.Expression)
+			case "and":
+				if schemaNumberIsFinitePredicate(tp, access.Expression) {
+					return true
+				}
+				return call.Arguments != nil && len(call.Arguments.Nodes) > 0 &&
+					schemaNumberIsFinitePredicate(tp, call.Arguments.Nodes[0])
+			}
+		}
+	}
+	return tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "isFinite") ||
+		tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "isInt")
 }
 
 func schemaNumberNodeContains(ancestor *ast.Node, target *ast.Node) bool {
