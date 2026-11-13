@@ -16,3 +16,11 @@ func NewOpenFileSnapshotRequest(fileName string, _ string, _ bool) *project.APIS
 func DerefSnapshot(snapshot *project.Snapshot, session *project.Session) {
 	snapshot.Deref(session)
 }
+
+// ContentMapperSelector mirrors the TypeScript next Client.RegisterContentMapperSelectors argument. typescript-go's
+// Client has no content mapper registration, so the type is only there to let one Client implementation compile
+// against every supported compiler.
+type ContentMapperSelector struct {
+	Pattern   string
+	Extension string
+}
