@@ -176,7 +176,7 @@ func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
 	if transformation.kind == TransformationKindCall {
 		// Curried factories decompose into a factory call and a trailing
 		// application; the input feeds the outermost applied call.
-		call = appliedCallOf(call)
+		call = AppliedCallExpression(call)
 	}
 	if call != nil && call.Arguments != nil {
 		switch transformation.kind {
@@ -200,22 +200,24 @@ func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
 	return nil
 }
 
-// appliedCallOf walks out of callee positions, returning the outermost call
-// that applies the given call's result to its subject.
-func appliedCallOf(call *ast.CallExpression) *ast.CallExpression {
+// AppliedCallExpression walks out of callee positions from call, through
+// parentheses, returning the outermost call that applies call's result:
+// for (f(a))(b) it returns the call with argument b. It returns call itself
+// when nothing applies it, and nil for nil.
+func AppliedCallExpression(call *ast.CallExpression) *ast.CallExpression {
 	if call == nil {
 		return nil
 	}
 	current := call.AsNode()
-	for current != nil && current.Parent != nil && ast.IsCallExpression(current.Parent) {
-		parent := current.Parent.AsCallExpression()
-		if parent == nil || parent.Expression != current {
+	for {
+		callee := current
+		for callee.Parent != nil && callee.Parent.Kind == ast.KindParenthesizedExpression {
+			callee = callee.Parent
+		}
+		if callee.Parent == nil || !ast.IsCallExpression(callee.Parent) || callee.Parent.AsCallExpression().Expression != callee {
 			break
 		}
-		current = parent.AsNode()
-	}
-	if current == nil {
-		return nil
+		current = callee.Parent
 	}
 	return current.AsCallExpression()
 }

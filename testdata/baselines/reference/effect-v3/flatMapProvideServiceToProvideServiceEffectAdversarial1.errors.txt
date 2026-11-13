@@ -1,0 +1,21 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/flatMapProvideServiceToProvideServiceEffectAdversarial1.ts(10,21): suggestion TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+
+
+==== /.src/flatMapProvideServiceToProvideServiceEffectAdversarial1.ts (1 errors) ====
+    // @effect-v3
+    import { Context, Effect } from "effect"
+    interface Service { readonly value: number }
+    const Key = Context.GenericTag<Service>("Service")
+    declare const acquire: Effect.Effect<Service>
+    declare const program: Effect.Effect<string, never, Service>
+    
+    // MUST TRIGGER: both union members acquire the service, and the fix preserves both error channels.
+    export function union(input: Effect.Effect<Service, "a"> | Effect.Effect<Service, "b">) {
+      return input.pipe(Effect.flatMap((p) => Effect.provideService(program, Key, p)))
+                        ~~~~~~~~~~~~~~
+!!! suggestion TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+    }
+    

@@ -1,0 +1,71 @@
+==== /.src/flatMapProvideServiceToProvideServiceEffect_preview.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 15:17 - 15:68
+Node: Context.GenericTag<DatabaseConnection>("Database")
+Node Kind: KindCallExpression
+
+Subject: "Database"
+Subject Type: "Database"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.GenericTag
+      args: (constant)
+      outType: Tag<DatabaseConnection, DatabaseConnection>
+
+=== Piping Flow ===
+Location: 19:16 - 22:3
+Node: Effect.gen(function*() {\n  const db = yield* Database\n  return yield* db.query("SELECT * FROM users")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const db = yield* Database\n  return yield* db.query("SELECT * FROM users")\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Tag<DatabaseConnection, DatabaseConnection>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, DatabaseConnection>
+
+=== Piping Flow ===
+Location: 21:16 - 21:48
+Node: db.query("SELECT * FROM users")
+Node Kind: KindCallExpression
+
+Subject: "SELECT * FROM users"
+Subject Type: "SELECT * FROM users"
+
+Transformations (1):
+  [0] kind: call
+      callee: db.query
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 24:31 - 26:2
+Node: makeConnection.pipe(\n  Effect.flatMap((conn) => Effect.provideService(program, Database, conn))\n)
+Node Kind: KindCallExpression
+
+Subject: makeConnection
+Subject Type: Effect<DatabaseConnection, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(conn) => Effect.provideService(program, Database, conn)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 25:27 - 25:74
+Node: Effect.provideService(program, Database, conn)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, DatabaseConnection>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [Database, conn]
+      outType: Effect<string, never, never>

@@ -1,0 +1,202 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+[D2] (17:3-17:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+[D3] (26:3-26:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+[D4] (33:3-33:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_typedPipes.ts ---
+import { Context, Effect } from "effect"
+
+interface Connection { readonly query: string }
+const Database = Context.Service<Connection>("Database")
+declare const acquire: Effect.Effect<Connection>
+const program = Effect.as(Database, 1)
+
+// MUST TRIGGER: explicit pipe type arguments do not change the acquisition or result types.
+// The fix rebuilds the acquisition prefix and replaces flatMap with provideServiceEffect.
+export const typedAcquisitionPrefix = Effect.provideServiceEffect(program, Database, acquire.pipe<Effect.Effect<Connection>, Effect.Effect<Connection>>(Effect.map(conn => conn)))
+
+// MUST TRIGGER: explicit pipe type arguments on self must preserve its earlier steps in the fix.
+export const typedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>, Effect.Effect<number>>(
+    Effect.map((n) => n + 1),
+    Effect.provideService(Database, conn)
+  ))
+)
+
+// MUST TRIGGER: a later step must remain valid after the prefix is replaced.
+// The fix drops the pipe type arguments when it removes a step.
+export const typedOuterLaterStep = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<number>, Effect.Effect<number>>(
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn)),
+  Effect.map((n) => n + 1)
+)
+
+// MUST TRIGGER: pipe type arguments that widen `self` to number | string are kept, sliced to the
+// remaining positions, so the fix keeps the widened type and the later step still type-checks.
+export const widenedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>, Effect.Effect<number | string>>(
+    Effect.map((n) => n),
+    Effect.provideService(Database, conn)
+  )),
+  Effect.map((value) => typeof value === "string" ? value.toUpperCase() : value)
+)
+
+
+=== [D2] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_typedPipes.ts ---
+import { Context, Effect } from "effect"
+
+interface Connection { readonly query: string }
+const Database = Context.Service<Connection>("Database")
+declare const acquire: Effect.Effect<Connection>
+const program = Effect.as(Database, 1)
+
+// MUST TRIGGER: explicit pipe type arguments do not change the acquisition or result types.
+// The fix rebuilds the acquisition prefix and replaces flatMap with provideServiceEffect.
+export const typedAcquisitionPrefix = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<Connection>, Effect.Effect<number>>(
+  Effect.map((conn) => conn),
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn))
+)
+
+// MUST TRIGGER: explicit pipe type arguments on self must preserve its earlier steps in the fix.
+export const typedSelfPrefix = Effect.provideServiceEffect(program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>>(Effect.map(n => n + 1)), Database, acquire)
+
+// MUST TRIGGER: a later step must remain valid after the prefix is replaced.
+// The fix drops the pipe type arguments when it removes a step.
+export const typedOuterLaterStep = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<number>, Effect.Effect<number>>(
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn)),
+  Effect.map((n) => n + 1)
+)
+
+// MUST TRIGGER: pipe type arguments that widen `self` to number | string are kept, sliced to the
+// remaining positions, so the fix keeps the widened type and the later step still type-checks.
+export const widenedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>, Effect.Effect<number | string>>(
+    Effect.map((n) => n),
+    Effect.provideService(Database, conn)
+  )),
+  Effect.map((value) => typeof value === "string" ? value.toUpperCase() : value)
+)
+
+
+=== [D3] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_typedPipes.ts ---
+import { Context, Effect } from "effect"
+
+interface Connection { readonly query: string }
+const Database = Context.Service<Connection>("Database")
+declare const acquire: Effect.Effect<Connection>
+const program = Effect.as(Database, 1)
+
+// MUST TRIGGER: explicit pipe type arguments do not change the acquisition or result types.
+// The fix rebuilds the acquisition prefix and replaces flatMap with provideServiceEffect.
+export const typedAcquisitionPrefix = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<Connection>, Effect.Effect<number>>(
+  Effect.map((conn) => conn),
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn))
+)
+
+// MUST TRIGGER: explicit pipe type arguments on self must preserve its earlier steps in the fix.
+export const typedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>, Effect.Effect<number>>(
+    Effect.map((n) => n + 1),
+    Effect.provideService(Database, conn)
+  ))
+)
+
+// MUST TRIGGER: a later step must remain valid after the prefix is replaced.
+// The fix drops the pipe type arguments when it removes a step.
+export const typedOuterLaterStep = Effect.provideServiceEffect(program, Database, acquire).pipe<Effect.Effect<number>, Effect.Effect<number>>(Effect.map(n => n + 1))
+
+// MUST TRIGGER: pipe type arguments that widen `self` to number | string are kept, sliced to the
+// remaining positions, so the fix keeps the widened type and the later step still type-checks.
+export const widenedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>, Effect.Effect<number | string>>(
+    Effect.map((n) => n),
+    Effect.provideService(Database, conn)
+  )),
+  Effect.map((value) => typeof value === "string" ? value.toUpperCase() : value)
+)
+
+
+=== [D4] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_typedPipes.ts ---
+import { Context, Effect } from "effect"
+
+interface Connection { readonly query: string }
+const Database = Context.Service<Connection>("Database")
+declare const acquire: Effect.Effect<Connection>
+const program = Effect.as(Database, 1)
+
+// MUST TRIGGER: explicit pipe type arguments do not change the acquisition or result types.
+// The fix rebuilds the acquisition prefix and replaces flatMap with provideServiceEffect.
+export const typedAcquisitionPrefix = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<Connection>, Effect.Effect<number>>(
+  Effect.map((conn) => conn),
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn))
+)
+
+// MUST TRIGGER: explicit pipe type arguments on self must preserve its earlier steps in the fix.
+export const typedSelfPrefix = acquire.pipe(
+  Effect.flatMap((conn) => program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number, never, Connection>, Effect.Effect<number>>(
+    Effect.map((n) => n + 1),
+    Effect.provideService(Database, conn)
+  ))
+)
+
+// MUST TRIGGER: a later step must remain valid after the prefix is replaced.
+// The fix drops the pipe type arguments when it removes a step.
+export const typedOuterLaterStep = acquire.pipe<Effect.Effect<Connection>, Effect.Effect<number>, Effect.Effect<number>>(
+  Effect.flatMap((conn) => Effect.provideService(program, Database, conn)),
+  Effect.map((n) => n + 1)
+)
+
+// MUST TRIGGER: pipe type arguments that widen `self` to number | string are kept, sliced to the
+// remaining positions, so the fix keeps the widened type and the later step still type-checks.
+export const widenedSelfPrefix = Effect.provideServiceEffect(program.pipe<Effect.Effect<number, never, Connection>, Effect.Effect<number | string, never, Connection>>(Effect.map(n => n)), Database, acquire).pipe(Effect.map(value => typeof value === "string" ? value.toUpperCase() : value))
+

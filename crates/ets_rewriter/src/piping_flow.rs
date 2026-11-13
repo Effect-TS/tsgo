@@ -84,7 +84,7 @@ impl Tracker {
         true
     }
 
-    // go: internal/rewriter/piping_flow.go:64 Tracker.replaceFunctionPipePrefix 8d690382ad4adba2
+    // go: internal/rewriter/piping_flow.go:64 Tracker.replaceFunctionPipePrefix 9d17d69439eb00d6
     pub(crate) fn replace_function_pipe_prefix(
         &mut self,
         source_file: P<SourceFile>,
@@ -104,12 +104,17 @@ impl Tracker {
             clone_node_list_nodes_from(f, Some(call.arguments()), argument_index + 1);
         let mut replacement = replacement_subject;
         if !remaining_arguments.is_empty() {
+            let value_types = pipe_value_types_of(call, TransformationKind::Pipe);
+            if value_types.layout == PipeTypeArgumentsLayout::TypeArgumentsNotPerValue {
+                return false;
+            }
+            let type_arguments = value_types.clone_from(f, value_types.produced_by(argument_index));
             let mut arguments = vec![replacement_subject];
             arguments.extend(remaining_arguments);
             replacement = f.new_call_expression(
                 f.deep_clone_node(Some(call.expression())).unwrap(),
                 f.deep_clone_node(call.question_dot_token()),
-                clone_node_list(f, call.type_arguments()),
+                type_arguments,
                 f.new_node_list(arguments),
                 call_node.flags(),
             );
@@ -119,7 +124,7 @@ impl Tracker {
         true
     }
 
-    // go: internal/rewriter/piping_flow.go:87 Tracker.replaceMethodPipePrefix 1f764a2f2ccb2792
+    // go: internal/rewriter/piping_flow.go:92 Tracker.replaceMethodPipePrefix 5120172dfedc296d
     // Rust: Go's `AsPropertyAccessExpression` panics on another kind, as tsrs's does; the name is never nil.
     pub(crate) fn replace_method_pipe_prefix(
         &mut self,
@@ -141,6 +146,11 @@ impl Tracker {
             clone_node_list_nodes_from(f, Some(call.arguments()), argument_index + 1);
         let mut replacement = replacement_subject;
         if !remaining_arguments.is_empty() {
+            let value_types = pipe_value_types_of(call, TransformationKind::Pipeable);
+            if value_types.layout == PipeTypeArgumentsLayout::TypeArgumentsNotPerValue {
+                return false;
+            }
+            let type_arguments = value_types.clone_from(f, value_types.produced_by(argument_index));
             let replacement_access = f.new_property_access_expression(
                 replacement_subject,
                 f.deep_clone_node(access.question_dot_token()),
@@ -150,7 +160,7 @@ impl Tracker {
             replacement = f.new_call_expression(
                 replacement_access,
                 f.deep_clone_node(call.question_dot_token()),
-                clone_node_list(f, call.type_arguments()),
+                type_arguments,
                 f.new_node_list(remaining_arguments),
                 call_node.flags(),
             );
@@ -159,9 +169,172 @@ impl Tracker {
         self.replace_node(source_file, Some(call_node), Some(replacement), None);
         true
     }
+
+    // go: internal/rewriter/piping_flow.go:137 Tracker.PipingFlowPrefixExpression 47003e103607493c
+    // PipingFlowPrefixExpression returns a new expression, cloned from the source,
+    // that evaluates the flow's subject and its first count transformations. It
+    // covers the prefixes TransformationInputNode has no node for: a prefix that
+    // ends inside x.pipe(...) or pipe(x, ...) after the first step becomes the
+    // receiver or first argument with the earlier pipe arguments, and with the
+    // pipe call's type arguments for those positions. It returns nil when the
+    // prefix has no expression form: an Effect.fn step, an optional chain, or
+    // pipe type arguments that do not follow pipe's positional layout.
+    //
+    // Rust: Go's nil receiver check has no counterpart (`&self`). Go's `AsPropertyAccessExpression` is only
+    // reached after the kind check.
+    pub fn piping_flow_prefix_expression(
+        &self,
+        flow: Option<&PipingFlow>,
+        count: i64,
+    ) -> Option<P<Node>> {
+        let flow = flow?;
+        if count < 0 || count > flow.transformations().len() {
+            return None;
+        }
+        let f = &self.tracker.node_factory;
+        if count == flow.transformations().len() {
+            return f.deep_clone_node(Some(flow.node()));
+        }
+        if let Some(input) = PipingFlow::transformation_input_node(Some(flow), count) {
+            return f.deep_clone_node(Some(input));
+        }
+        let next = flow.transformations().at(count);
+        if next.kind() != TransformationKind::Pipe && next.kind() != TransformationKind::Pipeable {
+            return None;
+        }
+        let (_, call, argument_index) =
+            containing_call_argument(piping_flow_transformation_node(next));
+        let call = call?;
+        if call.question_dot_token().is_some() {
+            return None;
+        }
+        if next.kind() == TransformationKind::Pipe {
+            if argument_index < 1 {
+                return None;
+            }
+            if argument_index == 1 {
+                return f.deep_clone_node(Some(call.arguments().nodes()[0]));
+            }
+            let value_types = pipe_value_types_of(call, TransformationKind::Pipe);
+            if value_types.layout == PipeTypeArgumentsLayout::TypeArgumentsNotPerValue {
+                return None;
+            }
+            return Some(f.new_call_expression(
+                f.deep_clone_node(Some(call.expression())).unwrap(),
+                None,
+                value_types.clone_through(f, value_types.produced_by(argument_index - 1)),
+                f.new_node_list(clone_nodes(
+                    f,
+                    &call.arguments().nodes()[..argument_index as usize],
+                )),
+                NodeFlags::None,
+            ));
+        }
+        if argument_index < 0 || !ast::is_property_access_expression(call.expression()) {
+            return None;
+        }
+        let access = call.expression().as_property_access_expression();
+        if access.question_dot_token().is_some() {
+            return None;
+        }
+        let receiver = f.deep_clone_node(Some(access.expression())).unwrap();
+        if argument_index == 0 {
+            return Some(receiver);
+        }
+        let value_types = pipe_value_types_of(call, TransformationKind::Pipeable);
+        if value_types.layout == PipeTypeArgumentsLayout::TypeArgumentsNotPerValue {
+            return None;
+        }
+        Some(f.new_call_expression(
+            f.new_property_access_expression(
+                receiver,
+                None,
+                f.deep_clone_node(Some(access.name())).unwrap(),
+                NodeFlags::None,
+            ),
+            None,
+            value_types.clone_through(f, value_types.produced_by(argument_index - 1)),
+            f.new_node_list(clone_nodes(f, &call.arguments().nodes()[..argument_index as usize])),
+            NodeFlags::None,
+        ))
+    }
 }
 
-// go: internal/rewriter/piping_flow.go:119 containingCallArgument 9b75000f48a347d8
+// go: internal/rewriter/piping_flow.go:198 pipeTypeArgumentsLayout f695c4f0340718aa
+// go: internal/rewriter/piping_flow.go:200 pipeWithoutTypeArguments 30d14e16f41c9cbd
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub(crate) enum PipeTypeArgumentsLayout {
+    WithoutTypeArguments,
+    TypeArgumentPerValue,
+    TypeArgumentsNotPerValue,
+}
+
+// go: internal/rewriter/piping_flow.go:206 pipeValueTypes f13a48cbb1a0b9ab
+pub(crate) struct PipeValueTypes {
+    pub(crate) layout: PipeTypeArgumentsLayout,
+    pub(crate) values: &'static [P<Node>],
+    pub(crate) first_argument_output: i64,
+}
+
+// go: internal/rewriter/piping_flow.go:212 pipeValueTypesOf 9226a05114508345
+// Rust: tsrs's call arguments are never nil.
+pub(crate) fn pipe_value_types_of(
+    call: &'static CallExpression,
+    kind: TransformationKind,
+) -> PipeValueTypes {
+    let mut first_argument_output = 0;
+    if kind == TransformationKind::Pipeable {
+        first_argument_output = 1;
+    }
+    let Some(type_arguments) = call.type_arguments() else {
+        return PipeValueTypes {
+            layout: PipeTypeArgumentsLayout::WithoutTypeArguments,
+            values: &[],
+            first_argument_output,
+        };
+    };
+    if type_arguments.nodes().len() as i64
+        != first_argument_output + call.arguments().nodes().len() as i64
+    {
+        return PipeValueTypes {
+            layout: PipeTypeArgumentsLayout::TypeArgumentsNotPerValue,
+            values: &[],
+            first_argument_output,
+        };
+    }
+    PipeValueTypes {
+        layout: PipeTypeArgumentsLayout::TypeArgumentPerValue,
+        values: type_arguments.nodes(),
+        first_argument_output,
+    }
+}
+
+impl PipeValueTypes {
+    // go: internal/rewriter/piping_flow.go:226 pipeValueTypes.producedBy e822f2bec50010c0
+    pub(crate) fn produced_by(&self, argument_index: i64) -> i64 {
+        self.first_argument_output + argument_index
+    }
+
+    // go: internal/rewriter/piping_flow.go:230 pipeValueTypes.cloneFrom a52aa74b07ac2eab
+    // Rust: takes the tracker's factory (Go: the tracker, for its embedded factory).
+    pub(crate) fn clone_from(&self, f: &NodeFactory, value: i64) -> Option<P<NodeList>> {
+        if self.layout != PipeTypeArgumentsLayout::TypeArgumentPerValue {
+            return None;
+        }
+        Some(f.new_node_list(clone_nodes(f, &self.values[value as usize..])))
+    }
+
+    // go: internal/rewriter/piping_flow.go:237 pipeValueTypes.cloneThrough bd7c35d08792537b
+    // Rust: takes the tracker's factory (Go: the tracker, for its embedded factory).
+    pub(crate) fn clone_through(&self, f: &NodeFactory, value: i64) -> Option<P<NodeList>> {
+        if self.layout != PipeTypeArgumentsLayout::TypeArgumentPerValue {
+            return None;
+        }
+        Some(f.new_node_list(clone_nodes(f, &self.values[..=(value as usize)])))
+    }
+}
+
+// go: internal/rewriter/piping_flow.go:244 containingCallArgument 9b75000f48a347d8
 // Rust: the call is returned both as its node and as its `CallExpression` data (Go's `*ast.Node` and
 // `*ast.CallExpression`); tsrs's call arguments are never nil.
 pub(crate) fn containing_call_argument(
@@ -185,7 +358,7 @@ pub(crate) fn containing_call_argument(
     (None, None, -1)
 }
 
-// go: internal/rewriter/piping_flow.go:138 pipingFlowTransformationNode 6de0fb2082bf06ed
+// go: internal/rewriter/piping_flow.go:263 pipingFlowTransformationNode e65a96579a63800e
 // Rust: tsrs's transformation callee is never nil; calls are returned as their nodes.
 pub(crate) fn piping_flow_transformation_node(
     transformation: &PipingFlowTransformation,
@@ -194,7 +367,7 @@ pub(crate) fn piping_flow_transformation_node(
     if transformation.kind() == TransformationKind::Call {
         // Curried factories decompose into a factory call and a trailing
         // application; the replaced node is the outermost applied call.
-        call = applied_call_expression(call);
+        call = ets_typeparser::applied_call_expression(call);
     }
     if call.is_some() {
         return call;
@@ -202,7 +375,7 @@ pub(crate) fn piping_flow_transformation_node(
     Some(transformation.callee())
 }
 
-// go: internal/rewriter/piping_flow.go:154 callExpressionForCallee d2506a6002f6283c
+// go: internal/rewriter/piping_flow.go:279 callExpressionForCallee d2506a6002f6283c
 // Rust: returns the call node (Go's `*ast.CallExpression`).
 pub(crate) fn call_expression_for_callee(callee: Option<P<Node>>) -> Option<P<Node>> {
     let callee = callee?;
@@ -216,25 +389,8 @@ pub(crate) fn call_expression_for_callee(callee: Option<P<Node>>) -> Option<P<No
     Some(parent)
 }
 
-// go: internal/rewriter/piping_flow.go:167 appliedCallExpression 723be897b8175f5d
-// appliedCallExpression walks out of callee positions, returning the outermost
-// call that applies the given call's result to its subject.
-pub(crate) fn applied_call_expression(call: Option<P<Node>>) -> Option<P<Node>> {
-    let mut current = call?;
-    while let Some(parent) = current.parent() {
-        if !ast::is_call_expression(parent) {
-            break;
-        }
-        if parent.as_call_expression().expression() != current {
-            break;
-        }
-        current = parent;
-    }
-    Some(current)
-}
-
 impl Tracker {
-    // go: internal/rewriter/piping_flow.go:184 Tracker.RemoveTrailingPipingFlowTransformation 4be38ba26b227447
+    // go: internal/rewriter/piping_flow.go:292 Tracker.RemoveTrailingPipingFlowTransformation 4be38ba26b227447
     // RemoveTrailingPipingFlowTransformation removes the last step while retaining
     // its input and any earlier transformations. Unsupported flows produce no edits.
     pub fn remove_trailing_piping_flow_transformation(
@@ -379,7 +535,7 @@ impl Tracker {
         }
     }
 
-    // go: internal/rewriter/piping_flow.go:293 Tracker.ReplacePipingFlowTransformation 5e90f24f36b631e5
+    // go: internal/rewriter/piping_flow.go:401 Tracker.ReplacePipingFlowTransformation 5e90f24f36b631e5
     // ReplacePipingFlowTransformation replaces a transformation while preserving
     // how its input is applied in source: as a pipe argument, a data-first or
     // data-last argument, or a unary/curried application. A call with optional
@@ -504,7 +660,7 @@ impl Tracker {
         }
     }
 
-    // go: internal/rewriter/piping_flow.go:380 Tracker.pipingFlowOperator 0acac1ed78187157
+    // go: internal/rewriter/piping_flow.go:488 Tracker.pipingFlowOperator 0acac1ed78187157
     pub(crate) fn piping_flow_operator(
         &self,
         replacement: PipingFlowTransformationReplacement,
@@ -513,7 +669,7 @@ impl Tracker {
     }
 }
 
-// go: internal/rewriter/piping_flow.go:380 Tracker.pipingFlowOperator 0acac1ed78187157
+// go: internal/rewriter/piping_flow.go:488 Tracker.pipingFlowOperator 0acac1ed78187157
 // Rust: the body over the tracker's factory, so that the visitor of `collapse_piping_flow_transformations` (a
 // `'static` closure, which cannot borrow the tracker) can call it. Callers check that the callee is set, as Go's
 // do. tsrs's call expressions always have an argument list: Go's nil `Arguments` next to type arguments is an
@@ -535,16 +691,22 @@ pub(crate) fn piping_flow_operator(
     )
 }
 
-// go: internal/rewriter/piping_flow.go:393 cloneNodeListNodes 795bf81e125deeb7
+// go: internal/rewriter/piping_flow.go:501 cloneNodeListNodes 880d23782a2d3d7a
 // Rust: takes the tracker's factory (Go: the tracker, for its embedded factory); nil and empty are one `Vec`.
 pub(crate) fn clone_node_list_nodes(f: &NodeFactory, list: Option<P<NodeList>>) -> Vec<P<Node>> {
     let Some(list) = list else {
         return Vec::new();
     };
-    list.nodes().iter().map(|&node| f.deep_clone_node(Some(node)).unwrap()).collect()
+    clone_nodes(f, list.nodes())
 }
 
-// go: internal/rewriter/piping_flow.go:404 cloneNodeListNodesFrom 5397691c927fff14
+// go: internal/rewriter/piping_flow.go:508 cloneNodes d8997d85feb57658
+// Rust: takes the tracker's factory (Go: the tracker, for its embedded factory).
+pub(crate) fn clone_nodes(f: &NodeFactory, list: &[P<Node>]) -> Vec<P<Node>> {
+    list.iter().map(|&node| f.deep_clone_node(Some(node)).unwrap()).collect()
+}
+
+// go: internal/rewriter/piping_flow.go:516 cloneNodeListNodesFrom 5397691c927fff14
 pub(crate) fn clone_node_list_nodes_from(
     f: &NodeFactory,
     list: Option<P<NodeList>>,
@@ -562,14 +724,14 @@ pub(crate) fn clone_node_list_nodes_from(
         .collect()
 }
 
-// go: internal/rewriter/piping_flow.go:415 cloneNodeList a65c5a709c756d5b
+// go: internal/rewriter/piping_flow.go:527 cloneNodeList a65c5a709c756d5b
 pub(crate) fn clone_node_list(f: &NodeFactory, list: Option<P<NodeList>>) -> Option<P<NodeList>> {
     let list = list?;
     Some(f.new_node_list(clone_node_list_nodes(f, Some(list))))
 }
 
 impl Tracker {
-    // go: internal/rewriter/piping_flow.go:425 Tracker.CollapsePipingFlowTransformations b224986204c116d3
+    // go: internal/rewriter/piping_flow.go:537 Tracker.CollapsePipingFlowTransformations b224986204c116d3
     // CollapsePipingFlowTransformations replaces an inclusive range of adjacent
     // steps with one operator at the last step. Nested applications are rewritten
     // together so removing an input step cannot overlap the replacement edit.
@@ -727,7 +889,7 @@ impl Tracker {
         true
     }
 
-    // go: internal/rewriter/piping_flow.go:525 Tracker.retainPipingFlowComments ca8d43868655dbeb
+    // go: internal/rewriter/piping_flow.go:637 Tracker.retainPipingFlowComments ca8d43868655dbeb
     // retainPipingFlowComments re-attaches source comments to the synthesized
     // clone of a collapsed flow. Comments inside the removed steps move to the
     // replacement; every other comment stays with the innermost kept node that
@@ -898,7 +1060,7 @@ impl Tracker {
         visitor.visit_node(Some(result)).unwrap()
     }
 
-    // go: internal/rewriter/piping_flow.go:648 Tracker.addPipingFlowComment ae97aebb26b284aa
+    // go: internal/rewriter/piping_flow.go:760 Tracker.addPipingFlowComment ae97aebb26b284aa
     pub(crate) fn add_piping_flow_comment(
         &self,
         text: &str,
@@ -931,7 +1093,7 @@ impl Tracker {
     }
 }
 
-// go: internal/rewriter/piping_flow.go:625 sourceComments 0d63739be11bd7e6
+// go: internal/rewriter/piping_flow.go:737 sourceComments 0d63739be11bd7e6
 // sourceComments lists the comments between start and end in source order.
 // Tokens are skipped by their parsed extent, so comment-like text inside
 // literals, templates and regular expressions is not reported.
@@ -973,7 +1135,7 @@ pub(crate) fn source_comments(
     comments
 }
 
-// go: internal/rewriter/piping_flow.go:663 isPipingFlowArgument e95d8061c1653ef2
+// go: internal/rewriter/piping_flow.go:775 isPipingFlowArgument e95d8061c1653ef2
 pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     matches!(
         kind,
@@ -984,7 +1146,7 @@ pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     )
 }
 
-// go: internal/rewriter/piping_flow.go:671 nodeWithin baedec3b3d887301
+// go: internal/rewriter/piping_flow.go:783 nodeWithin baedec3b3d887301
 pub(crate) fn node_within(node: Option<P<Node>>, ancestor: P<Node>) -> bool {
     let mut node = node;
     while let Some(n) = node {

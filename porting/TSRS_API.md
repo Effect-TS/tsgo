@@ -70,7 +70,7 @@ This is the path `ets_effecttest` uses.
 | `Checker.TypeToString` | `type_to_string_exported` (plain `type_to_string` is `pub(crate)`) |
 | `Checker.GetSymbolAtLocation`, `GetSymbolsInScope`, `ResolveExternalModuleSymbol`, `GetExportsOfModule`, `ResolveName`, `GetTypeFromTypeNode`, `GetDefaultFromTypeParameter` | the `*_exported` methods |
 | `checker.SkipAlias(sym, c)`, `c.GetUnknownSymbol()` | `Checker::skip_alias(sym)`, `get_unknown_symbol()`: return `P<Symbol>`, never nil |
-| `checker.GetMappedTypeModifiers`, `Checker_isReadonlySymbol`, `Checker_isTypeAssignableTo`, `Checker_getIndexInfosOfType` | public in tsrs (`get_mapped_type_modifiers` by patch 150): `tsrs_checker::get_mapped_type_modifiers`, `Checker::is_readonly_symbol`, `is_type_assignable_to`, `get_index_infos_of_type`; `IndexInfo::key_type` / `value_type` are public `Cell`s |
+| `checker.GetMappedTypeModifiers`, `Checker_isReadonlySymbol`, `Checker_isTypeAssignableTo`, `Checker_isTypeIdenticalTo`, `Checker_getIndexInfosOfType` | public in tsrs (`get_mapped_type_modifiers` by patch 150): `tsrs_checker::get_mapped_type_modifiers`, `Checker::is_readonly_symbol`, `is_type_assignable_to`, `is_type_identical_to`, `get_index_infos_of_type`; `IndexInfo::key_type` / `value_type` are public `Cell`s |
 | `Checker.GetConstructSignatures(t)`, `Checker.GetTypeOnlyAliasDeclaration` | `get_signatures_of_type(t, SignatureKind::Construct)`, `get_type_only_alias_declaration` (tsrs 0.20.1 dropped the forwarding wrappers) |
 | `checker.TypeFormatFlags*` | `tsrs_checker::types::TypeFormatFlags::*` (bitflags) |
 | `*ast.SourceFile` that may be nil | `Option<P<SourceFile>>` |
