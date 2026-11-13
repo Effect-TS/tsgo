@@ -27,6 +27,9 @@ const DiagnosticDirectivePolicyExpect = contentmapper.DiagnosticDirectivePolicyE
 const DiagnosticDirectivePolicyIgnore = contentmapper.DiagnosticDirectivePolicyIgnore
 type DiagnosticDirectives = contentmapper.DiagnosticDirectives
 var ErrProjectUnavailable = contentmapper.ErrProjectUnavailable
+type FileMatcher = contentmapper.FileMatcher
+//go:linkname FilterExtensionRewrites github.com/microsoft/TypeScript/tsc/internal/contentmapper.FilterExtensionRewrites
+func FilterExtensionRewrites(rewrites []tspath.ExtensionRewrite, extension string, caseSensitivity tspath.CaseSensitivity) []tspath.ExtensionRewrite
 //go:linkname HasReservedSourceExtension github.com/microsoft/TypeScript/tsc/internal/contentmapper.HasReservedSourceExtension
 func HasReservedSourceExtension(extension string) bool
 type Host = contentmapper.Host
@@ -59,6 +62,8 @@ const MethodCloseProject = contentmapper.MethodCloseProject
 const MethodInitialize = contentmapper.MethodInitialize
 const MethodOpenProject = contentmapper.MethodOpenProject
 const MethodTransform = contentmapper.MethodTransform
+//go:linkname NewFileMatcher github.com/microsoft/TypeScript/tsc/internal/contentmapper.NewFileMatcher
+func NewFileMatcher(mappers []*contentmapper.Mapper, baseDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *contentmapper.FileMatcher
 //go:linkname NewHost github.com/microsoft/TypeScript/tsc/internal/contentmapper.NewHost
 func NewHost(ctx context.Context, spawner contentmapper.Spawner, diagnosticLocale locale.Locale) contentmapper.Host
 //go:linkname NewHostWithOptions github.com/microsoft/TypeScript/tsc/internal/contentmapper.NewHostWithOptions
@@ -85,6 +90,8 @@ const ProjectErrorKindUnexpectedWatchedFiles = contentmapper.ProjectErrorKindUne
 type ProjectSpec = contentmapper.ProjectSpec
 type Request = contentmapper.Request
 type Result = contentmapper.Result
+//go:linkname RewritesForImport github.com/microsoft/TypeScript/tsc/internal/contentmapper.RewritesForImport
+func RewritesForImport(rewrites []tspath.ExtensionRewrite, importingFile tspath.RootedFilePath, specifier tspath.ModuleSpecifier, extensionForFileName func(tspath.RootedFilePath) string, caseSensitivity tspath.CaseSensitivity) []tspath.ExtensionRewrite
 type SourceFiles = contentmapper.SourceFiles
 type Spawner = contentmapper.Spawner
 type SpawnerFunc = contentmapper.SpawnerFunc
