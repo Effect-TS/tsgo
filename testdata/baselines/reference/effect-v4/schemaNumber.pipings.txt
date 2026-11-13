@@ -1,4 +1,4 @@
-==== /.src/schemaNumber.ts (22 flows) ====
+==== /.src/schemaNumber.ts (45 flows) ====
 
 === Piping Flow ===
 Location: 7:20 - 12:3
@@ -43,18 +43,18 @@ Transformations (1):
       outType: Struct<{ readonly quantity: Number; readonly amount: NumberFromString; }>
 
 === Piping Flow ===
-Location: 24:27 - 43:3
-Node: Schema.Struct({\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  annotated: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite()),\n  annotatedPredicate: Schema.Number.check(Schema.isFinite({ description: "a" })),\n  annotateMethodFinite: Schema.Number.check(Schema.isFinite().annotate({ expected: "a finite number" })),\n  annotateMethodInt: Schema.Number.check(Schema.isInt().annotate({ expected: "an integer" })),\n  annotateMethodChained: Schema.Number.check(integer().annotate({ title: "a" }).annotate({ description: "b" })),\n  annotateMethodNumberFromString: Schema.NumberFromString.check(Schema.isInt().annotate({ expected: "an integer" })),\n  pipedAnnotateMethod: Schema.Number.pipe(Schema.check(Schema.isInt().annotate({ expected: "an integer" }))),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer())),\n  pipedAnnotated: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )\n})
+Location: 24:27 - 57:3
+Node: Schema.Struct({\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  annotated: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite()),\n  annotatedPredicate: Schema.Number.check(Schema.isFinite({ description: "a" })),\n  annotateMethodFinite: Schema.Number.check(Schema.isFinite().annotate({ expected: "a finite number" })),\n  annotateMethodInt: Schema.Number.check(Schema.isInt().annotate({ expected: "an integer" })),\n  annotateMethodChained: Schema.Number.check(integer().annotate({ title: "a" }).annotate({ description: "b" })),\n  annotateMethodNumberFromString: Schema.NumberFromString.check(Schema.isInt().annotate({ expected: "an integer" })),\n  pipedAnnotateMethod: Schema.Number.pipe(Schema.check(Schema.isInt().annotate({ expected: "an integer" }))),\n  abortMethodInt: Schema.Number.check(Schema.isInt().abort()),\n  abortMethodFinite: Schema.Number.check(Schema.isFinite().abort()),\n  abortMethodImported: Schema.Number.check(integer().abort()),\n  abortMethodWithLaterCheck: Schema.Number.check(Schema.isInt().abort(), Schema.isBetween({ minimum: 1, maximum: 24 })),\n  abortMethodNumberFromString: Schema.NumberFromString.check(Schema.isFinite().abort()),\n  abortMethodParenthesized: Schema.Number.check((Schema.isInt()).abort()),\n  andMethodInt: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0))),\n  andMethodFinite: Schema.Number.check(Schema.isFinite().and(Schema.isLessThan(10), { expected: "a small number" })),\n  andMethodChained: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0)).and(Schema.isLessThan(10))),\n  mixedWrappers: Schema.Number.check(\n    Schema.isInt().annotate({ expected: "an integer" }).abort().and(Schema.isGreaterThan(0)).annotate({ title: "a" })\n  ),\n  pipedAbortMethod: Schema.Number.pipe(Schema.check(Schema.isInt().abort())),\n  pipedAndMethod: Schema.Number.pipe(refine(isFinite().and(Schema.isGreaterThan(0)))),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer())),\n  pipedAnnotated: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )\n})
 Node Kind: KindCallExpression
 
-Subject: {\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  annotated: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite()),\n  annotatedPredicate: Schema.Number.check(Schema.isFinite({ description: "a" })),\n  annotateMethodFinite: Schema.Number.check(Schema.isFinite().annotate({ expected: "a finite number" })),\n  annotateMethodInt: Schema.Number.check(Schema.isInt().annotate({ expected: "an integer" })),\n  annotateMethodChained: Schema.Number.check(integer().annotate({ title: "a" }).annotate({ description: "b" })),\n  annotateMethodNumberFromString: Schema.NumberFromString.check(Schema.isInt().annotate({ expected: "an integer" })),\n  pipedAnnotateMethod: Schema.Number.pipe(Schema.check(Schema.isInt().annotate({ expected: "an integer" }))),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer())),\n  pipedAnnotated: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )\n}
-Subject Type: { finite: Number; integer: Number; importedFinite: Number; importedInteger: Number; annotated: Number; annotatedPredicate: Number; annotateMethodFinite: Number; annotateMethodInt: Number; annotateMethodChained: Number; annotateMethodNumberFromString: NumberFromString; pipedAnnotateMethod: Number; pipedFinite: Number; pipedInteger: Number; pipedImported: Number; pipedAnnotated: Number; }
+Subject: {\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  annotated: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite()),\n  annotatedPredicate: Schema.Number.check(Schema.isFinite({ description: "a" })),\n  annotateMethodFinite: Schema.Number.check(Schema.isFinite().annotate({ expected: "a finite number" })),\n  annotateMethodInt: Schema.Number.check(Schema.isInt().annotate({ expected: "an integer" })),\n  annotateMethodChained: Schema.Number.check(integer().annotate({ title: "a" }).annotate({ description: "b" })),\n  annotateMethodNumberFromString: Schema.NumberFromString.check(Schema.isInt().annotate({ expected: "an integer" })),\n  pipedAnnotateMethod: Schema.Number.pipe(Schema.check(Schema.isInt().annotate({ expected: "an integer" }))),\n  abortMethodInt: Schema.Number.check(Schema.isInt().abort()),\n  abortMethodFinite: Schema.Number.check(Schema.isFinite().abort()),\n  abortMethodImported: Schema.Number.check(integer().abort()),\n  abortMethodWithLaterCheck: Schema.Number.check(Schema.isInt().abort(), Schema.isBetween({ minimum: 1, maximum: 24 })),\n  abortMethodNumberFromString: Schema.NumberFromString.check(Schema.isFinite().abort()),\n  abortMethodParenthesized: Schema.Number.check((Schema.isInt()).abort()),\n  andMethodInt: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0))),\n  andMethodFinite: Schema.Number.check(Schema.isFinite().and(Schema.isLessThan(10), { expected: "a small number" })),\n  andMethodChained: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0)).and(Schema.isLessThan(10))),\n  mixedWrappers: Schema.Number.check(\n    Schema.isInt().annotate({ expected: "an integer" }).abort().and(Schema.isGreaterThan(0)).annotate({ title: "a" })\n  ),\n  pipedAbortMethod: Schema.Number.pipe(Schema.check(Schema.isInt().abort())),\n  pipedAndMethod: Schema.Number.pipe(refine(isFinite().and(Schema.isGreaterThan(0)))),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer())),\n  pipedAnnotated: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )\n}
+Subject Type: { finite: Number; integer: Number; importedFinite: Number; importedInteger: Number; annotated: Number; annotatedPredicate: Number; annotateMethodFinite: Number; annotateMethodInt: Number; annotateMethodChained: Number; annotateMethodNumberFromString: NumberFromString; pipedAnnotateMethod: Number; abortMethodInt: Number; abortMethodFinite: Number; abortMethodImported: Number; abortMethodWithLaterCheck: Number; abortMethodNumberFromString: NumberFromString; abortMethodParenthesized: Number; andMethodInt: Number; andMethodFinite: Number; andMethodChained: Number; mixedWrappers: Number; pipedAbortMethod: Number; pipedAndMethod: Number; pipedFinite: Number; pipedInteger: Number; pipedImported: Number; pipedAnnotated: Number; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{ readonly finite: Number; readonly integer: Number; readonly importedFinite: Number; readonly importedInteger: Number; readonly annotated: Number; readonly annotatedPredicate: Number; readonly annotateMethodFinite: Number; readonly annotateMethodInt: Number; readonly annotateMethodChained: Number; readonly annotateMethodNumberFromString: NumberFromString; readonly pipedAnnotateMethod: Number; readonly pipedFinite: Number; readonly pipedInteger: Number; readonly pipedImported: Number; readonly pipedAnnotated: Number; }>
+      outType: Struct<{ readonly finite: Number; readonly integer: Number; readonly importedFinite: Number; readonly importedInteger: Number; readonly annotated: Number; readonly annotatedPredicate: Number; readonly annotateMethodFinite: Number; readonly annotateMethodInt: Number; readonly annotateMethodChained: Number; readonly annotateMethodNumberFromString: NumberFromString; readonly pipedAnnotateMethod: Number; readonly abortMethodInt: Number; readonly abortMethodFinite: Number; readonly abortMethodImported: Number; readonly abortMethodWithLaterCheck: Number; readonly abortMethodNumberFromString: NumberFromString; readonly abortMethodParenthesized: Number; readonly andMethodInt: Number; readonly andMethodFinite: Number; readonly andMethodChained: Number; readonly mixedWrappers: Number; readonly pipedAbortMethod: Number; readonly pipedAndMethod: Number; readonly pipedFinite: Number; readonly pipedInteger: Number; readonly pipedImported: Number; readonly pipedAnnotated: Number; }>
 
 === Piping Flow ===
 Location: 25:10 - 25:49
@@ -113,20 +113,6 @@ Transformations (1):
       outType: Number
 
 === Piping Flow ===
-Location: 29:13 - 29:83
-Node: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite())
-Node Kind: KindCallExpression
-
-Subject: Schema.isFinite()
-Subject Type: Filter<number>
-
-Transformations (1):
-  [0] kind: call
-      callee: Schema.Number.annotate({ description: "a" }).check
-      args: (constant)
-      outType: Number
-
-=== Piping Flow ===
 Location: 29:13 - 29:58
 Node: Schema.Number.annotate({ description: "a" })
 Node Kind: KindCallExpression
@@ -137,6 +123,20 @@ Subject Type: { description: string; }
 Transformations (1):
   [0] kind: call
       callee: Schema.Number.annotate
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 29:13 - 29:83
+Node: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite())
+Node Kind: KindCallExpression
+
+Subject: Schema.isFinite()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.annotate({ description: "a" }).check
       args: (constant)
       outType: Number
 
@@ -273,7 +273,271 @@ Transformations (1):
       outType: Filter<number>
 
 === Piping Flow ===
-Location: 36:15 - 36:67
+Location: 36:18 - 36:62
+Node: Schema.Number.check(Schema.isInt().abort())
+Node Kind: KindCallExpression
+
+Subject: Schema.isInt().abort()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 37:21 - 37:68
+Node: Schema.Number.check(Schema.isFinite().abort())
+Node Kind: KindCallExpression
+
+Subject: Schema.isFinite().abort()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 38:23 - 38:62
+Node: Schema.Number.check(integer().abort())
+Node Kind: KindCallExpression
+
+Subject: integer().abort()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 39:73 - 39:119
+Node: Schema.isBetween({ minimum: 1, maximum: 24 })
+Node Kind: KindCallExpression
+
+Subject: { minimum: 1, maximum: 24 }
+Subject Type: { minimum: number; maximum: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.isBetween
+      args: (constant)
+      outType: Filter<number>
+
+=== Piping Flow ===
+Location: 40:31 - 40:88
+Node: Schema.NumberFromString.check(Schema.isFinite().abort())
+Node Kind: KindCallExpression
+
+Subject: Schema.isFinite().abort()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.NumberFromString.check
+      args: (constant)
+      outType: NumberFromString
+
+=== Piping Flow ===
+Location: 41:28 - 41:74
+Node: Schema.Number.check((Schema.isInt()).abort())
+Node Kind: KindCallExpression
+
+Subject: (Schema.isInt()).abort()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 42:16 - 42:81
+Node: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0)))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (3):
+  [0] kind: call
+      callee: Schema.isGreaterThan
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: call
+      callee: Schema.isInt().and
+      args: (constant)
+      outType: FilterGroup<number>
+  [2] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 43:19 - 43:117
+Node: Schema.Number.check(Schema.isFinite().and(Schema.isLessThan(10), { expected: "a small number" }))
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (3):
+  [0] kind: call
+      callee: Schema.isLessThan
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: callWithOptionals
+      callee: Schema.isFinite().and
+      args: [{ expected: "a small number" }]
+      outType: FilterGroup<number>
+  [2] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 44:20 - 44:112
+Node: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0)).and(Schema.isLessThan(10)))
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (3):
+  [0] kind: call
+      callee: Schema.isLessThan
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: call
+      callee: Schema.isInt().and(Schema.isGreaterThan(0)).and
+      args: (constant)
+      outType: FilterGroup<number>
+  [2] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 44:41 - 44:84
+Node: Schema.isInt().and(Schema.isGreaterThan(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.isGreaterThan
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: call
+      callee: Schema.isInt().and
+      args: (constant)
+      outType: FilterGroup<number>
+
+=== Piping Flow ===
+Location: 45:17 - 47:4
+Node: Schema.Number.check(\n    Schema.isInt().annotate({ expected: "an integer" }).abort().and(Schema.isGreaterThan(0)).annotate({ title: "a" })\n  )
+Node Kind: KindCallExpression
+
+Subject: { title: "a" }
+Subject Type: { title: string; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.isInt().annotate({ expected: "an integer" }).abort().and(Schema.isGreaterThan(0)).annotate
+      args: (constant)
+      outType: FilterGroup<number>
+  [1] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 45:38 - 46:93
+Node: Schema.isInt().annotate({ expected: "an integer" }).abort().and(Schema.isGreaterThan(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.isGreaterThan
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: call
+      callee: Schema.isInt().annotate({ expected: "an integer" }).abort().and
+      args: (constant)
+      outType: FilterGroup<number>
+
+=== Piping Flow ===
+Location: 45:38 - 46:56
+Node: Schema.isInt().annotate({ expected: "an integer" })
+Node Kind: KindCallExpression
+
+Subject: { expected: "an integer" }
+Subject Type: { expected: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.isInt().annotate
+      args: (constant)
+      outType: Filter<number>
+
+=== Piping Flow ===
+Location: 48:20 - 48:77
+Node: Schema.Number.pipe(Schema.check(Schema.isInt().abort()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Schema.check
+      args: [Schema.isInt().abort()]
+      outType: Number
+
+=== Piping Flow ===
+Location: 49:18 - 49:86
+Node: Schema.Number.pipe(refine(isFinite().and(Schema.isGreaterThan(0))))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: refine
+      args: [isFinite().and(Schema.isGreaterThan(0))]
+      outType: Number
+
+=== Piping Flow ===
+Location: 49:45 - 49:84
+Node: isFinite().and(Schema.isGreaterThan(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.isGreaterThan
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: call
+      callee: isFinite().and
+      args: (constant)
+      outType: FilterGroup<number>
+
+=== Piping Flow ===
+Location: 50:15 - 50:67
 Node: Schema.Number.pipe(Schema.check(Schema.isFinite()))
 Node Kind: KindCallExpression
 
@@ -287,7 +551,7 @@ Transformations (1):
       outType: Number
 
 === Piping Flow ===
-Location: 37:16 - 37:65
+Location: 51:16 - 51:65
 Node: Schema.Number.pipe(Schema.check(Schema.isInt()))
 Node Kind: KindCallExpression
 
@@ -301,7 +565,7 @@ Transformations (1):
       outType: Number
 
 === Piping Flow ===
-Location: 38:17 - 38:55
+Location: 52:17 - 52:55
 Node: Schema.Number.pipe(refine(integer()))
 Node Kind: KindCallExpression
 
@@ -315,7 +579,7 @@ Transformations (1):
       outType: Number
 
 === Piping Flow ===
-Location: 39:18 - 42:4
+Location: 53:18 - 56:4
 Node: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )
 Node Kind: KindCallExpression
 
@@ -331,3 +595,109 @@ Transformations (2):
       callee: Schema.check
       args: [Schema.isFinite()]
       outType: Number
+
+=== Piping Flow ===
+Location: 58:29 - 62:3
+Node: Schema.Struct({\n  abortNonFinitePredicate: Schema.Number.check(Schema.isGreaterThan(0).abort()),\n  andNonFiniteReceiver: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isLessThan(10))),\n  pipedAbortNonFinitePredicate: Schema.Number.pipe(Schema.check(Schema.isGreaterThan(0).abort()))\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  abortNonFinitePredicate: Schema.Number.check(Schema.isGreaterThan(0).abort()),\n  andNonFiniteReceiver: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isLessThan(10))),\n  pipedAbortNonFinitePredicate: Schema.Number.pipe(Schema.check(Schema.isGreaterThan(0).abort()))\n}
+Subject Type: { abortNonFinitePredicate: Number; andNonFiniteReceiver: Number; pipedAbortNonFinitePredicate: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly abortNonFinitePredicate: Number; readonly andNonFiniteReceiver: Number; readonly pipedAbortNonFinitePredicate: Number; }>
+
+=== Piping Flow ===
+Location: 59:27 - 59:80
+Node: Schema.Number.check(Schema.isGreaterThan(0).abort())
+Node Kind: KindCallExpression
+
+Subject: Schema.isGreaterThan(0).abort()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 59:48 - 59:71
+Node: Schema.isGreaterThan(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.isGreaterThan
+      args: (constant)
+      outType: Filter<number>
+
+=== Piping Flow ===
+Location: 60:24 - 60:96
+Node: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isLessThan(10)))
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (3):
+  [0] kind: call
+      callee: Schema.isLessThan
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: call
+      callee: Schema.isGreaterThan(0).and
+      args: (constant)
+      outType: FilterGroup<number>
+  [2] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 60:45 - 60:68
+Node: Schema.isGreaterThan(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.isGreaterThan
+      args: (constant)
+      outType: Filter<number>
+
+=== Piping Flow ===
+Location: 61:32 - 61:98
+Node: Schema.Number.pipe(Schema.check(Schema.isGreaterThan(0).abort()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Schema.check
+      args: [Schema.isGreaterThan(0).abort()]
+      outType: Number
+
+=== Piping Flow ===
+Location: 61:65 - 61:88
+Node: Schema.isGreaterThan(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.isGreaterThan
+      args: (constant)
+      outType: Filter<number>

@@ -148,7 +148,7 @@ func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.
 
 func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments readonly.Slice[*ast.Node]) bool {
 	for _, argument := range arguments.All() {
-		argument = schemaNumberSkipPredicateAnnotate(argument)
+		argument = schemaNumberSkipPredicateWrappers(argument)
 		if argument.Kind != ast.KindCallExpression {
 			continue
 		}
@@ -164,9 +164,10 @@ func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments readonl
 	return false
 }
 
-// schemaNumberSkipPredicateAnnotate unwraps `X.annotate(...)` calls (any number of them)
-// and returns X, since annotating a filter keeps its validation predicate.
-func schemaNumberSkipPredicateAnnotate(node *ast.Node) *ast.Node {
+// schemaNumberSkipPredicateWrappers unwraps `X.annotate(...)`, `X.abort()` and `X.and(...)`
+// calls (any number of them) and returns X: annotating or aborting a filter keeps its
+// validation predicate, and `and` builds a filter group that still runs X.
+func schemaNumberSkipPredicateWrappers(node *ast.Node) *ast.Node {
 	node = ast.SkipParentheses(node)
 	for node.Kind == ast.KindCallExpression {
 		callee := node.AsCallExpression().Expression
@@ -174,8 +175,13 @@ func schemaNumberSkipPredicateAnnotate(node *ast.Node) *ast.Node {
 			break
 		}
 		access := callee.AsPropertyAccessExpression()
-		if access.Name() == nil || access.Name().Text() != "annotate" {
+		if access.Name() == nil {
 			break
+		}
+		switch access.Name().Text() {
+		case "annotate", "abort", "and":
+		default:
+			return node
 		}
 		node = ast.SkipParentheses(access.Expression)
 	}
