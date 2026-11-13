@@ -4,6 +4,8 @@
 
 mod baseline;
 pub mod baseline_results;
+#[cfg(test)]
+mod conditional_type_relationships_test;
 mod document_symbols_baseline;
 mod document_symbols_runner;
 #[cfg(test)]
