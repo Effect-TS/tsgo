@@ -66,7 +66,7 @@ pub struct FlatMapProvideServiceToProvideServiceEffectMatch {
     pub key: P<Node>,
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:51 AnalyzeFlatMapProvideServiceToProvideServiceEffect 819bda6064238f1c
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:51 AnalyzeFlatMapProvideServiceToProvideServiceEffect c4094426310a287b
 // AnalyzeFlatMapProvideServiceToProvideServiceEffect finds flatMap and andThen
 // callbacks that are a manual Effect.provideServiceEffect.
 //
@@ -136,6 +136,7 @@ pub fn analyze_flat_map_provide_service_to_provide_service_effect(
             if mentions_callback_binding(
                 tp,
                 ast::skip_parentheses(*step.args().at(0)),
+                parameter_symbol,
                 returned,
                 implementation,
             ) {
@@ -180,48 +181,42 @@ pub fn analyze_flat_map_provide_service_to_provide_service_effect(
     matches
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:129 mentionsCallbackBinding 04999dbed9dbdce5
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:135 mentionsCallbackBinding a9cb4b6147d971f1
+// mentionsCallbackBinding reports whether root, the callback's returned expression,
+// uses a binding of the callback other than the service argument skip: its
+// parameter, a function expression's own name, or its this, super, arguments or
+// new.target. These change meaning once root moves out of the callback.
+// ParseLazyExpression rejects type parameters and a plain parameter declares
+// nothing else, so the callback binds no other names.
 //
-// Rust: Go's checker argument is the parser's checker (`tp.checker()`); Go's closures are nested `fn`s taking what
-// they capture.
+// Rust: Go's checker argument is the parser's checker (`tp.checker()`); Go's recursive `visit` closure is a nested
+// `fn` taking what it captures.
 pub(crate) fn mentions_callback_binding(
     tp: &mut TypeParser<'_>,
     callback: P<Node>,
+    parameter_symbol: P<Symbol>,
     root: P<Node>,
     skip: P<Node>,
 ) -> bool {
-    fn resolves_to_callback_binding(
-        symbol: Option<P<Symbol>>,
-        node: P<Node>,
-        callback: P<Node>,
-        root: P<Node>,
-    ) -> bool {
-        declared_in_callback_outside_root(symbol, callback, root)
-            || is_builtin_arguments(symbol) && callback_is_this_container(callback, node)
-    }
-    fn visit(
-        tp: &mut TypeParser<'_>,
-        node: P<Node>,
-        callback: P<Node>,
-        root: P<Node>,
-        skip: P<Node>,
-    ) -> bool {
-        if node == skip {
-            return false;
+    for reference in tp.references_to_symbol(root, parameter_symbol) {
+        if reference != skip {
+            return true;
         }
+    }
+    if let Some(name) = callback.name() {
+        let name_symbol = tp.get_symbol_at_location(name);
+        if !tp.references_to_symbol(root, name_symbol).is_empty() {
+            return true;
+        }
+    }
+    let arguments_symbol = tp.checker().get_arguments_symbol();
+    for reference in tp.references_to_symbol(root, arguments_symbol) {
+        if callback_is_this_container(callback, reference) {
+            return true;
+        }
+    }
+    fn visit(node: P<Node>, callback: P<Node>) -> bool {
         match node.kind() {
-            Kind::ShorthandPropertyAssignment => {
-                let symbol = tp.checker().get_shorthand_assignment_value_symbol(Some(node));
-                if resolves_to_callback_binding(symbol, node, callback, root) {
-                    return true;
-                }
-            }
-            Kind::Identifier => {
-                let symbol = tp.get_symbol_at_location(node);
-                if resolves_to_callback_binding(symbol, node, callback, root) {
-                    return true;
-                }
-            }
             Kind::ThisKeyword | Kind::SuperKeyword
                 if callback_is_this_container(callback, node) =>
             {
@@ -235,45 +230,18 @@ pub(crate) fn mentions_callback_binding(
             }
             _ => {}
         }
-        // ets:ast-walk scans the returned expression, outside the service argument, for references to the callback's parameter, own name, this, arguments or new.target
-        node.for_each_child(&mut |child| visit(tp, child, callback, root, skip))
+        // ets:ast-walk scans the returned expression for this, super or new.target keywords, which have no symbol to look up
+        node.for_each_child(&mut |child| visit(child, callback))
     }
-    visit(tp, root, callback, root, skip)
+    visit(root, callback)
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:162 declaredInCallbackOutsideRoot 045da1a486261d15
-pub(crate) fn declared_in_callback_outside_root(
-    symbol: Option<P<Symbol>>,
-    callback: P<Node>,
-    root: P<Node>,
-) -> bool {
-    let Some(symbol) = symbol else {
-        return false;
-    };
-    for &declaration in symbol.declarations() {
-        if declaration.pos() >= callback.pos()
-            && declaration.end() <= callback.end()
-            && (declaration.pos() < root.pos() || declaration.end() > root.end())
-        {
-            return true;
-        }
-    }
-    false
-}
-
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:175 callbackIsThisContainer 178e0c7ee1281c41
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:167 callbackIsThisContainer 178e0c7ee1281c41
 pub(crate) fn callback_is_this_container(callback: P<Node>, node: P<Node>) -> bool {
     ast::get_this_container(node, false, false) == callback
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:181 isBuiltinArguments 7756df6269bb913f
-// isBuiltinArguments reports whether symbol is a function's implicit arguments
-// object, which the checker creates without declarations.
-pub(crate) fn is_builtin_arguments(symbol: Option<P<Symbol>>) -> bool {
-    symbol.is_some_and(|symbol| symbol.name() == "arguments" && symbol.declarations().is_empty())
-}
-
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:185 stepTypeIdenticalToProvideServiceEffectResult 988dd142b7679068
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:171 stepTypeIdenticalToProvideServiceEffectResult 988dd142b7679068
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the transformations are borrowed.
 pub(crate) fn step_type_identical_to_provide_service_effect_result(
@@ -304,7 +272,7 @@ pub(crate) fn step_type_identical_to_provide_service_effect_result(
     c.is_type_identical_to(step_channels.r, r)
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:199 effectChannels c78a96e6451c5b37
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:185 effectChannels c78a96e6451c5b37
 #[derive(Clone, Copy)]
 pub(crate) struct EffectChannels {
     pub(crate) a: P<Type>,
@@ -312,7 +280,7 @@ pub(crate) struct EffectChannels {
     pub(crate) r: P<Type>,
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:203 joinedStrictEffectChannels 8a6640981daa6b8f
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:189 joinedStrictEffectChannels 8a6640981daa6b8f
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn joined_strict_effect_channels(
