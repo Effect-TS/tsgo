@@ -191,7 +191,7 @@ pub(crate) fn analyze_catch_tags_transformation(
     })
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:185 analyzeCatchTagToCatchReasonHandler 82b61415516d41f9
+// go: internal/rules/catch_tag_to_catch_reason.go:185 analyzeCatchTagToCatchReasonHandler a4b6119bf9a40d75
 pub(crate) fn analyze_catch_tag_to_catch_reason_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
@@ -358,7 +358,7 @@ pub(crate) fn catch_tag_re_fail_parameter(
     None
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:322 validateCatchTagParameterUses 84d1c31cf7f6c690
+// go: internal/rules/catch_tag_to_catch_reason.go:322 validateCatchTagParameterUses 535d1d90d2ffd493
 //
 // Rust: Go's `(uses, valid)` result is `Some(uses)` when valid.
 pub(crate) fn validate_catch_tag_parameter_uses(
@@ -378,45 +378,21 @@ pub(crate) fn validate_catch_tag_parameter_uses(
     }
 
     let mut branch_uses = vec![false; branches.len()];
-    let mut valid = true;
-
-    // Rust: Go's recursive `walkBody` closure is a nested function.
-    fn walk_body(
-        tp: &mut TypeParser<'_>,
-        node: P<Node>,
-        parameter_symbol: P<Symbol>,
-        branches: &[CatchTagToCatchReasonBranch],
-        allowed: &FxHashSet<P<Node>>,
-        branch_uses: &mut [bool],
-        valid: &mut bool,
-    ) -> bool {
-        if !*valid {
-            return true;
+    for node in tp.references_to_symbol(body, parameter_symbol) {
+        if allowed.contains(&node) {
+            continue;
         }
-        if node.kind() == Kind::Identifier
-            && same_catch_reason_symbol(tp, Some(node), Some(parameter_symbol))
-        {
-            if allowed.contains(&node) {
-                return false;
-            }
-            let branch_index = catch_reason_recovery_branch_index(node, branches);
-            if branch_index >= 0 {
-                branch_uses[branch_index as usize] = true;
-                return false;
-            }
-            *valid = false;
-            return true;
+        let branch_index = catch_reason_recovery_branch_index(node, branches);
+        if branch_index >= 0 {
+            branch_uses[branch_index as usize] = true;
+            continue;
         }
-        node.for_each_child(&mut |child| {
-            walk_body(tp, child, parameter_symbol, branches, allowed, branch_uses, valid)
-        });
-        false
+        return None;
     }
-    walk_body(tp, body, parameter_symbol, branches, &allowed, &mut branch_uses, &mut valid);
-    if valid { Some(branch_uses) } else { None }
+    Some(branch_uses)
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:365 catchReasonRecoveryBranchIndex f8e06d3875c7560a
+// go: internal/rules/catch_tag_to_catch_reason.go:352 catchReasonRecoveryBranchIndex f8e06d3875c7560a
 pub(crate) fn catch_reason_recovery_branch_index(
     node: P<Node>,
     branches: &[CatchTagToCatchReasonBranch],
@@ -432,12 +408,12 @@ pub(crate) fn catch_reason_recovery_branch_index(
     -1
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:375 isEffectExpression b7a91be637846585
+// go: internal/rules/catch_tag_to_catch_reason.go:362 isEffectExpression b7a91be637846585
 pub(crate) fn is_effect_expression(tp: &mut TypeParser<'_>, expression: Option<P<Node>>) -> bool {
     tp.effect_type_at_location(expression).is_some()
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:379 catchTagsPropertyName d37709e4bd52b4db
+// go: internal/rules/catch_tag_to_catch_reason.go:366 catchTagsPropertyName d37709e4bd52b4db
 pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> {
     let name = name?;
     match name.kind() {
@@ -447,7 +423,7 @@ pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> 
     }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:393 sameCatchReasonSymbol 8011d80abd7bf5f0
+// go: internal/rules/catch_tag_to_catch_reason.go:380 sameCatchReasonSymbol 8011d80abd7bf5f0
 pub(crate) fn same_catch_reason_symbol(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

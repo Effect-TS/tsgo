@@ -3,12 +3,11 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // Restrict callbacks to arrows so the caught error cannot be observed through
 // a function's arguments object. An unused plain parameter can be removed.
-func catchHandlerIgnoresError(tp *typeparser.TypeParser, c *checker.Checker, handler *ast.Node) bool {
+func catchHandlerIgnoresError(tp *typeparser.TypeParser, handler *ast.Node) bool {
 	if handler == nil || handler.Kind != ast.KindArrowFunction || ast.GetCombinedModifierFlags(handler)&ast.ModifierFlagsAsync != 0 {
 		return false
 	}
@@ -30,18 +29,8 @@ func catchHandlerIgnoresError(tp *typeparser.TypeParser, c *checker.Checker, han
 	if symbol == nil {
 		return false
 	}
-	var usesParameter func(*ast.Node) bool
-	usesParameter = func(node *ast.Node) bool {
-		if node.Kind == ast.KindShorthandPropertyAssignment && c.GetShorthandAssignmentValueSymbol(node) == symbol {
-			return true
-		}
-		if node.Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(node) == symbol {
-			return true
-		}
-		//ets:ast-walk scans the handler body and return type for references to the caught error
-		return node.ForEachChild(usesParameter)
-	}
-	return !usesParameter(handler.AsArrowFunction().Body) && (handler.AsArrowFunction().Type == nil || !usesParameter(handler.AsArrowFunction().Type))
+	arrow := handler.AsArrowFunction()
+	return tp.ReferencesToSymbol(arrow.Body, symbol).Len() == 0 && tp.ReferencesToSymbol(arrow.Type, symbol).Len() == 0
 }
 
 // catchHandlerReturnsSucceedNone reports whether a catch handler's complete
