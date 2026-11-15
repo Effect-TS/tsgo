@@ -348,7 +348,7 @@ struct PipingFlowRewriteFixture {
     _checker: CheckerHandle,
 }
 
-// go test: internal/rewriter/piping_flow_test.go:199 newPipingFlowRewriteFixture f4d8a84b1829431a
+// go test: internal/rewriter/piping_flow_test.go:199 newPipingFlowRewriteFixture 16413d32884fa00e
 fn new_piping_flow_rewrite_fixture(
     t: &ets_go::testing::T,
     source: &str,
@@ -415,7 +415,7 @@ fn new_piping_flow_rewrite_fixture(
 }
 
 impl PipingFlowRewriteFixture {
-    // go test: internal/rewriter/piping_flow_test.go:231 pipingFlowRewriteFixture.apply ee24b8275872b783
+    // go test: internal/rewriter/piping_flow_test.go:234 pipingFlowRewriteFixture.apply ee24b8275872b783
     // Rust: Go's `t` argument is only used for `t.Helper()`, so it is dropped.
     fn apply(&mut self) -> String {
         let mut changes = Vec::new();

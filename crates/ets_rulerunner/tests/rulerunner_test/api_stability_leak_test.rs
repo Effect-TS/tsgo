@@ -32,7 +32,7 @@ pub(crate) fn api_stability_lifecycle_options(enabled: bool) -> EffectPluginOpti
     }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:38 apiStabilityLifecycleDiagnostics 6a723b2e84bc99e5
+// go test: internal/rulerunner/api_stability_leak_test.go:38 apiStabilityLifecycleDiagnostics 008ff7d17b1005a6
 // Rust: `files` is a slice of (name, source) pairs (Go ranges over a map, then sorts the names).
 pub(crate) fn api_stability_lifecycle_diagnostics(
     t: &T,
@@ -110,7 +110,7 @@ pub(crate) fn api_stability_lifecycle_diagnostics(
     messages
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:103 apiStabilityLifecycleContains edacfd637d66f4aa
+// go test: internal/rulerunner/api_stability_leak_test.go:106 apiStabilityLifecycleContains edacfd637d66f4aa
 pub(crate) fn api_stability_lifecycle_contains(messages: &[String], want: &str) -> bool {
     for message in messages {
         if message.contains(want) {
@@ -131,7 +131,7 @@ fn is_rule_message(message: &str) -> bool {
     message.contains("effect(apiStabilityLeak)")
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:112 TestApiStabilityLeakLifecycleRecursiveSafety 7d2f8ba03c0b0d72
+// go test: internal/rulerunner/api_stability_leak_test.go:115 TestApiStabilityLeakLifecycleRecursiveSafety 7d2f8ba03c0b0d72
 #[test]
 fn test_api_stability_leak_lifecycle_recursive_safety() {
     ets_go::testing::run(|t| {
@@ -155,10 +155,10 @@ fn test_api_stability_leak_lifecycle_recursive_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:127 apiStabilityRecursivePrefix 165c09ee2c2db74b
+// go test: internal/rulerunner/api_stability_leak_test.go:130 apiStabilityRecursivePrefix 165c09ee2c2db74b
 const API_STABILITY_RECURSIVE_PREFIX: &str = "type Deep<T> = T extends string ? Deep<T> : T\n";
 
-// go test: internal/rulerunner/api_stability_leak_test.go:129 runApiStabilitySafetyCase 6cb2ca3c8beb9b3a
+// go test: internal/rulerunner/api_stability_leak_test.go:132 runApiStabilitySafetyCase 6cb2ca3c8beb9b3a
 fn run_api_stability_safety_case(
     t: &T,
     name: &str,
@@ -210,7 +210,7 @@ fn run_api_stability_safety_case(
     }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:167 apiStabilityProgram 4188662c9b57bd65
+// go test: internal/rulerunner/api_stability_leak_test.go:170 apiStabilityProgram 6ecc8b29919ca4af
 // Rust: the checker handle is the cleanup (dropping it is Go's `done()`).
 fn api_stability_program(
     t: &T,
@@ -257,7 +257,7 @@ fn api_stability_program(
     (program, c)
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:198 apiStabilityExport fc5354e37580c2b3
+// go test: internal/rulerunner/api_stability_leak_test.go:204 apiStabilityExport fc5354e37580c2b3
 fn api_stability_export(t: &T, c: &mut Checker, sf: P<SourceFile>, name: &str) -> P<Symbol> {
     t.helper();
     let module_symbol = ets_typeparser::get_symbol_of_declaration(c, sf.as_node());
@@ -276,7 +276,7 @@ fn source_file(program: &'static Program, name: &str) -> P<SourceFile> {
     program.get_source_file(name).unwrap_or_else(|| panic!("missing source file {name}"))
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:210 apiStabilityDiagnostics 9bee25eb6adb5ffb
+// go test: internal/rulerunner/api_stability_leak_test.go:216 apiStabilityDiagnostics 9bee25eb6adb5ffb
 fn api_stability_diagnostics(t: &T, c: &mut Checker, sf: P<SourceFile>) -> Vec<String> {
     t.helper();
     let mut out = Vec::new();
@@ -297,7 +297,7 @@ fn api_stability_diagnostics(t: &T, c: &mut Checker, sf: P<SourceFile>) -> Vec<S
     out
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:232 apiStabilityProgramDiagnostics 080b308b15cc6703
+// go test: internal/rulerunner/api_stability_leak_test.go:238 apiStabilityProgramDiagnostics 080b308b15cc6703
 fn api_stability_program_diagnostics(t: &T, program: &'static Program) -> Vec<String> {
     t.helper();
     let mut out = Vec::new();
@@ -335,7 +335,7 @@ fn api_stability_whole_program_diagnostics(
     api_stability_program_diagnostics(t, program)
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:254 TestApiStabilityLeakWholeSurfaceSafety 9dae35346859ba32
+// go test: internal/rulerunner/api_stability_leak_test.go:260 TestApiStabilityLeakWholeSurfaceSafety 9dae35346859ba32
 #[test]
 fn test_api_stability_leak_whole_surface_safety() {
     ets_go::testing::run(|t| {
@@ -507,7 +507,7 @@ fn test_api_stability_leak_whole_surface_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:367 TestApiStabilityLeakBareBinderOrders f04aaf0edf9a606c
+// go test: internal/rulerunner/api_stability_leak_test.go:373 TestApiStabilityLeakBareBinderOrders f04aaf0edf9a606c
 #[test]
 fn test_api_stability_leak_bare_binder_orders() {
     ets_go::testing::run(|t| {
@@ -571,7 +571,7 @@ export const clean = make<string>()
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:417 TestApiStabilityLeakSubsequentCheckerExactness 9a5effc0247d42ed
+// go test: internal/rulerunner/api_stability_leak_test.go:423 TestApiStabilityLeakSubsequentCheckerExactness 9a5effc0247d42ed
 #[test]
 fn test_api_stability_leak_subsequent_checker_exactness() {
     ets_go::testing::run(|t| {
@@ -676,7 +676,7 @@ fn test_api_stability_leak_subsequent_checker_exactness() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:495 TestApiStabilityLeakInferredForwardingDiagnostics 0ef3333b744caf80
+// go test: internal/rulerunner/api_stability_leak_test.go:501 TestApiStabilityLeakInferredForwardingDiagnostics 0ef3333b744caf80
 #[test]
 fn test_api_stability_leak_inferred_forwarding_diagnostics() {
     ets_go::testing::run(|t| {
@@ -734,7 +734,7 @@ fn diagnostic_messages(diagnostics: &[P<Diagnostic>]) -> Vec<String> {
     diagnostics.iter().map(|d| d.localize()).collect()
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:530 TestApiStabilityLeakBlockedSurfaceNotCached 7a482d7f36623c69
+// go test: internal/rulerunner/api_stability_leak_test.go:536 TestApiStabilityLeakBlockedSurfaceNotCached 7a482d7f36623c69
 #[test]
 fn test_api_stability_leak_blocked_surface_not_cached() {
     ets_go::testing::run(|t| {
@@ -817,7 +817,7 @@ export declare const x: I<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:601 TestApiStabilityLeakRelationSafety b251723244c045cf
+// go test: internal/rulerunner/api_stability_leak_test.go:607 TestApiStabilityLeakRelationSafety b251723244c045cf
 #[test]
 fn test_api_stability_leak_relation_safety() {
     ets_go::testing::run(|t| {
@@ -959,7 +959,7 @@ fn test_api_stability_leak_relation_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:725 TestApiStabilityLeakRefusedSurfaceStaysRetryable 571ac330a0100afe
+// go test: internal/rulerunner/api_stability_leak_test.go:731 TestApiStabilityLeakRefusedSurfaceStaysRetryable 571ac330a0100afe
 #[test]
 fn test_api_stability_leak_refused_surface_stays_retryable() {
     ets_go::testing::run(|t| {
@@ -1015,7 +1015,7 @@ fn test_api_stability_leak_refused_surface_stays_retryable() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:766 TestApiStabilityLeakInferredDiagnosticsStayExact dedf17e80decbfef
+// go test: internal/rulerunner/api_stability_leak_test.go:772 TestApiStabilityLeakInferredDiagnosticsStayExact dedf17e80decbfef
 #[test]
 fn test_api_stability_leak_inferred_diagnostics_stay_exact() {
     ets_go::testing::run(|t| {
@@ -1073,7 +1073,7 @@ fn test_api_stability_leak_inferred_diagnostics_stay_exact() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:804 TestApiStabilityLeakRelationOperands e847c523eb6eb342
+// go test: internal/rulerunner/api_stability_leak_test.go:810 TestApiStabilityLeakRelationOperands e847c523eb6eb342
 #[test]
 fn test_api_stability_leak_relation_operands() {
     ets_go::testing::run(|t| {
@@ -1234,7 +1234,7 @@ export interface X { y: Select<F> }",
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:942 apiStabilityAccessorDiagnostic 8ddc0a752ca1597a
+// go test: internal/rulerunner/api_stability_leak_test.go:948 apiStabilityAccessorDiagnostic 8ddc0a752ca1597a
 fn api_stability_accessor_diagnostic(diagnostic: P<Diagnostic>) -> String {
     let mut name = "global".to_string();
     if let Some(file) = diagnostic.file() {
@@ -1243,7 +1243,7 @@ fn api_stability_accessor_diagnostic(diagnostic: P<Diagnostic>) -> String {
     format!("{name}:{}", diagnostic.localize())
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:950 TestApiStabilityLeakAccessorDiagnosticsExact 197b166d6e42c8c0
+// go test: internal/rulerunner/api_stability_leak_test.go:956 TestApiStabilityLeakAccessorDiagnosticsExact 197b166d6e42c8c0
 #[test]
 fn test_api_stability_leak_accessor_diagnostics_exact() {
     ets_go::testing::run(|t| {
