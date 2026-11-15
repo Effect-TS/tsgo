@@ -197,11 +197,14 @@ func compileFixturesWithJS(t testing.TB, version bundledeffect.EffectVersion, so
 	}
 	fs := bundled.WrapFS(vfstest.FromMap(testfs, tspath.CaseSensitive))
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         tsoptions.NewParsedCommandLine(compilerOptions, fileNames, nil, "/", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	c, done := program.GetTypeChecker(context.Background())
 	sourceFiles := make([]*ast.SourceFile, 0, len(fileNames))

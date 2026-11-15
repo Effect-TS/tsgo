@@ -30,11 +30,12 @@ func CreateWatchStatusReporter(sys tsc.System, locale locale.Locale, options *co
 type DiagnosticReporter = tsc.DiagnosticReporter
 type DiagnosticsReporter = tsc.DiagnosticsReporter
 //go:linkname EmitAndReportStatistics github.com/microsoft/TypeScript/tsc/internal/execute/tsc.EmitAndReportStatistics
-func EmitAndReportStatistics(input tsc.EmitInput) (tsc.CompileAndEmitResult, *tsc.Statistics)
+func EmitAndReportStatistics(ctx context.Context, input tsc.EmitInput) (tsc.CompileAndEmitResult, *tsc.Statistics)
 //go:linkname EmitFilesAndReportErrors github.com/microsoft/TypeScript/tsc/internal/execute/tsc.EmitFilesAndReportErrors
-func EmitFilesAndReportErrors(input tsc.EmitInput) (result tsc.CompileAndEmitResult)
+func EmitFilesAndReportErrors(ctx context.Context, input tsc.EmitInput) (result tsc.CompileAndEmitResult)
 type EmitInput = tsc.EmitInput
 type ExitStatus = tsc.ExitStatus
+const ExitStatusCancelled = tsc.ExitStatusCancelled
 const ExitStatusDiagnosticsPresent_OutputsGenerated = tsc.ExitStatusDiagnosticsPresent_OutputsGenerated
 const ExitStatusDiagnosticsPresent_OutputsSkipped = tsc.ExitStatusDiagnosticsPresent_OutputsSkipped
 const ExitStatusInvalidProject_OutputsSkipped = tsc.ExitStatusInvalidProject_OutputsSkipped

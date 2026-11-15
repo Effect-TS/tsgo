@@ -41,7 +41,7 @@ func NewCachedFSCompilerHost(fs vfs.FS, defaultLibraryPath tspath.RootedDirector
 //go:linkname NewCompilerHost github.com/microsoft/TypeScript/tsc/internal/compiler.NewCompilerHost
 func NewCompilerHost(fs vfs.FS, defaultLibraryPath tspath.RootedDirectoryPath, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any), contentMapperProject contentmapper.Project) compiler.CompilerHost
 //go:linkname NewProgram github.com/microsoft/TypeScript/tsc/internal/compiler.NewProgram
-func NewProgram(opts compiler.ProgramOptions) *compiler.Program
+func NewProgram(ctx context.Context, opts compiler.ProgramOptions) (*compiler.Program, error)
 type Program = compiler.Program
 type ProgramConfig = compiler.ProgramConfig
 type ProgramFactories = compiler.ProgramFactories

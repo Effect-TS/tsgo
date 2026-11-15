@@ -1,6 +1,7 @@
 package typeparser
 
 import (
+	"context"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -39,13 +40,16 @@ func compileNoLibSource(t *testing.T, source string) (*TypeParser, *ast.SourceFi
 	fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
 		"/.src/test.ts": &fstest.MapFile{Data: []byte(source)},
 	}, tspath.CaseSensitive))
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{
 			NoLib: core.TSTrue, Target: core.ScriptTargetESNext, Strict: core.TSTrue,
 		}, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	c, done := program.GetTypeChecker(t.Context())
 	return NewTypeParser(program, c), program.GetSourceFile("/.src/test.ts"), done
 }

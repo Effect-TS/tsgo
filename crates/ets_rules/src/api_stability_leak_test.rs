@@ -17,7 +17,7 @@ pub(crate) fn compile_api_stability_source(t: &T, source: &str) -> ApiStabilityC
     compile_api_stability_source_primed(t, source, true)
 }
 
-// go test: internal/rules/api_stability_leak_test.go:29 compileApiStabilitySourcePrimed 570954b7e98f200b
+// go test: internal/rules/api_stability_leak_test.go:29 compileApiStabilitySourcePrimed 634bbf6b27bca746
 // Rust: the same program as `compile_api_stability_files_primed` over the one file `/.src/test.ts`.
 pub(crate) fn compile_api_stability_source_primed(
     t: &T,
@@ -28,7 +28,7 @@ pub(crate) fn compile_api_stability_source_primed(
     compile_api_stability_files_primed(t, &files(&[("test.ts", source)]), prime)
 }
 
-// go test: internal/rules/api_stability_leak_test.go:70 TestApiStabilityLeakExportOrderIsDeterministic 620c8ede9b1bce3b
+// go test: internal/rules/api_stability_leak_test.go:73 TestApiStabilityLeakExportOrderIsDeterministic 620c8ede9b1bce3b
 // Rust: tsrs's exports hold no nil, so Go's nil-symbol checks cannot fail and drop.
 #[test]
 fn test_api_stability_leak_export_order_is_deterministic() {
@@ -98,7 +98,7 @@ export declare const omega: Middle
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:130 TestApiStabilityLeakRunsWithoutInstantiation 862a05efa846acf7
+// go test: internal/rules/api_stability_leak_test.go:133 TestApiStabilityLeakRunsWithoutInstantiation 862a05efa846acf7
 #[test]
 fn test_api_stability_leak_runs_without_instantiation() {
     run(|t| {
@@ -217,7 +217,7 @@ export interface Node { next: Node; payload: E }
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:228 TestApiStabilityLeakSurfaceSharedSnapshotReuse 95c1a929eec334a6
+// go test: internal/rules/api_stability_leak_test.go:231 TestApiStabilityLeakSurfaceSharedSnapshotReuse 95c1a929eec334a6
 #[test]
 fn test_api_stability_leak_surface_shared_snapshot_reuse() {
     run(|t| {
