@@ -232,7 +232,7 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 		return catchTagToCatchReasonHandler{}, false
 	}
 
-	branchParameterUses, validUses := validateCatchTagParameterUses(tp, c, body, parameterSymbol, branches, fallbackParam, dispatchRefs)
+	branchParameterUses, validUses := validateCatchTagParameterUses(tp, body, parameterSymbol, branches, fallbackParam, dispatchRefs)
 	if !validUses {
 		return catchTagToCatchReasonHandler{}, false
 	}
@@ -321,7 +321,6 @@ func catchTagReFailParameter(tp *typeparser.TypeParser, c *checker.Checker, expr
 
 func validateCatchTagParameterUses(
 	tp *typeparser.TypeParser,
-	c *checker.Checker,
 	body *ast.Node,
 	parameterSymbol *ast.Symbol,
 	branches []CatchTagToCatchReasonBranch,
@@ -337,29 +336,17 @@ func validateCatchTagParameterUses(
 	}
 
 	branchUses := make([]bool, len(branches))
-	valid := true
-	var walkBody ast.Visitor
-	walkBody = func(node *ast.Node) bool {
-		if node == nil || !valid {
-			return true
+	for _, node := range tp.ReferencesToSymbol(body, parameterSymbol).All() {
+		if _, ok := allowed[node]; ok {
+			continue
 		}
-		if node.Kind == ast.KindIdentifier && sameCatchReasonSymbol(tp, c, node, parameterSymbol) {
-			if _, ok := allowed[node]; ok {
-				return false
-			}
-			if branchIndex := catchReasonRecoveryBranchIndex(node, branches); branchIndex >= 0 {
-				branchUses[branchIndex] = true
-				return false
-			}
-			valid = false
-			return true
+		if branchIndex := catchReasonRecoveryBranchIndex(node, branches); branchIndex >= 0 {
+			branchUses[branchIndex] = true
+			continue
 		}
-		//ets:ast-walk scans the handler body for references to the caught reason parameter
-		node.ForEachChild(walkBody)
-		return false
+		return branchUses, false
 	}
-	walkBody(body)
-	return branchUses, valid
+	return branchUses, true
 }
 
 func catchReasonRecoveryBranchIndex(node *ast.Node, branches []CatchTagToCatchReasonBranch) int {

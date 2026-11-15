@@ -70,7 +70,7 @@ func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, ctx *fixable
 // only when the branch result reads it.
 func newCatchTagHandler(tracker *rewriter.Tracker, ctx *fixable.Context, match rules.CatchAllTagDispatchMatch, branch rules.CatchAllTagDispatchBranch) *ast.Node {
 	var parameters []*ast.Node
-	if rules.ConditionalRefailNodeContainsParameter(ctx.TypeParser, ctx.Checker, branch.Result, match.ParameterSymbol) {
+	if ctx.TypeParser.ReferencesToSymbol(branch.Result, match.ParameterSymbol).Len() != 0 {
 		parameters = []*ast.Node{tracker.NewParameterDeclaration(nil, nil, tracker.NewIdentifier(match.ParameterName), nil, nil, nil)}
 	}
 	return tracker.NewArrowFunction(nil, nil, tracker.NewNodeList(parameters), nil, nil, tracker.NewToken(ast.KindEqualsGreaterThanToken), tracker.DeepCloneNode(branch.Result))

@@ -56,7 +56,7 @@ pub struct TimeoutCatchTagToTimeoutOrElseMatch {
     pub handler: P<Node>,
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:38 AnalyzeTimeoutCatchTagToTimeoutOrElse bb21fc4b5ad5b0ce
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:38 AnalyzeTimeoutCatchTagToTimeoutOrElse 8f0d58d4aea617cc
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and checker are never nil.
 pub fn analyze_timeout_catch_tag_to_timeout_or_else(

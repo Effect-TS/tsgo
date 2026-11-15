@@ -6,7 +6,7 @@ Review rules for changes to Effect rules, fixables, the typeparser and the rewri
 
 A rule finds the calls it reports by iterating piping flows: `PipingFlows`, then `MatchesPrefix`, `MatchesExactly` or `FindTransformationSequences`, with `LongestPipingFlowAt` for a flow nested in an expression the rule already holds. Steps are matched on `Callee()` with the `IsNodeReferenceTo…` helpers. One flow predicate covers `pipe(x, f)`, `x.pipe(f)`, `f(x)`, data-first, data-last and curried spellings; a hand-matched call shape covers only the spelling its author thought of.
 
-An AST walk (`ForEachChild`, a visitor) is right when the rule looks for something that never becomes a flow step: classes, `yield`, `new`, `return`, type nodes, zero-argument calls, or scans for references inside a body. `pnpm lint` requires each walk to carry an `//ets:ast-walk <reason>` comment. Review the reason: it must name what the walk finds that flows do not produce. A reason like "find the Effect.x calls" fails, because a flow predicate does that.
+An AST walk (`ForEachChild`, a visitor) is right when the rule looks for something that never becomes a flow step: classes, `yield`, `new`, `return`, type nodes, zero-argument calls, or scans for references inside a body. A scan for references to one symbol calls the typeparser's `ReferencesToSymbol` instead of writing its own walk. `pnpm lint` requires each walk to carry an `//ets:ast-walk <reason>` comment. Review the reason: it must name what the walk finds that flows do not produce. A reason like "find the Effect.x calls" fails, because a flow predicate does that.
 
 Flag:
 

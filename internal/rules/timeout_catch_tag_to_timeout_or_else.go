@@ -76,7 +76,7 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 				continue
 			}
 			handler := ast.SkipParentheses(catch.Args().At(1))
-			if !catchHandlerIgnoresError(tp, c, handler) {
+			if !catchHandlerIgnoresError(tp, handler) {
 				continue
 			}
 			if option && !catchHandlerReturnsSucceedNone(tp, handler) {
