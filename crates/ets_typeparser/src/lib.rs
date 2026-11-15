@@ -144,6 +144,9 @@ mod promise_type;
 #[cfg(test)]
 mod readonly_results_test;
 mod reconstruct;
+mod references_to_symbol;
+#[cfg(test)]
+mod references_to_symbol_test;
 mod result_dispatch;
 mod result_type;
 mod returning_dispatch;

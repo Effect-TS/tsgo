@@ -47,11 +47,7 @@ fn run_catch_all_tag_dispatch_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec
             .branches
             .iter()
             .map(|branch| {
-                ets_rules::conditional_refail_node_contains_parameter(
-                    &mut ctx.type_parser,
-                    Some(branch.result),
-                    Some(m.parameter_symbol),
-                )
+                !ctx.type_parser.references_to_symbol(branch.result, m.parameter_symbol).is_empty()
             })
             .collect();
         let action = ctx.new_fix_action(FixAction {
@@ -136,12 +132,12 @@ fn build_catch_all_tag_dispatch_replacement(
     )
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:71 newCatchTagHandler a40080adf9dfc3ea
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:71 newCatchTagHandler 1369caa2cd7a0f49
 // newCatchTagHandler builds a branch handler that keeps the error parameter
 // only when the branch result reads it.
 //
-// Rust: Go's `ctx` parameter is `uses_parameter`, the branch's precomputed
-// `ConditionalRefailNodeContainsParameter` result.
+// Rust: Go's `ctx` parameter is `uses_parameter`, precomputed: whether
+// `ReferencesToSymbol` finds the parameter in the branch result.
 fn new_catch_tag_handler(
     tracker: &Tracker,
     m: &CatchAllTagDispatchMatch,
