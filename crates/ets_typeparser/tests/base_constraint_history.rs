@@ -1,4 +1,4 @@
-// Research regression for oxc-project/tsrs#996, not an accepted semantic patch.
+// Paired base-constraint regression for oxc-project/tsrs#996.
 // The paired Go test uses the same fixtures and sequential retained-checker histories.
 use std::sync::{Arc, Mutex};
 
