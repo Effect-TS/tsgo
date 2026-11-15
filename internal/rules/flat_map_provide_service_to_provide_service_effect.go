@@ -92,7 +92,7 @@ func AnalyzeFlatMapProvideServiceToProvideServiceEffect(tp *typeparser.TypeParse
 			if implementation.Kind != ast.KindIdentifier || tp.GetSymbolAtLocation(implementation) != parameterSymbol {
 				continue
 			}
-			if mentionsCallbackBinding(tp, c, ast.SkipParentheses(step.Args().At(0)), returned, implementation) {
+			if mentionsCallbackBinding(tp, c, ast.SkipParentheses(step.Args().At(0)), parameterSymbol, returned, implementation) {
 				continue
 			}
 
@@ -126,24 +126,29 @@ func AnalyzeFlatMapProvideServiceToProvideServiceEffect(tp *typeparser.TypeParse
 	return matches
 }
 
-func mentionsCallbackBinding(tp *typeparser.TypeParser, c *checker.Checker, callback, root, skip *ast.Node) bool {
-	resolvesToCallbackBinding := func(symbol *ast.Symbol, node *ast.Node) bool {
-		return declaredInCallbackOutsideRoot(symbol, callback, root) || isBuiltinArguments(symbol) && callbackIsThisContainer(callback, node)
+// mentionsCallbackBinding reports whether root, the callback's returned expression,
+// uses a binding of the callback other than the service argument skip: its
+// parameter, a function expression's own name, or its this, super, arguments or
+// new.target. These change meaning once root moves out of the callback.
+// ParseLazyExpression rejects type parameters and a plain parameter declares
+// nothing else, so the callback binds no other names.
+func mentionsCallbackBinding(tp *typeparser.TypeParser, c *checker.Checker, callback *ast.Node, parameterSymbol *ast.Symbol, root, skip *ast.Node) bool {
+	for _, reference := range tp.ReferencesToSymbol(root, parameterSymbol).All() {
+		if reference != skip {
+			return true
+		}
+	}
+	if name := callback.Name(); name != nil && tp.ReferencesToSymbol(root, tp.GetSymbolAtLocation(name)).Len() > 0 {
+		return true
+	}
+	for _, reference := range tp.ReferencesToSymbol(root, c.GetArgumentsSymbol()).All() {
+		if callbackIsThisContainer(callback, reference) {
+			return true
+		}
 	}
 	var visit func(node *ast.Node) bool
 	visit = func(node *ast.Node) bool {
-		if node == skip {
-			return false
-		}
 		switch node.Kind {
-		case ast.KindShorthandPropertyAssignment:
-			if resolvesToCallbackBinding(c.GetShorthandAssignmentValueSymbol(node), node) {
-				return true
-			}
-		case ast.KindIdentifier:
-			if resolvesToCallbackBinding(tp.GetSymbolAtLocation(node), node) {
-				return true
-			}
 		case ast.KindThisKeyword, ast.KindSuperKeyword:
 			if callbackIsThisContainer(callback, node) {
 				return true
@@ -153,33 +158,14 @@ func mentionsCallbackBinding(tp *typeparser.TypeParser, c *checker.Checker, call
 				return true
 			}
 		}
-		//ets:ast-walk scans the returned expression, outside the service argument, for references to the callback's parameter, own name, this, arguments or new.target
+		//ets:ast-walk scans the returned expression for this, super or new.target keywords, which have no symbol to look up
 		return node.ForEachChild(visit)
 	}
 	return visit(root)
 }
 
-func declaredInCallbackOutsideRoot(symbol *ast.Symbol, callback, root *ast.Node) bool {
-	if symbol == nil {
-		return false
-	}
-	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
-		if declaration.Pos() >= callback.Pos() && declaration.End() <= callback.End() &&
-			(declaration.Pos() < root.Pos() || declaration.End() > root.End()) {
-			return true
-		}
-	}
-	return false
-}
-
 func callbackIsThisContainer(callback, node *ast.Node) bool {
 	return ast.GetThisContainer(node, false, false) == callback
-}
-
-// isBuiltinArguments reports whether symbol is a function's implicit arguments
-// object, which the checker creates without declarations.
-func isBuiltinArguments(symbol *ast.Symbol) bool {
-	return symbol != nil && ast.TSGetSymbolName(symbol) == "arguments" && len(ast.TSGetSymbolDeclarations(symbol)) == 0
 }
 
 func stepTypeIdenticalToProvideServiceEffectResult(tp *typeparser.TypeParser, c *checker.Checker, step, provide typeparser.PipingFlowTransformation, acquired *effectChannels) bool {
