@@ -83,51 +83,24 @@ diff --git a/crates/oxc_linter/src/tsgolint.rs b/crates/oxc_linter/src/tsgolint.
 index f22136e16..8ed7716ff 100644
 --- a/crates/oxc_linter/src/tsgolint.rs
 +++ b/crates/oxc_linter/src/tsgolint.rs
-@@ -207,6 +207,12 @@ impl TsGoLintState {
-                                     let path = &tsgolint_diagnostic.file_path;
- 
-                                     let severity = resolved_configs
-+                                        .get(path)
-+                                        .and_then(|resolved_config| {
-+                                            tsgolint_rule_severity(resolved_config, &tsgolint_diagnostic.rule)
-+                                        })
-+                                        .or_else(|| {
-+                                            resolved_configs
-                                             .get(path)
-                                             .or_else(|| {
-                                                 debug_assert!(false, "resolved_configs should have an entry for every file we linted {tsgolint_diagnostic:?}");
-@@ -224,7 +230,8 @@ impl TsGoLintState {
-                                             .or_else(|| {
-                                                 debug_assert!(false, "resolved_config should have a matching rule for every diagnostic we received {tsgolint_diagnostic:?}");
-                                                 None
--                                            });
-+                                            })
-+                                        });
-                                     let Some(severity) = severity else {
-                                         // If the severity is not found, we should not report
-                                         // the diagnostic
-@@ -481,6 +488,8 @@ impl TsGoLintState {
-                                             None
-                                         }
-                                     });
-+                                let severity =
-+                                    tsgolint_rule_severity(resolved_config, &tsgolint_diagnostic.rule).or(severity);
-                                 let Some(severity) = severity else {
-                                     // If the severity is not found, we should not report the diagnostic
-                                     continue;
-@@ -607,7 +616,11 @@ impl TsGoLintState {
-                     .iter()
-                     .filter_map(|(rule, status)| {
-                         if status.is_warn_deny() && rule.is_tsgolint_rule() {
--                            let rule_name = rule.name().to_string();
+@@ -220,3 +220,3 @@ impl TsGoLintState {
+                                                         rule.is_tsgolint_rule()
+-                                                            && rule.name() == tsgolint_diagnostic.rule
++                                                            && tsgolint_rule_matches(rule.plugin_name(), rule.name(), &tsgolint_diagnostic.rule)
+                                                     })
+@@ -498,3 +498,3 @@ impl TsGoLintState {
+                                         if rule.is_tsgolint_rule()
+-                                            && rule.name() == tsgolint_diagnostic.rule
++                                            && tsgolint_rule_matches(rule.plugin_name(), rule.name(), &tsgolint_diagnostic.rule)
+                                         {
+@@ -610,2 +619,7 @@ impl TsGoLintState {
+                             let rule_name = rule.name().to_string();
 +                            let rule_name = if rule.plugin_name() == "effecttsgo" {
-+                                format!("effecttsgo/{}", rule.name())
++                                format!("effecttsgo/{rule_name}")
 +                            } else {
-+                                rule.name().to_string()
++                                rule_name
 +                            };
                              let options = match rule.to_configuration() {
-                                 Some(Ok(config)) => Some(config),
-                                 Some(Err(_)) | None => None,
 @@ -816,9 +829,20 @@ impl From<TsGoLintDiagnostic> for OxcDiagnostic {
  
  impl From<TsGoLintRuleDiagnostic> for OxcDiagnostic {
@@ -171,7 +144,7 @@ index f22136e16..8ed7716ff 100644
      } else {
          debug_assert!(
              false,
-@@ -1271,6 +1299,28 @@ fn should_skip_diagnostic(
+@@ -1271,6 +1299,17 @@ fn should_skip_diagnostic(
      }
  }
  
@@ -184,17 +157,6 @@ index f22136e16..8ed7716ff 100644
 +    let (diagnostic_plugin_name, diagnostic_rule_name) = split_tsgolint_rule_name(diagnostic_rule);
 +    diagnostic_rule_name == rule_name
 +        && diagnostic_plugin_name.map_or(plugin_name != "effecttsgo", |name| name == plugin_name)
-+}
-+
-+fn tsgolint_rule_severity(
-+    resolved_config: &ResolvedLinterState,
-+    diagnostic_rule: &str,
-+) -> Option<AllowWarnDeny> {
-+    resolved_config.rules.iter().find_map(|(rule, status)| {
-+        (rule.is_tsgolint_rule()
-+            && tsgolint_rule_matches(rule.plugin_name(), rule.name(), diagnostic_rule))
-+        .then_some(*status)
-+    })
 +}
 +
  /// Parses a single message from the binary tsgolint output.
