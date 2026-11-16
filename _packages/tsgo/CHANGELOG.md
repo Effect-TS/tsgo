@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.69.1
+
+### Patch Changes
+
+- 606541e: Catch-handler rules now find every use of the caught error parameter in the same way, through a shared typeparser scan. A shorthand property `{ error }` now counts as a use of `error` in `catchConditionalRefailToCatchIf`, `catchTagToCatchReason` and the `catchAllTagDispatchToCatchTag` quick fix, as it already did in `timeoutCatchTagToTimeoutOrElse`. When a branch result reads the error only through `{ error }`, the `catchAllTagDispatchToCatchTag` fix now keeps the handler parameter, and `catchTagToCatchReason` counts the branch as using the parameter.
+  
+  ```ts
+  program.pipe(
+    // now reported by catchConditionalRefailToCatchIf: the predicate reads `error` through `{ error }`
+    Effect.catch((error) => isNotFound({ error }) ? Effect.succeed("guest") : Effect.fail(error))
+  )
+  ```
+- aaafd45: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261115.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/6bdcb54d23f41bc7098c1f3488ac599c75b852ca) commit `6bdcb54d23f41bc7098c1f3488ac599c75b852ca`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.69.0
 
 ### Minor Changes
