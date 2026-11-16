@@ -2598,7 +2598,7 @@
         },
         "forLoopPushToForEach": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "suggestion",
+          "default": "off",
           "description": "Suggests Effect.forEach instead of a for-of loop that pushes yielded Effect results into an accumulator"
         },
         "genericEffectServices": {
