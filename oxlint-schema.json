@@ -1209,6 +1209,40 @@
       },
       "type": "object"
     },
+    "ChecksConditionals": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "#/definitions/ChecksConditionalsOptions"
+        }
+      ]
+    },
+    "ChecksConditionalsFlagUnions": {
+      "enum": [
+        "none",
+        "strict",
+        "all"
+      ],
+      "type": "string"
+    },
+    "ChecksConditionalsOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "flagUnions": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ChecksConditionalsFlagUnions"
+            }
+          ],
+          "default": "none",
+          "description": "Controls which union types are reported in conditionals.\n- `\"none\"` only reports values that are always Promise-like.\n- `\"strict\"` also reports unions where the non-Promise types match the awaited Promise types,\nsuch as `Promise\u003cnumber\u003e | number`.\n- `\"all\"` reports any union containing a Promise-like type.",
+          "markdownDescription": "Controls which union types are reported in conditionals.\n- `\"none\"` only reports values that are always Promise-like.\n- `\"strict\"` also reports unions where the non-Promise types match the awaited Promise types,\nsuch as `Promise\u003cnumber\u003e | number`.\n- `\"all\"` reports any union containing a Promise-like type."
+        }
+      },
+      "type": "object"
+    },
     "ChecksVoidReturn": {
       "anyOf": [
         {
@@ -15299,10 +15333,14 @@
       "additionalProperties": false,
       "properties": {
         "checksConditionals": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/ChecksConditionals"
+            }
+          ],
           "default": true,
-          "description": "Whether to check if Promises are used in conditionals.\nWhen true, disallows using Promises in conditions where a boolean is expected.",
-          "markdownDescription": "Whether to check if Promises are used in conditionals.\nWhen true, disallows using Promises in conditions where a boolean is expected.",
-          "type": "boolean"
+          "description": "Whether to check if Promises are used in conditionals.\nCan be a boolean to enable/disable the check, or an object to control union types.",
+          "markdownDescription": "Whether to check if Promises are used in conditionals.\nCan be a boolean to enable/disable the check, or an object to control union types."
         },
         "checksSpreads": {
           "default": true,
@@ -17522,8 +17560,8 @@
           "type": "boolean"
         },
         "typeCheck": {
-          "description": "Enable experimental type checking (includes TypeScript compiler diagnostics).\n\nEquivalent to passing `--type-check` on the CLI.\n\nNote that this requires the `oxlint-tsgolint` package to be installed.",
-          "markdownDescription": "Enable experimental type checking (includes TypeScript compiler diagnostics).\n\nEquivalent to passing `--type-check` on the CLI.\n\nNote that this requires the `oxlint-tsgolint` package to be installed.",
+          "description": "Enable type checking (includes TypeScript compiler diagnostics).\n\nEquivalent to passing `--type-check` on the CLI.\n\nNote that this requires the `oxlint-tsgolint` package to be installed.",
+          "markdownDescription": "Enable type checking (includes TypeScript compiler diagnostics).\n\nEquivalent to passing `--type-check` on the CLI.\n\nNote that this requires the `oxlint-tsgolint` package to be installed.",
           "type": "boolean"
         }
       },
@@ -17547,8 +17585,8 @@
               "$ref": "#/definitions/GlobSet"
             }
           ],
-          "description": "A list of glob patterns to exclude from this override.\n\nFiles matching these patterns are not globally ignored; this override\nsimply does not apply to them.\n\n## Example\n`[ \"*.generated.ts\", \"fixtures/**\" ]`",
-          "markdownDescription": "A list of glob patterns to exclude from this override.\n\nFiles matching these patterns are not globally ignored; this override\nsimply does not apply to them.\n\n## Example\n`[ \"*.generated.ts\", \"fixtures/**\" ]`"
+          "description": "A list of glob patterns to exclude from this override.\n\nFiles matching these patterns are not globally ignored; this override\nsimply does not apply to them.\n\nExample: `[ \"*.generated.ts\", \"fixtures/**\" ]`",
+          "markdownDescription": "A list of glob patterns to exclude from this override.\n\nFiles matching these patterns are not globally ignored; this override\nsimply does not apply to them.\n\nExample: `[ \"*.generated.ts\", \"fixtures/**\" ]`"
         },
         "files": {
           "allOf": [
@@ -17556,8 +17594,8 @@
               "$ref": "#/definitions/GlobSet"
             }
           ],
-          "description": "A list of glob patterns to override.\n\n## Example\n`[ \"*.test.ts\", \"*.spec.ts\" ]`",
-          "markdownDescription": "A list of glob patterns to override.\n\n## Example\n`[ \"*.test.ts\", \"*.spec.ts\" ]`"
+          "description": "A list of glob patterns to override.\n\nExample: `[ \"*.test.ts\", \"*.spec.ts\" ]`",
+          "markdownDescription": "A list of glob patterns to override.\n\nExample: `[ \"*.test.ts\", \"*.spec.ts\" ]`"
         },
         "globals": {
           "allOf": [

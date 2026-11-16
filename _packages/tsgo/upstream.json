@@ -4,10 +4,10 @@
     "typescript": {
       "latest": "7.0.2",
       "beta": "7.1.0-beta",
-      "next": "7.1.0-dev.20261115.1"
+      "next": "7.1.0-dev.20261116.1"
     },
     "oxlint": {
-      "latest": "1.93.0"
+      "latest": "1.94.0"
     },
     "oxlint-tsgolint": {
       "latest": "7.0.2007"
@@ -26,7 +26,7 @@
         "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a",
         "provider": "typescript"
       },
-      "7.1.0-dev.20261115.1": {
+      "7.1.0-dev.20261116.1": {
         "gitHead": "6bdcb54d23f41bc7098c1f3488ac599c75b852ca",
         "provider": "typescript"
       }
@@ -60,6 +60,9 @@
       },
       "1.93.0": {
         "gitHead": "7d8e1f4953a694e9705117f674933925142ed457"
+      },
+      "1.94.0": {
+        "gitHead": "229b69bf10a9c876f84287123fdf9d5e0747c96b"
       }
     },
     "tsrs": {
@@ -82,6 +85,14 @@
       }
     },
     {
+      "name": "oxlint@1.94.0",
+      "description": "Oxlint 1.94.0 compatibility runtime",
+      "dependencies": {
+        "oxlint": "1.94.0",
+        "oxlint-tsgolint": "7.0.2007"
+      }
+    },
+    {
       "name": "oxlint@1.93.0",
       "description": "Oxlint 1.93.0 compatibility runtime",
       "dependencies": {
@@ -94,14 +105,6 @@
       "description": "Oxlint 1.92.0 compatibility runtime",
       "dependencies": {
         "oxlint": "1.92.0",
-        "oxlint-tsgolint": "7.0.2007"
-      }
-    },
-    {
-      "name": "oxlint@1.91.0",
-      "description": "Oxlint 1.91.0 compatibility runtime",
-      "dependencies": {
-        "oxlint": "1.91.0",
         "oxlint-tsgolint": "7.0.2007"
       }
     },
