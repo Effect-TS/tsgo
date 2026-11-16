@@ -1,4 +1,4 @@
-==== /.src/forLoopPushToForEach.ts (138 flows) ====
+==== /.src/forLoopPushToForEach.ts (139 flows) ====
 
 === Piping Flow ===
 Location: 16:24 - 16:95
@@ -1930,4 +1930,18 @@ Transformations (1):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 493:25 - 493:60
+Node: Effect.forEach(items, processItem)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [processItem]
       outType: Effect<string[], never, never>
