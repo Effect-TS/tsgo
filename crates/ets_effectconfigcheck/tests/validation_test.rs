@@ -14,7 +14,7 @@ use ets_shim::tsoptions::{
 use ets_shim::vfs::{FS, bundled, vfstest};
 use rustc_hash::FxHashMap;
 
-// go test: internal/effectconfigcheck/validation_test.go:22 parseHost 140325da404d2758
+// go test: internal/effectconfigcheck/validation_test.go:23 parseHost 140325da404d2758
 struct ParseHost {
     fs: Arc<dyn FS>,
 }
@@ -29,7 +29,7 @@ impl ParseConfigHost for ParseHost {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:24 newHost 491665c7ddc49098
+// go test: internal/effectconfigcheck/validation_test.go:25 newHost 491665c7ddc49098
 // Rust: the host is leaked (tsrs takes `&'static dyn ParseConfigHost`; porting/TSRS_API.md, "Gaps"). The test package
 // imports etscheckerhooks, whose `init` registers the callbacks: `ets_etscheckerhooks::init()` here.
 fn new_host(files: &[(&str, &str)]) -> &'static ParseHost {
@@ -43,7 +43,7 @@ fn new_host(files: &[(&str, &str)]) -> &'static ParseHost {
     Box::leak(Box::new(ParseHost { fs }))
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:32 parse 0125bcab49ba9706
+// go test: internal/effectconfigcheck/validation_test.go:33 parse 0125bcab49ba9706
 fn parse(
     host: &'static ParseHost,
     path: &str,
@@ -66,14 +66,14 @@ fn parse(
     )
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:42 config f9526e3d9bec24d3
+// go test: internal/effectconfigcheck/validation_test.go:43 config f9526e3d9bec24d3
 fn config(options: &str, extra: &str) -> String {
     format!(
         r#"{{"files":["/main.ts"],"compilerOptions":{{"plugins":[{{"name":"@effect/language-service",{options}}}]}}{extra}}}"#
     )
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:46 unknownDiagnostics b5d9d8dd701e7ed1
+// go test: internal/effectconfigcheck/validation_test.go:47 unknownDiagnostics b5d9d8dd701e7ed1
 fn unknown_diagnostics(config: &ParsedCommandLine) -> Vec<P<Diagnostic>> {
     diagnostics_with_code(
         config,
@@ -81,7 +81,7 @@ fn unknown_diagnostics(config: &ParsedCommandLine) -> Vec<P<Diagnostic>> {
     )
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:50 deprecatedDiagnostics dfc461d82e0f14f4
+// go test: internal/effectconfigcheck/validation_test.go:51 deprecatedDiagnostics dfc461d82e0f14f4
 fn deprecated_diagnostics(config: &ParsedCommandLine) -> Vec<P<Diagnostic>> {
     diagnostics_with_code(
         config,
@@ -89,7 +89,7 @@ fn deprecated_diagnostics(config: &ParsedCommandLine) -> Vec<P<Diagnostic>> {
     )
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:54 diagnosticsWithCode 8ce5e98b272c08f4
+// go test: internal/effectconfigcheck/validation_test.go:55 diagnosticsWithCode 8ce5e98b272c08f4
 fn diagnostics_with_code(config: &ParsedCommandLine, code: i32) -> Vec<P<Diagnostic>> {
     let mut result = Vec::new();
     for &diagnostic in &config.errors {
@@ -111,7 +111,7 @@ fn extended_config_cache() -> ets_shim::execute::tsc::ExtendedConfigCache {
     ets_shim::execute::tsc::ExtendedConfigCache::default()
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:64 TestUnknownRuleNames 452911343bceea8e
+// go test: internal/effectconfigcheck/validation_test.go:65 TestUnknownRuleNames 452911343bceea8e
 #[test]
 fn test_unknown_rule_names() {
     for (name, options, count, category) in [
@@ -192,7 +192,7 @@ fn test_unknown_rule_names() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:105 TestDeprecatedRuleNames f04b431363bfda75
+// go test: internal/effectconfigcheck/validation_test.go:106 TestDeprecatedRuleNames f04b431363bfda75
 #[test]
 fn test_deprecated_rule_names() {
     for (name, options, count, category) in [
@@ -288,7 +288,7 @@ fn test_deprecated_rule_names() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:151 TestDeprecatedRuleNamesExtends 9112fd26c73f659d
+// go test: internal/effectconfigcheck/validation_test.go:152 TestDeprecatedRuleNamesExtends 9112fd26c73f659d
 #[test]
 fn test_deprecated_rule_names_extends() {
     for (name, base, child, count, category, local) in [
@@ -338,7 +338,7 @@ fn test_deprecated_rule_names_extends() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:186 TestUnknownRuleNamesExtends cb950712265e3b29
+// go test: internal/effectconfigcheck/validation_test.go:187 TestUnknownRuleNamesExtends cb950712265e3b29
 #[test]
 fn test_unknown_rule_names_extends() {
     for (name, base, child, count, category, local) in [
@@ -415,7 +415,7 @@ fn test_unknown_rule_names_extends() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:226 TestEffectPluginInheritance 1a65f2b80fbdc197
+// go test: internal/effectconfigcheck/validation_test.go:227 TestEffectPluginInheritance 1a65f2b80fbdc197
 #[test]
 fn test_effect_plugin_inheritance() {
     let base = config(r#""diagnostics":false"#, "");
@@ -467,7 +467,7 @@ fn test_effect_plugin_inheritance() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:284 TestInheritedOverridesUseLocalSyntaxOnly 57ea5abcd4c79e92
+// go test: internal/effectconfigcheck/validation_test.go:285 TestInheritedOverridesUseLocalSyntaxOnly 57ea5abcd4c79e92
 #[test]
 fn test_inherited_overrides_use_local_syntax_only() {
     let host = new_host(&[
@@ -496,7 +496,7 @@ fn test_inherited_overrides_use_local_syntax_only() {
     assert_eq!(underline(got[1]), r#""localTypo""#, "wrong local underline");
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:305 TestUnknownRuleNamesJSONAPI ae2ae8e0d62a3b6e
+// go test: internal/effectconfigcheck/validation_test.go:306 TestUnknownRuleNamesJSONAPI ae2ae8e0d62a3b6e
 #[test]
 fn test_unknown_rule_names_json_api() {
     let (raw, errors) = ets_shim::tsoptions::parse_config_file_text_to_json(
@@ -522,7 +522,7 @@ fn test_unknown_rule_names_json_api() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:318 TestProjectReferencesAndSharedExtends d17dfbfd0fa8dae9
+// go test: internal/effectconfigcheck/validation_test.go:319 TestProjectReferencesAndSharedExtends 52b994b8a8bccc21
 #[test]
 fn test_project_references_and_shared_extends() {
     let host = new_host(&[
@@ -591,7 +591,7 @@ fn test_project_references_and_shared_extends() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:369 TestMultipleExtendsAndExistingOptions 0e777470169add38
+// go test: internal/effectconfigcheck/validation_test.go:373 TestMultipleExtendsAndExistingOptions 0e777470169add38
 #[test]
 fn test_multiple_extends_and_existing_options() {
     let host = new_host(&[
@@ -636,7 +636,7 @@ fn test_multiple_extends_and_existing_options() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:390 TestOtherPluginsAndCompilerErrors 235be75931db41d9
+// go test: internal/effectconfigcheck/validation_test.go:394 TestOtherPluginsAndCompilerErrors 235be75931db41d9
 #[test]
 fn test_other_plugins_and_compiler_errors() {
     let host = new_host(&[(
@@ -653,7 +653,7 @@ fn test_other_plugins_and_compiler_errors() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:404 TestUnknownRuleNamesDeterministicOrder 8d2d51201ffb4f0f
+// go test: internal/effectconfigcheck/validation_test.go:408 TestUnknownRuleNamesDeterministicOrder 8d2d51201ffb4f0f
 #[test]
 fn test_unknown_rule_names_deterministic_order() {
     let host = new_host(&[(

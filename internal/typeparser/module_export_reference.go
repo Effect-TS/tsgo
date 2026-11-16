@@ -41,6 +41,7 @@ const (
 	moduleDescriptorPlatformBrowser
 	moduleDescriptorResult
 	moduleDescriptorEither
+	moduleDescriptorExit
 	moduleDescriptorCount
 )
 

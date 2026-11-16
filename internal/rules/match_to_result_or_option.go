@@ -43,7 +43,6 @@ type MatchToResultOrOptionMatch struct {
 	Start, End      int
 	ReplacementName string // result, option or either
 	SourceName      string // match, matchEffect, map/catch or map/catchAll
-	Fixable         bool
 }
 
 // reifyingKind is the container a constructor wraps into (result, option or
@@ -86,7 +85,6 @@ func AnalyzeMatchToResultOrOption(tp *typeparser.TypeParser, c *checker.Checker,
 			End:             end,
 			ReplacementName: onSuccess.replacement,
 			SourceName:      sourceName,
-			Fixable:         !mapMapErrorPathHasTypeArguments(flow.Transformations().At(start), flow.Transformations().At(end)),
 		})
 	}
 	for _, flow := range tp.PipingFlows(sf, true).All() {
@@ -155,7 +153,7 @@ func succeedReifyingHandler(tp *typeparser.TypeParser, c *checker.Checker, node 
 	}
 	flow := tp.LongestPipingFlowAt(lazy.Expression(), false)
 	isPlainStep := func(step typeparser.PipingFlowTransformation) bool {
-		return step.Args().Len() == 0 && !hasExplicitTypeArguments(&step)
+		return step.Args().Len() == 0 && !HasExplicitTypeArguments(&step)
 	}
 	isSucceed := func(step typeparser.PipingFlowTransformation) bool {
 		return isPlainStep(step) && tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "succeed")

@@ -64,6 +64,7 @@
         "flatMapConditionalToFilterOrFail": "suggestion",
         "flatMapIdentityToFlatten": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
+        "flatMapProvideServiceToProvideServiceEffect": "suggestion",
         "flatMapToMap": "suggestion",
         "flatMapToTap": "suggestion",
         "floatingEffect": "error",
@@ -93,6 +94,7 @@
         "nonObjectEffectServiceType": "error",
         "obsoleteMatchImport": "warning",
         "obsoleteSchemaImport": "warning",
+        "onExitFailureToOnError": "suggestion",
         "optionMatchToFromOption": "suggestion",
         "outdatedApi": "warning",
         "overriddenSchemaConstructor": "error",
@@ -167,6 +169,7 @@
         "flatMapConditionalToFilterOrFail": "error",
         "flatMapIdentityToFlatten": "error",
         "flatMapIgnoredParamToAndThen": "error",
+        "flatMapProvideServiceToProvideServiceEffect": "error",
         "flatMapToMap": "error",
         "flatMapToTap": "error",
         "floatingEffect": "error",
@@ -196,6 +199,7 @@
         "nonObjectEffectServiceType": "error",
         "obsoleteMatchImport": "error",
         "obsoleteSchemaImport": "error",
+        "onExitFailureToOnError": "error",
         "optionMatchToFromOption": "error",
         "outdatedApi": "error",
         "overriddenSchemaConstructor": "error",
@@ -352,6 +356,7 @@
         "flatMapConditionalToFilterOrFail": "warning",
         "flatMapIdentityToFlatten": "warning",
         "flatMapIgnoredParamToAndThen": "warning",
+        "flatMapProvideServiceToProvideServiceEffect": "warning",
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
         "forLoopPushToForEach": "warning",
@@ -365,11 +370,13 @@
         "matchEffectToMatch": "warning",
         "matchToResultOrOption": "warning",
         "missedPipeableOpportunity": "warning",
+        "missingConcurrencyOption": "warning",
         "missingEffectServiceDependency": "warning",
         "missingPipeableSignature": "warning",
         "multipleCatchTag": "warning",
         "nestedEffectGenYield": "warning",
         "newSchemaClass": "warning",
+        "onExitFailureToOnError": "warning",
         "optionMatchToFromOption": "warning",
         "preferBarrelImport": "warning",
         "preferNamespaceImport": "warning",
@@ -2773,6 +2780,30 @@
       }
     },
     {
+      "name": "flatMapProvideServiceToProvideServiceEffect",
+      "group": "style",
+      "description": "Suggests Effect.provideServiceEffect when a flatMap or andThen callback only forwards its parameter to Effect.provideService",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377194
+      ],
+      "preview": {
+        "sourceText": "import { Context, Effect } from \"effect\"\n\n// The quick fix rewrites this to Effect.provideServiceEffect(program, Database, makeConnection).\n// Notes:\n// - After the fix, `program` is evaluated once when the expression is built, not on every run of the callback.\n// - The Effect.gen form (`const conn = yield* makeConnection; return yield* Effect.provideService(program, Database, conn)`)\n//   is deliberately not reported.\n// - On Effect v3, data-first `Effect.andThen(acquire, callback)` is not reported, since its overloads do not form a dual.\n\ninterface DatabaseConnection {\n  readonly query: (sql: string) =\u003e Effect.Effect\u003cstring\u003e\n}\n\nconst Database = Context.Service\u003cDatabaseConnection\u003e(\"Database\")\n\ndeclare const makeConnection: Effect.Effect\u003cDatabaseConnection\u003e\n\nconst program = Effect.gen(function*() {\n  const db = yield* Effect.service(Database)\n  return yield* db.query(\"SELECT * FROM users\")\n})\n\nexport const runWithDatabase = makeConnection.pipe(\n  Effect.flatMap((conn) =\u003e Effect.provideService(program, Database, conn))\n)\n",
+        "diagnostics": [
+          {
+            "start": 961,
+            "end": 975,
+            "text": "`Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)"
+          }
+        ]
+      }
+    },
+    {
       "name": "flatMapToMap",
       "group": "style",
       "description": "Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed",
@@ -3094,6 +3125,30 @@
       }
     },
     {
+      "name": "missingConcurrencyOption",
+      "group": "style",
+      "description": "Reports Effect.all and Effect.forEach calls without an explicit concurrency option, which run sequentially by default",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377188
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const items: ReadonlyArray\u003cnumber\u003e\ndeclare const save: (n: number) =\u003e Effect.Effect\u003cvoid\u003e\n\nexport const program = Effect.forEach(items, save)\n",
+        "diagnostics": [
+          {
+            "start": 155,
+            "end": 169,
+            "text": "`Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)"
+          }
+        ]
+      }
+    },
+    {
       "name": "missingEffectServiceDependency",
       "group": "style",
       "description": "Checks that Effect.Service dependencies satisfy all required layer inputs",
@@ -3207,6 +3262,30 @@
             "start": 135,
             "end": 139,
             "text": "This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "onExitFailureToOnError",
+      "group": "style",
+      "description": "Suggests Effect.onError when an Effect.onExit callback only acts on failure",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377184
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Exit } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(\n  Effect.onExit((exit) =\u003e\n    Exit.isFailure(exit)\n      ? Effect.logError(\"failed\", { cause: exit.cause })\n      : Effect.void\n  )\n)\n",
+        "diagnostics": [
+          {
+            "start": 109,
+            "end": 122,
+            "text": "Effect.onError expresses this failure-only Effect.onExit callback more directly. effect(onExitFailureToOnError)"
           }
         ]
       }

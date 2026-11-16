@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:24-8:38) TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+  Fix 0: "Disable missingConcurrencyOption for this line"
+  Fix 1: "Disable missingConcurrencyOption for entire file"
+  Fix 2: "Add `concurrency: 1`"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingConcurrencyOption for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingConcurrencyOption for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add `concurrency: 1`" ===
+
+--- file:///.src/missingConcurrencyOption_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics missingConcurrencyOption:warning
+import { Effect } from "effect"
+
+declare const items: ReadonlyArray<number>
+declare const save: (n: number) => Effect.Effect<void>
+
+export const program = Effect.forEach(items, save, { concurrency: 1 })
+

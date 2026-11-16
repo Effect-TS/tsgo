@@ -6,6 +6,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/rules"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var PreferSchemaTypePropertyFix = fixable.Fixable{
@@ -24,7 +25,7 @@ func runPreferSchemaTypePropertyFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
-			Description: "Replace with 'typeof " + match.SchemaNameText + "." + match.PropertyName + "'",
+			Description: "Replace with 'typeof " + scanner.GetTextOfNode(match.SchemaName) + "." + match.PropertyName + "'",
 			Run: func(tracker *rewriter.Tracker) {
 				schemaType := tracker.NewQualifiedName(
 					tracker.DeepCloneNode(match.SchemaName),

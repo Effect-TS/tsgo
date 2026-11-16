@@ -1,4 +1,4 @@
-==== /.src/flatMapToMap.ts (19 flows) ====
+==== /.src/flatMapToMap.ts (27 flows) ====
 
 === Piping Flow ===
 Location: 4:37 - 6:2
@@ -297,3 +297,131 @@ Transformations (1):
       callee: unrelated.succeed
       args: (constant)
       outType: number
+
+=== Piping Flow ===
+Location: 58:42 - 60:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => Effect.succeed({ value: n }))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.succeed({ value: n })]
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 59:24 - 59:53
+Node: Effect.succeed({ value: n })
+Node Kind: KindCallExpression
+
+Subject: { value: n }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 63:49 - 65:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => Effect.succeed({ value: n } as const))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.succeed({ value: n } as const)]
+      outType: Effect<{ readonly value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 64:24 - 64:62
+Node: Effect.succeed({ value: n } as const)
+Node Kind: KindCallExpression
+
+Subject: { value: n } as const
+Subject Type: { readonly value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ readonly value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 68:51 - 70:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => Effect.succeed({ value: n } satisfies Wrapped))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.succeed({ value: n } satisfies Wrapped)]
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 69:24 - 69:71
+Node: Effect.succeed({ value: n } satisfies Wrapped)
+Node Kind: KindCallExpression
+
+Subject: { value: n } satisfies Wrapped
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 73:47 - 77:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => {\n    return Effect.succeed({ value: n })\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => {\n    return Effect.succeed({ value: n })\n  }]
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 75:11 - 75:40
+Node: Effect.succeed({ value: n })
+Node Kind: KindCallExpression
+
+Subject: { value: n }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>

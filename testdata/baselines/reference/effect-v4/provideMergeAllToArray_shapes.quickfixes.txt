@@ -15,6 +15,14 @@
   Fix 1: "Disable provideMergeAllToArray for entire file"
   Fix 2: "Pass the layers as an array to Effect.provide"
 
+[D4] (33:18-33:82) TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
+  Fix 0: "Disable provideMergeAllToArray for this line"
+  Fix 1: "Disable provideMergeAllToArray for entire file"
+
+[D5] (37:90-37:112) TS377161: Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)
+  Fix 0: "Disable provideMergeAllToArray for this line"
+  Fix 1: "Disable provideMergeAllToArray for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable provideMergeAllToArray for this line" ===
@@ -55,12 +63,13 @@ export const effectFnUntraced = Effect.fnUntraced(function*() {
 // MUST NOT TRIGGER: the curried Effect.provide is never applied to an effect
 export const unapplied = Effect.provide(Layer.mergeAll(ALayer, BLayer))
 
-// MUST NOT TRIGGER: explicit type arguments on Layer.mergeAll
+// MUST TRIGGER without a fix: Effect.provide<[Layer.Layer<A>, Layer.Layer<B>]>([ALayer, BLayer]) can be
+// written by hand, but the fix does not carry type arguments over
 export const explicitMergeAllTypeArguments = program.pipe(
   Effect.provide(Layer.mergeAll<[Layer.Layer<A>, Layer.Layer<B>]>(ALayer, BLayer))
 )
 
-// MUST NOT TRIGGER: explicit type arguments on Effect.provide
+// MUST TRIGGER without a fix: explicit type arguments on Effect.provide, which the fix does not carry over
 export const explicitProvideTypeArguments = program.pipe(Effect.provide<A, never, never>(Layer.mergeAll(ALayer)))
 
 // MUST NOT TRIGGER: Layer.mergeAll without arguments
@@ -110,12 +119,13 @@ export const effectFnUntraced = Effect.fnUntraced(function*() {
 // MUST NOT TRIGGER: the curried Effect.provide is never applied to an effect
 export const unapplied = Effect.provide(Layer.mergeAll(ALayer, BLayer))
 
-// MUST NOT TRIGGER: explicit type arguments on Layer.mergeAll
+// MUST TRIGGER without a fix: Effect.provide<[Layer.Layer<A>, Layer.Layer<B>]>([ALayer, BLayer]) can be
+// written by hand, but the fix does not carry type arguments over
 export const explicitMergeAllTypeArguments = program.pipe(
   Effect.provide(Layer.mergeAll<[Layer.Layer<A>, Layer.Layer<B>]>(ALayer, BLayer))
 )
 
-// MUST NOT TRIGGER: explicit type arguments on Effect.provide
+// MUST TRIGGER without a fix: explicit type arguments on Effect.provide, which the fix does not carry over
 export const explicitProvideTypeArguments = program.pipe(Effect.provide<A, never, never>(Layer.mergeAll(ALayer)))
 
 // MUST NOT TRIGGER: Layer.mergeAll without arguments
@@ -165,12 +175,13 @@ export const effectFnUntraced = Effect.fnUntraced(function*() {
 // MUST NOT TRIGGER: the curried Effect.provide is never applied to an effect
 export const unapplied = Effect.provide(Layer.mergeAll(ALayer, BLayer))
 
-// MUST NOT TRIGGER: explicit type arguments on Layer.mergeAll
+// MUST TRIGGER without a fix: Effect.provide<[Layer.Layer<A>, Layer.Layer<B>]>([ALayer, BLayer]) can be
+// written by hand, but the fix does not carry type arguments over
 export const explicitMergeAllTypeArguments = program.pipe(
   Effect.provide(Layer.mergeAll<[Layer.Layer<A>, Layer.Layer<B>]>(ALayer, BLayer))
 )
 
-// MUST NOT TRIGGER: explicit type arguments on Effect.provide
+// MUST TRIGGER without a fix: explicit type arguments on Effect.provide, which the fix does not carry over
 export const explicitProvideTypeArguments = program.pipe(Effect.provide<A, never, never>(Layer.mergeAll(ALayer)))
 
 // MUST NOT TRIGGER: Layer.mergeAll without arguments
@@ -181,3 +192,15 @@ export const noArguments = program.pipe(Effect.provide(Layer.mergeAll()))
 // @effect-diagnostics-next-line provideMergeAllToArray:off
 export const disabledNextLine = program.pipe(Effect.provide(Layer.mergeAll(ALayer, BLayer)))
 
+
+=== [D4] Fix 0: "Disable provideMergeAllToArray for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable provideMergeAllToArray for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable provideMergeAllToArray for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable provideMergeAllToArray for entire file" ===
+skipped by default

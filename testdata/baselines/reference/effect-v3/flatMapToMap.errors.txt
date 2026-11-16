@@ -7,9 +7,13 @@ Effect version: 3.19.19
 /.src/flatMapToMap.ts(23,39): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 /.src/flatMapToMap.ts(26,38): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 /.src/flatMapToMap.ts(31,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+/.src/flatMapToMap.ts(60,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+/.src/flatMapToMap.ts(65,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+/.src/flatMapToMap.ts(70,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+/.src/flatMapToMap.ts(75,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 
 
-==== /.src/flatMapToMap.ts (6 errors) ====
+==== /.src/flatMapToMap.ts (10 errors) ====
     // @effect-v3
     import { Effect, pipe } from "effect"
     
@@ -74,4 +78,38 @@ Effect version: 3.19.19
       succeed: <A>(value: A): A => value
     }
     export const shouldNotTriggerUnrelated = unrelated.flatMap(1, (n) => unrelated.succeed(n + 1))
+    
+    interface Wrapped {
+      readonly value: number
+    }
+    
+    // Should trigger: object literal in a concise arrow body needs parentheses after the fix
+    export const shouldTriggerObjectLiteral = Effect.succeed(1).pipe(
+      Effect.flatMap((n) => Effect.succeed({ value: n }))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+    )
+    
+    // Should trigger: object literal with `as const` in a concise arrow body
+    export const shouldTriggerObjectLiteralAsConst = Effect.succeed(1).pipe(
+      Effect.flatMap((n) => Effect.succeed({ value: n } as const))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+    )
+    
+    // Should trigger: object literal with `satisfies` in a concise arrow body
+    export const shouldTriggerObjectLiteralSatisfies = Effect.succeed(1).pipe(
+      Effect.flatMap((n) => Effect.succeed({ value: n } satisfies Wrapped))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+    )
+    
+    // Should trigger: object literal in a block body needs no parentheses
+    export const shouldTriggerObjectLiteralBlock = Effect.succeed(1).pipe(
+      Effect.flatMap((n) => {
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+        return Effect.succeed({ value: n })
+      })
+    )
     

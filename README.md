@@ -5,14 +5,14 @@ A wrapper for both [TSRS](https://github.com/oxc-project/tsrs) and [TypeScript-G
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.67.3`:
+The following target package versions are supported by `@effect/tsgo@0.69.1`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261103.1` |
-| tsrs | `0.21.0-ts7.1.0-beta` |
-| Oxlint | `1.88.0`, `1.89.0`, `1.90.0`, `1.91.0` |
-| oxlint-tsgolint | `7.0.2004`, `7.0.2005` |
+| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261115.1` |
+| tsrs | `0.25.0-ts7.1.0-beta` |
+| Oxlint | `1.91.0`, `1.92.0`, `1.93.0` |
+| oxlint-tsgolint | `7.0.2005`, `7.0.2006`, `7.0.2007` |
 <!-- supported-components:end -->
 
 ## Installation
@@ -185,6 +185,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-conditional-to-filter-or-fail.md"><code>flatMapConditionalToFilterOrFail</code></a></td><td>Suggests Effect.filterOrFail or Effect.filterOrElse when Effect.flatMap conditionally passes its input through with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-identity-to-flatten.md"><code>flatMapIdentityToFlatten</code></a></td><td>Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect&#39;s identity export referenced directly or an unannotated function returning its parameter</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-ignored-param-to-and-then.md"><code>flatMapIgnoredParamToAndThen</code></a></td><td>Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-provide-service-to-provide-service-effect.md"><code>flatMapProvideServiceToProvideServiceEffect</code></a></td><td>Suggests Effect.provideServiceEffect when a flatMap or andThen callback only forwards its parameter to Effect.provideService</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-to-map.md"><code>flatMapToMap</code></a></td><td>Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-to-tap.md"><code>flatMapToTap</code></a></td><td>Suggests Effect.tap when a flatMap or andThen callback runs an effect and returns its unchanged parameter</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/for-loop-push-to-for-each.md"><code>forLoopPushToForEach</code></a></td><td>Suggests Effect.forEach instead of a for-of loop that pushes yielded Effect results into an accumulator</td></tr>
@@ -198,11 +199,13 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-effect-to-match.md"><code>matchEffectToMatch</code></a></td><td>Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-to-result-or-option.md"><code>matchToResultOrOption</code></a></td><td>Suggests Effect.result, Effect.option or Effect.either when match handlers, or a map step followed by a catch step, only reify the outcome</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missed-pipeable-opportunity.md"><code>missedPipeableOpportunity</code></a></td><td>Suggests using .pipe() for nested function calls</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missing-concurrency-option.md"><code>missingConcurrencyOption</code></a></td><td>Reports Effect.all and Effect.forEach calls without an explicit concurrency option, which run sequentially by default</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missing-effect-service-dependency.md"><code>missingEffectServiceDependency</code></a></td><td>Checks that Effect.Service dependencies satisfy all required layer inputs</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missing-pipeable-signature.md"><code>missingPipeableSignature</code></a></td><td>Reports exported fixed-arity functions whose call signatures have no corresponding pipeable overload</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/multiple-catch-tag.md"><code>multipleCatchTag</code></a></td><td>Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/nested-effect-gen-yield.md"><code>nestedEffectGenYield</code></a></td><td>Warns when yielding a nested bare Effect.gen inside an existing Effect generator context</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/new-schema-class.md"><code>newSchemaClass</code></a></td><td>Suggests using Schema make instead of new for Schema classes</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/on-exit-failure-to-on-error.md"><code>onExitFailureToOnError</code></a></td><td>Suggests Effect.onError when an Effect.onExit callback only acts on failure</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/option-match-to-from-option.md"><code>optionMatchToFromOption</code></a></td><td>Suggests Effect.fromOption when Option.match or an Option tag conditional only converts Some to Effect.succeed and None to Effect.fail</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-barrel-import.md"><code>preferBarrelImport</code></a></td><td>Reports imports of individual modules from packages configured in barrelImportPackages that should be named imports from the package barrel</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-namespace-import.md"><code>preferNamespaceImport</code></a></td><td>Reports named imports from packages configured in namespaceImportPackages that should be namespace imports</td></tr>

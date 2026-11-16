@@ -1,0 +1,85 @@
+==== /.src/flatMapProvideServiceToProvideServiceEffect_preview.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 14:17 - 14:65
+Node: Context.Service<DatabaseConnection>("Database")
+Node Kind: KindCallExpression
+
+Subject: "Database"
+Subject Type: "Database"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service
+      args: (constant)
+      outType: Service<DatabaseConnection, DatabaseConnection>
+
+=== Piping Flow ===
+Location: 18:16 - 21:3
+Node: Effect.gen(function*() {\n  const db = yield* Effect.service(Database)\n  return yield* db.query("SELECT * FROM users")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const db = yield* Effect.service(Database)\n  return yield* db.query("SELECT * FROM users")\n}
+Subject Type: () => Generator<Effect<string, never, never> | Effect<DatabaseConnection, never, DatabaseConnection>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, DatabaseConnection>
+
+=== Piping Flow ===
+Location: 19:20 - 19:45
+Node: Effect.service(Database)
+Node Kind: KindCallExpression
+
+Subject: Database
+Subject Type: Service<DatabaseConnection, DatabaseConnection>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.service
+      args: (constant)
+      outType: Effect<DatabaseConnection, never, DatabaseConnection>
+
+=== Piping Flow ===
+Location: 20:16 - 20:48
+Node: db.query("SELECT * FROM users")
+Node Kind: KindCallExpression
+
+Subject: "SELECT * FROM users"
+Subject Type: "SELECT * FROM users"
+
+Transformations (1):
+  [0] kind: call
+      callee: db.query
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 23:31 - 25:2
+Node: makeConnection.pipe(\n  Effect.flatMap((conn) => Effect.provideService(program, Database, conn))\n)
+Node Kind: KindCallExpression
+
+Subject: makeConnection
+Subject Type: Effect<DatabaseConnection, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(conn) => Effect.provideService(program, Database, conn)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 24:27 - 24:74
+Node: Effect.provideService(program, Database, conn)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, DatabaseConnection>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [Database, conn]
+      outType: Effect<string, never, never>

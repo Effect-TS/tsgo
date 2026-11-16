@@ -34,19 +34,18 @@ pub static SCHEMA_STRUCT_WITH_TAG: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_struct_with_tag.go:36 SchemaStructWithTagMatch fe67a4346a4ae55f
+// go: internal/rules/schema_struct_with_tag.go:36 SchemaStructWithTagMatch 8572402ccf7233ed
 // SchemaStructWithTagMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the schemaStructWithTag pattern.
 #[derive(Clone)]
 pub struct SchemaStructWithTagMatch {
     pub source_file: P<SourceFile>,
-    pub location: TextRange, // Pre-computed error range for the diagnostic
-    pub call_node: P<Node>,  // The full Schema.Struct(...) call expression
-    pub tag_value: String,   // The string value extracted from Schema.Literal("...")
-    pub other_properties: Vec<P<Node>>, // All property assignment nodes in the object literal except _tag
+    pub location: TextRange,   // Pre-computed error range for the diagnostic
+    pub call_node: P<Node>,    // The full Schema.Struct(...) call expression
+    pub tag_property: P<Node>, // The _tag property assignment, initialized with Schema.Literal("...")
 }
 
-// go: internal/rules/schema_struct_with_tag.go:48 AnalyzeSchemaStructWithTag 96c7c9559dc20e63
+// go: internal/rules/schema_struct_with_tag.go:47 AnalyzeSchemaStructWithTag 96c7c9559dc20e63
 // AnalyzeSchemaStructWithTag finds all Schema.Struct({ _tag: Schema.Literal("..."), ... })
 // call expressions and returns match structs for each.
 //
@@ -81,7 +80,7 @@ pub fn analyze_schema_struct_with_tag(
     matches
 }
 
-// go: internal/rules/schema_struct_with_tag.go:77 analyzeSchemaStructWithTagNode 21703e96352d02cd
+// go: internal/rules/schema_struct_with_tag.go:76 analyzeSchemaStructWithTagNode 836bea7c37ab509f
 // analyzeSchemaStructWithTagNode checks a call expression for Schema.Struct({ _tag: Schema.Literal("...") }).
 pub(crate) fn analyze_schema_struct_with_tag_node(
     tp: &mut TypeParser<'_>,
@@ -145,25 +144,11 @@ pub(crate) fn analyze_schema_struct_with_tag_node(
             return None;
         }
 
-        let tag_value = literal_arguments[0].text().to_string();
-
-        // Collect all properties except _tag
-        let mut other_props = Vec::new();
-        for &p in properties {
-            if p == prop {
-                continue;
-            }
-            other_props.push(p);
-        }
-
-        // Extract the Schema expression from Schema.Struct (the left side of the property access)
-
         return Some(SchemaStructWithTagMatch {
             source_file: sf,
             location: ets_shim::scanner::get_error_range_for_node(sf, node),
             call_node: node,
-            tag_value,
-            other_properties: other_props,
+            tag_property: prop,
         });
     }
 

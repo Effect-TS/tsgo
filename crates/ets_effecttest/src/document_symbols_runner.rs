@@ -289,7 +289,7 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:244 noopProjectClient.RegisterContentMapperExtensions 62f089b106e57603
+    // go test: internal/effecttest/document_symbols_runner.go:249 noopProjectClient.RegisterContentMapperExtensions 0aabe3acb283399d
     fn register_content_mapper_extensions(
         &self,
         _ctx: &Context,
@@ -298,12 +298,12 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:248 noopProjectClient.RefreshDiagnostics 1fa72b9a191c0d7e
+    // go test: internal/effecttest/document_symbols_runner.go:253 noopProjectClient.RefreshDiagnostics 1fa72b9a191c0d7e
     fn refresh_diagnostics(&self, _ctx: &Context) -> Result<(), lsproto::Error> {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:250 noopProjectClient.PublishDiagnostics ab1d1535f82ebe39
+    // go test: internal/effecttest/document_symbols_runner.go:255 noopProjectClient.PublishDiagnostics ab1d1535f82ebe39
     fn publish_diagnostics(
         &self,
         _ctx: &Context,
@@ -312,23 +312,23 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:254 noopProjectClient.RefreshInlayHints 668cd929ff2e3caa
+    // go test: internal/effecttest/document_symbols_runner.go:259 noopProjectClient.RefreshInlayHints 668cd929ff2e3caa
     fn refresh_inlay_hints(&self, _ctx: &Context) -> Result<(), lsproto::Error> {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:256 noopProjectClient.RefreshCodeLens 5d473f1f00b00385
+    // go test: internal/effecttest/document_symbols_runner.go:261 noopProjectClient.RefreshCodeLens 5d473f1f00b00385
     fn refresh_code_lens(&self, _ctx: &Context) -> Result<(), lsproto::Error> {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:258 noopProjectClient.ProgressStart bcadecd239fe9cf5
+    // go test: internal/effecttest/document_symbols_runner.go:263 noopProjectClient.ProgressStart bcadecd239fe9cf5
     fn progress_start(&self, _message: &'static Message, _args: &[&dyn Display]) {}
 
-    // go test: internal/effecttest/document_symbols_runner.go:260 noopProjectClient.ProgressFinish 47aea43ac0426a21
+    // go test: internal/effecttest/document_symbols_runner.go:265 noopProjectClient.ProgressFinish 47aea43ac0426a21
     fn progress_finish(&self, _message: &'static Message, _args: &[&dyn Display]) {}
 
-    // go test: internal/effecttest/document_symbols_runner.go:262 noopProjectClient.SendTelemetry a764820ff2c95563
+    // go test: internal/effecttest/document_symbols_runner.go:267 noopProjectClient.SendTelemetry a764820ff2c95563
     fn send_telemetry(
         &self,
         _ctx: &Context,
@@ -337,15 +337,15 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:264 noopProjectClient.IsActive 22c40ce91f45c1ed
+    // go test: internal/effecttest/document_symbols_runner.go:269 noopProjectClient.IsActive 22c40ce91f45c1ed
     fn is_active(&self) -> bool {
         true
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:266 noopProjectClient.SetLocale 1cdc254d51b8948c
+    // go test: internal/effecttest/document_symbols_runner.go:271 noopProjectClient.SetLocale 1cdc254d51b8948c
     fn set_locale(&self, _locale: &str) {}
 
-    // go test: internal/effecttest/document_symbols_runner.go:268 noopProjectClient.GetLocale 7e39d049afb16543
+    // go test: internal/effecttest/document_symbols_runner.go:273 noopProjectClient.GetLocale 7e39d049afb16543
     fn get_locale(&self) -> Locale {
         Locale::DEFAULT
     }

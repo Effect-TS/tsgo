@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+
+
+==== /.src/onExitFailureToOnError_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    import { Effect, Exit } from "effect"
+    
+    declare const program: Effect.Effect<number, string>
+    
+    program.pipe(
+      Effect.onExit((exit) =>
+        Exit.isFailure(exit)
+          ? Effect.logError("failed", { cause: exit.cause })
+          : Effect.void
+      )
+    )
+    

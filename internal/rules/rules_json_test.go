@@ -471,11 +471,14 @@ func evaluatePreviewWithoutHooks(t *testing.T, version bundledeffect.EffectVersi
 
 	programConfig := tsoptions.NewParsedCommandLine(compilerOptions, programFileNames, nil, "/", tspath.CaseSensitive)
 	programConfig.ConfigFile = parsedConfig.ConfigFile
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         programConfig,
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	ctx := context.Background()
 	forceFullTypeCheck(ctx, program)

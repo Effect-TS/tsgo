@@ -12,6 +12,7 @@ type PathPatternInput = vfsmatch.PathPatternInput
 type SpecMatcher = vfsmatch.SpecMatcher
 const UnlimitedDepth = vfsmatch.UnlimitedDepth
 type Usage = vfsmatch.Usage
+const UsageContentMapperInclude = vfsmatch.UsageContentMapperInclude
 const UsageDirectories = vfsmatch.UsageDirectories
 const UsageExclude = vfsmatch.UsageExclude
 const UsageFiles = vfsmatch.UsageFiles

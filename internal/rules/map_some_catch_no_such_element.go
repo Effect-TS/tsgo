@@ -52,7 +52,7 @@ func AnalyzeMapSomeCatchNoSuchElement(tp *typeparser.TypeParser, sf *ast.SourceF
 		).All() {
 			start := sequence.Start()
 			wrap, catch := sequence.Transformations().At(0), sequence.Transformations().At(1)
-			if hasExplicitTypeArguments(&wrap) || hasExplicitTypeArguments(&catch) {
+			if HasExplicitTypeArguments(&wrap) || HasExplicitTypeArguments(&catch) {
 				continue
 			}
 			if !mapSomeCatchHandlerIsPlain(catch.Args().At(1)) || !catchHandlerReturnsSucceedNone(tp, catch.Args().At(1)) {

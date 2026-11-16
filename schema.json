@@ -2571,6 +2571,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value"
         },
+        "flatMapProvideServiceToProvideServiceEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.provideServiceEffect when a flatMap or andThen callback only forwards its parameter to Effect.provideService"
+        },
         "flatMapToMap": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2746,6 +2751,11 @@
           "default": "off",
           "description": "Suggests using .pipe() for nested function calls"
         },
+        "missingConcurrencyOption": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports Effect.all and Effect.forEach calls without an explicit concurrency option, which run sequentially by default"
+        },
         "missingEffectContext": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",
@@ -2825,6 +2835,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
           "description": "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package"
+        },
+        "onExitFailureToOnError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.onError when an Effect.onExit callback only acts on failure"
         },
         "optionMatchToFromOption": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

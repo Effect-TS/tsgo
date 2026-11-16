@@ -19,13 +19,10 @@ pub static CATCH_IF_TAG_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_catch_if_tag_to_catch_tag_fix,
 });
 
-// go: internal/fixables/catch_if_tag_to_catch_tag.go:19 runCatchIfTagToCatchTagFix 3ed0efb13d6148aa
+// go: internal/fixables/catch_if_tag_to_catch_tag.go:19 runCatchIfTagToCatchTagFix 0a512b2a274acd50
 fn run_catch_if_tag_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_catch_if_tag_to_catch_tag(&mut ctx.type_parser, Some(source_file)) {
-        if !m.can_fix {
-            continue;
-        }
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }

@@ -22,7 +22,7 @@ var AllOfMapToForEachFix = fixable.Fixable{
 
 func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 	for _, match := range rules.AnalyzeAllOfMapToForEach(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
-		if !match.CanFix {
+		if match.CallNode == nil {
 			continue
 		}
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
@@ -30,7 +30,8 @@ func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 		// The generic parameter lists of Array#map, Effect.all, and Effect.forEach
 		// differ, so an explicit type argument cannot be moved safely.
-		if match.HasTypeArguments {
+		if hasCallTypeArguments(match.CallNode.AsCallExpression()) ||
+			hasCallTypeArguments(match.Callback.Parent.AsCallExpression()) {
 			continue
 		}
 
@@ -55,4 +56,8 @@ func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 		continue
 	}
 	return nil
+}
+
+func hasCallTypeArguments(call *ast.CallExpression) bool {
+	return call != nil && call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0
 }

@@ -168,7 +168,7 @@ func analyzeConditionalRefailHandler(
 	}
 
 	condition := branch.Condition().Subject()
-	if !isConditionalRefailPredicate(tp, c, condition, parameterSymbol) {
+	if !isConditionalRefailPredicate(tp, condition, parameterSymbol) {
 		return "", false
 	}
 
@@ -207,7 +207,7 @@ func isConditionalRefailExpression(tp *typeparser.TypeParser, c *checker.Checker
 	return actualSymbol != nil && checker.Checker_getSymbolIfSameReference(c, actualSymbol, parameterSymbol) != nil
 }
 
-func isConditionalRefailPredicate(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, parameterSymbol *ast.Symbol) bool {
+func isConditionalRefailPredicate(tp *typeparser.TypeParser, node *ast.Node, parameterSymbol *ast.Symbol) bool {
 	node = unwrapTransparentExpression(node)
 	if node == nil {
 		return false
@@ -215,10 +215,10 @@ func isConditionalRefailPredicate(tp *typeparser.TypeParser, c *checker.Checker,
 
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindTypeOfExpression:
-		return conditionalRefailNodeContainsParameter(tp, c, node, parameterSymbol)
+		return tp.ReferencesToSymbol(node, parameterSymbol).Len() != 0
 	case ast.KindPrefixUnaryExpression:
 		prefix := node.AsPrefixUnaryExpression()
-		return prefix != nil && prefix.Operator == ast.KindExclamationToken && isConditionalRefailPredicate(tp, c, prefix.Operand, parameterSymbol)
+		return prefix != nil && prefix.Operator == ast.KindExclamationToken && isConditionalRefailPredicate(tp, prefix.Operand, parameterSymbol)
 	case ast.KindBinaryExpression:
 		binary := node.AsBinaryExpression()
 		if binary == nil || binary.OperatorToken == nil {
@@ -226,43 +226,18 @@ func isConditionalRefailPredicate(tp *typeparser.TypeParser, c *checker.Checker,
 		}
 		switch binary.OperatorToken.Kind {
 		case ast.KindAmpersandAmpersandToken, ast.KindBarBarToken:
-			return isConditionalRefailPredicate(tp, c, binary.Left, parameterSymbol) || isConditionalRefailPredicate(tp, c, binary.Right, parameterSymbol)
+			return isConditionalRefailPredicate(tp, binary.Left, parameterSymbol) || isConditionalRefailPredicate(tp, binary.Right, parameterSymbol)
 		case ast.KindInstanceOfKeyword:
-			return conditionalRefailNodeContainsParameter(tp, c, binary.Left, parameterSymbol)
+			return tp.ReferencesToSymbol(binary.Left, parameterSymbol).Len() != 0
 		case ast.KindInKeyword:
-			return conditionalRefailNodeContainsParameter(tp, c, binary.Right, parameterSymbol)
+			return tp.ReferencesToSymbol(binary.Right, parameterSymbol).Len() != 0
 		case ast.KindEqualsEqualsToken, ast.KindEqualsEqualsEqualsToken,
 			ast.KindExclamationEqualsToken, ast.KindExclamationEqualsEqualsToken,
 			ast.KindLessThanToken, ast.KindLessThanEqualsToken,
 			ast.KindGreaterThanToken, ast.KindGreaterThanEqualsToken:
-			return conditionalRefailNodeContainsParameter(tp, c, node, parameterSymbol)
+			return tp.ReferencesToSymbol(node, parameterSymbol).Len() != 0
 		}
 	}
 
 	return false
-}
-
-func conditionalRefailNodeContainsParameter(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, parameterSymbol *ast.Symbol) bool {
-	if node == nil || parameterSymbol == nil {
-		return false
-	}
-	found := false
-	var visit func(*ast.Node) bool
-	visit = func(current *ast.Node) bool {
-		if current == nil || found {
-			return found
-		}
-		if current.Kind == ast.KindIdentifier {
-			actual := tp.GetSymbolAtLocation(current)
-			if actual != nil && checker.Checker_getSymbolIfSameReference(c, actual, parameterSymbol) != nil {
-				found = true
-				return true
-			}
-		}
-		//ets:ast-walk scans the predicate for references to the caught error parameter
-		current.ForEachChild(visit)
-		return found
-	}
-	visit(node)
-	return found
 }

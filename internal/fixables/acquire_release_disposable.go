@@ -25,7 +25,7 @@ func runAcquireReleaseDisposableFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.HasTypeArguments {
+		if hasCallTypeArguments(match.CallNode.AsCallExpression()) {
 			continue
 		}
 

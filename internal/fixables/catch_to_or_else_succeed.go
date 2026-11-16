@@ -31,7 +31,7 @@ func runCatchToOrElseSucceedFix(ctx *fixable.Context) []ls.CodeAction {
 			Run: func(tracker *rewriter.Tracker) {
 				tracker.ReplaceNode(sf, match.Callee, tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("orElseSucceed")...), nil)
 
-				tracker.ReplaceNode(sf, match.SucceedCallExpression, match.SucceedArgument, nil)
+				tracker.ReplaceNode(sf, match.SucceedCallExpression, replacementForExpression(tracker, match.SucceedCallExpression, match.SucceedArgument), nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

@@ -136,13 +136,13 @@ pub(crate) fn conditional_refail_methods(
     }
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:122 analyzeConditionalRefailHandler 368d80b3bfc3553d
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:122 analyzeConditionalRefailHandler 77b45701c5c2baf4
 pub(crate) fn analyze_conditional_refail_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
     methods: ConditionalRefailCatchMethods,
 ) -> Option<&'static str> {
-    let dispatch = tp.parse_returning_dispatch(handler_node)?;
+    let dispatch = tp.parse_returning_dispatch_exported(handler_node)?;
     let result_dispatch: &ResultDispatch = dispatch.dispatch();
     if dispatch.params().len() != 1 || result_dispatch.branches().len() != 1 {
         return None;
@@ -264,7 +264,7 @@ pub(crate) fn is_conditional_refail_expression(
     tp.checker().get_symbol_if_same_reference(actual_symbol, parameter_symbol).is_some()
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:210 isConditionalRefailPredicate 3917a5a0da49e28a
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:210 isConditionalRefailPredicate 93451710a9cadb3f
 pub(crate) fn is_conditional_refail_predicate(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
@@ -278,9 +278,7 @@ pub(crate) fn is_conditional_refail_predicate(
         Kind::CallExpression
         | Kind::PropertyAccessExpression
         | Kind::ElementAccessExpression
-        | Kind::TypeOfExpression => {
-            conditional_refail_node_contains_parameter(tp, Some(node), Some(parameter_symbol))
-        }
+        | Kind::TypeOfExpression => !tp.references_to_symbol(node, parameter_symbol).is_empty(),
         Kind::PrefixUnaryExpression => {
             let prefix = node.as_prefix_unary_expression();
             prefix.operator() == Kind::ExclamationToken
@@ -297,16 +295,12 @@ pub(crate) fn is_conditional_refail_predicate(
                             parameter_symbol,
                         )
                 }
-                Kind::InstanceOfKeyword => conditional_refail_node_contains_parameter(
-                    tp,
-                    Some(binary.left()),
-                    Some(parameter_symbol),
-                ),
-                Kind::InKeyword => conditional_refail_node_contains_parameter(
-                    tp,
-                    Some(binary.right()),
-                    Some(parameter_symbol),
-                ),
+                Kind::InstanceOfKeyword => {
+                    !tp.references_to_symbol(binary.left(), parameter_symbol).is_empty()
+                }
+                Kind::InKeyword => {
+                    !tp.references_to_symbol(binary.right(), parameter_symbol).is_empty()
+                }
                 Kind::EqualsEqualsToken
                 | Kind::EqualsEqualsEqualsToken
                 | Kind::ExclamationEqualsToken
@@ -314,49 +308,12 @@ pub(crate) fn is_conditional_refail_predicate(
                 | Kind::LessThanToken
                 | Kind::LessThanEqualsToken
                 | Kind::GreaterThanToken
-                | Kind::GreaterThanEqualsToken => conditional_refail_node_contains_parameter(
-                    tp,
-                    Some(node),
-                    Some(parameter_symbol),
-                ),
+                | Kind::GreaterThanEqualsToken => {
+                    !tp.references_to_symbol(node, parameter_symbol).is_empty()
+                }
                 _ => false,
             }
         }
         _ => false,
     }
-}
-
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:245 conditionalRefailNodeContainsParameter b70e6bfeb64a1eb8
-pub(crate) fn conditional_refail_node_contains_parameter(
-    tp: &mut TypeParser<'_>,
-    node: Option<P<Node>>,
-    parameter_symbol: Option<P<Symbol>>,
-) -> bool {
-    let (Some(node), Some(parameter_symbol)) = (node, parameter_symbol) else {
-        return false;
-    };
-    let mut found = false;
-
-    // Rust: Go's recursive `visit` closure is a nested function.
-    fn visit(
-        tp: &mut TypeParser<'_>,
-        current: P<Node>,
-        parameter_symbol: P<Symbol>,
-        found: &mut bool,
-    ) -> bool {
-        if *found {
-            return *found;
-        }
-        if current.kind() == Kind::Identifier
-            && let Some(actual) = tp.get_symbol_at_location(current)
-            && tp.checker().get_symbol_if_same_reference(actual, parameter_symbol).is_some()
-        {
-            *found = true;
-            return true;
-        }
-        current.for_each_child(&mut |child| visit(tp, child, parameter_symbol, found));
-        *found
-    }
-    visit(tp, node, parameter_symbol, &mut found);
-    found
 }

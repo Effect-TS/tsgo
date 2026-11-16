@@ -9,8 +9,6 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectMajorVersion, PipingFlow, PipingFlowTransformation, TypeParser};
 
-use crate::piping_flow::has_explicit_type_arguments;
-
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_OR_DIE_EXPRESSES_ESCALATING_EVERY_TYPED_FAILURE_INTO_A_DEFECT_MORE_DIRECTLY_THAN_EFFECT_0_WITH_AN_IDENTITY_FORWARDING_EFFECT_DIE_HANDLER_EFFECT_CATCH_DIE_TO_OR_DIE;
 
@@ -42,7 +40,7 @@ pub static CATCH_DIE_TO_OR_DIE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_die_to_or_die.go:42 CatchDieToOrDieMatch 40020130086d7eba
+// go: internal/rules/catch_die_to_or_die.go:42 CatchDieToOrDieMatch 1f8e027605e1cd3a
 // CatchDieToOrDieMatch holds the nodes needed by the diagnostic and fix.
 #[derive(Clone)]
 pub struct CatchDieToOrDieMatch {
@@ -50,10 +48,9 @@ pub struct CatchDieToOrDieMatch {
     pub location: TextRange,
     pub transformation: PipingFlowTransformation,
     pub catch_method_name: &'static str,
-    pub has_type_arguments: bool,
 }
 
-// go: internal/rules/catch_die_to_or_die.go:52 AnalyzeCatchDieToOrDie 6b95a0907e94a1fd
+// go: internal/rules/catch_die_to_or_die.go:51 AnalyzeCatchDieToOrDie f65b6d8bed6a0945
 // AnalyzeCatchDieToOrDie finds Effect.catch/catchAll transformations whose
 // handler is Effect.die or forwards its sole argument unchanged to Effect.die.
 //
@@ -96,7 +93,6 @@ pub fn analyze_catch_die_to_or_die(
                     source_file: sf,
                     location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                     catch_method_name: method_name,
-                    has_type_arguments: has_explicit_type_arguments(Some(&transformation)),
                     transformation,
                 });
             }
@@ -106,7 +102,7 @@ pub fn analyze_catch_die_to_or_die(
     matches
 }
 
-// go: internal/rules/catch_die_to_or_die.go:87 catchDieMethod 0de18339afa85519
+// go: internal/rules/catch_die_to_or_die.go:85 catchDieMethod 0de18339afa85519
 //
 // Rust: Go's `(name, ok)` result is `Some(name)` when ok.
 pub(crate) fn catch_die_method(

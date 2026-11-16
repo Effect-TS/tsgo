@@ -41,7 +41,7 @@ pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE: LazyLock<Rule> = LazyLock::
     },
 });
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:39 ProvideLayerSucceedToProvideServiceMatch adb0d2a4783ec3b1
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:39 ProvideLayerSucceedToProvideServiceMatch 593c440954fc2042
 //
 // Rust: Go's `*PipingFlowTransformation` (a pointer to a local copy) is an owned copy.
 #[derive(Clone)]
@@ -51,10 +51,13 @@ pub struct ProvideLayerSucceedToProvideServiceMatch {
     pub provide_transformation: PipingFlowTransformation,
     pub service_node: P<Node>,
     pub implementation_node: Option<P<Node>>,
+    // LayerTransformation is the Layer.succeed or Layer.effect step; the fix
+    // cannot carry its explicit type arguments over.
+    pub layer_transformation: PipingFlowTransformation,
     pub replacement_method_name: &'static str,
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:48 AnalyzeProvideLayerSucceedToProvideService 4a75a6b494388776
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:51 AnalyzeProvideLayerSucceedToProvideService 9b428868e6645066
 //
 // Rust: Go's checker argument is the parser's checker; Go ignores it, so it is dropped.
 pub fn analyze_provide_layer_succeed_to_provide_service(
@@ -79,7 +82,7 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
                 continue;
             }
 
-            let Some((service, implementation, replacement)) =
+            let Some((layer, service, implementation, replacement)) =
                 inline_single_service_layer(tp, *provide.args().at(0))
             else {
                 continue;
@@ -96,6 +99,7 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
                 provide_transformation: provide,
                 service_node: service,
                 implementation_node: implementation,
+                layer_transformation: layer,
                 replacement_method_name: replacement,
             });
         }
@@ -103,13 +107,13 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
     matches
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:80 inlineSingleServiceLayer 9bfb76915b16917d
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:84 inlineSingleServiceLayer bb6e256a24612d3b
 //
-// Rust: Go's `(service, implementation, replacement, ok)` is an `Option`.
+// Rust: Go's `(layer, service, implementation, replacement, ok)` is an `Option`.
 pub(crate) fn inline_single_service_layer(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
-) -> Option<(P<Node>, Option<P<Node>>, &'static str)> {
+) -> Option<(PipingFlowTransformation, P<Node>, Option<P<Node>>, &'static str)> {
     let node = ast::skip_parentheses(node);
     let flow = tp.longest_piping_flow_at(node, false);
     if flow.as_ref().is_none_or(|flow| flow.node() != node)
@@ -119,7 +123,6 @@ pub(crate) fn inline_single_service_layer(
             &|_: &mut TypeParser<'_>, subject: &PipingFlowSubject| subject.node().is_some(),
             &[&|_: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| {
                 transformation.args().len() == 1
-                    && transformation.type_arguments().is_none_or(|args| args.nodes().is_empty())
             }],
         )
     {
@@ -136,5 +139,5 @@ pub(crate) fn inline_single_service_layer(
     } else {
         return None;
     };
-    Some((*transformation.args().at(0), flow.subject().node(), replacement))
+    Some((transformation.clone(), *transformation.args().at(0), flow.subject().node(), replacement))
 }

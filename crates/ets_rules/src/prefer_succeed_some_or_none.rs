@@ -3,12 +3,10 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node, NodeList, SourceFile};
+use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::{
-    PipingFlow, PipingFlowSubject, PipingFlowTransformation, TransformationKind, TypeParser,
-};
+use ets_typeparser::{PipingFlow, PipingFlowSubject, PipingFlowTransformation, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
@@ -42,29 +40,22 @@ pub static PREFER_SUCCEED_SOME_OR_NONE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/prefer_succeed_some_or_none.go:42 PreferSucceedSomeOrNoneMatch 303ed4a64acfba6f
+// go: internal/rules/prefer_succeed_some_or_none.go:42 PreferSucceedSomeOrNoneMatch 95d6588ace5ce94f
 // PreferSucceedSomeOrNoneMatch holds the nodes needed by the diagnostic and quick fix.
 //
-// Rust: Go's `*PipingFlow` (nil unless the succeed step is a call, pipe or pipeable step) is an owned copy.
+// Rust: Go's `*PipingFlow` is an owned copy.
 #[derive(Clone)]
 pub struct PreferSucceedSomeOrNoneMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
+    // Flow's first TransformationCount steps end in Effect.succeed; for
+    // succeedSome the step before it is Option.some.
     pub flow: Option<PipingFlow>,
     pub transformation_count: i64,
-    pub replacement_name: &'static str,
-    pub value_node: Option<P<Node>>,
-    pub value_type_arguments: Option<P<NodeList>>,
+    pub replacement_name: &'static str, // succeedNone or succeedSome
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:52 normalizedOptionInput b45c887c637dfa54
-pub(crate) struct NormalizedOptionInput {
-    pub(crate) replacement_name: &'static str,
-    pub(crate) value_node: Option<P<Node>>,
-    pub(crate) value_type_arguments: Option<P<NodeList>>,
-}
-
-// go: internal/rules/prefer_succeed_some_or_none.go:61 AnalyzePreferSucceedSomeOrNone b2d8b7eb7a0f5074
+// go: internal/rules/prefer_succeed_some_or_none.go:55 AnalyzePreferSucceedSomeOrNone f2bcfdbe0cf1dde0
 // AnalyzePreferSucceedSomeOrNone finds piping flows in which Option.none or
 // Option.some feeds directly into Effect.succeed. This covers both nested calls
 // and pipe forms such as Option.none().pipe(Effect.succeed).
@@ -96,16 +87,7 @@ pub fn analyze_prefer_succeed_some_or_none(
             },
             &[&is_succeed],
         ) {
-            matches.push(prefer_succeed_some_or_none_match(
-                sf,
-                flow,
-                0,
-                &NormalizedOptionInput {
-                    replacement_name: "succeedNone",
-                    value_node: None,
-                    value_type_arguments: None,
-                },
-            ));
+            matches.push(prefer_succeed_some_or_none_match(sf, flow, 0, "succeedNone"));
         }
 
         let sequences = PipingFlow::find_transformation_sequences(
@@ -123,50 +105,37 @@ pub fn analyze_prefer_succeed_some_or_none(
             ],
         );
         for sequence in sequences.iter().flatten() {
-            let option_index = sequence.start();
             matches.push(prefer_succeed_some_or_none_match(
                 sf,
                 flow,
-                option_index + 1,
-                &NormalizedOptionInput {
-                    replacement_name: "succeedSome",
-                    value_node: PipingFlow::transformation_input_node(Some(flow), option_index),
-                    value_type_arguments: flow.transformations().at(option_index).type_arguments(),
-                },
+                sequence.start() + 1,
+                "succeedSome",
             ));
         }
     }
     matches
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:100 preferSucceedSomeOrNoneMatch 78cc7a7cbfb55d18
+// go: internal/rules/prefer_succeed_some_or_none.go:89 preferSucceedSomeOrNoneMatch cd2d011ac1e5cc84
 pub(crate) fn prefer_succeed_some_or_none_match(
     sf: P<SourceFile>,
     flow: &PipingFlow,
     succeed_index: i64,
-    option_input: &NormalizedOptionInput,
+    replacement_name: &'static str,
 ) -> PreferSucceedSomeOrNoneMatch {
-    let transformation = flow.transformations().at(succeed_index);
-    let mut m = PreferSucceedSomeOrNoneMatch {
+    PreferSucceedSomeOrNoneMatch {
         source_file: sf,
-        location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
-        flow: None,
-        transformation_count: 0,
-        replacement_name: option_input.replacement_name,
-        value_node: option_input.value_node,
-        value_type_arguments: option_input.value_type_arguments,
-    };
-    if transformation.kind() == TransformationKind::Call
-        || transformation.kind() == TransformationKind::Pipe
-        || transformation.kind() == TransformationKind::Pipeable
-    {
-        m.flow = Some(flow.clone());
-        m.transformation_count = succeed_index + 1;
+        location: ets_shim::scanner::get_error_range_for_node(
+            sf,
+            flow.transformations().at(succeed_index).callee(),
+        ),
+        flow: Some(flow.clone()),
+        transformation_count: succeed_index + 1,
+        replacement_name,
     }
-    m
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:118 isOptionNoneCall 44b554b98187b299
+// go: internal/rules/prefer_succeed_some_or_none.go:99 isOptionNoneCall 44b554b98187b299
 pub(crate) fn is_option_none_call(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

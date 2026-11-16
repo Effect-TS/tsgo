@@ -36,9 +36,6 @@ type FlatMapIdentityToFlattenMatch struct {
 	Location       core.TextRange
 	Callee         *ast.Node
 	Transformation *typeparser.PipingFlowTransformation
-	// EffectModuleNode is the receiver of Callee when it is an Effect module
-	// property access, nil when flatMap is referenced without a module.
-	EffectModuleNode *ast.Node
 }
 
 // AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback is
@@ -66,20 +63,12 @@ func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Check
 				tp.EffectType(success) == nil {
 				continue
 			}
-			var effectModuleNode *ast.Node
-			if callee.Kind == ast.KindPropertyAccessExpression {
-				receiver := callee.AsPropertyAccessExpression().Expression
-				if tp.IsExpressionEffectModule(receiver) {
-					effectModuleNode = receiver
-				}
-			}
 			transformation := step
 			matches = append(matches, FlatMapIdentityToFlattenMatch{
-				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, callee),
-				Callee:           callee,
-				Transformation:   &transformation,
-				EffectModuleNode: effectModuleNode,
+				SourceFile:     sf,
+				Location:       scanner.GetErrorRangeForNode(sf, callee),
+				Callee:         callee,
+				Transformation: &transformation,
 			})
 		}
 	}

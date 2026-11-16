@@ -1,4 +1,4 @@
-==== /.src/catchToOrElseSucceed.ts (17 flows) ====
+==== /.src/catchToOrElseSucceed.ts (25 flows) ====
 
 === Piping Flow ===
 Location: 6:34 - 8:2
@@ -269,3 +269,131 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 59:42 - 61:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll(() => Effect.succeed({ ok: false }))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [() => Effect.succeed({ ok: false })]
+      outType: Effect<{ ok: boolean; }, never, never>
+
+=== Piping Flow ===
+Location: 60:24 - 60:54
+Node: Effect.succeed({ ok: false })
+Node Kind: KindCallExpression
+
+Subject: { ok: false }
+Subject Type: { ok: false; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ ok: boolean; }, never, never>
+
+=== Piping Flow ===
+Location: 64:49 - 66:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll(() => Effect.succeed({ ok: false } as const))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [() => Effect.succeed({ ok: false } as const)]
+      outType: Effect<{ readonly ok: false; }, never, never>
+
+=== Piping Flow ===
+Location: 65:24 - 65:63
+Node: Effect.succeed({ ok: false } as const)
+Node Kind: KindCallExpression
+
+Subject: { ok: false } as const
+Subject Type: { readonly ok: false; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ readonly ok: false; }, never, never>
+
+=== Piping Flow ===
+Location: 69:51 - 71:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll(() => Effect.succeed({ ok: false } satisfies Result))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [() => Effect.succeed({ ok: false } satisfies Result)]
+      outType: Effect<{ ok: false; }, never, never>
+
+=== Piping Flow ===
+Location: 70:24 - 70:71
+Node: Effect.succeed({ ok: false } satisfies Result)
+Node Kind: KindCallExpression
+
+Subject: { ok: false } satisfies Result
+Subject Type: { ok: false; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ ok: false; }, never, never>
+
+=== Piping Flow ===
+Location: 74:47 - 78:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll(() => {\n    return Effect.succeed({ ok: false })\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [() => {\n    return Effect.succeed({ ok: false })\n  }]
+      outType: Effect<{ ok: boolean; }, never, never>
+
+=== Piping Flow ===
+Location: 76:11 - 76:41
+Node: Effect.succeed({ ok: false })
+Node Kind: KindCallExpression
+
+Subject: { ok: false }
+Subject Type: { ok: false; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ ok: boolean; }, never, never>

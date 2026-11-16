@@ -12,7 +12,6 @@ use ets_typeparser::{
     PipingFlowTransformation, TypeParser,
 };
 
-use crate::map_map_error_to_map_both::map_map_error_path_has_type_arguments;
 use crate::option_match_to_from_option::same_identifier_reference;
 use crate::piping_flow::has_explicit_type_arguments;
 
@@ -47,7 +46,7 @@ pub static MATCH_TO_RESULT_OR_OPTION: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/match_to_result_or_option.go:37 MatchToResultOrOptionMatch 5569f9e7e6bc3842
+// go: internal/rules/match_to_result_or_option.go:37 MatchToResultOrOptionMatch 778108b9a3134f72
 #[derive(Clone)]
 pub struct MatchToResultOrOptionMatch {
     pub source_file: P<SourceFile>,
@@ -59,10 +58,9 @@ pub struct MatchToResultOrOptionMatch {
     pub end: i64,
     pub replacement_name: &'static str, // result, option or either
     pub source_name: String,            // match, matchEffect, map/catch or map/catchAll
-    pub fixable: bool,
 }
 
-// go: internal/rules/match_to_result_or_option.go:51 reifyingKind 790565b4fbea0540
+// go: internal/rules/match_to_result_or_option.go:50 reifyingKind 790565b4fbea0540
 // reifyingKind is the container a constructor wraps into (result, option or
 // either) and whether it wraps the failure.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
@@ -71,13 +69,13 @@ pub(crate) struct ReifyingKind {
     failure: bool,
 }
 
-// go: internal/rules/match_to_result_or_option.go:56 reifyingNone 89ffc2d02b21376f
+// go: internal/rules/match_to_result_or_option.go:55 reifyingNone 89ffc2d02b21376f
 const REIFYING_NONE: ReifyingKind = ReifyingKind { replacement: "option", failure: true };
 
 /// Rust-only: Go's `classify` handler classifiers share this signature.
 type ReifyingClassifier = fn(&mut TypeParser<'_>, Option<P<Node>>) -> Option<ReifyingKind>;
 
-// go: internal/rules/match_to_result_or_option.go:61 AnalyzeMatchToResultOrOption a4b50a8a6a17e690
+// go: internal/rules/match_to_result_or_option.go:60 AnalyzeMatchToResultOrOption d35643753467edad
 // AnalyzeMatchToResultOrOption finds Effect.match and Effect.matchEffect steps
 // whose handlers only wrap the value and the error, and adjacent Effect.map and
 // Effect.catch (Effect.catchAll in v3) steps that do the same.
@@ -201,14 +199,10 @@ fn push_match_to_result_or_option_match(
         end,
         replacement_name: on_success.replacement,
         source_name,
-        fixable: !map_map_error_path_has_type_arguments(
-            flow.transformations().at(start),
-            flow.transformations().at(end),
-        ),
     });
 }
 
-// go: internal/rules/match_to_result_or_option.go:133 reifyingHandler 4e1408a343c8af76
+// go: internal/rules/match_to_result_or_option.go:131 reifyingHandler 4e1408a343c8af76
 // reifyingHandler classifies a handler that wraps its argument into a
 // container: the constructor itself, an identity forwarder to it, or a
 // function whose body is Option.none().
@@ -232,7 +226,7 @@ pub(crate) fn reifying_handler(
     matched.then_some(REIFYING_NONE)
 }
 
-// go: internal/rules/match_to_result_or_option.go:148 succeedReifyingHandler 2df450b484148fdc
+// go: internal/rules/match_to_result_or_option.go:146 succeedReifyingHandler 90f0c50c24e2d6d7
 // succeedReifyingHandler classifies a handler whose body lifts a reified
 // value with Effect.succeed: Effect.succeed(Result.fail(e)) for its parameter
 // e, or Effect.succeed(Option.none()), in any flow spelling.
@@ -288,7 +282,7 @@ pub(crate) fn succeed_reifying_handler(
     matched.then_some(kind.get())
 }
 
-// go: internal/rules/match_to_result_or_option.go:181 reifyingConstructor 72a5b36652f6f49c
+// go: internal/rules/match_to_result_or_option.go:179 reifyingConstructor 72a5b36652f6f49c
 // reifyingConstructor classifies a reference to a constructor that wraps a
 // value or an error into a Result, Option or Either.
 //
@@ -315,7 +309,7 @@ pub(crate) fn reifying_constructor(
     }
 }
 
-// go: internal/rules/match_to_result_or_option.go:201 isReifyingNoneCall 1ae5307dadd929d9
+// go: internal/rules/match_to_result_or_option.go:199 isReifyingNoneCall 1ae5307dadd929d9
 // isReifyingNoneCall reports whether node is Option.none(), with or without
 // explicit type arguments.
 //
@@ -334,7 +328,7 @@ pub(crate) fn is_reifying_none_call(tp: &mut TypeParser<'_>, node: Option<P<Node
     reifying_constructor(tp, Some(call.expression())) == Some(REIFYING_NONE)
 }
 
-// go: internal/rules/match_to_result_or_option.go:216 hasPlainParameters 2d488e95f01f3bed
+// go: internal/rules/match_to_result_or_option.go:214 hasPlainParameters 2d488e95f01f3bed
 // hasPlainParameters reports whether a handler declares at most one
 // parameter, bound to an identifier without a default or rest marker.
 pub(crate) fn has_plain_parameters(lazy: &ParsedLazyExpression) -> bool {
@@ -353,7 +347,7 @@ pub(crate) fn has_plain_parameters(lazy: &ParsedLazyExpression) -> bool {
     true
 }
 
-// go: internal/rules/match_to_result_or_option.go:232 matchToResultCatchName c474ed6b4ca700f3
+// go: internal/rules/match_to_result_or_option.go:230 matchToResultCatchName c474ed6b4ca700f3
 // matchToResultCatchName returns catch or catchAll for an Effect catch step,
 // and "" for any other step.
 pub(crate) fn match_to_result_catch_name(

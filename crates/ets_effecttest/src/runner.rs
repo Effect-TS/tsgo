@@ -138,7 +138,7 @@ pub const DEFAULT_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/effecttest/runner.go:133 RunEffectTest 44d084c777c0dd1a
+// go test: internal/effecttest/runner.go:133 RunEffectTest 65b588741363dc0e
 // RunEffectTest executes a single Effect diagnostic test case for the given version.
 //
 // Rust: the Effect diagnostics come from the hook crates `init_hooks` registers (`etscheckerhooks`). Go's

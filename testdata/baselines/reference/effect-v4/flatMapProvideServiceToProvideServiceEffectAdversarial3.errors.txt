@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/flatMapProvideServiceToProvideServiceEffectAdversarial3.ts(8,25): suggestion TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+
+
+==== /.src/flatMapProvideServiceToProvideServiceEffectAdversarial3.ts (1 errors) ====
+    import { Context, Effect } from "effect"
+    interface Service { readonly value: number }
+    const Key = Context.Service<Service>("Service")
+    declare const acquire: Effect.Effect<Service>
+    declare const program: Effect.Effect<string, never, Service>
+    
+    // MUST TRIGGER: the curried call must use acquire, remove the callback, and replace the whole application.
+    export const curried = (Effect.flatMap((p: Service) => Effect.provideService(program, Key, p)))(acquire)
+                            ~~~~~~~~~~~~~~
+!!! suggestion TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+    

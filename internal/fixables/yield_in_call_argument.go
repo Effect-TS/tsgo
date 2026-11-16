@@ -28,7 +28,13 @@ var YieldInCallArgumentFix = fixable.Fixable{
 func runYieldInCallArgumentFix(ctx *fixable.Context) []ls.CodeAction {
 	sf := ctx.SourceFile
 	match := yieldInCallArgumentMatchAt(rules.AnalyzeYieldInCallArgument(ctx.TypeParser, sf), ctx.Span)
-	if match == nil || match.Statement == nil {
+	if match == nil {
+		return nil
+	}
+	// Hoisting could change what runs before the effect; the diagnostic stays
+	// without a fix.
+	anchor := yieldInCallArgumentHoistAnchor(match.Argument)
+	if anchor == nil {
 		return nil
 	}
 
@@ -60,7 +66,7 @@ func runYieldInCallArgumentFix(ctx *fixable.Context) []ls.CodeAction {
 			// No flow edit inserts a statement or replaces a single argument, and
 			// new or multi-argument calls have no flow, so the fix edits nodes directly.
 
-			tracker.InsertNodeBefore(sf, match.Statement, statement, false, rewriter.LeadingTriviaOptionNone)
+			tracker.InsertNodeBefore(sf, anchor, statement, false, rewriter.LeadingTriviaOptionNone)
 			tracker.ReplaceNode(sf, match.Argument, newName(), nil)
 		},
 	}); action != nil {
@@ -123,4 +129,125 @@ func yieldInCallArgumentName(operand *ast.Node) string {
 		return "value"
 	}
 	return segment
+}
+
+// yieldInCallArgumentHoistAnchor returns the statement before which the yield*
+// argument can be hoisted without changing what runs before the effect, or nil.
+// It climbs from the argument through an allowlist of parent kinds; everything
+// evaluated before the argument along the way must be side-effect free.
+func yieldInCallArgumentHoistAnchor(arg *ast.Node) *ast.Node {
+	child := arg
+	anchor := ast.FindAncestorOrQuit(arg.Parent, func(p *ast.Node) ast.FindAncestorResult {
+		result := yieldInCallArgumentHoistStep(p, child)
+		child = p
+		return result
+	})
+	if anchor == nil {
+		return nil
+	}
+	if anchor.Kind == ast.KindVariableDeclaration {
+		anchor = anchor.Parent.Parent
+	}
+	return yieldInCallArgumentFinalizeAnchor(anchor)
+}
+
+// yieldInCallArgumentHoistStep decides one step of the climb from child to its
+// parent p: climb on, stop at p as the statement (or the single const
+// declaration) to hoist before, or quit because hoisting could change what runs
+// before the effect.
+func yieldInCallArgumentHoistStep(p *ast.Node, child *ast.Node) ast.FindAncestorResult {
+	switch p.Kind {
+	case ast.KindParenthesizedExpression, ast.KindAsExpression, ast.KindNonNullExpression, ast.KindYieldExpression:
+		return ast.FindAncestorFalse
+	case ast.KindCallExpression, ast.KindNewExpression:
+		if child == p.Expression() {
+			return ast.FindAncestorFalse
+		}
+		if p.Flags&ast.NodeFlagsOptionalChain != 0 || !yieldInCallArgumentIsSideEffectFree(p.Expression()) {
+			return ast.FindAncestorQuit
+		}
+		for _, argument := range p.Arguments() {
+			if argument == child {
+				break
+			}
+			if !yieldInCallArgumentIsSideEffectFree(argument) {
+				return ast.FindAncestorQuit
+			}
+		}
+		return ast.FindAncestorFalse
+	case ast.KindPropertyAccessExpression:
+		if child != p.Expression() {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindElementAccessExpression:
+		if child != p.Expression() && (p.Flags&ast.NodeFlagsOptionalChain != 0 || !yieldInCallArgumentIsSideEffectFree(p.Expression())) {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindBinaryExpression:
+		binary := p.AsBinaryExpression()
+		if child == binary.Left {
+			return ast.FindAncestorFalse
+		}
+		operator := binary.OperatorToken.Kind
+		if operator == ast.KindAmpersandAmpersandToken || operator == ast.KindBarBarToken || operator == ast.KindQuestionQuestionToken ||
+			ast.IsLogicalOrCoalescingAssignmentOperator(operator) || !yieldInCallArgumentIsSideEffectFree(binary.Left) {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindConditionalExpression:
+		if child != p.AsConditionalExpression().Condition {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorFalse
+	case ast.KindExpressionStatement, ast.KindReturnStatement:
+		return ast.FindAncestorTrue
+	case ast.KindIfStatement:
+		if child != p.AsIfStatement().Expression {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorTrue
+	case ast.KindVariableDeclaration:
+		list := p.Parent
+		if child != p.Initializer() || list == nil || list.Kind != ast.KindVariableDeclarationList ||
+			list.Flags&ast.NodeFlagsConst == 0 || len(list.AsVariableDeclarationList().Declarations.Nodes) != 1 ||
+			list.Parent == nil || list.Parent.Kind != ast.KindVariableStatement {
+			return ast.FindAncestorQuit
+		}
+		return ast.FindAncestorTrue
+	}
+	return ast.FindAncestorQuit
+}
+
+// yieldInCallArgumentFinalizeAnchor accepts a statement only when it sits in a
+// statement list, so a const can be inserted right before it.
+func yieldInCallArgumentFinalizeAnchor(statement *ast.Node) *ast.Node {
+	if statement.Parent == nil {
+		return nil
+	}
+	switch statement.Parent.Kind {
+	case ast.KindBlock, ast.KindCaseClause, ast.KindDefaultClause:
+		return statement
+	}
+	return nil
+}
+
+// yieldInCallArgumentIsSideEffectFree reports whether evaluating node cannot run
+// code: identifiers, literals and non-optional property accesses on them.
+func yieldInCallArgumentIsSideEffectFree(node *ast.Node) bool {
+	node = ast.SkipParentheses(node)
+	switch node.Kind {
+	case ast.KindIdentifier,
+		ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindBigIntLiteral,
+		ast.KindNoSubstitutionTemplateLiteral, ast.KindRegularExpressionLiteral,
+		ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword:
+		return true
+	case ast.KindPrefixUnaryExpression:
+		prefix := node.AsPrefixUnaryExpression()
+		return prefix.Operator == ast.KindMinusToken && prefix.Operand.Kind == ast.KindNumericLiteral
+	case ast.KindPropertyAccessExpression:
+		return node.Flags&ast.NodeFlagsOptionalChain == 0 && yieldInCallArgumentIsSideEffectFree(node.Expression())
+	}
+	return false
 }

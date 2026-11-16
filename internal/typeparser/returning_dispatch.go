@@ -121,12 +121,20 @@ func (tp *TypeParser) ParseResultDispatch(node *ast.Node) *ResultDispatch {
 // conditional expressions, returned conditional expressions, if/else-if,
 // sequential returning if statements, and returning switch cases.
 func (tp *TypeParser) ParseReturningDispatch(node *ast.Node) *ParsedReturningDispatch {
+	return tp.parseReturningDispatch(node, false)
+}
+
+func (tp *TypeParser) ParseReturningDispatchAllowingTypeParameters(node *ast.Node) *ParsedReturningDispatch {
+	return tp.parseReturningDispatch(node, true)
+}
+
+func (tp *TypeParser) parseReturningDispatch(node *ast.Node, allowTypeParameters bool) *ParsedReturningDispatch {
 	node = unwrapResultDispatchExpression(node)
 	if node == nil || (node.Kind != ast.KindArrowFunction && node.Kind != ast.KindFunctionExpression) {
 		return nil
 	}
 	typeParameters := GetFunctionLikeTypeParameters(node)
-	if typeParameters != nil && len(typeParameters.Nodes) > 0 {
+	if !allowTypeParameters && typeParameters != nil && len(typeParameters.Nodes) > 0 {
 		return nil
 	}
 	body := GetFunctionLikeBody(node)
@@ -205,29 +213,22 @@ func parseResultDispatchSwitch(node *ast.Node) *resultDispatchSyntax {
 		return nil
 	}
 
-	dispatch := &resultDispatchSyntax{}
-	for index, clauseNode := range caseBlock.Clauses.Nodes {
+	clauses := caseBlock.Clauses.Nodes
+	fallback, ok := switchDefaultClauseResult(clauses)
+	if !ok {
+		return nil
+	}
+	dispatch := &resultDispatchSyntax{fallback: fallback}
+	for _, clauseNode := range clauses {
 		if clauseNode == nil || (clauseNode.Kind != ast.KindCaseClause && clauseNode.Kind != ast.KindDefaultClause) {
 			return nil
 		}
-		statements := clauseNode.StatementList()
-		if statements == nil {
-			return nil
-		}
-		result := singleResultDispatchReturn(statements.Nodes)
-		if result == nil {
-			return nil
-		}
-
 		if clauseNode.Kind == ast.KindDefaultClause {
-			if index != len(caseBlock.Clauses.Nodes)-1 || dispatch.fallback != nil {
-				return nil
-			}
-			dispatch.fallback = result
 			continue
 		}
+		result := switchClauseResult(clauseNode)
 		caseExpression := clauseNode.Expression()
-		if caseExpression == nil {
+		if result == nil || caseExpression == nil {
 			return nil
 		}
 		dispatch.branches = append(dispatch.branches, ResultDispatchBranch{
@@ -239,6 +240,31 @@ func parseResultDispatchSwitch(node *ast.Node) *resultDispatchSyntax {
 		return nil
 	}
 	return dispatch
+}
+
+func switchDefaultClauseResult(clauses []*ast.Node) (*ast.Node, bool) {
+	var fallback *ast.Node
+	for _, clauseNode := range clauses {
+		if clauseNode == nil || clauseNode.Kind != ast.KindDefaultClause {
+			continue
+		}
+		if fallback != nil {
+			return nil, false
+		}
+		fallback = switchClauseResult(clauseNode)
+		if fallback == nil {
+			return nil, false
+		}
+	}
+	return fallback, true
+}
+
+func switchClauseResult(clauseNode *ast.Node) *ast.Node {
+	statements := clauseNode.StatementList()
+	if statements == nil {
+		return nil
+	}
+	return singleResultDispatchReturn(statements.Nodes)
 }
 
 func parseResultDispatchConditional(node *ast.Node) *resultDispatchSyntax {

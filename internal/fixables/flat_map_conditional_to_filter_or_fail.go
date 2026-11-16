@@ -25,7 +25,7 @@ func runFlatMapConditionalToFilterOrFailFix(ctx *fixable.Context) []ls.CodeActio
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if !match.CanFix || match.Transformation == nil ||
+		if match.Transformation == nil ||
 			match.ParameterNode == nil || match.PredicateNode == nil || match.FallbackNode == nil {
 			continue
 		}

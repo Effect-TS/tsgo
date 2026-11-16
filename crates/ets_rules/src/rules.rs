@@ -4,7 +4,7 @@ use ets_rule::Rule;
 
 use crate::*;
 
-// go: internal/rules/rules.go:10 All 48b582c59d34593a
+// go: internal/rules/rules.go:10 All 30447065b337719a
 // All is the list of all diagnostic rules.
 // Add new rules here explicitly - no init() magic.
 //
@@ -129,6 +129,7 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*EFFECT_MAP_FLATTEN).clone(),
         (*ALL_OF_MAP_TO_FOR_EACH).clone(),
         (*FOR_LOOP_PUSH_TO_FOR_EACH).clone(),
+        (*MISSING_CONCURRENCY_OPTION).clone(),
         (*MAP_SOME_TO_AS_SOME).clone(),
         (*MAP_CONST_TO_AS).clone(),
         (*MANUAL_METRIC_TAP_TO_TRACK).clone(),
@@ -136,6 +137,7 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*SUSPEND_FAIL_TO_FAIL_SYNC).clone(),
         (*FLAT_MAP_TO_MAP).clone(),
         (*FLAT_MAP_TO_TAP).clone(),
+        (*FLAT_MAP_PROVIDE_SERVICE_TO_PROVIDE_SERVICE_EFFECT).clone(),
         (*FLAT_MAP_IGNORED_PARAM_TO_AND_THEN).clone(),
         (*FLAT_MAP_IDENTITY_TO_FLATTEN).clone(),
         (*MATCH_EFFECT_TO_MATCH).clone(),
@@ -144,6 +146,7 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*MATCH_EFFECT_TO_MAP_BOTH).clone(),
         (*MAP_MAP_ERROR_TO_MAP_BOTH).clone(),
         (*FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL).clone(),
+        (*ON_EXIT_FAILURE_TO_ON_ERROR).clone(),
         (*OPTION_MATCH_TO_FROM_OPTION).clone(),
         (*RESULT_MATCH_TO_FROM_RESULT).clone(),
         (*SYNC_TO_SUCCEED).clone(),

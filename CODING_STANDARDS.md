@@ -6,7 +6,7 @@ Review rules for changes to Effect rules, fixables, the typeparser and the rewri
 
 A rule finds the calls it reports by iterating piping flows: `PipingFlows`, then `MatchesPrefix`, `MatchesExactly` or `FindTransformationSequences`, with `LongestPipingFlowAt` for a flow nested in an expression the rule already holds. Steps are matched on `Callee()` with the `IsNodeReferenceTo…` helpers. One flow predicate covers `pipe(x, f)`, `x.pipe(f)`, `f(x)`, data-first, data-last and curried spellings; a hand-matched call shape covers only the spelling its author thought of.
 
-An AST walk (`ForEachChild`, a visitor) is right when the rule looks for something that never becomes a flow step: classes, `yield`, `new`, `return`, type nodes, zero-argument calls, or scans for references inside a body. `pnpm lint` requires each walk to carry an `//ets:ast-walk <reason>` comment. Review the reason: it must name what the walk finds that flows do not produce. A reason like "find the Effect.x calls" fails, because a flow predicate does that.
+An AST walk (`ForEachChild`, a visitor) is right when the rule looks for something that never becomes a flow step: classes, `yield`, `new`, `return`, type nodes, zero-argument calls, or scans for references inside a body. A scan for references to one symbol calls the typeparser's `ReferencesToSymbol` instead of writing its own walk. `pnpm lint` requires each walk to carry an `//ets:ast-walk <reason>` comment. Review the reason: it must name what the walk finds that flows do not produce. A reason like "find the Effect.x calls" fails, because a flow predicate does that.
 
 Flag:
 
@@ -18,6 +18,10 @@ Flag:
 ## Fixes rewrite the flow
 
 A fixable whose match holds a flow edits it with `ReplacePipingFlowPrefix`, `ReplacePipingFlowTransformation`, `CollapsePipingFlowTransformations` or `RemoveTrailingPipingFlowTransformation`. These keep the steps around the edit and every spelling of the input. `tracker.ReplaceNode` or raw text edits on step nodes are right only when no flow edit expresses the change, or when a flow edit would lose comments the fix must keep; the code says which. If no fix can be written well, the rule ships as a diagnostic only.
+
+## Fix work stays in the fixable
+
+A rule's analysis computes only what the diagnostic needs: whether to report, and where. Its match may also return what detection already collected along the way (the flow, the transformation, the callback, the branch nodes) so the fixable can find what to rewrite without searching again. It must not compute anything new just for the fix: scans of a callback body, fresh names, whether the rewrite is safe, replacement nodes. That work runs only when the fixable asks for it, for the match in the requested span. Analysis runs on every check of every file; fix code runs only when the editor asks for actions at that position. Flag match fields and `Analyze…` work that exist only to serve the fix. When the fix cannot be made safely, the fixable returns no action and the diagnostic stays.
 
 ## Primitive gaps go to the user
 

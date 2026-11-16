@@ -207,11 +207,14 @@ func newPipingFlowRewriteFixture(t *testing.T, source string) *pipingFlowRewrite
 		Target: core.ScriptTargetESNext, Module: core.ModuleKindNodeNext, ModuleResolution: core.ModuleResolutionKindNodeNext,
 		Strict: core.TSTrue, SkipLibCheck: core.TSTrue,
 	}
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         tsoptions.NewParsedCommandLine(options, []tspath.RootedFilePath{"/test.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	ctx := context.Background()
 	c, done := program.GetTypeChecker(ctx)
 	t.Cleanup(done)

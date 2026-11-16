@@ -34,7 +34,7 @@ pub static SCHEMA_UNION_OF_LITERALS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_union_of_literals.go:36 SchemaUnionOfLiteralsMatch d33c7c8c0eb028e6
+// go: internal/rules/schema_union_of_literals.go:36 SchemaUnionOfLiteralsMatch 76068afc907e41d4
 // SchemaUnionOfLiteralsMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the schemaUnionOfLiterals pattern.
 #[derive(Clone)]
@@ -43,10 +43,9 @@ pub struct SchemaUnionOfLiteralsMatch {
     pub location: TextRange, // Pre-computed error range for the diagnostic
     pub union_call_node: P<Node>, // The full Schema.Union(...) call expression to be replaced
     pub first_literal_expression: Option<P<Node>>, // The callee expression (Schema.Literal) from the first argument
-    pub all_literal_args: Vec<P<Node>>, // All arguments collected from every Schema.Literal(...) call, in order
 }
 
-// go: internal/rules/schema_union_of_literals.go:48 AnalyzeSchemaUnionOfLiterals 77518c3ad298cbbe
+// go: internal/rules/schema_union_of_literals.go:47 AnalyzeSchemaUnionOfLiterals 77518c3ad298cbbe
 // AnalyzeSchemaUnionOfLiterals finds all Schema.Union(...) calls where every argument
 // is a Schema.Literal(...) call, returning matches with captured nodes for diagnostics and fixes.
 //
@@ -84,7 +83,7 @@ pub fn analyze_schema_union_of_literals(
     matches
 }
 
-// go: internal/rules/schema_union_of_literals.go:81 analyzeSchemaUnionOfLiteralsNode 8575420d52ec254e
+// go: internal/rules/schema_union_of_literals.go:80 analyzeSchemaUnionOfLiteralsNode 0f3e3af0c7413335
 // analyzeSchemaUnionOfLiteralsNode checks if a call expression is Schema.Union(...)
 // where all arguments are Schema.Literal(...) calls.
 pub(crate) fn analyze_schema_union_of_literals_node(
@@ -106,7 +105,6 @@ pub(crate) fn analyze_schema_union_of_literals_node(
     }
 
     let mut first_literal_expression = None;
-    let mut all_literal_args = Vec::new();
 
     // Check that every argument is a call expression referencing Schema.Literal
     for (i, &arg) in arguments.iter().enumerate() {
@@ -121,9 +119,6 @@ pub(crate) fn analyze_schema_union_of_literals_node(
         if i == 0 {
             first_literal_expression = Some(arg_call.expression());
         }
-
-        // Collect all arguments from this Schema.Literal(...) call
-        all_literal_args.extend_from_slice(arg_call.arguments().nodes());
     }
 
     Some(SchemaUnionOfLiteralsMatch {
@@ -131,6 +126,5 @@ pub(crate) fn analyze_schema_union_of_literals_node(
         location: ets_shim::scanner::get_error_range_for_node(sf, node),
         union_call_node: node,
         first_literal_expression,
-        all_literal_args,
     })
 }

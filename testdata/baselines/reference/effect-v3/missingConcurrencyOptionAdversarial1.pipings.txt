@@ -1,0 +1,29 @@
+==== /.src/missingConcurrencyOptionAdversarial1.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 11:25 - 11:77
+Node: Effect.forEach(items, save, { ["concurrency"]: 4 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { ["concurrency"]: 4 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 13:25 - 13:68
+Node: Effect.all(checks, { ["concurrency"]: 4 })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ ["concurrency"]: 4 }]
+      outType: Effect<boolean[], never, never>

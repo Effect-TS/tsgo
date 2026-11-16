@@ -37,7 +37,6 @@ type UnnecessaryEffectGenMatch struct {
 	CallNode          *ast.Node       // The Effect.gen(...) call expression (replacement target)
 	YieldedExpression *ast.Node       // The expression being yield*-ed (the replacement value)
 	ExplicitReturn    bool            // Whether the statement had an explicit return
-	SuccessIsVoid     bool            // Whether the yielded Effect's success type is void-like
 }
 
 // AnalyzeUnnecessaryEffectGen finds all Effect.gen calls that contain only a single
@@ -120,20 +119,22 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 		return nil
 	}
 
-	// Determine if the success type is void-like
-	successIsVoid := false
-	if effect := tp.EffectTypeAtLocation(yieldedExpr); effect != nil && effect.A() != nil {
-		successIsVoid = effect.A().Flags()&checker.TypeFlagsVoidLike != 0
-	}
-
 	return &UnnecessaryEffectGenMatch{
 		SourceFile:        sf,
 		Location:          scanner.GetErrorRangeForNode(sf, n),
 		CallNode:          n,
 		YieldedExpression: yieldedExpr,
 		ExplicitReturn:    explicitReturn,
-		SuccessIsVoid:     successIsVoid,
 	}
+}
+
+// UnnecessaryEffectGenSuccessIsVoid reports whether the success type of the
+// yielded Effect is void-like, so a bare yield* statement can be unwrapped
+// without Effect.asVoid. The quick fix and the refactor ask for it only when the
+// statement has no explicit return.
+func UnnecessaryEffectGenSuccessIsVoid(tp *typeparser.TypeParser, yieldedExpression *ast.Node) bool {
+	effect := tp.EffectTypeAtLocation(yieldedExpression)
+	return effect != nil && effect.A() != nil && effect.A().Flags()&checker.TypeFlagsVoidLike != 0
 }
 
 func isYieldStarExpression(expr *ast.Node) bool {

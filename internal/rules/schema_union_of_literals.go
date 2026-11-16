@@ -38,7 +38,6 @@ type SchemaUnionOfLiteralsMatch struct {
 	Location               core.TextRange // Pre-computed error range for the diagnostic
 	UnionCallNode          *ast.Node      // The full Schema.Union(...) call expression to be replaced
 	FirstLiteralExpression *ast.Node      // The callee expression (Schema.Literal) from the first argument
-	AllLiteralArgs         []*ast.Node    // All arguments collected from every Schema.Literal(...) call, in order
 }
 
 // AnalyzeSchemaUnionOfLiterals finds all Schema.Union(...) calls where every argument
@@ -92,7 +91,6 @@ func analyzeSchemaUnionOfLiteralsNode(tp *typeparser.TypeParser, _ *checker.Chec
 	}
 
 	var firstLiteralExpression *ast.Node
-	var allLiteralArgs []*ast.Node
 
 	// Check that every argument is a call expression referencing Schema.Literal
 	for i, arg := range call.Arguments.Nodes {
@@ -107,11 +105,6 @@ func analyzeSchemaUnionOfLiteralsNode(tp *typeparser.TypeParser, _ *checker.Chec
 		if i == 0 {
 			firstLiteralExpression = argCall.Expression
 		}
-
-		// Collect all arguments from this Schema.Literal(...) call
-		if argCall.Arguments != nil {
-			allLiteralArgs = append(allLiteralArgs, argCall.Arguments.Nodes...)
-		}
 	}
 
 	return SchemaUnionOfLiteralsMatch{
@@ -119,6 +112,5 @@ func analyzeSchemaUnionOfLiteralsNode(tp *typeparser.TypeParser, _ *checker.Chec
 		Location:               scanner.GetErrorRangeForNode(sf, node),
 		UnionCallNode:          node,
 		FirstLiteralExpression: firstLiteralExpression,
-		AllLiteralArgs:         allLiteralArgs,
 	}, true
 }

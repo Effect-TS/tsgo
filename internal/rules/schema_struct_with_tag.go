@@ -34,11 +34,10 @@ var SchemaStructWithTag = rule.Rule{
 // SchemaStructWithTagMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the schemaStructWithTag pattern.
 type SchemaStructWithTagMatch struct {
-	SourceFile      *ast.SourceFile
-	Location        core.TextRange // Pre-computed error range for the diagnostic
-	CallNode        *ast.Node      // The full Schema.Struct(...) call expression
-	TagValue        string         // The string value extracted from Schema.Literal("...")
-	OtherProperties []*ast.Node    // All property assignment nodes in the object literal except _tag
+	SourceFile  *ast.SourceFile
+	Location    core.TextRange // Pre-computed error range for the diagnostic
+	CallNode    *ast.Node      // The full Schema.Struct(...) call expression
+	TagProperty *ast.Node      // The _tag property assignment, initialized with Schema.Literal("...")
 }
 
 // AnalyzeSchemaStructWithTag finds all Schema.Struct({ _tag: Schema.Literal("..."), ... })
@@ -132,23 +131,11 @@ func analyzeSchemaStructWithTagNode(tp *typeparser.TypeParser, _ *checker.Checke
 			return SchemaStructWithTagMatch{}, false
 		}
 
-		tagValue := literalCall.Arguments.Nodes[0].AsStringLiteral().Text
-
-		// Collect all properties except _tag
-		var otherProps []*ast.Node
-		for _, p := range objLit.Properties.Nodes {
-			if p == prop {
-				continue
-			}
-			otherProps = append(otherProps, p)
-		}
-
 		return SchemaStructWithTagMatch{
-			SourceFile:      sf,
-			Location:        scanner.GetErrorRangeForNode(sf, node),
-			CallNode:        node,
-			TagValue:        tagValue,
-			OtherProperties: otherProps,
+			SourceFile:  sf,
+			Location:    scanner.GetErrorRangeForNode(sf, node),
+			CallNode:    node,
+			TagProperty: prop,
 		}, true
 	}
 

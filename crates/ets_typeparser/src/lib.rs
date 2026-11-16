@@ -52,6 +52,7 @@ mod effect_type;
 mod effect_type_test;
 mod effect_yieldable_type;
 mod either_type;
+mod exit_type;
 mod expected_and_real_type;
 #[cfg(test)]
 mod expected_and_real_type_test;
@@ -122,6 +123,8 @@ mod node_cannot_be_effect_library_type;
 mod node_cannot_be_effect_library_type_test;
 mod object_literal;
 mod object_literal_contextual_type;
+#[cfg(test)]
+mod object_literal_test;
 mod option_type;
 mod packagejson;
 mod pipeable;
@@ -141,6 +144,9 @@ mod promise_type;
 #[cfg(test)]
 mod readonly_results_test;
 mod reconstruct;
+mod references_to_symbol;
+#[cfg(test)]
+mod references_to_symbol_test;
 mod result_dispatch;
 mod result_type;
 mod returning_dispatch;
@@ -163,6 +169,9 @@ mod type_parser;
 mod type_parser_test;
 mod unique_types_map;
 mod unroll_members;
+mod uses_function_own_bindings;
+#[cfg(test)]
+mod uses_function_own_bindings_test;
 mod vitest_api;
 mod yieldable_error;
 

@@ -7,10 +7,10 @@ crates and then calls it. The feature is off for the `tsrs` binary target, which
 allocator are linked once).
 
 diff --git a/crates/tsrs_cli/Cargo.toml b/crates/tsrs_cli/Cargo.toml
-index 223616b6..1e5045d9 100644
+index 96955c91..5927f709 100644
 --- a/crates/tsrs_cli/Cargo.toml
 +++ b/crates/tsrs_cli/Cargo.toml
-@@ -25,6 +25,9 @@ noembed = ["tsrs_vfs/noembed"]
+@@ -27,6 +27,9 @@ noembed = ["tsrs_vfs/noembed"]
  # The system allocator instead of mimalloc, for sanitizer builds (AddressSanitizer and ThreadSanitizer track only its
  # blocks; mimalloc's memory looks like one long-lived region to them).
  system-alloc = []
@@ -39,7 +39,7 @@ index 2b8534c6..0df42bd1 100644
 +#[cfg(feature = "effect-main")]
 +pub use effect_main::main;
 diff --git a/crates/tsrs_cli/src/main.rs b/crates/tsrs_cli/src/main.rs
-index e552fd81..d0568dcd 100644
+index 032dbf0a..28899284 100644
 --- a/crates/tsrs_cli/src/main.rs
 +++ b/crates/tsrs_cli/src/main.rs
 @@ -72,7 +72,8 @@ fn mimalloc_collect(force: bool) {
@@ -51,4 +51,4 @@ index e552fd81..d0568dcd 100644
 +pub fn main() -> std::process::ExitCode {
      #[cfg(all(target_os = "linux", not(any(feature = "system-alloc", miri))))]
      tsrs_core::allocator::init_mimalloc();
-     let args: Vec<String> = std::env::args().skip(1).collect();
+     // `std::env::args()` panics on an argument that isn't UTF-8. tsgo keeps the bytes and its diagnostics format them

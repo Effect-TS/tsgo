@@ -34,7 +34,8 @@ func runOverriddenSchemaConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 		var actions []ls.CodeAction
 
 		// _static action: Rewrite using the static 'new' pattern (only when body exists)
-		if match.HasBody && constructorSupportsStaticRewrite(match.ConstructorNode) {
+		body := match.ConstructorNode.AsConstructorDeclaration().Body
+		if body != nil && body.Kind == ast.KindBlock && constructorSupportsStaticRewrite(match.ConstructorNode) {
 			if action := ctx.NewFixAction(fixable.FixAction{
 				Description: "Rewrite using the static 'new' pattern",
 				Run: func(tracker *rewriter.Tracker) {

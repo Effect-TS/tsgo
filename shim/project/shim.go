@@ -27,6 +27,9 @@ func ConfiguredProjectIDFromPathKey(value tspath.PathKey) project.ConfiguredProj
 type ContentMappedParseCache = project.ContentMappedParseCache
 type ContentMappedParseCacheKey = project.ContentMappedParseCacheKey
 type ContentMapperContributions = project.ContentMapperContributions
+//go:linkname ContentMapperExtensionPattern github.com/microsoft/TypeScript/tsc/internal/project.ContentMapperExtensionPattern
+func ContentMapperExtensionPattern(extension string) string
+type ContentMapperSelector = project.ContentMapperSelector
 type CreateProgramResult = project.CreateProgramResult
 var ErrNoProjectForUnknownScriptKind = project.ErrNoProjectForUnknownScriptKind
 type ExtendedConfigCache = project.ExtendedConfigCache

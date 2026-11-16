@@ -140,6 +140,8 @@ func HasImplementationTSFileExtension(path string) bool
 func HasJSFileExtension(path string) bool
 //go:linkname HasJSONFileExtension github.com/microsoft/TypeScript/tsc/internal/tspath.HasJSONFileExtension
 func HasJSONFileExtension(path string) bool
+//go:linkname HasRuntimeExtensionRewrites github.com/microsoft/TypeScript/tsc/internal/tspath.HasRuntimeExtensionRewrites
+func HasRuntimeExtensionRewrites(rewrites []tspath.ExtensionRewrite) bool
 //go:linkname HasTSFileExtension github.com/microsoft/TypeScript/tsc/internal/tspath.HasTSFileExtension
 func HasTSFileExtension(path string) bool
 //go:linkname HasTrailingDirectorySeparator github.com/microsoft/TypeScript/tsc/internal/tspath.HasTrailingDirectorySeparator

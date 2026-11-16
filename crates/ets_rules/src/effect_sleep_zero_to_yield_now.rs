@@ -41,17 +41,16 @@ pub enum YieldNowForm {
     Value = 2,
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:46 EffectSleepZeroToYieldNowMatch 8d12d5e28566ad43
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:46 EffectSleepZeroToYieldNowMatch 93aa8119fd001f54
 #[derive(Clone)]
 pub struct EffectSleepZeroToYieldNowMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub call: P<Node>,
-    pub effect_module: Option<P<Node>>,
     pub form: YieldNowForm,
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:54 AnalyzeEffectSleepZeroToYieldNow f2022af02d6d859c
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:53 AnalyzeEffectSleepZeroToYieldNow de0a7205afa1ea7a
 //
 // Rust: Go's checker argument is unused and dropped.
 pub fn analyze_effect_sleep_zero_to_yield_now(
@@ -83,21 +82,10 @@ pub fn analyze_effect_sleep_zero_to_yield_now(
                 && tp.is_node_reference_to_effect_module_api(callee, "sleep")
                 && is_removable_zero_duration(tp, call.arguments().nodes()[0], version)
             {
-                let mut receiver = None;
-                if callee.kind() == Kind::PropertyAccessExpression {
-                    let candidate = callee.as_property_access_expression().expression();
-                    if is_imported_module_receiver(tp, candidate)
-                        && tp
-                            .is_expression_effect_module(unwrap_zero_duration_expression(candidate))
-                    {
-                        receiver = Some(candidate);
-                    }
-                }
                 matches.push(EffectSleepZeroToYieldNowMatch {
                     source_file: sf,
                     location: ets_shim::scanner::get_error_range_for_node(sf, call.expression()),
                     call: node,
-                    effect_module: receiver,
                     form,
                 });
             }
@@ -109,8 +97,8 @@ pub fn analyze_effect_sleep_zero_to_yield_now(
     matches
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:99 unwrapZeroDurationExpression 09e3400c206d959b
-pub(crate) fn unwrap_zero_duration_expression(node: P<Node>) -> P<Node> {
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:90 UnwrapZeroDurationExpression 9e456a044983f0e3
+pub fn unwrap_zero_duration_expression(node: P<Node>) -> P<Node> {
     ast::skip_outer_expressions(
         node,
         OuterExpressionKinds::Parentheses
@@ -119,7 +107,7 @@ pub(crate) fn unwrap_zero_duration_expression(node: P<Node>) -> P<Node> {
     )
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:103 isOrdinarySingleArgumentCall 449b85a4aa7eed12
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:94 isOrdinarySingleArgumentCall 449b85a4aa7eed12
 pub(crate) fn is_ordinary_single_argument_call(node: P<Node>) -> bool {
     let call = node.as_call_expression();
     let arguments = call.arguments().nodes();
@@ -129,8 +117,10 @@ pub(crate) fn is_ordinary_single_argument_call(node: P<Node>) -> bool {
         && arguments[0].kind() != Kind::SpreadElement
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:110 isImportedModuleReceiver 5b88b506b3a5a073
-pub(crate) fn is_imported_module_receiver(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:103 IsImportedModuleReceiver 9d16951fb158765c
+// IsImportedModuleReceiver reports whether node is a namespace or named import
+// binding, or a property of a namespace import, so it names a module directly.
+pub fn is_imported_module_receiver(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     let node = unwrap_zero_duration_expression(node);
     if node.kind() == Kind::PropertyAccessExpression
         && !node.flags().intersects(NodeFlags::OptionalChain)
@@ -160,7 +150,7 @@ pub(crate) fn is_imported_module_receiver(tp: &mut TypeParser<'_>, node: P<Node>
     kind == Kind::ImportSpecifier || kind == Kind::NamespaceImport
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:131 zeroDurationString 7c51699657b1e4b8
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:124 zeroDurationString 7c51699657b1e4b8
 pub(crate) static ZERO_DURATION_STRING: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(-?0+(?:\.0+)?)[ \t]+(nanos?|micros?|millis?|seconds?|minutes?|hours?|days?|weeks?)$",
@@ -168,7 +158,7 @@ pub(crate) static ZERO_DURATION_STRING: LazyLock<Regex> = LazyLock::new(|| {
     .expect("valid regexp")
 });
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:133 isRemovableZeroDuration 94811fcfc9945915
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:126 isRemovableZeroDuration fa29bc75ab81f67c
 pub(crate) fn is_removable_zero_duration(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -237,7 +227,7 @@ pub(crate) fn is_removable_zero_duration(
     }
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:179 isZeroDurationNumber 4f0885e90f8a81d6
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:172 isZeroDurationNumber 8eece420d2ff9c9b
 pub(crate) fn is_zero_duration_number(node: P<Node>, bigint: bool) -> bool {
     let mut node = unwrap_zero_duration_expression(node);
     if node.kind() == Kind::PrefixUnaryExpression {

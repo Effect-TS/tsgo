@@ -20,6 +20,10 @@ var TimeoutCatchTagToTimeoutOrElseFix = fixable.Fixable{
 			if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 				continue
 			}
+			// The rewrite cannot carry explicit type arguments of Effect.timeout over.
+			if rules.HasExplicitTypeArguments(new(match.Flow.Transformations().At(match.Start))) {
+				continue
+			}
 			action := ctx.NewFixAction(fixable.FixAction{
 				Description: "Replace with Effect." + match.ReplacementName,
 				Run: func(t *rewriter.Tracker) {

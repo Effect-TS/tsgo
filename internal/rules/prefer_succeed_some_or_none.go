@@ -40,19 +40,13 @@ var PreferSucceedSomeOrNone = rule.Rule{
 
 // PreferSucceedSomeOrNoneMatch holds the nodes needed by the diagnostic and quick fix.
 type PreferSucceedSomeOrNoneMatch struct {
-	SourceFile          *ast.SourceFile
-	Location            core.TextRange
+	SourceFile *ast.SourceFile
+	Location   core.TextRange
+	// Flow's first TransformationCount steps end in Effect.succeed; for
+	// succeedSome the step before it is Option.some.
 	Flow                *typeparser.PipingFlow
 	TransformationCount int
-	ReplacementName     string
-	ValueNode           *ast.Node
-	ValueTypeArguments  *ast.NodeList
-}
-
-type normalizedOptionInput struct {
-	ReplacementName    string
-	ValueNode          *ast.Node
-	ValueTypeArguments *ast.NodeList
+	ReplacementName     string // succeedNone or succeedSome
 }
 
 // AnalyzePreferSucceedSomeOrNone finds piping flows in which Option.none or
@@ -75,7 +69,7 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 			func(subject typeparser.PipingFlowSubject) bool { return isOptionNoneCall(tp, subject.Node()) },
 			isSucceed,
 		) {
-			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, 0, &normalizedOptionInput{ReplacementName: "succeedNone"}))
+			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, 0, "succeedNone"))
 		}
 
 		sequences := flow.FindTransformationSequences(
@@ -86,33 +80,20 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 			isSucceed,
 		)
 		for _, sequence := range sequences.All() {
-			optionIndex := sequence.Start()
-			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, optionIndex+1, &normalizedOptionInput{
-				ReplacementName:    "succeedSome",
-				ValueNode:          flow.TransformationInputNode(optionIndex),
-				ValueTypeArguments: flow.Transformations().At(optionIndex).TypeArguments(),
-			}))
+			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, sequence.Start()+1, "succeedSome"))
 		}
 	}
 	return matches
 }
 
-func preferSucceedSomeOrNoneMatch(sf *ast.SourceFile, flow *typeparser.PipingFlow, succeedIndex int, optionInput *normalizedOptionInput) PreferSucceedSomeOrNoneMatch {
-	transformation := flow.Transformations().At(succeedIndex)
-	match := PreferSucceedSomeOrNoneMatch{
-		SourceFile:         sf,
-		Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee()),
-		ReplacementName:    optionInput.ReplacementName,
-		ValueNode:          optionInput.ValueNode,
-		ValueTypeArguments: optionInput.ValueTypeArguments,
+func preferSucceedSomeOrNoneMatch(sf *ast.SourceFile, flow *typeparser.PipingFlow, succeedIndex int, replacementName string) PreferSucceedSomeOrNoneMatch {
+	return PreferSucceedSomeOrNoneMatch{
+		SourceFile:          sf,
+		Location:            scanner.GetErrorRangeForNode(sf, flow.Transformations().At(succeedIndex).Callee()),
+		Flow:                flow,
+		TransformationCount: succeedIndex + 1,
+		ReplacementName:     replacementName,
 	}
-	if transformation.Kind() == typeparser.TransformationKindCall ||
-		transformation.Kind() == typeparser.TransformationKindPipe ||
-		transformation.Kind() == typeparser.TransformationKindPipeable {
-		match.Flow = flow
-		match.TransformationCount = succeedIndex + 1
-	}
-	return match
 }
 
 func isOptionNoneCall(tp *typeparser.TypeParser, node *ast.Node) bool {

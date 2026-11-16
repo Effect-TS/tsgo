@@ -175,6 +175,8 @@ func Checker_inferTypes(recv *checker.Checker, inferences []*checker.InferenceIn
 func Checker_newInferenceContext(recv *checker.Checker, typeParameters []*checker.Type, signature *checker.Signature, flags checker.InferenceFlags, compareTypes checker.TypeComparer) *checker.InferenceContext
 //go:linkname Checker_getMapperFromContext github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getMapperFromContext
 func Checker_getMapperFromContext(recv *checker.Checker, n *checker.InferenceContext) *checker.TypeMapper
+//go:linkname Checker_isTypeIdenticalTo github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).isTypeIdenticalTo
+func Checker_isTypeIdenticalTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
 //go:linkname Checker_isTypeAssignableTo github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).isTypeAssignableTo
 func Checker_isTypeAssignableTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
 //go:linkname Checker_getTypeParameterModifiers github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getTypeParameterModifiers
@@ -1116,6 +1118,7 @@ func RegisterAfterCheckSourceFileCallback(cb func(context.Context, checker.Progr
 func RegisterExpressionCheckedCallback(cb func(*checker.Checker, *ast.Node, checker.CheckMode, *checker.Type))
 type Relater = checker.Relater
 type Relation = checker.Relation
+type RelationCacheSizes = checker.RelationCacheSizes
 type RelationComparisonResult = checker.RelationComparisonResult
 const RelationComparisonResultComplexityOverflow = checker.RelationComparisonResultComplexityOverflow
 const RelationComparisonResultFailed = checker.RelationComparisonResultFailed

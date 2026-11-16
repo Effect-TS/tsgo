@@ -22,19 +22,16 @@ pub static FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL_FIX: LazyLock<Fixable> = LazyL
     }
 });
 
-// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:23 runFlatMapConditionalToFilterOrFailFix 05dde3a5a288196c
+// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:23 runFlatMapConditionalToFilterOrFailFix bae58f71d9887992
 //
-// Rust: the match's transformation, parameter, predicate and fallback are never nil (non-optional fields), so only
-// Go's `CanFix` check remains.
+// Rust: the match's transformation, parameter, predicate and fallback are never nil (non-optional fields), so Go's
+// nil checks drop.
 fn run_flat_map_conditional_to_filter_or_fail_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in
         ets_rules::analyze_flat_map_conditional_to_filter_or_fail(&mut ctx.type_parser, source_file)
     {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
-            continue;
-        }
-        if !m.can_fix {
             continue;
         }
 

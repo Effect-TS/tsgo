@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rules::YieldInCallArgumentMatch;
-use ets_shim::ast::{self, Kind, Node, NodeFlags, OuterExpressionKinds};
+use ets_shim::ast::{self, FindAncestorResult, Kind, Node, NodeFlags, OuterExpressionKinds};
 use ets_shim::core::{P, TextRange};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
@@ -22,14 +22,16 @@ pub static YIELD_IN_CALL_ARGUMENT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_yield_in_call_argument_fix,
 });
 
-// go: internal/fixables/yield_in_call_argument.go:28 runYieldInCallArgumentFix c3ac9b036ea98618
+// go: internal/fixables/yield_in_call_argument.go:28 runYieldInCallArgumentFix 4fd6ccfba608445f
 fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let matches = ets_rules::analyze_yield_in_call_argument(&mut ctx.type_parser, sf);
     let Some(m) = yield_in_call_argument_match_at(&matches, ctx.span).copied() else {
         return Vec::new();
     };
-    let Some(statement) = m.statement else {
+    // Hoisting could change what runs before the effect; the diagnostic stays
+    // without a fix.
+    let Some(anchor) = yield_in_call_argument_hoist_anchor(m.argument) else {
         return Vec::new();
     };
 
@@ -76,7 +78,7 @@ fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
 
             tracker.insert_node_before(
                 sf,
-                Some(statement),
+                Some(anchor),
                 Some(statement_node),
                 false,
                 ets_rewriter::LEADING_TRIVIA_OPTION_NONE,
@@ -90,7 +92,7 @@ fn run_yield_in_call_argument_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
     Vec::new()
 }
 
-// go: internal/fixables/yield_in_call_argument.go:75 yieldInCallArgumentMatchAt 9aaf7408d4cbe738
+// go: internal/fixables/yield_in_call_argument.go:81 yieldInCallArgumentMatchAt 9aaf7408d4cbe738
 // yieldInCallArgumentMatchAt picks the match whose location is exactly span,
 // falling back to the first overlapping one. The exact match comes first because
 // a nested yield* such as f(yield* g(yield* x)) lies inside the outer range.
@@ -106,7 +108,7 @@ fn yield_in_call_argument_match_at(
     matches.iter().find(|m| m.location.intersects(span) || span.contained_by(m.location))
 }
 
-// go: internal/fixables/yield_in_call_argument.go:91 yieldInCallArgumentVerbs 0d344c5ad43828a4
+// go: internal/fixables/yield_in_call_argument.go:97 yieldInCallArgumentVerbs 0d344c5ad43828a4
 // yieldInCallArgumentVerbs maps a leading verb of the yielded name to its past
 // participle, so `load` becomes `loaded` and `fetchUser` becomes `fetchedUser`.
 static YIELD_IN_CALL_ARGUMENT_VERBS: LazyLock<FxHashMap<&'static str, &'static str>> =
@@ -114,7 +116,7 @@ static YIELD_IN_CALL_ARGUMENT_VERBS: LazyLock<FxHashMap<&'static str, &'static s
         FxHashMap::from_iter([("load", "loaded"), ("fetch", "fetched"), ("build", "built")])
     });
 
-// go: internal/fixables/yield_in_call_argument.go:100 yieldInCallArgumentName c099258f00d1e09e
+// go: internal/fixables/yield_in_call_argument.go:106 yieldInCallArgumentName c099258f00d1e09e
 // yieldInCallArgumentName picks the base of the hoisted const name from the
 // yielded expression: its identifier or last property name, with a leading verb
 // turned into a participle, falling back to `value`.
@@ -161,4 +163,161 @@ fn go_unicode_is_lower(r: char) -> bool {
         return r.is_ascii_lowercase();
     }
     r.is_lowercase()
+}
+
+// go: internal/fixables/yield_in_call_argument.go:138 yieldInCallArgumentHoistAnchor df8ab9f25c95dfc9
+// yieldInCallArgumentHoistAnchor returns the statement before which the yield*
+// argument can be hoisted without changing what runs before the effect, or nil.
+// It climbs from the argument through an allowlist of parent kinds; everything
+// evaluated before the argument along the way must be side-effect free.
+fn yield_in_call_argument_hoist_anchor(arg: P<Node>) -> Option<P<Node>> {
+    let mut child = arg;
+    let mut anchor = ast::find_ancestor_or_quit(arg.parent(), |p| {
+        let result = yield_in_call_argument_hoist_step(p, child);
+        child = p;
+        result
+    })?;
+    if anchor.kind() == Kind::VariableDeclaration {
+        anchor = anchor
+            .parent()
+            .and_then(|list| list.parent())
+            .expect("the hoist step checked the variable statement");
+    }
+    yield_in_call_argument_finalize_anchor(anchor)
+}
+
+// go: internal/fixables/yield_in_call_argument.go:158 yieldInCallArgumentHoistStep 72c201a66a81b6b2
+// yieldInCallArgumentHoistStep decides one step of the climb from child to its
+// parent p: climb on, stop at p as the statement (or the single const
+// declaration) to hoist before, or quit because hoisting could change what runs
+// before the effect.
+fn yield_in_call_argument_hoist_step(p: P<Node>, child: P<Node>) -> FindAncestorResult {
+    match p.kind() {
+        Kind::ParenthesizedExpression
+        | Kind::AsExpression
+        | Kind::NonNullExpression
+        | Kind::YieldExpression => FindAncestorResult::False,
+        Kind::CallExpression | Kind::NewExpression => {
+            let expression = p.expression().expect("a call or new expression has a callee");
+            if child == expression {
+                return FindAncestorResult::False;
+            }
+            if p.flags().intersects(NodeFlags::OptionalChain)
+                || !yield_in_call_argument_is_side_effect_free(expression)
+            {
+                return FindAncestorResult::Quit;
+            }
+            for &argument in p.arguments() {
+                if argument == child {
+                    break;
+                }
+                if !yield_in_call_argument_is_side_effect_free(argument) {
+                    return FindAncestorResult::Quit;
+                }
+            }
+            FindAncestorResult::False
+        }
+        Kind::PropertyAccessExpression => {
+            if Some(child) != p.expression() {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::ElementAccessExpression => {
+            let expression = p.expression().expect("an element access has an expression");
+            if child != expression
+                && (p.flags().intersects(NodeFlags::OptionalChain)
+                    || !yield_in_call_argument_is_side_effect_free(expression))
+            {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::BinaryExpression => {
+            let binary = p.as_binary_expression();
+            if child == binary.left() {
+                return FindAncestorResult::False;
+            }
+            let operator = binary.operator_token().kind();
+            if operator == Kind::AmpersandAmpersandToken
+                || operator == Kind::BarBarToken
+                || operator == Kind::QuestionQuestionToken
+                || ast::is_logical_or_coalescing_assignment_operator(operator)
+                || !yield_in_call_argument_is_side_effect_free(binary.left())
+            {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::ConditionalExpression => {
+            if child != p.as_conditional_expression().condition() {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::False
+        }
+        Kind::ExpressionStatement | Kind::ReturnStatement => FindAncestorResult::True,
+        Kind::IfStatement => {
+            if child != p.as_if_statement().expression() {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::True
+        }
+        Kind::VariableDeclaration => {
+            let list = p.parent();
+            if Some(child) != p.initializer()
+                || list.is_none_or(|list| {
+                    list.kind() != Kind::VariableDeclarationList
+                        || !list.flags().intersects(NodeFlags::Const)
+                        || list.as_variable_declaration_list().declarations().nodes().len() != 1
+                        || list
+                            .parent()
+                            .is_none_or(|parent| parent.kind() != Kind::VariableStatement)
+                })
+            {
+                return FindAncestorResult::Quit;
+            }
+            FindAncestorResult::True
+        }
+        _ => FindAncestorResult::Quit,
+    }
+}
+
+// go: internal/fixables/yield_in_call_argument.go:225 yieldInCallArgumentFinalizeAnchor 6655bd2c7ae49357
+// yieldInCallArgumentFinalizeAnchor accepts a statement only when it sits in a
+// statement list, so a const can be inserted right before it.
+fn yield_in_call_argument_finalize_anchor(statement: P<Node>) -> Option<P<Node>> {
+    let parent = statement.parent()?;
+    match parent.kind() {
+        Kind::Block | Kind::CaseClause | Kind::DefaultClause => Some(statement),
+        _ => None,
+    }
+}
+
+// go: internal/fixables/yield_in_call_argument.go:238 yieldInCallArgumentIsSideEffectFree cdcd23d12fe7c18b
+// yieldInCallArgumentIsSideEffectFree reports whether evaluating node cannot run
+// code: identifiers, literals and non-optional property accesses on them.
+fn yield_in_call_argument_is_side_effect_free(node: P<Node>) -> bool {
+    let node = ast::skip_parentheses(node);
+    match node.kind() {
+        Kind::Identifier
+        | Kind::StringLiteral
+        | Kind::NumericLiteral
+        | Kind::BigIntLiteral
+        | Kind::NoSubstitutionTemplateLiteral
+        | Kind::RegularExpressionLiteral
+        | Kind::TrueKeyword
+        | Kind::FalseKeyword
+        | Kind::NullKeyword => true,
+        Kind::PrefixUnaryExpression => {
+            let prefix = node.as_prefix_unary_expression();
+            prefix.operator() == Kind::MinusToken && prefix.operand().kind() == Kind::NumericLiteral
+        }
+        Kind::PropertyAccessExpression => {
+            !node.flags().intersects(NodeFlags::OptionalChain)
+                && yield_in_call_argument_is_side_effect_free(
+                    node.expression().expect("a property access has an expression"),
+                )
+        }
+        _ => false,
+    }
 }

@@ -1,0 +1,1059 @@
+==== /.src/missingConcurrencyOption.ts (75 flows) ====
+
+=== Piping Flow ===
+Location: 21:32 - 21:60
+Node: Effect.forEach(items, save)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 24:35 - 24:69
+Node: pipe(items, Effect.forEach(save))
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.forEach
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 27:39 - 29:2
+Node: Effect.succeed(items).pipe(\n  Effect.flatMap(Effect.forEach(save))\n)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<readonly number[], never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [Effect.forEach(save)]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 28:18 - 28:38
+Node: Effect.forEach(save)
+Node Kind: KindCallExpression
+
+Subject: save
+Subject Type: (n: number) => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.forEach
+      args: (constant)
+      outType: (self: readonly number[]) => Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 32:30 - 32:58
+Node: Effect.forEach(save)(items)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.forEach
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 35:37 - 35:81
+Node: Effect.forEach(items, (n) => Effect.log(n))
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [(n) => Effect.log(n)]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 35:66 - 35:80
+Node: Effect.log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 42:34 - 42:81
+Node: Effect.forEach(items, save, { discard: true })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { discard: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 45:35 - 45:67
+Node: Effect.forEach(items, save, {})
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, {}]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 48:39 - 50:3
+Node: Effect.forEach(items, save, {\n  discard: true\n})
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, {\n  discard: true\n}]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 53:38 - 53:91
+Node: pipe(items, Effect.forEach(save, { discard: true }))
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.forEach
+      args: [save, { discard: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 56:43 - 56:92
+Node: Effect.forEach(items, save, ({ discard: true }))
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, ({ discard: true })]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 60:30 - 60:77
+Node: Effect.forEach(items, save, { concurrent: 4 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrent: 4 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 67:33 - 67:60
+Node: Effect.all([check, check])
+Node Kind: KindCallExpression
+
+Subject: [check, check]
+Subject Type: [Effect<boolean, never, never>, Effect<boolean, never, never>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<[boolean, boolean], never, never>
+
+=== Piping Flow ===
+Location: 70:33 - 70:52
+Node: Effect.all(checks)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 73:34 - 73:69
+Node: Effect.all({ a: check, b: check })
+Node Kind: KindCallExpression
+
+Subject: { a: check, b: check }
+Subject Type: { a: Effect<boolean, never, never>; b: Effect<boolean, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<{ a: boolean; b: boolean; }, never, never>
+
+=== Piping Flow ===
+Location: 76:30 - 76:68
+Node: Effect.all(checks, { discard: true })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ discard: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 79:33 - 79:80
+Node: Effect.all(checks, { discard: true } as const)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ discard: true } as const]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 80:39 - 80:126
+Node: Effect.forEach(items, save, { discard: true } satisfies { readonly discard: boolean })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { discard: true } satisfies { readonly discard: boolean }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 83:29 - 83:68
+Node: Effect.all(checks, { mode: "either" })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ mode: "either" }]
+      outType: Effect<Either<boolean, never>[], never, never>
+
+=== Piping Flow ===
+Location: 86:26 - 86:81
+Node: Effect.all(checks).pipe(Effect.map((xs) => xs.length))
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<boolean[], never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(xs) => xs.length]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 93:32 - 93:57
+Node: Eff.forEach(items, save)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Eff.forEach
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 96:28 - 96:54
+Node: forEachNamed(items, save)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: forEachNamed
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 97:24 - 97:41
+Node: allNamed(checks)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: allNamed
+      args: (constant)
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 102:26 - 102:43
+Node: allAlias(checks)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: allAlias
+      args: (constant)
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 103:30 - 103:56
+Node: forEachAlias(items, save)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: forEachAlias
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 109:27 - 119:3
+Node: Effect.gen(function*() {\n  // MUST TRIGGER\n  yield* Effect.forEach(items, save)\n  // MUST TRIGGER\n  const results = yield* Effect.all(checks)\n  // MUST NOT TRIGGER: sequential intent stated explicitly.\n  yield* Effect.forEach(items, save, { concurrency: 1 })\n  // MUST NOT TRIGGER: explicit bounded concurrency.\n  yield* Effect.all(checks, { concurrency: 4 })\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER\n  yield* Effect.forEach(items, save)\n  // MUST TRIGGER\n  const results = yield* Effect.all(checks)\n  // MUST NOT TRIGGER: sequential intent stated explicitly.\n  yield* Effect.forEach(items, save, { concurrency: 1 })\n  // MUST NOT TRIGGER: explicit bounded concurrency.\n  yield* Effect.all(checks, { concurrency: 4 })\n  return results\n}
+Subject Type: () => Generator<YieldWrap<Effect<void[], never, never>> | YieldWrap<Effect<boolean[], never, never>>, boolean[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 111:9 - 111:37
+Node: Effect.forEach(items, save)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 113:25 - 113:44
+Node: Effect.all(checks)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 115:9 - 115:57
+Node: Effect.forEach(items, save, { concurrency: 1 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: 1 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 117:9 - 117:48
+Node: Effect.all(checks, { concurrency: 4 })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ concurrency: 4 }]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 121:26 - 128:3
+Node: Effect.fn("inEffectFn")(function*() {\n  // MUST TRIGGER\n  yield* Effect.forEach(items, save)\n  // MUST TRIGGER\n  yield* Effect.all(checks, { discard: true })\n  // MUST NOT TRIGGER: explicit concurrency.\n  yield* Effect.forEach(items, save, { concurrency: 2 })\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // MUST TRIGGER\n  yield* Effect.forEach(items, save)\n  // MUST TRIGGER\n  yield* Effect.all(checks, { discard: true })\n  // MUST NOT TRIGGER: explicit concurrency.\n  yield* Effect.forEach(items, save, { concurrency: 2 })\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("inEffectFn")
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 123:9 - 123:37
+Node: Effect.forEach(items, save)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 125:9 - 125:47
+Node: Effect.all(checks, { discard: true })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ discard: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 127:9 - 127:57
+Node: Effect.forEach(items, save, { concurrency: 2 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: 2 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 131:22 - 131:87
+Node: Effect.forEach(items, (n) => Effect.all([save(n), save(n + 1)]))
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [(n) => Effect.all([save(n), save(n + 1)])]
+      outType: Effect<[void, void][], never, never>
+
+=== Piping Flow ===
+Location: 131:51 - 131:86
+Node: Effect.all([save(n), save(n + 1)])
+Node Kind: KindCallExpression
+
+Subject: [save(n), save(n + 1)]
+Subject Type: [Effect<void, never, never>, Effect<void, never, never>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<[void, void], never, never>
+
+=== Piping Flow ===
+Location: 131:64 - 131:71
+Node: save(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: save
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 131:72 - 131:84
+Node: save(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: save
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 138:33 - 138:81
+Node: Effect.forEach(items, save, { concurrency: 1 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: 1 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 141:30 - 141:93
+Node: Effect.forEach(items, save, { concurrency: 4, discard: true })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: 4, discard: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 144:32 - 144:90
+Node: Effect.forEach(items, save, { concurrency: "unbounded" })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: "unbounded" }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 147:31 - 147:74
+Node: Effect.all(checks, { concurrency: limit })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ concurrency: limit }]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 151:32 - 151:77
+Node: Effect.forEach(items, save, { concurrency })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 154:32 - 154:82
+Node: Effect.forEach(items, save, { "concurrency": 2 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { "concurrency": 2 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 157:42 - 157:94
+Node: Effect.forEach(items, save, { [`concurrency`]: 2 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { [`concurrency`]: 2 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 159:38 - 159:82
+Node: Effect.all(checks, { [concurrencyKey]: 2 })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ [concurrencyKey]: 2 }]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 162:40 - 162:96
+Node: Effect.forEach(items, save, { concurrency: undefined })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: undefined }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 165:26 - 165:74
+Node: Effect.all(checks, { concurrency: 2 } as const)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ concurrency: 2 } as const]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 168:39 - 168:93
+Node: pipe(items, Effect.forEach(save, { concurrency: 2 }))
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.forEach
+      args: [save, { concurrency: 2 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 169:38 - 169:86
+Node: Effect.forEach(save, { concurrency: 1 })(items)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.forEach
+      args: [save, { concurrency: 1 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 172:28 - 172:76
+Node: Effect.forEach(items, save, { concurrency: 1 })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: 1 }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 173:24 - 173:63
+Node: Effect.all(checks, { concurrency: 4 })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ concurrency: 4 }]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 180:38 - 180:82
+Node: Effect.forEach(items, save, runtimeOptions)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, runtimeOptions]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 183:38 - 183:79
+Node: Effect.forEach(items, save, discardOnly)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, discardOnly]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 187:37 - 190:2
+Node: Effect.all(\n  checks,\n  parallel ? { concurrency: "unbounded" } : { concurrency: 1 }\n)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [parallel ? { concurrency: "unbounded" } : { concurrency: 1 }]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 193:36 - 193:87
+Node: Effect.forEach(items, save, { ...runtimeOptions })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { ...runtimeOptions }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 194:36 - 194:99
+Node: Effect.forEach(items, save, { ...discardOnly, discard: true })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { ...discardOnly, discard: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 202:32 - 202:57
+Node: pipe(checks, Effect.all)
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 206:24 - 206:75
+Node: Effect.filter(items, (n) => Effect.succeed(n > 0))
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.filter
+      args: [(n) => Effect.succeed(n > 0)]
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 206:52 - 206:74
+Node: Effect.succeed(n > 0)
+Node Kind: KindCallExpression
+
+Subject: n > 0
+Subject Type: boolean
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 209:25 - 209:70
+Node: Option.all([Option.some(1), Option.some(2)])
+Node Kind: KindCallExpression
+
+Subject: [Option.some(1), Option.some(2)]
+Subject Type: [Option<number>, Option<number>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.all
+      args: (constant)
+      outType: Option<[number, number]>
+
+=== Piping Flow ===
+Location: 209:38 - 209:52
+Node: Option.some(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 209:53 - 209:68
+Node: Option.some(2)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 209:70 - 212:28
+Node: items.forEach((n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: (n) => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: items.forEach
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 213:24 - 213:58
+Node: Promise.all([Promise.resolve(1)])
+Node Kind: KindCallExpression
+
+Subject: [Promise.resolve(1)]
+Subject Type: [Promise<number>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[number]>
+
+=== Piping Flow ===
+Location: 213:38 - 213:56
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 218:63 - 218:81
+Node: values.forEach(f)
+Node Kind: KindCallExpression
+
+Subject: f
+Subject Type: (a: A) => void
+
+Transformations (1):
+  [0] kind: call
+      callee: values.forEach
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 220:24 - 220:41
+Node: local.all(items)
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: local.all
+      args: (constant)
+      outType: readonly number[]
+
+=== Piping Flow ===
+Location: 231:35 - 231:83
+Node: Effect.forEach(items, save, { batching: true })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { batching: true }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 232:43 - 232:94
+Node: Effect.all(checks, { concurrentFinalizers: true })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ concurrentFinalizers: true }]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 235:31 - 235:72
+Node: Effect.all(checks, { mode: "validate" })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ mode: "validate" }]
+      outType: Effect<boolean[], Option<never>[], never>
+
+=== Piping Flow ===
+Location: 238:26 - 238:73
+Node: Effect.all(checks, { concurrency: "inherit" })
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ concurrency: "inherit" }]
+      outType: Effect<boolean[], never, never>
+
+=== Piping Flow ===
+Location: 239:30 - 239:102
+Node: Effect.forEach(items, save, { concurrency: "inherit", batching: true })
+Node Kind: KindCallExpression
+
+Subject: items
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [save, { concurrency: "inherit", batching: true }]
+      outType: Effect<void[], never, never>
+
+=== Piping Flow ===
+Location: 242:36 - 242:84
+Node: pipe(checks, Effect.allWith({ discard: true }))
+Node Kind: KindCallExpression
+
+Subject: checks
+Subject Type: readonly Effect<boolean, never, never>[]
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.allWith
+      args: [{ discard: true }]
+      outType: Effect<void, never, never>

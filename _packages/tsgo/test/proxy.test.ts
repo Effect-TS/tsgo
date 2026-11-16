@@ -299,12 +299,12 @@ describe("proxy tsc and tsrs resolution", () => {
     const musl = await makeContext({ isGlibc: () => false })
     await expect(run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, musl))).rejects.toMatchObject({
       reason: "Linux musl is not supported by the packaged tsrs integration; it is built for "
-        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64."
+        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64, win32-arm64."
     })
-    const windows = await makeContext({ platform: "win32", arch: "arm64" })
-    await expect(run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, windows))).rejects.toMatchObject({
-      reason: "The packaged tsrs integration is not available for win32-arm64; it is built for "
-        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64."
+    const linuxArm = await makeContext({ platform: "linux", arch: "arm" })
+    await expect(run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, linuxArm))).rejects.toMatchObject({
+      reason: "The packaged tsrs integration is not available for linux-arm; it is built for "
+        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64, win32-arm64."
     })
   })
 })
@@ -401,7 +401,7 @@ describe("proxy oxlint resolution", () => {
     })
   })
 
-  it("rejects --tsrs-lint without a version after =, an unknown version, or an unsupported host", async () => {
+  it("rejects --tsrs-lint without a version after =, an unknown version, or a missing build", async () => {
     const context = await makeContext()
     await installOxlint(context.cwd)
     await writeArtifact(join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.linux-x64-gnu.node"))
@@ -424,14 +424,6 @@ describe("proxy oxlint resolution", () => {
     await expect(run(resolveProxyCommand(invocation(undefined), context))).rejects.toMatchObject({
       _tag: "ProxyError",
       reason: `Missing packaged artifact ${join(context.packageDirectory, "artifacts", "tsrs", tsrsVersion, "tsrs")}.`
-    })
-    const windowsArm = await makeContext({ platform: "win32", arch: "arm64" })
-    await installOxlint(windowsArm.cwd)
-    await writeArtifact(
-      join(windowsArm.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.win32-arm64-msvc.node")
-    )
-    await expect(run(resolveProxyCommand(invocation(undefined), windowsArm))).rejects.toMatchObject({
-      reason: expect.stringContaining("The packaged tsrs integration is not available for win32-arm64")
     })
   })
 

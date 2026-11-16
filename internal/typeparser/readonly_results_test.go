@@ -28,13 +28,16 @@ export const result = source.pipe(add(1), add(2), add(1))
 	fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
 		"/test.ts": &fstest.MapFile{Data: []byte(source)},
 	}, tspath.CaseSensitive))
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{
 			Target: core.ScriptTargetESNext, Strict: core.TSTrue,
 		}, []tspath.RootedFilePath{"/test.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	c, done := program.GetTypeChecker(context.Background())
 	defer done()
 	sf := program.GetSourceFile("/test.ts")

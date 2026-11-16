@@ -35,7 +35,7 @@ pub static CATCH_IF_TAG_TO_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_if_tag_to_catch_tag.go:33 CatchIfTagToCatchTagMatch ab67b7f93fdd5bb5
+// go: internal/rules/catch_if_tag_to_catch_tag.go:33 CatchIfTagToCatchTagMatch 4e95ef3dd7ec9faf
 #[derive(Clone)]
 pub struct CatchIfTagToCatchTagMatch {
     pub source_file: P<SourceFile>,
@@ -43,10 +43,9 @@ pub struct CatchIfTagToCatchTagMatch {
     pub transformation: PipingFlowTransformation,
     pub tag: String,
     pub handler: P<Node>,
-    pub can_fix: bool,
 }
 
-// go: internal/rules/catch_if_tag_to_catch_tag.go:42 AnalyzeCatchIfTagToCatchTag dd12ed3be98b0f02
+// go: internal/rules/catch_if_tag_to_catch_tag.go:41 AnalyzeCatchIfTagToCatchTag 0d1849de8b43d5e4
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), never nil.
 pub fn analyze_catch_if_tag_to_catch_tag(
@@ -76,14 +75,13 @@ pub fn analyze_catch_if_tag_to_catch_tag(
                 handler: *transformation.args().at(1),
                 transformation,
                 tag,
-                can_fix: true,
             });
         }
     }
     matches
 }
 
-// go: internal/rules/catch_if_tag_to_catch_tag.go:69 catchIfTagPredicate 35321ff688773ead
+// go: internal/rules/catch_if_tag_to_catch_tag.go:67 catchIfTagPredicate 35321ff688773ead
 pub(crate) fn catch_if_tag_predicate(
     tp: &mut TypeParser<'_>,
     predicate_node: P<Node>,

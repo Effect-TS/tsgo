@@ -97,7 +97,8 @@ export const tsrsTargets = [
   "linux-x64-musl",
   "linux-arm64-gnu",
   "linux-arm64-musl",
-  "win32-x64"
+  "win32-x64",
+  "win32-arm64"
 ] as const
 
 export type TsrsTarget = typeof tsrsTargets[number]

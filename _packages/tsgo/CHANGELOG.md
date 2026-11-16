@@ -1,5 +1,136 @@
 # @effect/tsgo
 
+## 0.69.1
+
+### Patch Changes
+
+- 606541e: Catch-handler rules now find every use of the caught error parameter in the same way, through a shared typeparser scan. A shorthand property `{ error }` now counts as a use of `error` in `catchConditionalRefailToCatchIf`, `catchTagToCatchReason` and the `catchAllTagDispatchToCatchTag` quick fix, as it already did in `timeoutCatchTagToTimeoutOrElse`. When a branch result reads the error only through `{ error }`, the `catchAllTagDispatchToCatchTag` fix now keeps the handler parameter, and `catchTagToCatchReason` counts the branch as using the parameter.
+  
+  ```ts
+  program.pipe(
+    // now reported by catchConditionalRefailToCatchIf: the predicate reads `error` through `{ error }`
+    Effect.catch((error) => isNotFound({ error }) ? Effect.succeed("guest") : Effect.fail(error))
+  )
+  ```
+- aaafd45: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261115.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/6bdcb54d23f41bc7098c1f3488ac599c75b852ca) commit `6bdcb54d23f41bc7098c1f3488ac599c75b852ca`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.69.0
+
+### Minor Changes
+
+- 647cd77: Add the opt-in `missingConcurrencyOption` diagnostic in `style`. `Effect.all` and `Effect.forEach` run sequentially unless `concurrency` is set, which readers coming from `Promise.all` often do not expect. The rule reports calls whose options argument is missing or is an object literal without a `concurrency` key, in every spelling: data-first, data-last in a pipe, curried, and inside `Effect.gen` / `Effect.fn` bodies.
+  
+  ```ts
+  yield* Effect.forEach(items, save)                      // reported
+  yield* Effect.forEach(items, save, { concurrency: 1 })  // ok
+  yield* Effect.all(checks, { concurrency: 4 })           // ok
+  ```
+  
+  A quick fix adds `concurrency: 1`, which keeps the current behaviour: `Effect.forEach(items, save)` becomes `Effect.forEach(items, save, { concurrency: 1 })`, and `Effect.all(checks, { discard: true })` becomes `Effect.all(checks, { discard: true, concurrency: 1 })`. Options that are not an object literal, or that use a spread, are not reported. A literal under `as const`, `as` or `satisfies` is checked like a bare one; under `satisfies` the call is reported without the quick fix, since adding `concurrency` may not satisfy the type. The rule defaults to off and supports Effect v3 and v4.
+  
+  Piping flows now recognize Effect v4's `forEach` as a dual, so `Effect.forEach(items, f)` and `Effect.forEach(f)(items)` normalize like they do on v3.
+
+### Patch Changes
+
+- 0f776a9: Fix `schemaNumber` false positives for `isInt()` and `isFinite()` checks wrapped in `.abort()` or combined with `.and(...)`. `.abort()` keeps the filter's predicate and `X.and(Y)` runs both filters, so the schema still rejects `NaN`, `Infinity` and `-Infinity`, like the bare filter and the `.annotate(...)` form, which was already accepted. A finite filter on either side of `.and(...)` counts, and the wrappers can be chained in any order, in `.check(...)` and in piped `Schema.check(...)`.
+  
+  ```ts
+  Schema.Number.check(Schema.isInt().abort())                              // no longer reported
+  Schema.Number.check(Schema.isFinite().abort(), Schema.isBetween({ minimum: 1, maximum: 24 })) // no longer reported
+  Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0)))         // no longer reported
+  Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isInt()))         // no longer reported
+  Schema.Number.check(Schema.isGreaterThan(0).abort())                     // still reported
+  ```
+- f374280: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261112.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/ad24728023c52ef6a92a278046cdb69621048365) commit `ad24728023c52ef6a92a278046cdb69621048365`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.68.2
+
+### Patch Changes
+
+- 4f8b181: Ship the patched tsrs binary for Windows ARM64 (`win32-arm64`), now that tsrs 0.25.0 publishes `@tsrs/win32-arm64`.
+
+## 0.68.1
+
+### Patch Changes
+
+- e2593ac: Fix the `catchToOrElseSucceed` and `flatMapToMap` quick fixes emitting code that does not parse when `Effect.succeed` receives an object literal inside a concise arrow body. The value is now parenthesized, including when the object literal is followed by `as const` or `satisfies T`:
+  
+  ```ts
+  // before
+  Effect.catch(() => Effect.succeed({ ok: false } as const))
+  Effect.flatMap((n) => Effect.succeed({ value: n }))
+  
+  // after the fix (previously `() => { ok: false } as const` and `(n) => { value: n }`)
+  Effect.orElseSucceed(() => ({ ok: false } as const))
+  Effect.map((n) => ({ value: n }))
+  ```
+- 732dd03: Stop `--tsrs-lint ... --type-check` from reporting Effect suggestions as errors (#1025).
+  
+  Oxlint showed every type-check diagnostic as an error, so suggestion-level Effect diagnostics such as `schemaClassMissingBrand` made the lint fail even though `effect-tsgo tsrs --noEmit` passed. tsrs-lint now forwards only errors and warnings to `--type-check`. This backports oxc-project/tsrs#959 as a tsrs patch until it lands upstream.
+  
+  ```sh
+  # before: suggestions reported as errors, exit 1
+  # after: exits 0, like `effect-tsgo tsrs --noEmit`
+  effect-tsgo --tsrs-lint vp lint --type-aware --type-check
+  ```
+
+## 0.68.0
+
+### Minor Changes
+
+- a764f17: Add `onExitFailureToOnError` style suggestion: it reports an `Effect.onExit` callback that only acts on failure (`Exit.isFailure`, `Exit.isSuccess`, `exit._tag` checks, in a conditional, `if` or `switch`, with `Effect.void` on the other side) and recommends `Effect.onError`, which expresses the same intent more directly.
+  
+  ```ts
+  program.pipe(
+    Effect.onExit((exit) =>
+      Exit.isFailure(exit) ? Effect.logError("failed", { cause: exit.cause }) : Effect.void
+    )
+  )
+  // can be written as
+  program.pipe(Effect.onError((cause) => Effect.logError("failed", { cause })))
+  ```
+
+### Patch Changes
+
+- ec499f2: Move fix-only work out of rule analysis into the quick fixes, so it runs only when the editor asks for code actions instead of on every check. This covers 27 rules, among them `yieldInCallArgument`, `failCauseToConstructor`, `suspendFailToFailSync`, `catchTagToCatchReason`, `mapMapErrorToMapBoth` and `unnecessaryEffectGen`. Their diagnostics are unchanged.
+  
+  Three rules now report explicitly typed calls that they used to skip, because those calls can still be rewritten by hand. They get no quick fix:
+  
+  - `provideLayerSucceedToProvideService`: `Effect.provide(Layer.succeed<I, S>(Service, implementation))` (rewrite: `Effect.provideService<I, S>(Service, implementation)`), and the same for `Layer.effect<…>`
+  - `provideMergeAllToArray`: `Effect.provide<…>(Layer.mergeAll(...))` and `Effect.provide(Layer.mergeAll<…>(...))`
+  - `timeoutCatchTagToTimeoutOrElse`: explicit type arguments on the `Effect.timeout` step
+  
+  ```ts
+  // now reported, without a quick fix
+  program.pipe(Effect.provide(Layer.succeed<Service, { readonly value: number }>(Service, implementation)))
+  ```
+- 7aacb7d: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261110.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/b7917e5e4c278f132ed19f777d968b6b1180fc24) commit `b7917e5e4c278f132ed19f777d968b6b1180fc24`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.67.7
+
+### Patch Changes
+
+- 2d1784c: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261109.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/f7973164a5f079a2d8b88d0fdb39347222549124) commit `f7973164a5f079a2d8b88d0fdb39347222549124`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.67.6
+
+### Patch Changes
+
+- 9298af7: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261108.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/f7973164a5f079a2d8b88d0fdb39347222549124) commit `f7973164a5f079a2d8b88d0fdb39347222549124`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.67.5
+
+### Patch Changes
+
+- 689b96f: Finish the tsrs 0.23.0 bump: refresh `Cargo.lock` for the new tsrs crate versions, and update the release parity check in `repoctl tsrs check` to read tsrs's new matrix-based `build-windows` job (same target, runner and build flags, now written as `${{ matrix.target }}`). Rework the Oxlint `002-effect-tsgolint-path.patch` so it applies to Oxlint 1.92.0 as well as 1.88–1.91: `EFFECT_TSGO_TSGOLINT_PATH` is now resolved by a wrapper around upstream's `try_find_tsgolint_executable` instead of an edit inside it (same behavior).
+- c7f44a4: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261106.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/a59fafb8e7b5b2efef0568149fea03caad02356a) commit `a59fafb8e7b5b2efef0568149fea03caad02356a`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
+## 0.67.4
+
+### Patch Changes
+
+- dd69d48: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261105.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/c46bcd6089ea2e5e84e7fcc60845ac884a5b0ac1) commit `c46bcd6089ea2e5e84e7fcc60845ac884a5b0ac1`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.67.3
 
 ### Patch Changes

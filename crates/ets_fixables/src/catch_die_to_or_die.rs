@@ -17,17 +17,17 @@ pub static CATCH_DIE_TO_OR_DIE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable
     run: run_catch_die_to_or_die_fix,
 });
 
-// go: internal/fixables/catch_die_to_or_die.go:22 runCatchDieToOrDieFix f4771d57ebe9b9fb
+// go: internal/fixables/catch_die_to_or_die.go:22 runCatchDieToOrDieFix 52cd9f9db8c0a064
 //
 // Rust: the match's transformation is never nil (`CatchDieToOrDieMatch::transformation` is not optional), so only
-// Go's `HasTypeArguments` check remains.
+// Go's `HasExplicitTypeArguments` check remains.
 fn run_catch_die_to_or_die_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_catch_die_to_or_die(&mut ctx.type_parser, Some(source_file)) {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
-        if m.has_type_arguments {
+        if ets_rules::has_explicit_type_arguments(Some(&m.transformation)) {
             continue;
         }
 

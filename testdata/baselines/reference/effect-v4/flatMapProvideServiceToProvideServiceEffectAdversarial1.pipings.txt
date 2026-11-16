@@ -1,0 +1,43 @@
+==== /.src/flatMapProvideServiceToProvideServiceEffectAdversarial1.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 3:12 - 3:48
+Node: Context.Service<Service>("Service")
+Node Kind: KindCallExpression
+
+Subject: "Service"
+Subject Type: "Service"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service
+      args: (constant)
+      outType: Service<Service, Service>
+
+=== Piping Flow ===
+Location: 9:9 - 9:83
+Node: input.pipe(Effect.flatMap((p) => Effect.provideService(program, Key, p)))
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: Effect<Service, "a", never> | Effect<Service, "b", never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(p) => Effect.provideService(program, Key, p)]
+      outType: Effect<string, "a" | "b", never>
+
+=== Piping Flow ===
+Location: 9:42 - 9:81
+Node: Effect.provideService(program, Key, p)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, never, Service>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provideService
+      args: [Key, p]
+      outType: Effect<string, never, never>

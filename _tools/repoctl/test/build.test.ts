@@ -57,7 +57,8 @@ test("builds tsrs per tsrs version on its native platforms only, optimized as ts
       "darwin-x64 macos-26-intel pgo",
       "linux-x64 ubuntu-22.04 pgo-bolt",
       "linux-arm64 ubuntu-22.04-arm pgo-bolt",
-      "win32-x64 windows-latest pgo"
+      "win32-x64 windows-latest pgo",
+      "win32-arm64 windows-11-arm pgo"
     ]
   )
   assert.deepEqual(componentArtifact("/repo", "linux-arm64", "tsrs", "0.18.0-ts7.1.0", tsrsBinaryName), {
@@ -68,7 +69,7 @@ test("builds tsrs per tsrs version on its native platforms only, optimized as ts
     binaryName: "tsrs",
     path: "/repo/_packages/tsgo-win32-x64/artifacts/tsrs/0.18.0-ts7.1.0/tsrs.exe"
   })
-  for (const target of ["win32-arm64", "linux-arm"] as const) {
+  for (const target of ["linux-arm"] as const) {
     await assert.rejects(
       Effect.runPromise(
         buildArtifact("/repo", "tsrs", "0.18.0-ts7.1.0", target).pipe(Effect.provide(NodeServices.layer))

@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 static MESSAGE: &Message =
     &tsdiag::USE_EFFECT_0_TO_HANDLE_THIS_TIMEOUT_DIRECTLY_EFFECT_TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE;
 
-// go: internal/fixables/timeout_catch_tag_to_timeout_or_else.go:13 TimeoutCatchTagToTimeoutOrElseFix 96ee800fd7b78686
+// go: internal/fixables/timeout_catch_tag_to_timeout_or_else.go:13 TimeoutCatchTagToTimeoutOrElseFix d2b6ffc679375095
 pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE_FIX: LazyLock<Fixable> =
     LazyLock::new(|| Fixable {
         name: "timeoutCatchTagToTimeoutOrElse",
@@ -24,6 +24,12 @@ pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE_FIX: LazyLock<Fixable> =
                 Some(sf),
             ) {
                 if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
+                    continue;
+                }
+                // The rewrite cannot carry explicit type arguments of Effect.timeout over.
+                if ets_rules::has_explicit_type_arguments(Some(
+                    m.flow.transformations().at(m.start),
+                )) {
                     continue;
                 }
                 let action = ctx.new_fix_action(FixAction {

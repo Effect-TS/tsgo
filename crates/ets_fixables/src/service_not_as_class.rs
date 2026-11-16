@@ -18,7 +18,7 @@ pub static SERVICE_NOT_AS_CLASS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixabl
     run: run_service_not_as_class_fix,
 });
 
-// go: internal/fixables/service_not_as_class.go:20 runServiceNotAsClassFix 4835cfc59f44a6da
+// go: internal/fixables/service_not_as_class.go:20 runServiceNotAsClassFix 8b96454be30b3757
 //
 // Rust: tsrs's call expressions always have an argument list; Go's nil `Arguments` (the inner call, and the outer
 // one without arguments) is an empty list, which prints the same `()`.
@@ -29,6 +29,21 @@ fn run_service_not_as_class_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     for m in matches {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
+        }
+
+        // The fix replaces the variable statement, keeping its modifiers (e.g.
+        // export), or the declaration list when it is not in a statement.
+        let mut target_node = m
+            .call_expr_node
+            .parent()
+            .and_then(|declaration| declaration.parent())
+            .expect("the match's call is the initializer of a const declaration");
+        let mut modifier_nodes = None;
+        if let Some(variable_statement) = target_node.parent()
+            && variable_statement.kind() == Kind::VariableStatement
+        {
+            target_node = variable_statement;
+            modifier_nodes = variable_statement.as_variable_statement().modifiers();
         }
 
         if let Some(action) = ctx.new_fix_action(FixAction {
@@ -94,7 +109,7 @@ fn run_service_not_as_class_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
 
                 // Build modifiers for the class declaration
                 let mut modifiers = None;
-                if let Some(modifier_nodes) = m.modifier_nodes
+                if let Some(modifier_nodes) = modifier_nodes
                     && !modifier_nodes.nodes().is_empty()
                 {
                     let mod_nodes = modifier_nodes
@@ -115,7 +130,7 @@ fn run_service_not_as_class_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
                 );
 
                 ast::set_parent_in_children(class_decl);
-                tracker.replace_node(sf, Some(m.target_node), Some(class_decl), None);
+                tracker.replace_node(sf, Some(target_node), Some(class_decl), None);
             }),
         }) {
             return vec![action];

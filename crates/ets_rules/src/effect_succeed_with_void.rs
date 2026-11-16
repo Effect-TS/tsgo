@@ -106,7 +106,7 @@ pub(crate) fn filter_effect_succeed_constant_matches(
     result
 }
 
-// go: internal/rules/effect_succeed_with_void.go:83 analyzeEffectSucceedConstant dd93585c9d03a7d0
+// go: internal/rules/effect_succeed_with_void.go:83 analyzeEffectSucceedConstant 5771ac3e499dc3a7
 // analyzeEffectSucceedConstant finds piping flows whose subject is the constant `undefined`
 // or `void 0`, possibly parenthesized, and whose first step is Effect.succeed. The step's
 // success type picks the replacement: void gets Effect.void, undefined gets Effect.undefined

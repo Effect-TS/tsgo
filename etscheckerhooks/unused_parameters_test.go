@@ -1,6 +1,7 @@
 package etscheckerhooks_test
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"testing"
@@ -56,7 +57,7 @@ func TestEffectDiagnosticsPreserveUnusedPredicateParameter(t *testing.T) {
 		}
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			program := unusedParameterProgram(enabled, true, `export function unusedPredicate(value: unknown): value is number {
+			program := unusedParameterProgram(t, enabled, true, `export function unusedPredicate(value: unknown): value is number {
   return true;
 }`)
 			sourceFile := program.GetSourceFile("/src/main.ts")
@@ -79,7 +80,7 @@ func TestEffectDiagnosticsPreserveUnusedPredicateParameter(t *testing.T) {
 
 func TestEffectDiagnosticsRunWithoutUnusedChecking(t *testing.T) {
 	t.Parallel()
-	program := unusedParameterProgram(true, false, `export function unusedPredicate(value: unknown): value is number {
+	program := unusedParameterProgram(t, true, false, `export function unusedPredicate(value: unknown): value is number {
   return true;
 }
 export class LocalProblem extends Error {}`)
@@ -95,7 +96,7 @@ export class LocalProblem extends Error {}`)
 	}
 }
 
-func unusedParameterProgram(pluginEnabled, unusedEnabled bool, source string) *compiler.Program {
+func unusedParameterProgram(t testing.TB, pluginEnabled, unusedEnabled bool, source string) *compiler.Program {
 	fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
 		"/src/main.ts": &fstest.MapFile{Data: []byte(source)},
 	}, tspath.CaseSensitive))
@@ -114,9 +115,13 @@ func unusedParameterProgram(pluginEnabled, unusedEnabled bool, source string) *c
 			},
 		}
 	}
-	return compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         tsoptions.NewParsedCommandLine(options, []tspath.RootedFilePath{"/src/main.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return program
 }

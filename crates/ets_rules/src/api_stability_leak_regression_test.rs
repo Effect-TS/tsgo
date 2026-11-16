@@ -107,7 +107,7 @@ pub(crate) fn compile_api_stability_files(t: &T, files: &Files) -> ApiStabilityC
     compile_api_stability_files_primed(t, files, true)
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:29 compileApiStabilityFilesPrimed 38af34ff1f95306a
+// go test: internal/rules/api_stability_leak_regression_test.go:29 compileApiStabilityFilesPrimed 9f02413a1cc5c902
 pub(crate) fn compile_api_stability_files_primed(
     t: &T,
     files: &Files,
@@ -180,7 +180,7 @@ pub(crate) fn compile_api_stability_files_primed(
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:76 runApiStabilityMessages b7a9cacc63996f48
+// go test: internal/rules/api_stability_leak_regression_test.go:79 runApiStabilityMessages b7a9cacc63996f48
 pub(crate) fn run_api_stability_messages(t: &T, rule_ctx: &mut Context<'_, '_>) -> Vec<String> {
     t.helper();
     let diagnostics = (API_STABILITY_LEAK.run)(rule_ctx);
@@ -191,13 +191,13 @@ pub(crate) fn run_api_stability_messages(t: &T, rule_ctx: &mut Context<'_, '_>) 
     messages
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:86 containsApiStabilityMessage 623ef286624fa5b0
+// go test: internal/rules/api_stability_leak_regression_test.go:89 containsApiStabilityMessage 623ef286624fa5b0
 pub(crate) fn contains_api_stability_message(t: &T, messages: &[String], want: &str) -> bool {
     t.helper();
     messages.iter().any(|message| message.contains(want))
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:93 apiStabilityCompilerDiagnostics fcd920d9016abd70
+// go test: internal/rules/api_stability_leak_regression_test.go:96 apiStabilityCompilerDiagnostics fcd920d9016abd70
 pub(crate) fn api_stability_compiler_diagnostics(rule_ctx: &mut Context<'_, '_>) -> Vec<String> {
     let mut out = Vec::new();
     let source_file = rule_ctx.source_file;
@@ -212,7 +212,7 @@ pub(crate) fn api_stability_compiler_diagnostics(rule_ctx: &mut Context<'_, '_>)
     out
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:104 assertApiStabilitySourcesParse 6c45db01dca6d2de
+// go test: internal/rules/api_stability_leak_regression_test.go:107 assertApiStabilitySourcesParse 6c45db01dca6d2de
 // Rust: Go's assertion to `*compiler.Program` always succeeds (the helper builds a compiler program).
 pub(crate) fn assert_api_stability_sources_parse(t: &T, files: &Files) {
     t.helper();
@@ -222,7 +222,7 @@ pub(crate) fn assert_api_stability_sources_parse(t: &T, files: &Files) {
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:117 apiStabilityRegressionCase 68261a0f18f59638
+// go test: internal/rules/api_stability_leak_regression_test.go:120 apiStabilityRegressionCase 68261a0f18f59638
 pub(crate) struct ApiStabilityRegressionCase {
     pub(crate) name: String,
     pub(crate) files: Files,
@@ -245,17 +245,17 @@ pub(crate) fn case(
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:124 apiStabilityMaxInstantiationDelta 766a9c4370342608
+// go test: internal/rules/api_stability_leak_regression_test.go:127 apiStabilityMaxInstantiationDelta 766a9c4370342608
 pub(crate) const API_STABILITY_MAX_INSTANTIATION_DELTA: u32 = 100_000;
 
-// go test: internal/rules/api_stability_leak_regression_test.go:126 apiStabilityControlCompilerDiagnostics a5c47da7af76d24a
+// go test: internal/rules/api_stability_leak_regression_test.go:129 apiStabilityControlCompilerDiagnostics a5c47da7af76d24a
 pub(crate) fn api_stability_control_compiler_diagnostics(t: &T, files: &Files) -> Vec<String> {
     t.helper();
     let mut compiled = compile_api_stability_files_primed(t, files, false);
     compiled.with_rule_ctx(api_stability_compiler_diagnostics)
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:133 runApiStabilityRegressionCase a0d6c2e1c7878a3f
+// go test: internal/rules/api_stability_leak_regression_test.go:136 runApiStabilityRegressionCase a0d6c2e1c7878a3f
 pub(crate) fn run_api_stability_regression_case(t: &T, test: &ApiStabilityRegressionCase) {
     t.helper();
     for cold in [false, true] {
@@ -325,16 +325,16 @@ pub(crate) fn run_api_stability_regression_cases(t: &T, tests: &[ApiStabilityReg
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:180 apiStabilityExperimentalPrefix af87b235e7ebcf6c
+// go test: internal/rules/api_stability_leak_regression_test.go:183 apiStabilityExperimentalPrefix af87b235e7ebcf6c
 pub(crate) const API_STABILITY_EXPERIMENTAL_PREFIX: &str =
     "/** @stability experimental */\ninterface E { value: string }\ndeclare const e: E\n";
 
-// go test: internal/rules/api_stability_leak_regression_test.go:182 singleApiStabilityFile 127546e23e462399
+// go test: internal/rules/api_stability_leak_regression_test.go:185 singleApiStabilityFile 127546e23e462399
 pub(crate) fn single_api_stability_file(source: &str) -> Files {
     files(&[("test.ts", &cat(&[API_STABILITY_EXPERIMENTAL_PREFIX, source]))])
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:186 apiStabilityBothOrders d4c2cfdb1a41e2d9
+// go test: internal/rules/api_stability_leak_regression_test.go:189 apiStabilityBothOrders d4c2cfdb1a41e2d9
 pub(crate) fn api_stability_both_orders(
     name: &str,
     prefix: &str,
@@ -358,7 +358,7 @@ pub(crate) fn api_stability_both_orders(
     ]
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:203 TestApiStabilityLeakColdSafety 1e5911b4736931ed
+// go test: internal/rules/api_stability_leak_regression_test.go:206 TestApiStabilityLeakColdSafety 1e5911b4736931ed
 #[test]
 fn test_api_stability_leak_cold_safety() {
     run(|t| {
@@ -697,7 +697,7 @@ export declare const directLeaky: Direct<E>",
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:414 TestApiStabilityLeakDoesNotTruncateMembers 03656ab02d864305
+// go test: internal/rules/api_stability_leak_regression_test.go:417 TestApiStabilityLeakDoesNotTruncateMembers 03656ab02d864305
 #[test]
 fn test_api_stability_leak_does_not_truncate_members() {
     run(|t| {
@@ -721,7 +721,7 @@ fn test_api_stability_leak_does_not_truncate_members() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:434 TestApiStabilityLeakInstantiationDoesNotScaleWithDepth 34c8dd9b22a615df
+// go test: internal/rules/api_stability_leak_regression_test.go:437 TestApiStabilityLeakInstantiationDoesNotScaleWithDepth 34c8dd9b22a615df
 #[test]
 fn test_api_stability_leak_instantiation_does_not_scale_with_depth() {
     run(|t| {
@@ -768,7 +768,7 @@ fn test_api_stability_leak_instantiation_does_not_scale_with_depth() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:461 TestApiStabilityLeakCyclicCompletionIsReusable 3735ffcf5895603c
+// go test: internal/rules/api_stability_leak_regression_test.go:464 TestApiStabilityLeakCyclicCompletionIsReusable 3735ffcf5895603c
 #[test]
 #[expect(clippy::literal_string_with_formatting_args, reason = "TypeScript fixtures with braces")]
 fn test_api_stability_leak_cyclic_completion_is_reusable() {
@@ -809,7 +809,7 @@ interface E {value:string}
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:487 TestApiStabilityNonInstantiatingAccessors 83ca3e9b50d2dbb3
+// go test: internal/rules/api_stability_leak_regression_test.go:490 TestApiStabilityNonInstantiatingAccessors 83ca3e9b50d2dbb3
 #[test]
 #[expect(clippy::literal_string_with_formatting_args, reason = "TypeScript fixtures with braces")]
 fn test_api_stability_non_instantiating_accessors() {
@@ -958,7 +958,7 @@ fn diagnostic_messages(diagnostics: &[P<Diagnostic>]) -> Vec<String> {
     diagnostics.iter().map(|diagnostic| diagnostic.localize()).collect()
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:575 TestApiStabilityLeakColdLazyReadMatchesWarm 6c2b4f39722e3c74
+// go test: internal/rules/api_stability_leak_regression_test.go:578 TestApiStabilityLeakColdLazyReadMatchesWarm 6c2b4f39722e3c74
 #[test]
 fn test_api_stability_leak_cold_lazy_read_matches_warm() {
     run(|t| {
@@ -1015,7 +1015,7 @@ fn dependency_names(used: &ApiStabilityUsed) -> Vec<String> {
         .collect()
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:608 containsDependencyName d87c41945ee3aa66
+// go test: internal/rules/api_stability_leak_regression_test.go:611 containsDependencyName d87c41945ee3aa66
 fn contains_dependency_name(used: &ApiStabilityUsed, name: &str) -> bool {
     for (_, dependency) in used.dependencies().all() {
         if api_stability_dependency_name(dependency) == name {
@@ -1025,7 +1025,7 @@ fn contains_dependency_name(used: &ApiStabilityUsed, name: &str) -> bool {
     false
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:617 apiStabilityColdUnavailableProbes c05ee930ca7e1a0c
+// go test: internal/rules/api_stability_leak_regression_test.go:620 apiStabilityColdUnavailableProbes c05ee930ca7e1a0c
 fn api_stability_cold_unavailable_probes() -> Vec<(&'static str, String)> {
     let deep_alias = "type Deep<T> = T extends string ? Deep<T> : T\n";
     vec![
@@ -1109,7 +1109,7 @@ export const x = { nested: { deep } }",
     ]
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:649 TestApiStabilityLeakColdUnavailableIsSafe ea596ff90ddbd7d1
+// go test: internal/rules/api_stability_leak_regression_test.go:652 TestApiStabilityLeakColdUnavailableIsSafe ea596ff90ddbd7d1
 #[test]
 fn test_api_stability_leak_cold_unavailable_is_safe() {
     run(|t| {
@@ -1152,7 +1152,7 @@ fn test_api_stability_leak_cold_unavailable_is_safe() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:680 TestApiStabilityLeakRepresentedConditionalOutcomes 98f7e6c1e7721437
+// go test: internal/rules/api_stability_leak_regression_test.go:683 TestApiStabilityLeakRepresentedConditionalOutcomes 98f7e6c1e7721437
 #[test]
 fn test_api_stability_leak_represented_conditional_outcomes() {
     run(|t| {
@@ -1227,7 +1227,7 @@ export declare const x: Holder<{ value: string }>",
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:748 TestApiStabilityLeakLazyConditionalOutcomes a6b60d6dd0f7caca
+// go test: internal/rules/api_stability_leak_regression_test.go:751 TestApiStabilityLeakLazyConditionalOutcomes a6b60d6dd0f7caca
 #[test]
 fn test_api_stability_leak_lazy_conditional_outcomes() {
     run(|t| {
@@ -1298,7 +1298,7 @@ export declare const x: Holder<{ value: string }>",
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:810 TestApiStabilityLeakDeclaredIndexSignatureTags 5f079fbd8f9eada9
+// go test: internal/rules/api_stability_leak_regression_test.go:813 TestApiStabilityLeakDeclaredIndexSignatureTags 5f079fbd8f9eada9
 #[test]
 fn test_api_stability_leak_declared_index_signature_tags() {
     run(|t| {
@@ -1351,7 +1351,7 @@ fn test_api_stability_leak_declared_index_signature_tags() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:854 TestApiStabilityLeakFiniteRecursionDoesNotInstantiate 55335091a4a2c624
+// go test: internal/rules/api_stability_leak_regression_test.go:857 TestApiStabilityLeakFiniteRecursionDoesNotInstantiate 55335091a4a2c624
 #[test]
 fn test_api_stability_leak_finite_recursion_does_not_instantiate() {
     run(|t| {

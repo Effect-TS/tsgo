@@ -284,7 +284,7 @@ fn test_is_node_reference_to_module_export_caches_by_symbol_descriptor_and_membe
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:167 compileFixturesWithJS 3dd5ae8355bd83d2
+// go test: internal/typeparser/module_export_reference_test.go:167 compileFixturesWithJS 6ade85cacb115269
 // Rust: Go's empty version is `None`.
 #[expect(
     clippy::case_sensitive_file_extension_comparisons,
@@ -337,7 +337,7 @@ pub(crate) fn kind_string(kind: Kind) -> String {
     format!("Kind{kind:?}")
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:219 TestReferenceSymbolAtNode_MatchesUngatedComputation d5a1d2a0c705144d
+// go test: internal/typeparser/module_export_reference_test.go:222 TestReferenceSymbolAtNode_MatchesUngatedComputation d5a1d2a0c705144d
 #[test]
 fn test_reference_symbol_at_node_matches_ungated_computation() {
     run(|t| {
@@ -585,7 +585,7 @@ pub(crate) fn node_pos(node: P<Node>) -> i64 {
     node.pos().source_offset().map_or(-1, i64::from)
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:373 TestSymbolHasDeclarationInModuleCached_DeclarationCounts 5f0275243d57355e
+// go test: internal/typeparser/module_export_reference_test.go:376 TestSymbolHasDeclarationInModuleCached_DeclarationCounts 5f0275243d57355e
 #[test]
 fn test_symbol_has_declaration_in_module_cached_declaration_counts() {
     run(|t| {

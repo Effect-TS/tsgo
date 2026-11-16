@@ -204,8 +204,8 @@ test("builds the tsrs binary once per tsrs version and tsrs platform, natively",
   }
 
   const release = buildReleasePlan(upstream)
-  // 2 TypeScript versions x 7 targets, independent of tsrs, then 2 tsrs versions x 5 targets.
-  assert.equal(release.length, 24)
+  // 2 TypeScript versions x 7 targets, independent of tsrs, then 2 tsrs versions x 6 targets.
+  assert.equal(release.length, 26)
   assert.ok(release.filter((artifact) => artifact.component === "typescript").every((artifact) =>
     artifact.runner === "ubuntu-latest"))
   const tsrs = release.filter((artifact) => artifact.component === "tsrs")
@@ -217,7 +217,8 @@ test("builds the tsrs binary once per tsrs version and tsrs platform, natively",
       `${version} darwin-x64 macos-26-intel pgo 120`,
       `${version} linux-x64 ubuntu-22.04 pgo-bolt 120`,
       `${version} linux-arm64 ubuntu-22.04-arm pgo-bolt 120`,
-      `${version} win32-x64 windows-latest pgo 180`
+      `${version} win32-x64 windows-latest pgo 180`,
+      `${version} win32-arm64 windows-11-arm pgo 180`
     ])
   )
   assert.ok(release.filter((artifact) => artifact.component !== "tsrs").every((artifact) =>
@@ -273,8 +274,9 @@ test("orders the release matrix in rounds so every cache is filled once before i
   assert.deepEqual(release.map(label).sort(), buildReleasePlan(upstream).map(label).sort())
   // Round 1: the first job of each cache, the longer tsrs builds first: the Rust build of each tsrs target, the Go
   // caches of both TypeScripts, the Rust build of each oxlint target (shared by its versions).
-  assert.deepEqual(release.slice(0, 13).map(label), [
+  assert.deepEqual(release.slice(0, 14).map(label), [
     "tsrs 0.20.0-ts7.1.0-dev win32-x64",
+    "tsrs 0.20.0-ts7.1.0-dev win32-arm64",
     "tsrs 0.20.0-ts7.1.0-dev darwin-arm64",
     "tsrs 0.20.0-ts7.1.0-dev darwin-x64",
     "tsrs 0.20.0-ts7.1.0-dev linux-x64",
@@ -289,7 +291,7 @@ test("orders the release matrix in rounds so every cache is filled once before i
     "oxlint 1.89.0 linux-arm64"
   ])
   // Round 2 reuses those caches: each oxlint target's second version, the TypeScripts' second targets.
-  assert.deepEqual(release.slice(13, 21).map(label), [
+  assert.deepEqual(release.slice(14, 22).map(label), [
     "typescript 7.0.2 darwin-x64",
     "typescript 7.1.0-dev darwin-x64",
     "oxlint 1.90.0 darwin-arm64",

@@ -17,7 +17,7 @@ pub static SCHEMA_UNION_OF_LITERALS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_schema_union_of_literals_fix,
 });
 
-// go: internal/fixables/schema_union_of_literals.go:20 runSchemaUnionOfLiteralsFix b5a1ace1e1049f56
+// go: internal/fixables/schema_union_of_literals.go:20 runSchemaUnionOfLiteralsFix cbf6300768d6441b
 //
 // Rust: Go's `NewCallExpression` would take the nil clone of a nil first literal expression; tsrs's needs a node,
 // and the rule sets it for every match (`expect`).
@@ -33,7 +33,12 @@ fn run_schema_union_of_literals_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
         // Capture loop variables for the closure
         let union_call_node = m.union_call_node;
         let first_literal_expression = m.first_literal_expression;
-        let all_literal_args = m.all_literal_args;
+        // Every argument of the union is a Schema.Literal(...) call; the
+        // replacement takes all of their arguments, in order.
+        let mut all_literal_args = Vec::new();
+        for &arg in union_call_node.as_call_expression().arguments().nodes() {
+            all_literal_args.extend_from_slice(arg.as_call_expression().arguments().nodes());
+        }
 
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with a single Schema.Literal call".to_string(),

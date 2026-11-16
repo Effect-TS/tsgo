@@ -50,3 +50,29 @@ const catchAlias = Effect.catchAll
 export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
   catchAlias(() => Effect.succeed(42))
 )
+
+interface Result {
+  readonly ok: boolean
+}
+
+// Should trigger: object literal in a concise arrow body needs parentheses after the fix
+export const shouldTriggerObjectLiteral = Effect.fail("error").pipe(
+  Effect.catchAll(() => Effect.succeed({ ok: false }))
+)
+
+// Should trigger: object literal with `as const` in a concise arrow body
+export const shouldTriggerObjectLiteralAsConst = Effect.fail("error").pipe(
+  Effect.catchAll(() => Effect.succeed({ ok: false } as const))
+)
+
+// Should trigger: object literal with `satisfies` in a concise arrow body
+export const shouldTriggerObjectLiteralSatisfies = Effect.fail("error").pipe(
+  Effect.catchAll(() => Effect.succeed({ ok: false } satisfies Result))
+)
+
+// Should trigger: object literal in a block body needs no parentheses
+export const shouldTriggerObjectLiteralBlock = Effect.fail("error").pipe(
+  Effect.catchAll(() => {
+    return Effect.succeed({ ok: false })
+  })
+)

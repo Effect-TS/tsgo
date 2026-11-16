@@ -17,7 +17,7 @@ pub static REMOVE_UNNECESSARY_EFFECT_GEN: LazyLock<Refactor> = LazyLock::new(|| 
     run: run_remove_unnecessary_effect_gen,
 });
 
-// go: internal/refactors/remove_unnecessary_effect_gen.go:21 runRemoveUnnecessaryEffectGen 218de653f3aafb8a
+// go: internal/refactors/remove_unnecessary_effect_gen.go:21 runRemoveUnnecessaryEffectGen 3abf2d0ab9545c83
 pub(crate) fn run_remove_unnecessary_effect_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let matches = ets_rules::analyze_unnecessary_effect_gen(&mut ctx.type_parser, ctx.source_file);
     if matches.is_empty() {
@@ -40,7 +40,12 @@ pub(crate) fn run_remove_unnecessary_effect_gen(ctx: &mut Context<'_, '_>) -> Ve
             // Found a matching unnecessary Effect.gen call at cursor
             let sf = ctx.source_file;
 
-            if m.explicit_return || m.success_is_void {
+            if m.explicit_return
+                || ets_rules::unnecessary_effect_gen_success_is_void(
+                    &mut ctx.type_parser,
+                    m.yielded_expression,
+                )
+            {
                 // Simple unwrap: delete the prefix and suffix around the yielded expression
                 let Some(mut action) = ctx.new_refactor_action(RefactorAction {
                     description: "Remove unnecessary Effect.gen".to_string(),

@@ -19,11 +19,18 @@ pub static MATCH_TO_RESULT_OR_OPTION_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_match_to_result_or_option_fix,
 });
 
-// go: internal/fixables/match_to_result_or_option.go:22 runMatchToResultOrOptionFix b4f66794605928e9
+// go: internal/fixables/match_to_result_or_option.go:22 runMatchToResultOrOptionFix 71343b33090570e4
 fn run_match_to_result_or_option_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_match_to_result_or_option(&mut ctx.type_parser, Some(source_file)) {
-        if !m.fixable || (!m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location)) {
+        if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
+            continue;
+        }
+        // Collapsing the steps changes the input type of every call between them.
+        if map_map_error_path_has_type_arguments(
+            m.flow.transformations().at(m.start),
+            m.flow.transformations().at(m.end),
+        ) {
             continue;
         }
         let member = effect_module_member(m.replacement_name);

@@ -6,7 +6,7 @@ use ets_typeparser::{
 
 use crate::prefer_succeed_some_or_none::is_option_none_call;
 
-// go: internal/rules/catch_handler.go:11 catchHandlerIgnoresError 378a622d08553fbc
+// go: internal/rules/catch_handler.go:10 catchHandlerIgnoresError dd82c82f3e583965
 // Restrict callbacks to arrows so the caught error cannot be observed through
 // a function's arguments object. An unused plain parameter can be removed.
 pub(crate) fn catch_handler_ignores_error(
@@ -44,30 +44,13 @@ pub(crate) fn catch_handler_ignores_error(
         return false;
     };
 
-    // Rust: Go's recursive `usesParameter` closure is a nested function.
-    fn uses_parameter(
-        tp: &mut TypeParser<'_>,
-        symbol: P<ets_shim::ast::Symbol>,
-        node: P<Node>,
-    ) -> bool {
-        if node.kind() == Kind::ShorthandPropertyAssignment
-            && tp.checker().get_shorthand_assignment_value_symbol(Some(node)) == Some(symbol)
-        {
-            return true;
-        }
-        if node.kind() == Kind::Identifier && tp.get_symbol_at_location(node) == Some(symbol) {
-            return true;
-        }
-        node.for_each_child(&mut |child| uses_parameter(tp, symbol, child))
-    }
-
     let arrow = handler.as_arrow_function();
     let body = handler.body().expect("an arrow function has a body");
-    !uses_parameter(tp, symbol, body)
-        && arrow.type_().is_none_or(|type_node| !uses_parameter(tp, symbol, type_node))
+    tp.references_to_symbol(body, symbol).is_empty()
+        && tp.references_to_symbol(arrow.type_(), symbol).is_empty()
 }
 
-// go: internal/rules/catch_handler.go:49 catchHandlerReturnsSucceedNone e385e74113256572
+// go: internal/rules/catch_handler.go:38 catchHandlerReturnsSucceedNone e385e74113256572
 // catchHandlerReturnsSucceedNone reports whether a catch handler's complete
 // returned flow is Effect.succeedNone or Effect.succeed(Option.none()).
 pub(crate) fn catch_handler_returns_succeed_none(

@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/missingConcurrencyOption_preview.ts(8,24): warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+
+
+==== /.src/missingConcurrencyOption_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics missingConcurrencyOption:warning
+    import { Effect } from "effect"
+    
+    declare const items: ReadonlyArray<number>
+    declare const save: (n: number) => Effect.Effect<void>
+    
+    export const program = Effect.forEach(items, save)
+                           ~~~~~~~~~~~~~~
+!!! warning TS377188: `Effect.forEach` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)
+    

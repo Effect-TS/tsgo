@@ -33,6 +33,28 @@ export const refinements = Schema.Struct({
   annotateMethodChained: Schema.Number.check(integer().annotate({ title: "a" }).annotate({ description: "b" })),
   annotateMethodNumberFromString: Schema.NumberFromString.check(Schema.isInt().annotate({ expected: "an integer" })),
   pipedAnnotateMethod: Schema.Number.pipe(Schema.check(Schema.isInt().annotate({ expected: "an integer" }))),
+  abortMethodInt: Schema.Number.check(Schema.isInt().abort()),
+  abortMethodFinite: Schema.Number.check(Schema.isFinite().abort()),
+  abortMethodImported: Schema.Number.check(integer().abort()),
+  abortMethodWithLaterCheck: Schema.Number.check(Schema.isInt().abort(), Schema.isBetween({ minimum: 1, maximum: 24 })),
+  abortMethodNumberFromString: Schema.NumberFromString.check(Schema.isFinite().abort()),
+  abortMethodParenthesized: Schema.Number.check((Schema.isInt()).abort()),
+  andMethodInt: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0))),
+  andMethodFinite: Schema.Number.check(Schema.isFinite().and(Schema.isLessThan(10), { expected: "a small number" })),
+  andMethodChained: Schema.Number.check(Schema.isInt().and(Schema.isGreaterThan(0)).and(Schema.isLessThan(10))),
+  mixedWrappers: Schema.Number.check(
+    Schema.isInt().annotate({ expected: "an integer" }).abort().and(Schema.isGreaterThan(0)).annotate({ title: "a" })
+  ),
+  andArgumentInt: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isInt())),
+  andArgumentAnnotatedAbort: Schema.Number.check(
+    Schema.isGreaterThan(0).and(Schema.isFinite().annotate({ expected: "a finite number" }).abort())
+  ),
+  andArgumentNested: Schema.Number.check(
+    Schema.isGreaterThan(0).and(Schema.isLessThan(10).and(integer())).annotate({ title: "a" })
+  ),
+  pipedAbortMethod: Schema.Number.pipe(Schema.check(Schema.isInt().abort())),
+  pipedAndMethod: Schema.Number.pipe(refine(isFinite().and(Schema.isGreaterThan(0)))),
+  pipedAndArgument: Schema.Number.pipe(Schema.check(Schema.isGreaterThan(0).and(Schema.isInt()))),
   pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),
   pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),
   pipedImported: Schema.Number.pipe(refine(integer())),
@@ -41,5 +63,12 @@ export const refinements = Schema.Struct({
     Schema.check(Schema.isFinite())
   )
 })
+export const stillReported = Schema.Struct({
+  abortNonFinitePredicate: Schema.Number.check(Schema.isGreaterThan(0).abort()),
+  andNonFiniteOperands: Schema.Number.check(Schema.isGreaterThan(0).and(Schema.isLessThan(10))),
+  andNonFiniteOperandsAborted: Schema.Number.check(Schema.isGreaterThan(0).abort().and(Schema.isLessThan(10).abort())),
+  pipedAbortNonFinitePredicate: Schema.Number.pipe(Schema.check(Schema.isGreaterThan(0).abort()))
+})
+
 // @effect-diagnostics-next-line schemaNumber:off
 export const intentionallyNonFinite = Schema.Number

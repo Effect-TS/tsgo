@@ -85,7 +85,7 @@ Transformations (1):
       outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, A | B>>
 
 === Piping Flow ===
-Location: 31:45 - 33:2
+Location: 32:45 - 34:2
 Node: program.pipe(\n  Effect.provide(Layer.mergeAll<[Layer.Layer<A>, Layer.Layer<B>]>(ALayer, BLayer))\n)
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 36:44 - 36:114
+Location: 37:44 - 37:114
 Node: program.pipe(Effect.provide<A, never, never>(Layer.mergeAll(ALayer)))
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<void, never, B>
 
 === Piping Flow ===
-Location: 36:90 - 36:112
+Location: 37:90 - 37:112
 Node: Layer.mergeAll(ALayer)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Layer<A, never, never>
 
 === Piping Flow ===
-Location: 40:27 - 40:74
+Location: 41:27 - 41:74
 Node: program.pipe(Effect.provide(Layer.mergeAll()))
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<void, any, any>
 
 === Piping Flow ===
-Location: 44:32 - 44:93
+Location: 45:32 - 45:93
 Node: program.pipe(Effect.provide(Layer.mergeAll(ALayer, BLayer)))
 Node Kind: KindCallExpression
 

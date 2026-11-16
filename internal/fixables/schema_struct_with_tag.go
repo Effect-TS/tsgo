@@ -30,9 +30,15 @@ func runSchemaStructWithTagFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 
 		// Capture loop variables for the closure
-		tagValue := match.TagValue
-		otherProperties := match.OtherProperties
 		callNode := match.CallNode
+		tagValue := match.TagProperty.Initializer().AsCallExpression().Arguments.Nodes[0].AsStringLiteral().Text
+		// Every property but _tag moves to the TaggedStruct fields.
+		var otherProperties []*ast.Node
+		for _, prop := range callNode.AsCallExpression().Arguments.Nodes[0].AsObjectLiteralExpression().Properties.Nodes {
+			if prop != match.TagProperty {
+				otherProperties = append(otherProperties, prop)
+			}
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Rewrite as Schema.TaggedStruct",

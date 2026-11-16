@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, ModifierList, Node, NodeFlags, SourceFile};
+use ets_shim::ast::{Diagnostic, Kind, Node, NodeFlags, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectMajorVersion, TypeParser};
@@ -37,23 +37,19 @@ pub static SERVICE_NOT_AS_CLASS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/service_not_as_class.go:35 ServiceNotAsClassMatch e25401608b339f1b
+// go: internal/rules/service_not_as_class.go:35 ServiceNotAsClassMatch c29d772a0ff545f8
 // ServiceNotAsClassMatch holds the data needed by both the diagnostic and the quickfix.
 #[derive(Clone)]
 pub struct ServiceNotAsClassMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,          // Error range for the call expression
     pub suggested_usage: String, // The full suggested class declaration string for the diagnostic message
-    pub call_expr_node: P<Node>, // The call expression node (ServiceMap.Service<...>(...) or Context.Service<...>(...))
+    pub call_expr_node: P<Node>, // The call expression node (ServiceMap.Service<...>(...) or Context.Service<...>(...)), the initializer of a const declaration
     pub variable_name: String,   // The variable/class name
-    pub type_args_text: String,  // Text of original type arguments (e.g. "ConfigService")
-    pub args_text: String,       // Text of original call arguments (e.g. `"Config"`)
     pub service_module: &'static str, // Service namespace identifier (e.g. "ServiceMap" or "Context")
-    pub target_node: P<Node>, // The node to replace (variable statement or declaration list)
-    pub modifier_nodes: Option<P<ModifierList>>, // Modifiers from the variable statement (e.g. export)
 }
 
-// go: internal/rules/service_not_as_class.go:52 AnalyzeServiceNotAsClass bd8ddf45a6da5d9e
+// go: internal/rules/service_not_as_class.go:48 AnalyzeServiceNotAsClass bd8ddf45a6da5d9e
 // AnalyzeServiceNotAsClass finds all const variable declarations using the v4 service constructor
 // that should be class declarations instead. V4-only rule.
 //
@@ -90,7 +86,7 @@ pub fn analyze_service_not_as_class(
     matches
 }
 
-// go: internal/rules/service_not_as_class.go:82 checkServiceNotAsClass 682c39c8692ef90c
+// go: internal/rules/service_not_as_class.go:78 checkServiceNotAsClass e946f6e0b8307b63
 pub(crate) fn check_service_not_as_class(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -156,34 +152,17 @@ pub(crate) fn check_service_not_as_class(
         )
     };
 
-    // Determine target node and modifiers
-    let variable_statement = decl_list.parent();
-    let target_node;
-    let mut modifier_nodes = None;
-    if let Some(variable_statement) = variable_statement
-        && variable_statement.kind() == Kind::VariableStatement
-    {
-        target_node = variable_statement;
-        modifier_nodes = variable_statement.as_variable_statement().modifiers();
-    } else {
-        target_node = decl_list;
-    }
-
     Some(ServiceNotAsClassMatch {
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, initializer),
         suggested_usage,
         call_expr_node: initializer,
         variable_name,
-        type_args_text,
-        args_text,
         service_module,
-        target_node,
-        modifier_nodes,
     })
 }
 
-// go: internal/rules/service_not_as_class.go:171 extractNodeText 6c972669ed450689
+// go: internal/rules/service_not_as_class.go:152 extractNodeText 6c972669ed450689
 // extractNodeText gets the source text of a node, skipping leading trivia.
 pub(crate) fn extract_node_text(sf: P<SourceFile>, text: &str, node: Option<P<Node>>) -> String {
     let Some(node) = node else {

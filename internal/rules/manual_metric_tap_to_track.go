@@ -203,47 +203,12 @@ func isParameterVerbatim(tp *typeparser.TypeParser, params readonly.Slice[*ast.N
 // super, arguments, new.target or fn's own name. An arrow function in the
 // same position resolves all of them differently.
 func usesFunctionExpressionBindings(tp *typeparser.TypeParser, fn *ast.Node, params readonly.Slice[*ast.Node], input *ast.Node) bool {
-	var self *ast.Symbol
-	if name := fn.Name(); name != nil {
-		self = tp.GetSymbolAtLocation(name)
-	}
-	// own is false inside nested non-arrow functions, which bind their own
-	// this, super, arguments and new.target; fn's name is visible everywhere.
-	var visit func(node *ast.Node, own bool) bool
-	visit = func(node *ast.Node, own bool) bool {
-		if node == nil {
-			return false
-		}
-		switch node.Kind {
-		case ast.KindThisKeyword, ast.KindSuperKeyword, ast.KindMetaProperty:
-			if own {
-				return true
-			}
-		case ast.KindIdentifier:
-			return own && node.Text() == "arguments" || self != nil && tp.GetSymbolAtLocation(node) == self
-		case ast.KindClassExpression:
-			// Computed names, heritage clauses and static blocks mix both scopes.
-			if own {
-				return true
-			}
-		case ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindMethodDeclaration,
-			ast.KindGetAccessor, ast.KindSetAccessor, ast.KindConstructor:
-			name := node.Name()
-			//ets:ast-walk scans the function for this, super, arguments, new.target and self references
-			return node.ForEachChild(func(child *ast.Node) bool {
-				// A computed method name is evaluated in the enclosing scope.
-				return visit(child, own && child == name)
-			})
-		}
-		//ets:ast-walk scans the function for this, super, arguments, new.target and self references
-		return node.ForEachChild(func(child *ast.Node) bool { return visit(child, own) })
-	}
 	for _, param := range params.All() {
-		if visit(param, true) {
+		if tp.UsesFunctionOwnBindings(fn, param) {
 			return true
 		}
 	}
-	return visit(input, true)
+	return tp.UsesFunctionOwnBindings(fn, input)
 }
 
 func resolveManualMetricTapAPI(tp *typeparser.TypeParser, callee *ast.Node) *manualMetricTapAPI {

@@ -115,7 +115,7 @@ pub(crate) fn test_compiler_options() -> CompilerOptions {
     }
 }
 
-// go test: internal/typeparser/helpers_test.go:20 compileAndGetCheckerAndSourceFilesInternal 0624adbb43087f17
+// go test: internal/typeparser/helpers_test.go:20 compileAndGetCheckerAndSourceFilesInternal be84782535cfb809
 // Rust: the checker handle's drop is Go's `done` (see `Compiled`).
 #[expect(
     clippy::case_sensitive_file_extension_comparisons,
@@ -147,7 +147,7 @@ pub(crate) fn compile_and_get_checker_and_source_files_internal(
     (compiled, source_files)
 }
 
-// go test: internal/typeparser/helpers_test.go:67 compileAndGetCheckerAndSourceFileInternal b4079d26a7ebc3d6
+// go test: internal/typeparser/helpers_test.go:70 compileAndGetCheckerAndSourceFileInternal a1d395290784913a
 pub(crate) fn compile_and_get_checker_and_source_file_internal(
     t: &T,
     source: &str,
@@ -265,7 +265,7 @@ pub(crate) fn mount_effect(version: EffectVersion, testfs: &mut TestFS) -> Resul
     Ok(())
 }
 
-// go test: internal/typeparser/helpers_test.go:107 compileAndGetCheckerAndSourceFileWithEffectV4Internal f847741f4e78a343
+// go test: internal/typeparser/helpers_test.go:113 compileAndGetCheckerAndSourceFileWithEffectV4Internal f847741f4e78a343
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v4_internal(
     t: &T,
     source: &str,
@@ -273,7 +273,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v4_internal(
     compile_and_get_checker_and_source_file_with_effect_version_internal(t, EFFECT_V4, source)
 }
 
-// go test: internal/typeparser/helpers_test.go:111 compileAndGetCheckerAndSourceFileWithEffectV3Internal 9a882273dab795a8
+// go test: internal/typeparser/helpers_test.go:117 compileAndGetCheckerAndSourceFileWithEffectV3Internal 9a882273dab795a8
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v3_internal(
     t: &T,
     source: &str,
@@ -281,7 +281,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v3_internal(
     compile_and_get_checker_and_source_file_with_effect_version_internal(t, EFFECT_V3, source)
 }
 
-// go test: internal/typeparser/helpers_test.go:115 compileAndGetCheckerAndSourceFileWithEffectVersionInternal e3bc086beeefc6c0
+// go test: internal/typeparser/helpers_test.go:121 compileAndGetCheckerAndSourceFileWithEffectVersionInternal 9655cd128279890d
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_version_internal(
     t: &T,
     version: EffectVersion,
@@ -302,7 +302,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_version_intern
     (compiled, sf)
 }
 
-// go test: internal/typeparser/helpers_test.go:158 findIdentifierByText aee8d87e464c7b18
+// go test: internal/typeparser/helpers_test.go:167 findIdentifierByText aee8d87e464c7b18
 pub(crate) fn find_identifier_by_text(
     t: &T,
     sf: P<SourceFile>,
@@ -343,7 +343,7 @@ pub(crate) fn find_identifier_by_text(
     found
 }
 
-// go test: internal/typeparser/helpers_test.go:192 getFirstVariableDeclarationType 2304888a4125584f
+// go test: internal/typeparser/helpers_test.go:201 getFirstVariableDeclarationType 2304888a4125584f
 fn get_first_variable_declaration_type(
     t: &T,
     tp: &mut TypeParser<'_>,
@@ -377,7 +377,7 @@ pub(crate) fn type_string(tp: &mut TypeParser<'_>, t: P<Type>) -> String {
     tp.checker().type_to_string_exported(t)
 }
 
-// go test: internal/typeparser/helpers_test.go:220 TestExtractVarianceTypesRejectGenericSignatures 77e69d77421076d4
+// go test: internal/typeparser/helpers_test.go:229 TestExtractVarianceTypesRejectGenericSignatures 77e69d77421076d4
 #[test]
 fn test_extract_variance_types_reject_generic_signatures() {
     type Extract = fn(&mut TypeParser<'_>, Option<P<Type>>, &str) -> Option<P<Type>>;
@@ -459,7 +459,7 @@ fn test_extract_variance_types_reject_generic_signatures() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:259 TestGetSymbolIfSameReferenceWithinModule 08bafdf075ee7d8c
+// go test: internal/typeparser/helpers_test.go:268 TestGetSymbolIfSameReferenceWithinModule 08bafdf075ee7d8c
 #[test]
 fn test_get_symbol_if_same_reference_within_module() {
     run(|t| {
@@ -496,7 +496,7 @@ fn test_get_symbol_if_same_reference_within_module() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:290 TestGetSymbolIfSameReference_ResolvesImportAliases 9141069b2f36a790
+// go test: internal/typeparser/helpers_test.go:299 TestGetSymbolIfSameReference_ResolvesImportAliases 9141069b2f36a790
 #[test]
 fn test_get_symbol_if_same_reference_resolves_import_aliases() {
     run(|t| {

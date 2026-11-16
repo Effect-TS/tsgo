@@ -29,7 +29,7 @@ pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/overridden_schema_constructor.go:33 OverriddenSchemaConstructorMatch 9b518efd777f5c66
+// go: internal/rules/overridden_schema_constructor.go:33 OverriddenSchemaConstructorMatch a78317104c4c6292
 // OverriddenSchemaConstructorMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fixes for the overriddenSchemaConstructor pattern.
 #[derive(Clone)]
@@ -37,10 +37,9 @@ pub struct OverriddenSchemaConstructorMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,       // The error range for the constructor node
     pub constructor_node: P<Node>, // The constructor declaration AST node
-    pub has_body: bool, // Whether the constructor has a body (the static fix is only available when true)
 }
 
-// go: internal/rules/overridden_schema_constructor.go:44 AnalyzeOverriddenSchemaConstructor 0f18608db61554ec
+// go: internal/rules/overridden_schema_constructor.go:43 AnalyzeOverriddenSchemaConstructor 0f18608db61554ec
 // AnalyzeOverriddenSchemaConstructor finds all class declarations extending Schema
 // that have an overridden constructor which is not an allowed passthrough pattern.
 //
@@ -73,7 +72,7 @@ pub fn analyze_overridden_schema_constructor(
     matches
 }
 
-// go: internal/rules/overridden_schema_constructor.go:70 checkOverriddenSchemaConstructor cf5ea392a0b4ca59
+// go: internal/rules/overridden_schema_constructor.go:69 checkOverriddenSchemaConstructor c40d960a8da4b22a
 //
 // Rust: Go's (ignored) checker argument is dropped.
 pub(crate) fn check_overridden_schema_constructor(
@@ -111,12 +110,10 @@ pub(crate) fn check_overridden_schema_constructor(
             if is_allowed_constructor(member) {
                 continue;
             }
-            let has_body = member.body().is_some_and(|body| body.kind() == Kind::Block);
             return Some(OverriddenSchemaConstructorMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, member),
                 constructor_node: member,
-                has_body,
             });
         }
     }
@@ -124,7 +121,7 @@ pub(crate) fn check_overridden_schema_constructor(
     None
 }
 
-// go: internal/rules/overridden_schema_constructor.go:121 isAllowedConstructor d144bcab2e4795ea
+// go: internal/rules/overridden_schema_constructor.go:117 isAllowedConstructor d144bcab2e4795ea
 // isAllowedConstructor checks if a constructor is a passthrough that simply forwards
 // exactly 2 parameters to super(). This pattern is used internally by Schema and is allowed.
 pub(crate) fn is_allowed_constructor(ctor_node: P<Node>) -> bool {

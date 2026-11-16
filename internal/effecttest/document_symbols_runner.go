@@ -241,6 +241,11 @@ func (noopProjectClient) WatchFiles(_ context.Context, _ project.WatcherID, _ []
 
 func (noopProjectClient) UnwatchFiles(_ context.Context, _ project.WatcherID) error { return nil }
 
+func (noopProjectClient) RegisterContentMapperSelectors(_ context.Context, _ []project.ContentMapperSelector) error {
+	return nil
+}
+
+// RegisterContentMapperExtensions is the Client method of TypeScript releases before content mapper selectors.
 func (noopProjectClient) RegisterContentMapperExtensions(_ context.Context, _ []string) error {
 	return nil
 }

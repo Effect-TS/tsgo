@@ -24,8 +24,7 @@ diff --git a/go.mod b/go.mod
 index 7eff05d..2cabaed 100644
 --- a/go.mod
 +++ b/go.mod
-@@ -3,6 +3,7 @@ module github.com/typescript-eslint/tsgolint
- go 1.26
+@@ -4,5 +4,6 @@ go 1.26
  
  replace (
 +	github.com/effect-ts/tsgo => ..

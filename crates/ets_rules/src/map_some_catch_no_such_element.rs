@@ -54,7 +54,7 @@ pub struct MapSomeCatchNoSuchElementMatch {
 // property Effect.catchNoSuchElement checks at runtime.
 pub(crate) const NO_SUCH_ELEMENT_ERROR_TYPE_ID: &str = "~effect/Cause/NoSuchElementError";
 
-// go: internal/rules/map_some_catch_no_such_element.go:40 AnalyzeMapSomeCatchNoSuchElement c304f29ae042eef6
+// go: internal/rules/map_some_catch_no_such_element.go:40 AnalyzeMapSomeCatchNoSuchElement 266f6ad67e93e4ba
 //
 // Rust: the parser is never nil.
 pub fn analyze_map_some_catch_no_such_element(

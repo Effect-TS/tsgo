@@ -42,6 +42,9 @@ type ProvideMergeAllToArrayMatch struct {
 	Location   core.TextRange // Error range of the Layer.mergeAll(...) call
 	Argument   *ast.Node      // The provide argument as written, possibly parenthesized
 	MergeAll   *ast.Node      // The Layer.mergeAll(...) call inside Argument
+	// Provide is the Effect.provide step; the fix cannot carry its explicit
+	// type arguments over.
+	Provide *typeparser.PipingFlowTransformation
 }
 
 // AnalyzeProvideMergeAllToArray finds Effect.provide calls whose layer argument
@@ -61,7 +64,6 @@ func AnalyzeProvideMergeAllToArray(tp *typeparser.TypeParser, sf *ast.SourceFile
 			argument := provide.Args().At(0)
 			mergeAll := ast.SkipParentheses(argument)
 			if !isPlainMergeAllCallShape(mergeAll) ||
-				(provide.TypeArguments() != nil && len(provide.TypeArguments().Nodes) > 0) ||
 				!tp.IsNodeReferenceToEffectModuleApi(provide.Callee(), "provide") ||
 				!tp.IsNodeReferenceToEffectLayerModuleApi(mergeAll.AsCallExpression().Expression, "mergeAll") {
 				continue
@@ -72,20 +74,20 @@ func AnalyzeProvideMergeAllToArray(tp *typeparser.TypeParser, sf *ast.SourceFile
 				Location:   scanner.GetErrorRangeForNode(sf, mergeAll),
 				Argument:   argument,
 				MergeAll:   mergeAll,
+				Provide:    &provide,
 			})
 		}
 	}
 	return matches
 }
 
-// isPlainMergeAllCallShape checks the syntax a quick fix can rewrite to an array:
-// a non-optional call without explicit type arguments and with at least one argument.
+// isPlainMergeAllCallShape checks for a call that can be written as an array:
+// a non-optional call with at least one argument.
 func isPlainMergeAllCallShape(node *ast.Node) bool {
 	if node == nil || node.Kind != ast.KindCallExpression {
 		return false
 	}
 	call := node.AsCallExpression()
 	return call.QuestionDotToken == nil &&
-		(call.TypeArguments == nil || len(call.TypeArguments.Nodes) == 0) &&
 		call.Arguments != nil && len(call.Arguments.Nodes) > 0
 }

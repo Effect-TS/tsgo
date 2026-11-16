@@ -46,11 +46,14 @@ func compileApiStabilitySourcePrimed(t testing.TB, source string, prime bool) (*
 		Strict:              core.TSTrue,
 	}
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         tsoptions.NewParsedCommandLine(compilerOptions, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/.src", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	ctx := context.Background()
 	if prime {

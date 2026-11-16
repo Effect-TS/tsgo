@@ -59,7 +59,7 @@ fn run_missed_pipeable_opportunity_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
     Vec::new()
 }
 
-// go: internal/fixables/missed_pipeable_opportunity.go:59 buildMissedPipeableReplacement a5c287105552e96c
+// go: internal/fixables/missed_pipeable_opportunity.go:59 buildMissedPipeableReplacement 60b43757884aced7
 // buildMissedPipeableReplacement builds the .pipe() replacement and applies it via tracker.ReplaceNode.
 fn build_missed_pipeable_replacement(
     tracker: &mut Tracker,
@@ -76,8 +76,10 @@ fn build_missed_pipeable_replacement(
     let subject_node = tracker.deep_clone_node(Some(subject_input)).unwrap();
 
     // Build pipe arguments from transformations
-    let mut pipe_args = Vec::with_capacity(m.pipeable_transformations.len());
-    for t in &m.pipeable_transformations {
+    let pipeable_transformations =
+        flow.transformations().slice(m.pipeable_start_index, m.pipeable_end_index);
+    let mut pipe_args = Vec::with_capacity(pipeable_transformations.len() as usize);
+    for (_, t) in pipeable_transformations.all() {
         let arg = if t.args().len() > 0 {
             // It's a function call like Effect.map((x) => x + 1) -> create callee(args...)
             let cloned_callee = tracker.deep_clone_node(Some(t.callee())).unwrap();
@@ -115,7 +117,8 @@ fn build_missed_pipeable_replacement(
     );
 
     // Wrap with "after" transformations if any
-    let after_transformations = ets_readonly::new(m.after_transformations.as_deref());
+    let after_transformations =
+        flow.transformations().slice(m.pipeable_end_index, m.reported_count);
     let replacement_node = if after_transformations.len() > 0 {
         wrap_with_after_transformations(tracker, pipe_call, after_transformations)
     } else {
@@ -126,7 +129,7 @@ fn build_missed_pipeable_replacement(
     tracker.replace_node(sf, Some(m.node), Some(replacement_node), None);
 }
 
-// go: internal/fixables/missed_pipeable_opportunity.go:108 wrapWithAfterTransformations 8209e8af6acc01ea
+// go: internal/fixables/missed_pipeable_opportunity.go:110 wrapWithAfterTransformations 8209e8af6acc01ea
 // wrapWithAfterTransformations wraps an inner node with the "after" transformations.
 // For "call" kind: callee(innerNode)
 // For "callWithOptionals" kind: callee(innerNode, args...)
