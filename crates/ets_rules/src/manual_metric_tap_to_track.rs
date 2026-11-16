@@ -4,7 +4,7 @@ use ets_etscore::Severity;
 use ets_readonly::Slice;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, CallExpression, Diagnostic, Kind, Node, SourceFile, Symbol};
+use ets_shim::ast::{self, CallExpression, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
@@ -250,7 +250,7 @@ pub(crate) fn is_parameter_verbatim(
     symbol.is_some() && symbol == tp.get_symbol_at_location(param.name())
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:205 usesFunctionExpressionBindings 8ea8c569fb84cf63
+// go: internal/rules/manual_metric_tap_to_track.go:205 usesFunctionExpressionBindings 6b27cc85200c097d
 // usesFunctionExpressionBindings reports whether the parameters or the input of
 // the function expression fn read a binding that fn itself provides: this,
 // super, arguments, new.target or fn's own name. An arrow function in the
@@ -261,62 +261,15 @@ pub(crate) fn uses_function_expression_bindings(
     params: Slice<'_, P<Node>>,
     input: P<Node>,
 ) -> bool {
-    let mut self_ = None;
-    if let Some(name) = fn_.name() {
-        self_ = tp.get_symbol_at_location(name);
-    }
-    // own is false inside nested non-arrow functions, which bind their own
-    // this, super, arguments and new.target; fn's name is visible everywhere.
-    fn visit(
-        tp: &mut TypeParser<'_>,
-        self_: Option<P<Symbol>>,
-        node: Option<P<Node>>,
-        own: bool,
-    ) -> bool {
-        let Some(node) = node else {
-            return false;
-        };
-        match node.kind() {
-            Kind::ThisKeyword | Kind::SuperKeyword | Kind::MetaProperty => {
-                if own {
-                    return true;
-                }
-            }
-            Kind::Identifier => {
-                return own && node.text() == "arguments"
-                    || self_.is_some() && tp.get_symbol_at_location(node) == self_;
-            }
-            Kind::ClassExpression => {
-                // Computed names, heritage clauses and static blocks mix both scopes.
-                if own {
-                    return true;
-                }
-            }
-            Kind::FunctionExpression
-            | Kind::FunctionDeclaration
-            | Kind::MethodDeclaration
-            | Kind::GetAccessor
-            | Kind::SetAccessor
-            | Kind::Constructor => {
-                let name = node.name();
-                return node.for_each_child(&mut |child| {
-                    // A computed method name is evaluated in the enclosing scope.
-                    visit(tp, self_, Some(child), own && Some(child) == name)
-                });
-            }
-            _ => {}
-        }
-        node.for_each_child(&mut |child| visit(tp, self_, Some(child), own))
-    }
     for (_, param) in params.all() {
-        if visit(tp, self_, Some(*param), true) {
+        if tp.uses_function_own_bindings(fn_, *param) {
             return true;
         }
     }
-    visit(tp, self_, Some(input), true)
+    tp.uses_function_own_bindings(fn_, input)
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:249 resolveManualMetricTapAPI 0af0435b267899a2
+// go: internal/rules/manual_metric_tap_to_track.go:214 resolveManualMetricTapAPI 0af0435b267899a2
 pub(crate) fn resolve_manual_metric_tap_api(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,

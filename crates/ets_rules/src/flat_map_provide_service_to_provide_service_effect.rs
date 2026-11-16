@@ -66,7 +66,7 @@ pub struct FlatMapProvideServiceToProvideServiceEffectMatch {
     pub key: P<Node>,
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:51 AnalyzeFlatMapProvideServiceToProvideServiceEffect c4094426310a287b
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:51 AnalyzeFlatMapProvideServiceToProvideServiceEffect a3774334fbe7cfc2
 // AnalyzeFlatMapProvideServiceToProvideServiceEffect finds flatMap and andThen
 // callbacks that are a manual Effect.provideServiceEffect.
 //
@@ -181,16 +181,13 @@ pub fn analyze_flat_map_provide_service_to_provide_service_effect(
     matches
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:135 mentionsCallbackBinding a9cb4b6147d971f1
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:135 mentionsCallbackBinding a3bbd9c22edf6a0f
 // mentionsCallbackBinding reports whether root, the callback's returned expression,
 // uses a binding of the callback other than the service argument skip: its
-// parameter, a function expression's own name, or its this, super, arguments or
-// new.target. These change meaning once root moves out of the callback.
-// ParseLazyExpression rejects type parameters and a plain parameter declares
-// nothing else, so the callback binds no other names.
-//
-// Rust: Go's checker argument is the parser's checker (`tp.checker()`); Go's recursive `visit` closure is a nested
-// `fn` taking what it captures.
+// parameter, or a binding the callback itself provides (UsesFunctionOwnBindings).
+// These change meaning once root moves out of the callback. ParseLazyExpression
+// rejects type parameters and a plain parameter declares nothing else, so the
+// callback binds no other names.
 pub(crate) fn mentions_callback_binding(
     tp: &mut TypeParser<'_>,
     callback: P<Node>,
@@ -203,45 +200,10 @@ pub(crate) fn mentions_callback_binding(
             return true;
         }
     }
-    if let Some(name) = callback.name() {
-        let name_symbol = tp.get_symbol_at_location(name);
-        if !tp.references_to_symbol(root, name_symbol).is_empty() {
-            return true;
-        }
-    }
-    let arguments_symbol = tp.checker().get_arguments_symbol();
-    for reference in tp.references_to_symbol(root, arguments_symbol) {
-        if callback_is_this_container(callback, reference) {
-            return true;
-        }
-    }
-    fn visit(node: P<Node>, callback: P<Node>) -> bool {
-        match node.kind() {
-            Kind::ThisKeyword | Kind::SuperKeyword
-                if callback_is_this_container(callback, node) =>
-            {
-                return true;
-            }
-            Kind::MetaProperty
-                if node.as_meta_property().keyword_token() == Kind::NewKeyword
-                    && callback_is_this_container(callback, node) =>
-            {
-                return true;
-            }
-            _ => {}
-        }
-        // ets:ast-walk scans the returned expression for this, super or new.target keywords, which have no symbol to look up
-        node.for_each_child(&mut |child| visit(child, callback))
-    }
-    visit(root, callback)
+    tp.uses_function_own_bindings(callback, root)
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:167 callbackIsThisContainer 178e0c7ee1281c41
-pub(crate) fn callback_is_this_container(callback: P<Node>, node: P<Node>) -> bool {
-    ast::get_this_container(node, false, false) == callback
-}
-
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:171 stepTypeIdenticalToProvideServiceEffectResult 988dd142b7679068
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:144 stepTypeIdenticalToProvideServiceEffectResult 988dd142b7679068
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the transformations are borrowed.
 pub(crate) fn step_type_identical_to_provide_service_effect_result(
@@ -272,7 +234,7 @@ pub(crate) fn step_type_identical_to_provide_service_effect_result(
     c.is_type_identical_to(step_channels.r, r)
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:185 effectChannels c78a96e6451c5b37
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:158 effectChannels c78a96e6451c5b37
 #[derive(Clone, Copy)]
 pub(crate) struct EffectChannels {
     pub(crate) a: P<Type>,
@@ -280,7 +242,7 @@ pub(crate) struct EffectChannels {
     pub(crate) r: P<Type>,
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:189 joinedStrictEffectChannels 8a6640981daa6b8f
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:162 joinedStrictEffectChannels 8a6640981daa6b8f
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn joined_strict_effect_channels(
