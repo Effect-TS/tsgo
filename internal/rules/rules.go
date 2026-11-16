@@ -132,6 +132,7 @@ var All = []rule.Rule{
 	SuspendFailToFailSync,
 	FlatMapToMap,
 	FlatMapToTap,
+	FlatMapProvideServiceToProvideServiceEffect,
 	FlatMapIgnoredParamToAndThen,
 	FlatMapIdentityToFlatten,
 	MatchEffectToMatch,

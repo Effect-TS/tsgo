@@ -1,0 +1,42 @@
+=== Quick Fix Inventory ===
+
+[D1] (24:3-24:17) TS377194: `Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)
+  Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line"
+  Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file"
+  Fix 2: "Replace with Effect.provideServiceEffect"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapProvideServiceToProvideServiceEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapProvideServiceToProvideServiceEffect for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.provideServiceEffect" ===
+
+--- file:///.src/flatMapProvideServiceToProvideServiceEffect_preview.ts ---
+import { Context, Effect } from "effect"
+
+// The quick fix rewrites this to Effect.provideServiceEffect(program, Database, makeConnection).
+// Notes:
+// - After the fix, `program` is evaluated once when the expression is built, not on every run of the callback.
+// - The Effect.gen form (`const conn = yield* makeConnection; return yield* Effect.provideService(program, Database, conn)`)
+//   is deliberately not reported.
+// - On Effect v3, data-first `Effect.andThen(acquire, callback)` is not reported, since its overloads do not form a dual.
+
+interface DatabaseConnection {
+  readonly query: (sql: string) => Effect.Effect<string>
+}
+
+const Database = Context.Service<DatabaseConnection>("Database")
+
+declare const makeConnection: Effect.Effect<DatabaseConnection>
+
+const program = Effect.gen(function*() {
+  const db = yield* Effect.service(Database)
+  return yield* db.query("SELECT * FROM users")
+})
+
+export const runWithDatabase = Effect.provideServiceEffect(program, Database, makeConnection)
+

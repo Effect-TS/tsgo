@@ -682,5 +682,9 @@
     "`Effect.{0}` runs sequentially unless `concurrency` is set; pass `{ concurrency: 1 }` to keep sequential execution or set the concurrency you intend. effect(missingConcurrencyOption)": {
         "category": "Warning",
         "code": 377188
+    },
+    "`Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.{0}` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)": {
+        "category": "Suggestion",
+        "code": 377194
     }
 }

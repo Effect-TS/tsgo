@@ -1,0 +1,85 @@
+// @effect-v3
+import { Context, Effect } from "effect"
+interface DatabaseConnection {
+  readonly query: (sql: string) => Effect.Effect<string>
+}
+
+const Database = Context.GenericTag<DatabaseConnection>("Database")
+
+declare const makeConnection: Effect.Effect<DatabaseConnection>
+declare const makeFailingConnection: Effect.Effect<DatabaseConnection, Error>
+
+const program = Database.pipe(Effect.flatMap((db) => db.query("SELECT 1")))
+const count = Effect.as(program, 1)
+
+// MUST NOT TRIGGER: the callback's return type widens the error channel to Error, which the
+// later handler relies on; Effect.provideServiceEffect(count, Database, makeConnection) has never.
+export const widenedError = makeConnection.pipe(
+  Effect.flatMap((conn): Effect.Effect<number, Error> => Effect.provideService(count, Database, conn)),
+  Effect.catchAll((error) => Effect.succeed(error.message.length))
+)
+
+// MUST NOT TRIGGER: the callback's return type widens the success channel.
+export const widenedSuccess = makeConnection.pipe(
+  Effect.flatMap((conn): Effect.Effect<number | string> => Effect.provideService(count, Database, conn)),
+  Effect.map((value) => typeof value)
+)
+
+// MUST NOT TRIGGER: the callback's return type widens the requirement channel.
+export const widenedRequirement = makeConnection.pipe(
+  Effect.andThen((conn): Effect.Effect<number, never, DatabaseConnection> => Effect.provideService(count, Database, conn))
+)
+
+// MUST NOT TRIGGER: the callback's return type is any.
+export const anyResult = makeConnection.pipe(
+  Effect.flatMap((conn): any => Effect.provideService(count, Database, conn))
+)
+
+// MUST NOT TRIGGER: explicit flatMap type arguments widen the result.
+export const flatMapTypeArguments = Effect.flatMap<DatabaseConnection, never, never, number | string, Error, never>(
+  makeConnection,
+  (conn) => Effect.provideService(count, Database, conn)
+)
+
+// MUST NOT TRIGGER: explicit provideService type arguments, which the fix would drop.
+export const provideServiceTypeArguments = makeConnection.pipe(
+  Effect.flatMap((conn) =>
+    Effect.provideService<number | string, never, DatabaseConnection, DatabaseConnection, DatabaseConnection>(count, Database, conn)
+  )
+)
+
+// MUST TRIGGER: the callback's return type is exactly the provided program's type.
+export const exactResult = makeConnection.pipe(
+  Effect.flatMap((conn): Effect.Effect<number> => Effect.provideService(count, Database, conn))
+)
+
+// MUST TRIGGER: the acquisition's error already reaches the later handler, and the annotation
+// adds nothing to it, so the fix keeps the Error channel.
+export const acquisitionError = makeFailingConnection.pipe(
+  Effect.flatMap((conn): Effect.Effect<number> => Effect.provideService(count, Database, conn)),
+  Effect.catchAll((error) => Effect.succeed(error.message.length))
+)
+
+const readonlyResult = Effect.as(program, { value: 1 } as { readonly value: number })
+const anyNestedResult = Effect.as(program, { value: 1 } as { value: number })
+
+// MUST NOT TRIGGER: the callback's return type drops readonly, which the later step relies on;
+// readonly and mutable properties are mutually assignable but not identical.
+export const mutableSuccess = makeConnection.pipe(
+  Effect.flatMap((conn): Effect.Effect<{ value: number }> => Effect.provideService(readonlyResult, Database, conn)),
+  Effect.map((result) => {
+    result.value += 1
+    return result
+  })
+)
+
+// MUST NOT TRIGGER: the callback's return type nests any inside the success type.
+export const nestedAnySuccess = makeConnection.pipe(
+  Effect.flatMap((conn): Effect.Effect<{ value: any }> => Effect.provideService(anyNestedResult, Database, conn)),
+  Effect.map((result) => result.value.toUpperCase())
+)
+
+// MUST TRIGGER: the return type names the readonly success type exactly.
+export const exactReadonlySuccess = makeConnection.pipe(
+  Effect.flatMap((conn): Effect.Effect<{ readonly value: number }> => Effect.provideService(readonlyResult, Database, conn))
+)

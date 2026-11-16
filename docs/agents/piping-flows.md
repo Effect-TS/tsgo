@@ -86,14 +86,15 @@ These live on `*rewriter.Tracker` and keep every step outside the edit untouched
 | Swap one step for another operator, keeping how its input is applied (pipe argument, data-first, data-last, curried, call with optionals) | `ReplacePipingFlowTransformation` |
 | Merge adjacent steps `start..end` into one operator (`map(f)` then `mapError(g)` becomes `mapBoth`) | `CollapsePipingFlowTransformations` |
 | Drop the last step | `RemoveTrailingPipingFlowTransformation` |
+| Build a new expression for the subject and the first `n` steps, to move a prefix elsewhere (`acquire.pipe(Effect.map(f), Effect.flatMap(g))` gives `acquire.pipe(Effect.map(f))` for `n = 1`) | `PipingFlowPrefixExpression` |
 
-`ReplacePipingFlowPrefix` refuses a prefix that ends in an `Effect.fn` step and returns `false`; check the result. A replacement operator is a `PipingFlowTransformationReplacement`: nil `Arguments` is a bare operator (`Effect.asVoid`), a non-nil list is a call (`Effect.as("done")`). `CollapsePipingFlowTransformations` carries comments over to the replacement; the others reprint the nodes they move.
+`ReplacePipingFlowPrefix` refuses a prefix that ends in an `Effect.fn` step and returns `false`; check the result. A `pipe` or `.pipe` call's type arguments are positional (the subject, then one per argument), so `ReplacePipingFlowPrefix` and `PipingFlowPrefixExpression` keep the ones for the positions of a pipe call they rebuild with fewer arguments, and refuse type arguments that do not follow that layout. A replacement operator is a `PipingFlowTransformationReplacement`: nil `Arguments` is a bare operator (`Effect.asVoid`), a non-nil list is a call (`Effect.as("done")`). `CollapsePipingFlowTransformations` carries comments over to the replacement; the others reprint the nodes they move.
 
 ## Known gaps
 
 Record new ones here once the user agrees they belong in the parser or rewriter.
 
-- `TransformationInputNode` has no node for `pipe`/`pipeable` steps after index 0 (above).
+- `TransformationInputNode` has no node for `pipe`/`pipeable` steps after index 0 (above). A fix that needs that input as an expression can build one with `PipingFlowPrefixExpression`.
 - A data-last factory called with two or more arguments and not applied in place (`Effect.flatMap(Effect.forEach(f, { discard: true }))`) is not a step.
 - A step does not record instantiation type arguments or optional-chain (`?.`) calls.
 - The rewriter's lookup of a step's enclosing pipe call is not exported.

@@ -169,6 +169,9 @@ mod type_parser;
 mod type_parser_test;
 mod unique_types_map;
 mod unroll_members;
+mod uses_function_own_bindings;
+#[cfg(test)]
+mod uses_function_own_bindings_test;
 mod vitest_api;
 mod yieldable_error;
 

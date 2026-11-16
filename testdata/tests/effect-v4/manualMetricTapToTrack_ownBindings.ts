@@ -1,0 +1,68 @@
+// @filename: manualMetricTapToTrack_ownBindings.mts
+// @effect-diagnostics *:off
+// @effect-diagnostics manualMetricTapToTrack:warning
+import { Effect, Metric } from "effect"
+
+const responseSize = Metric.gauge("response_size")
+declare const handleRequest: Effect.Effect<number, Error>
+declare const sizes: { readonly arguments: number }
+declare const dec: (value: unknown) => any
+
+// MUST TRIGGER: a property named `arguments` is not the callback's arguments object
+// -> Effect.trackSuccesses(responseSize, (size) => size + sizes.arguments)
+export const propertyNamedArguments = handleRequest.pipe(
+  Effect.tap(function(size) {
+    return Metric.update(responseSize, size + sizes.arguments)
+  })
+)
+
+// MUST TRIGGER: import.meta belongs to the module, not to the callback
+// -> Effect.trackSuccesses(responseSize, (size) => size + import.meta.url.length)
+export const importMeta = handleRequest.pipe(
+  Effect.tap(function(size) {
+    return Metric.update(responseSize, size + import.meta.url.length)
+  })
+)
+
+// MUST TRIGGER: `this` in a class field and `arguments` in a method belong to the class
+// -> Effect.trackSuccesses(responseSize, (size) => size + new (class { ... })().m())
+export const classOwnBindings = handleRequest.pipe(
+  Effect.tap(function(size) {
+    return Metric.update(responseSize, size + new (class { readonly n = this; m() { return arguments.length } })().m())
+  })
+)
+
+// MUST NOT TRIGGER: shorthand `{ record }` reads the function expression's own name
+export const shorthandOwnName = handleRequest.pipe(
+  Effect.tap(function record(size) {
+    return Metric.update(responseSize, size + Object.keys({ record }).length)
+  })
+)
+
+// MUST NOT TRIGGER: a class `extends` clause is evaluated in the callback, so it reads the callback's arguments
+export const classExtendsArguments = handleRequest.pipe(
+  Effect.tap(function(size) {
+    return Metric.update(responseSize, size + new (class extends (arguments.length > 1 ? Array : Array)<number> {})().length)
+  })
+)
+
+// MUST NOT TRIGGER: a computed method name is evaluated in the callback, so it reads the callback's arguments
+export const classComputedNameArguments = handleRequest.pipe(
+  Effect.tap(function(size) {
+    return Metric.update(responseSize, size + Object.keys(class { [String(arguments.length)]() {} }).length)
+  })
+)
+
+// MUST NOT TRIGGER: a computed property name is evaluated in the callback, so it reads the callback's new.target
+export const objectComputedNameNewTarget = handleRequest.pipe(
+  Effect.tap(function(size) {
+    return Metric.update(responseSize, size + Object.keys({ [String(new.target)]: 1 }).length)
+  })
+)
+
+// MUST NOT TRIGGER: a member decorator is evaluated in the callback, so it reads the callback's arguments
+export const memberDecoratorArguments = handleRequest.pipe(
+  Effect.tap(function(size) {
+    return Metric.update(responseSize, size + Object.keys(class { @dec(arguments.length) m() {} }).length)
+  })
+)

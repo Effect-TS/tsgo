@@ -64,6 +64,7 @@
         "flatMapConditionalToFilterOrFail": "suggestion",
         "flatMapIdentityToFlatten": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
+        "flatMapProvideServiceToProvideServiceEffect": "suggestion",
         "flatMapToMap": "suggestion",
         "flatMapToTap": "suggestion",
         "floatingEffect": "error",
@@ -168,6 +169,7 @@
         "flatMapConditionalToFilterOrFail": "error",
         "flatMapIdentityToFlatten": "error",
         "flatMapIgnoredParamToAndThen": "error",
+        "flatMapProvideServiceToProvideServiceEffect": "error",
         "flatMapToMap": "error",
         "flatMapToTap": "error",
         "floatingEffect": "error",
@@ -354,6 +356,7 @@
         "flatMapConditionalToFilterOrFail": "warning",
         "flatMapIdentityToFlatten": "warning",
         "flatMapIgnoredParamToAndThen": "warning",
+        "flatMapProvideServiceToProvideServiceEffect": "warning",
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
         "manualMetricTapToTrack": "warning",
@@ -2771,6 +2774,30 @@
             "start": 140,
             "end": 154,
             "text": "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "flatMapProvideServiceToProvideServiceEffect",
+      "group": "style",
+      "description": "Suggests Effect.provideServiceEffect when a flatMap or andThen callback only forwards its parameter to Effect.provideService",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377194
+      ],
+      "preview": {
+        "sourceText": "import { Context, Effect } from \"effect\"\n\n// The quick fix rewrites this to Effect.provideServiceEffect(program, Database, makeConnection).\n// Notes:\n// - After the fix, `program` is evaluated once when the expression is built, not on every run of the callback.\n// - The Effect.gen form (`const conn = yield* makeConnection; return yield* Effect.provideService(program, Database, conn)`)\n//   is deliberately not reported.\n// - On Effect v3, data-first `Effect.andThen(acquire, callback)` is not reported, since its overloads do not form a dual.\n\ninterface DatabaseConnection {\n  readonly query: (sql: string) =\u003e Effect.Effect\u003cstring\u003e\n}\n\nconst Database = Context.Service\u003cDatabaseConnection\u003e(\"Database\")\n\ndeclare const makeConnection: Effect.Effect\u003cDatabaseConnection\u003e\n\nconst program = Effect.gen(function*() {\n  const db = yield* Effect.service(Database)\n  return yield* db.query(\"SELECT * FROM users\")\n})\n\nexport const runWithDatabase = makeConnection.pipe(\n  Effect.flatMap((conn) =\u003e Effect.provideService(program, Database, conn))\n)\n",
+        "diagnostics": [
+          {
+            "start": 961,
+            "end": 975,
+            "text": "`Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.flatMap` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)"
           }
         ]
       }

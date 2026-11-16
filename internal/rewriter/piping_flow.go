@@ -70,11 +70,16 @@ func (t *Tracker) replaceFunctionPipePrefix(sourceFile *ast.SourceFile, lastTran
 	remainingArguments := cloneNodeListNodesFrom(t, call.Arguments, argumentIndex+1)
 	replacement := replacementSubject
 	if len(remainingArguments) > 0 {
+		valueTypes := pipeValueTypesOf(call, typeparser.TransformationKindPipe)
+		if valueTypes.layout == pipeTypeArgumentsNotPerValue {
+			return false
+		}
+		typeArguments := valueTypes.cloneFrom(t, valueTypes.producedBy(argumentIndex))
 		arguments := append([]*ast.Node{replacementSubject}, remainingArguments...)
 		replacement = t.NewCallExpression(
 			t.DeepCloneNode(call.Expression),
 			t.DeepCloneNode(call.QuestionDotToken),
-			cloneNodeList(t, call.TypeArguments),
+			typeArguments,
 			t.NewNodeList(arguments),
 			callNode.Flags,
 		)
@@ -97,6 +102,11 @@ func (t *Tracker) replaceMethodPipePrefix(sourceFile *ast.SourceFile, lastTransf
 	remainingArguments := cloneNodeListNodesFrom(t, call.Arguments, argumentIndex+1)
 	replacement := replacementSubject
 	if len(remainingArguments) > 0 {
+		valueTypes := pipeValueTypesOf(call, typeparser.TransformationKindPipeable)
+		if valueTypes.layout == pipeTypeArgumentsNotPerValue {
+			return false
+		}
+		typeArguments := valueTypes.cloneFrom(t, valueTypes.producedBy(argumentIndex))
 		replacementAccess := t.NewPropertyAccessExpression(
 			replacementSubject,
 			t.DeepCloneNode(access.QuestionDotToken),
@@ -106,7 +116,7 @@ func (t *Tracker) replaceMethodPipePrefix(sourceFile *ast.SourceFile, lastTransf
 		replacement = t.NewCallExpression(
 			replacementAccess,
 			t.DeepCloneNode(call.QuestionDotToken),
-			cloneNodeList(t, call.TypeArguments),
+			typeArguments,
 			t.NewNodeList(remainingArguments),
 			callNode.Flags,
 		)
@@ -114,6 +124,121 @@ func (t *Tracker) replaceMethodPipePrefix(sourceFile *ast.SourceFile, lastTransf
 	ast.SetParentInChildren(replacement)
 	t.ReplaceNode(sourceFile, callNode, replacement, nil)
 	return true
+}
+
+// PipingFlowPrefixExpression returns a new expression, cloned from the source,
+// that evaluates the flow's subject and its first count transformations. It
+// covers the prefixes TransformationInputNode has no node for: a prefix that
+// ends inside x.pipe(...) or pipe(x, ...) after the first step becomes the
+// receiver or first argument with the earlier pipe arguments, and with the
+// pipe call's type arguments for those positions. It returns nil when the
+// prefix has no expression form: an Effect.fn step, an optional chain, or
+// pipe type arguments that do not follow pipe's positional layout.
+func (t *Tracker) PipingFlowPrefixExpression(flow *typeparser.PipingFlow, count int) *ast.Node {
+	if t == nil || flow == nil || count < 0 || count > flow.Transformations().Len() {
+		return nil
+	}
+	if count == flow.Transformations().Len() {
+		return t.DeepCloneNode(flow.Node())
+	}
+	if input := flow.TransformationInputNode(count); input != nil {
+		return t.DeepCloneNode(input)
+	}
+	next := flow.Transformations().At(count)
+	if next.Kind() != typeparser.TransformationKindPipe && next.Kind() != typeparser.TransformationKindPipeable {
+		return nil
+	}
+	_, call, argumentIndex := containingCallArgument(pipingFlowTransformationNode(next))
+	if call == nil || call.QuestionDotToken != nil {
+		return nil
+	}
+	if next.Kind() == typeparser.TransformationKindPipe {
+		if argumentIndex < 1 {
+			return nil
+		}
+		if argumentIndex == 1 {
+			return t.DeepCloneNode(call.Arguments.Nodes[0])
+		}
+		valueTypes := pipeValueTypesOf(call, typeparser.TransformationKindPipe)
+		if valueTypes.layout == pipeTypeArgumentsNotPerValue {
+			return nil
+		}
+		return t.NewCallExpression(
+			t.DeepCloneNode(call.Expression),
+			nil,
+			valueTypes.cloneThrough(t, valueTypes.producedBy(argumentIndex-1)),
+			t.NewNodeList(cloneNodes(t, call.Arguments.Nodes[:argumentIndex])),
+			ast.NodeFlagsNone,
+		)
+	}
+	if argumentIndex < 0 || !ast.IsPropertyAccessExpression(call.Expression) {
+		return nil
+	}
+	access := call.Expression.AsPropertyAccessExpression()
+	if access.QuestionDotToken != nil {
+		return nil
+	}
+	receiver := t.DeepCloneNode(access.Expression)
+	if argumentIndex == 0 {
+		return receiver
+	}
+	valueTypes := pipeValueTypesOf(call, typeparser.TransformationKindPipeable)
+	if valueTypes.layout == pipeTypeArgumentsNotPerValue {
+		return nil
+	}
+	return t.NewCallExpression(
+		t.NewPropertyAccessExpression(receiver, nil, t.DeepCloneNode(access.Name()), ast.NodeFlagsNone),
+		nil,
+		valueTypes.cloneThrough(t, valueTypes.producedBy(argumentIndex-1)),
+		t.NewNodeList(cloneNodes(t, call.Arguments.Nodes[:argumentIndex])),
+		ast.NodeFlagsNone,
+	)
+}
+
+type pipeTypeArgumentsLayout int
+
+const (
+	pipeWithoutTypeArguments pipeTypeArgumentsLayout = iota
+	pipeTypeArgumentPerValue
+	pipeTypeArgumentsNotPerValue
+)
+
+type pipeValueTypes struct {
+	layout              pipeTypeArgumentsLayout
+	values              []*ast.Node
+	firstArgumentOutput int
+}
+
+func pipeValueTypesOf(call *ast.CallExpression, kind typeparser.TransformationKind) pipeValueTypes {
+	firstArgumentOutput := 0
+	if kind == typeparser.TransformationKindPipeable {
+		firstArgumentOutput = 1
+	}
+	if call.TypeArguments == nil {
+		return pipeValueTypes{layout: pipeWithoutTypeArguments, firstArgumentOutput: firstArgumentOutput}
+	}
+	if len(call.TypeArguments.Nodes) != firstArgumentOutput+len(call.Arguments.Nodes) {
+		return pipeValueTypes{layout: pipeTypeArgumentsNotPerValue, firstArgumentOutput: firstArgumentOutput}
+	}
+	return pipeValueTypes{layout: pipeTypeArgumentPerValue, values: call.TypeArguments.Nodes, firstArgumentOutput: firstArgumentOutput}
+}
+
+func (types pipeValueTypes) producedBy(argumentIndex int) int {
+	return types.firstArgumentOutput + argumentIndex
+}
+
+func (types pipeValueTypes) cloneFrom(t *Tracker, value int) *ast.NodeList {
+	if types.layout != pipeTypeArgumentPerValue {
+		return nil
+	}
+	return t.NewNodeList(cloneNodes(t, types.values[value:]))
+}
+
+func (types pipeValueTypes) cloneThrough(t *Tracker, value int) *ast.NodeList {
+	if types.layout != pipeTypeArgumentPerValue {
+		return nil
+	}
+	return t.NewNodeList(cloneNodes(t, types.values[:value+1]))
 }
 
 func containingCallArgument(node *ast.Node) (*ast.Node, *ast.CallExpression, int) {
@@ -143,7 +268,7 @@ func pipingFlowTransformationNode(transformation typeparser.PipingFlowTransforma
 	if transformation.Kind() == typeparser.TransformationKindCall {
 		// Curried factories decompose into a factory call and a trailing
 		// application; the replaced node is the outermost applied call.
-		call = appliedCallExpression(call)
+		call = typeparser.AppliedCallExpression(call)
 	}
 	if call != nil {
 		return call.AsNode()
@@ -160,23 +285,6 @@ func callExpressionForCallee(callee *ast.Node) *ast.CallExpression {
 		return nil
 	}
 	return call
-}
-
-// appliedCallExpression walks out of callee positions, returning the outermost
-// call that applies the given call's result to its subject.
-func appliedCallExpression(call *ast.CallExpression) *ast.CallExpression {
-	if call == nil {
-		return nil
-	}
-	current := call.AsNode()
-	for current != nil && current.Parent != nil && ast.IsCallExpression(current.Parent) {
-		parent := current.Parent.AsCallExpression()
-		if parent == nil || parent.Expression != current {
-			break
-		}
-		current = parent.AsNode()
-	}
-	return current.AsCallExpression()
 }
 
 // RemoveTrailingPipingFlowTransformation removes the last step while retaining
@@ -394,8 +502,12 @@ func cloneNodeListNodes(t *Tracker, list *ast.NodeList) []*ast.Node {
 	if list == nil {
 		return nil
 	}
-	nodes := make([]*ast.Node, len(list.Nodes))
-	for i, node := range list.Nodes {
+	return cloneNodes(t, list.Nodes)
+}
+
+func cloneNodes(t *Tracker, list []*ast.Node) []*ast.Node {
+	nodes := make([]*ast.Node, len(list))
+	for i, node := range list {
 		nodes[i] = t.DeepCloneNode(node)
 	}
 	return nodes
