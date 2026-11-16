@@ -655,6 +655,10 @@
         "category": "Warning",
         "code": 377169
     },
+    "`Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)": {
+        "category": "Suggestion",
+        "code": 377170
+    },
     "`Effect.{0}` reifies the outcome directly; these `Effect.{1}` handlers only wrap the value and the error. effect(matchToResultOrOption)": {
         "category": "Suggestion",
         "code": 377175

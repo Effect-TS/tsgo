@@ -1,0 +1,26 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/forLoopPushToForEach_preview.ts(10,3): warning TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+
+
+==== /.src/forLoopPushToForEach_preview.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics forLoopPushToForEach:warning
+    import { Effect } from "effect"
+    
+    declare const items: ReadonlyArray<number>
+    declare const processItem: (item: number) => Effect.Effect<string>
+    
+    export const program = Effect.gen(function*() {
+      const results = []
+      for (const item of items) {
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        results.push(yield* processItem(item))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }
+    ~~~
+!!! warning TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      return results
+    })
+    

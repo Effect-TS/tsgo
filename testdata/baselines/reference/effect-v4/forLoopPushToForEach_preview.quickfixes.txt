@@ -1,0 +1,30 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:3-12:4) TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+  Fix 0: "Disable forLoopPushToForEach for this line"
+  Fix 1: "Disable forLoopPushToForEach for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable forLoopPushToForEach for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable forLoopPushToForEach for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/forLoopPushToForEach_preview.ts ---
+// @effect-v4
+// @effect-diagnostics forLoopPushToForEach:warning
+import { Effect } from "effect"
+
+declare const items: ReadonlyArray<number>
+declare const processItem: (item: number) => Effect.Effect<string>
+
+export const program = Effect.gen(function*() {
+  const results = yield* Effect.forEach(items, processItem)
+  return results
+})
+
