@@ -58,11 +58,14 @@ func apiStabilityLifecycleDiagnostics(t *testing.T, files map[string]string, ena
 		SkipDefaultLibCheck: core.TSTrue,
 	}
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         tsoptions.NewParsedCommandLine(options, names, nil, "/.src", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	ctx := context.Background()
 	sf := program.GetSourceFile("/.src/test.ts")
 	if sf == nil {
@@ -186,11 +189,14 @@ func apiStabilityProgram(t *testing.T, files map[string]string, enabled bool) (*
 		NoErrorTruncation:   core.TSTrue,
 	}
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         tsoptions.NewParsedCommandLine(options, names, nil, "/.src", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	c, done := program.GetTypeChecker(context.Background())
 	return program, c, done
 }

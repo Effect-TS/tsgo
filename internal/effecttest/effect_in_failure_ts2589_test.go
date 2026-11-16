@@ -178,11 +178,14 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 	}
 	programConfig := tsoptions.NewParsedCommandLine(compilerOptions, programFileNames, nil, tspath.RootedDirectoryPath(currentDirectory), tspath.CaseSensitive)
 	programConfig.ConfigFile = configFile
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         programConfig,
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	ctx := context.Background()
 	var diagnostics []*ast.Diagnostic

@@ -49,7 +49,7 @@ This is the path `ets_effecttest` uses.
 
 | Go (via shim) | tsrs |
 | ------------- | ---- |
-| `compiler.NewProgram(ProgramOptions{Config, Host})` | `tsrs_compiler::new_program(ProgramOptions) -> &'static Program`; `ProgramOptions::new(P::new(config), host)`, then set public fields. Never freed unless you free it ("The API path", step 6) |
+| `compiler.NewProgram(ctx, ProgramOptions{Config, Host})` | `tsrs_compiler::new_program(ProgramOptions) -> &'static Program` (tsrs ports the beta, whose `NewProgram` takes no context and cannot fail, so the Go `err` check after a `context.Background()` call has no Rust counterpart); `ProgramOptions::new(P::new(config), host)`, then set public fields. Never freed unless you free it ("The API path", step 6) |
 | A Go type embedding `compiler.CompilerHost` and overriding a method (`effecttest`'s `cachingCompilerHost`) | a struct holding the inner `Arc<dyn CompilerHost>` that implements the trait, forwarding the other methods (their signatures use `ets_shim::contentmapper`) |
 | `compiler.NewCachedFSCompilerHost(fs, libPath, ...)` | `tsrs_compiler::new_cached_fs_compiler_host(current_directory, Arc<dyn FS>, &lib_path, cache, trace, cm_project) -> Arc<dyn CompilerHost>`: tsrs takes a current directory first |
 | `Program.GetTypeCheckerForFile(ctx, file) (c, done)` | `Program::get_type_checker_for_file(&Context, P<SourceFile>) -> CheckerHandle` (`DerefMut<Target = Checker>`; dropping it is `done()`; not `Send`) |

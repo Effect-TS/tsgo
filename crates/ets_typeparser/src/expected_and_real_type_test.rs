@@ -12,7 +12,7 @@ use ets_shim::vfs::vfstest::MapFile;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/expected_and_real_type_test.go:23 compileAndGetCheckerAndSourceFile 27341b85ff88f55e
+// go test: internal/typeparser/expected_and_real_type_test.go:23 compileAndGetCheckerAndSourceFile 16c35233bcf37152
 // Rust: returns the `Compiled` the parser borrows (`compiled.type_parser()`); dropping it is Go's `done`.
 pub(crate) fn compile_and_get_checker_and_source_file(
     t: &T,
@@ -35,7 +35,7 @@ fn results_len(results: Option<&[ExpectedAndRealType]>) -> i64 {
     results.map_or(0, |results| results.len() as i64)
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:63 TestExpectedAndRealTypes 136f1caf8509c28c
+// go test: internal/typeparser/expected_and_real_type_test.go:66 TestExpectedAndRealTypes 136f1caf8509c28c
 #[test]
 fn test_expected_and_real_types() {
     run(|t| {
@@ -109,7 +109,7 @@ const s = "test" satisfies string
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:125 TestExpectedAndRealTypes_EmptyFile 8793775a5480aed8
+// go test: internal/typeparser/expected_and_real_type_test.go:128 TestExpectedAndRealTypes_EmptyFile 8793775a5480aed8
 #[test]
 fn test_expected_and_real_types_empty_file() {
     run(|t| {
@@ -131,7 +131,7 @@ fn test_expected_and_real_types_empty_file() {
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:136 TestTypeParser_NilInputs bd01fa5449490fc9
+// go test: internal/typeparser/expected_and_real_type_test.go:139 TestTypeParser_NilInputs bd01fa5449490fc9
 // Rust: a nil `*TypeParser` cannot be written, so the loop runs on the parser only; Go's nil-checker call also
 // passes a nil source file, which the same guard rejects, so that input is checked on the parser.
 #[test]

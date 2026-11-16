@@ -125,7 +125,7 @@ pub(crate) fn has_diagnostic_code(diags: &[String], prefix: &str) -> bool {
     false
 }
 
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:105 collectDiagnosticStringsFromContent 4cf57b2755ecc502
+// go test: internal/effecttest/effect_in_failure_ts2589_test.go:105 collectDiagnosticStringsFromContent b7b476eb1424c57b
 //
 // Rust: as in `run_effect_test`, the Effect hooks are registered first (Go's blank import of `etscheckerhooks`), and
 // the program and what the case allocates are freed at the end (Go: the GC).
@@ -271,7 +271,7 @@ pub(crate) fn collect_diagnostic_strings_from_content(t: &T, content: &str) -> V
     results
 }
 
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:201 isHarnessConfigFile c881aaa284ec9a04
+// go test: internal/effecttest/effect_in_failure_ts2589_test.go:204 isHarnessConfigFile c881aaa284ec9a04
 pub(crate) fn is_harness_config_file(file_name: &str) -> bool {
     file_name.ends_with("/tsconfig.json") || file_name == "tsconfig.json"
 }

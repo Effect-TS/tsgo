@@ -10,7 +10,7 @@ use crate::helpers_test::*;
 use crate::native_string_test::same_arc;
 use crate::*;
 
-// go test: internal/typeparser/native_array_test.go:17 findMemberAccess 83a4c40148f556f0
+// go test: internal/typeparser/native_array_test.go:18 findMemberAccess 83a4c40148f556f0
 pub(crate) fn find_member_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
     t.helper();
     fn walk(sf: P<SourceFile>, node: P<Node>, text: &str, found: &mut Option<P<Node>>) -> bool {
@@ -35,7 +35,7 @@ pub(crate) fn find_member_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node
     found
 }
 
-// go test: internal/typeparser/native_array_test.go:37 compileNoLibSource 87f6b94d7b5e7f26
+// go test: internal/typeparser/native_array_test.go:38 compileNoLibSource 6e7f09eddb1acd1a
 // Rust: the parser borrows the returned `Compiled` (`compiled.type_parser()`); its drop is Go's `done`.
 pub(crate) fn compile_no_lib_source(t: &T, source: &str) -> (Compiled, P<SourceFile>) {
     t.helper();
@@ -58,7 +58,7 @@ pub(crate) fn compile_no_lib_source(t: &T, source: &str) -> (Compiled, P<SourceF
 /// Rust-only: Go's method values `tp.IsNativeArrayMethodReference` / `tp.IsNativeArrayConstructorMethodReference`.
 type NativeArrayQuery = fn(&mut TypeParser<'_>, P<Node>, &str) -> bool;
 
-// go test: internal/typeparser/native_array_test.go:53 TestArrayType 796302320a7aa2fd
+// go test: internal/typeparser/native_array_test.go:57 TestArrayType 796302320a7aa2fd
 #[test]
 fn test_array_type() {
     run(|t| {
@@ -117,7 +117,7 @@ function constrained<T extends readonly number[]>(generic: T) {}
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:94 TestNativeArrayMethodReference af8ab5af6fc30a34
+// go test: internal/typeparser/native_array_test.go:98 TestNativeArrayMethodReference af8ab5af6fc30a34
 #[test]
 fn test_native_array_method_reference() {
     run(|t| {
@@ -237,7 +237,7 @@ alias;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:202 TestNativeArrayAugmentation 790cbe63d23fffdb
+// go test: internal/typeparser/native_array_test.go:206 TestNativeArrayAugmentation 790cbe63d23fffdb
 #[test]
 fn test_native_array_augmentation() {
     run(|t| {
@@ -284,7 +284,7 @@ Array.of;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:237 TestNativeArrayInheritedAugmentation 8bc5b69f17b499f9
+// go test: internal/typeparser/native_array_test.go:241 TestNativeArrayInheritedAugmentation 8bc5b69f17b499f9
 #[test]
 fn test_native_array_inherited_augmentation() {
     run(|t| {
@@ -310,7 +310,7 @@ Array.isArray;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:256 TestNativeArrayNoLib 2e43a607fcc0164e
+// go test: internal/typeparser/native_array_test.go:260 TestNativeArrayNoLib 2e43a607fcc0164e
 // Rust: Go's last check (`len(tp.links.nativeArrayRegistry.instance) != 0 || len(...constructor) != 0`, "noLib
 // registry contains canonical members") is left out: the registry's fields are private to `native_array`.
 #[test]
@@ -338,7 +338,7 @@ Array.isArray;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:277 TestNativeArrayCheckerCache 2fb01e8108438698
+// go test: internal/typeparser/native_array_test.go:281 TestNativeArrayCheckerCache 2fb01e8108438698
 // Rust: a parser borrows its checker mutably, so `tp` and `second` (both `new_type_parser` over the same checker,
 // as in Go) are re-created for each use; they share the checker's links. Go compares the cached member pointers;
 // they come from one links store, so the values are compared. The member's fields are private to `native_array`,

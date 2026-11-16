@@ -1,6 +1,7 @@
 package effectconfigcheck_test
 
 import (
+	"context"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -326,11 +327,14 @@ func TestProjectReferencesAndSharedExtends(t *testing.T) {
 	})
 	cache := &tsc.ExtendedConfigCache{}
 	root := parse(t, host, "/tsconfig.json", cache)
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config:         root,
 		Host:           compiler.NewCompilerHost(host.fs, bundled.LibPath(), cache, nil, nil),
 		SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	if got := unknownDiagnostics(root); len(got) != 0 {
 		t.Fatal("reference diagnostics leaked into solution config")
 	}

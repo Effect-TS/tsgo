@@ -15,6 +15,10 @@ func FindNextToken(previousToken *ast.Node, parent *ast.Node, file *ast.SourceFi
 func FindPrecedingToken(sourceFile *ast.SourceFile, position int) *ast.Node
 //go:linkname FindPrecedingTokenEx github.com/microsoft/TypeScript/tsc/internal/astnav.FindPrecedingTokenEx
 func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *ast.Node, excludeJSDoc bool) *ast.Node
+//go:linkname GetPossibleSymbolReferenceNodes github.com/microsoft/TypeScript/tsc/internal/astnav.GetPossibleSymbolReferenceNodes
+func GetPossibleSymbolReferenceNodes(sourceFile *ast.SourceFile, symbolName string, container *ast.Node) []*ast.Node
+//go:linkname GetPossibleSymbolReferencePositions github.com/microsoft/TypeScript/tsc/internal/astnav.GetPossibleSymbolReferencePositions
+func GetPossibleSymbolReferencePositions(sourceFile *ast.SourceFile, symbolName string, container *ast.Node) []int
 //go:linkname GetStartOfNode github.com/microsoft/TypeScript/tsc/internal/astnav.GetStartOfNode
 func GetStartOfNode(node *ast.Node, file *ast.SourceFile, includeJSDoc bool) int
 //go:linkname GetTokenAtPosition github.com/microsoft/TypeScript/tsc/internal/astnav.GetTokenAtPosition

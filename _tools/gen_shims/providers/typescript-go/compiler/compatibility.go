@@ -1,6 +1,8 @@
 package compiler
 
 import (
+	"context"
+
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -21,9 +23,11 @@ type rootedCompilerHost struct {
 
 func (h *rootedCompilerHost) GetCurrentDirectory() string { return h.directory }
 
-func NewProgram(options compiler.ProgramOptions) *compiler.Program {
+// NewProgram adapts the context-aware API. The legacy program cannot be
+// cancelled while it is built, so it never returns an error.
+func NewProgram(_ context.Context, options compiler.ProgramOptions) (*compiler.Program, error) {
 	if options.Config != nil && options.Config.GetCurrentDirectory() != "" {
 		options.Host = &rootedCompilerHost{options.Host, options.Config.GetCurrentDirectory()}
 	}
-	return compiler.NewProgram(options)
+	return compiler.NewProgram(options), nil
 }

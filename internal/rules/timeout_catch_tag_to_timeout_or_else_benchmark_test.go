@@ -42,10 +42,13 @@ func benchmarkTimeoutFixture(b *testing.B, scenario string) (*typeparser.TypePar
 	}
 	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseSensitive))
 	options := &core.CompilerOptions{Target: core.ScriptTargetESNext, Module: core.ModuleKindNodeNext, ModuleResolution: core.ModuleResolutionKindNodeNext, Strict: core.TSTrue, SkipLibCheck: core.TSTrue}
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(context.Background(), compiler.ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(options, []tspath.RootedFilePath{"/.src/main.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil), SingleThreaded: core.TSTrue,
 	})
+	if err != nil {
+		b.Fatal(err)
+	}
 	if diags := program.GetSemanticDiagnostics(context.Background(), nil); len(diags) != 0 {
 		b.Fatalf("fixture has %d diagnostics: %v", len(diags), diags[0])
 	}
