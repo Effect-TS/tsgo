@@ -1,5 +1,56 @@
 # @effect/tsgo
 
+## 0.70.0
+
+### Minor Changes
+
+- 9ada5da: Add the `flatMapProvideServiceToProvideServiceEffect` suggestion in `style`. An `Effect.flatMap` (or `Effect.andThen` given a callback) whose callback only forwards its parameter to `Effect.provideService` is a manual `Effect.provideServiceEffect`. The rule reports it in every spelling: pipeable, data-first, `pipe(...)` and curried, on both the outer `flatMap` and the inner `provideService`, and inside `Effect.gen` / `Effect.fn` bodies.
+  
+  ```ts
+  makeConnection.pipe(Effect.flatMap((conn) => Effect.provideService(program, Database, conn))) // reported
+  Effect.provideServiceEffect(program, Database, makeConnection)                                // ok
+  ```
+  
+  A quick fix rewrites the expression to `Effect.provideServiceEffect(self, Key, acquire)` and keeps any later pipe steps: `Effect.suspend(() => step(s)).pipe(Effect.flatMap((meta) => Effect.provideService(effect, Key, meta)), Effect.map(f))` becomes `Effect.provideServiceEffect(effect, Key, Effect.suspend(() => step(s))).pipe(Effect.map(f))`.
+  
+  The callback is not reported when it does anything else: when the parameter appears outside the service argument (in the program, in any earlier step of the program, or in the key), when the program or key uses something the callback binds (the name of a named function expression, or a function-expression callback's own `this`, `super`, `new.target` or `arguments`, plain or as shorthand `{ arguments }`), when the service argument is not the bare parameter, when steps follow `provideService`, when the acquired value's type is not assignable to the key's service type (for example through a `(conn: any)` parameter), or when the `flatMap` result type differs from the `provideServiceEffect` one (a return-type annotation on the callback or explicit type arguments that widen it, or explicit type arguments on `provideService`), since code after it may rely on that type. After the fix, the program expression is evaluated once when the expression is built rather than on every run of the callback. The `Effect.gen` form (`const p = yield* acquire; return yield* Effect.provideService(self, Key, p)`) is deliberately not reported. On Effect v3, data-first `Effect.andThen(acquire, callback)` is not reported, since its overloads do not form a dual. The rule supports Effect v3 and v4.
+  
+  Piping-flow fixes can now build an expression for a flow prefix with `PipingFlowPrefixExpression`, including prefixes that end inside a `.pipe(...)` or `pipe(...)` call.
+- 50c28e5: Add the `forLoopPushToForEach` diagnostic (style, off by default; enable it with `"forLoopPushToForEach": "suggestion"`) and quickfix. Inside an Effect generator, a `for (const x of iterable)` loop whose only statement is `acc.push(yield* effect)`, with `acc` a `const acc = []` declared just before the loop, is reported. The fix replaces it with `Effect.forEach`. The fix is not offered when the accumulator is mutated after the loop, or when the loop binding or the yielded expression contains a `yield` of the generator. The callback is passed directly only when it is a plain single-parameter function applied to the loop variable, whether as `f(x)`, `pipe(x, f)` or `x.pipe(f)`; otherwise an arrow is kept.
+  
+  ```ts
+  // before
+  const results = []
+  for (const item of items) {
+    results.push(yield* processItem(item))
+  }
+  // after
+  const results = yield* Effect.forEach(items, processItem)
+  ```
+
+### Patch Changes
+
+- 75a36b2: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261116.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/6bdcb54d23f41bc7098c1f3488ac599c75b852ca) commit `6bdcb54d23f41bc7098c1f3488ac599c75b852ca`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+- 9ada5da: `manualMetricTapToTrack` now decides more precisely whether a function-expression callback can become an arrow mapper. It looks for the callback's own `this`, `super`, `new.target`, `arguments` and name the way the compiler resolves them, through the new typeparser helper `UsesFunctionOwnBindings`, which `flatMapProvideServiceToProvideServiceEffect` now uses too.
+  
+  The rule now reports callbacks it used to skip, since none of these read a binding of the callback:
+  
+  ```ts
+  Effect.tap(function(size) { return Metric.update(responseSize, size + sizes.arguments) })       // a property named `arguments`
+  Effect.tap(function(size) { return Metric.update(responseSize, size + import.meta.url.length) }) // `import.meta`
+  Effect.tap(function(size) {                                                                     // a class that uses its own `this` and `arguments`
+    return Metric.update(responseSize, size + new (class { readonly n = this; m() { return arguments.length } })().m())
+  })
+  ```
+  
+  It no longer reports a named callback that reads its own name through a shorthand property, which the fix would have left unbound:
+  
+  ```ts
+  Effect.tap(function record(size) { return Metric.update(responseSize, size + Object.keys({ record }).length) })
+  ```
+  
+  Class expressions are still skipped when their `extends` clause, a computed member name or a member decorator reads the callback's bindings.
+
 ## 0.69.1
 
 ### Patch Changes
