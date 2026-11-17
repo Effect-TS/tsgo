@@ -326,6 +326,7 @@
         "processEnv": "warning",
         "processEnvInEffect": "warning",
         "promiseAllInEffect": "warning",
+        "promiseRaceInEffect": "warning",
         "schemaSync": "warning"
       }
     },
@@ -2207,6 +2208,31 @@
             "start": 196,
             "end": 207,
             "text": "`Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "promiseRaceInEffect",
+      "group": "effectNative",
+      "description": "Warns when Promise.race or Promise.any races a list of promises inside Effect code, leaving the losing promises running",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377212,
+        377213
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const mirrors: ReadonlyArray\u003cstring\u003e\ndeclare const download: (url: string) =\u003e Promise\u003cUint8Array\u003e\n\nexport const preview = Effect.tryPromise(() =\u003e Promise.any(mirrors.map((url) =\u003e download(url))))\n",
+        "diagnostics": [
+          {
+            "start": 187,
+            "end": 198,
+            "text": "This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)"
           }
         ]
       }

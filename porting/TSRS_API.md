@@ -73,6 +73,7 @@ This is the path `ets_effecttest` uses.
 | `checker.GetMappedTypeModifiers`, `Checker_isReadonlySymbol`, `Checker_isTypeAssignableTo`, `Checker_isTypeIdenticalTo`, `Checker_getIndexInfosOfType` | public in tsrs (`get_mapped_type_modifiers` by patch 150): `tsrs_checker::get_mapped_type_modifiers`, `Checker::is_readonly_symbol`, `is_type_assignable_to`, `is_type_identical_to`, `get_index_infos_of_type`; `IndexInfo::key_type` / `value_type` are public `Cell`s |
 | `Checker.GetConstructSignatures(t)`, `Checker.GetTypeOnlyAliasDeclaration` | `get_signatures_of_type(t, SignatureKind::Construct)`, `get_type_only_alias_declaration` (tsrs 0.20.1 dropped the forwarding wrappers) |
 | `checker.TypeFormatFlags*` | `tsrs_checker::types::TypeFormatFlags::*` (bitflags) |
+| `t.TargetTupleType()` (typescript-go's exported `Type` method) | `t.target().unwrap().as_tuple_type()`: tsrs's `Type::target_tuple_type` is `pub(crate)`, and a tuple type reference's `target()` reads the same field (`ets_rules`'s `promise_race_in_effect_has_rest`) |
 | `*ast.SourceFile` that may be nil | `Option<P<SourceFile>>` |
 | `SourceFile.Text()`, `Statements.Nodes` | `text() -> &'static str`, `statements().nodes() -> &'static [P<Node>]` |
 | `node.Pos()`, `node.End()` (`int`) | `TextPos`; a parsed node's is `.expect_source(..)` (`u32`), widened to `i64` where Go computes with `int`. Synthesized nodes: `TextPos::Synthetic` (Go's `-1`) |

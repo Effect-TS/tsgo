@@ -1,0 +1,210 @@
+// @effect-v3
+// @effect-diagnostics promiseRaceInEffect:warning
+import { Data, Effect } from "effect"
+
+class DownloadError extends Data.TaggedError("DownloadError")<{ readonly cause: unknown }> {}
+
+declare const mirrors: ReadonlyArray<string>
+declare const mutableMirrors: Array<string>
+declare const download: (url: string) => Promise<Uint8Array>
+declare const downloadWithSignal: (url: string, signal: AbortSignal) => Promise<Uint8Array>
+declare const pending: ReadonlyArray<Promise<Uint8Array>>
+declare const primary: Promise<Uint8Array>
+declare const fallbacks: Array<Promise<Uint8Array>>
+declare const pendingSet: Set<Promise<Uint8Array>>
+declare const optionalPair: [Promise<Uint8Array>, Promise<Uint8Array>?]
+
+// ---------------------------------------------------------------------------
+// Thunk-safe shape: the Effect.promise / Effect.tryPromise thunk's expression
+// body is exactly the call, and its argument is xs.map(<inline arrow or function>).
+// On v3 only Promise.any gets a quick fix (to Effect.raceAll). Promise.race is
+// reported without naming a replacement and gets NO quick fix: Effect v3 has no
+// list version of raceFirst (Effect.raceFirst takes exactly two effects).
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: Promise.any over a mapped list in Effect.tryPromise.
+// Message names Effect.raceAll. Quick fix:
+// Effect.raceAll(mirrors.map((url) => Effect.tryPromise(() => download(url))))
+export const fastest = Effect.tryPromise(() => Promise.any(mirrors.map((url) => download(url))))
+
+// MUST TRIGGER: Promise.race over a mapped list in Effect.tryPromise.
+// Message reports the problem without naming a replacement (v3). No quick fix on v3.
+export const firstSettled = Effect.tryPromise(() => Promise.race(mirrors.map((url) => download(url))))
+
+// MUST TRIGGER: Promise.race in Effect.promise. No replacement named, no quick fix on v3.
+export const firstSettledPromise = Effect.promise(() => Promise.race(mirrors.map((url) => download(url))))
+
+// MUST TRIGGER: Effect.promise keeps its constructor in the per-item thunk.
+// Quick fix: Effect.raceAll(mutableMirrors.map((url) => Effect.promise(() => download(url))))
+export const fastestPromise = Effect.promise(() => Promise.any(mutableMirrors.map((url) => download(url))))
+
+// MUST TRIGGER: the callback is an inline function expression.
+// Quick fix: Effect.raceAll(mirrors.map(function(url) { return Effect.tryPromise(() => download(url)) }))
+// (or an equivalent shape where the per-item Effect wraps the callback body).
+export const functionCallback = Effect.tryPromise(() =>
+  Promise.any(mirrors.map(function(url) {
+    return download(url)
+  }))
+)
+
+// MUST TRIGGER: block-bodied inline arrow callback using the index parameter.
+// Quick fix keeps the callback params (url, index) and wraps the block body in the per-item thunk.
+export const blockCallback = Effect.tryPromise(() =>
+  Promise.any(mirrors.map((url, index) => {
+    const ranked = `${url}?rank=${index}`
+    return download(ranked)
+  }))
+)
+
+// MUST TRIGGER: the thunk's signal parameter is declared again on each per-item thunk.
+// Quick fix: Effect.raceAll(mirrors.map((url) => Effect.tryPromise((signal) => downloadWithSignal(url, signal))))
+export const withSignal = Effect.tryPromise((signal) =>
+  Promise.any(mirrors.map((url) => downloadWithSignal(url, signal)))
+)
+
+// MUST TRIGGER: same with Effect.promise.
+// Quick fix: Effect.raceAll(mirrors.map((url) => Effect.promise((signal) => downloadWithSignal(url, signal))))
+export const withSignalPromise = Effect.promise((signal) =>
+  Promise.any(mirrors.map((url) => downloadWithSignal(url, signal)))
+)
+
+// MUST TRIGGER: Promise.race with a signal. No replacement named, no quick fix on v3.
+export const withSignalRace = Effect.tryPromise((signal) =>
+  Promise.race(mirrors.map((url) => downloadWithSignal(url, signal)))
+)
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, NO quick fix (not the thunk-safe shape)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER, no fix: identifier callback instead of an inline arrow / function.
+export const identifierCallback = Effect.tryPromise(() => Promise.race(mirrors.map(download)))
+
+// MUST TRIGGER, no fix: the argument is an existing list of promises, not xs.map(...).
+export const existingList = Effect.promise(() => Promise.any(pending))
+
+// MUST TRIGGER, no fix: a tuple with a rest element is data-driven.
+export const tupleWithRest = Effect.promise(() => Promise.race([primary, ...fallbacks]))
+
+// MUST TRIGGER, no fix: spreading a list yields an array.
+export const spreadList = Effect.promise(() => Promise.any([...pending]))
+
+// MUST TRIGGER, no fix: the { try, catch } object form.
+export const tryObject = Effect.tryPromise({
+  try: () => Promise.any(mirrors.map((url) => download(url))),
+  catch: (cause) => new DownloadError({ cause })
+})
+
+// MUST TRIGGER, no fix: async thunk.
+export const asyncThunk = Effect.tryPromise(async () => Promise.race(mirrors.map((url) => download(url))))
+
+// MUST TRIGGER, no fix: async thunk awaiting the combinator.
+export const asyncAwaitThunk = Effect.promise(async () => {
+  const bytes = await Promise.any(mirrors.map((url) => download(url)))
+  return bytes.length
+})
+
+// MUST TRIGGER, no fix: block-bodied thunk, the call is not the whole (expression) body.
+export const blockThunk = Effect.promise(() => {
+  return Promise.race(mirrors.map((url) => download(url)))
+})
+
+// MUST TRIGGER, no fix: the call is the receiver of .then, not the whole thunk body.
+export const chainedThen = Effect.promise(() => Promise.any(mirrors.map((url) => download(url))).then((bytes) => bytes.length))
+
+// MUST TRIGGER, no fix: inside an Effect.gen body.
+export const inGen = Effect.gen(function*() {
+  const winner = Promise.race(mirrors.map((url) => download(url)))
+  return yield* Effect.promise(() => winner)
+})
+
+// MUST TRIGGER, no fix: Promise.any as a plain statement of an Effect.gen body.
+export const inGenAny = Effect.gen(function*() {
+  const all = yield* Effect.succeed(mirrors)
+  const winner = Promise.any(all.map((url) => download(url)))
+  return yield* Effect.promise(() => winner)
+})
+
+// MUST TRIGGER, no fix: inside a generator Effect.fn body.
+export const inFn = Effect.fn("inFn")(function*(urls: ReadonlyArray<string>) {
+  const winner = Promise.any(urls.map((url) => download(url)))
+  return yield* Effect.promise(() => winner)
+})
+
+// MUST TRIGGER, no fix: Effect.suspend thunks are Effect constructor thunks too.
+export const inSuspend = Effect.suspend(() => {
+  const winner = Promise.race(mirrors.map((url) => download(url)))
+  return Effect.promise(() => winner)
+})
+
+// MUST TRIGGER, no fix: aliased global Promise.
+export const aliasedPromise = Effect.gen(function*() {
+  const P = Promise
+  const winner = P.any(mirrors.map((url) => download(url)))
+  return yield* Effect.promise(() => winner)
+})
+
+// MUST TRIGGER, no fix: globalThis.Promise is the global Promise.
+export const viaGlobalThis = Effect.promise(() => globalThis.Promise.race(mirrors.map((url) => download(url))))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER: fixed-length tuple literal.
+export const fixedTuple = Effect.promise(() => Promise.race([download("a"), download("b")]))
+
+// MUST NOT TRIGGER: fixed-length readonly tuple.
+const pair = [download("a"), download("b")] as const
+export const fixedReadonlyTuple = Effect.promise(() => Promise.any(pair))
+
+// MUST NOT TRIGGER: a tuple with an optional element has no rest element.
+export const optionalTuple = Effect.promise(() => Promise.race(optionalPair))
+
+// MUST NOT TRIGGER: an Iterable that is not an array (out of v1 scope).
+export const iterableSet = Effect.promise(() => Promise.any(pendingSet))
+
+// MUST NOT TRIGGER (deliberate in v1): combinator inside a function nested in the thunk.
+export const nestedInThen = Effect.promise(() =>
+  download("index").then(() => Promise.any(mirrors.map((url) => download(url))))
+)
+
+// MUST NOT TRIGGER: nested arrow inside an Effect.gen body.
+export const nestedArrowInGen = Effect.gen(function*() {
+  const pick = () => Promise.race(mirrors.map((url) => download(url)))
+  return pick
+})
+
+// MUST NOT TRIGGER: outside Effect code (module level and a plain async function).
+export const moduleLevel = Promise.race(mirrors.map((url) => download(url)))
+export const plainAsync = async () => Promise.any(mirrors.map((url) => download(url)))
+
+// MUST NOT TRIGGER: Effect.runPromise argument is not Effect-run code.
+export const runPromise = () => Effect.runPromise(Effect.succeed(1)).then(() => Promise.any(pending))
+
+// MUST NOT TRIGGER: Promise.all / Promise.allSettled belong to promiseAllInEffect.
+export const promiseAll = Effect.promise(() => Promise.all(mirrors.map((url) => download(url))))
+export const promiseAllSettled = Effect.promise(() => Promise.allSettled(mirrors.map((url) => download(url))))
+
+// MUST NOT TRIGGER: shadowed Promise.
+export const shadowedPromise = Effect.gen(function*() {
+  const Promise = {
+    race: (values: ReadonlyArray<string>) => values[0],
+    any: (values: ReadonlyArray<string>) => values[0]
+  }
+  return [Promise.race(mirrors.map((url) => url)), Promise.any(mirrors.map((url) => url))]
+})
+
+// MUST NOT TRIGGER: a user-defined race / any on another object.
+class Pool {
+  static race(values: ReadonlyArray<string>) {
+    return values[0]
+  }
+  static any(values: ReadonlyArray<string>) {
+    return values[0]
+  }
+}
+export const userDefined = Effect.sync(() => [Pool.race(mirrors.map((url) => url)), Pool.any(mirrors)])
+
+// MUST NOT TRIGGER: the Effect replacement itself.
+export const goodAny = Effect.raceAll(mirrors.map((url) => Effect.tryPromise(() => download(url))))

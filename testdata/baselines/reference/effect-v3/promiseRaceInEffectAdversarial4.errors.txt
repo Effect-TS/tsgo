@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/promiseRaceInEffectAdversarial4.ts(9,49): warning TS377213: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. effect(promiseRaceInEffect)
+/.src/promiseRaceInEffectAdversarial4.ts(12,48): warning TS377212: This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)
+
+
+==== /.src/promiseRaceInEffectAdversarial4.ts (2 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics promiseRaceInEffect:warning
+    import { Effect } from "effect"
+    
+    declare const pending: ReadonlyArray<Promise<string>>
+    
+    // MUST TRIGGER: literal element access calls the same global Promise.race.
+    export const elementRace = Effect.promise(() => Promise["race"](pending))
+                                                    ~~~~~~~~~~~~~~~
+!!! warning TS377213: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. effect(promiseRaceInEffect)
+    
+    // MUST TRIGGER: literal element access calls the same global Promise.any.
+    export const elementAny = Effect.promise(() => Promise["any"](pending))
+                                                   ~~~~~~~~~~~~~~
+!!! warning TS377212: This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)
+    

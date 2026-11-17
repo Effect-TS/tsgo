@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/promiseRaceInEffectAdversarial2.ts(8,51): warning TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+/.src/promiseRaceInEffectAdversarial2.ts(12,24): warning TS377212: This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)
+
+
+==== /.src/promiseRaceInEffectAdversarial2.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics promiseRaceInEffect:warning
+    import { Effect } from "effect"
+    
+    declare const lists: ReadonlyArray<Promise<string>> | ReadonlyArray<Promise<number>>
+    
+    // MUST TRIGGER: every union member is a data-driven array; no fix for an existing list.
+    export const unionOfArrays = Effect.promise(() => Promise.race(lists))
+                                                      ~~~~~~~~~~~~
+!!! warning TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+    
+    // MUST TRIGGER: T is constrained to an array, so its length is data-driven.
+    export const constrainedArray = <T extends ReadonlyArray<Promise<string>>>(xs: T) =>
+      Effect.promise(() => Promise.any(xs))
+                           ~~~~~~~~~~~
+!!! warning TS377212: This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)
+    

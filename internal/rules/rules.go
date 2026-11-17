@@ -97,6 +97,7 @@ var All = []rule.Rule{
 	LeakingRequirements,
 	LazyEffect,
 	LazyPromiseInEffectSync,
+	PromiseRaceInEffect,
 	PromiseInEffectSuccess,
 	NestedEffectGenYield,
 	YieldInCallArgument,

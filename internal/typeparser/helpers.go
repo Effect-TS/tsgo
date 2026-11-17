@@ -137,9 +137,10 @@ func (tp *TypeParser) ResolveToGlobalSymbol(sym *ast.Symbol) *ast.Symbol {
 }
 
 // IsNodeReferenceToGlobalMember reports whether node resolves to a property of
-// a global value. ReferenceSymbolAtNode follows import and const aliases, so
-// callers do not need to constrain the source expression to property-access
-// syntax merely to recognize the global API.
+// a global value. ReferenceSymbolAtNode follows import and const aliases, and a
+// literal element access resolves through its key, so callers do not need to
+// constrain the source expression to property-access syntax merely to
+// recognize the global API.
 func (tp *TypeParser) IsNodeReferenceToGlobalMember(node *ast.Node, globalName string, memberName string) bool {
 	if tp == nil || tp.checker == nil || node == nil {
 		return false
@@ -154,5 +155,10 @@ func (tp *TypeParser) IsNodeReferenceToGlobalMember(node *ast.Node, globalName s
 	}
 	member := tp.checker.GetPropertyOfType(globalType, memberName)
 	actual := tp.ReferenceSymbolAtNode(node)
+	if actual == nil && ast.IsElementAccessExpression(node) {
+		if key := node.AsElementAccessExpression().ArgumentExpression; key != nil && ast.IsStringOrNumericLiteralLike(key) {
+			actual = tp.ReferenceSymbolAtNode(key)
+		}
+	}
 	return member != nil && actual != nil && checker.Checker_getSymbolIfSameReference(tp.checker, member, actual) != nil
 }

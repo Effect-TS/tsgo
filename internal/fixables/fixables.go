@@ -77,6 +77,7 @@ var All = []fixable.Fixable{
 	SchemaNumberFix,
 	RedundantSchemaTagIdentifierRemoveIdentifierFix,
 	RunEffectInsideEffectFix,
+	PromiseRaceInEffectFix,
 	SchemaUnionOfLiteralsFix,
 	MissedPipeableOpportunityFix,
 	NewSchemaClassFix,

@@ -1,0 +1,47 @@
+==== /.src/promiseRaceInEffect_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 9:23 - 9:97
+Node: Effect.tryPromise(() => Promise.any(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownException, never>
+
+=== Piping Flow ===
+Location: 9:47 - 9:96
+Node: Promise.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 9:80 - 9:94
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>

@@ -331,6 +331,14 @@
         "category": "Warning",
         "code": 377082
     },
+    "This Effect code races promises with `Promise.{0}`; the losing promises keep running and are not interrupted. Use `Effect.{1}` over Effect values instead. effect(promiseRaceInEffect)": {
+        "category": "Warning",
+        "code": 377212
+    },
+    "This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. effect(promiseRaceInEffect)": {
+        "category": "Warning",
+        "code": 377213
+    },
     "This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)": {
         "category": "Warning",
         "code": 377083

@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:48-8:59) TS377212: This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default

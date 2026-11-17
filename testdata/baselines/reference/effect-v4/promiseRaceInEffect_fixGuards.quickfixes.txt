@@ -1,0 +1,470 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:57-14:69) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D2] (18:50-18:56) TS6133: 'signal' is declared but its value is never read.
+  (no quick fixes)
+
+[D3] (18:61-18:73) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D4] (21:54-21:66) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D5] (25:53-25:65) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+  Fix 2: "Replace with Effect.raceAllFirst"
+
+[D6] (31:49-31:61) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D7] (34:49-34:61) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D8] (39:3-39:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D9] (44:3-44:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D10] (50:3-50:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D11] (58:3-58:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D12] (66:3-66:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D13] (72:3-72:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D14] (77:60-77:75) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D15] (81:3-81:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+
+[D16] (87:3-87:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+  Fix 2: "Replace with Effect.raceAllFirst"
+
+[D17] (95:3-95:15) TS377212: This Effect code races promises with `Promise.race`; the losing promises keep running and are not interrupted. Use `Effect.raceAllFirst` over Effect values instead. effect(promiseRaceInEffect)
+  Fix 0: "Disable promiseRaceInEffect for this line"
+  Fix 1: "Disable promiseRaceInEffect for entire file"
+  Fix 2: "Replace with Effect.raceAllFirst"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.raceAllFirst" ===
+
+--- file:///.src/promiseRaceInEffect_fixGuards.ts ---
+// @effect-diagnostics promiseRaceInEffect:warning
+import { Effect } from "effect"
+
+declare const mirrors: ReadonlyArray<string>
+declare const download: (url: string) => Promise<Uint8Array>
+declare const listMirrors: () => ReadonlyArray<string>
+declare const nextMirror: () => string
+
+// Promise.race is the combinator that has a quick fix on Effect v4 (to Effect.raceAllFirst),
+// so each case below isolates one guard of that fix.
+
+// MUST TRIGGER, no fix: the receiver is a call, which the fix would move from
+// every run of the Effect to its construction.
+export const unstableReceiver = Effect.tryPromise(() => Promise.race(listMirrors().map((url) => download(url))))
+
+// MUST TRIGGER, no fix: the callback parameter shadows the thunk's signal, so a
+// per-item thunk declaring signal again would capture the callback's binding.
+export const shadowedSignal = Effect.tryPromise((signal) => Promise.race(mirrors.map((signal) => download(signal))))
+
+// MUST TRIGGER, no fix: an async callback is not an inline synchronous callback.
+export const asyncCallback = Effect.tryPromise(() => Promise.race(mirrors.map(async (url) => download(url))))
+
+// MUST TRIGGER, fixed: steps after the constructor are kept.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise(() => download(url)))).pipe(Effect.map((bytes) => bytes.length))
+export const trailingPipe = Effect.raceAllFirst(mirrors.map(url => Effect.tryPromise(() => download(url)))).pipe(
+  Effect.map((bytes) => bytes.length)
+)
+
+// MUST TRIGGER, no fix: the callback returns plain values, which a per-item
+// Effect.promise / Effect.tryPromise thunk cannot return.
+export const plainValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length)))
+
+// MUST TRIGGER, no fix: the callback sometimes returns a plain value.
+export const mixedValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length > 0 ? download(url) : 0)))
+
+// MUST TRIGGER, no fix: a callback parameter default reads the thunk's signal,
+// which the per-item thunk declares only around the callback body.
+export const signalInParameterDefault = Effect.promise((signal) =>
+  Promise.race(mirrors.map((url = String(signal.aborted)) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a callback parameter type reads the thunk's signal.
+export const signalInParameterType = Effect.tryPromise((signal) =>
+  Promise.race(mirrors.map((url: typeof signal extends AbortSignal ? string : never) => download(url)))
+)
+
+// MUST TRIGGER, no fix: the named callback calls itself, and would return an
+// Effect after the rewrite.
+export const recursiveCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function retry(url): Promise<Uint8Array> {
+    return url.length > 0 ? download(url) : retry("fallback")
+  }))
+)
+
+// MUST TRIGGER, no fix: the named callback refers to itself in a parameter
+// default, outside its body, and would return an Effect after the rewrite.
+export const selfInParameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function self(url: string | Promise<Uint8Array> = self("fallback")): Promise<Uint8Array> {
+    return typeof url === "string" ? download(url) : url
+  }))
+)
+
+// MUST TRIGGER, no fix: a parameter default runs when the callback is bound,
+// which the rewrite would move from the Effect run to its construction.
+export const parameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map((url = nextMirror()) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a destructuring parameter runs the string iterator when
+// it is bound, which the rewrite would move from the Effect run to its construction.
+export const destructuredParameter = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(([scheme]) => download(scheme ?? "")))
+)
+
+// MUST TRIGGER, no fix: only the Promise.race spelling is rewritten; the element
+// access spelling of the same global is reported without a fix.
+export const elementAccessCallee = Effect.tryPromise(() => Promise["race"](mirrors.map((url) => download(url))))
+
+// MUST TRIGGER, no fix: explicit map type arguments would type the rewritten callback.
+export const mapTypeArguments = Effect.tryPromise(() =>
+  Promise.race(mirrors.map<Promise<Uint8Array>>((url) => download(url)))
+)
+
+// MUST TRIGGER, fixed: a named callback that does not refer to itself keeps its name.
+// Quick fix: Effect.raceAllFirst(mirrors.map(function fetchMirror(url) { return Effect.tryPromise(() => { return download(url) }) }))
+export const namedCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function fetchMirror(url) {
+    return download(url)
+  }))
+)
+
+// MUST TRIGGER, fixed: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise((): Promise<Uint8Array> => download(url))))
+export const annotatedCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map((url): Promise<Uint8Array> => download(url)))
+)
+
+
+=== [D6] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Replace with Effect.raceAllFirst" ===
+
+--- file:///.src/promiseRaceInEffect_fixGuards.ts ---
+// @effect-diagnostics promiseRaceInEffect:warning
+import { Effect } from "effect"
+
+declare const mirrors: ReadonlyArray<string>
+declare const download: (url: string) => Promise<Uint8Array>
+declare const listMirrors: () => ReadonlyArray<string>
+declare const nextMirror: () => string
+
+// Promise.race is the combinator that has a quick fix on Effect v4 (to Effect.raceAllFirst),
+// so each case below isolates one guard of that fix.
+
+// MUST TRIGGER, no fix: the receiver is a call, which the fix would move from
+// every run of the Effect to its construction.
+export const unstableReceiver = Effect.tryPromise(() => Promise.race(listMirrors().map((url) => download(url))))
+
+// MUST TRIGGER, no fix: the callback parameter shadows the thunk's signal, so a
+// per-item thunk declaring signal again would capture the callback's binding.
+export const shadowedSignal = Effect.tryPromise((signal) => Promise.race(mirrors.map((signal) => download(signal))))
+
+// MUST TRIGGER, no fix: an async callback is not an inline synchronous callback.
+export const asyncCallback = Effect.tryPromise(() => Promise.race(mirrors.map(async (url) => download(url))))
+
+// MUST TRIGGER, fixed: steps after the constructor are kept.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise(() => download(url)))).pipe(Effect.map((bytes) => bytes.length))
+export const trailingPipe = Effect.tryPromise(() => Promise.race(mirrors.map((url) => download(url)))).pipe(
+  Effect.map((bytes) => bytes.length)
+)
+
+// MUST TRIGGER, no fix: the callback returns plain values, which a per-item
+// Effect.promise / Effect.tryPromise thunk cannot return.
+export const plainValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length)))
+
+// MUST TRIGGER, no fix: the callback sometimes returns a plain value.
+export const mixedValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length > 0 ? download(url) : 0)))
+
+// MUST TRIGGER, no fix: a callback parameter default reads the thunk's signal,
+// which the per-item thunk declares only around the callback body.
+export const signalInParameterDefault = Effect.promise((signal) =>
+  Promise.race(mirrors.map((url = String(signal.aborted)) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a callback parameter type reads the thunk's signal.
+export const signalInParameterType = Effect.tryPromise((signal) =>
+  Promise.race(mirrors.map((url: typeof signal extends AbortSignal ? string : never) => download(url)))
+)
+
+// MUST TRIGGER, no fix: the named callback calls itself, and would return an
+// Effect after the rewrite.
+export const recursiveCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function retry(url): Promise<Uint8Array> {
+    return url.length > 0 ? download(url) : retry("fallback")
+  }))
+)
+
+// MUST TRIGGER, no fix: the named callback refers to itself in a parameter
+// default, outside its body, and would return an Effect after the rewrite.
+export const selfInParameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function self(url: string | Promise<Uint8Array> = self("fallback")): Promise<Uint8Array> {
+    return typeof url === "string" ? download(url) : url
+  }))
+)
+
+// MUST TRIGGER, no fix: a parameter default runs when the callback is bound,
+// which the rewrite would move from the Effect run to its construction.
+export const parameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map((url = nextMirror()) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a destructuring parameter runs the string iterator when
+// it is bound, which the rewrite would move from the Effect run to its construction.
+export const destructuredParameter = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(([scheme]) => download(scheme ?? "")))
+)
+
+// MUST TRIGGER, no fix: only the Promise.race spelling is rewritten; the element
+// access spelling of the same global is reported without a fix.
+export const elementAccessCallee = Effect.tryPromise(() => Promise["race"](mirrors.map((url) => download(url))))
+
+// MUST TRIGGER, no fix: explicit map type arguments would type the rewritten callback.
+export const mapTypeArguments = Effect.tryPromise(() =>
+  Promise.race(mirrors.map<Promise<Uint8Array>>((url) => download(url)))
+)
+
+// MUST TRIGGER, fixed: a named callback that does not refer to itself keeps its name.
+// Quick fix: Effect.raceAllFirst(mirrors.map(function fetchMirror(url) { return Effect.tryPromise(() => { return download(url) }) }))
+export const namedCallback = Effect.raceAllFirst(mirrors.map(function fetchMirror(url) {
+    return Effect.tryPromise(() => {
+        return download(url);
+    });
+}))
+
+// MUST TRIGGER, fixed: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise((): Promise<Uint8Array> => download(url))))
+export const annotatedCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map((url): Promise<Uint8Array> => download(url)))
+)
+
+
+=== [D17] Fix 0: "Disable promiseRaceInEffect for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable promiseRaceInEffect for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Replace with Effect.raceAllFirst" ===
+
+--- file:///.src/promiseRaceInEffect_fixGuards.ts ---
+// @effect-diagnostics promiseRaceInEffect:warning
+import { Effect } from "effect"
+
+declare const mirrors: ReadonlyArray<string>
+declare const download: (url: string) => Promise<Uint8Array>
+declare const listMirrors: () => ReadonlyArray<string>
+declare const nextMirror: () => string
+
+// Promise.race is the combinator that has a quick fix on Effect v4 (to Effect.raceAllFirst),
+// so each case below isolates one guard of that fix.
+
+// MUST TRIGGER, no fix: the receiver is a call, which the fix would move from
+// every run of the Effect to its construction.
+export const unstableReceiver = Effect.tryPromise(() => Promise.race(listMirrors().map((url) => download(url))))
+
+// MUST TRIGGER, no fix: the callback parameter shadows the thunk's signal, so a
+// per-item thunk declaring signal again would capture the callback's binding.
+export const shadowedSignal = Effect.tryPromise((signal) => Promise.race(mirrors.map((signal) => download(signal))))
+
+// MUST TRIGGER, no fix: an async callback is not an inline synchronous callback.
+export const asyncCallback = Effect.tryPromise(() => Promise.race(mirrors.map(async (url) => download(url))))
+
+// MUST TRIGGER, fixed: steps after the constructor are kept.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise(() => download(url)))).pipe(Effect.map((bytes) => bytes.length))
+export const trailingPipe = Effect.tryPromise(() => Promise.race(mirrors.map((url) => download(url)))).pipe(
+  Effect.map((bytes) => bytes.length)
+)
+
+// MUST TRIGGER, no fix: the callback returns plain values, which a per-item
+// Effect.promise / Effect.tryPromise thunk cannot return.
+export const plainValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length)))
+
+// MUST TRIGGER, no fix: the callback sometimes returns a plain value.
+export const mixedValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length > 0 ? download(url) : 0)))
+
+// MUST TRIGGER, no fix: a callback parameter default reads the thunk's signal,
+// which the per-item thunk declares only around the callback body.
+export const signalInParameterDefault = Effect.promise((signal) =>
+  Promise.race(mirrors.map((url = String(signal.aborted)) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a callback parameter type reads the thunk's signal.
+export const signalInParameterType = Effect.tryPromise((signal) =>
+  Promise.race(mirrors.map((url: typeof signal extends AbortSignal ? string : never) => download(url)))
+)
+
+// MUST TRIGGER, no fix: the named callback calls itself, and would return an
+// Effect after the rewrite.
+export const recursiveCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function retry(url): Promise<Uint8Array> {
+    return url.length > 0 ? download(url) : retry("fallback")
+  }))
+)
+
+// MUST TRIGGER, no fix: the named callback refers to itself in a parameter
+// default, outside its body, and would return an Effect after the rewrite.
+export const selfInParameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function self(url: string | Promise<Uint8Array> = self("fallback")): Promise<Uint8Array> {
+    return typeof url === "string" ? download(url) : url
+  }))
+)
+
+// MUST TRIGGER, no fix: a parameter default runs when the callback is bound,
+// which the rewrite would move from the Effect run to its construction.
+export const parameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map((url = nextMirror()) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a destructuring parameter runs the string iterator when
+// it is bound, which the rewrite would move from the Effect run to its construction.
+export const destructuredParameter = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(([scheme]) => download(scheme ?? "")))
+)
+
+// MUST TRIGGER, no fix: only the Promise.race spelling is rewritten; the element
+// access spelling of the same global is reported without a fix.
+export const elementAccessCallee = Effect.tryPromise(() => Promise["race"](mirrors.map((url) => download(url))))
+
+// MUST TRIGGER, no fix: explicit map type arguments would type the rewritten callback.
+export const mapTypeArguments = Effect.tryPromise(() =>
+  Promise.race(mirrors.map<Promise<Uint8Array>>((url) => download(url)))
+)
+
+// MUST TRIGGER, fixed: a named callback that does not refer to itself keeps its name.
+// Quick fix: Effect.raceAllFirst(mirrors.map(function fetchMirror(url) { return Effect.tryPromise(() => { return download(url) }) }))
+export const namedCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function fetchMirror(url) {
+    return download(url)
+  }))
+)
+
+// MUST TRIGGER, fixed: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise((): Promise<Uint8Array> => download(url))))
+export const annotatedCallback = Effect.raceAllFirst(mirrors.map(url => Effect.tryPromise((): Promise<Uint8Array> => download(url))))
+

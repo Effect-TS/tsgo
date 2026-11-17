@@ -1,0 +1,1753 @@
+==== /.src/promiseRaceInEffect.ts (116 flows) ====
+
+=== Piping Flow ===
+Location: 4:28 - 4:62
+Node: Data.TaggedError("DownloadError")
+Node Kind: KindCallExpression
+
+Subject: "DownloadError"
+Subject Type: "DownloadError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "DownloadError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 25:23 - 25:97
+Node: Effect.tryPromise(() => Promise.any(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 25:47 - 25:96
+Node: Promise.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 25:80 - 25:94
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 30:28 - 30:103
+Node: Effect.tryPromise(() => Promise.race(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 30:52 - 30:102
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 30:86 - 30:100
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 34:35 - 34:107
+Node: Effect.promise(() => Promise.race(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 34:56 - 34:106
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 34:90 - 34:104
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 38:30 - 38:108
+Node: Effect.promise(() => Promise.any(mutableMirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(mutableMirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 38:51 - 38:107
+Node: Promise.any(mutableMirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mutableMirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 38:91 - 38:105
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 43:32 - 47:2
+Node: Effect.tryPromise(() =>\n  Promise.race(mirrors.map(function(url) {\n    return download(url)\n  }))\n)
+Node Kind: KindCallExpression
+
+Subject: () =>\n  Promise.race(mirrors.map(function(url) {\n    return download(url)\n  }))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 43:56 - 46:6
+Node: Promise.race(mirrors.map(function(url) {\n    return download(url)\n  }))
+Node Kind: KindCallExpression
+
+Subject: function(url) {\n    return download(url)\n  }
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 45:11 - 45:25
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 51:29 - 56:2
+Node: Effect.tryPromise(() =>\n  Promise.race(mirrors.map((url, index) => {\n    const ranked = `${url}?rank=${index}`\n    return download(ranked)\n  }))\n)
+Node Kind: KindCallExpression
+
+Subject: () =>\n  Promise.race(mirrors.map((url, index) => {\n    const ranked = `${url}?rank=${index}`\n    return download(ranked)\n  }))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 51:53 - 55:6
+Node: Promise.race(mirrors.map((url, index) => {\n    const ranked = `${url}?rank=${index}`\n    return download(ranked)\n  }))
+Node Kind: KindCallExpression
+
+Subject: (url, index) => {\n    const ranked = `${url}?rank=${index}`\n    return download(ranked)\n  }
+Subject Type: (url: string, index: number) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 54:11 - 54:28
+Node: download(ranked)
+Node Kind: KindCallExpression
+
+Subject: ranked
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 60:26 - 62:2
+Node: Effect.tryPromise((signal) =>\n  Promise.race(mirrors.map((url) => downloadWithSignal(url, signal)))\n)
+Node Kind: KindCallExpression
+
+Subject: (signal) =>\n  Promise.race(mirrors.map((url) => downloadWithSignal(url, signal)))
+Subject Type: (signal: AbortSignal) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 60:56 - 61:70
+Node: Promise.race(mirrors.map((url) => downloadWithSignal(url, signal)))
+Node Kind: KindCallExpression
+
+Subject: (url) => downloadWithSignal(url, signal)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 66:29 - 68:2
+Node: Effect.promise((signal) =>\n  Promise.any(mirrors.map((url) => downloadWithSignal(url, signal)))\n)
+Node Kind: KindCallExpression
+
+Subject: (signal) =>\n  Promise.any(mirrors.map((url) => downloadWithSignal(url, signal)))
+Subject Type: (signal: AbortSignal) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 66:56 - 67:69
+Node: Promise.any(mirrors.map((url) => downloadWithSignal(url, signal)))
+Node Kind: KindCallExpression
+
+Subject: (url) => downloadWithSignal(url, signal)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 75:34 - 75:95
+Node: Effect.tryPromise(() => Promise.race(mirrors.map(download)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race(mirrors.map(download))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 75:58 - 75:94
+Node: Promise.race(mirrors.map(download))
+Node Kind: KindCallExpression
+
+Subject: download
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 78:28 - 78:71
+Node: Effect.promise(() => Promise.any(pending))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(pending)
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 78:49 - 78:70
+Node: Promise.any(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<Uint8Array<ArrayBufferLike>>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 81:29 - 81:89
+Node: Effect.promise(() => Promise.race([primary, ...fallbacks]))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race([primary, ...fallbacks])
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 81:50 - 81:88
+Node: Promise.race([primary, ...fallbacks])
+Node Kind: KindCallExpression
+
+Subject: [primary, ...fallbacks]
+Subject Type: [Promise<Uint8Array<ArrayBufferLike>>, ...Promise<Uint8Array<ArrayBufferLike>>[]]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 84:26 - 84:74
+Node: Effect.promise(() => Promise.any([...pending]))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any([...pending])
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 84:47 - 84:73
+Node: Promise.any([...pending])
+Node Kind: KindCallExpression
+
+Subject: [...pending]
+Subject Type: Promise<Uint8Array<ArrayBufferLike>>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 87:25 - 90:3
+Node: Effect.tryPromise({\n  try: () => Promise.any(mirrors.map((url) => download(url))),\n  catch: (cause) => new DownloadError({ cause })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => Promise.any(mirrors.map((url) => download(url))),\n  catch: (cause) => new DownloadError({ cause })\n}
+Subject Type: { try: () => Promise<Uint8Array<ArrayBufferLike>>; catch: (cause: unknown) => DownloadError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, DownloadError, never>
+
+=== Piping Flow ===
+Location: 88:13 - 88:62
+Node: Promise.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 88:46 - 88:60
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 93:26 - 93:107
+Node: Effect.tryPromise(async () => Promise.race(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: async () => Promise.race(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 93:56 - 93:106
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 93:90 - 93:104
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 96:31 - 99:3
+Node: Effect.promise(async () => {\n  const bytes = await Promise.any(mirrors.map((url) => download(url)))\n  return bytes.length\n})
+Node Kind: KindCallExpression
+
+Subject: async () => {\n  const bytes = await Promise.any(mirrors.map((url) => download(url)))\n  return bytes.length\n}
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 97:22 - 97:71
+Node: Promise.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 97:55 - 97:69
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 102:26 - 104:3
+Node: Effect.promise(() => {\n  return Promise.race(mirrors.map((url) => download(url)))\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  return Promise.race(mirrors.map((url) => download(url)))\n}
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 103:9 - 103:59
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 103:43 - 103:57
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 107:27 - 107:128
+Node: Effect.promise(() => Promise.any(mirrors.map((url) => download(url))).then((bytes) => bytes.length))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(mirrors.map((url) => download(url))).then((bytes) => bytes.length)
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 107:48 - 107:127
+Node: Promise.any(mirrors.map((url) => download(url))).then((bytes) => bytes.length)
+Node Kind: KindCallExpression
+
+Subject: (bytes) => bytes.length
+Subject Type: (bytes: Uint8Array<ArrayBufferLike>) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.any(mirrors.map((url) => download(url))).then
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 107:48 - 107:97
+Node: Promise.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 107:81 - 107:95
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 110:21 - 113:3
+Node: Effect.gen(function*() {\n  const winner = Promise.race(mirrors.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const winner = Promise.race(mirrors.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n}
+Subject Type: () => Generator<Effect<Uint8Array<ArrayBufferLike>, never, never>, Uint8Array<ArrayBufferLike>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 111:17 - 111:67
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 111:51 - 111:65
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 112:16 - 112:45
+Node: Effect.promise(() => winner)
+Node Kind: KindCallExpression
+
+Subject: () => winner
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 116:24 - 120:3
+Node: Effect.gen(function*() {\n  const all = yield* Effect.succeed(mirrors)\n  const winner = Promise.any(all.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const all = yield* Effect.succeed(mirrors)\n  const winner = Promise.any(all.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n}
+Subject Type: () => Generator<Effect<readonly string[], never, never> | Effect<Uint8Array<ArrayBufferLike>, never, never>, Uint8Array<ArrayBufferLike>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 117:21 - 117:45
+Node: Effect.succeed(mirrors)
+Node Kind: KindCallExpression
+
+Subject: mirrors
+Subject Type: readonly string[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<readonly string[], never, never>
+
+=== Piping Flow ===
+Location: 118:17 - 118:62
+Node: Promise.any(all.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: all.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 118:46 - 118:60
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 119:16 - 119:45
+Node: Effect.promise(() => winner)
+Node Kind: KindCallExpression
+
+Subject: () => winner
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 123:20 - 126:3
+Node: Effect.fn("inFn")(function*(urls: ReadonlyArray<string>) {\n  const winner = Promise.any(urls.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n})
+Node Kind: KindCallExpression
+
+Subject: function*(urls: ReadonlyArray<string>) {\n  const winner = Promise.any(urls.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n}
+Subject Type: (urls: readonly string[]) => Generator<Effect<Uint8Array<ArrayBufferLike>, never, never>, Uint8Array<ArrayBufferLike>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("inFn")
+      args: (constant)
+      outType: (urls: readonly string[]) => Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 124:17 - 124:63
+Node: Promise.any(urls.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: urls.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 124:47 - 124:61
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 125:16 - 125:45
+Node: Effect.promise(() => winner)
+Node Kind: KindCallExpression
+
+Subject: () => winner
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 129:25 - 132:3
+Node: Effect.suspend(() => {\n  const winner = Promise.race(mirrors.map((url) => download(url)))\n  return Effect.promise(() => winner)\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  const winner = Promise.race(mirrors.map((url) => download(url)))\n  return Effect.promise(() => winner)\n}
+Subject Type: () => Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 130:17 - 130:67
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 130:51 - 130:65
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 131:9 - 131:38
+Node: Effect.promise(() => winner)
+Node Kind: KindCallExpression
+
+Subject: () => winner
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 135:30 - 139:3
+Node: Effect.gen(function*() {\n  const P = Promise\n  const winner = P.any(mirrors.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const P = Promise\n  const winner = P.any(mirrors.map((url) => download(url)))\n  return yield* Effect.promise(() => winner)\n}
+Subject Type: () => Generator<Effect<Uint8Array<ArrayBufferLike>, never, never>, Uint8Array<ArrayBufferLike>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 137:17 - 137:60
+Node: P.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: P.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 137:44 - 137:58
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 138:16 - 138:45
+Node: Effect.promise(() => winner)
+Node Kind: KindCallExpression
+
+Subject: () => winner
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 142:29 - 142:112
+Node: Effect.promise(() => globalThis.Promise.race(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => globalThis.Promise.race(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 142:50 - 142:111
+Node: globalThis.Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: globalThis.Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 142:95 - 142:109
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 149:26 - 149:93
+Node: Effect.promise(() => Promise.race([download("a"), download("b")]))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race([download("a"), download("b")])
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 149:47 - 149:92
+Node: Promise.race([download("a"), download("b")])
+Node Kind: KindCallExpression
+
+Subject: [download("a"), download("b")]
+Subject Type: [Promise<Uint8Array<ArrayBufferLike>>, Promise<Uint8Array<ArrayBufferLike>>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 149:62 - 149:75
+Node: download("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 149:76 - 149:90
+Node: download("b")
+Node Kind: KindCallExpression
+
+Subject: "b"
+Subject Type: "b"
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 152:15 - 152:28
+Node: download("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 152:29 - 152:43
+Node: download("b")
+Node Kind: KindCallExpression
+
+Subject: "b"
+Subject Type: "b"
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 153:34 - 153:74
+Node: Effect.promise(() => Promise.any(pair))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(pair)
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 153:55 - 153:73
+Node: Promise.any(pair)
+Node Kind: KindCallExpression
+
+Subject: pair
+Subject Type: readonly [Promise<Uint8Array<ArrayBufferLike>>, Promise<Uint8Array<ArrayBufferLike>>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 156:29 - 156:78
+Node: Effect.promise(() => Promise.race(optionalPair))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race(optionalPair)
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike> | undefined>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike> | undefined, never, never>
+
+=== Piping Flow ===
+Location: 156:50 - 156:77
+Node: Promise.race(optionalPair)
+Node Kind: KindCallExpression
+
+Subject: optionalPair
+Subject Type: [Promise<Uint8Array<ArrayBufferLike>>, (Promise<Uint8Array<ArrayBufferLike>> | undefined)?]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike> | undefined>
+
+=== Piping Flow ===
+Location: 159:27 - 159:73
+Node: Effect.promise(() => Promise.any(pendingSet))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(pendingSet)
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 159:48 - 159:72
+Node: Promise.any(pendingSet)
+Node Kind: KindCallExpression
+
+Subject: pendingSet
+Subject Type: Set<Promise<Uint8Array<ArrayBufferLike>>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 162:28 - 164:2
+Node: Effect.promise(() =>\n  download("index").then(() => Promise.any(mirrors.map((url) => download(url))))\n)
+Node Kind: KindCallExpression
+
+Subject: () =>\n  download("index").then(() => Promise.any(mirrors.map((url) => download(url))))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, never, never>
+
+=== Piping Flow ===
+Location: 162:49 - 163:81
+Node: download("index").then(() => Promise.any(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: download("index").then
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 162:49 - 163:20
+Node: download("index")
+Node Kind: KindCallExpression
+
+Subject: "index"
+Subject Type: "index"
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 163:31 - 163:80
+Node: Promise.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 163:64 - 163:78
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 167:32 - 170:3
+Node: Effect.gen(function*() {\n  const pick = () => Promise.race(mirrors.map((url) => download(url)))\n  return pick\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const pick = () => Promise.race(mirrors.map((url) => download(url)))\n  return pick\n}
+Subject Type: () => Generator<never, () => Promise<Uint8Array<ArrayBufferLike>>, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => Promise<Uint8Array<ArrayBufferLike>>, never, never>
+
+=== Piping Flow ===
+Location: 168:21 - 168:71
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 168:55 - 168:69
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 173:27 - 173:77
+Node: Promise.race(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 173:61 - 173:75
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 174:38 - 174:87
+Node: Promise.any(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 174:71 - 174:85
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 177:32 - 177:102
+Node: Effect.runPromise(Effect.succeed(1)).then(() => Promise.any(pending))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(pending)
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise(Effect.succeed(1)).then
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 177:32 - 177:69
+Node: Effect.runPromise(Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 177:80 - 177:101
+Node: Promise.any(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<Uint8Array<ArrayBufferLike>>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 180:26 - 180:97
+Node: Effect.promise(() => Promise.all(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>[], never, never>
+
+=== Piping Flow ===
+Location: 180:47 - 180:96
+Node: Promise.all(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>[]>
+
+=== Piping Flow ===
+Location: 180:80 - 180:94
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 181:33 - 181:111
+Node: Effect.promise(() => Promise.allSettled(mirrors.map((url) => download(url))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.allSettled(mirrors.map((url) => download(url)))
+Subject Type: () => Promise<PromiseSettledResult<Uint8Array<ArrayBufferLike>>[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<PromiseSettledResult<Uint8Array<ArrayBufferLike>>[], never, never>
+
+=== Piping Flow ===
+Location: 181:54 - 181:110
+Node: Promise.allSettled(mirrors.map((url) => download(url)))
+Node Kind: KindCallExpression
+
+Subject: (url) => download(url)
+Subject Type: (url: string) => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>[]
+  [1] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<Uint8Array<ArrayBufferLike>>[]>
+
+=== Piping Flow ===
+Location: 181:94 - 181:108
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 184:31 - 190:3
+Node: Effect.gen(function*() {\n  const Promise = {\n    race: (values: ReadonlyArray<string>) => values[0],\n    any: (values: ReadonlyArray<string>) => values[0]\n  }\n  return [Promise.race(mirrors.map((url) => url)), Promise.any(mirrors.map((url) => url))]\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const Promise = {\n    race: (values: ReadonlyArray<string>) => values[0],\n    any: (values: ReadonlyArray<string>) => values[0]\n  }\n  return [Promise.race(mirrors.map((url) => url)), Promise.any(mirrors.map((url) => url))]\n}
+Subject Type: () => Generator<never, string[], never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 189:11 - 189:50
+Node: Promise.race(mirrors.map((url) => url))
+Node Kind: KindCallExpression
+
+Subject: (url) => url
+Subject Type: (url: string) => string
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: string[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 189:51 - 189:90
+Node: Promise.any(mirrors.map((url) => url))
+Node Kind: KindCallExpression
+
+Subject: (url) => url
+Subject Type: (url: string) => string
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: string[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 201:27 - 201:104
+Node: Effect.sync(() => [Pool.race(mirrors.map((url) => url)), Pool.any(mirrors)])
+Node Kind: KindCallExpression
+
+Subject: () => [Pool.race(mirrors.map((url) => url)), Pool.any(mirrors)]
+Subject Type: () => string[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 201:47 - 201:83
+Node: Pool.race(mirrors.map((url) => url))
+Node Kind: KindCallExpression
+
+Subject: (url) => url
+Subject Type: (url: string) => string
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: string[]
+  [1] kind: call
+      callee: Pool.race
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 201:84 - 201:102
+Node: Pool.any(mirrors)
+Node Kind: KindCallExpression
+
+Subject: mirrors
+Subject Type: readonly string[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Pool.any
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 204:23 - 204:100
+Node: Effect.raceAll(mirrors.map((url) => Effect.tryPromise(() => download(url))))
+Node Kind: KindCallExpression
+
+Subject: (url) => Effect.tryPromise(() => download(url))
+Subject Type: (url: string) => Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>[]
+  [1] kind: call
+      callee: Effect.raceAll
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 204:59 - 204:98
+Node: Effect.tryPromise(() => download(url))
+Node Kind: KindCallExpression
+
+Subject: () => download(url)
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 204:83 - 204:97
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>
+
+=== Piping Flow ===
+Location: 205:24 - 205:106
+Node: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise(() => download(url))))
+Node Kind: KindCallExpression
+
+Subject: (url) => Effect.tryPromise(() => download(url))
+Subject Type: (url: string) => Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: mirrors.map
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>[]
+  [1] kind: call
+      callee: Effect.raceAllFirst
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 205:65 - 205:104
+Node: Effect.tryPromise(() => download(url))
+Node Kind: KindCallExpression
+
+Subject: () => download(url)
+Subject Type: () => Promise<Uint8Array<ArrayBufferLike>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Uint8Array<ArrayBufferLike>, UnknownError, never>
+
+=== Piping Flow ===
+Location: 205:89 - 205:103
+Node: download(url)
+Node Kind: KindCallExpression
+
+Subject: url
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: download
+      args: (constant)
+      outType: Promise<Uint8Array<ArrayBufferLike>>

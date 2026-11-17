@@ -1,4 +1,4 @@
-use ets_shim::ast::{Kind, Node, Symbol, SymbolFlags};
+use ets_shim::ast::{self, Kind, Node, Symbol, SymbolFlags};
 use ets_shim::checker::{SignatureKind, Type};
 use ets_shim::core::P;
 
@@ -160,11 +160,14 @@ impl TypeParser<'_> {
         sym
     }
 
-    // go: internal/typeparser/helpers.go:143 TypeParser.IsNodeReferenceToGlobalMember aa84cd0317aaf6a8
+    // go: internal/typeparser/helpers.go:144 TypeParser.IsNodeReferenceToGlobalMember 645ac7543345bdad
     // IsNodeReferenceToGlobalMember reports whether node resolves to a property of
-    // a global value. ReferenceSymbolAtNode follows import and const aliases, so
-    // callers do not need to constrain the source expression to property-access
-    // syntax merely to recognize the global API.
+    // a global value. ReferenceSymbolAtNode follows import and const aliases, and a
+    // literal element access resolves through its key, so callers do not need to
+    // constrain the source expression to property-access syntax merely to
+    // recognize the global API.
+    //
+    // Rust: an element access always has an argument expression, so Go's nil check on the key drops.
     pub fn is_node_reference_to_global_member(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -184,7 +187,13 @@ impl TypeParser<'_> {
             return false;
         };
         let member = self.checker.get_property_of_type_exported(global_type, member_name);
-        let actual = self.reference_symbol_at_node(node);
+        let mut actual = self.reference_symbol_at_node(node);
+        if actual.is_none() && ast::is_element_access_expression(node) {
+            let key = node.as_element_access_expression().argument_expression();
+            if ast::is_string_or_numeric_literal_like(key) {
+                actual = self.reference_symbol_at_node(key);
+            }
+        }
         member.is_some()
             && actual.is_some()
             && get_symbol_if_same_reference(self.checker, member, actual).is_some()
