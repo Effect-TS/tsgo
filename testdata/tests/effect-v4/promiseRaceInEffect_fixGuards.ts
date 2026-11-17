@@ -1,0 +1,96 @@
+// @effect-diagnostics promiseRaceInEffect:warning
+import { Effect } from "effect"
+
+declare const mirrors: ReadonlyArray<string>
+declare const download: (url: string) => Promise<Uint8Array>
+declare const listMirrors: () => ReadonlyArray<string>
+declare const nextMirror: () => string
+
+// Promise.race is the combinator that has a quick fix on Effect v4 (to Effect.raceAllFirst),
+// so each case below isolates one guard of that fix.
+
+// MUST TRIGGER, no fix: the receiver is a call, which the fix would move from
+// every run of the Effect to its construction.
+export const unstableReceiver = Effect.tryPromise(() => Promise.race(listMirrors().map((url) => download(url))))
+
+// MUST TRIGGER, no fix: the callback parameter shadows the thunk's signal, so a
+// per-item thunk declaring signal again would capture the callback's binding.
+export const shadowedSignal = Effect.tryPromise((signal) => Promise.race(mirrors.map((signal) => download(signal))))
+
+// MUST TRIGGER, no fix: an async callback is not an inline synchronous callback.
+export const asyncCallback = Effect.tryPromise(() => Promise.race(mirrors.map(async (url) => download(url))))
+
+// MUST TRIGGER, fixed: steps after the constructor are kept.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise(() => download(url)))).pipe(Effect.map((bytes) => bytes.length))
+export const trailingPipe = Effect.tryPromise(() => Promise.race(mirrors.map((url) => download(url)))).pipe(
+  Effect.map((bytes) => bytes.length)
+)
+
+// MUST TRIGGER, no fix: the callback returns plain values, which a per-item
+// Effect.promise / Effect.tryPromise thunk cannot return.
+export const plainValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length)))
+
+// MUST TRIGGER, no fix: the callback sometimes returns a plain value.
+export const mixedValues = Effect.promise(() => Promise.race(mirrors.map((url) => url.length > 0 ? download(url) : 0)))
+
+// MUST TRIGGER, no fix: a callback parameter default reads the thunk's signal,
+// which the per-item thunk declares only around the callback body.
+export const signalInParameterDefault = Effect.promise((signal) =>
+  Promise.race(mirrors.map((url = String(signal.aborted)) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a callback parameter type reads the thunk's signal.
+export const signalInParameterType = Effect.tryPromise((signal) =>
+  Promise.race(mirrors.map((url: typeof signal extends AbortSignal ? string : never) => download(url)))
+)
+
+// MUST TRIGGER, no fix: the named callback calls itself, and would return an
+// Effect after the rewrite.
+export const recursiveCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function retry(url): Promise<Uint8Array> {
+    return url.length > 0 ? download(url) : retry("fallback")
+  }))
+)
+
+// MUST TRIGGER, no fix: the named callback refers to itself in a parameter
+// default, outside its body, and would return an Effect after the rewrite.
+export const selfInParameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function self(url: string | Promise<Uint8Array> = self("fallback")): Promise<Uint8Array> {
+    return typeof url === "string" ? download(url) : url
+  }))
+)
+
+// MUST TRIGGER, no fix: a parameter default runs when the callback is bound,
+// which the rewrite would move from the Effect run to its construction.
+export const parameterDefault = Effect.tryPromise(() =>
+  Promise.race(mirrors.map((url = nextMirror()) => download(url)))
+)
+
+// MUST TRIGGER, no fix: a destructuring parameter runs the string iterator when
+// it is bound, which the rewrite would move from the Effect run to its construction.
+export const destructuredParameter = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(([scheme]) => download(scheme ?? "")))
+)
+
+// MUST TRIGGER, no fix: only the Promise.race spelling is rewritten; the element
+// access spelling of the same global is reported without a fix.
+export const elementAccessCallee = Effect.tryPromise(() => Promise["race"](mirrors.map((url) => download(url))))
+
+// MUST TRIGGER, no fix: explicit map type arguments would type the rewritten callback.
+export const mapTypeArguments = Effect.tryPromise(() =>
+  Promise.race(mirrors.map<Promise<Uint8Array>>((url) => download(url)))
+)
+
+// MUST TRIGGER, fixed: a named callback that does not refer to itself keeps its name.
+// Quick fix: Effect.raceAllFirst(mirrors.map(function fetchMirror(url) { return Effect.tryPromise(() => { return download(url) }) }))
+export const namedCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map(function fetchMirror(url) {
+    return download(url)
+  }))
+)
+
+// MUST TRIGGER, fixed: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.raceAllFirst(mirrors.map((url) => Effect.tryPromise((): Promise<Uint8Array> => download(url))))
+export const annotatedCallback = Effect.tryPromise(() =>
+  Promise.race(mirrors.map((url): Promise<Uint8Array> => download(url)))
+)

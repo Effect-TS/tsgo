@@ -2641,6 +2641,9 @@
         "effecttsgo/promise-in-effect-success": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/promise-race-in-effect": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/provide-layer-succeed-to-provide-service": {
           "$ref": "#/definitions/RuleNoConfig"
         },

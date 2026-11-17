@@ -1,0 +1,57 @@
+==== /.src/promiseRaceInEffectAdversarial2.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 8:29 - 8:71
+Node: Effect.promise(() => Promise.race(lists))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race(lists)
+Subject Type: () => Promise<string | number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 8:50 - 8:70
+Node: Promise.race(lists)
+Node Kind: KindCallExpression
+
+Subject: lists
+Subject Type: readonly Promise<string>[] | readonly Promise<number>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<string | number>
+
+=== Piping Flow ===
+Location: 11:85 - 12:40
+Node: Effect.promise(() => Promise.any(xs))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(xs)
+Subject Type: () => Promise<Awaited<T[number]>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Awaited<T[number]>, never, never>
+
+=== Piping Flow ===
+Location: 12:23 - 12:39
+Node: Promise.any(xs)
+Node Kind: KindCallExpression
+
+Subject: xs
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<Awaited<T[number]>>

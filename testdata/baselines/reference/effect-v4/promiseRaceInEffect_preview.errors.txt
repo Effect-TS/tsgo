@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/promiseRaceInEffect_preview.ts(8,48): warning TS377212: This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)
+
+
+==== /.src/promiseRaceInEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics promiseRaceInEffect:warning
+    import { Effect } from "effect"
+    
+    declare const mirrors: ReadonlyArray<string>
+    declare const download: (url: string) => Promise<Uint8Array>
+    
+    export const preview = Effect.tryPromise(() => Promise.any(mirrors.map((url) => download(url))))
+                                                   ~~~~~~~~~~~
+!!! warning TS377212: This Effect code races promises with `Promise.any`; the losing promises keep running and are not interrupted. Use `Effect.raceAll` over Effect values instead. effect(promiseRaceInEffect)
+    

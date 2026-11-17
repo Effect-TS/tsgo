@@ -2931,6 +2931,11 @@
           "default": "warning",
           "description": "Detects Promise types in Effect success channels where they are not awaited"
         },
+        "promiseRaceInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when Promise.race or Promise.any races a list of promises inside Effect code, leaving the losing promises running"
+        },
         "provideLayerSucceedToProvideService": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
