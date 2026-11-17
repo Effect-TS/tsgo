@@ -1,0 +1,2521 @@
+==== /.src/promiseAllInEffect.ts (168 flows) ====
+
+=== Piping Flow ===
+Location: 11:25 - 11:56
+Node: Data.TaggedError("FetchError")
+Node Kind: KindCallExpression
+
+Subject: "FetchError"
+Subject Type: "FetchError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "FetchError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 31:21 - 31:90
+Node: Effect.tryPromise(() => Promise.all(ids.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<User[], UnknownException, never>
+
+=== Piping Flow ===
+Location: 31:45 - 31:89
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 31:73 - 31:87
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 34:23 - 34:84
+Node: Effect.promise(() => Promise.allSettled(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.allSettled(ids.map(fetchUser))
+Subject Type: () => Promise<PromiseSettledResult<User>[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<PromiseSettledResult<User>[], never, never>
+
+=== Piping Flow ===
+Location: 34:44 - 34:83
+Node: Promise.allSettled(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<User>[]>
+
+=== Piping Flow ===
+Location: 42:28 - 42:94
+Node: Effect.promise(() => Promise.all(ids.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 42:49 - 42:93
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 42:77 - 42:91
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 46:41 - 50:2
+Node: Effect.promise(() =>\n  Promise.all(ids.map(function(id) {\n    return fetchUser(id)\n  }))\n)
+Node Kind: KindCallExpression
+
+Subject: () =>\n  Promise.all(ids.map(function(id) {\n    return fetchUser(id)\n  }))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 46:62 - 49:6
+Node: Promise.all(ids.map(function(id) {\n    return fetchUser(id)\n  }))
+Node Kind: KindCallExpression
+
+Subject: function(id) {\n    return fetchUser(id)\n  }
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 48:11 - 48:25
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 54:32 - 54:111
+Node: Effect.promise(() => Promise.all(ids.map((id, i) => fetchUser(`${i}:${id}`))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map((id, i) => fetchUser(`${i}:${id}`)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 54:53 - 54:110
+Node: Promise.all(ids.map((id, i) => fetchUser(`${i}:${id}`)))
+Node Kind: KindCallExpression
+
+Subject: (id, i) => fetchUser(`${i}:${id}`)
+Subject Type: (id: string, i: number) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 54:84 - 54:108
+Node: fetchUser(`${i}:${id}`)
+Node Kind: KindCallExpression
+
+Subject: `${i}:${id}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 57:35 - 57:108
+Node: Effect.promise(() => Promise.all(mutableIds.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(mutableIds.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 57:56 - 57:107
+Node: Promise.all(mutableIds.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: mutableIds.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 57:91 - 57:105
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 61:36 - 63:2
+Node: Effect.promise(() =>\n  Promise.all(ids.filter((id) => id.length > 0).map((id) => fetchUser(id)))\n)
+Node Kind: KindCallExpression
+
+Subject: () =>\n  Promise.all(ids.filter((id) => id.length > 0).map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 61:57 - 62:76
+Node: Promise.all(ids.filter((id) => id.length > 0).map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.filter((id) => id.length > 0).map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 62:15 - 62:48
+Node: ids.filter((id) => id.length > 0)
+Node Kind: KindCallExpression
+
+Subject: (id) => id.length > 0
+Subject Type: (id: string) => boolean
+
+Transformations (1):
+  [0] kind: call
+      callee: ids.filter
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 62:60 - 62:74
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 68:33 - 70:2
+Node: Effect.promise((signal) =>\n  Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))\n)
+Node Kind: KindCallExpression
+
+Subject: (signal) =>\n  Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))
+Subject Type: (signal: AbortSignal) => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 68:60 - 69:64
+Node: Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUserWithSignal(id, signal)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 73:36 - 75:2
+Node: Effect.tryPromise((signal) =>\n  Promise.all(ids.map((id) => fetch(`https://example.com/users/${id}`, { signal })))\n)
+Node Kind: KindCallExpression
+
+Subject: (signal) =>\n  Promise.all(ids.map((id) => fetch(`https://example.com/users/${id}`, { signal })))
+Subject Type: (signal: AbortSignal) => Promise<Response[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response[], UnknownException, never>
+
+=== Piping Flow ===
+Location: 73:66 - 74:85
+Node: Promise.all(ids.map((id) => fetch(`https://example.com/users/${id}`, { signal })))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetch(`https://example.com/users/${id}`, { signal })
+Subject Type: (id: string) => Promise<Response>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<Response>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<Response[]>
+
+=== Piping Flow ===
+Location: 74:30 - 74:83
+Node: fetch(`https://example.com/users/${id}`, { signal })
+Node Kind: KindCallExpression
+
+Subject: `https://example.com/users/${id}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: fetch
+      args: [{ signal }]
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 78:31 - 78:94
+Node: Eff.promise(() => Promise.all(ids.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Eff.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 78:49 - 78:93
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 78:77 - 78:91
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 83:29 - 83:142
+Node: Effect.promise(() => Promise.all(ids.map(async (id) => { const user = await fetchUser(id); return user.name })))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map(async (id) => { const user = await fetchUser(id); return user.name }))
+Subject Type: () => Promise<string[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 83:50 - 83:141
+Node: Promise.all(ids.map(async (id) => { const user = await fetchUser(id); return user.name }))
+Node Kind: KindCallExpression
+
+Subject: async (id) => { const user = await fetchUser(id); return user.name }
+Subject Type: (id: string) => Promise<string>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<string>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<string[]>
+
+=== Piping Flow ===
+Location: 83:105 - 83:119
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 87:29 - 87:144
+Node: Effect.succeed(ids).pipe(Effect.flatMap((xs) => Effect.promise(() => Promise.all(xs.map((id) => fetchUser(id))))))
+Node Kind: KindCallExpression
+
+Subject: ids
+Subject Type: readonly string[]
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<readonly string[], never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(xs) => Effect.promise(() => Promise.all(xs.map((id) => fetchUser(id))))]
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 87:77 - 87:142
+Node: Effect.promise(() => Promise.all(xs.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(xs.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 87:98 - 87:141
+Node: Promise.all(xs.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: xs.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 87:125 - 87:139
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 94:34 - 94:88
+Node: Effect.promise(() => Promise.all(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map(fetchUser))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 94:55 - 94:87
+Node: Promise.all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 98:33 - 98:131
+Node: Effect.promise(() => Promise.all(ids.map((id, i, all) => fetchUser(`${i}/${all.length}:${id}`))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map((id, i, all) => fetchUser(`${i}/${all.length}:${id}`)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 98:54 - 98:130
+Node: Promise.all(ids.map((id, i, all) => fetchUser(`${i}/${all.length}:${id}`)))
+Node Kind: KindCallExpression
+
+Subject: (id, i, all) => fetchUser(`${i}/${all.length}:${id}`)
+Subject Type: (id: string, i: number, all: readonly string[]) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 98:90 - 98:128
+Node: fetchUser(`${i}/${all.length}:${id}`)
+Node Kind: KindCallExpression
+
+Subject: `${i}/${all.length}:${id}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 102:27 - 102:96
+Node: Effect.promise(() => Promise.all(idPage.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(idPage.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 102:48 - 102:95
+Node: Promise.all(idPage.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: idPage.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 102:79 - 102:93
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 105:29 - 105:72
+Node: Effect.promise(() => Promise.all(pending))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(pending)
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 105:50 - 105:71
+Node: Promise.all(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 108:31 - 108:97
+Node: Effect.promise(() => Promise.all([...ids.map(fetchUser), extra]))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all([...ids.map(fetchUser), extra])
+Subject Type: () => Promise<[...User[], User]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<[...User[], User], never, never>
+
+=== Piping Flow ===
+Location: 108:52 - 108:96
+Node: Promise.all([...ids.map(fetchUser), extra])
+Node Kind: KindCallExpression
+
+Subject: [...ids.map(fetchUser), extra]
+Subject Type: [...Promise<User>[], Promise<User>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[...User[], User]>
+
+=== Piping Flow ===
+Location: 108:69 - 108:87
+Node: ids.map(fetchUser)
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (1):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+
+=== Piping Flow ===
+Location: 111:33 - 111:84
+Node: Effect.promise(() => Promise.all(nonEmptyPending))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(nonEmptyPending)
+Subject Type: () => Promise<[User, ...User[]]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<[User, ...User[]], never, never>
+
+=== Piping Flow ===
+Location: 111:54 - 111:83
+Node: Promise.all(nonEmptyPending)
+Node Kind: KindCallExpression
+
+Subject: nonEmptyPending
+Subject Type: readonly [Promise<User>, ...Promise<User>[]]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[User, ...User[]]>
+
+=== Piping Flow ===
+Location: 114:26 - 114:101
+Node: Effect.tryPromise(async () => Promise.all(ids.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: async () => Promise.all(ids.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<User[], UnknownException, never>
+
+=== Piping Flow ===
+Location: 114:56 - 114:100
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 114:84 - 114:98
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 117:30 - 119:3
+Node: Effect.promise(() => {\n  return Promise.all(ids.map((id) => fetchUser(id)))\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  return Promise.all(ids.map((id) => fetchUser(id)))\n}
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 118:9 - 118:53
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 118:37 - 118:51
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 122:29 - 122:127
+Node: Effect.promise(() => Promise.all(ids.map((id) => fetchUser(id))).then((values) => values.length))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map((id) => fetchUser(id))).then((values) => values.length)
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 122:50 - 122:94
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 122:50 - 122:126
+Node: Promise.all(ids.map((id) => fetchUser(id))).then((values) => values.length)
+Node Kind: KindCallExpression
+
+Subject: (values) => values.length
+Subject Type: (values: User[]) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all(ids.map((id) => fetchUser(id))).then
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 122:78 - 122:92
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 125:32 - 128:3
+Node: Effect.tryPromise({\n  try: () => Promise.all(ids.map((id) => fetchUser(id))),\n  catch: (cause) => new FetchError({ cause })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => Promise.all(ids.map((id) => fetchUser(id))),\n  catch: (cause) => new FetchError({ cause })\n}
+Subject Type: { try: () => Promise<User[]>; catch: (cause: unknown) => FetchError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<User[], FetchError, never>
+
+=== Piping Flow ===
+Location: 126:13 - 126:57
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 126:41 - 126:55
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 132:29 - 132:105
+Node: Effect.tryPromise(() => Promise.allSettled(ids.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.allSettled(ids.map((id) => fetchUser(id)))
+Subject Type: () => Promise<PromiseSettledResult<User>[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<PromiseSettledResult<User>[], UnknownException, never>
+
+=== Piping Flow ===
+Location: 132:53 - 132:104
+Node: Promise.allSettled(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<User>[]>
+
+=== Piping Flow ===
+Location: 132:88 - 132:102
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 136:30 - 136:90
+Node: Effect.promise(() => GlobalPromise.all(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => GlobalPromise.all(ids.map(fetchUser))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 136:51 - 136:89
+Node: GlobalPromise.all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: GlobalPromise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 143:22 - 143:62
+Node: Effect.sync(() => Promise.all(pending))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(pending)
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<User[]>, never, never>
+
+=== Piping Flow ===
+Location: 143:40 - 143:61
+Node: Promise.all(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 146:21 - 146:60
+Node: Effect.try(() => Promise.all(pending))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(pending)
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<Promise<User[]>, UnknownException, never>
+
+=== Piping Flow ===
+Location: 146:38 - 146:59
+Node: Promise.all(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 149:27 - 152:3
+Node: Effect.try({\n  try: () => Promise.allSettled(pending),\n  catch: (cause) => new FetchError({ cause })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => Promise.allSettled(pending),\n  catch: (cause) => new FetchError({ cause })\n}
+Subject Type: { try: () => Promise<PromiseSettledResult<User>[]>; catch: (cause: unknown) => FetchError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<Promise<PromiseSettledResult<User>[]>, FetchError, never>
+
+=== Piping Flow ===
+Location: 150:13 - 150:41
+Node: Promise.allSettled(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<User>[]>
+
+=== Piping Flow ===
+Location: 155:25 - 158:3
+Node: Effect.suspend(() => {\n  const pendingAll = Promise.all(pending)\n  return Effect.promise(() => pendingAll)\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  const pendingAll = Promise.all(pending)\n  return Effect.promise(() => pendingAll)\n}
+Subject Type: () => Effect<User[], never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 156:21 - 156:42
+Node: Promise.all(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 157:9 - 157:42
+Node: Effect.promise(() => pendingAll)
+Node Kind: KindCallExpression
+
+Subject: () => pendingAll
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 161:33 - 165:2
+Node: Effect.forEach(\n  [ids, mutableIds],\n  (group) => Effect.promise(() => Promise.all(group.map((id) => fetchUser(id)))),\n  { concurrency: 1 }\n)
+Node Kind: KindCallExpression
+
+Subject: [ids, mutableIds]
+Subject Type: (readonly string[])[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [(group) => Effect.promise(() => Promise.all(group.map((id) => fetchUser(id)))), { concurrency: 1 }]
+      outType: Effect<User[][], never, never>
+
+=== Piping Flow ===
+Location: 163:13 - 163:81
+Node: Effect.promise(() => Promise.all(group.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(group.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 163:34 - 163:80
+Node: Promise.all(group.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: group.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 163:64 - 163:78
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 171:21 - 182:3
+Node: Effect.gen(function*() {\n  const promises = ids.map(fetchUser)\n  // MUST TRIGGER: bare Promise.all in a gen body (the promises start here, outside the Effect).\n  const pendingAll = Promise.all(promises)\n  // MUST TRIGGER: Promise.allSettled in a gen body.\n  const settledAll = Promise.allSettled(promises)\n  // MUST TRIGGER: inside an Effect.promise thunk inside the gen body (argument is not xs.map(...), no quick fix).\n  const users = yield* Effect.promise(() => Promise.all(promises))\n  // MUST NOT TRIGGER: fixed-length tuple in a gen body.\n  const pair = Promise.all([fetchUser("a"), fetchUser("b")])\n  return { pendingAll, settledAll, users, pair }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const promises = ids.map(fetchUser)\n  // MUST TRIGGER: bare Promise.all in a gen body (the promises start here, outside the Effect).\n  const pendingAll = Promise.all(promises)\n  // MUST TRIGGER: Promise.allSettled in a gen body.\n  const settledAll = Promise.allSettled(promises)\n  // MUST TRIGGER: inside an Effect.promise thunk inside the gen body (argument is not xs.map(...), no quick fix).\n  const users = yield* Effect.promise(() => Promise.all(promises))\n  // MUST NOT TRIGGER: fixed-length tuple in a gen body.\n  const pair = Promise.all([fetchUser("a"), fetchUser("b")])\n  return { pendingAll, settledAll, users, pair }\n}
+Subject Type: () => Generator<YieldWrap<Effect<User[], never, never>>, { pendingAll: Promise<User[]>; settledAll: Promise<PromiseSettledResult<User>[]>; users: User[]; pair: Promise<[User, User]>; }, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ pendingAll: Promise<User[]>; settledAll: Promise<PromiseSettledResult<User>[]>; users: User[]; pair: Promise<[User, User]>; }, never, never>
+
+=== Piping Flow ===
+Location: 172:19 - 172:38
+Node: ids.map(fetchUser)
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (1):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+
+=== Piping Flow ===
+Location: 174:21 - 174:43
+Node: Promise.all(promises)
+Node Kind: KindCallExpression
+
+Subject: promises
+Subject Type: Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 176:21 - 176:50
+Node: Promise.allSettled(promises)
+Node Kind: KindCallExpression
+
+Subject: promises
+Subject Type: Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<User>[]>
+
+=== Piping Flow ===
+Location: 178:23 - 178:67
+Node: Effect.promise(() => Promise.all(promises))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(promises)
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 178:44 - 178:66
+Node: Promise.all(promises)
+Node Kind: KindCallExpression
+
+Subject: promises
+Subject Type: Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 180:15 - 180:61
+Node: Promise.all([fetchUser("a"), fetchUser("b")])
+Node Kind: KindCallExpression
+
+Subject: [fetchUser("a"), fetchUser("b")]
+Subject Type: [Promise<User>, Promise<User>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[User, User]>
+
+=== Piping Flow ===
+Location: 180:29 - 180:43
+Node: fetchUser("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 180:44 - 180:59
+Node: fetchUser("b")
+Node Kind: KindCallExpression
+
+Subject: "b"
+Subject Type: "b"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 185:26 - 188:3
+Node: Effect.fn("inEffectFn")(function*(input: ReadonlyArray<string>) {\n  const pendingAll = Promise.all(input.map((id) => fetchUser(id)))\n  return yield* Effect.promise(() => pendingAll)\n})
+Node Kind: KindCallExpression
+
+Subject: function*(input: ReadonlyArray<string>) {\n  const pendingAll = Promise.all(input.map((id) => fetchUser(id)))\n  return yield* Effect.promise(() => pendingAll)\n}
+Subject Type: (input: readonly string[]) => Generator<YieldWrap<Effect<User[], never, never>>, User[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("inEffectFn")
+      args: (constant)
+      outType: (input: readonly string[]) => Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 186:21 - 186:67
+Node: Promise.all(input.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: input.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 186:51 - 186:65
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 187:16 - 187:49
+Node: Effect.promise(() => pendingAll)
+Node Kind: KindCallExpression
+
+Subject: () => pendingAll
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 191:35 - 193:3
+Node: Effect.fn(function*(input: ReadonlyArray<string>) {\n  return yield* Effect.promise(() => Promise.allSettled(input.map(fetchUser)))\n})
+Node Kind: KindCallExpression
+
+Subject: function*(input: ReadonlyArray<string>) {\n  return yield* Effect.promise(() => Promise.allSettled(input.map(fetchUser)))\n}
+Subject Type: (input: readonly string[]) => Generator<YieldWrap<Effect<PromiseSettledResult<User>[], never, never>>, PromiseSettledResult<User>[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: (input: readonly string[]) => Effect<PromiseSettledResult<User>[], never, never>
+
+=== Piping Flow ===
+Location: 192:16 - 192:79
+Node: Effect.promise(() => Promise.allSettled(input.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.allSettled(input.map(fetchUser))
+Subject Type: () => Promise<PromiseSettledResult<User>[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<PromiseSettledResult<User>[], never, never>
+
+=== Piping Flow ===
+Location: 192:37 - 192:78
+Node: Promise.allSettled(input.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: input.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<User>[]>
+
+=== Piping Flow ===
+Location: 196:34 - 199:3
+Node: Effect.fnUntraced(function*(input: ReadonlyArray<string>) {\n  const pendingAll = Promise.all(input.map(fetchUser))\n  return yield* Effect.promise(() => pendingAll)\n})
+Node Kind: KindCallExpression
+
+Subject: function*(input: ReadonlyArray<string>) {\n  const pendingAll = Promise.all(input.map(fetchUser))\n  return yield* Effect.promise(() => pendingAll)\n}
+Subject Type: (input: readonly string[]) => Generator<YieldWrap<Effect<User[], never, never>>, User[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: (input: readonly string[]) => Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 197:21 - 197:55
+Node: Promise.all(input.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: input.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 198:16 - 198:49
+Node: Effect.promise(() => pendingAll)
+Node Kind: KindCallExpression
+
+Subject: () => pendingAll
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 206:25 - 206:93
+Node: Effect.promise(() => Promise.all([fetchUser("a"), fetchUser("b")]))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all([fetchUser("a"), fetchUser("b")])
+Subject Type: () => Promise<[User, User]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<[User, User], never, never>
+
+=== Piping Flow ===
+Location: 206:46 - 206:92
+Node: Promise.all([fetchUser("a"), fetchUser("b")])
+Node Kind: KindCallExpression
+
+Subject: [fetchUser("a"), fetchUser("b")]
+Subject Type: [Promise<User>, Promise<User>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[User, User]>
+
+=== Piping Flow ===
+Location: 206:60 - 206:74
+Node: fetchUser("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 206:75 - 206:90
+Node: fetchUser("b")
+Node Kind: KindCallExpression
+
+Subject: "b"
+Subject Type: "b"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 209:32 - 209:99
+Node: Effect.promise(() => Promise.allSettled([fetchUser("a"), load()]))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.allSettled([fetchUser("a"), load()])
+Subject Type: () => Promise<[PromiseSettledResult<User>, PromiseSettledResult<void>]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<[PromiseSettledResult<User>, PromiseSettledResult<void>], never, never>
+
+=== Piping Flow ===
+Location: 209:53 - 209:98
+Node: Promise.allSettled([fetchUser("a"), load()])
+Node Kind: KindCallExpression
+
+Subject: [fetchUser("a"), load()]
+Subject Type: [Promise<User>, Promise<void>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<[PromiseSettledResult<User>, PromiseSettledResult<void>]>
+
+=== Piping Flow ===
+Location: 209:74 - 209:88
+Node: fetchUser("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 212:28 - 212:105
+Node: Effect.promise(() => Promise.all([fetchUser("a"), fetchUser("b")] as const))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all([fetchUser("a"), fetchUser("b")] as const)
+Subject Type: () => Promise<[User, User]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<[User, User], never, never>
+
+=== Piping Flow ===
+Location: 212:49 - 212:104
+Node: Promise.all([fetchUser("a"), fetchUser("b")] as const)
+Node Kind: KindCallExpression
+
+Subject: [fetchUser("a"), fetchUser("b")] as const
+Subject Type: [Promise<User>, Promise<User>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[User, User]>
+
+=== Piping Flow ===
+Location: 212:63 - 212:77
+Node: fetchUser("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 212:78 - 212:93
+Node: fetchUser("b")
+Node Kind: KindCallExpression
+
+Subject: "b"
+Subject Type: "b"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 215:26 - 215:64
+Node: Effect.promise(() => Promise.all([]))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all([])
+Subject Type: () => Promise<[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<[], never, never>
+
+=== Piping Flow ===
+Location: 215:47 - 215:63
+Node: Promise.all([])
+Node Kind: KindCallExpression
+
+Subject: []
+Subject Type: []
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[]>
+
+=== Piping Flow ===
+Location: 218:23 - 218:69
+Node: Effect.promise(() => Promise.all(pendingSet))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(pendingSet)
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 218:44 - 218:68
+Node: Promise.all(pendingSet)
+Node Kind: KindCallExpression
+
+Subject: pendingSet
+Subject Type: Set<Promise<User>>
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 221:23 - 221:67
+Node: Effect.promise(() => Promise.all(anything))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(anything)
+Subject Type: () => Promise<any[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<any[], never, never>
+
+=== Piping Flow ===
+Location: 221:44 - 221:66
+Node: Promise.all(anything)
+Node Kind: KindCallExpression
+
+Subject: anything
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<any[]>
+
+=== Piping Flow ===
+Location: 228:24 - 228:56
+Node: Promise.all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 232:9 - 232:53
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 232:37 - 232:51
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 237:28 - 237:116
+Node: Effect.tryPromise(() => load().then(() => Promise.all(ids.map((id) => fetchUser(id)))))
+Node Kind: KindCallExpression
+
+Subject: () => load().then(() => Promise.all(ids.map((id) => fetchUser(id))))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<User[], UnknownException, never>
+
+=== Piping Flow ===
+Location: 237:52 - 237:115
+Node: load().then(() => Promise.all(ids.map((id) => fetchUser(id))))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map((id) => fetchUser(id)))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: load().then
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 237:70 - 237:114
+Node: Promise.all(ids.map((id) => fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: (id) => fetchUser(id)
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 237:98 - 237:112
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 240:35 - 243:3
+Node: Effect.gen(function*() {\n  const run = () => Promise.all(ids.map(fetchUser))\n  return yield* Effect.promise(run)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const run = () => Promise.all(ids.map(fetchUser))\n  return yield* Effect.promise(run)\n}
+Subject Type: () => Generator<YieldWrap<Effect<User[], never, never>>, User[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 241:20 - 241:52
+Node: Promise.all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 242:16 - 242:36
+Node: Effect.promise(run)
+Node Kind: KindCallExpression
+
+Subject: run
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 246:38 - 246:84
+Node: Effect.sync(() => () => Promise.all(pending))
+Node Kind: KindCallExpression
+
+Subject: () => () => Promise.all(pending)
+Subject Type: () => () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<() => Promise<User[]>, never, never>
+
+=== Piping Flow ===
+Location: 246:62 - 246:83
+Node: Promise.all(pending)
+Node Kind: KindCallExpression
+
+Subject: pending
+Subject Type: readonly Promise<User>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 249:30 - 249:90
+Node: pipe(() => Promise.all(ids.map(fetchUser)), Effect.promise)
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map(fetchUser))
+Subject Type: () => Promise<User[]>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 249:41 - 249:73
+Node: Promise.all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 252:36 - 255:3
+Node: Effect.fn("nonGeneratorEffectFn")((input: ReadonlyArray<string>) => {\n  const pendingAll = Promise.all(input.map(fetchUser))\n  return Effect.promise(() => pendingAll.then((values) => values.length))\n})
+Node Kind: KindCallExpression
+
+Subject: (input: ReadonlyArray<string>) => {\n  const pendingAll = Promise.all(input.map(fetchUser))\n  return Effect.promise(() => pendingAll.then((values) => values.length))\n}
+Subject Type: (input: readonly string[]) => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("nonGeneratorEffectFn")
+      args: (constant)
+      outType: (input: readonly string[]) => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 253:21 - 253:55
+Node: Promise.all(input.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: input.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 254:9 - 254:74
+Node: Effect.promise(() => pendingAll.then((values) => values.length))
+Node Kind: KindCallExpression
+
+Subject: () => pendingAll.then((values) => values.length)
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 254:30 - 254:73
+Node: pendingAll.then((values) => values.length)
+Node Kind: KindCallExpression
+
+Subject: (values) => values.length
+Subject Type: (values: User[]) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: pendingAll.then
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 258:32 - 258:100
+Node: Promise.all([Effect.runPromise(users), Effect.runPromise(settled)])
+Node Kind: KindCallExpression
+
+Subject: [Effect.runPromise(users), Effect.runPromise(settled)]
+Subject Type: [Promise<User[]>, Promise<PromiseSettledResult<User>[]>]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<[User[], PromiseSettledResult<User>[]]>
+
+=== Piping Flow ===
+Location: 258:46 - 258:70
+Node: Effect.runPromise(users)
+Node Kind: KindCallExpression
+
+Subject: users
+Subject Type: Effect<User[], UnknownException, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<User[]>
+
+=== Piping Flow ===
+Location: 258:71 - 258:98
+Node: Effect.runPromise(settled)
+Node Kind: KindCallExpression
+
+Subject: settled
+Subject Type: Effect<PromiseSettledResult<User>[], never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<PromiseSettledResult<User>[]>
+
+=== Piping Flow ===
+Location: 259:37 - 259:105
+Node: Promise.all(ids.map((id) => Effect.runPromise(Effect.succeed(id))))
+Node Kind: KindCallExpression
+
+Subject: (id) => Effect.runPromise(Effect.succeed(id))
+Subject Type: (id: string) => Promise<string>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<string>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<string[]>
+
+=== Piping Flow ===
+Location: 259:65 - 259:103
+Node: Effect.runPromise(Effect.succeed(id))
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 266:81 - 266:101
+Node: Promise.all(values)
+Node Kind: KindCallExpression
+
+Subject: values
+Subject Type: readonly Promise<A>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<Awaited<A>[]>
+
+=== Piping Flow ===
+Location: 267:23 - 267:69
+Node: Effect.promise(() => all(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => all(ids.map(fetchUser))
+Subject Type: () => Promise<readonly User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<readonly User[], never, never>
+
+=== Piping Flow ===
+Location: 267:44 - 267:68
+Node: all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: all
+      args: (constant)
+      outType: Promise<readonly User[]>
+
+=== Piping Flow ===
+Location: 271:76 - 271:107
+Node: globalThis.Promise.all(values)
+Node Kind: KindCallExpression
+
+Subject: values
+Subject Type: readonly Promise<A>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: globalThis.Promise.all
+      args: (constant)
+      outType: Promise<Awaited<A>[]>
+
+=== Piping Flow ===
+Location: 272:56 - 272:94
+Node: globalThis.Promise.allSettled(values)
+Node Kind: KindCallExpression
+
+Subject: values
+Subject Type: readonly Promise<A>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: globalThis.Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<Awaited<A>>[]>
+
+=== Piping Flow ===
+Location: 274:24 - 274:76
+Node: Effect.promise(() => Batch.all(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Batch.all(ids.map(fetchUser))
+Subject Type: () => Promise<readonly User[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<readonly User[], never, never>
+
+=== Piping Flow ===
+Location: 274:45 - 274:75
+Node: Batch.all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Batch.all
+      args: (constant)
+      outType: Promise<readonly User[]>
+
+=== Piping Flow ===
+Location: 275:31 - 275:90
+Node: Effect.promise(() => Batch.allSettled(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Batch.allSettled(ids.map(fetchUser))
+Subject Type: () => Promise<PromiseSettledResult<User>[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<PromiseSettledResult<User>[], never, never>
+
+=== Piping Flow ===
+Location: 275:52 - 275:89
+Node: Batch.allSettled(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Batch.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<User>[]>
+
+=== Piping Flow ===
+Location: 280:62 - 280:104
+Node: globalThis.Promise.resolve(values.length)
+Node Kind: KindCallExpression
+
+Subject: values.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: globalThis.Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 282:9 - 282:63
+Node: Effect.promise(() => Promise.all(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(ids.map(fetchUser))
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 282:30 - 282:62
+Node: Promise.all(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 290:20 - 290:75
+Node: Effect.promise(() => Promise.race(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.race(ids.map(fetchUser))
+Subject Type: () => Promise<User>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User, never, never>
+
+=== Piping Flow ===
+Location: 290:41 - 290:74
+Node: Promise.race(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.race
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 293:23 - 293:77
+Node: Effect.promise(() => Promise.any(ids.map(fetchUser)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.any(ids.map(fetchUser))
+Subject Type: () => Promise<User>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User, never, never>
+
+=== Piping Flow ===
+Location: 293:44 - 293:76
+Node: Promise.any(ids.map(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: fetchUser
+Subject Type: (id: string) => Promise<User>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<User>[]
+  [1] kind: call
+      callee: Promise.any
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 296:24 - 296:90
+Node: Effect.promise(() => Promise.resolve(ids.map((id) => id.length)))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.resolve(ids.map((id) => id.length))
+Subject Type: () => Promise<number[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 296:45 - 296:89
+Node: Promise.resolve(ids.map((id) => id.length))
+Node Kind: KindCallExpression
+
+Subject: (id) => id.length
+Subject Type: (id: string) => number
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: number[]
+  [1] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number[]>
+
+=== Piping Flow ===
+Location: 302:25 - 302:113
+Node: Effect.forEach(ids, (id) => Effect.tryPromise(() => fetchUser(id)), { concurrency: 8 })
+Node Kind: KindCallExpression
+
+Subject: ids
+Subject Type: readonly string[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [(id) => Effect.tryPromise(() => fetchUser(id)), { concurrency: 8 }]
+      outType: Effect<User[], UnknownException, never>
+
+=== Piping Flow ===
+Location: 302:53 - 302:92
+Node: Effect.tryPromise(() => fetchUser(id))
+Node Kind: KindCallExpression
+
+Subject: () => fetchUser(id)
+Subject Type: () => Promise<User>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<User, UnknownException, never>
+
+=== Piping Flow ===
+Location: 302:77 - 302:91
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 304:27 - 307:3
+Node: Effect.all(ids.map((id) => Effect.promise(() => fetchUser(id))), {\n  concurrency: 8,\n  mode: "either"\n})
+Node Kind: KindCallExpression
+
+Subject: (id) => Effect.promise(() => fetchUser(id))
+Subject Type: (id: string) => Effect<User, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Effect<User, never, never>[]
+  [1] kind: callWithOptionals
+      callee: Effect.all
+      args: [{\n  concurrency: 8,\n  mode: "either"\n}]
+      outType: Effect<Either<User, never>[], never, never>
+
+=== Piping Flow ===
+Location: 304:54 - 304:90
+Node: Effect.promise(() => fetchUser(id))
+Node Kind: KindCallExpression
+
+Subject: () => fetchUser(id)
+Subject Type: () => Promise<User>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User, never, never>
+
+=== Piping Flow ===
+Location: 304:75 - 304:89
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Promise<User>
+
+=== Piping Flow ===
+Location: 310:29 - 314:2
+Node: Effect.forEach(\n  ids,\n  (id) => Effect.promise((signal) => fetchUserWithSignal(id, signal)),\n  { concurrency: "unbounded" }\n)
+Node Kind: KindCallExpression
+
+Subject: ids
+Subject Type: readonly string[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [(id) => Effect.promise((signal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" }]
+      outType: Effect<User[], never, never>
+
+=== Piping Flow ===
+Location: 312:10 - 312:70
+Node: Effect.promise((signal) => fetchUserWithSignal(id, signal))
+Node Kind: KindCallExpression
+
+Subject: (signal) => fetchUserWithSignal(id, signal)
+Subject Type: (signal: AbortSignal) => Promise<User>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<User, never, never>

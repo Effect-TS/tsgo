@@ -1,0 +1,15 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+declare const tasks: ReadonlyArray<Promise<number>>
+
+// MUST NOT TRIGGER: these use a local Promise binding, not the global constructor.
+// Its interface type does not establish the identity of the supplied implementation.
+export function withLocalPromise(Promise: PromiseConstructor) {
+  return [
+    Effect.promise(() => Promise.all(tasks)),
+    Effect.promise(() => Promise.allSettled(tasks))
+  ]
+}

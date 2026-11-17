@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/promiseAllInEffectAdversarial2.ts(9,46): warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+/.src/promiseAllInEffectAdversarial2.ts(12,50): warning TS377198: `Promise.allSettled` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.all(..., { mode: "result" })` with a concurrency option instead. effect(promiseAllInEffect)
+
+
+==== /.src/promiseAllInEffectAdversarial2.ts (2 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics promiseAllInEffect:warning
+    import { Effect } from "effect"
+    
+    declare const tasks: ReadonlyArray<Promise<number>> | Array<Promise<string>>
+    
+    // MUST TRIGGER: both members of this union are variable-length arrays.
+    export const unionAll = Effect.promise(() => Promise.all(tasks))
+                                                 ~~~~~~~~~~~
+!!! warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+    
+    // MUST TRIGGER: allSettled has the same unbounded array fan-out.
+    export const unionSettled = Effect.promise(() => Promise.allSettled(tasks))
+                                                     ~~~~~~~~~~~~~~~~~~
+!!! warning TS377198: `Promise.allSettled` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.all(..., { mode: "result" })` with a concurrency option instead. effect(promiseAllInEffect)
+    

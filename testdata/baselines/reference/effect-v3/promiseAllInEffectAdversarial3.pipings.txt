@@ -1,0 +1,33 @@
+==== /.src/promiseAllInEffectAdversarial3.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 13:31 - 15:2
+Node: Effect.promise((signal = fallback) =>\n  Promise.all(ids.map((fallback) => fetchUser(fallback, signal)))\n)
+Node Kind: KindCallExpression
+
+Subject: (signal = fallback) =>\n  Promise.all(ids.map((fallback) => fetchUser(fallback, signal)))
+Subject Type: (signal?: AbortSignal) => Promise<string[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 13:69 - 14:66
+Node: Promise.all(ids.map((fallback) => fetchUser(fallback, signal)))
+Node Kind: KindCallExpression
+
+Subject: (fallback) => fetchUser(fallback, signal)
+Subject Type: (fallback: string) => Promise<string>
+
+Transformations (2):
+  [0] kind: call
+      callee: ids.map
+      args: (constant)
+      outType: Promise<string>[]
+  [1] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<string[]>

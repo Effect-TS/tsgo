@@ -40,6 +40,7 @@ var All = []fixable.Fixable{
 	ManualMetricTapToTrackFix,
 	FailCauseToConstructorFix,
 	SuspendFailToFailSyncFix,
+	PromiseAllInEffectFix,
 	OptionMatchToFromOptionFix,
 	ResultMatchToFromResultFix,
 	SyncToSucceedFix,

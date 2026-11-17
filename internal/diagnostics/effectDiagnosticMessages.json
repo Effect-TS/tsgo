@@ -690,5 +690,9 @@
     "`Effect.provideServiceEffect` provides this service from the acquiring effect directly instead of `Effect.{0}` forwarding its parameter to `Effect.provideService`. effect(flatMapProvideServiceToProvideServiceEffect)": {
         "category": "Suggestion",
         "code": 377194
+    },
+    "`{0}` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `{1}` with a concurrency option instead. effect(promiseAllInEffect)": {
+        "category": "Warning",
+        "code": 377198
     }
 }

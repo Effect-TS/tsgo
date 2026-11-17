@@ -53,6 +53,7 @@ var All = []rule.Rule{
 	CryptoRandomUUIDInEffect,
 	GlobalFetch,
 	GlobalFetchInEffect,
+	PromiseAllInEffect,
 	ProcessEnv,
 	ProcessEnvInEffect,
 	GlobalConsole,

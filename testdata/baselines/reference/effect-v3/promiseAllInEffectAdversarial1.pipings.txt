@@ -1,0 +1,85 @@
+==== /.src/promiseAllInEffectAdversarial1.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 9:23 - 9:67
+Node: Effect.promise(() => Promise["all"](tasks))
+Node Kind: KindCallExpression
+
+Subject: () => Promise["all"](tasks)
+Subject Type: () => Promise<number[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 9:44 - 9:66
+Node: Promise["all"](tasks)
+Node Kind: KindCallExpression
+
+Subject: tasks
+Subject Type: readonly Promise<number>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise["all"]
+      args: (constant)
+      outType: Promise<number[]>
+
+=== Piping Flow ===
+Location: 12:32 - 12:74
+Node: Effect.promise(() => Promise?.all(tasks))
+Node Kind: KindCallExpression
+
+Subject: () => Promise?.all(tasks)
+Subject Type: () => Promise<number[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 12:53 - 12:73
+Node: Promise?.all(tasks)
+Node Kind: KindCallExpression
+
+Subject: tasks
+Subject Type: readonly Promise<number>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise?.all
+      args: (constant)
+      outType: Promise<number[]>
+
+=== Piping Flow ===
+Location: 15:30 - 15:73
+Node: Effect.promise(() => Promise.all?.(tasks))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all?.(tasks)
+Subject Type: () => Promise<number[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 15:51 - 15:72
+Node: Promise.all?.(tasks)
+Node Kind: KindCallExpression
+
+Subject: tasks
+Subject Type: readonly Promise<number>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<number[]>
