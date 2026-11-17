@@ -2921,6 +2921,11 @@
           "default": "off",
           "description": "Warns when reading process.env inside Effect generators instead of using Effect Config"
         },
+        "promiseAllInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when Promise.all or Promise.allSettled fans out over an array inside Effect code instead of Effect.forEach or Effect.all with a concurrency option"
+        },
         "promiseInEffectSuccess": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",

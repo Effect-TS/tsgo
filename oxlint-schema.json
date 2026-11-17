@@ -2635,6 +2635,9 @@
         "effecttsgo/process-env-in-effect": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/promise-all-in-effect": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/promise-in-effect-success": {
           "$ref": "#/definitions/RuleNoConfig"
         },

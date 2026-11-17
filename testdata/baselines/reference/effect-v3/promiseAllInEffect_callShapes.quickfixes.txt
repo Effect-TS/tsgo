@@ -1,0 +1,1504 @@
+=== Quick Fix Inventory ===
+
+[D1] (25:50-25:61) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D2] (30:3-30:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D3] (35:53-35:64) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D4] (39:59-39:70) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D5] (44:3-44:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D6] (56:62-56:73) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D7] (60:54-60:60) TS6133: 'signal' is declared but its value is never read.
+  (no quick fixes)
+
+[D8] (60:65-60:76) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D9] (66:3-66:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D10] (72:3-72:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D11] (80:3-80:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D12] (86:59-86:70) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D13] (89:51-89:62) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D14] (93:56-93:67) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D15] (97:3-97:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D16] (102:59-102:70) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D17] (107:3-107:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D18] (112:51-112:57) TS6133: 'signal' is declared but its value is never read.
+  (no quick fixes)
+
+[D19] (113:3-113:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D20] (121:54-121:60) TS6133: 'signal' is declared but its value is never read.
+  (no quick fixes)
+
+[D21] (122:3-122:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D22] (133:3-133:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D23] (141:3-141:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D24] (149:3-149:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D25] (156:24-156:35) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D26] (167:3-167:14) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D27] (179:50-179:61) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D28] (193:51-193:73) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/promiseAllInEffect_callShapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+interface User {
+  readonly name: string
+}
+
+declare const ids: ReadonlyArray<string>
+declare const pairIds: readonly [string, string]
+declare const entries: ReadonlyArray<{ readonly id: string }>
+declare const fetchUser: (id: string) => Promise<User>
+declare const fetchUserWithSignal: (id: string, signal: AbortSignal) => Promise<User>
+declare const idsFor: (signal: AbortSignal) => ReadonlyArray<string>
+declare const cachedUser: User
+declare const maybeIds: ReadonlyArray<string | undefined>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, quick fix: call shapes around the thunk-safe form.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the steps after Effect.promise(...) are kept.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" }).pipe(Effect.asVoid)
+export const trailingPipe = Effect.forEach(ids, id => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" }).pipe(Effect.asVoid)
+
+// MUST TRIGGER: an annotated thunk parameter is redeclared as written.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((signal: AbortSignal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const annotatedSignal = Effect.promise((signal: AbortSignal) =>
+  Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((): Promise<User> => fetchUser(id)), { concurrency: "unbounded" })
+export const annotatedReturn = Effect.promise(() => Promise.all(ids.map((id): Promise<User> => fetchUser(id))))
+
+// MUST TRIGGER: a destructured callback parameter, with no thunk parameter to collide with.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" })
+export const destructuredParameter = Effect.promise(() => Promise.all(entries.map(({ id }) => fetchUser(id))))
+
+// MUST TRIGGER: async function expression callback keeps `async` on the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.tryPromise(async () => { const user = await fetchUser(id); return user.name }), { concurrency: "unbounded" })
+export const asyncFunctionExpression = Effect.tryPromise(() =>
+  Promise.all(ids.map(async function(id) {
+    const user = await fetchUser(id)
+    return user.name
+  }))
+)
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, no quick fix: the rewrite would not compile or would change meaning.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the receiver reads the thunk's `signal`, which is out of scope once
+// the receiver moves to Effect.forEach's first argument; no quick fix.
+export const receiverUsesSignal = Effect.promise((signal) => Promise.all(idsFor(signal).map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback parameter has the thunk parameter's name; the redeclared
+// thunk parameter would shadow it in the moved body; no quick fix.
+export const callbackShadowsSignal = Effect.promise((signal) => Promise.all(ids.map((signal) => fetchUser(signal))))
+
+// MUST TRIGGER: a destructured callback parameter next to the thunk's `signal`; the
+// destructured names do not collide with it.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise((signal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const destructuredWithSignal = Effect.promise((signal) =>
+  Promise.all(entries.map(({ id }) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: a function expression callback reading its own `arguments`; an arrow
+// would read another function's `arguments`; no quick fix.
+export const callbackUsesArguments = Effect.promise(() =>
+  Promise.all(ids.map(function(id) {
+    return fetchUser(`${arguments.length}:${id}`)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback that calls itself; its name is
+// not in scope in the per-item thunk; no quick fix.
+export const callbackUsesOwnName = Effect.promise(() =>
+  Promise.all(ids.map(function load(id): Promise<User> {
+    return id.length > 0 ? fetchUser(id) : load("root")
+  }))
+)
+
+// MUST TRIGGER: a rest-parameter callback; Effect.forEach passes only (item, index); no quick fix.
+export const restParameterCallback = Effect.promise(() => Promise.all(ids.map((...args) => fetchUser(args[0]))))
+
+// MUST TRIGGER: the `.map` receiver is a tuple, not an array or readonly array; no quick fix.
+export const tupleReceiver = Effect.promise(() => Promise.all(pairIds.map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback returns a plain value; Promise.all accepts it, but the
+// per-item Effect.promise thunk must return a promise; no quick fix.
+export const plainValueCallback = Effect.promise(() => Promise.all(ids.map((id) => id.length)))
+
+// MUST TRIGGER: the callback returns a value or a promise; no quick fix.
+export const valueOrPromiseCallback = Effect.promise(() =>
+  Promise.all(ids.map((id) => id.length > 0 ? fetchUser(id) : cachedUser))
+)
+
+// MUST TRIGGER: a callback parameter named like the constructor's module would capture
+// the copied `Effect.promise` reference; no quick fix.
+export const callbackShadowsEffect = Effect.promise(() => Promise.all(ids.map((Effect) => fetchUser(Effect))))
+
+// MUST TRIGGER: a callback parameter initializer reads the thunk's `signal`, which is out
+// of scope once the parameters move to Effect.forEach's callback; no quick fix.
+export const parameterInitializerUsesSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id: string = String(signal.reason)) => fetchUser(id)))
+)
+
+// MUST TRIGGER: the callback body declares the thunk parameter's name; it would collide
+// with the redeclared per-item `signal`; no quick fix.
+export const bodyDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    const signal = id.trim()
+    return fetchUser(signal)
+  }))
+)
+
+// MUST TRIGGER: a hoisted `var` in a nested block of the callback body has the same
+// collision; no quick fix.
+export const bodyVarDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    if (id.length > 0) {
+      var signal: string | undefined = id
+    }
+    return fetchUser(signal ?? id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback declaring a `this` parameter, which an
+// arrow cannot declare; no quick fix.
+export const thisParameterCallback = Effect.promise(() =>
+  Promise.all(ids.map(function(this: void, id) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback whose parameter initializer reads
+// its own name; the copied parameter list has no such name in scope; no quick fix.
+export const parameterInitializerUsesOwnName = Effect.promise(() =>
+  Promise.all(maybeIds.map(function load(id = load.name) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback whose parameter initializer reads its own
+// `arguments`; an arrow would read another function's `arguments`; no quick fix.
+export const parameterInitializerUsesArguments = Effect.promise(() =>
+  Promise.all(maybeIds.map(function(id = String(arguments.length)) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a type parameter constrained to an array is a variable-length input.
+export const constrainedGeneric = <Tasks extends ReadonlyArray<Promise<User>>>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+// MUST NOT TRIGGER: a type parameter constrained to a fixed-length tuple.
+export const constrainedFixedTuple = <Tasks extends readonly [Promise<User>, Promise<User>]>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+type Signal = AbortSignal
+
+// MUST TRIGGER: the thunk parameter's type annotation names a type that the callback
+// body declares again; copied under the callback it would mean that type; no quick fix.
+export const thunkParameterTypeCaptured = Effect.promise((signal: Signal) =>
+  Promise.all(ids.map((id) => {
+    type Signal = string
+    const label: Signal = id
+    return fetchUserWithSignal(label, signal)
+  }))
+)
+
+declare const brandedTasks: Array<Promise<User>> & { readonly batchId: string }
+declare const brandedPair: readonly [Promise<User>, Promise<User>] & { readonly batchId: string }
+declare const arrayAndPair: ReadonlyArray<Promise<User>> & readonly [Promise<User>, Promise<User>]
+
+// MUST TRIGGER: a branded mutable array is still a variable-length array.
+export const brandedArray = Effect.promise(() => Promise.all(brandedTasks))
+
+// MUST NOT TRIGGER: a branded fixed-length tuple is still a fixed fan-out.
+export const brandedFixedTuple = Effect.promise(() => Promise.all(brandedPair))
+
+// MUST NOT TRIGGER: an array type intersected with a fixed-length tuple has the tuple's length.
+export const arrayIntersectedWithPair = Effect.promise(() => Promise.allSettled(arrayAndPair))
+
+declare const pending: ReadonlyArray<Promise<User>>
+declare const InjectedPromise: PromiseConstructor
+declare const deps: { readonly Promise: PromiseConstructor }
+const unboundAll = Promise.all
+
+// MUST TRIGGER: `globalThis.Promise` is the global Promise value.
+export const viaGlobalThis = Effect.promise(() => globalThis.Promise.all(pending))
+
+// MUST NOT TRIGGER: a declared value typed PromiseConstructor is not the global Promise.
+export const injectedConstructor = Effect.promise(() => InjectedPromise.all(pending))
+
+// MUST NOT TRIGGER: a constructor reached through an object property is not the global Promise.
+export const constructorProperty = Effect.promise(() => deps.Promise.allSettled(pending))
+
+// MUST NOT TRIGGER: an unbound alias of the method is not called on the global Promise.
+export const unboundMethodAlias = Effect.promise(() => unboundAll(pending))
+
+
+=== [D2] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/promiseAllInEffect_callShapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+interface User {
+  readonly name: string
+}
+
+declare const ids: ReadonlyArray<string>
+declare const pairIds: readonly [string, string]
+declare const entries: ReadonlyArray<{ readonly id: string }>
+declare const fetchUser: (id: string) => Promise<User>
+declare const fetchUserWithSignal: (id: string, signal: AbortSignal) => Promise<User>
+declare const idsFor: (signal: AbortSignal) => ReadonlyArray<string>
+declare const cachedUser: User
+declare const maybeIds: ReadonlyArray<string | undefined>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, quick fix: call shapes around the thunk-safe form.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the steps after Effect.promise(...) are kept.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" }).pipe(Effect.asVoid)
+export const trailingPipe = Effect.promise(() => Promise.all(ids.map((id) => fetchUser(id)))).pipe(Effect.asVoid)
+
+// MUST TRIGGER: an annotated thunk parameter is redeclared as written.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((signal: AbortSignal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const annotatedSignal = Effect.forEach(ids, id => Effect.promise((signal: AbortSignal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+
+// MUST TRIGGER: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((): Promise<User> => fetchUser(id)), { concurrency: "unbounded" })
+export const annotatedReturn = Effect.promise(() => Promise.all(ids.map((id): Promise<User> => fetchUser(id))))
+
+// MUST TRIGGER: a destructured callback parameter, with no thunk parameter to collide with.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" })
+export const destructuredParameter = Effect.promise(() => Promise.all(entries.map(({ id }) => fetchUser(id))))
+
+// MUST TRIGGER: async function expression callback keeps `async` on the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.tryPromise(async () => { const user = await fetchUser(id); return user.name }), { concurrency: "unbounded" })
+export const asyncFunctionExpression = Effect.tryPromise(() =>
+  Promise.all(ids.map(async function(id) {
+    const user = await fetchUser(id)
+    return user.name
+  }))
+)
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, no quick fix: the rewrite would not compile or would change meaning.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the receiver reads the thunk's `signal`, which is out of scope once
+// the receiver moves to Effect.forEach's first argument; no quick fix.
+export const receiverUsesSignal = Effect.promise((signal) => Promise.all(idsFor(signal).map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback parameter has the thunk parameter's name; the redeclared
+// thunk parameter would shadow it in the moved body; no quick fix.
+export const callbackShadowsSignal = Effect.promise((signal) => Promise.all(ids.map((signal) => fetchUser(signal))))
+
+// MUST TRIGGER: a destructured callback parameter next to the thunk's `signal`; the
+// destructured names do not collide with it.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise((signal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const destructuredWithSignal = Effect.promise((signal) =>
+  Promise.all(entries.map(({ id }) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: a function expression callback reading its own `arguments`; an arrow
+// would read another function's `arguments`; no quick fix.
+export const callbackUsesArguments = Effect.promise(() =>
+  Promise.all(ids.map(function(id) {
+    return fetchUser(`${arguments.length}:${id}`)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback that calls itself; its name is
+// not in scope in the per-item thunk; no quick fix.
+export const callbackUsesOwnName = Effect.promise(() =>
+  Promise.all(ids.map(function load(id): Promise<User> {
+    return id.length > 0 ? fetchUser(id) : load("root")
+  }))
+)
+
+// MUST TRIGGER: a rest-parameter callback; Effect.forEach passes only (item, index); no quick fix.
+export const restParameterCallback = Effect.promise(() => Promise.all(ids.map((...args) => fetchUser(args[0]))))
+
+// MUST TRIGGER: the `.map` receiver is a tuple, not an array or readonly array; no quick fix.
+export const tupleReceiver = Effect.promise(() => Promise.all(pairIds.map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback returns a plain value; Promise.all accepts it, but the
+// per-item Effect.promise thunk must return a promise; no quick fix.
+export const plainValueCallback = Effect.promise(() => Promise.all(ids.map((id) => id.length)))
+
+// MUST TRIGGER: the callback returns a value or a promise; no quick fix.
+export const valueOrPromiseCallback = Effect.promise(() =>
+  Promise.all(ids.map((id) => id.length > 0 ? fetchUser(id) : cachedUser))
+)
+
+// MUST TRIGGER: a callback parameter named like the constructor's module would capture
+// the copied `Effect.promise` reference; no quick fix.
+export const callbackShadowsEffect = Effect.promise(() => Promise.all(ids.map((Effect) => fetchUser(Effect))))
+
+// MUST TRIGGER: a callback parameter initializer reads the thunk's `signal`, which is out
+// of scope once the parameters move to Effect.forEach's callback; no quick fix.
+export const parameterInitializerUsesSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id: string = String(signal.reason)) => fetchUser(id)))
+)
+
+// MUST TRIGGER: the callback body declares the thunk parameter's name; it would collide
+// with the redeclared per-item `signal`; no quick fix.
+export const bodyDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    const signal = id.trim()
+    return fetchUser(signal)
+  }))
+)
+
+// MUST TRIGGER: a hoisted `var` in a nested block of the callback body has the same
+// collision; no quick fix.
+export const bodyVarDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    if (id.length > 0) {
+      var signal: string | undefined = id
+    }
+    return fetchUser(signal ?? id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback declaring a `this` parameter, which an
+// arrow cannot declare; no quick fix.
+export const thisParameterCallback = Effect.promise(() =>
+  Promise.all(ids.map(function(this: void, id) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback whose parameter initializer reads
+// its own name; the copied parameter list has no such name in scope; no quick fix.
+export const parameterInitializerUsesOwnName = Effect.promise(() =>
+  Promise.all(maybeIds.map(function load(id = load.name) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback whose parameter initializer reads its own
+// `arguments`; an arrow would read another function's `arguments`; no quick fix.
+export const parameterInitializerUsesArguments = Effect.promise(() =>
+  Promise.all(maybeIds.map(function(id = String(arguments.length)) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a type parameter constrained to an array is a variable-length input.
+export const constrainedGeneric = <Tasks extends ReadonlyArray<Promise<User>>>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+// MUST NOT TRIGGER: a type parameter constrained to a fixed-length tuple.
+export const constrainedFixedTuple = <Tasks extends readonly [Promise<User>, Promise<User>]>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+type Signal = AbortSignal
+
+// MUST TRIGGER: the thunk parameter's type annotation names a type that the callback
+// body declares again; copied under the callback it would mean that type; no quick fix.
+export const thunkParameterTypeCaptured = Effect.promise((signal: Signal) =>
+  Promise.all(ids.map((id) => {
+    type Signal = string
+    const label: Signal = id
+    return fetchUserWithSignal(label, signal)
+  }))
+)
+
+declare const brandedTasks: Array<Promise<User>> & { readonly batchId: string }
+declare const brandedPair: readonly [Promise<User>, Promise<User>] & { readonly batchId: string }
+declare const arrayAndPair: ReadonlyArray<Promise<User>> & readonly [Promise<User>, Promise<User>]
+
+// MUST TRIGGER: a branded mutable array is still a variable-length array.
+export const brandedArray = Effect.promise(() => Promise.all(brandedTasks))
+
+// MUST NOT TRIGGER: a branded fixed-length tuple is still a fixed fan-out.
+export const brandedFixedTuple = Effect.promise(() => Promise.all(brandedPair))
+
+// MUST NOT TRIGGER: an array type intersected with a fixed-length tuple has the tuple's length.
+export const arrayIntersectedWithPair = Effect.promise(() => Promise.allSettled(arrayAndPair))
+
+declare const pending: ReadonlyArray<Promise<User>>
+declare const InjectedPromise: PromiseConstructor
+declare const deps: { readonly Promise: PromiseConstructor }
+const unboundAll = Promise.all
+
+// MUST TRIGGER: `globalThis.Promise` is the global Promise value.
+export const viaGlobalThis = Effect.promise(() => globalThis.Promise.all(pending))
+
+// MUST NOT TRIGGER: a declared value typed PromiseConstructor is not the global Promise.
+export const injectedConstructor = Effect.promise(() => InjectedPromise.all(pending))
+
+// MUST NOT TRIGGER: a constructor reached through an object property is not the global Promise.
+export const constructorProperty = Effect.promise(() => deps.Promise.allSettled(pending))
+
+// MUST NOT TRIGGER: an unbound alias of the method is not called on the global Promise.
+export const unboundMethodAlias = Effect.promise(() => unboundAll(pending))
+
+
+=== [D3] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/promiseAllInEffect_callShapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+interface User {
+  readonly name: string
+}
+
+declare const ids: ReadonlyArray<string>
+declare const pairIds: readonly [string, string]
+declare const entries: ReadonlyArray<{ readonly id: string }>
+declare const fetchUser: (id: string) => Promise<User>
+declare const fetchUserWithSignal: (id: string, signal: AbortSignal) => Promise<User>
+declare const idsFor: (signal: AbortSignal) => ReadonlyArray<string>
+declare const cachedUser: User
+declare const maybeIds: ReadonlyArray<string | undefined>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, quick fix: call shapes around the thunk-safe form.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the steps after Effect.promise(...) are kept.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" }).pipe(Effect.asVoid)
+export const trailingPipe = Effect.promise(() => Promise.all(ids.map((id) => fetchUser(id)))).pipe(Effect.asVoid)
+
+// MUST TRIGGER: an annotated thunk parameter is redeclared as written.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((signal: AbortSignal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const annotatedSignal = Effect.promise((signal: AbortSignal) =>
+  Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((): Promise<User> => fetchUser(id)), { concurrency: "unbounded" })
+export const annotatedReturn = Effect.forEach(ids, id => Effect.promise((): Promise<User> => fetchUser(id)), { concurrency: "unbounded" })
+
+// MUST TRIGGER: a destructured callback parameter, with no thunk parameter to collide with.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" })
+export const destructuredParameter = Effect.promise(() => Promise.all(entries.map(({ id }) => fetchUser(id))))
+
+// MUST TRIGGER: async function expression callback keeps `async` on the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.tryPromise(async () => { const user = await fetchUser(id); return user.name }), { concurrency: "unbounded" })
+export const asyncFunctionExpression = Effect.tryPromise(() =>
+  Promise.all(ids.map(async function(id) {
+    const user = await fetchUser(id)
+    return user.name
+  }))
+)
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, no quick fix: the rewrite would not compile or would change meaning.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the receiver reads the thunk's `signal`, which is out of scope once
+// the receiver moves to Effect.forEach's first argument; no quick fix.
+export const receiverUsesSignal = Effect.promise((signal) => Promise.all(idsFor(signal).map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback parameter has the thunk parameter's name; the redeclared
+// thunk parameter would shadow it in the moved body; no quick fix.
+export const callbackShadowsSignal = Effect.promise((signal) => Promise.all(ids.map((signal) => fetchUser(signal))))
+
+// MUST TRIGGER: a destructured callback parameter next to the thunk's `signal`; the
+// destructured names do not collide with it.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise((signal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const destructuredWithSignal = Effect.promise((signal) =>
+  Promise.all(entries.map(({ id }) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: a function expression callback reading its own `arguments`; an arrow
+// would read another function's `arguments`; no quick fix.
+export const callbackUsesArguments = Effect.promise(() =>
+  Promise.all(ids.map(function(id) {
+    return fetchUser(`${arguments.length}:${id}`)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback that calls itself; its name is
+// not in scope in the per-item thunk; no quick fix.
+export const callbackUsesOwnName = Effect.promise(() =>
+  Promise.all(ids.map(function load(id): Promise<User> {
+    return id.length > 0 ? fetchUser(id) : load("root")
+  }))
+)
+
+// MUST TRIGGER: a rest-parameter callback; Effect.forEach passes only (item, index); no quick fix.
+export const restParameterCallback = Effect.promise(() => Promise.all(ids.map((...args) => fetchUser(args[0]))))
+
+// MUST TRIGGER: the `.map` receiver is a tuple, not an array or readonly array; no quick fix.
+export const tupleReceiver = Effect.promise(() => Promise.all(pairIds.map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback returns a plain value; Promise.all accepts it, but the
+// per-item Effect.promise thunk must return a promise; no quick fix.
+export const plainValueCallback = Effect.promise(() => Promise.all(ids.map((id) => id.length)))
+
+// MUST TRIGGER: the callback returns a value or a promise; no quick fix.
+export const valueOrPromiseCallback = Effect.promise(() =>
+  Promise.all(ids.map((id) => id.length > 0 ? fetchUser(id) : cachedUser))
+)
+
+// MUST TRIGGER: a callback parameter named like the constructor's module would capture
+// the copied `Effect.promise` reference; no quick fix.
+export const callbackShadowsEffect = Effect.promise(() => Promise.all(ids.map((Effect) => fetchUser(Effect))))
+
+// MUST TRIGGER: a callback parameter initializer reads the thunk's `signal`, which is out
+// of scope once the parameters move to Effect.forEach's callback; no quick fix.
+export const parameterInitializerUsesSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id: string = String(signal.reason)) => fetchUser(id)))
+)
+
+// MUST TRIGGER: the callback body declares the thunk parameter's name; it would collide
+// with the redeclared per-item `signal`; no quick fix.
+export const bodyDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    const signal = id.trim()
+    return fetchUser(signal)
+  }))
+)
+
+// MUST TRIGGER: a hoisted `var` in a nested block of the callback body has the same
+// collision; no quick fix.
+export const bodyVarDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    if (id.length > 0) {
+      var signal: string | undefined = id
+    }
+    return fetchUser(signal ?? id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback declaring a `this` parameter, which an
+// arrow cannot declare; no quick fix.
+export const thisParameterCallback = Effect.promise(() =>
+  Promise.all(ids.map(function(this: void, id) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback whose parameter initializer reads
+// its own name; the copied parameter list has no such name in scope; no quick fix.
+export const parameterInitializerUsesOwnName = Effect.promise(() =>
+  Promise.all(maybeIds.map(function load(id = load.name) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback whose parameter initializer reads its own
+// `arguments`; an arrow would read another function's `arguments`; no quick fix.
+export const parameterInitializerUsesArguments = Effect.promise(() =>
+  Promise.all(maybeIds.map(function(id = String(arguments.length)) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a type parameter constrained to an array is a variable-length input.
+export const constrainedGeneric = <Tasks extends ReadonlyArray<Promise<User>>>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+// MUST NOT TRIGGER: a type parameter constrained to a fixed-length tuple.
+export const constrainedFixedTuple = <Tasks extends readonly [Promise<User>, Promise<User>]>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+type Signal = AbortSignal
+
+// MUST TRIGGER: the thunk parameter's type annotation names a type that the callback
+// body declares again; copied under the callback it would mean that type; no quick fix.
+export const thunkParameterTypeCaptured = Effect.promise((signal: Signal) =>
+  Promise.all(ids.map((id) => {
+    type Signal = string
+    const label: Signal = id
+    return fetchUserWithSignal(label, signal)
+  }))
+)
+
+declare const brandedTasks: Array<Promise<User>> & { readonly batchId: string }
+declare const brandedPair: readonly [Promise<User>, Promise<User>] & { readonly batchId: string }
+declare const arrayAndPair: ReadonlyArray<Promise<User>> & readonly [Promise<User>, Promise<User>]
+
+// MUST TRIGGER: a branded mutable array is still a variable-length array.
+export const brandedArray = Effect.promise(() => Promise.all(brandedTasks))
+
+// MUST NOT TRIGGER: a branded fixed-length tuple is still a fixed fan-out.
+export const brandedFixedTuple = Effect.promise(() => Promise.all(brandedPair))
+
+// MUST NOT TRIGGER: an array type intersected with a fixed-length tuple has the tuple's length.
+export const arrayIntersectedWithPair = Effect.promise(() => Promise.allSettled(arrayAndPair))
+
+declare const pending: ReadonlyArray<Promise<User>>
+declare const InjectedPromise: PromiseConstructor
+declare const deps: { readonly Promise: PromiseConstructor }
+const unboundAll = Promise.all
+
+// MUST TRIGGER: `globalThis.Promise` is the global Promise value.
+export const viaGlobalThis = Effect.promise(() => globalThis.Promise.all(pending))
+
+// MUST NOT TRIGGER: a declared value typed PromiseConstructor is not the global Promise.
+export const injectedConstructor = Effect.promise(() => InjectedPromise.all(pending))
+
+// MUST NOT TRIGGER: a constructor reached through an object property is not the global Promise.
+export const constructorProperty = Effect.promise(() => deps.Promise.allSettled(pending))
+
+// MUST NOT TRIGGER: an unbound alias of the method is not called on the global Promise.
+export const unboundMethodAlias = Effect.promise(() => unboundAll(pending))
+
+
+=== [D4] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/promiseAllInEffect_callShapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+interface User {
+  readonly name: string
+}
+
+declare const ids: ReadonlyArray<string>
+declare const pairIds: readonly [string, string]
+declare const entries: ReadonlyArray<{ readonly id: string }>
+declare const fetchUser: (id: string) => Promise<User>
+declare const fetchUserWithSignal: (id: string, signal: AbortSignal) => Promise<User>
+declare const idsFor: (signal: AbortSignal) => ReadonlyArray<string>
+declare const cachedUser: User
+declare const maybeIds: ReadonlyArray<string | undefined>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, quick fix: call shapes around the thunk-safe form.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the steps after Effect.promise(...) are kept.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" }).pipe(Effect.asVoid)
+export const trailingPipe = Effect.promise(() => Promise.all(ids.map((id) => fetchUser(id)))).pipe(Effect.asVoid)
+
+// MUST TRIGGER: an annotated thunk parameter is redeclared as written.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((signal: AbortSignal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const annotatedSignal = Effect.promise((signal: AbortSignal) =>
+  Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((): Promise<User> => fetchUser(id)), { concurrency: "unbounded" })
+export const annotatedReturn = Effect.promise(() => Promise.all(ids.map((id): Promise<User> => fetchUser(id))))
+
+// MUST TRIGGER: a destructured callback parameter, with no thunk parameter to collide with.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" })
+export const destructuredParameter = Effect.forEach(entries, ({ id }) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" })
+
+// MUST TRIGGER: async function expression callback keeps `async` on the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.tryPromise(async () => { const user = await fetchUser(id); return user.name }), { concurrency: "unbounded" })
+export const asyncFunctionExpression = Effect.tryPromise(() =>
+  Promise.all(ids.map(async function(id) {
+    const user = await fetchUser(id)
+    return user.name
+  }))
+)
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, no quick fix: the rewrite would not compile or would change meaning.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the receiver reads the thunk's `signal`, which is out of scope once
+// the receiver moves to Effect.forEach's first argument; no quick fix.
+export const receiverUsesSignal = Effect.promise((signal) => Promise.all(idsFor(signal).map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback parameter has the thunk parameter's name; the redeclared
+// thunk parameter would shadow it in the moved body; no quick fix.
+export const callbackShadowsSignal = Effect.promise((signal) => Promise.all(ids.map((signal) => fetchUser(signal))))
+
+// MUST TRIGGER: a destructured callback parameter next to the thunk's `signal`; the
+// destructured names do not collide with it.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise((signal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const destructuredWithSignal = Effect.promise((signal) =>
+  Promise.all(entries.map(({ id }) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: a function expression callback reading its own `arguments`; an arrow
+// would read another function's `arguments`; no quick fix.
+export const callbackUsesArguments = Effect.promise(() =>
+  Promise.all(ids.map(function(id) {
+    return fetchUser(`${arguments.length}:${id}`)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback that calls itself; its name is
+// not in scope in the per-item thunk; no quick fix.
+export const callbackUsesOwnName = Effect.promise(() =>
+  Promise.all(ids.map(function load(id): Promise<User> {
+    return id.length > 0 ? fetchUser(id) : load("root")
+  }))
+)
+
+// MUST TRIGGER: a rest-parameter callback; Effect.forEach passes only (item, index); no quick fix.
+export const restParameterCallback = Effect.promise(() => Promise.all(ids.map((...args) => fetchUser(args[0]))))
+
+// MUST TRIGGER: the `.map` receiver is a tuple, not an array or readonly array; no quick fix.
+export const tupleReceiver = Effect.promise(() => Promise.all(pairIds.map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback returns a plain value; Promise.all accepts it, but the
+// per-item Effect.promise thunk must return a promise; no quick fix.
+export const plainValueCallback = Effect.promise(() => Promise.all(ids.map((id) => id.length)))
+
+// MUST TRIGGER: the callback returns a value or a promise; no quick fix.
+export const valueOrPromiseCallback = Effect.promise(() =>
+  Promise.all(ids.map((id) => id.length > 0 ? fetchUser(id) : cachedUser))
+)
+
+// MUST TRIGGER: a callback parameter named like the constructor's module would capture
+// the copied `Effect.promise` reference; no quick fix.
+export const callbackShadowsEffect = Effect.promise(() => Promise.all(ids.map((Effect) => fetchUser(Effect))))
+
+// MUST TRIGGER: a callback parameter initializer reads the thunk's `signal`, which is out
+// of scope once the parameters move to Effect.forEach's callback; no quick fix.
+export const parameterInitializerUsesSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id: string = String(signal.reason)) => fetchUser(id)))
+)
+
+// MUST TRIGGER: the callback body declares the thunk parameter's name; it would collide
+// with the redeclared per-item `signal`; no quick fix.
+export const bodyDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    const signal = id.trim()
+    return fetchUser(signal)
+  }))
+)
+
+// MUST TRIGGER: a hoisted `var` in a nested block of the callback body has the same
+// collision; no quick fix.
+export const bodyVarDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    if (id.length > 0) {
+      var signal: string | undefined = id
+    }
+    return fetchUser(signal ?? id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback declaring a `this` parameter, which an
+// arrow cannot declare; no quick fix.
+export const thisParameterCallback = Effect.promise(() =>
+  Promise.all(ids.map(function(this: void, id) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback whose parameter initializer reads
+// its own name; the copied parameter list has no such name in scope; no quick fix.
+export const parameterInitializerUsesOwnName = Effect.promise(() =>
+  Promise.all(maybeIds.map(function load(id = load.name) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback whose parameter initializer reads its own
+// `arguments`; an arrow would read another function's `arguments`; no quick fix.
+export const parameterInitializerUsesArguments = Effect.promise(() =>
+  Promise.all(maybeIds.map(function(id = String(arguments.length)) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a type parameter constrained to an array is a variable-length input.
+export const constrainedGeneric = <Tasks extends ReadonlyArray<Promise<User>>>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+// MUST NOT TRIGGER: a type parameter constrained to a fixed-length tuple.
+export const constrainedFixedTuple = <Tasks extends readonly [Promise<User>, Promise<User>]>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+type Signal = AbortSignal
+
+// MUST TRIGGER: the thunk parameter's type annotation names a type that the callback
+// body declares again; copied under the callback it would mean that type; no quick fix.
+export const thunkParameterTypeCaptured = Effect.promise((signal: Signal) =>
+  Promise.all(ids.map((id) => {
+    type Signal = string
+    const label: Signal = id
+    return fetchUserWithSignal(label, signal)
+  }))
+)
+
+declare const brandedTasks: Array<Promise<User>> & { readonly batchId: string }
+declare const brandedPair: readonly [Promise<User>, Promise<User>] & { readonly batchId: string }
+declare const arrayAndPair: ReadonlyArray<Promise<User>> & readonly [Promise<User>, Promise<User>]
+
+// MUST TRIGGER: a branded mutable array is still a variable-length array.
+export const brandedArray = Effect.promise(() => Promise.all(brandedTasks))
+
+// MUST NOT TRIGGER: a branded fixed-length tuple is still a fixed fan-out.
+export const brandedFixedTuple = Effect.promise(() => Promise.all(brandedPair))
+
+// MUST NOT TRIGGER: an array type intersected with a fixed-length tuple has the tuple's length.
+export const arrayIntersectedWithPair = Effect.promise(() => Promise.allSettled(arrayAndPair))
+
+declare const pending: ReadonlyArray<Promise<User>>
+declare const InjectedPromise: PromiseConstructor
+declare const deps: { readonly Promise: PromiseConstructor }
+const unboundAll = Promise.all
+
+// MUST TRIGGER: `globalThis.Promise` is the global Promise value.
+export const viaGlobalThis = Effect.promise(() => globalThis.Promise.all(pending))
+
+// MUST NOT TRIGGER: a declared value typed PromiseConstructor is not the global Promise.
+export const injectedConstructor = Effect.promise(() => InjectedPromise.all(pending))
+
+// MUST NOT TRIGGER: a constructor reached through an object property is not the global Promise.
+export const constructorProperty = Effect.promise(() => deps.Promise.allSettled(pending))
+
+// MUST NOT TRIGGER: an unbound alias of the method is not called on the global Promise.
+export const unboundMethodAlias = Effect.promise(() => unboundAll(pending))
+
+
+=== [D5] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/promiseAllInEffect_callShapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+interface User {
+  readonly name: string
+}
+
+declare const ids: ReadonlyArray<string>
+declare const pairIds: readonly [string, string]
+declare const entries: ReadonlyArray<{ readonly id: string }>
+declare const fetchUser: (id: string) => Promise<User>
+declare const fetchUserWithSignal: (id: string, signal: AbortSignal) => Promise<User>
+declare const idsFor: (signal: AbortSignal) => ReadonlyArray<string>
+declare const cachedUser: User
+declare const maybeIds: ReadonlyArray<string | undefined>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, quick fix: call shapes around the thunk-safe form.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the steps after Effect.promise(...) are kept.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" }).pipe(Effect.asVoid)
+export const trailingPipe = Effect.promise(() => Promise.all(ids.map((id) => fetchUser(id)))).pipe(Effect.asVoid)
+
+// MUST TRIGGER: an annotated thunk parameter is redeclared as written.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((signal: AbortSignal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const annotatedSignal = Effect.promise((signal: AbortSignal) =>
+  Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((): Promise<User> => fetchUser(id)), { concurrency: "unbounded" })
+export const annotatedReturn = Effect.promise(() => Promise.all(ids.map((id): Promise<User> => fetchUser(id))))
+
+// MUST TRIGGER: a destructured callback parameter, with no thunk parameter to collide with.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" })
+export const destructuredParameter = Effect.promise(() => Promise.all(entries.map(({ id }) => fetchUser(id))))
+
+// MUST TRIGGER: async function expression callback keeps `async` on the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.tryPromise(async () => { const user = await fetchUser(id); return user.name }), { concurrency: "unbounded" })
+export const asyncFunctionExpression = Effect.forEach(ids, id => Effect.tryPromise(async () => {
+    const user = await fetchUser(id);
+    return user.name;
+}), { concurrency: "unbounded" })
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, no quick fix: the rewrite would not compile or would change meaning.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the receiver reads the thunk's `signal`, which is out of scope once
+// the receiver moves to Effect.forEach's first argument; no quick fix.
+export const receiverUsesSignal = Effect.promise((signal) => Promise.all(idsFor(signal).map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback parameter has the thunk parameter's name; the redeclared
+// thunk parameter would shadow it in the moved body; no quick fix.
+export const callbackShadowsSignal = Effect.promise((signal) => Promise.all(ids.map((signal) => fetchUser(signal))))
+
+// MUST TRIGGER: a destructured callback parameter next to the thunk's `signal`; the
+// destructured names do not collide with it.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise((signal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const destructuredWithSignal = Effect.promise((signal) =>
+  Promise.all(entries.map(({ id }) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: a function expression callback reading its own `arguments`; an arrow
+// would read another function's `arguments`; no quick fix.
+export const callbackUsesArguments = Effect.promise(() =>
+  Promise.all(ids.map(function(id) {
+    return fetchUser(`${arguments.length}:${id}`)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback that calls itself; its name is
+// not in scope in the per-item thunk; no quick fix.
+export const callbackUsesOwnName = Effect.promise(() =>
+  Promise.all(ids.map(function load(id): Promise<User> {
+    return id.length > 0 ? fetchUser(id) : load("root")
+  }))
+)
+
+// MUST TRIGGER: a rest-parameter callback; Effect.forEach passes only (item, index); no quick fix.
+export const restParameterCallback = Effect.promise(() => Promise.all(ids.map((...args) => fetchUser(args[0]))))
+
+// MUST TRIGGER: the `.map` receiver is a tuple, not an array or readonly array; no quick fix.
+export const tupleReceiver = Effect.promise(() => Promise.all(pairIds.map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback returns a plain value; Promise.all accepts it, but the
+// per-item Effect.promise thunk must return a promise; no quick fix.
+export const plainValueCallback = Effect.promise(() => Promise.all(ids.map((id) => id.length)))
+
+// MUST TRIGGER: the callback returns a value or a promise; no quick fix.
+export const valueOrPromiseCallback = Effect.promise(() =>
+  Promise.all(ids.map((id) => id.length > 0 ? fetchUser(id) : cachedUser))
+)
+
+// MUST TRIGGER: a callback parameter named like the constructor's module would capture
+// the copied `Effect.promise` reference; no quick fix.
+export const callbackShadowsEffect = Effect.promise(() => Promise.all(ids.map((Effect) => fetchUser(Effect))))
+
+// MUST TRIGGER: a callback parameter initializer reads the thunk's `signal`, which is out
+// of scope once the parameters move to Effect.forEach's callback; no quick fix.
+export const parameterInitializerUsesSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id: string = String(signal.reason)) => fetchUser(id)))
+)
+
+// MUST TRIGGER: the callback body declares the thunk parameter's name; it would collide
+// with the redeclared per-item `signal`; no quick fix.
+export const bodyDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    const signal = id.trim()
+    return fetchUser(signal)
+  }))
+)
+
+// MUST TRIGGER: a hoisted `var` in a nested block of the callback body has the same
+// collision; no quick fix.
+export const bodyVarDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    if (id.length > 0) {
+      var signal: string | undefined = id
+    }
+    return fetchUser(signal ?? id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback declaring a `this` parameter, which an
+// arrow cannot declare; no quick fix.
+export const thisParameterCallback = Effect.promise(() =>
+  Promise.all(ids.map(function(this: void, id) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback whose parameter initializer reads
+// its own name; the copied parameter list has no such name in scope; no quick fix.
+export const parameterInitializerUsesOwnName = Effect.promise(() =>
+  Promise.all(maybeIds.map(function load(id = load.name) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback whose parameter initializer reads its own
+// `arguments`; an arrow would read another function's `arguments`; no quick fix.
+export const parameterInitializerUsesArguments = Effect.promise(() =>
+  Promise.all(maybeIds.map(function(id = String(arguments.length)) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a type parameter constrained to an array is a variable-length input.
+export const constrainedGeneric = <Tasks extends ReadonlyArray<Promise<User>>>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+// MUST NOT TRIGGER: a type parameter constrained to a fixed-length tuple.
+export const constrainedFixedTuple = <Tasks extends readonly [Promise<User>, Promise<User>]>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+type Signal = AbortSignal
+
+// MUST TRIGGER: the thunk parameter's type annotation names a type that the callback
+// body declares again; copied under the callback it would mean that type; no quick fix.
+export const thunkParameterTypeCaptured = Effect.promise((signal: Signal) =>
+  Promise.all(ids.map((id) => {
+    type Signal = string
+    const label: Signal = id
+    return fetchUserWithSignal(label, signal)
+  }))
+)
+
+declare const brandedTasks: Array<Promise<User>> & { readonly batchId: string }
+declare const brandedPair: readonly [Promise<User>, Promise<User>] & { readonly batchId: string }
+declare const arrayAndPair: ReadonlyArray<Promise<User>> & readonly [Promise<User>, Promise<User>]
+
+// MUST TRIGGER: a branded mutable array is still a variable-length array.
+export const brandedArray = Effect.promise(() => Promise.all(brandedTasks))
+
+// MUST NOT TRIGGER: a branded fixed-length tuple is still a fixed fan-out.
+export const brandedFixedTuple = Effect.promise(() => Promise.all(brandedPair))
+
+// MUST NOT TRIGGER: an array type intersected with a fixed-length tuple has the tuple's length.
+export const arrayIntersectedWithPair = Effect.promise(() => Promise.allSettled(arrayAndPair))
+
+declare const pending: ReadonlyArray<Promise<User>>
+declare const InjectedPromise: PromiseConstructor
+declare const deps: { readonly Promise: PromiseConstructor }
+const unboundAll = Promise.all
+
+// MUST TRIGGER: `globalThis.Promise` is the global Promise value.
+export const viaGlobalThis = Effect.promise(() => globalThis.Promise.all(pending))
+
+// MUST NOT TRIGGER: a declared value typed PromiseConstructor is not the global Promise.
+export const injectedConstructor = Effect.promise(() => InjectedPromise.all(pending))
+
+// MUST NOT TRIGGER: a constructor reached through an object property is not the global Promise.
+export const constructorProperty = Effect.promise(() => deps.Promise.allSettled(pending))
+
+// MUST NOT TRIGGER: an unbound alias of the method is not called on the global Promise.
+export const unboundMethodAlias = Effect.promise(() => unboundAll(pending))
+
+
+=== [D6] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/promiseAllInEffect_callShapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+interface User {
+  readonly name: string
+}
+
+declare const ids: ReadonlyArray<string>
+declare const pairIds: readonly [string, string]
+declare const entries: ReadonlyArray<{ readonly id: string }>
+declare const fetchUser: (id: string) => Promise<User>
+declare const fetchUserWithSignal: (id: string, signal: AbortSignal) => Promise<User>
+declare const idsFor: (signal: AbortSignal) => ReadonlyArray<string>
+declare const cachedUser: User
+declare const maybeIds: ReadonlyArray<string | undefined>
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, quick fix: call shapes around the thunk-safe form.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the steps after Effect.promise(...) are kept.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" }).pipe(Effect.asVoid)
+export const trailingPipe = Effect.promise(() => Promise.all(ids.map((id) => fetchUser(id)))).pipe(Effect.asVoid)
+
+// MUST TRIGGER: an annotated thunk parameter is redeclared as written.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((signal: AbortSignal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const annotatedSignal = Effect.promise((signal: AbortSignal) =>
+  Promise.all(ids.map((id) => fetchUserWithSignal(id, signal)))
+)
+
+// MUST TRIGGER: the callback's return type annotation moves to the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.promise((): Promise<User> => fetchUser(id)), { concurrency: "unbounded" })
+export const annotatedReturn = Effect.promise(() => Promise.all(ids.map((id): Promise<User> => fetchUser(id))))
+
+// MUST TRIGGER: a destructured callback parameter, with no thunk parameter to collide with.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise(() => fetchUser(id)), { concurrency: "unbounded" })
+export const destructuredParameter = Effect.promise(() => Promise.all(entries.map(({ id }) => fetchUser(id))))
+
+// MUST TRIGGER: async function expression callback keeps `async` on the per-item thunk.
+// Quick fix: Effect.forEach(ids, (id) => Effect.tryPromise(async () => { const user = await fetchUser(id); return user.name }), { concurrency: "unbounded" })
+export const asyncFunctionExpression = Effect.tryPromise(() =>
+  Promise.all(ids.map(async function(id) {
+    const user = await fetchUser(id)
+    return user.name
+  }))
+)
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, no quick fix: the rewrite would not compile or would change meaning.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the receiver reads the thunk's `signal`, which is out of scope once
+// the receiver moves to Effect.forEach's first argument; no quick fix.
+export const receiverUsesSignal = Effect.promise((signal) => Promise.all(idsFor(signal).map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback parameter has the thunk parameter's name; the redeclared
+// thunk parameter would shadow it in the moved body; no quick fix.
+export const callbackShadowsSignal = Effect.promise((signal) => Promise.all(ids.map((signal) => fetchUser(signal))))
+
+// MUST TRIGGER: a destructured callback parameter next to the thunk's `signal`; the
+// destructured names do not collide with it.
+// Quick fix: Effect.forEach(entries, ({ id }) => Effect.promise((signal) => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+export const destructuredWithSignal = Effect.forEach(entries, ({ id }) => Effect.promise(signal => fetchUserWithSignal(id, signal)), { concurrency: "unbounded" })
+
+// MUST TRIGGER: a function expression callback reading its own `arguments`; an arrow
+// would read another function's `arguments`; no quick fix.
+export const callbackUsesArguments = Effect.promise(() =>
+  Promise.all(ids.map(function(id) {
+    return fetchUser(`${arguments.length}:${id}`)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback that calls itself; its name is
+// not in scope in the per-item thunk; no quick fix.
+export const callbackUsesOwnName = Effect.promise(() =>
+  Promise.all(ids.map(function load(id): Promise<User> {
+    return id.length > 0 ? fetchUser(id) : load("root")
+  }))
+)
+
+// MUST TRIGGER: a rest-parameter callback; Effect.forEach passes only (item, index); no quick fix.
+export const restParameterCallback = Effect.promise(() => Promise.all(ids.map((...args) => fetchUser(args[0]))))
+
+// MUST TRIGGER: the `.map` receiver is a tuple, not an array or readonly array; no quick fix.
+export const tupleReceiver = Effect.promise(() => Promise.all(pairIds.map((id) => fetchUser(id))))
+
+// MUST TRIGGER: the callback returns a plain value; Promise.all accepts it, but the
+// per-item Effect.promise thunk must return a promise; no quick fix.
+export const plainValueCallback = Effect.promise(() => Promise.all(ids.map((id) => id.length)))
+
+// MUST TRIGGER: the callback returns a value or a promise; no quick fix.
+export const valueOrPromiseCallback = Effect.promise(() =>
+  Promise.all(ids.map((id) => id.length > 0 ? fetchUser(id) : cachedUser))
+)
+
+// MUST TRIGGER: a callback parameter named like the constructor's module would capture
+// the copied `Effect.promise` reference; no quick fix.
+export const callbackShadowsEffect = Effect.promise(() => Promise.all(ids.map((Effect) => fetchUser(Effect))))
+
+// MUST TRIGGER: a callback parameter initializer reads the thunk's `signal`, which is out
+// of scope once the parameters move to Effect.forEach's callback; no quick fix.
+export const parameterInitializerUsesSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id: string = String(signal.reason)) => fetchUser(id)))
+)
+
+// MUST TRIGGER: the callback body declares the thunk parameter's name; it would collide
+// with the redeclared per-item `signal`; no quick fix.
+export const bodyDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    const signal = id.trim()
+    return fetchUser(signal)
+  }))
+)
+
+// MUST TRIGGER: a hoisted `var` in a nested block of the callback body has the same
+// collision; no quick fix.
+export const bodyVarDeclaresSignal = Effect.promise((signal) =>
+  Promise.all(ids.map((id) => {
+    if (id.length > 0) {
+      var signal: string | undefined = id
+    }
+    return fetchUser(signal ?? id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback declaring a `this` parameter, which an
+// arrow cannot declare; no quick fix.
+export const thisParameterCallback = Effect.promise(() =>
+  Promise.all(ids.map(function(this: void, id) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a named function expression callback whose parameter initializer reads
+// its own name; the copied parameter list has no such name in scope; no quick fix.
+export const parameterInitializerUsesOwnName = Effect.promise(() =>
+  Promise.all(maybeIds.map(function load(id = load.name) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a function expression callback whose parameter initializer reads its own
+// `arguments`; an arrow would read another function's `arguments`; no quick fix.
+export const parameterInitializerUsesArguments = Effect.promise(() =>
+  Promise.all(maybeIds.map(function(id = String(arguments.length)) {
+    return fetchUser(id)
+  }))
+)
+
+// MUST TRIGGER: a type parameter constrained to an array is a variable-length input.
+export const constrainedGeneric = <Tasks extends ReadonlyArray<Promise<User>>>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+// MUST NOT TRIGGER: a type parameter constrained to a fixed-length tuple.
+export const constrainedFixedTuple = <Tasks extends readonly [Promise<User>, Promise<User>]>(tasks: Tasks) =>
+  Effect.promise(() => Promise.all(tasks))
+
+type Signal = AbortSignal
+
+// MUST TRIGGER: the thunk parameter's type annotation names a type that the callback
+// body declares again; copied under the callback it would mean that type; no quick fix.
+export const thunkParameterTypeCaptured = Effect.promise((signal: Signal) =>
+  Promise.all(ids.map((id) => {
+    type Signal = string
+    const label: Signal = id
+    return fetchUserWithSignal(label, signal)
+  }))
+)
+
+declare const brandedTasks: Array<Promise<User>> & { readonly batchId: string }
+declare const brandedPair: readonly [Promise<User>, Promise<User>] & { readonly batchId: string }
+declare const arrayAndPair: ReadonlyArray<Promise<User>> & readonly [Promise<User>, Promise<User>]
+
+// MUST TRIGGER: a branded mutable array is still a variable-length array.
+export const brandedArray = Effect.promise(() => Promise.all(brandedTasks))
+
+// MUST NOT TRIGGER: a branded fixed-length tuple is still a fixed fan-out.
+export const brandedFixedTuple = Effect.promise(() => Promise.all(brandedPair))
+
+// MUST NOT TRIGGER: an array type intersected with a fixed-length tuple has the tuple's length.
+export const arrayIntersectedWithPair = Effect.promise(() => Promise.allSettled(arrayAndPair))
+
+declare const pending: ReadonlyArray<Promise<User>>
+declare const InjectedPromise: PromiseConstructor
+declare const deps: { readonly Promise: PromiseConstructor }
+const unboundAll = Promise.all
+
+// MUST TRIGGER: `globalThis.Promise` is the global Promise value.
+export const viaGlobalThis = Effect.promise(() => globalThis.Promise.all(pending))
+
+// MUST NOT TRIGGER: a declared value typed PromiseConstructor is not the global Promise.
+export const injectedConstructor = Effect.promise(() => InjectedPromise.all(pending))
+
+// MUST NOT TRIGGER: a constructor reached through an object property is not the global Promise.
+export const constructorProperty = Effect.promise(() => deps.Promise.allSettled(pending))
+
+// MUST NOT TRIGGER: an unbound alias of the method is not called on the global Promise.
+export const unboundMethodAlias = Effect.promise(() => unboundAll(pending))
+
+
+=== [D10] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D19] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D22] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D25] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D26] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D26] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D27] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D27] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D28] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D28] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default

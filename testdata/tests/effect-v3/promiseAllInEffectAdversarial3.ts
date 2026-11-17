@@ -1,0 +1,15 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics promiseAllInEffect:warning
+import { Effect } from "effect"
+
+declare const ids: ReadonlyArray<string>
+declare const fallback: AbortSignal
+declare const fetchUser: (id: string, signal: AbortSignal) => Promise<string>
+
+// MUST TRIGGER, no quick fix: moving the thunk parameter initializer under the
+// map callback captures its `fallback` string parameter instead of the outer
+// AbortSignal binding, making the rewritten thunk fail to type-check.
+export const capturedDefault = Effect.promise((signal = fallback) =>
+  Promise.all(ids.map((fallback) => fetchUser(fallback, signal)))
+)

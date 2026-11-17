@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/promiseAllInEffect_preview.ts(9,46): warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+
+
+==== /.src/promiseAllInEffect_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics promiseAllInEffect:warning
+    import { Effect } from "effect"
+    
+    declare const ids: ReadonlyArray<string>
+    declare const fetchUser: (id: string) => Promise<{ readonly name: string }>
+    
+    export const users = Effect.tryPromise(() => Promise.all(ids.map((id) => fetchUser(id))))
+                                                 ~~~~~~~~~~~
+!!! warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+    

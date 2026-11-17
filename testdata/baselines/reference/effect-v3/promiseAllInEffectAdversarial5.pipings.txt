@@ -1,0 +1,57 @@
+==== /.src/promiseAllInEffectAdversarial5.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 11:11 - 12:45
+Node: Effect.promise(() => Promise.all(tasks))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(tasks)
+Subject Type: () => Promise<number[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 12:25 - 12:44
+Node: Promise.all(tasks)
+Node Kind: KindCallExpression
+
+Subject: tasks
+Subject Type: readonly Promise<number>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<number[]>
+
+=== Piping Flow ===
+Location: 12:46 - 13:52
+Node: Effect.promise(() => Promise.allSettled(tasks))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.allSettled(tasks)
+Subject Type: () => Promise<PromiseSettledResult<number>[]>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<PromiseSettledResult<number>[], never, never>
+
+=== Piping Flow ===
+Location: 13:25 - 13:51
+Node: Promise.allSettled(tasks)
+Node Kind: KindCallExpression
+
+Subject: tasks
+Subject Type: readonly Promise<number>[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<PromiseSettledResult<number>[]>

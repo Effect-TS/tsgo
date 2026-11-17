@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:45-9:59) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D2] (12:54-12:66) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+[D3] (15:52-15:63) TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+  Fix 0: "Disable promiseAllInEffect for this line"
+  Fix 1: "Disable promiseAllInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable promiseAllInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable promiseAllInEffect for entire file" ===
+skipped by default

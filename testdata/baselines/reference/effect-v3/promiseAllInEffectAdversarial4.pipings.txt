@@ -1,0 +1,57 @@
+==== /.src/promiseAllInEffectAdversarial4.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 9:26 - 9:67
+Node: Effect.promise(() => Promise.all(tasks))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.all(tasks)
+Subject Type: () => Promise<{ [x: number]: number; length: number; toString: number; toLocaleString: number; concat: number; join: number; slice: number; indexOf: number; lastIndexOf: number; every: number; some: number; forEach: number; map: number; filter: number; reduce: number; reduceRight: number; find: number; findIndex: number; [Symbol.iterator]: number; entries: number; keys: number; values: number; [Symbol.unscopables]: number; includes: number; flatMap: number; flat: number; at: number; findLast: number; findLastIndex: number; toReversed: number; toSorted: number; toSpliced: number; with: number; batchId: number; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<{ [x: number]: number; length: number; toString: number; toLocaleString: number; concat: number; join: number; slice: number; indexOf: number; lastIndexOf: number; every: number; some: number; forEach: number; map: number; filter: number; reduce: number; reduceRight: number; find: number; findIndex: number; [Symbol.iterator]: number; entries: number; keys: number; values: number; [Symbol.unscopables]: number; includes: number; flatMap: number; flat: number; at: number; findLast: number; findLastIndex: number; toReversed: number; toSorted: number; toSpliced: number; with: number; batchId: number; }, never, never>
+
+=== Piping Flow ===
+Location: 9:47 - 9:66
+Node: Promise.all(tasks)
+Node Kind: KindCallExpression
+
+Subject: tasks
+Subject Type: readonly Promise<number>[] & { readonly batchId: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.all
+      args: (constant)
+      outType: Promise<{ [x: number]: number; length: number; toString: number; toLocaleString: number; concat: number; join: number; slice: number; indexOf: number; lastIndexOf: number; every: number; some: number; forEach: number; map: number; filter: number; reduce: number; reduceRight: number; find: number; findIndex: number; [Symbol.iterator]: number; entries: number; keys: number; values: number; [Symbol.unscopables]: number; includes: number; flatMap: number; flat: number; at: number; findLast: number; findLastIndex: number; toReversed: number; toSorted: number; toSpliced: number; with: number; batchId: number; }>
+
+=== Piping Flow ===
+Location: 12:30 - 12:78
+Node: Effect.promise(() => Promise.allSettled(tasks))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.allSettled(tasks)
+Subject Type: () => Promise<{ [x: number]: PromiseSettledResult<number>; length: PromiseSettledResult<number>; toString: PromiseSettledResult<number>; toLocaleString: PromiseSettledResult<number>; concat: PromiseSettledResult<number>; join: PromiseSettledResult<number>; slice: PromiseSettledResult<number>; indexOf: PromiseSettledResult<number>; lastIndexOf: PromiseSettledResult<number>; every: PromiseSettledResult<number>; some: PromiseSettledResult<number>; forEach: PromiseSettledResult<number>; map: PromiseSettledResult<number>; filter: PromiseSettledResult<number>; reduce: PromiseSettledResult<number>; reduceRight: PromiseSettledResult<number>; find: PromiseSettledResult<number>; findIndex: PromiseSettledResult<number>; [Symbol.iterator]: PromiseSettledResult<number>; entries: PromiseSettledResult<number>; keys: PromiseSettledResult<number>; values: PromiseSettledResult<number>; [Symbol.unscopables]: PromiseSettledResult<number>; includes: PromiseSettledResult<number>; flatMap: PromiseSettledResult<number>; flat: PromiseSettledResult<number>; at: PromiseSettledResult<number>; findLast: PromiseSettledResult<number>; findLastIndex: PromiseSettledResult<number>; toReversed: PromiseSettledResult<number>; toSorted: PromiseSettledResult<number>; toSpliced: PromiseSettledResult<number>; with: PromiseSettledResult<number>; batchId: PromiseSettledResult<number>; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<{ [x: number]: PromiseSettledResult<number>; length: PromiseSettledResult<number>; toString: PromiseSettledResult<number>; toLocaleString: PromiseSettledResult<number>; concat: PromiseSettledResult<number>; join: PromiseSettledResult<number>; slice: PromiseSettledResult<number>; indexOf: PromiseSettledResult<number>; lastIndexOf: PromiseSettledResult<number>; every: PromiseSettledResult<number>; some: PromiseSettledResult<number>; forEach: PromiseSettledResult<number>; map: PromiseSettledResult<number>; filter: PromiseSettledResult<number>; reduce: PromiseSettledResult<number>; reduceRight: PromiseSettledResult<number>; find: PromiseSettledResult<number>; findIndex: PromiseSettledResult<number>; [Symbol.iterator]: PromiseSettledResult<number>; entries: PromiseSettledResult<number>; keys: PromiseSettledResult<number>; values: PromiseSettledResult<number>; [Symbol.unscopables]: PromiseSettledResult<number>; includes: PromiseSettledResult<number>; flatMap: PromiseSettledResult<number>; flat: PromiseSettledResult<number>; at: PromiseSettledResult<number>; findLast: PromiseSettledResult<number>; findLastIndex: PromiseSettledResult<number>; toReversed: PromiseSettledResult<number>; toSorted: PromiseSettledResult<number>; toSpliced: PromiseSettledResult<number>; with: PromiseSettledResult<number>; batchId: PromiseSettledResult<number>; }, never, never>
+
+=== Piping Flow ===
+Location: 12:51 - 12:77
+Node: Promise.allSettled(tasks)
+Node Kind: KindCallExpression
+
+Subject: tasks
+Subject Type: readonly Promise<number>[] & { readonly batchId: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.allSettled
+      args: (constant)
+      outType: Promise<{ [x: number]: PromiseSettledResult<number>; length: PromiseSettledResult<number>; toString: PromiseSettledResult<number>; toLocaleString: PromiseSettledResult<number>; concat: PromiseSettledResult<number>; join: PromiseSettledResult<number>; slice: PromiseSettledResult<number>; indexOf: PromiseSettledResult<number>; lastIndexOf: PromiseSettledResult<number>; every: PromiseSettledResult<number>; some: PromiseSettledResult<number>; forEach: PromiseSettledResult<number>; map: PromiseSettledResult<number>; filter: PromiseSettledResult<number>; reduce: PromiseSettledResult<number>; reduceRight: PromiseSettledResult<number>; find: PromiseSettledResult<number>; findIndex: PromiseSettledResult<number>; [Symbol.iterator]: PromiseSettledResult<number>; entries: PromiseSettledResult<number>; keys: PromiseSettledResult<number>; values: PromiseSettledResult<number>; [Symbol.unscopables]: PromiseSettledResult<number>; includes: PromiseSettledResult<number>; flatMap: PromiseSettledResult<number>; flat: PromiseSettledResult<number>; at: PromiseSettledResult<number>; findLast: PromiseSettledResult<number>; findLastIndex: PromiseSettledResult<number>; toReversed: PromiseSettledResult<number>; toSorted: PromiseSettledResult<number>; toSpliced: PromiseSettledResult<number>; with: PromiseSettledResult<number>; batchId: PromiseSettledResult<number>; }>

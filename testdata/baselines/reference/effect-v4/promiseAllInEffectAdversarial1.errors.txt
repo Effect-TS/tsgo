@@ -1,0 +1,31 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/promiseAllInEffectAdversarial1.ts(9,45): warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+/.src/promiseAllInEffectAdversarial1.ts(12,54): warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+/.src/promiseAllInEffectAdversarial1.ts(15,52): warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+
+
+==== /.src/promiseAllInEffectAdversarial1.ts (3 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics promiseAllInEffect:warning
+    import { Effect } from "effect"
+    
+    declare const tasks: ReadonlyArray<Promise<number>>
+    
+    // MUST TRIGGER: literal element access calls the same global Promise.all.
+    export const bracket = Effect.promise(() => Promise["all"](tasks))
+                                                ~~~~~~~~~~~~~~
+!!! warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+    
+    // MUST TRIGGER: the global Promise constructor is never nullish.
+    export const optionalReceiver = Effect.promise(() => Promise?.all(tasks))
+                                                         ~~~~~~~~~~~~
+!!! warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+    
+    // MUST TRIGGER: the global Promise.all method is never nullish.
+    export const optionalMethod = Effect.promise(() => Promise.all?.(tasks))
+                                                       ~~~~~~~~~~~
+!!! warning TS377198: `Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)
+    

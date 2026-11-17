@@ -325,6 +325,7 @@
         "preferEffectString": "warning",
         "processEnv": "warning",
         "processEnvInEffect": "warning",
+        "promiseAllInEffect": "warning",
         "schemaSync": "warning"
       }
     },
@@ -2182,6 +2183,30 @@
             "start": 121,
             "end": 137,
             "text": "This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "promiseAllInEffect",
+      "group": "effectNative",
+      "description": "Warns when Promise.all or Promise.allSettled fans out over an array inside Effect code instead of Effect.forEach or Effect.all with a concurrency option",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377198
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const ids: ReadonlyArray\u003cstring\u003e\ndeclare const fetchUser: (id: string) =\u003e Promise\u003c{ readonly name: string }\u003e\n\nexport const users = Effect.tryPromise(() =\u003e Promise.all(ids.map((id) =\u003e fetchUser(id))))\n",
+        "diagnostics": [
+          {
+            "start": 196,
+            "end": 207,
+            "text": "`Promise.all` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `Effect.forEach` with a concurrency option instead. effect(promiseAllInEffect)"
           }
         ]
       }
