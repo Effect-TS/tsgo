@@ -138,6 +138,7 @@ var All = []rule.Rule{
 	FlatMapProvideServiceToProvideServiceEffect,
 	FlatMapIgnoredParamToAndThen,
 	FlatMapIdentityToFlatten,
+	FlatMapMapToZipWith,
 	MatchEffectToMatch,
 	MatchToResultOrOption,
 	MatchBooleanToIsSuccess,

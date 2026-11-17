@@ -107,4 +107,48 @@ impl TypeParser<'_> {
                 && self.checker.is_block_scoped_name_declared_before_use(declaration, location)
         })
     }
+
+    // go: internal/typeparser/expression_stability.go:82 TypeParser.IsDeclarationFileModuleConstant ae7a67f3c8b0c5b4
+    pub fn is_declaration_file_module_constant(
+        &mut self,
+        expression: impl Into<Option<P<Node>>>,
+    ) -> bool {
+        let Some(expression) = expression.into() else {
+            return false;
+        };
+        let expression = ets_shim::ast::skip_parentheses(expression);
+        if expression.kind() != Kind::PropertyAccessExpression
+            || expression.flags().intersects(NodeFlags::OptionalChain)
+        {
+            return false;
+        }
+        let access = expression.as_property_access_expression();
+        if !ets_shim::ast::is_entity_name_expression(access.expression()) {
+            return false;
+        }
+        let module_symbol = self.get_symbol_at_location(access.expression());
+        let module = self.resolve_aliased_symbol(module_symbol);
+        let Some(module) = module else {
+            return false;
+        };
+        if !module.flags().intersects(SymbolFlags::ValueModule | SymbolFlags::NamespaceModule) {
+            return false;
+        }
+        let member_symbol = self.get_symbol_at_location(access.name());
+        let member = self.resolve_aliased_symbol(member_symbol);
+        let Some(member) = member else {
+            return false;
+        };
+        if !self.checker.is_constant_variable(member) {
+            return false;
+        }
+        let Some(declaration) = member.value_declaration() else {
+            return false;
+        };
+        if !ets_shim::ast::is_variable_declaration(declaration) {
+            return false;
+        }
+        let source_file = ets_shim::ast::get_source_file_of_node(declaration);
+        source_file.is_some_and(|source_file| source_file.is_declaration_file())
+    }
 }

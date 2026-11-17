@@ -702,5 +702,9 @@
     "`{0}` starts every promise at once with no concurrency bound, and they keep running when the fiber is interrupted. Use `{1}` with a concurrency option instead. effect(promiseAllInEffect)": {
         "category": "Warning",
         "code": 377198
+    },
+    "`Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)": {
+        "category": "Suggestion",
+        "code": 377218
     }
 }

@@ -64,6 +64,7 @@
         "flatMapConditionalToFilterOrFail": "suggestion",
         "flatMapIdentityToFlatten": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
+        "flatMapMapToZipWith": "suggestion",
         "flatMapProvideServiceToProvideServiceEffect": "suggestion",
         "flatMapToMap": "suggestion",
         "flatMapToTap": "suggestion",
@@ -169,6 +170,7 @@
         "flatMapConditionalToFilterOrFail": "error",
         "flatMapIdentityToFlatten": "error",
         "flatMapIgnoredParamToAndThen": "error",
+        "flatMapMapToZipWith": "error",
         "flatMapProvideServiceToProvideServiceEffect": "error",
         "flatMapToMap": "error",
         "flatMapToTap": "error",
@@ -358,6 +360,7 @@
         "flatMapConditionalToFilterOrFail": "warning",
         "flatMapIdentityToFlatten": "warning",
         "flatMapIgnoredParamToAndThen": "warning",
+        "flatMapMapToZipWith": "warning",
         "flatMapProvideServiceToProvideServiceEffect": "warning",
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
@@ -2826,6 +2829,30 @@
             "start": 140,
             "end": 154,
             "text": "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "flatMapMapToZipWith",
+      "group": "style",
+      "description": "Suggests Effect.zipWith when Effect.flatMap only maps an independent effect with its parameter",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377218
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\n// The quick fix rewrites this to Effect.zipWith(getUser, getConfig, (user, config) =\u003e `${user.name} (${config.locale})`).\n// Notes:\n// - The rule stays silent when the inner effect uses the outer result (e.g. `loadProfile(user.id)`),\n//   because the second effect depends on the first and zipWith does not apply.\n// - When the combiner is exactly `[user, config]`, the fix suggests Effect.zip(getUser, getConfig).\n// - The rule stays silent when the mapper returns the outer value unchanged, because flatMapToTap covers that.\n\ndeclare const getUser: Effect.Effect\u003c{ readonly name: string }\u003e\ndeclare const getConfig: Effect.Effect\u003c{ readonly locale: string }\u003e\n\nexport const greeting = Effect.flatMap(getUser, (user) =\u003e\n  Effect.map(getConfig, (config) =\u003e `${user.name} (${config.locale})`))\n",
+        "diagnostics": [
+          {
+            "start": 719,
+            "end": 733,
+            "text": "`Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)"
           }
         ]
       }

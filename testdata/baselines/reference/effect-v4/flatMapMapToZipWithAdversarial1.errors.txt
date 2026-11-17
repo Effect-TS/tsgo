@@ -1,0 +1,22 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/flatMapMapToZipWithAdversarial1.ts(9,30): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+
+
+==== /.src/flatMapMapToZipWithAdversarial1.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    const first = Effect.succeed(10)
+    const second = Effect.succeed(20)
+    
+    // MUST TRIGGER, NO FIX: direct eval observes the mapper's original arguments object.
+    // The nested form yields 31 (10 + 20 + 1). The merged function yields 32,
+    // because zipWith calls the combiner with two arguments instead of one.
+    export const evalArguments = Effect.flatMap(first, (a) =>
+                                 ~~~~~~~~~~~~~~
+!!! suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+      Effect.map(second, function (b) {
+        return a + b + Number(eval("arguments.length"))
+      }))
+    

@@ -1,0 +1,85 @@
+==== /.src/flatMapMapToZipWithAdversarial2.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 3:14 - 3:33
+Node: Effect.succeed(10)
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 4:15 - 4:34
+Node: Effect.succeed(20)
+Node Kind: KindCallExpression
+
+Subject: 20
+Subject Type: 20
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:28 - 10:36
+Node: Effect.flatMap(first, <A extends number>(a: A) =>\n  Effect.map(second, (b) => a + b))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [<A extends number>(a: A) =>\n  Effect.map(second, (b) => a + b)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:78 - 10:35
+Node: Effect.map(second, (b) => a + b)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b) => a + b]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:28 - 15:57
+Node: Effect.flatMap(first, (a) =>\n  Effect.map(second, <B extends number>(b: B) => a + b))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a) =>\n  Effect.map(second, <B extends number>(b: B) => a + b)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:57 - 15:56
+Node: Effect.map(second, <B extends number>(b: B) => a + b)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [<B extends number>(b: B) => a + b]
+      outType: Effect<number, never, never>

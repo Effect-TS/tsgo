@@ -1,0 +1,23 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:29-10:43) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+  Fix 0: "Disable flatMapMapToZipWith for this line"
+  Fix 1: "Disable flatMapMapToZipWith for entire file"
+
+[D2] (15:29-15:43) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+  Fix 0: "Disable flatMapMapToZipWith for this line"
+  Fix 1: "Disable flatMapMapToZipWith for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapMapToZipWith for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable flatMapMapToZipWith for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
+skipped by default
