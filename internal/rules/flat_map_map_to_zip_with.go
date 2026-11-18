@@ -90,10 +90,8 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 			if len(outerSymbols) == 0 {
 				continue
 			}
-			if flatMapMapToZipWithThatDependsOnOuter(tp, flatMapCallback, returnedFlow, outerSymbols) {
-				continue
-			}
-			if !flatMapMapToZipWithReferencesAny(tp, mapCallback, outerSymbols) {
+			if !flatMapMapToZipWithOnlyMapperUsesOuter(tp, returned, mapCallback, outerSymbols) ||
+				tp.UsesFunctionOwnBindings(flatMapCallback, returned) {
 				continue
 			}
 			if flatMapMapToZipWithReyieldsOuter(tp, flatMapCallback, mapResult) {
@@ -134,38 +132,20 @@ func flatMapMapToZipWithPlainParameter(parameter *ast.Node) bool {
 	return name.Kind == ast.KindIdentifier || name.Kind == ast.KindObjectBindingPattern || name.Kind == ast.KindArrayBindingPattern
 }
 
-func flatMapMapToZipWithThatParts(returnedFlow *typeparser.PipingFlow) []*ast.Node {
-	parts := []*ast.Node{returnedFlow.Subject().Node()}
-	steps := returnedFlow.Transformations()
-	for j := range steps.Len() - 1 {
-		step := steps.At(j)
-		parts = append(parts, step.Callee())
-		for _, argument := range step.Args().All() {
-			parts = append(parts, argument)
+// flatMapMapToZipWithOnlyMapperUsesOuter reports whether the outer parameter is
+// used in returned, and only inside mapper: everything else in returned becomes
+// the independent effect that zipWith runs on its own.
+func flatMapMapToZipWithOnlyMapperUsesOuter(tp *typeparser.TypeParser, returned, mapper *ast.Node, outerSymbols []*ast.Symbol) bool {
+	used := false
+	for _, symbol := range outerSymbols {
+		for _, reference := range tp.ReferencesToSymbol(returned, symbol).All() {
+			if reference.Pos() < mapper.Pos() || reference.End() > mapper.End() {
+				return false
+			}
+			used = true
 		}
 	}
-	return parts
-}
-
-func flatMapMapToZipWithThatDependsOnOuter(tp *typeparser.TypeParser, flatMapCallback *ast.Node, returnedFlow *typeparser.PipingFlow, outerSymbols []*ast.Symbol) bool {
-	for _, part := range flatMapMapToZipWithThatParts(returnedFlow) {
-		if part == nil {
-			continue
-		}
-		if flatMapMapToZipWithReferencesAny(tp, part, outerSymbols) || tp.UsesFunctionOwnBindings(flatMapCallback, part) {
-			return true
-		}
-	}
-	return false
-}
-
-func flatMapMapToZipWithReferencesAny(tp *typeparser.TypeParser, root *ast.Node, symbols []*ast.Symbol) bool {
-	for _, symbol := range symbols {
-		if tp.ReferencesToSymbol(root, symbol).Len() > 0 {
-			return true
-		}
-	}
-	return false
+	return used
 }
 
 func flatMapMapToZipWithReyieldsOuter(tp *typeparser.TypeParser, flatMapCallback, mapResult *ast.Node) bool {

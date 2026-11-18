@@ -184,7 +184,7 @@ fn flat_map_map_to_zip_with_map_parameters_capture_outer_names(
     false
 }
 
-// go: internal/fixables/flat_map_map_to_zip_with.go:128 flatMapMapToZipWithMapCallbackIsTiedToItsFunction b43cf8cc366266c3
+// go: internal/fixables/flat_map_map_to_zip_with.go:128 flatMapMapToZipWithMapCallbackIsTiedToItsFunction fcdce97e32e6c3c3
 fn flat_map_map_to_zip_with_map_callback_is_tied_to_its_function(
     ctx: &mut Context<'_, '_>,
     m: &FlatMapMapToZipWithMatch,
@@ -203,8 +203,8 @@ fn flat_map_map_to_zip_with_map_callback_is_tied_to_its_function(
         let Some(part) = part else {
             continue;
         };
-        if tp.uses_function_own_bindings(m.flat_map_callback, part)
-            || tp.uses_function_own_bindings(map_callback, part)
+        // The outer callback's own bindings are already excluded by the rule.
+        if tp.uses_function_own_bindings(map_callback, part)
             || eval.is_some() && !tp.references_to_symbol(part, eval).is_empty()
         {
             return true;

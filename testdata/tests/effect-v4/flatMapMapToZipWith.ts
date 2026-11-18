@@ -347,7 +347,7 @@ export const outerReturnAnnotated = Effect.flatMap(
   (user): Effect.Effect<string, "ConfigError", "ConfigRepo"> => Effect.map(getConfig, (config) => user.name + config.locale)
 )
 
-// MUST TRIGGER, NO FIX: the arrow mapper reads the outer function's `arguments`, which would change meaning.
+// MUST NOT TRIGGER: the outer function's own `arguments` is read inside its returned expression, so it cannot be split.
 export const functionUsesArguments = Effect.flatMap(getUser, function(user) {
   return Effect.map(getConfig, (config) => user.name + config.locale + arguments.length)
 })

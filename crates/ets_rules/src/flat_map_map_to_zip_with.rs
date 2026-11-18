@@ -47,7 +47,7 @@ pub struct FlatMapMapToZipWithMatch {
     pub map_result: Option<P<Node>>,
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:46 AnalyzeFlatMapMapToZipWith 06db1013556992c9
+// go: internal/rules/flat_map_map_to_zip_with.go:46 AnalyzeFlatMapMapToZipWith 9fcbd750c4d8d203
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go's `isEffectApiStep` and `isFlatMap`
 // closures capture the parser, so they are nested functions that take it; a transformation's callee is never nil,
@@ -128,15 +128,13 @@ pub fn analyze_flat_map_map_to_zip_with(
             if outer_symbols.is_empty() {
                 continue;
             }
-            if flat_map_map_to_zip_with_that_depends_on_outer(
+            if !flat_map_map_to_zip_with_only_mapper_uses_outer(
                 tp,
-                flat_map_callback,
-                &returned_flow,
+                returned,
+                map_callback,
                 &outer_symbols,
-            ) {
-                continue;
-            }
-            if !flat_map_map_to_zip_with_references_any(tp, map_callback, &outer_symbols) {
+            ) || tp.uses_function_own_bindings(flat_map_callback, returned)
+            {
                 continue;
             }
             if flat_map_map_to_zip_with_reyields_outer(tp, flat_map_callback, map_result) {
@@ -167,7 +165,7 @@ pub fn analyze_flat_map_map_to_zip_with(
     matches
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:122 flatMapMapToZipWithPlainParameter 25e62a13050d6c8b
+// go: internal/rules/flat_map_map_to_zip_with.go:120 flatMapMapToZipWithPlainParameter 25e62a13050d6c8b
 //
 // Rust: the parameter is a node of a parameter list, never nil, so Go's nil check drops.
 pub(crate) fn flat_map_map_to_zip_with_plain_parameter(parameter: P<Node>) -> bool {
@@ -186,60 +184,29 @@ pub(crate) fn flat_map_map_to_zip_with_plain_parameter(parameter: P<Node>) -> bo
         || name.kind() == Kind::ArrayBindingPattern
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:137 flatMapMapToZipWithThatParts 465519f034a09224
-//
-// Rust: the subject's node is an `Option` (Go's slice may hold nil; the caller skips it); a transformation's
-// callee is never nil.
-pub(crate) fn flat_map_map_to_zip_with_that_parts(
-    returned_flow: &PipingFlow,
-) -> Vec<Option<P<Node>>> {
-    let mut parts = vec![returned_flow.subject().node()];
-    let steps = returned_flow.transformations();
-    for j in 0..steps.len() - 1 {
-        let step = steps.at(j);
-        parts.push(Some(step.callee()));
-        for (_, &argument) in step.args().all() {
-            parts.push(Some(argument));
-        }
-    }
-    parts
-}
-
-// go: internal/rules/flat_map_map_to_zip_with.go:150 flatMapMapToZipWithThatDependsOnOuter 414a8ceb975fe962
-pub(crate) fn flat_map_map_to_zip_with_that_depends_on_outer(
+// go: internal/rules/flat_map_map_to_zip_with.go:138 flatMapMapToZipWithOnlyMapperUsesOuter 8ef4454430488d95
+// flatMapMapToZipWithOnlyMapperUsesOuter reports whether the outer parameter is
+// used in returned, and only inside mapper: everything else in returned becomes
+// the independent effect that zipWith runs on its own.
+pub(crate) fn flat_map_map_to_zip_with_only_mapper_uses_outer(
     tp: &mut TypeParser<'_>,
-    flat_map_callback: P<Node>,
-    returned_flow: &PipingFlow,
+    returned: P<Node>,
+    mapper: P<Node>,
     outer_symbols: &[P<Symbol>],
 ) -> bool {
-    for part in flat_map_map_to_zip_with_that_parts(returned_flow) {
-        let Some(part) = part else {
-            continue;
-        };
-        if flat_map_map_to_zip_with_references_any(tp, part, outer_symbols)
-            || tp.uses_function_own_bindings(flat_map_callback, part)
-        {
-            return true;
+    let mut used = false;
+    for &symbol in outer_symbols {
+        for reference in tp.references_to_symbol(returned, symbol) {
+            if reference.pos() < mapper.pos() || reference.end() > mapper.end() {
+                return false;
+            }
+            used = true;
         }
     }
-    false
+    used
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:162 flatMapMapToZipWithReferencesAny e22d125c55dec6b3
-pub(crate) fn flat_map_map_to_zip_with_references_any(
-    tp: &mut TypeParser<'_>,
-    root: P<Node>,
-    symbols: &[P<Symbol>],
-) -> bool {
-    for &symbol in symbols {
-        if !tp.references_to_symbol(root, symbol).is_empty() {
-            return true;
-        }
-    }
-    false
-}
-
-// go: internal/rules/flat_map_map_to_zip_with.go:171 flatMapMapToZipWithReyieldsOuter df461a6efd9ff5ea
+// go: internal/rules/flat_map_map_to_zip_with.go:151 flatMapMapToZipWithReyieldsOuter df461a6efd9ff5ea
 //
 // Rust: the outer parameter's name is set (checked by `flat_map_map_to_zip_with_plain_parameter`), as Go assumes.
 pub(crate) fn flat_map_map_to_zip_with_reyields_outer(
@@ -259,7 +226,7 @@ pub(crate) fn flat_map_map_to_zip_with_reyields_outer(
         && tp.get_symbol_at_location(map_result) == tp.get_symbol_at_location(name)
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:179 flatMapMapToZipWithUnaryMapper 626c6e5add2b9bfa
+// go: internal/rules/flat_map_map_to_zip_with.go:159 flatMapMapToZipWithUnaryMapper 626c6e5add2b9bfa
 pub(crate) fn flat_map_map_to_zip_with_unary_mapper(mapper: P<Node>) -> bool {
     let mut values = 0;
     for &parameter in mapper.parameters() {
@@ -274,7 +241,7 @@ pub(crate) fn flat_map_map_to_zip_with_unary_mapper(mapper: P<Node>) -> bool {
     true
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:196 flatMapMapToZipWithMapCallback 998daecccf0f398a
+// go: internal/rules/flat_map_map_to_zip_with.go:176 flatMapMapToZipWithMapCallback 998daecccf0f398a
 // flatMapMapToZipWithMapCallback accepts any body shape, unlike
 // ParseLazyExpression: the whole body moves into the combiner, so a mapper that
 // branches between several returns is still fine.

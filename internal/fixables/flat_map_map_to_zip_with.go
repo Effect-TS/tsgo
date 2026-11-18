@@ -134,8 +134,8 @@ func flatMapMapToZipWithMapCallbackIsTiedToItsFunction(ctx *fixable.Context, mat
 	eval := ctx.Checker.GetGlobalSymbol("eval", ast.SymbolFlagsValue, nil)
 	moved := append(slices.Clone(mapCallback.Parameters()), mapCallback.Type(), mapCallback.Body())
 	for _, part := range moved {
-		if part != nil && (tp.UsesFunctionOwnBindings(match.FlatMapCallback, part) || tp.UsesFunctionOwnBindings(mapCallback, part) ||
-			eval != nil && tp.ReferencesToSymbol(part, eval).Len() > 0) {
+		// The outer callback's own bindings are already excluded by the rule.
+		if part != nil && (tp.UsesFunctionOwnBindings(mapCallback, part) || eval != nil && tp.ReferencesToSymbol(part, eval).Len() > 0) {
 			return true
 		}
 	}
