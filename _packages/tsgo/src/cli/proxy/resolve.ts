@@ -15,6 +15,7 @@ import {
   isNativeTypescriptVersion,
   type PackageMetadata,
   packagedComponentPath,
+  packageScopes,
   supportedVersions,
   tsrsExecutableName,
   tsrsReplacementTargets,
@@ -111,10 +112,13 @@ const installedTypescriptVersion = (context: ProxyContext) => Effect.gen(functio
   return undefined
 })
 
+// The tsrs version installed in the project, directly or through vite-plus.
 const installedTsrsVersion = (context: ProxyContext) => Effect.gen(function*() {
-  const require = yield* projectRequire(context)
-  const installed = yield* findInstalledPackage(require, "tsrs").pipe(Effect.mapError(toProxyError))
-  return installed?.version
+  for (const require of yield* packageScopes(context.cwd).pipe(Effect.mapError(toProxyError))) {
+    const installed = yield* findInstalledPackage(require, "tsrs").pipe(Effect.mapError(toProxyError))
+    if (installed !== undefined) return installed.version
+  }
+  return undefined
 })
 
 const requireArtifact = (artifactPath: string) => Effect.gen(function*() {
@@ -211,13 +215,9 @@ export interface OxlintInstallation {
 // The oxlint package of the project, installed directly or through vite-plus, with the oxlint-tsgolint package next to
 // it when installed.
 export const findOxlintInstallation = (cwd: string) => Effect.gen(function*() {
-  const path = yield* Path.Path
   const find = (require: NodeJS.Require, packageName: string) =>
     findInstalledPackage(require, packageName).pipe(Effect.mapError(toProxyError))
-  const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
-  const vitePlus = yield* find(cwdRequire, "vite-plus")
-  const scopes = [cwdRequire, ...(vitePlus === undefined ? [] : [nodeModule.createRequire(vitePlus.packageJsonPath)])]
-  for (const require of scopes) {
+  for (const require of yield* packageScopes(cwd).pipe(Effect.mapError(toProxyError))) {
     const oxlint = yield* find(require, "oxlint")
     if (oxlint !== undefined) return { oxlint, tsgolint: yield* find(require, "oxlint-tsgolint") } satisfies OxlintInstallation
   }

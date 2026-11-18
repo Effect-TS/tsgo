@@ -8,7 +8,7 @@ import { chmod, mkdir, mkdtemp, rm, stat, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, describe, expect, it, onTestFinished, vi } from "vitest"
 import * as pkgJson from "../package.json" with { type: "json" }
 import upstreamJson from "../upstream.json" with { type: "json" }
 import { parseProxyInvocation } from "../src/cli/proxy/argv.js"
@@ -51,6 +51,13 @@ const writeArtifact = async (filePath: string, mode = 0o755) => {
   return filePath
 }
 
+// The packaged tsrs of the requested, installed or latest version, with lib.d.ts next to it.
+const writeTsrs = async (context: ProxyContext, version: string) => {
+  const tsrs = await writeArtifact(join(context.packageDirectory, "artifacts", "tsrs", version, "tsrs"), 0o644)
+  await writeFile(join(dirname(tsrs), "lib.d.ts"), "lib")
+  return tsrs
+}
+
 const makeContext = async (overrides: Partial<ProxyContext> = {}): Promise<ProxyContext> => ({
   cwd: await makeTemporaryDirectory(),
   env: { PATH: "/usr/bin" },
@@ -80,6 +87,16 @@ const olderTypescript = typescriptVersions.find((version) => version !== typescr
 const tsrsVersion = upstreamJson.tags.tsrs.latest
 const oxlintVersion = upstreamJson.tags.oxlint.latest
 const tsgolintVersion = upstreamJson.tags["oxlint-tsgolint"].latest
+
+// Supports a second tsrs version, other than the latest, until the test finishes.
+const secondTsrsVersion = "0.0.0-second"
+const supportSecondTsrsVersion = () => {
+  const versions: Record<string, unknown> = upstreamJson.components.tsrs
+  versions[secondTsrsVersion] = versions[tsrsVersion]
+  onTestFinished(() => {
+    delete versions[secondTsrsVersion]
+  })
+}
 
 afterEach(async () => {
   vi.restoreAllMocks()
@@ -283,6 +300,29 @@ describe("proxy tsc and tsrs resolution", () => {
     })
   })
 
+  it("runs the build of the tsrs version installed through vite-plus", async () => {
+    supportSecondTsrsVersion()
+    const context = await makeContext()
+    const vitePlus = await writePackage(context.cwd, "vite-plus", { version: "1.7.0" })
+    await writePackage(vitePlus, "tsrs", { version: secondTsrsVersion })
+    await writeTsrs(context, tsrsVersion)
+    const executable = await writeTsrs(context, secondTsrsVersion)
+    const command = await run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, context))
+    expect(command.file).toBe(executable)
+  })
+
+  it("prefers the tsrs version installed in the project over the one of vite-plus", async () => {
+    supportSecondTsrsVersion()
+    const context = await makeContext()
+    await writePackage(context.cwd, "tsrs", { version: secondTsrsVersion })
+    const vitePlus = await writePackage(context.cwd, "vite-plus", { version: "1.7.0" })
+    await writePackage(vitePlus, "tsrs", { version: tsrsVersion })
+    await writeTsrs(context, tsrsVersion)
+    const executable = await writeTsrs(context, secondTsrsVersion)
+    const command = await run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, context))
+    expect(command.file).toBe(executable)
+  })
+
   it("rejects --tsrs-lint for the tools that do not run Oxlint", async () => {
     const context = await makeContext()
     for (const tool of ["tsc", "tsrs"] as const) {
@@ -353,13 +393,6 @@ describe("proxy oxlint resolution", () => {
     expect((await stat(tsgolint)).mode & 0o777).toBe(0o755)
   })
 
-  // The packaged tsrs of the requested, installed or latest version, with lib.d.ts next to it.
-  const writeTsrs = async (context: ProxyContext, version: string) => {
-    const tsrs = await writeArtifact(join(context.packageDirectory, "artifacts", "tsrs", version, "tsrs"), 0o644)
-    await writeFile(join(dirname(tsrs), "lib.d.ts"), "lib")
-    return tsrs
-  }
-
   it("runs the type-aware rules on the packaged tsrs with --tsrs-lint, instead of the packaged tsgolint", async () => {
     const context = await makeContext({ env: { PATH: "/usr/bin", EFFECT_TSGO_TSGOLINT_MODE: "stale" } })
     const bin = await installOxlint(context.cwd, { tsgolint: true })
@@ -382,6 +415,25 @@ describe("proxy oxlint resolution", () => {
       })
     }
     expect((await stat(tsrs)).mode & 0o777).toBe(0o755)
+  })
+
+  it("runs the type-aware rules on the packaged tsrs of the version installed through vite-plus", async () => {
+    supportSecondTsrsVersion()
+    const context = await makeContext()
+    const vitePlus = await writePackage(context.cwd, "vite-plus", { version: "1.7.0" })
+    const bin = await installOxlint(vitePlus)
+    await writePackage(vitePlus, "tsrs", { version: secondTsrsVersion })
+    const binding = await writeArtifact(
+      join(context.packageDirectory, "artifacts", "oxlint", oxlintVersion, "oxlint.linux-x64-gnu.node")
+    )
+    await writeTsrs(context, tsrsVersion)
+    const tsrs = await writeTsrs(context, secondTsrsVersion)
+    expect(await run(resolveProxyCommand({ tool: "oxlint", version: undefined, tsrsLint: { version: undefined }, args: [] }, context)))
+      .toEqual({
+        file: "/usr/bin/node",
+        args: [bin],
+        env: { PATH: "/usr/bin", ...bridgeEnv("/pkg/lib/oxlint-bridge.cjs", { binding, tsrs }) }
+      })
   })
 
   it("selects tsrs without oxlint-tsgolint and ignores an unsupported oxlint-tsgolint", async () => {
