@@ -64,7 +64,7 @@ const single = () => { return 3 }
     });
 }
 
-// go test: internal/typeparser/lazy_expression_test.go:39 TestParseLazyExpressionFlags 00162875d7880f2b
+// go test: internal/typeparser/lazy_expression_test.go:39 TestParseLazyExpressionFlags 419abdf31496dca4
 #[test]
 fn test_parse_lazy_expression_flags() {
     run(|t| {
@@ -78,6 +78,8 @@ const parenthesized = (((() => 1)))
 const asyncFunction = async () => 1
 const generator = function* () { return 1 }
 const parameter = (value: number) => value
+const genericArrow = <A,>(value: A) => value
+const genericFunction = function <A>(value: A) { return value }
 ",
         );
 
@@ -118,6 +120,18 @@ const parameter = (value: number) => value
         .is_some()
         {
             t.fatal("expected Thunk to reject a function with parameters");
+        }
+        for name in ["genericArrow", "genericFunction"] {
+            let generic = find_variable_initializer(t, sf, name);
+            if parse_lazy_expression(generic, LazyExpressionFlags::None).is_some() {
+                t.fatal(sprintf!("%s: expected zero flags to reject a generic function", name));
+            }
+            if parse_lazy_expression(generic, LazyExpressionFlags::AllowTypeParameters).is_none() {
+                t.fatal(sprintf!(
+                    "%s: expected AllowTypeParameters to accept a generic function",
+                    name
+                ));
+            }
         }
     });
 }

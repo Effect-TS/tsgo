@@ -38,6 +38,9 @@ type FlatMapMapToZipWithMatch struct {
 	FlatMapCallback *ast.Node
 	ReturnedFlow    *typeparser.PipingFlow
 	MapCallback     *ast.Node
+	// MapResult is what MapCallback returns when its body is an expression or a
+	// single return, and nil otherwise.
+	MapResult *ast.Node
 }
 
 func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []FlatMapMapToZipWithMatch {
@@ -54,14 +57,13 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 			i := sequence.Start()
 			step := sequence.Transformations().At(0)
 
-			flatMapCallback := flatMapMapToZipWithFunction(step.Args().At(0))
-			if flatMapCallback == nil || len(flatMapCallback.Parameters()) != 1 || !flatMapMapToZipWithPlainParameter(flatMapCallback.Parameters()[0]) {
+			parsedFlatMapCallback := typeparser.ParseLazyExpression(step.Args().At(0), typeparser.LazyExpressionAllowTypeParameters)
+			if parsedFlatMapCallback == nil || parsedFlatMapCallback.Params().Len() != 1 ||
+				!flatMapMapToZipWithPlainParameter(parsedFlatMapCallback.Params().At(0)) {
 				continue
 			}
-			returned := FlatMapMapToZipWithReturnedExpression(flatMapCallback)
-			if returned == nil {
-				continue
-			}
+			flatMapCallback := parsedFlatMapCallback.Node()
+			returned := ast.SkipParentheses(parsedFlatMapCallback.Expression())
 			returnedFlow := tp.LongestPipingFlowAt(returned, false)
 			if returnedFlow == nil || returnedFlow.Node() != returned || returnedFlow.Transformations().Len() == 0 {
 				continue
@@ -72,9 +74,13 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 				continue
 			}
 
-			mapCallback := flatMapMapToZipWithFunction(mapStep.Args().At(0))
+			mapCallback := flatMapMapToZipWithMapCallback(mapStep.Args().At(0))
 			if mapCallback == nil || !flatMapMapToZipWithUnaryMapper(mapCallback) {
 				continue
+			}
+			var mapResult *ast.Node
+			if parsedMapCallback := typeparser.ParseLazyExpression(mapCallback, typeparser.LazyExpressionAllowTypeParameters); parsedMapCallback != nil {
+				mapResult = ast.SkipParentheses(parsedMapCallback.Expression())
 			}
 
 			var outerSymbols []*ast.Symbol
@@ -90,7 +96,7 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 			if !flatMapMapToZipWithReferencesAny(tp, mapCallback, outerSymbols) {
 				continue
 			}
-			if flatMapMapToZipWithReyieldsOuter(tp, flatMapCallback, mapCallback) {
+			if flatMapMapToZipWithReyieldsOuter(tp, flatMapCallback, mapResult) {
 				continue
 			}
 
@@ -106,6 +112,7 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 				FlatMapCallback: flatMapCallback,
 				ReturnedFlow:    returnedFlow,
 				MapCallback:     mapCallback,
+				MapResult:       mapResult,
 			})
 		}
 	}
@@ -161,13 +168,12 @@ func flatMapMapToZipWithReferencesAny(tp *typeparser.TypeParser, root *ast.Node,
 	return false
 }
 
-func flatMapMapToZipWithReyieldsOuter(tp *typeparser.TypeParser, flatMapCallback, mapCallback *ast.Node) bool {
+func flatMapMapToZipWithReyieldsOuter(tp *typeparser.TypeParser, flatMapCallback, mapResult *ast.Node) bool {
 	name := flatMapCallback.Parameters()[0].Name()
 	if name.Kind != ast.KindIdentifier {
 		return false
 	}
-	returned := FlatMapMapToZipWithReturnedExpression(mapCallback)
-	return returned != nil && returned.Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(returned) == tp.GetSymbolAtLocation(name)
+	return mapResult != nil && mapResult.Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(mapResult) == tp.GetSymbolAtLocation(name)
 }
 
 func flatMapMapToZipWithUnaryMapper(mapper *ast.Node) bool {
@@ -184,37 +190,17 @@ func flatMapMapToZipWithUnaryMapper(mapper *ast.Node) bool {
 	return true
 }
 
-func flatMapMapToZipWithFunction(node *ast.Node) *ast.Node {
+// flatMapMapToZipWithMapCallback accepts any body shape, unlike
+// ParseLazyExpression: the whole body moves into the combiner, so a mapper that
+// branches between several returns is still fine.
+func flatMapMapToZipWithMapCallback(node *ast.Node) *ast.Node {
 	node = ast.SkipParentheses(node)
-	if node == nil || ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsAsync != 0 {
+	if node == nil {
 		return nil
 	}
-	switch node.Kind {
-	case ast.KindArrowFunction:
-	case ast.KindFunctionExpression:
-		if node.AsFunctionExpression().AsteriskToken != nil {
-			return nil
-		}
-	default:
-		return nil
-	}
-	if node.Body() == nil {
+	isNonGeneratorFunction := ast.IsArrowFunction(node) || ast.IsFunctionExpression(node) && node.AsFunctionExpression().AsteriskToken == nil
+	if !isNonGeneratorFunction || node.Body() == nil || ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsAsync != 0 {
 		return nil
 	}
 	return node
-}
-
-func FlatMapMapToZipWithReturnedExpression(fn *ast.Node) *ast.Node {
-	body := fn.Body()
-	if body.Kind != ast.KindBlock {
-		return ast.SkipParentheses(body)
-	}
-	statements := body.AsBlock().Statements
-	if statements == nil || len(statements.Nodes) != 1 || statements.Nodes[0].Kind != ast.KindReturnStatement {
-		return nil
-	}
-	if expression := statements.Nodes[0].AsReturnStatement().Expression; expression != nil {
-		return ast.SkipParentheses(expression)
-	}
-	return nil
 }

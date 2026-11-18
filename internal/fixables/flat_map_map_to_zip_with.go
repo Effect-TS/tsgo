@@ -144,7 +144,7 @@ func flatMapMapToZipWithMapCallbackIsTiedToItsFunction(ctx *fixable.Context, mat
 
 func flatMapMapToZipWithMapCallbackIsZip(tp *typeparser.TypeParser, match *rules.FlatMapMapToZipWithMatch) bool {
 	mapCallback := match.MapCallback
-	pair := rules.FlatMapMapToZipWithReturnedExpression(mapCallback)
+	pair := match.MapResult
 	if pair == nil || len(mapCallback.Parameters()) != 1 {
 		return false
 	}

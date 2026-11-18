@@ -35,10 +35,12 @@ const (
 	LazyExpressionAllowGenerator
 	// LazyExpressionAllowMultiStatementBlock accepts statements before a sole final return.
 	LazyExpressionAllowMultiStatementBlock
+	// LazyExpressionAllowTypeParameters additionally accepts generic functions.
+	LazyExpressionAllowTypeParameters
 )
 
 // ParseLazyExpression parses an arrow function or function expression, extracting its inner expression.
-// By default, only synchronous, non-generator functions are accepted.
+// By default, only synchronous, non-generator, non-generic functions are accepted.
 // Returns nil if the node is not a valid lazy expression.
 func ParseLazyExpression(node *ast.Node, flags LazyExpressionFlags) *ParsedLazyExpression {
 	node = ast.SkipParentheses(node)
@@ -71,8 +73,8 @@ func ParseLazyExpression(node *ast.Node, flags LazyExpressionFlags) *ParsedLazyE
 		return nil
 	}
 
-	// Reject functions with type parameters
-	if typeParams != nil && len(typeParams.Nodes) > 0 {
+	// Reject functions with type parameters unless they are allowed.
+	if flags&LazyExpressionAllowTypeParameters == 0 && typeParams != nil && len(typeParams.Nodes) > 0 {
 		return nil
 	}
 

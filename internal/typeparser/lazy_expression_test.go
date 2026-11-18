@@ -45,6 +45,8 @@ const parenthesized = (((() => 1)))
 const asyncFunction = async () => 1
 const generator = function* () { return 1 }
 const parameter = (value: number) => value
+const genericArrow = <A,>(value: A) => value
+const genericFunction = function <A>(value: A) { return value }
 `)
 	defer done()
 
@@ -70,5 +72,14 @@ const parameter = (value: number) => value
 	}
 	if ParseLazyExpression(findVariableInitializer(t, sf, "parameter"), LazyExpressionThunk) != nil {
 		t.Fatal("expected Thunk to reject a function with parameters")
+	}
+	for _, name := range []string{"genericArrow", "genericFunction"} {
+		generic := findVariableInitializer(t, sf, name)
+		if ParseLazyExpression(generic, LazyExpressionNone) != nil {
+			t.Fatalf("%s: expected zero flags to reject a generic function", name)
+		}
+		if ParseLazyExpression(generic, LazyExpressionAllowTypeParameters) == nil {
+			t.Fatalf("%s: expected AllowTypeParameters to accept a generic function", name)
+		}
 	}
 }
