@@ -64,7 +64,7 @@ const single = () => { return 3 }
     });
 }
 
-// go test: internal/typeparser/lazy_expression_test.go:39 TestParseLazyExpressionFlags 419abdf31496dca4
+// go test: internal/typeparser/lazy_expression_test.go:39 TestParseLazyExpressionFlags 7737b51fbbc05164
 #[test]
 fn test_parse_lazy_expression_flags() {
     run(|t| {
@@ -80,6 +80,8 @@ const generator = function* () { return 1 }
 const parameter = (value: number) => value
 const genericArrow = <A,>(value: A) => value
 const genericFunction = function <A>(value: A) { return value }
+const two = (a: number, b: number) => a + b
+const thisAndValue = function (this: void, value: number) { return value }
 ",
         );
 
@@ -131,6 +133,29 @@ const genericFunction = function <A>(value: A) { return value }
                     "%s: expected AllowTypeParameters to accept a generic function",
                     name
                 ));
+            }
+        }
+        // Rust: Go's map literal is a slice of pairs; the cases are independent, so order does not matter.
+        let at_most = LazyExpressionFlags::AtMostOneParameter;
+        let at_least = LazyExpressionFlags::AtLeastOneParameter;
+        for (name, want) in [
+            ("sync", [(at_most, true), (at_least, false)]),
+            ("parameter", [(at_most, true), (at_least, true)]),
+            ("two", [(at_most, false), (at_least, true)]),
+            ("thisAndValue", [(at_most, false), (at_least, true)]),
+        ] {
+            for (flags, accepted) in want {
+                let got =
+                    parse_lazy_expression(find_variable_initializer(t, sf, name), flags).is_some();
+                if got != accepted {
+                    t.fatal(sprintf!(
+                        "%s with flags %d: accepted = %v, want %v",
+                        name,
+                        flags.0,
+                        got,
+                        accepted
+                    ));
+                }
             }
         }
     });

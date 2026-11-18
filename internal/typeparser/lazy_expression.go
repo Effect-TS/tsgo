@@ -37,6 +37,12 @@ const (
 	LazyExpressionAllowMultiStatementBlock
 	// LazyExpressionAllowTypeParameters additionally accepts generic functions.
 	LazyExpressionAllowTypeParameters
+	// LazyExpressionAtMostOneParameter rejects functions with more than one
+	// parameter. A `this` parameter counts. Combine it with
+	// LazyExpressionAtLeastOneParameter to require exactly one.
+	LazyExpressionAtMostOneParameter
+	// LazyExpressionAtLeastOneParameter rejects functions with no parameters.
+	LazyExpressionAtLeastOneParameter
 )
 
 // ParseLazyExpression parses an arrow function or function expression, extracting its inner expression.
@@ -91,6 +97,10 @@ func ParseLazyExpression(node *ast.Node, flags LazyExpressionFlags) *ParsedLazyE
 	var paramNodes []*ast.Node
 	if params != nil {
 		paramNodes = params.Nodes
+	}
+	if flags&LazyExpressionAtMostOneParameter != 0 && len(paramNodes) > 1 ||
+		flags&LazyExpressionAtLeastOneParameter != 0 && len(paramNodes) == 0 {
+		return nil
 	}
 
 	// Extract the inner expression

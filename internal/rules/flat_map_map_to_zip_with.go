@@ -57,9 +57,9 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 			i := sequence.Start()
 			step := sequence.Transformations().At(0)
 
-			parsedFlatMapCallback := typeparser.ParseLazyExpression(step.Args().At(0), typeparser.LazyExpressionAllowTypeParameters)
-			if parsedFlatMapCallback == nil || parsedFlatMapCallback.Params().Len() != 1 ||
-				!flatMapMapToZipWithPlainParameter(parsedFlatMapCallback.Params().At(0)) {
+			parsedFlatMapCallback := typeparser.ParseLazyExpression(step.Args().At(0),
+				typeparser.LazyExpressionAllowTypeParameters|typeparser.LazyExpressionAtMostOneParameter|typeparser.LazyExpressionAtLeastOneParameter)
+			if parsedFlatMapCallback == nil || !flatMapMapToZipWithPlainParameter(parsedFlatMapCallback.Params().At(0)) {
 				continue
 			}
 			flatMapCallback := parsedFlatMapCallback.Node()
@@ -74,8 +74,9 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 				continue
 			}
 
-			parsedMapCallback := typeparser.ParseLazyExpression(mapStep.Args().At(0), typeparser.LazyExpressionAllowTypeParameters)
-			if parsedMapCallback == nil || !flatMapMapToZipWithUnaryMapper(parsedMapCallback.Node()) {
+			parsedMapCallback := typeparser.ParseLazyExpression(mapStep.Args().At(0),
+				typeparser.LazyExpressionAllowTypeParameters|typeparser.LazyExpressionAtMostOneParameter)
+			if parsedMapCallback == nil || parsedMapCallback.Params().Len() == 1 && !flatMapMapToZipWithPlainParameter(parsedMapCallback.Params().At(0)) {
 				continue
 			}
 			mapCallback := parsedMapCallback.Node()
@@ -152,18 +153,4 @@ func flatMapMapToZipWithReyieldsOuter(tp *typeparser.TypeParser, flatMapCallback
 		return false
 	}
 	return mapResult.Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(mapResult) == tp.GetSymbolAtLocation(name)
-}
-
-func flatMapMapToZipWithUnaryMapper(mapper *ast.Node) bool {
-	values := 0
-	for _, parameter := range mapper.Parameters() {
-		if ast.IsThisParameter(parameter) {
-			continue
-		}
-		values++
-		if values > 1 || !flatMapMapToZipWithPlainParameter(parameter) {
-			return false
-		}
-	}
-	return true
 }

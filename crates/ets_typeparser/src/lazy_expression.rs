@@ -46,7 +46,7 @@ impl ParsedLazyExpression {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub struct LazyExpressionFlags(pub u8);
 
-// go: internal/typeparser/lazy_expression.go:28 LazyExpressionNone af12eb2e947c2b64
+// go: internal/typeparser/lazy_expression.go:28 LazyExpressionNone eb6c8989b8accd62
 impl LazyExpressionFlags {
     pub const None: LazyExpressionFlags = LazyExpressionFlags(0);
     // LazyExpressionThunk requires a function with no parameters.
@@ -60,6 +60,12 @@ impl LazyExpressionFlags {
     pub const AllowMultiStatementBlock: LazyExpressionFlags = LazyExpressionFlags(1 << 4);
     // LazyExpressionAllowTypeParameters additionally accepts generic functions.
     pub const AllowTypeParameters: LazyExpressionFlags = LazyExpressionFlags(1 << 5);
+    // LazyExpressionAtMostOneParameter rejects functions with more than one
+    // parameter. A `this` parameter counts. Combine it with
+    // LazyExpressionAtLeastOneParameter to require exactly one.
+    pub const AtMostOneParameter: LazyExpressionFlags = LazyExpressionFlags(1 << 6);
+    // LazyExpressionAtLeastOneParameter rejects functions with no parameters.
+    pub const AtLeastOneParameter: LazyExpressionFlags = LazyExpressionFlags(1 << 7);
 
     /// Rust-only: Go's `flags&mask != 0`.
     pub fn intersects(self, mask: LazyExpressionFlags) -> bool {
@@ -74,7 +80,7 @@ impl BitOr for LazyExpressionFlags {
     }
 }
 
-// go: internal/typeparser/lazy_expression.go:45 ParseLazyExpression 5a4a00156bab0fa4
+// go: internal/typeparser/lazy_expression.go:51 ParseLazyExpression 0700179d1330dca7
 // ParseLazyExpression parses an arrow function or function expression, extracting its inner expression.
 // By default, only synchronous, non-generator, non-generic functions are accepted.
 // Returns nil if the node is not a valid lazy expression.
@@ -132,6 +138,12 @@ pub fn parse_lazy_expression(
 
     // Build params list
     let param_nodes = params.map(|params| params.nodes());
+    let param_count = param_nodes.map_or(0, <[P<Node>]>::len);
+    if flags.intersects(LazyExpressionFlags::AtMostOneParameter) && param_count > 1
+        || flags.intersects(LazyExpressionFlags::AtLeastOneParameter) && param_count == 0
+    {
+        return None;
+    }
 
     // Extract the inner expression
     let expr = if body.kind() == Kind::Block {

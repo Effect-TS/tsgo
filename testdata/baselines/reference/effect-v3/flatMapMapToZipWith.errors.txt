@@ -15,20 +15,19 @@ Effect version: 3.19.19
 /.src/flatMapMapToZipWith.ts(79,42): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
 /.src/flatMapMapToZipWith.ts(84,35): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
 /.src/flatMapMapToZipWith.ts(88,40): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(92,36): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(106,30): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(113,29): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(145,34): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(150,28): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(154,31): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(159,38): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(168,37): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(180,28): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(184,34): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-/.src/flatMapMapToZipWith.ts(190,37): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(105,30): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(112,29): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(144,34): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(149,28): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(153,31): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(158,38): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(167,37): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(179,28): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(183,34): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+/.src/flatMapMapToZipWith.ts(189,37): suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
 
 
-==== /.src/flatMapMapToZipWith.ts (25 errors) ====
+==== /.src/flatMapMapToZipWith.ts (24 errors) ====
     // @effect-v3
     import { Clock, Context, Effect, Either, Option, pipe } from "effect"
     import * as E from "effect/Effect"
@@ -146,11 +145,8 @@ Effect version: 3.19.19
                                            ~~~~~~~~~~~~~~
 !!! suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
     
-    // MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-    // parameter cannot be prepended to its parameter list (TS2680).
+    // MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
     export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
-                                       ~~~~~~~~~~~~~~
-!!! suggestion TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
       Effect.map(getConfig, function(this: void, config: Config) {
         return user.name + config.locale
       }))

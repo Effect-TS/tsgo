@@ -479,8 +479,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale

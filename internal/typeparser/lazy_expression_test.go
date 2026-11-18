@@ -47,6 +47,8 @@ const generator = function* () { return 1 }
 const parameter = (value: number) => value
 const genericArrow = <A,>(value: A) => value
 const genericFunction = function <A>(value: A) { return value }
+const two = (a: number, b: number) => a + b
+const thisAndValue = function (this: void, value: number) { return value }
 `)
 	defer done()
 
@@ -80,6 +82,18 @@ const genericFunction = function <A>(value: A) { return value }
 		}
 		if ParseLazyExpression(generic, LazyExpressionAllowTypeParameters) == nil {
 			t.Fatalf("%s: expected AllowTypeParameters to accept a generic function", name)
+		}
+	}
+	for name, want := range map[string]map[LazyExpressionFlags]bool{
+		"sync":         {LazyExpressionAtMostOneParameter: true, LazyExpressionAtLeastOneParameter: false},
+		"parameter":    {LazyExpressionAtMostOneParameter: true, LazyExpressionAtLeastOneParameter: true},
+		"two":          {LazyExpressionAtMostOneParameter: false, LazyExpressionAtLeastOneParameter: true},
+		"thisAndValue": {LazyExpressionAtMostOneParameter: false, LazyExpressionAtLeastOneParameter: true},
+	} {
+		for flags, accepted := range want {
+			if got := ParseLazyExpression(findVariableInitializer(t, sf, name), flags) != nil; got != accepted {
+				t.Fatalf("%s with flags %d: accepted = %v, want %v", name, flags, got, accepted)
+			}
 		}
 	}
 }

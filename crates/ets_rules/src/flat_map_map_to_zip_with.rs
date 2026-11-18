@@ -47,7 +47,7 @@ pub struct FlatMapMapToZipWithMatch {
     pub map_result: P<Node>,
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:46 AnalyzeFlatMapMapToZipWith 8a78aa7027131600
+// go: internal/rules/flat_map_map_to_zip_with.go:46 AnalyzeFlatMapMapToZipWith 28803c66d58fee94
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go's `isEffectApiStep` and `isFlatMap`
 // closures capture the parser, so they are nested functions that take it; a transformation's callee is never nil,
@@ -78,16 +78,16 @@ pub fn analyze_flat_map_map_to_zip_with(
             let i = sequence.start();
             let step = sequence.transformations().at(0).clone();
 
-            let parsed_flat_map_callback =
-                parse_lazy_expression(*step.args().at(0), LazyExpressionFlags::AllowTypeParameters);
+            let parsed_flat_map_callback = parse_lazy_expression(
+                *step.args().at(0),
+                LazyExpressionFlags::AllowTypeParameters
+                    | LazyExpressionFlags::AtMostOneParameter
+                    | LazyExpressionFlags::AtLeastOneParameter,
+            );
             let Some(parsed_flat_map_callback) = parsed_flat_map_callback else {
                 continue;
             };
-            if parsed_flat_map_callback.params().len() != 1
-                || !flat_map_map_to_zip_with_plain_parameter(
-                    *parsed_flat_map_callback.params().at(0),
-                )
-            {
+            if !flat_map_map_to_zip_with_plain_parameter(*parsed_flat_map_callback.params().at(0)) {
                 continue;
             }
             let flat_map_callback = parsed_flat_map_callback.node();
@@ -107,12 +107,14 @@ pub fn analyze_flat_map_map_to_zip_with(
 
             let parsed_map_callback = parse_lazy_expression(
                 *map_step.args().at(0),
-                LazyExpressionFlags::AllowTypeParameters,
+                LazyExpressionFlags::AllowTypeParameters | LazyExpressionFlags::AtMostOneParameter,
             );
             let Some(parsed_map_callback) = parsed_map_callback else {
                 continue;
             };
-            if !flat_map_map_to_zip_with_unary_mapper(parsed_map_callback.node()) {
+            if parsed_map_callback.params().len() == 1
+                && !flat_map_map_to_zip_with_plain_parameter(*parsed_map_callback.params().at(0))
+            {
                 continue;
             }
             let map_callback = parsed_map_callback.node();
@@ -164,7 +166,7 @@ pub fn analyze_flat_map_map_to_zip_with(
     matches
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:118 flatMapMapToZipWithPlainParameter 25e62a13050d6c8b
+// go: internal/rules/flat_map_map_to_zip_with.go:119 flatMapMapToZipWithPlainParameter 25e62a13050d6c8b
 //
 // Rust: the parameter is a node of a parameter list, never nil, so Go's nil check drops.
 pub(crate) fn flat_map_map_to_zip_with_plain_parameter(parameter: P<Node>) -> bool {
@@ -183,7 +185,7 @@ pub(crate) fn flat_map_map_to_zip_with_plain_parameter(parameter: P<Node>) -> bo
         || name.kind() == Kind::ArrayBindingPattern
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:136 flatMapMapToZipWithOnlyMapperUsesOuter 8ef4454430488d95
+// go: internal/rules/flat_map_map_to_zip_with.go:137 flatMapMapToZipWithOnlyMapperUsesOuter 8ef4454430488d95
 // flatMapMapToZipWithOnlyMapperUsesOuter reports whether the outer parameter is
 // used in returned, and only inside mapper: everything else in returned becomes
 // the independent effect that zipWith runs on its own.
@@ -205,7 +207,7 @@ pub(crate) fn flat_map_map_to_zip_with_only_mapper_uses_outer(
     used
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:149 flatMapMapToZipWithReyieldsOuter 18d76e458c8bccf0
+// go: internal/rules/flat_map_map_to_zip_with.go:150 flatMapMapToZipWithReyieldsOuter 18d76e458c8bccf0
 //
 // Rust: the outer parameter's name is set (checked by `flat_map_map_to_zip_with_plain_parameter`), as Go assumes.
 pub(crate) fn flat_map_map_to_zip_with_reyields_outer(
@@ -220,19 +222,4 @@ pub(crate) fn flat_map_map_to_zip_with_reyields_outer(
     }
     map_result.kind() == Kind::Identifier
         && tp.get_symbol_at_location(map_result) == tp.get_symbol_at_location(name)
-}
-
-// go: internal/rules/flat_map_map_to_zip_with.go:157 flatMapMapToZipWithUnaryMapper 626c6e5add2b9bfa
-pub(crate) fn flat_map_map_to_zip_with_unary_mapper(mapper: P<Node>) -> bool {
-    let mut values = 0;
-    for &parameter in mapper.parameters() {
-        if ast::is_this_parameter(parameter) {
-            continue;
-        }
-        values += 1;
-        if values > 1 || !flat_map_map_to_zip_with_plain_parameter(parameter) {
-            return false;
-        }
-    }
-    true
 }

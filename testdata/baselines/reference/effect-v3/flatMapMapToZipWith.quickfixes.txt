@@ -71,48 +71,44 @@
   Fix 1: "Disable flatMapMapToZipWith for entire file"
   Fix 2: "Replace with Effect.zipWith"
 
-[D16] (92:36-92:50) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D16] (105:30-105:44) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D17] (106:30-106:44) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D17] (112:29-112:43) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D18] (113:29-113:43) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D18] (144:34-144:48) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D19] (145:34-145:48) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D19] (149:28-149:42) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D20] (150:28-150:42) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
-  Fix 0: "Disable flatMapMapToZipWith for this line"
-  Fix 1: "Disable flatMapMapToZipWith for entire file"
-
-[D21] (154:31-154:45) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D20] (153:31-153:45) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
   Fix 2: "Replace with Effect.zipWith"
 
-[D22] (159:38-159:52) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D21] (158:38-158:52) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D23] (168:37-168:51) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D22] (167:37-167:51) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D24] (180:28-180:42) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D23] (179:28-179:42) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D25] (184:34-184:48) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D24] (183:34-183:48) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
-[D26] (190:37-190:51) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+[D25] (189:37-189:51) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
   Fix 0: "Disable flatMapMapToZipWith for this line"
   Fix 1: "Disable flatMapMapToZipWith for entire file"
 
@@ -215,8 +211,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -467,8 +462,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -719,8 +713,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -969,8 +962,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -1221,8 +1213,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -1473,8 +1464,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -1725,8 +1715,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -1977,8 +1966,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -2235,8 +2223,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -2492,8 +2479,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -2744,8 +2730,7 @@ export const outerOptionalAlone = Effect.zipWith(getName, getCount, (a?: string)
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -2996,8 +2981,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -3180,13 +3164,7 @@ skipped by default
 === [D20] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
 skipped by default
 
-=== [D21] Fix 0: "Disable flatMapMapToZipWith for this line" ===
-skipped by default
-
-=== [D21] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
-skipped by default
-
-=== [D21] Fix 2: "Replace with Effect.zipWith" ===
+=== [D20] Fix 2: "Replace with Effect.zipWith" ===
 
 --- file:///.src/flatMapMapToZipWith.ts ---
 // @effect-v3
@@ -3278,8 +3256,7 @@ export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect
 // Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
 export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 
-// MUST TRIGGER, NO FIX: the mapper declares a `this` parameter, which must stay first, so the outer
-// parameter cannot be prepended to its parameter list (TS2680).
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
 export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
   Effect.map(getConfig, function(this: void, config: Config) {
     return user.name + config.locale
@@ -3432,6 +3409,12 @@ export const optionNested = Option.flatMap(Option.some(1), (a) => Option.map(Opt
 export const outerAndThen = Effect.andThen(getUser, (user) => Effect.map(getConfig, (config) => user.name + config.locale))
 
 
+=== [D21] Fix 0: "Disable flatMapMapToZipWith for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
+skipped by default
+
 === [D22] Fix 0: "Disable flatMapMapToZipWith for this line" ===
 skipped by default
 
@@ -3454,10 +3437,4 @@ skipped by default
 skipped by default
 
 === [D25] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
-skipped by default
-
-=== [D26] Fix 0: "Disable flatMapMapToZipWith for this line" ===
-skipped by default
-
-=== [D26] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
 skipped by default
