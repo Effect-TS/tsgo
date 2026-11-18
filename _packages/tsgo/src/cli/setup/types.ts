@@ -17,7 +17,8 @@ export interface FileInput {
 }
 
 export type Editor = "vscode" | "nvim" | "emacs"
-export type Integration = "typescript" | "oxlint"
+// `tsrs` is not chosen: it goes with `oxlint` when the project's vite-plus lints with tsrs (Target.create).
+export type Integration = "typescript" | "oxlint" | "tsrs"
 
 export interface PackageDependency {
   readonly dependencyType: "dependencies" | "devDependencies"

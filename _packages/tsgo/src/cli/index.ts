@@ -24,7 +24,12 @@ import {
   propagateDiagnosticsExit,
   runDiagnosticsBinary
 } from "./diagnostics.js"
-import { ensureIntegrationSelected, integrationFlags, IntegrationSelectionError } from "./integrationFlags.js"
+import {
+  ensureIntegrationSelected,
+  integrationFlags,
+  IntegrationSelectionError,
+  selectedComponents
+} from "./integrationFlags.js"
 import { parseProxyInvocation, runProxy } from "./proxy/index.js"
 import { setupCommand } from "./setup/index.js"
 import * as pkgJson from "../../package.json" with { type: "json" }
@@ -33,17 +38,6 @@ class ChmodBinaryError extends Data.TaggedError("ChmodBinaryError")<{ readonly t
   get message(): string {
     return `Failed to set executable permissions on ${this.targetPath}.`
   }
-}
-
-const selectedComponents = (typescript: boolean, oxlint: boolean, tsrs: boolean): ReadonlySet<Component> => {
-  const components = new Set<Component>()
-  if (typescript) components.add("typescript")
-  if (oxlint) {
-    components.add("oxlint")
-    components.add("oxlint-tsgolint")
-  }
-  if (tsrs) components.add("tsrs")
-  return components
 }
 
 const discoverSelected = (

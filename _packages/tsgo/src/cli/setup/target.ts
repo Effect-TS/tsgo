@@ -2,6 +2,7 @@ import * as Option from "effect/Option"
 import * as Effect from "effect/Effect"
 import * as Path from "effect/Path"
 import { defaultTypescriptPackageNames } from "./consts.js"
+import { vitePlusLintsWithTsrs } from "./patch-command.js"
 import type { RuleSeverity } from "./rule-info.js"
 import type { Assessment } from "./types.js"
 import type { Editor, Integration, Target } from "./types.js"
@@ -119,7 +120,12 @@ export const create = (
           : assessment.packageJson.oxlintTsgolintVersion,
         prepareScript: true,
         managePrepareScript: true,
-        integrations
+        // The Oxlint integration of a vite-plus that lints with tsrs patches that tsrs as well: `vp lint` runs vite-plus's
+        // tsrs-lint even next to an oxlint of the project's own.
+        integrations: useOxlint &&
+            Option.exists(assessment.packageJson.vitePlusVersion, (dependency) => vitePlusLintsWithTsrs(dependency.version))
+          ? [...integrations.filter((integration) => integration !== "tsrs"), "tsrs"]
+          : integrations.filter((integration) => integration !== "tsrs")
       },
       tsconfig: {
         schemaPath: useTypescript

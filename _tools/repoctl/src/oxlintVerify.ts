@@ -23,11 +23,11 @@ export class OxlintVerifyError extends Data.TaggedError("OxlintVerifyError")<{
   }
 }
 
-// The type-aware linter a case runs: the packaged tsgolint of the installed oxlint-tsgolint, or the packaged tsrs of
-// `--tsrs-lint` (`flag`: with a version, or without one for the installed tsrs).
+// The type-aware linter a case runs: the packaged tsgolint of the installed oxlint-tsgolint, or the packaged tsrs, of
+// `--tsrs-lint=<version>` (`flag`) or, without a flag, of the tsrs installed instead of oxlint-tsgolint.
 export type OxlintVerifyLinter =
   | { readonly kind: "tsgolint"; readonly version: string }
-  | { readonly kind: "tsrs"; readonly version: string; readonly flag: string }
+  | { readonly kind: "tsrs"; readonly version: string; readonly flag?: string }
 
 export interface OxlintVerifyCase {
   readonly name: string
@@ -44,8 +44,8 @@ const vitePlusProfile = /^vite-plus@(.+)$/
 
 // One case per runtime profile (a vite-plus profile installs vite-plus, any other its oxlint and oxlint-tsgolint) and
 // one per tsrs version (`--tsrs-lint=<version>` on the latest oxlint). A vite-plus that pins tsrs rather than
-// oxlint-tsgolint runs `effect-tsgo --tsrs-lint vp`, which takes the installed tsrs. The `vite-plus` profile repeats
-// the newest `vite-plus@<version>` one, so cases are deduplicated by name.
+// oxlint-tsgolint lints with the packaged build of that tsrs, with no flag. The `vite-plus` profile repeats the newest
+// `vite-plus@<version>` one, so cases are deduplicated by name.
 export const buildOxlintVerifyCases = (upstream: typeof Upstream.Type): ReadonlyArray<OxlintVerifyCase> => {
   const cases = new Map<string, OxlintVerifyCase>()
   const add = (verifyCase: OxlintVerifyCase) => {
@@ -59,7 +59,7 @@ export const buildOxlintVerifyCases = (upstream: typeof Upstream.Type): Readonly
     const linter: OxlintVerifyLinter | undefined = tsgolint !== undefined
       ? { kind: "tsgolint", version: tsgolint }
       : tsrs !== undefined
-      ? { kind: "tsrs", version: tsrs, flag: "--tsrs-lint" }
+      ? { kind: "tsrs", version: tsrs }
       : undefined
     if (linter === undefined) continue
     const vitePlus = vitePlusProfile.exec(profile.name)?.[1]
@@ -220,6 +220,10 @@ export const oxlintChecks = {
       ? undefined
       : "the two diagnostics do not share a span"
   },
+  // A patched tsrs reports `+effect-tsgo.<version>` in its version (_patches/tsrs/021-core-version-suffix.patch).
+  patchedTsrs: (result: ProxyResult) =>
+    expectExit(result, 0) ??
+      (/\+effect-tsgo\./.test(result.output) ? undefined : `not the Effect-patched tsrs:\n${excerpt(result)}`),
   traceRefused: (result: ProxyResult) =>
     result.exitCode === 0
       ? "OXLINT_TSGOLINT_TRACE was accepted by the tsrs linter"
@@ -338,7 +342,7 @@ const runCase = Effect.fnUntraced(function*(
       : `resolved oxlint ${oxlint || "none"} and ${linterPackage} ${linter || "none"}, expected ${verifyCase.oxlint} and ${verifyCase.linter.version}`
   })
 
-  const flag = verifyCase.linter.kind === "tsrs" ? [verifyCase.linter.flag] : []
+  const flag = verifyCase.linter.kind === "tsrs" && verifyCase.linter.flag !== undefined ? [verifyCase.linter.flag] : []
   const run = (tool: "oxlint" | "vp", args: ReadonlyArray<string>, env?: Readonly<Record<string, string>>) =>
     runCommandCaptureSplit(process.execPath, project, [cli, ...flag, tool, ...args], env).pipe(
       Effect.map(({ exitCode, stderr, stdout }): ProxyResult => ({
@@ -360,8 +364,42 @@ const runCase = Effect.fnUntraced(function*(
     }))
 
   if (verifyCase.runner === "vp") {
-    yield* check("vp lint reports floating-effect", run("vp", ["lint", "diagnostic.ts"]), oxlintChecks.reports)
-    yield* check("vp lint on disabled.ts", run("vp", ["lint", "disabled.ts"]), oxlintChecks.silent)
+    const tsrs = verifyCase.linter.kind === "tsrs"
+    yield* check("effect-tsgo vp lint reports floating-effect", run("vp", ["lint", "diagnostic.ts"]), oxlintChecks.reports)
+    yield* check("effect-tsgo vp lint on disabled.ts", run("vp", ["lint", "disabled.ts"]), oxlintChecks.silent)
+    if (tsrs) {
+      // TSRS_BINARY: every tsrs that vite-plus runs through tsrs's launcher is the packaged build.
+      yield* check(
+        "effect-tsgo vp exec tsrs runs the packaged tsrs",
+        run("vp", ["exec", "tsrs", "--version"]),
+        oxlintChecks.patchedTsrs
+      )
+    }
+    // `effect-tsgo patch`, then vite-plus itself: the patched binding, and the patched tsrs that vite-plus lints with.
+    const vp = path.join(project, "node_modules", "vite-plus", "bin", "vp")
+    const plain = (args: ReadonlyArray<string>) =>
+      runCommandCaptureSplit(process.execPath, project, [vp, ...args]).pipe(
+        Effect.map(({ exitCode, stderr, stdout }): ProxyResult => ({
+          exitCode: Number(exitCode),
+          stdout,
+          output: `${stdout}\n${stderr}`
+        }))
+      )
+    yield* check(
+      `effect-tsgo patch --oxlint${tsrs ? " --tsrs" : ""}`,
+      runCommandCaptureSplit(process.execPath, project, [cli, "patch", "--no-typescript", "--oxlint", ...(tsrs ? ["--tsrs"] : [])])
+        .pipe(Effect.map(({ exitCode, stderr, stdout }): ProxyResult => ({
+          exitCode: Number(exitCode),
+          stdout,
+          output: `${stdout}\n${stderr}`
+        }))),
+      (result) => expectExit(result, 0)
+    )
+    yield* check("patched vp lint reports floating-effect", plain(["lint", "diagnostic.ts"]), oxlintChecks.reports)
+    yield* check("patched vp lint on disabled.ts", plain(["lint", "disabled.ts"]), oxlintChecks.silent)
+    if (tsrs) {
+      yield* check("patched vp exec tsrs runs the patched tsrs", plain(["exec", "tsrs", "--version"]), oxlintChecks.patchedTsrs)
+    }
   } else {
     const config = ["--type-aware", "--config", ".oxlintrc.json"]
     yield* check("--rules lists the Effect rules", run("oxlint", ["--rules", "--format", "json"]), oxlintChecks.rules)

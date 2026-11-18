@@ -7,7 +7,7 @@ import * as Path from "effect/Path"
 import * as Scope from "effect/Scope"
 import { createHash } from "node:crypto"
 import { existsSync } from "node:fs"
-import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, rm, rmdir, stat, writeFile } from "node:fs/promises"
 import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
@@ -52,11 +52,19 @@ const writePackage = async (directory: string, packageName: string, packageJson:
   return packageDirectory
 }
 
-// A project with `tsrs` and its platform package installed (the binary plus one of the lib*.d.ts files next to it).
-const installTsrs = async (target: string, version: string, options: { readonly nested?: boolean } = {}) => {
-  const directory = await makeTemporaryDirectory()
-  const tsrsDirectory = await writePackage(directory, "tsrs", { name: "tsrs", version })
-  const platformDirectory = await writePackage(options.nested ? tsrsDirectory : directory, `@tsrs/${target}`, {
+const installVitePlus = (directory: string) => writePackage(directory, "vite-plus", { name: "vite-plus", version: "1.7.0" })
+
+// A project with `tsrs` and its platform package installed (the binary plus one of the lib*.d.ts files next to it), at
+// the root or, with `vitePlus`, as a dependency of vite-plus that does not resolve from the root.
+const installTsrs = async (
+  target: string,
+  version: string,
+  options: { readonly nested?: boolean; readonly vitePlus?: boolean; readonly directory?: string } = {}
+) => {
+  const directory = options.directory ?? await makeTemporaryDirectory()
+  const scope = options.vitePlus ? await installVitePlus(directory) : directory
+  const tsrsDirectory = await writePackage(scope, "tsrs", { name: "tsrs", version })
+  const platformDirectory = await writePackage(options.nested ? tsrsDirectory : scope, `@tsrs/${target}`, {
     name: `@tsrs/${target}`,
     version
   })
@@ -70,7 +78,8 @@ const hostTarget = tsrsTarget(process.platform, process.arch, isGlibc())
 const hostReplacementAvailable = (tsrsReplacementTargets as ReadonlyArray<string | undefined>).includes(hostTarget)
 
 // The patched tsrs artifact in this host's @effect/tsgo-<platform> package, written for the test unless a local build
-// already provides one.
+// already provides one. Only the artifact and the directories above it are removed, and those only once empty, as other
+// test files write their artifacts into the same package concurrently.
 const providePackagedTsrs = async (version: string) => {
   const packageJson = createRequire(import.meta.url).resolve(
     `@effect/tsgo-${process.platform}-${process.arch}/package.json`,
@@ -79,10 +88,14 @@ const providePackagedTsrs = async (version: string) => {
   const binary = join(dirname(packageJson), "artifacts", "tsrs", version, "tsrs")
   if (existsSync(binary)) return { binary, contents: await readFile(binary, "utf8") }
   const artifacts = join(dirname(packageJson), "artifacts")
-  const created = existsSync(artifacts) ? join(artifacts, "tsrs", version) : artifacts
   await mkdir(dirname(binary), { recursive: true })
   await writeFile(binary, "patched tsrs")
-  cleanups.push(() => rm(created, { recursive: true, force: true }))
+  cleanups.push(async () => {
+    await rm(binary, { force: true })
+    for (const directory of [dirname(binary), join(artifacts, "tsrs"), artifacts]) {
+      await rmdir(directory).catch(() => undefined)
+    }
+  })
   return { binary, contents: "patched tsrs" }
 }
 
@@ -122,10 +135,48 @@ describe("tsrs component", () => {
     }
   )
 
+  it.runIf(hostTarget !== undefined)("discovers the tsrs binary installed through vite-plus", async () => {
+    const { binaryPath, directory } = await installTsrs(hostTarget!, "0.18.0-test", { vitePlus: true })
+    expect(await run(discoverBinaries(directory))).toEqual([{
+      component: "tsrs",
+      packageName: `@tsrs/${hostTarget}`,
+      packageVersion: "0.18.0-test",
+      binaryPath,
+      fileHash: hash("stock tsrs")
+    }])
+  })
+
+  it.runIf(hostTarget !== undefined)("discovers the tsrs binaries of the project and of vite-plus, root first", async () => {
+    const root = await installTsrs(hostTarget!, "0.18.0-test")
+    const vitePlus = await installTsrs(hostTarget!, "0.19.0-test", { vitePlus: true, directory: root.directory })
+    const discovered = await run(discoverBinaries(root.directory))
+    expect(discovered.map(({ binaryPath, packageVersion }) => ({ binaryPath, packageVersion }))).toEqual([
+      { binaryPath: root.binaryPath, packageVersion: "0.18.0-test" },
+      { binaryPath: vitePlus.binaryPath, packageVersion: "0.19.0-test" }
+    ])
+  })
+
+  it.runIf(hostTarget !== undefined)("discovers the tsrs binary once when vite-plus resolves the project's", async () => {
+    const { binaryPath, directory } = await installTsrs(hostTarget!, "0.18.0-test")
+    await installVitePlus(directory)
+    expect((await run(discoverBinaries(directory))).map((binary) => binary.binaryPath)).toEqual([binaryPath])
+  })
+
   it("discovers nothing without the tsrs package or its platform package", async () => {
     const directory = await makeTemporaryDirectory()
     expect(await run(discoverBinaries(directory))).toEqual([])
     await writePackage(directory, "tsrs", { name: "tsrs", version: "0.18.0-test" })
+    const discovered = await run(discoverBinaries(directory))
+    expect(discovered).toEqual([])
+    await expect(run(requireComponents(discovered, new Set(["tsrs"])))).rejects.toThrow(
+      "Unable to discover an installed tsrs binary. Install the tsrs package; its binary is published for "
+        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-x64-musl, linux-arm64-gnu, linux-arm64-musl, win32-x64, win32-arm64."
+    )
+  })
+
+  it("discovers nothing when vite-plus has no tsrs package", async () => {
+    const directory = await makeTemporaryDirectory()
+    await installVitePlus(directory)
     const discovered = await run(discoverBinaries(directory))
     expect(discovered).toEqual([])
     await expect(run(requireComponents(discovered, new Set(["tsrs"])))).rejects.toThrow(
@@ -162,6 +213,15 @@ describe("tsrs component", () => {
       `Package @tsrs/${hostTarget} version 0.0.0-unsupported is not supported by @effect/tsgo`
     )
     expect(result.skipped[0]?.message).toContain(supportedTsrsVersion)
+    expect(await readFile(binaryPath, "utf8")).toBe("stock tsrs")
+  })
+
+  it.runIf(hostReplacementAvailable)("skips an unsupported tsrs version installed through vite-plus", async () => {
+    const { binaryPath, directory } = await installTsrs(hostTarget!, "0.0.0-unsupported", { vitePlus: true })
+    const result = await run(patch({ cwd: directory, components: new Set(["tsrs"]), skipMissing: true }))
+    expect(result.changed).toEqual([])
+    expect(result.skipped.map(({ reason }) => reason)).toEqual(["replacement-unavailable"])
+    expect(result.skipped[0]?.message).toContain(`Package @tsrs/${hostTarget} version 0.0.0-unsupported is not supported`)
     expect(await readFile(binaryPath, "utf8")).toBe("stock tsrs")
   })
 
@@ -205,6 +265,25 @@ describe("tsrs component", () => {
       const again = await run(patch({ cwd: directory, components, skipMissing: false }))
       expect(again.changed).toEqual([])
       expect(again.skipped.map(({ reason }) => reason)).toEqual(["already-patched"])
+
+      const restored = await run(unpatch({ cwd: directory, components }))
+      expect(restored.changed.map(({ binaryPath }) => binaryPath)).toEqual([binaryPath])
+      expect(await readFile(binaryPath, "utf8")).toBe("stock tsrs")
+      expect(existsSync(`${binaryPath}.original`)).toBe(false)
+    }
+  )
+
+  it.runIf(hostReplacementAvailable)(
+    "swaps the tsrs binary installed through vite-plus for the patched build and restores it",
+    async () => {
+      const packaged = await providePackagedTsrs(supportedTsrsVersion)
+      const { binaryPath, directory } = await installTsrs(hostTarget!, supportedTsrsVersion, { vitePlus: true })
+      const components = new Set(["tsrs"] as const)
+
+      const patched = await run(patch({ cwd: directory, components, skipMissing: false }))
+      expect(patched.changed.map(({ binaryPath }) => binaryPath)).toEqual([binaryPath])
+      expect(await readFile(binaryPath, "utf8")).toBe(packaged.contents)
+      expect(await readFile(`${binaryPath}.original`, "utf8")).toBe("stock tsrs")
 
       const restored = await run(unpatch({ cwd: directory, components }))
       expect(restored.changed.map(({ binaryPath }) => binaryPath)).toEqual([binaryPath])

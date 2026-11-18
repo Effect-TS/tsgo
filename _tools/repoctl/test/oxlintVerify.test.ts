@@ -52,13 +52,13 @@ test("verifies each runtime profile and each tsrs version once", () => {
     "vite-plus@1.6.0 (oxlint 1.93.0, tsgolint 7.0.2006)",
     "vite-plus@1.7.0 (oxlint 1.94.0, tsrs 7.1.0-beta.tsrs2)"
   ])
-  // A vite-plus that pins tsrs runs `effect-tsgo --tsrs-lint vp`, on the tsrs it installs.
+  // A vite-plus that pins tsrs runs plain `effect-tsgo vp`, which lints with the packaged build of the tsrs it installs.
   assert.deepEqual(cases.at(-1), {
     name: "vite-plus@1.7.0 (oxlint 1.94.0, tsrs 7.1.0-beta.tsrs2)",
     dependencies: { "vite-plus": "1.7.0" },
     runner: "vp",
     oxlint: "1.94.0",
-    linter: { kind: "tsrs", version: "7.1.0-beta.tsrs2", flag: "--tsrs-lint" }
+    linter: { kind: "tsrs", version: "7.1.0-beta.tsrs2" }
   })
   // Each tsrs version runs on the latest oxlint, without oxlint-tsgolint.
   assert.deepEqual(cases[3], {
@@ -116,6 +116,9 @@ test("checks the proxy's output for the Effect diagnostics", () => {
     undefined
   )
   assert.match(oxlintChecks.traceRefused(result(0, "")) ?? "", /was accepted/)
+
+  assert.equal(oxlintChecks.patchedTsrs(result(0, "Version 7.1.0-beta+effect-tsgo.0.71.0 (tsrs 7.1.0-beta.tsrs2)")), undefined)
+  assert.match(oxlintChecks.patchedTsrs(result(0, "Version 7.1.0-beta (tsrs 7.1.0-beta.tsrs2)")) ?? "", /not the Effect-patched/)
 })
 
 test("summarizes the runtimes and details the failures", () => {
