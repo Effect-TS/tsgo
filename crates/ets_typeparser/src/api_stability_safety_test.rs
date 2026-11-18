@@ -263,7 +263,7 @@ fn test_api_stability_safety_computed_name_display_and_sort() {
             ("42", "42"),
         ];
         let mut seen = 0;
-        let entries = members.map(|table| table.entries()).unwrap_or_default();
+        let entries = members.map_or_default(|table| table.entries());
         for (key, member) in entries {
             let mut want_rendered = "";
             for (prefix, rendered) in want_by_key {

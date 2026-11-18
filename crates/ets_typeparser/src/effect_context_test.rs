@@ -660,8 +660,7 @@ fn test_effect_context_matches_per_node_analysis_on_rule_fixtures() {
                         };
                         let base = dir
                             .file_name()
-                            .map(|name| name.to_string_lossy().into_owned())
-                            .unwrap_or_default();
+                            .map_or_default(|name| name.to_string_lossy().into_owned());
                         sources.insert(format!("/.src/{base}/{entry_name}"), content);
                     }
                 }

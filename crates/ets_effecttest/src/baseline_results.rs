@@ -51,15 +51,9 @@ pub fn reference_files(subfolder: &str) -> Vec<String> {
         .lock()
         .entry(subfolder.to_string())
         .or_insert_with(|| {
-            read_dir_sorted(&baseline_reference_path(subfolder))
-                .map(|entries| {
-                    entries
-                        .into_iter()
-                        .filter(|(_, is_dir)| !is_dir)
-                        .map(|(name, _)| name)
-                        .collect()
-                })
-                .unwrap_or_default()
+            read_dir_sorted(&baseline_reference_path(subfolder)).map_or_default(|entries| {
+                entries.into_iter().filter(|(_, is_dir)| !is_dir).map(|(name, _)| name).collect()
+            })
         })
         .clone()
 }

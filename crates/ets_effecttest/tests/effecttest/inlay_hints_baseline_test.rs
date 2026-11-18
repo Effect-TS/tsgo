@@ -178,7 +178,6 @@ pub(crate) fn local_inlay_baseline_file_name(t: &T) -> String {
 pub(crate) fn is_lib_file(file_name: &str) -> bool {
     let base_name = std::path::Path::new(file_name)
         .file_name()
-        .map(|n| n.to_string_lossy().into_owned())
-        .unwrap_or_default();
+        .map_or_default(|n| n.to_string_lossy().into_owned());
     base_name.starts_with("lib.") && base_name.ends_with(".d.ts")
 }

@@ -1,0 +1,44 @@
+Port of _patches/typescript/005-checker-types.patch (tsc/internal/checker/types.go) to tsrs: the RelationError type
+and SourceFileLinks.relation_errors (copied with the other links when a forked checker first reads a file's links).
+
+diff --git a/crates/tsrs_checker/src/types.rs b/crates/tsrs_checker/src/types.rs
+index 6363b7cca..f5b2cd289 100644
+--- a/crates/tsrs_checker/src/types.rs
++++ b/crates/tsrs_checker/src/types.rs
+@@ -779,6 +779,15 @@ pub struct AssertionLinks {
+ 
+ // SourceFile links
+ 
++// effect-tsgo patch 005 (types.go `RelationError`).
++// RelationError captures a type relation error for Effect diagnostics processing.
++#[derive(Clone, Copy)]
++pub struct RelationError {
++    pub source: P<Type>,
++    pub target: P<Type>,
++    pub error_node: P<Node>,
++}
++
+ #[derive(Default)]
+ pub struct SourceFileLinks {
+     pub(crate) type_checked: Cell<bool>,
+@@ -792,6 +801,7 @@ pub struct SourceFileLinks {
+     pub(crate) local_jsx_factory: Cell<Option<P<Node>>>,
+     pub(crate) local_jsx_fragment_factory: Cell<Option<P<Node>>>,
+     pub(crate) jsx_fragment_type: Cell<Option<P<Type>>>,
++    pub relation_errors: RefCell<Vec<RelationError>>, // Collected during type checking for Effect diagnostics
+ }
+ 
+ // Signature specific links
+@@ -3445,6 +3455,12 @@ impl crate::links::LinkCopy for SourceFileLinks {
+         self.local_jsx_factory.set(frozen.local_jsx_factory.get());
+         self.local_jsx_fragment_factory.set(frozen.local_jsx_fragment_factory.get());
+         self.jsx_fragment_type.set(frozen.jsx_fragment_type.get());
++        // effect-tsgo patch 005. SAFETY: as for ContainingSymbolLinks.
++        unsafe {
++            self.relation_errors
++                .borrow_mut()
++                .clone_from(frozen.relation_errors.try_borrow_unguarded().unwrap());
++        }
+     }
+ }
+ 

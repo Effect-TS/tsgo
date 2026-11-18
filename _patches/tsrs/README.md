@@ -17,3 +17,15 @@ To change a patch, edit the files in `tsrs/` after a setup, then regenerate the
 patch with `git -C tsrs diff -- <files>` (keeping the header) and run
 `pnpm setup-repo` again: setup resets the checkout before applying the patches,
 so edits that are not captured here are lost.
+
+## Per-version override folders
+
+`upstream.json` records more than one tsrs: the latest release (`tags.tsrs.latest`, the
+one these patches target and the Rust port follows) and every tsrs a vite-plus runtime
+pins (vite-plus ships tsrs since 1.7.0). Each recorded version is built and released.
+When these patches do not apply to another recorded commit, that commit gets a
+`_patches/tsrs-<gitHead>/` folder: the same patches, file for file, rebased on it,
+applied instead of this folder when that commit is set up
+(`repoctl submodules setup --component tsrs --version <v>`). Every change here is
+mirrored into each override folder. `repoctl check` fails when an override folder's
+patch file names differ from these, or when it names no recorded tsrs commit.

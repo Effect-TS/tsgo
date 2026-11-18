@@ -1,6 +1,6 @@
-# Same toolchain as the pinned tsrs (its rust-toolchain.toml, _packages/tsgo/upstream.json `tags.tsrs`); bump them
-# together.
+# One toolchain for every recorded tsrs (_packages/tsgo/upstream.json `components.tsrs`): the newest any of them pins
+# in its rust-toolchain.toml (a newer rustc builds the older tsrs too). Bump it when a recorded tsrs moves past it.
 [toolchain]
-channel = "1.99.1"
+channel = "1.100.0"
 components = ["clippy", "rustfmt"]
 profile = "minimal"

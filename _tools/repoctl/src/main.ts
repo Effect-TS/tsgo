@@ -45,7 +45,7 @@ import {
   portTodo
 } from "./port.ts"
 import { runPipings } from "./pipings.ts"
-import { runRustChecks, runRustLint, runRustTests } from "./rust.ts"
+import { runRustChecks, runRustLint, runRustTests, syncTsrsCargoLock } from "./rust.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
 import { runTests } from "./tests.ts"
 import { readUpstream, resolveComponent, updateUpstream } from "./upstream.ts"
@@ -79,6 +79,9 @@ const setup = Command.make("setup", {
       yield* validateOxlintComponent(repositoryRoot, selected.version)
     }
     yield* patchSubmodules(repositoryRoot, selected.typescript.source)
+    if (selected.name === "tsrs") {
+      yield* syncTsrsCargoLock(repositoryRoot)
+    }
     yield* generateTypeScriptGoIntegration(repositoryRoot, selected.typescript.source)
     if (selected.name === "oxlint") {
       yield* generateOxlintEffectRules(repositoryRoot)

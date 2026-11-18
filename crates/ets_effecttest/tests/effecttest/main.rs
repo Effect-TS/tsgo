@@ -22,7 +22,7 @@ use libtest_mimic::{Arguments, Failed, Trial};
 
 /// The case's name: the test file's base name without `.ts` (Go's `strings.TrimSuffix(filepath.Base(tc), ".ts")`).
 pub(crate) fn case_name(tc: &Path) -> String {
-    let base = tc.file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
+    let base = tc.file_name().map_or_default(|n| n.to_string_lossy().into_owned());
     base.strip_suffix(".ts").map_or(base.clone(), str::to_string)
 }
 

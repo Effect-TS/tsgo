@@ -1,0 +1,54 @@
+Port of _patches/typescript/001-cmd-tsgo-main.patch (tsc/cmd/tsc/main.go) to tsrs.
+
+Go imports the Effect hook packages from cmd/tsc/main.go, so their init()s run before main. effect-tsgo's Rust
+binary (crates/ets_tsrs) cannot call into tsrs's binary crate: the `effect-main` feature of tsrs_cli adds main.rs to
+its library as a module, whose `main` becomes public (`tsrs_cli::main`), so that crates/ets_tsrs registers the hook
+crates and then calls it. The feature is off for the `tsrs` binary target, which is unchanged (main.rs and its global
+allocator are linked once).
+
+diff --git a/crates/tsrs_cli/Cargo.toml b/crates/tsrs_cli/Cargo.toml
+index 9290b9212..d94a12ecc 100644
+--- a/crates/tsrs_cli/Cargo.toml
++++ b/crates/tsrs_cli/Cargo.toml
+@@ -33,6 +33,9 @@ noembed = ["tsrs_vfs/noembed"]
+ # The system allocator instead of mimalloc, for sanitizer builds (AddressSanitizer and ThreadSanitizer track only its
+ # blocks; mimalloc's memory looks like one long-lived region to them).
+ system-alloc = []
++# effect-tsgo: the executable's `main` as a library function (`tsrs_cli::main`), for crates/ets_tsrs. Off for the
++# `tsrs` binary target, which keeps main.rs (and its global allocator) to itself.
++effect-main = []
+ 
+ [lib]
+ test = false
+diff --git a/crates/tsrs_cli/src/lib.rs b/crates/tsrs_cli/src/lib.rs
+index 2b8534c60..0df42bd13 100644
+--- a/crates/tsrs_cli/src/lib.rs
++++ b/crates/tsrs_cli/src/lib.rs
+@@ -4,3 +4,13 @@
+ pub mod api;
+ pub mod lsp;
+ pub mod signals;
++
++// effect-tsgo: main.rs as a module (`tsrs_cli::main`), for crates/ets_tsrs, which registers the Effect hooks first (as
++// effect-tsgo's patched cmd/tsc/main.go imports the hook packages). main.rs reaches the modules above as `tsrs_cli`.
++#[cfg(feature = "effect-main")]
++extern crate self as tsrs_cli;
++#[cfg(feature = "effect-main")]
++#[path = "main.rs"]
++mod effect_main;
++#[cfg(feature = "effect-main")]
++pub use effect_main::main;
+diff --git a/crates/tsrs_cli/src/main.rs b/crates/tsrs_cli/src/main.rs
+index 032dbf0a4..288992844 100644
+--- a/crates/tsrs_cli/src/main.rs
++++ b/crates/tsrs_cli/src/main.rs
+@@ -72,7 +72,8 @@ fn mimalloc_collect(force: bool) {
+     let _ = force;
+ }
+ 
+-fn main() -> std::process::ExitCode {
++// effect-tsgo: public, so that lib.rs can expose it to crates/ets_tsrs (feature `effect-main`).
++pub fn main() -> std::process::ExitCode {
+     #[cfg(all(target_os = "linux", not(any(feature = "system-alloc", miri))))]
+     tsrs_core::allocator::init_mimalloc();
+     // `std::env::args()` panics on an argument that isn't UTF-8. tsgo keeps the bytes and its diagnostics format them

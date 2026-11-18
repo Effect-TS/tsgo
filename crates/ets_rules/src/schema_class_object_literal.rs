@@ -91,11 +91,8 @@ pub static SCHEMA_CLASS_OBJECT_LITERAL: LazyLock<Rule> = LazyLock::new(|| Rule {
                         break;
                     }
                     if class_name.is_empty() {
-                        class_name = member
-                            .symbol()
-                            .map(|symbol| symbol.name())
-                            .unwrap_or_default()
-                            .to_string();
+                        class_name =
+                            member.symbol().map_or_default(|symbol| symbol.name()).to_string();
                     }
                 }
                 if !class_name.is_empty()

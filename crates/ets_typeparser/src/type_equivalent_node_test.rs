@@ -43,8 +43,8 @@ export class C { field = Effect.never }
                 let want = tp.get_type_at_location(target);
                 if got != want {
                     // Rust: Go's TypeToString of a nil type is what `type_string` of `None` stands for.
-                    let got_text = got.map(|got| type_string(tp, got)).unwrap_or_default();
-                    let want_text = want.map(|want| type_string(tp, want)).unwrap_or_default();
+                    let got_text = got.map_or_default(|got| type_string(tp, got));
+                    let want_text = want.map_or_default(|want| type_string(tp, want));
                     t.error(sprintf!(
                         "%v at %d: type %v differs from its equivalent %v: %v",
                         kind_string(node.kind()),

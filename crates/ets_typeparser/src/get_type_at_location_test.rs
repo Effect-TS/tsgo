@@ -342,14 +342,14 @@ fn test_get_type_at_location_returns_checked_type() {
             {
                 // Rust: Go's TypeToString of a nil type is the empty string here.
                 let t = tp.get_type_at_location(expression);
-                let text = t.map(|t| type_string(tp, t)).unwrap_or_default();
+                let text = t.map_or_default(|t| type_string(tp, t));
                 got.insert(format!("return {}", scanner_text(sf, expression)), text);
             } else if ets_shim::ast::is_binary_expression(node)
                 && node.as_binary_expression().operator_token().kind() == Kind::InstanceOfKeyword
             {
                 let left = node.as_binary_expression().left();
                 let t = tp.get_type_at_location(left);
-                let text = t.map(|t| type_string(tp, t)).unwrap_or_default();
+                let text = t.map_or_default(|t| type_string(tp, t));
                 got.insert(format!("instanceof {}", scanner_text(sf, left)), text);
             }
             node.for_each_child(&mut |child| visit(tp, sf, got, child));
@@ -367,7 +367,7 @@ fn test_get_type_at_location_returns_checked_type() {
             ("instanceof array", "ArrayBufferView<ArrayBufferLike> | null"),
         ];
         for (key, want) in expected {
-            let got = got.get(key).map(String::as_str).unwrap_or_default();
+            let got = got.get(key).map_or_default(String::as_str);
             if got != want {
                 t.error(ets_go::sprintf!("%s: got %q, want %q", key, got, want));
             }

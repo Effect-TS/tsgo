@@ -33,11 +33,7 @@ fn is_effect_data_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> boo
         tagged_enum_sym =
             c.try_get_member_in_module_exports_and_properties("taggedEnum", module_sym);
     }
-    if tagged_enum_sym.is_none() {
-        return false;
-    }
-
-    true
+    tagged_enum_sym.is_some()
 }
 
 impl TypeParser<'_> {

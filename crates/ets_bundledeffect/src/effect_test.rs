@@ -81,12 +81,11 @@ pub(crate) fn read_package_json(t: &T, path: &Path) -> PackageJson {
         dependencies: parsed
             .get("dependencies")
             .and_then(serde_json::Value::as_object)
-            .map(|o| {
+            .map_or_default(|o| {
                 o.iter()
                     .map(|(k, v)| (k.clone(), v.as_str().unwrap_or_default().to_string()))
                     .collect()
-            })
-            .unwrap_or_default(),
+            }),
         version: parsed
             .get("version")
             .and_then(serde_json::Value::as_str)

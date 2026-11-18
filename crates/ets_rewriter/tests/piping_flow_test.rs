@@ -422,7 +422,7 @@ impl PipingFlowRewriteFixture {
         for edit in self.tracker.get_changes().shift_remove(self.sf.file_name()).unwrap_or_default()
         {
             let span = self.converters.from_lsp_range_to_original(&self.sf, edit.range);
-            changes.push(TextChange { text_range: span, new_text: edit.new_text.clone() });
+            changes.push(TextChange { text_range: span, new_text: edit.new_text });
         }
         ets_shim::core::apply_bulk_edits(&self.source, &changes)
     }
