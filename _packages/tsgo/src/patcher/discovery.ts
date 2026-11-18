@@ -222,10 +222,9 @@ export const packageScopes: (
   })
 
 export const discoverBinaries = (cwd: string, preferredTypescriptPackage?: string) => Effect.gen(function*() {
-  const path = yield* Path.Path
-  const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
-  const located = [...yield* discoverTypeScript(cwdRequire, preferredTypescriptPackage)]
-  for (const require of yield* packageScopes(cwd)) {
+  const scopes = yield* packageScopes(cwd)
+  const located = [...yield* discoverTypeScript(scopes[0], preferredTypescriptPackage)]
+  for (const require of scopes) {
     located.push(...yield* discoverOxlint(require), ...yield* discoverTsrs(require))
   }
   const discovered = [...new Map(located.map((binary) => [binary.binaryPath, binary])).values()]

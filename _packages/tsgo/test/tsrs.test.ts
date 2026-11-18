@@ -52,6 +52,8 @@ const writePackage = async (directory: string, packageName: string, packageJson:
   return packageDirectory
 }
 
+const installVitePlus = (directory: string) => writePackage(directory, "vite-plus", { name: "vite-plus", version: "1.7.0" })
+
 // A project with `tsrs` and its platform package installed (the binary plus one of the lib*.d.ts files next to it), at
 // the root or, with `vitePlus`, as a dependency of vite-plus that does not resolve from the root.
 const installTsrs = async (
@@ -60,9 +62,7 @@ const installTsrs = async (
   options: { readonly nested?: boolean; readonly vitePlus?: boolean; readonly directory?: string } = {}
 ) => {
   const directory = options.directory ?? await makeTemporaryDirectory()
-  const scope = options.vitePlus
-    ? await writePackage(directory, "vite-plus", { name: "vite-plus", version: "1.7.0" })
-    : directory
+  const scope = options.vitePlus ? await installVitePlus(directory) : directory
   const tsrsDirectory = await writePackage(scope, "tsrs", { name: "tsrs", version })
   const platformDirectory = await writePackage(options.nested ? tsrsDirectory : scope, `@tsrs/${target}`, {
     name: `@tsrs/${target}`,
@@ -153,16 +153,25 @@ describe("tsrs component", () => {
 
   it.runIf(hostTarget !== undefined)("discovers the tsrs binary once when vite-plus resolves the project's", async () => {
     const { binaryPath, directory } = await installTsrs(hostTarget!, "0.18.0-test")
-    await writePackage(directory, "vite-plus", { name: "vite-plus", version: "1.7.0" })
+    await installVitePlus(directory)
     expect((await run(discoverBinaries(directory))).map((binary) => binary.binaryPath)).toEqual([binaryPath])
   })
 
   it("discovers nothing without the tsrs package or its platform package", async () => {
     const directory = await makeTemporaryDirectory()
     expect(await run(discoverBinaries(directory))).toEqual([])
-    await writePackage(directory, "vite-plus", { name: "vite-plus", version: "1.7.0" })
-    expect(await run(discoverBinaries(directory))).toEqual([])
     await writePackage(directory, "tsrs", { name: "tsrs", version: "0.18.0-test" })
+    const discovered = await run(discoverBinaries(directory))
+    expect(discovered).toEqual([])
+    await expect(run(requireComponents(discovered, new Set(["tsrs"])))).rejects.toThrow(
+      "Unable to discover an installed tsrs binary. Install the tsrs package; its binary is published for "
+        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-x64-musl, linux-arm64-gnu, linux-arm64-musl, win32-x64, win32-arm64."
+    )
+  })
+
+  it("discovers nothing when vite-plus has no tsrs package", async () => {
+    const directory = await makeTemporaryDirectory()
+    await installVitePlus(directory)
     const discovered = await run(discoverBinaries(directory))
     expect(discovered).toEqual([])
     await expect(run(requireComponents(discovered, new Set(["tsrs"])))).rejects.toThrow(
