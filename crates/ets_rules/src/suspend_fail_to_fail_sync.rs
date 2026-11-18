@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, SourceFile};
+use ets_shim::ast::{self, Diagnostic, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
@@ -62,14 +62,13 @@ pub struct SuspendFailToFailSyncMatch {
     pub inner: PipingFlow,
 }
 
-// go: internal/rules/suspend_fail_to_fail_sync.go:62 AnalyzeSuspendFailToFailSync b4bbc0e9ec8b5072
+// go: internal/rules/suspend_fail_to_fail_sync.go:62 AnalyzeSuspendFailToFailSync f4eb2381709d07aa
 // AnalyzeSuspendFailToFailSync finds piping flows that apply Effect.suspend to
 // a thunk whose returned flow ends in Effect.fail, or Effect.die on Effect v3,
 // which has Effect.dieSync.
 //
 // Rust: Go's checker argument is the parser's checker, so it is dropped; Go's nil parser check has no counterpart
-// (the parser is a reference). Go's `Callee() != nil`, `thunk.Expression() == nil` and `inner == nil` checks drop:
-// all three are non-optional here.
+// (the parser is a reference). Go's `Callee() != nil` and `inner == nil` checks drop: both are non-optional here.
 pub fn analyze_suspend_fail_to_fail_sync(
     tp: &mut TypeParser<'_>,
     sf: Option<P<SourceFile>>,
@@ -91,9 +90,7 @@ pub fn analyze_suspend_fail_to_fail_sync(
     // An arrow or function expression is always the subject of its flow, so
     // Effect.suspend is the first transformation.
     let is_thunk_subject = |_: &mut TypeParser<'_>, subject: &PipingFlowSubject| -> bool {
-        subject.node().is_some_and(|node| {
-            node.kind() == Kind::ArrowFunction || node.kind() == Kind::FunctionExpression
-        })
+        ets_typeparser::parse_lazy_expression(subject.node(), LazyExpressionFlags::Thunk).is_some()
     };
     // Explicit type arguments on suspend pin an error channel that failSync would narrow.
     let is_suspend = |tp: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| -> bool {

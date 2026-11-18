@@ -78,3 +78,32 @@ func (tp *TypeParser) isDeclaredBeforeLocation(declaration *ast.Node, location *
 		declaration.End() <= location.Pos() &&
 		checker.Checker_isBlockScopedNameDeclaredBeforeUse(tp.checker, declaration, location)
 }
+
+func (tp *TypeParser) IsDeclarationFileModuleConstant(expression *ast.Node) bool {
+	if tp == nil || tp.checker == nil || expression == nil {
+		return false
+	}
+	expression = ast.SkipParentheses(expression)
+	if expression == nil || expression.Kind != ast.KindPropertyAccessExpression ||
+		expression.Flags&ast.NodeFlagsOptionalChain != 0 {
+		return false
+	}
+	access := expression.AsPropertyAccessExpression()
+	if !ast.IsEntityNameExpression(access.Expression) {
+		return false
+	}
+	module := tp.resolveAliasedSymbol(tp.GetSymbolAtLocation(access.Expression))
+	if module == nil || ast.TSGetSymbolFlags(module)&(ast.SymbolFlagsValueModule|ast.SymbolFlagsNamespaceModule) == 0 {
+		return false
+	}
+	member := tp.resolveAliasedSymbol(tp.GetSymbolAtLocation(access.Name()))
+	if member == nil || !checker.Checker_isConstantVariable(tp.checker, member) {
+		return false
+	}
+	declaration := ast.TSGetSymbolValueDeclaration(member)
+	if declaration == nil || !ast.IsVariableDeclaration(declaration) {
+		return false
+	}
+	sourceFile := ast.GetSourceFileOfNode(declaration)
+	return sourceFile != nil && sourceFile.IsDeclarationFile
+}

@@ -28,7 +28,7 @@ pub static PROMISE_ALL_IN_EFFECT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixab
     run: run_promise_all_in_effect_fix,
 });
 
-// go: internal/fixables/promise_all_in_effect.go:25 runPromiseAllInEffectFix d777fc0d0c1e09fe
+// go: internal/fixables/promise_all_in_effect.go:25 runPromiseAllInEffectFix 3f21610f18f7cc37
 // Only Promise.all is fixed: the
 // success type of Promise.allSettled differs from any Effect.all mode.
 //
@@ -61,12 +61,11 @@ fn run_promise_all_in_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
             if node.kind() != Kind::ArrowFunction {
                 return false;
             }
-            let thunk = ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::None);
-            thunk.is_some_and(|thunk| {
-                !ast::is_block(thunk.body())
-                    && thunk.params().len() <= 1
-                    && node.type_node().is_none()
-            })
+            let thunk = ets_typeparser::parse_lazy_expression(
+                node,
+                LazyExpressionFlags::AtMostOneParameter,
+            );
+            thunk.is_some_and(|thunk| !ast::is_block(thunk.body()) && node.type_node().is_none())
         };
     let is_promise_constructor =
         |tp: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| {

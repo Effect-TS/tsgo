@@ -131,11 +131,7 @@ func analyzeConditionalRefailHandler(
 		return "", false
 	}
 	parameter := dispatch.Params().At(0)
-	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
-		return "", false
-	}
-	parameterDeclaration := parameter.AsParameterDeclaration()
-	if parameterDeclaration == nil || parameterDeclaration.DotDotDotToken != nil || parameterDeclaration.Initializer != nil {
+	if !typeparser.IsPlainIdentifierParameter(parameter) {
 		return "", false
 	}
 	parameterSymbol := tp.GetSymbolAtLocation(parameter.Name())

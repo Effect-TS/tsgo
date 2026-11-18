@@ -1,0 +1,75 @@
+==== /.src/flatMapMapToZipWithAdversarial1.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 4:14 - 4:33
+Node: Effect.succeed(10)
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 5:15 - 5:34
+Node: Effect.succeed(20)
+Node Kind: KindCallExpression
+
+Subject: 20
+Subject Type: 20
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:29 - 13:6
+Node: Effect.flatMap(first, (a) =>\n  Effect.map(second, function (b) {\n    return a + b + Number(eval("arguments.length"))\n  }))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a) =>\n  Effect.map(second, function (b) {\n    return a + b + Number(eval("arguments.length"))\n  })]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:58 - 13:5
+Node: Effect.map(second, function (b) {\n    return a + b + Number(eval("arguments.length"))\n  })
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [function (b) {\n    return a + b + Number(eval("arguments.length"))\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:19 - 12:52
+Node: Number(eval("arguments.length"))
+Node Kind: KindCallExpression
+
+Subject: "arguments.length"
+Subject Type: "arguments.length"
+
+Transformations (2):
+  [0] kind: call
+      callee: eval
+      args: (constant)
+      outType: any
+  [1] kind: call
+      callee: Number
+      args: (constant)
+      outType: number

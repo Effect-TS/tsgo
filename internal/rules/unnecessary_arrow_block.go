@@ -70,31 +70,16 @@ func AnalyzeUnnecessaryArrowBlock(_ *typeparser.TypeParser, _ *checker.Checker, 
 }
 
 func analyzeUnnecessaryArrowBlockNode(sf *ast.SourceFile, n *ast.Node) *UnnecessaryArrowBlockMatch {
-	arrowFn := n.AsArrowFunction()
-	if arrowFn == nil || arrowFn.Body == nil || arrowFn.Body.Kind != ast.KindBlock {
-		return nil
-	}
-
-	body := arrowFn.Body.AsBlock()
-	if body.Statements == nil || len(body.Statements.Nodes) != 1 {
-		return nil
-	}
-
-	stmt := body.Statements.Nodes[0]
-	if stmt == nil || stmt.Kind != ast.KindReturnStatement {
-		return nil
-	}
-
-	returnedExpression := stmt.AsReturnStatement().Expression
-	if returnedExpression == nil {
+	lazy := typeparser.ParseLazyExpression(n, typeparser.LazyExpressionAllowAsync|typeparser.LazyExpressionAllowTypeParameters)
+	if lazy == nil || !ast.IsBlock(lazy.Body()) {
 		return nil
 	}
 
 	return &UnnecessaryArrowBlockMatch{
 		SourceFile:         sf,
-		Location:           scanner.GetErrorRangeForNode(sf, arrowFn.Body),
+		Location:           scanner.GetErrorRangeForNode(sf, lazy.Body()),
 		ArrowFunction:      n,
-		BodyBlock:          arrowFn.Body,
-		ReturnedExpression: returnedExpression,
+		BodyBlock:          lazy.Body(),
+		ReturnedExpression: lazy.Expression(),
 	}
 }

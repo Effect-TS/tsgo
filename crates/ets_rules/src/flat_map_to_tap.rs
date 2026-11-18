@@ -52,7 +52,7 @@ pub struct FlatMapToTapMatch {
     pub return_flow: PipingFlow,
 }
 
-// go: internal/rules/flat_map_to_tap.go:47 AnalyzeFlatMapToTap d0607b4bb86aa4d8
+// go: internal/rules/flat_map_to_tap.go:47 AnalyzeFlatMapToTap a956a89a8ec715e7
 // AnalyzeFlatMapToTap finds callbacks that restore their unchanged input after an effect.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -85,16 +85,20 @@ pub fn analyze_flat_map_to_tap(
             {
                 continue;
             }
-            let callback =
-                parse_lazy_expression(*args.at(0), LazyExpressionFlags::AllowMultiStatementBlock);
+            let callback = parse_lazy_expression(
+                *args.at(0),
+                LazyExpressionFlags::AllowMultiStatementBlock
+                    | LazyExpressionFlags::AtMostOneParameter
+                    | LazyExpressionFlags::AtLeastOneParameter,
+            );
             let Some(callback) = callback else {
                 continue;
             };
-            if callback.params().len() != 1 || callback.node().type_node().is_some() {
+            if callback.node().type_node().is_some() {
                 continue;
             }
             let parameter = *callback.params().at(0);
-            if !plain_tap_parameter(parameter)
+            if !ets_typeparser::is_plain_identifier_parameter(parameter)
                 || step.kind() == TransformationKind::Call && parameter.type_node().is_some()
             {
                 continue;
@@ -138,12 +142,12 @@ pub fn analyze_flat_map_to_tap(
             let mut ref_ = *terminal.args().at(0);
             if tp.is_node_reference_to_effect_module_api(terminal.callee(), "as") {
             } else if tp.is_node_reference_to_effect_module_api(terminal.callee(), "map") {
-                let mapper = parse_lazy_expression(ref_, LazyExpressionFlags::None);
+                let mapper = parse_lazy_expression(ref_, LazyExpressionFlags::AtMostOneParameter);
                 let Some(mapper) = mapper else {
                     continue;
                 };
-                if mapper.params().len() > 1
-                    || mapper.params().len() == 1 && !plain_tap_parameter(*mapper.params().at(0))
+                if mapper.params().len() == 1
+                    && !ets_typeparser::is_plain_identifier_parameter(*mapper.params().at(0))
                 {
                     continue;
                 }
@@ -164,12 +168,4 @@ pub fn analyze_flat_map_to_tap(
         }
     }
     matches
-}
-
-// go: internal/rules/flat_map_to_tap.go:122 plainTapParameter f3c0d2f3c44f0ac3
-// Rust: the parameter is the node (Go's `*ast.ParameterDeclaration` view).
-pub(crate) fn plain_tap_parameter(parameter: P<Node>) -> bool {
-    parameter.name().is_some_and(|name| name.kind() == Kind::Identifier)
-        && parameter.initializer().is_none()
-        && parameter.as_parameter_declaration().dot_dot_dot_token().is_none()
 }

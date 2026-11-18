@@ -1,0 +1,1371 @@
+==== /.src/flatMapMapToZipWith.ts (95 flows) ====
+
+=== Piping Flow ===
+Location: 13:23 - 13:47
+Node: Context.Tag("Database")
+Node Kind: KindCallExpression
+
+Subject: "Database"
+Subject Type: "Database"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Database", Shape>
+
+=== Piping Flow ===
+Location: 26:25 - 27:72
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, (config) => `${user.name} (${config.locale})`))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getConfig, (config) => `${user.name} (${config.locale})`)]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 26:59 - 27:71
+Node: Effect.map(getConfig, (config) => `${user.name} (${config.locale})`)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => `${user.name} (${config.locale})`]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 31:32 - 33:2
+Node: getUser.pipe(\n  Effect.flatMap((user) => getConfig.pipe(Effect.map((config) => user.name + config.locale)))\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => getConfig.pipe(Effect.map((config) => user.name + config.locale))]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 32:27 - 32:93
+Node: getConfig.pipe(Effect.map((config) => user.name + config.locale))
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 36:28 - 39:2
+Node: pipe(\n  getUser,\n  Effect.flatMap((user) => Effect.map(getConfig, (config) => user.name + config.locale))\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getConfig, (config) => user.name + config.locale)]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 38:27 - 38:88
+Node: Effect.map(getConfig, (config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 42:30 - 44:2
+Node: Effect.flatMap((user: User) => Effect.map(getConfig, (config) => user.name + config.locale))(\n  getUser\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: [(user: User) => Effect.map(getConfig, (config) => user.name + config.locale)]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 42:61 - 42:122
+Node: Effect.map(getConfig, (config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 47:25 - 50:2
+Node: getUser.pipe(\n  Effect.flatMap((result) => Clock.currentTimeMillis.pipe(Effect.map((at) => ({ result, at })))),\n  Effect.withSpan("load")\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(result) => Clock.currentTimeMillis.pipe(Effect.map((at) => ({ result, at })))]
+      outType: Effect<{ result: User; at: number; }, "UserError", "UserRepo">
+  [1] kind: pipeable
+      callee: Effect.withSpan
+      args: ["load"]
+      outType: Effect<{ result: User; at: number; }, "UserError", "UserRepo">
+
+=== Piping Flow ===
+Location: 48:29 - 48:96
+Node: Clock.currentTimeMillis.pipe(Effect.map((at) => ({ result, at })))
+Node Kind: KindCallExpression
+
+Subject: Clock.currentTimeMillis
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(at) => ({ result, at })]
+      outType: Effect<{ result: User; at: number; }, never, never>
+
+=== Piping Flow ===
+Location: 53:30 - 53:116
+Node: E.flatMap(getUser, (user) => E.map(getConfig, (config) => user.name + config.locale))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: E.flatMap
+      args: [(user) => E.map(getConfig, (config) => user.name + config.locale)]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 53:59 - 53:115
+Node: E.map(getConfig, (config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: E.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 56:30 - 56:115
+Node: Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config) => [user, config]))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getConfig, (config) => [user, config])]
+      outType: Effect<(Config | User)[], "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 56:64 - 56:114
+Node: Effect.map(getConfig, (config) => [user, config])
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => [user, config]]
+      outType: Effect<(Config | User)[], "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 59:29 - 59:124
+Node: getUser.pipe(Effect.flatMap((user) => getConfig.pipe(Effect.map((config) => [user, config]))))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => getConfig.pipe(Effect.map((config) => [user, config]))]
+      outType: Effect<(Config | User)[], "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 59:67 - 59:122
+Node: getConfig.pipe(Effect.map((config) => [user, config]))
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(config) => [user, config]]
+      outType: Effect<(Config | User)[], "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 63:26 - 63:127
+Node: Effect.flatMap(getUser, (user) => Effect.map(loadSettings(), (config) => user.name + config.locale))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(loadSettings(), (config) => user.name + config.locale)]
+      outType: Effect<string, "UserError", "UserRepo">
+
+=== Piping Flow ===
+Location: 63:60 - 63:126
+Node: Effect.map(loadSettings(), (config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: loadSettings()
+Subject Type: Effect<Config, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 66:34 - 66:108
+Node: getUser.pipe(Effect.flatMap((user) => Effect.map(getConfig, () => user)))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getConfig, () => user)]
+      outType: Effect<User, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 66:72 - 66:106
+Node: Effect.map(getConfig, () => user)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [() => user]
+      outType: Effect<User, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 68:55 - 69:47
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, ({ locale }) => user))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getConfig, ({ locale }) => user)]
+      outType: Effect<User, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 68:89 - 69:46
+Node: Effect.map(getConfig, ({ locale }) => user)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [({ locale }) => user]
+      outType: Effect<User, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 75:38 - 75:122
+Node: Effect.flatMap(getName, (a?: string) => Effect.map(getCount, (b) => a + String(b)))
+Node Kind: KindCallExpression
+
+Subject: getName
+Subject Type: Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a?: string) => Effect.map(getCount, (b) => a + String(b))]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 75:78 - 75:121
+Node: Effect.map(getCount, (b) => a + String(b))
+Node Kind: KindCallExpression
+
+Subject: getCount
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b) => a + String(b)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 75:110 - 75:120
+Node: String(b)
+Node Kind: KindCallExpression
+
+Subject: b
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 79:41 - 80:55
+Node: Effect.flatMap(getName, (a?: string) =>\n  Effect.map(getCount, (b?: number) => a + String(b)))
+Node Kind: KindCallExpression
+
+Subject: getName
+Subject Type: Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a?: string) =>\n  Effect.map(getCount, (b?: number) => a + String(b))]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 79:81 - 80:54
+Node: Effect.map(getCount, (b?: number) => a + String(b))
+Node Kind: KindCallExpression
+
+Subject: getCount
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b?: number) => a + String(b)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 80:43 - 80:53
+Node: String(b)
+Node Kind: KindCallExpression
+
+Subject: b
+Subject Type: number | undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 84:34 - 84:111
+Node: Effect.flatMap(getName, (a?: string) => Effect.map(getCount, () => a + "!"))
+Node Kind: KindCallExpression
+
+Subject: getName
+Subject Type: Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a?: string) => Effect.map(getCount, () => a + "!")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 84:74 - 84:110
+Node: Effect.map(getCount, () => a + "!")
+Node Kind: KindCallExpression
+
+Subject: getCount
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [() => a + "!"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 88:39 - 88:109
+Node: Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
+Node Kind: KindCallExpression
+
+Subject: getName
+Subject Type: Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a?) => Effect.map(getCount, (b?) => [a, b])]
+      outType: Effect<(string | number | undefined)[], never, never>
+
+=== Piping Flow ===
+Location: 88:71 - 88:108
+Node: Effect.map(getCount, (b?) => [a, b])
+Node Kind: KindCallExpression
+
+Subject: getCount
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b?) => [a, b]]
+      outType: Effect<(string | number | undefined)[], never, never>
+
+=== Piping Flow ===
+Location: 91:35 - 94:6
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, function(this: void, config: Config) {\n    return user.name + config.locale\n  }))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getConfig, function(this: void, config: Config) {\n    return user.name + config.locale\n  })]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 91:69 - 94:5
+Node: Effect.map(getConfig, function(this: void, config: Config) {\n    return user.name + config.locale\n  })
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [function(this: void, config: Config) {\n    return user.name + config.locale\n  }]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 100:19 - 100:45
+Node: Effect.succeed(aliasView)
+Node Kind: KindCallExpression
+
+Subject: aliasView
+Subject Type: { readonly value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ readonly value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 101:20 - 104:3
+Node: Effect.sync(() => {\n  aliasMutable.value = 2\n  return 10\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  aliasMutable.value = 2\n  return 10\n}
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 105:29 - 106:45
+Node: Effect.flatMap(aliasFirst, ({ value }) =>\n  Effect.map(aliasSecond, (n) => value + n))
+Node Kind: KindCallExpression
+
+Subject: aliasFirst
+Subject Type: Effect<{ readonly value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [({ value }) =>\n  Effect.map(aliasSecond, (n) => value + n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 105:71 - 106:44
+Node: Effect.map(aliasSecond, (n) => value + n)
+Node Kind: KindCallExpression
+
+Subject: aliasSecond
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => value + n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 110:18 - 110:36
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 111:19 - 111:37
+Node: Effect.succeed(2)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 112:28 - 113:69
+Node: Effect.flatMap(thisFirst, (value) =>\n  Effect.map(thisSecond, function(this: void) { return value + 1 }))
+Node Kind: KindCallExpression
+
+Subject: thisFirst
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(value) =>\n  Effect.map(thisSecond, function(this: void) { return value + 1 })]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 112:65 - 113:68
+Node: Effect.map(thisSecond, function(this: void) { return value + 1 })
+Node Kind: KindCallExpression
+
+Subject: thisSecond
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [function(this: void) { return value + 1 }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 118:32 - 122:6
+Node: Effect.flatMap(branchFirst, (a) =>\n  Effect.map(branchSecond, (b) => {\n    if (b > 0) return a + b\n    return a - b\n  }))
+Node Kind: KindCallExpression
+
+Subject: branchFirst
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a) =>\n  Effect.map(branchSecond, (b) => {\n    if (b > 0) return a + b\n    return a - b\n  })]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 118:67 - 122:5
+Node: Effect.map(branchSecond, (b) => {\n    if (b > 0) return a + b\n    return a - b\n  })
+Node Kind: KindCallExpression
+
+Subject: branchSecond
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b) => {\n    if (b > 0) return a + b\n    return a - b\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 125:34 - 132:8
+Node: pipe(branchFirst, Effect.flatMap((a) =>\n  branchSecond.pipe(Effect.map(function (b) {\n    if (b > 0) {\n      return a + b\n    } else {\n      return a - b\n    }\n  }))))
+Node Kind: KindCallExpression
+
+Subject: branchFirst
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.flatMap
+      args: [(a) =>\n  branchSecond.pipe(Effect.map(function (b) {\n    if (b > 0) {\n      return a + b\n    } else {\n      return a - b\n    }\n  }))]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 125:74 - 132:6
+Node: branchSecond.pipe(Effect.map(function (b) {\n    if (b > 0) {\n      return a + b\n    } else {\n      return a - b\n    }\n  }))
+Node Kind: KindCallExpression
+
+Subject: branchSecond
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [function (b) {\n    if (b > 0) {\n      return a + b\n    } else {\n      return a - b\n    }\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 135:29 - 138:6
+Node: Effect.flatMap(branchFirst, (a) =>\n  Effect.map(branchSecond, (b) => {\n    console.log(a + b)\n  }))
+Node Kind: KindCallExpression
+
+Subject: branchFirst
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(a) =>\n  Effect.map(branchSecond, (b) => {\n    console.log(a + b)\n  })]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 135:64 - 138:5
+Node: Effect.map(branchSecond, (b) => {\n    console.log(a + b)\n  })
+Node Kind: KindCallExpression
+
+Subject: branchSecond
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b) => {\n    console.log(a + b)\n  }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 136:36 - 137:23
+Node: console.log(a + b)
+Node Kind: KindCallExpression
+
+Subject: a + b
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 144:33 - 146:3
+Node: Effect.flatMap(evalFirst, function(a) {\n  return Effect.map(evalSecond, (b) => a + b + Number(eval("arguments.length")))\n})
+Node Kind: KindCallExpression
+
+Subject: evalFirst
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [function(a) {\n  return Effect.map(evalSecond, (b) => a + b + Number(eval("arguments.length")))\n}]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 145:9 - 145:81
+Node: Effect.map(evalSecond, (b) => a + b + Number(eval("arguments.length")))
+Node Kind: KindCallExpression
+
+Subject: evalSecond
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b) => a + b + Number(eval("arguments.length"))]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 145:47 - 145:80
+Node: Number(eval("arguments.length"))
+Node Kind: KindCallExpression
+
+Subject: "arguments.length"
+Subject Type: "arguments.length"
+
+Transformations (2):
+  [0] kind: call
+      callee: eval
+      args: (constant)
+      outType: any
+  [1] kind: call
+      callee: Number
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 149:27 - 150:61
+Node: Effect.flatMap(evalFirst, <A extends number>(a: A) =>\n  Effect.map(evalSecond, <B extends number>(b: B) => a + b))
+Node Kind: KindCallExpression
+
+Subject: evalFirst
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [<A extends number>(a: A) =>\n  Effect.map(evalSecond, <B extends number>(b: B) => a + b)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 149:81 - 150:60
+Node: Effect.map(evalSecond, <B extends number>(b: B) => a + b)
+Node Kind: KindCallExpression
+
+Subject: evalSecond
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [<B extends number>(b: B) => a + b]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 153:30 - 153:124
+Node: Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config): unknown => [user, config]))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(getConfig, (config): unknown => [user, config])]
+      outType: Effect<unknown, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 153:64 - 153:123
+Node: Effect.map(getConfig, (config): unknown => [user, config])
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config): unknown => [user, config]]
+      outType: Effect<unknown, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 158:37 - 159:56
+Node: Effect.flatMap(getPartialCount, ({ n = bump() }) =>\n  Effect.map(getConfig, (config) => n + config.locale))
+Node Kind: KindCallExpression
+
+Subject: getPartialCount
+Subject Type: Effect<{ readonly n?: number | undefined; }, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [({ n = bump() }) =>\n  Effect.map(getConfig, (config) => n + config.locale)]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 158:89 - 159:55
+Node: Effect.map(getConfig, (config) => n + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => n + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 167:36 - 167:118
+Node: Effect.flatMap(getCounter, ({ count }) => Effect.map(increment, () => count + 1))
+Node Kind: KindCallExpression
+
+Subject: getCounter
+Subject Type: Effect<MutableCounter, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [({ count }) => Effect.map(increment, () => count + 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 167:78 - 167:117
+Node: Effect.map(increment, () => count + 1)
+Node Kind: KindCallExpression
+
+Subject: increment
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [() => count + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 179:27 - 179:117
+Node: Effect.flatMap(getGetterCounter, ({ value }) => Effect.map(bumpGetter, (b) => value + b))
+Node Kind: KindCallExpression
+
+Subject: getGetterCounter
+Subject Type: Effect<GetterCounter, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [({ value }) => Effect.map(bumpGetter, (b) => value + b)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 179:75 - 179:116
+Node: Effect.map(bumpGetter, (b) => value + b)
+Node Kind: KindCallExpression
+
+Subject: bumpGetter
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b) => value + b]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 183:33 - 184:44
+Node: Effect.flatMap(getGetterHolder, ({ inner: { value } }) =>\n  Effect.map(bumpGetter, (b) => value + b))
+Node Kind: KindCallExpression
+
+Subject: getGetterHolder
+Subject Type: Effect<{ readonly inner: GetterCounter; }, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [({ inner: { value } }) =>\n  Effect.map(bumpGetter, (b) => value + b)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 183:91 - 184:43
+Node: Effect.map(bumpGetter, (b) => value + b)
+Node Kind: KindCallExpression
+
+Subject: bumpGetter
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(b) => value + b]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 189:36 - 189:131
+Node: Effect.flatMap(getUser, ({ name }) => Effect.map(getConfig, (config) => name + config.locale))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [({ name }) => Effect.map(getConfig, (config) => name + config.locale)]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 189:74 - 189:130
+Node: Effect.map(getConfig, (config) => name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 196:30 - 196:110
+Node: Effect.zipWith(getUser, getConfig, (user, config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.zipWith
+      args: [getConfig, (user, config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 197:26 - 197:62
+Node: getUser.pipe(Effect.zip(getConfig))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.zip
+      args: [getConfig]
+      outType: Effect<[User, Config], "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 200:29 - 200:131
+Node: Effect.flatMap(getUser, (user) => Effect.map(loadProfile(user.id), (profile) => user.name + profile))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(loadProfile(user.id), (profile) => user.name + profile)]
+      outType: Effect<string, "UserError", "UserRepo">
+
+=== Piping Flow ===
+Location: 200:63 - 200:130
+Node: Effect.map(loadProfile(user.id), (profile) => user.name + profile)
+Node Kind: KindCallExpression
+
+Subject: user.id
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: loadProfile
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(profile) => user.name + profile]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 203:37 - 203:129
+Node: Effect.flatMap(getUser, ({ id }) => Effect.map(loadProfile(id), (profile) => profile + id))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [({ id }) => Effect.map(loadProfile(id), (profile) => profile + id)]
+      outType: Effect<string, "UserError", "UserRepo">
+
+=== Piping Flow ===
+Location: 203:73 - 203:128
+Node: Effect.map(loadProfile(id), (profile) => profile + id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: loadProfile
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(profile) => profile + id]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 206:32 - 206:110
+Node: Effect.flatMap(Database, (db) => Effect.map(db.load(1), (row) => row.length))
+Node Kind: KindCallExpression
+
+Subject: Database
+Subject Type: typeof Database
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(db) => Effect.map(db.load(1), (row) => row.length)]
+      outType: Effect<number, never, Database>
+
+=== Piping Flow ===
+Location: 206:65 - 206:109
+Node: Effect.map(db.load(1), (row) => row.length)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: db.load
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(row) => row.length]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 209:30 - 212:4
+Node: getUser.pipe(Effect.flatMap((user) => {\n  console.log(user.name)\n  return Effect.map(getConfig, (config) => user.name + config.locale)\n}))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => {\n  console.log(user.name)\n  return Effect.map(getConfig, (config) => user.name + config.locale)\n}]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 209:70 - 210:25
+Node: console.log(user.name)
+Node Kind: KindCallExpression
+
+Subject: user.name
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 211:9 - 211:70
+Node: Effect.map(getConfig, (config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 215:33 - 221:2
+Node: getUser.pipe(\n  Effect.flatMap((user) =>\n    user.id > 0\n      ? Effect.map(getConfig, (config) => user.name + config.locale)\n      : Effect.succeed("anonymous")\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) =>\n    user.id > 0\n      ? Effect.map(getConfig, (config) => user.name + config.locale)\n      : Effect.succeed("anonymous")]
+      outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
+
+=== Piping Flow ===
+Location: 218:8 - 218:69
+Node: Effect.map(getConfig, (config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 219:8 - 219:36
+Node: Effect.succeed("anonymous")
+Node Kind: KindCallExpression
+
+Subject: "anonymous"
+Subject Type: "anonymous"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 225:28 - 225:112
+Node: Effect.flatMap(getUser, (user) => Effect.map(Option.some(1), (n) => user.name + n))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(Option.some(1), (n) => user.name + n)]
+      outType: Effect<string, "UserError" | NoSuchElementException, "UserRepo">
+
+=== Piping Flow ===
+Location: 225:62 - 225:111
+Node: Effect.map(Option.some(1), (n) => user.name + n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => user.name + n]
+      outType: Effect<string, NoSuchElementException, never>
+
+=== Piping Flow ===
+Location: 226:28 - 226:113
+Node: Effect.flatMap(getUser, (user) => Effect.map(Either.right(1), (n) => user.name + n))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(Either.right(1), (n) => user.name + n)]
+      outType: Effect<string, "UserError", "UserRepo">
+
+=== Piping Flow ===
+Location: 226:62 - 226:112
+Node: Effect.map(Either.right(1), (n) => user.name + n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.right
+      args: (constant)
+      outType: Either<number, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => user.name + n]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 227:28 - 227:120
+Node: Effect.flatMap(Option.some(2), (m) => Effect.map(getConfig, (config) => config.locale + m))
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(m) => Effect.map(getConfig, (config) => config.locale + m)]
+      outType: Effect<string, "ConfigError" | NoSuchElementException, "ConfigRepo">
+
+=== Piping Flow ===
+Location: 227:66 - 227:119
+Node: Effect.map(getConfig, (config) => config.locale + m)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => config.locale + m]
+      outType: Effect<string, "ConfigError", "ConfigRepo">
+
+=== Piping Flow ===
+Location: 230:22 - 230:45
+Node: Context.Tag("Counter")
+Node Kind: KindCallExpression
+
+Subject: "Counter"
+Subject Type: "Counter"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Counter", Shape>
+
+=== Piping Flow ===
+Location: 232:32 - 232:117
+Node: Effect.flatMap(Counter, (db) => Effect.map(Clock.currentTimeMillis, (t) => [db, t]))
+Node Kind: KindCallExpression
+
+Subject: Counter
+Subject Type: typeof Counter
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(db) => Effect.map(Clock.currentTimeMillis, (t) => [db, t])]
+      outType: Effect<(number | { readonly q: Effect<number, never, never>; })[], never, Counter>
+
+=== Piping Flow ===
+Location: 232:64 - 232:116
+Node: Effect.map(Clock.currentTimeMillis, (t) => [db, t])
+Node Kind: KindCallExpression
+
+Subject: Clock.currentTimeMillis
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(t) => [db, t]]
+      outType: Effect<(number | { readonly q: Effect<number, never, never>; })[], never, never>
+
+=== Piping Flow ===
+Location: 234:32 - 234:107
+Node: Effect.flatMap(getUser, (user) => Effect.map(Counter, (db) => [db, user]))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<User, "UserError", "UserRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(Counter, (db) => [db, user])]
+      outType: Effect<(User | { readonly q: Effect<number, never, never>; })[], "UserError", "UserRepo" | Counter>
+
+=== Piping Flow ===
+Location: 234:66 - 234:106
+Node: Effect.map(Counter, (db) => [db, user])
+Node Kind: KindCallExpression
+
+Subject: Counter
+Subject Type: typeof Counter
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(db) => [db, user]]
+      outType: Effect<(User | { readonly q: Effect<number, never, never>; })[], never, Counter>
+
+=== Piping Flow ===
+Location: 237:28 - 237:108
+Node: Option.flatMap(Option.some(1), (a) => Option.map(Option.some(2), (b) => a + b))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: dataFirst
+      callee: Option.flatMap
+      args: [(a) => Option.map(Option.some(2), (b) => a + b)]
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 237:66 - 237:107
+Node: Option.map(Option.some(2), (b) => a + b)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: dataFirst
+      callee: Option.map
+      args: [(b) => a + b]
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 240:62 - 240:123
+Node: Effect.map(getConfig, (config) => user.name + config.locale)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<Config, "ConfigError", "ConfigRepo">
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => user.name + config.locale]
+      outType: Effect<string, "ConfigError", "ConfigRepo">

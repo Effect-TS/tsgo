@@ -64,12 +64,12 @@ func AnalyzeFlatMapProvideServiceToProvideServiceEffect(tp *typeparser.TypeParse
 			if tp.IsNodeReferenceToEffectModuleApi(callee, "andThen") {
 				method = "andThen"
 			}
-			callback := typeparser.ParseLazyExpression(step.Args().At(0), typeparser.LazyExpressionNone)
-			if callback == nil || callback.Params().Len() != 1 {
+			callback := typeparser.ParseLazyExpression(step.Args().At(0), typeparser.LazyExpressionAtMostOneParameter|typeparser.LazyExpressionAtLeastOneParameter)
+			if callback == nil {
 				continue
 			}
-			parameter := callback.Params().At(0).AsParameterDeclaration()
-			if !plainTapParameter(parameter) {
+			parameter := callback.Params().At(0)
+			if !typeparser.IsPlainIdentifierParameter(parameter) {
 				continue
 			}
 			parameterSymbol := tp.GetSymbolAtLocation(parameter.Name())

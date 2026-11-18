@@ -1,0 +1,29 @@
+==== /.src/flatMapMapToZipWith_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 13:24 - 14:72
+Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, (config) => `${user.name} (${config.locale})`))
+Node Kind: KindCallExpression
+
+Subject: getUser
+Subject Type: Effect<{ readonly name: string; }, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) =>\n  Effect.map(getConfig, (config) => `${user.name} (${config.locale})`)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 13:58 - 14:71
+Node: Effect.map(getConfig, (config) => `${user.name} (${config.locale})`)
+Node Kind: KindCallExpression
+
+Subject: getConfig
+Subject Type: Effect<{ readonly locale: string; }, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(config) => `${user.name} (${config.locale})`]
+      outType: Effect<string, never, never>

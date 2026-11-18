@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/identity_forwarder.go:17 TypeParser.UnwrapIdentityForwarder e1137554430df53e
+    // go: internal/typeparser/identity_forwarder.go:17 TypeParser.UnwrapIdentityForwarder f50f3d80b01c28f8
     // UnwrapIdentityForwarder returns the callee of a one-parameter function
     // whose body is a piping flow that applies a single operator to that
     // parameter, any explicit type arguments on that operator, and the
@@ -25,26 +25,18 @@ impl TypeParser<'_> {
         };
 
         let node = ets_shim::ast::skip_parentheses(node);
-        let Some(lazy) = parse_lazy_expression(node, LazyExpressionFlags::None) else {
+        let Some(lazy) = parse_lazy_expression(
+            node,
+            LazyExpressionFlags::AtMostOneParameter | LazyExpressionFlags::AtLeastOneParameter,
+        ) else {
             return (Some(node), None, None);
         };
-        let params = lazy.params.unwrap_or_default();
-        if params.len() != 1 {
-            return (Some(node), None, None);
-        }
 
-        let parameter_node = params[0];
-        if parameter_node.kind() != Kind::Parameter {
+        let parameter_node = lazy.params.unwrap_or_default()[0];
+        if !is_plain_identifier_parameter(parameter_node) {
             return (Some(node), None, None);
         }
-        let parameter_declaration = parameter_node.as_parameter_declaration();
-        if parameter_declaration.name().kind() != Kind::Identifier
-            || parameter_declaration.dot_dot_dot_token().is_some()
-            || parameter_declaration.initializer().is_some()
-        {
-            return (Some(node), None, None);
-        }
-        let parameter_symbol = self.get_symbol_at_location(parameter_declaration.name());
+        let parameter_symbol = self.get_symbol_at_location(parameter_node.name());
         if parameter_symbol.is_none() {
             return (Some(node), None, None);
         }

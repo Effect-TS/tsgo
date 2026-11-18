@@ -65,8 +65,8 @@ func AnalyzeCatchIfTagToCatchTag(tp *typeparser.TypeParser, c *checker.Checker, 
 }
 
 func catchIfTagPredicate(tp *typeparser.TypeParser, c *checker.Checker, predicateNode *ast.Node) (string, bool) {
-	lazy := typeparser.ParseLazyExpression(predicateNode, typeparser.LazyExpressionNone)
-	if lazy == nil || lazy.Params().Len() != 1 {
+	lazy := typeparser.ParseLazyExpression(predicateNode, typeparser.LazyExpressionAtMostOneParameter|typeparser.LazyExpressionAtLeastOneParameter)
+	if lazy == nil {
 		return "", false
 	}
 	parameter := lazy.Params().At(0)

@@ -1,0 +1,32 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:25-13:39) TS377218: `Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)
+  Fix 0: "Disable flatMapMapToZipWith for this line"
+  Fix 1: "Disable flatMapMapToZipWith for entire file"
+  Fix 2: "Replace with Effect.zipWith"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapMapToZipWith for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapMapToZipWith for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.zipWith" ===
+
+--- file:///.src/flatMapMapToZipWith_preview.ts ---
+import { Effect } from "effect"
+
+// The quick fix rewrites this to Effect.zipWith(getUser, getConfig, (user, config) => `${user.name} (${config.locale})`).
+// Notes:
+// - The rule stays silent when the inner effect uses the outer result (e.g. `loadProfile(user.id)`),
+//   because the second effect depends on the first and zipWith does not apply.
+// - When the combiner is exactly `[user, config]`, the fix suggests Effect.zip(getUser, getConfig).
+// - The rule stays silent when the mapper returns the outer value unchanged, because flatMapToTap covers that.
+
+declare const getUser: Effect.Effect<{ readonly name: string }>
+declare const getConfig: Effect.Effect<{ readonly locale: string }>
+
+export const greeting = Effect.zipWith(getUser, getConfig, (user, config) => `${user.name} (${config.locale})`)
+

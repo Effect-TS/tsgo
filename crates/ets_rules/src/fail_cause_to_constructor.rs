@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, SourceFile};
+use ets_shim::ast::{Diagnostic, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
@@ -66,15 +66,14 @@ pub struct FailCauseToConstructorMatch {
     pub inner: Option<PipingFlow>,
 }
 
-// go: internal/rules/fail_cause_to_constructor.go:67 AnalyzeFailCauseToConstructor 936414918167cead
+// go: internal/rules/fail_cause_to_constructor.go:67 AnalyzeFailCauseToConstructor 7989a4b234e566c8
 // AnalyzeFailCauseToConstructor finds piping flows in which Cause.fail or
 // Cause.die feeds directly into Effect.failCause, and Effect.failCauseSync
 // thunks whose returned flow ends in Cause.fail (or Cause.die on Effect v3,
 // which has Effect.dieSync).
 //
 // Rust: Go's checker argument is the parser's checker, so it is dropped; Go's nil parser check has no counterpart
-// (the parser is a reference). Go's `Callee() != nil` and `lazy.Expression() == nil` checks drop, both are
-// non-optional here.
+// (the parser is a reference). Go's `Callee() != nil` check drops, the callee is non-optional here.
 pub fn analyze_fail_cause_to_constructor(
     tp: &mut TypeParser<'_>,
     sf: Option<P<SourceFile>>,
@@ -129,9 +128,8 @@ pub fn analyze_fail_cause_to_constructor(
         // An arrow or function expression is always the subject of its flow,
         // so Effect.failCauseSync is the first transformation.
         let is_thunk_subject = |_: &mut TypeParser<'_>, subject: &PipingFlowSubject| -> bool {
-            subject.node().is_some_and(|node| {
-                node.kind() == Kind::ArrowFunction || node.kind() == Kind::FunctionExpression
-            })
+            ets_typeparser::parse_lazy_expression(subject.node(), LazyExpressionFlags::Thunk)
+                .is_some()
         };
         if !PipingFlow::matches_prefix(
             Some(flow),

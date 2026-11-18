@@ -130,7 +130,7 @@ pub fn analyze_match_boolean_to_is_success(
     matches
 }
 
-// go: internal/rules/match_boolean_to_is_success.go:110 booleanLiteralHandler 24b0c4628824c0a0
+// go: internal/rules/match_boolean_to_is_success.go:110 booleanLiteralHandler 299451787af43bc4
 // booleanLiteralHandler accepts a lazy expression (see ParseLazyExpression)
 // that ignores its input and returns a bare (possibly parenthesized) boolean
 // literal.
@@ -138,7 +138,8 @@ pub fn analyze_match_boolean_to_is_success(
 // Rust: Go's `(value, ok)` is `Option<value>`.
 pub(crate) fn boolean_literal_handler(handler: Option<P<Node>>) -> Option<bool> {
     let handler = handler?;
-    let lazy = ets_typeparser::parse_lazy_expression(handler, LazyExpressionFlags::None)?;
+    let lazy =
+        ets_typeparser::parse_lazy_expression(handler, LazyExpressionFlags::AtMostOneParameter)?;
     if !is_ignorable_map_parameter_list(lazy.params()) {
         return None;
     }

@@ -46,13 +46,13 @@ pub struct MapConstToAsMatch {
     pub constant_value: P<Node>, // The returned constant, with parentheses skipped
 }
 
-// go: internal/rules/map_const_to_as.go:52 AnalyzeMapConstToAs 5c1881b98bfeecdd
+// go: internal/rules/map_const_to_as.go:52 AnalyzeMapConstToAs c050ef461e130b5b
 // AnalyzeMapConstToAs finds data-last and data-first Effect.map calls whose
 // callback ignores its input and returns a value that is stable when the
 // Effect is constructed, so Effect.as can capture it once.
 //
 // Rust: Go's unused checker argument is dropped (the parser holds the checker); Go's
-// `callee == nil` and `lazy.Expression() == nil` checks drop, both are non-optional here.
+// `callee == nil` check drops, the callee is non-optional here.
 pub fn analyze_map_const_to_as(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -73,7 +73,7 @@ pub fn analyze_map_const_to_as(
 
             let lazy = ets_typeparser::parse_lazy_expression(
                 *transformation.args().at(0),
-                LazyExpressionFlags::None,
+                LazyExpressionFlags::AtMostOneParameter,
             );
             // A return type annotation pins Effect.map's success type independently
             // of the value; Effect.as infers it from the value alone.
@@ -104,22 +104,13 @@ pub fn analyze_map_const_to_as(
     matches
 }
 
-// go: internal/rules/map_const_to_as.go:92 isIgnorableMapParameterList bca157fc30aee44d
-// isIgnorableMapParameterList accepts no parameters, or a single plain
+// go: internal/rules/map_const_to_as.go:93 isIgnorableMapParameterList 62e491142c5c25a4
+// isIgnorableMapParameterList accepts the parameters of a callback parsed with
+// LazyExpressionAtMostOneParameter when there are none, or a single plain
 // identifier parameter. Stable values never resolve to that parameter, so it
 // is unused whenever the returned value is stable.
 pub(crate) fn is_ignorable_map_parameter_list(params: Slice<'_, P<Node>>) -> bool {
-    match params.len() {
-        0 => return true,
-        1 => {
-            let param = *params.at(0);
-            let declaration = param.as_parameter_declaration();
-            return !ast::is_this_parameter(param)
-                && param.name().is_some_and(ast::is_identifier)
-                && declaration.dot_dot_dot_token().is_none()
-                && declaration.initializer().is_none();
-        }
-        _ => {}
-    }
-    false
+    params.len() == 0
+        || !ast::is_this_parameter(*params.at(0))
+            && ets_typeparser::is_plain_identifier_parameter(*params.at(0))
 }

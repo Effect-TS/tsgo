@@ -60,10 +60,10 @@ func AnalyzeMapConstToAs(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 				continue
 			}
 
-			lazy := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionNone)
+			lazy := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionAtMostOneParameter)
 			// A return type annotation pins Effect.map's success type independently
 			// of the value; Effect.as infers it from the value alone.
-			if lazy == nil || lazy.Expression() == nil || lazy.Node().Type() != nil ||
+			if lazy == nil || lazy.Node().Type() != nil ||
 				!isIgnorableMapParameterList(lazy.Params()) {
 				continue
 			}
@@ -86,18 +86,10 @@ func AnalyzeMapConstToAs(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 	return matches
 }
 
-// isIgnorableMapParameterList accepts no parameters, or a single plain
+// isIgnorableMapParameterList accepts the parameters of a callback parsed with
+// LazyExpressionAtMostOneParameter when there are none, or a single plain
 // identifier parameter. Stable values never resolve to that parameter, so it
 // is unused whenever the returned value is stable.
 func isIgnorableMapParameterList(params readonly.Slice[*ast.Node]) bool {
-	switch params.Len() {
-	case 0:
-		return true
-	case 1:
-		param := params.At(0)
-		declaration := param.AsParameterDeclaration()
-		return !ast.IsThisParameter(param) && ast.IsIdentifier(param.Name()) &&
-			declaration.DotDotDotToken == nil && declaration.Initializer == nil
-	}
-	return false
+	return params.Len() == 0 || !ast.IsThisParameter(params.At(0)) && typeparser.IsPlainIdentifierParameter(params.At(0))
 }

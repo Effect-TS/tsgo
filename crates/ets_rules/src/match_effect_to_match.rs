@@ -116,7 +116,7 @@ pub fn analyze_match_effect_to_match(
     matches
 }
 
-// go: internal/rules/match_effect_to_match.go:91 matchEffectConstructorHandler 5a87f87e6b4c80b2
+// go: internal/rules/match_effect_to_match.go:91 matchEffectConstructorHandler b6779646a56ecb67
 //
 // Rust: Go's `(result, argument, ok)` is `Option<(result, argument)>`.
 pub(crate) fn match_effect_constructor_handler(

@@ -1,0 +1,548 @@
+// @filename: local.ts
+import { Effect } from "effect"
+
+export const localConfig: Effect.Effect<{ readonly locale: string }> = Effect.succeed({ locale: "en" })
+
+// @filename: ambient.d.ts
+import { Effect } from "effect"
+
+export declare const ambientConfig: Effect.Effect<{ readonly locale: string }>
+export declare let ambientMutableConfig: Effect.Effect<{ readonly locale: string }>
+
+// @filename: flatMapMapToZipWith.ts
+import { Clock, Context, DateTime, Effect, FileSystem, Option, pipe, Stream } from "effect"
+import * as E from "effect/Effect"
+import { flatMap as bind, map as fmap } from "effect/Effect"
+import * as Local from "./local"
+import * as Ambient from "./ambient"
+
+interface User {
+  readonly id: number
+  readonly name: string
+}
+interface Config {
+  readonly locale: string
+}
+
+declare const getUser: Effect.Effect<User, "UserError", "UserRepo">
+declare const getConfig: Effect.Effect<Config, "ConfigError", "ConfigRepo">
+declare const loadProfile: (id: number) => Effect.Effect<string>
+declare const loadSettings: () => Effect.Effect<Config>
+declare const decodeResponse: (response: User) => Effect.Effect<string>
+declare const makeFormatter: (user: User) => (config: Config) => string
+declare const path: string
+let mutableConfig = getConfig
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER (quick fix: Effect.zipWith)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: the issue's example, data-first flatMap with a data-first inner map.
+// Fix: Effect.zipWith(getUser, getConfig, (user, config) => `${user.name} (${config.locale})`)
+export const dataFirst = Effect.flatMap(getUser, (user) =>
+  Effect.map(getConfig, (config) => `${user.name} (${config.locale})`))
+
+// MUST TRIGGER: pipeable flatMap with a pipeable inner map (`that.pipe(Effect.map(...))`).
+// Fix: getUser.pipe(Effect.zipWith(getConfig, (user, config) => user.name + config.locale))
+export const pipeablePipeable = getUser.pipe(
+  Effect.flatMap((user) => getConfig.pipe(Effect.map((config) => user.name + config.locale)))
+)
+
+// MUST TRIGGER: pipeable flatMap with a data-first inner map.
+export const pipeableDataFirst = getUser.pipe(
+  Effect.flatMap((user) => Effect.map(getConfig, (config) => user.name + config.locale))
+)
+
+// MUST TRIGGER: data-first flatMap with a pipeable inner map.
+export const dataFirstPipeable = Effect.flatMap(getUser, (user) => getConfig.pipe(Effect.map((config) => user.id + config.locale)))
+
+// MUST TRIGGER: function pipe on both sides.
+export const functionPipe = pipe(
+  getUser,
+  Effect.flatMap((user) => pipe(getConfig, Effect.map((config) => user.name + config.locale)))
+)
+
+// MUST TRIGGER: curried flatMap applied to self; the annotation is kept in the merged combiner.
+// Fix: Effect.zipWith(getConfig, (user: User, config) => user.name + config.locale)(getUser)
+export const curriedFlatMap = Effect.flatMap((user: User) => Effect.map(getConfig, (config) => user.name + config.locale))(
+  getUser
+)
+
+// MUST TRIGGER: curried inner map applied to `that`.
+export const curriedInnerMap = getUser.pipe(
+  Effect.flatMap((user) => Effect.map((config: Config) => user.name + config.locale)(getConfig))
+)
+
+// MUST TRIGGER: T3 Code site (PullRequestService.ts) — an independent clock effect mapped with the outer result.
+// `Clock.currentTimeMillis` is a const exported by a declaration file of an external package, so it is a stable `that`.
+// Fix: result.pipe(Effect.zipWith(Clock.currentTimeMillis, (result, at) => ({ result, at })))
+export const t3ClockSite = getUser.pipe(
+  Effect.flatMap((result) => Clock.currentTimeMillis.pipe(Effect.map((at) => ({ result, at }))))
+)
+
+// MUST TRIGGER: T3 Code site (EnvironmentAuth.ts) — DateTime.now mapped with the outer result, multi-line
+// combiner, with a later step kept after the rewritten step. `DateTime.now` is a stable `that` (const from a .d.ts).
+export const t3DateTimeSite = getUser.pipe(
+  Effect.flatMap((session) =>
+    DateTime.now.pipe(
+      Effect.map(
+        (now) => ({
+          name: session.name,
+          expiresAt: DateTime.toUtc(DateTime.add(now, { days: 30 }))
+        })
+      )
+    )
+  ),
+  Effect.withSpan("EnvironmentAuth.createBrowserSession")
+)
+
+// MUST TRIGGER: flatMap is a later step of the outer flow; `self` is the prefix (getUser + tap), which is kept.
+// Fix: getUser.pipe(Effect.tap(Effect.log), Effect.zipWith(getConfig, (user, config) => ...), Effect.asVoid)
+export const outerPrefixAndSuffix = getUser.pipe(
+  Effect.tap((user) => Effect.log(user.name)),
+  Effect.flatMap((user) => Effect.map(getConfig, (config) => user.name + config.locale)),
+  Effect.asVoid
+)
+
+// MUST TRIGGER: a block body whose only statement returns the inner map (outer and inner callbacks).
+export const blockBodies = getUser.pipe(Effect.flatMap((user) => {
+  return Effect.map(getConfig, (config) => {
+    return user.name + config.locale
+  })
+}))
+
+// MUST TRIGGER: function expression callbacks.
+export const functionExpressions = Effect.flatMap(getUser, function(user) {
+  return Effect.map(getConfig, function(config) {
+    return user.name + config.locale
+  })
+})
+
+// MUST TRIGGER, NO FIX: a destructured outer parameter, used only in the combiner.
+// The combiner would destructure after `that` runs instead of before; `readonly` does not make the object
+// immutable (another reference can change it while `that` runs), so the binding cannot move.
+export const destructuredOuter = Effect.flatMap(getUser, ({ name }) => Effect.map(getConfig, (config) => name + config.locale))
+
+// MUST TRIGGER: the inner callback ignores its parameter; the combiner only uses the outer result.
+// Fix: Effect.zipWith(getUser, getConfig, (user) => user.name)
+// (the merged combiner is the outer parameter followed by the inner parameter list exactly as written; no `_` is invented)
+export const innerIgnoresParameter = Effect.flatMap(getUser, (user) => Effect.map(getConfig, () => user.name))
+
+// MUST TRIGGER: `that` contains a nested callback whose own parameter shadows the outer name;
+// it is a different binding, so `that` is still independent of the outer result.
+// No quick fix expected: `that` is a call, which zipWith would evaluate eagerly (see below).
+export const shadowedInThat = Effect.flatMap(getUser, (user) =>
+  Effect.map(Effect.forEach([1, 2], (user) => loadProfile(user)), (profiles) => user.name + profiles.join(",")))
+
+// MUST TRIGGER: module namespace and imported aliases.
+export const namespaceAlias = E.flatMap(getUser, (user) => E.map(getConfig, (config) => user.name + config.locale))
+export const importedAlias = getUser.pipe(bind((user) => fmap(getConfig, (config) => user.name + config.locale)))
+
+// MUST TRIGGER: inside an Effect.gen body.
+export const insideGen = Effect.gen(function*() {
+  yield* Effect.log("start")
+  return yield* Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config) => user.name + config.locale))
+})
+
+// MUST TRIGGER: inside an Effect.fn body.
+export const insideFn = Effect.fn("insideFn")(function*() {
+  return yield* getUser.pipe(Effect.flatMap((user) => getConfig.pipe(Effect.map((config) => user.name + config.locale))))
+})
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER (quick fix: Effect.zip, the combiner is exactly the tuple of the two parameters)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: Fix: Effect.zip(getUser, getConfig)
+export const tupleDataFirst = Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config) => [user, config]))
+
+// MUST TRIGGER: Fix: getUser.pipe(Effect.zip(getConfig))
+export const tuplePipeable = getUser.pipe(Effect.flatMap((user) => getConfig.pipe(Effect.map((config) => [user, config]))))
+
+// MUST TRIGGER, but the fix is zipWith, not zip: the tuple is in the reverse order.
+export const tupleSwapped = Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config) => [config, user]))
+
+// MUST TRIGGER, but the fix is zipWith, not zip: `as const` makes it more than the bare tuple.
+export const tupleAsConst = Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config) => [user, config] as const))
+
+// MUST TRIGGER, but the fix is zipWith, not zip: a tuple with an extra element.
+export const tupleExtra = Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config) => [user, config, 1]))
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, but NO quick fix: moving `that` out of the callback is not semantics-preserving.
+// In the nested form `that` is evaluated only after `self` succeeds (and on every run);
+// Effect.zipWith(self, that, f) evaluates it once, when the expression is built.
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER, NO FIX: `that` is a call expression.
+export const thatIsCall = Effect.flatMap(getUser, (user) => Effect.map(loadSettings(), (config) => user.name + config.locale))
+
+// MUST TRIGGER, NO FIX: `that` is a pipe with earlier steps (a call), independent of the outer result.
+export const thatHasEarlierSteps = getUser.pipe(
+  Effect.flatMap((user) =>
+    getConfig.pipe(
+      Effect.tap(() => Effect.log("config")),
+      Effect.map((config) => user.name + config.locale)
+    )
+  )
+)
+
+// MUST TRIGGER, NO FIX: `that` is a mutable binding, which may be reassigned before the callback runs.
+export const thatIsMutable = Effect.flatMap(getUser, (user) => Effect.map(mutableConfig, (config) => user.name + config.locale))
+
+// MUST TRIGGER, NO FIX: `that` is declared after this expression (TDZ if evaluated eagerly).
+export const thatDeclaredLater = Effect.flatMap(getUser, (user) => Effect.map(laterConfig, (config) => user.name + config.locale))
+const laterConfig = getConfig
+
+// MUST TRIGGER, NO FIX: `that` is a property of a mutable object, not a const exported by a declaration file.
+const holder = { effect: getConfig }
+export const thatIsObjectProperty = Effect.flatMap(getUser, (user) =>
+  Effect.map(holder.effect, (config) => user.name + config.locale))
+
+// MUST TRIGGER, NO FIX: `that` is a const of a namespace-imported LOCAL module (not a declaration file).
+export const thatIsLocalModuleMember = Effect.flatMap(getUser, (user) =>
+  Effect.map(Local.localConfig, (config) => user.name + config.locale))
+
+// MUST TRIGGER, NO FIX: merging the callbacks would declare `name` twice: `({ name, id }, name) => ...`.
+export const mergedBindingClash = Effect.flatMap(getUser, ({ id, name }) =>
+  Effect.map(Effect.succeed("x"), (name) => `${id}:${name}`))
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER: already uses zipWith / zip.
+export const alreadyZipWith = Effect.zipWith(getUser, getConfig, (user, config) => user.name + config.locale)
+export const alreadyZipWithPipeable = getUser.pipe(Effect.zipWith(getConfig, (user, config) => user.name + config.locale))
+export const alreadyZip = getUser.pipe(Effect.zip(getConfig))
+
+// MUST NOT TRIGGER (independence guard): `that` uses the outer parameter (the issue's getUser/loadProfile example).
+export const dependentCall = Effect.flatMap(getUser, (user) => Effect.map(loadProfile(user.id), (profile) => user.name + profile))
+
+// MUST NOT TRIGGER (independence guard): `that` is the outer parameter's response decoded (OpenAiClient.ts shape).
+export const dependentDecode = getUser.pipe(
+  Effect.flatMap((response) => Effect.map(decodeResponse(response), (decoded) => decoded.length))
+)
+
+// MUST NOT TRIGGER (independence guard): HttpBody.ts shape — `that` is a method of the acquired service.
+export const dependentService = Effect.flatMap(FileSystem.FileSystem, (fs) => Effect.map(fs.stat(path), (info) => info.size))
+
+// MUST NOT TRIGGER (independence guard): `that` uses a binding destructured from the outer parameter.
+export const dependentDestructured = Effect.flatMap(getUser, ({ id }) => Effect.map(loadProfile(id), (profile) => profile + id))
+export const dependentNestedDestructured = Effect.flatMap(
+  Effect.succeed({ user: { id: 1 } }),
+  ({ user: { id } }) => Effect.map(loadProfile(id), (profile) => profile + id)
+)
+
+// MUST NOT TRIGGER (independence guard): the outer parameter is used in an earlier step of `that`, not its receiver.
+export const dependentEarlierStep = getUser.pipe(
+  Effect.flatMap((user) =>
+    getConfig.pipe(
+      Effect.tap(() => Effect.log(user.name)),
+      Effect.map((config) => user.name + config.locale)
+    )
+  )
+)
+
+// MUST NOT TRIGGER (independence guard): the outer parameter is used deep inside `that`'s own callback.
+export const dependentInsideThatCallback = Effect.flatMap(getUser, (user) =>
+  Effect.map(Effect.sync(() => user.id + 1), (next) => user.name + next))
+
+// MUST NOT TRIGGER: the outer callback has statements besides returning the inner map.
+export const extraStatement = getUser.pipe(Effect.flatMap((user) => {
+  console.log(user.name)
+  return Effect.map(getConfig, (config) => user.name + config.locale)
+}))
+export const localBinding = getUser.pipe(Effect.flatMap((user) => {
+  const prefix = "user:"
+  return Effect.map(getConfig, (config) => prefix + user.name + config.locale)
+}))
+
+// MUST NOT TRIGGER: the outer callback returns conditionally.
+export const conditionalReturn = getUser.pipe(
+  Effect.flatMap((user) =>
+    user.id > 0
+      ? Effect.map(getConfig, (config) => user.name + config.locale)
+      : Effect.succeed("anonymous")
+  )
+)
+export const ifStatement = getUser.pipe(Effect.flatMap((user) => {
+  if (user.id > 0) {
+    return Effect.map(getConfig, (config) => user.name + config.locale)
+  }
+  return Effect.succeed("anonymous")
+}))
+
+// MUST NOT TRIGGER: the inner map is not the last step of what the callback returns.
+export const innerLaterStep = getUser.pipe(
+  Effect.flatMap((user) => getConfig.pipe(Effect.map((config) => user.name + config.locale), Effect.withSpan("load")))
+)
+export const innerWrapped = Effect.flatMap(getUser, (user) =>
+  Effect.asVoid(Effect.map(getConfig, (config) => user.name + config.locale)))
+
+// MUST NOT TRIGGER: the outer callback ignores its parameter (no parameter, or never used);
+// that is plain sequencing (Effect.andThen), not a two-result combination.
+export const outerNoParameter = Effect.flatMap(getUser, () => Effect.map(getConfig, (config) => config.locale))
+export const outerUnusedParameter = Effect.flatMap(getUser, (_user) => Effect.map(getConfig, (config) => config.locale))
+export const outerShadowedByInner = Effect.flatMap(getUser, (x) => Effect.map(getConfig, (x) => x.locale))
+
+// MUST NOT TRIGGER: the inner map's function is not an inline callback; merging would move the
+// evaluation of `makeFormatter(user)` after `that` runs.
+export const innerFunctionFactory = Effect.flatMap(getUser, (user) => Effect.map(getConfig, makeFormatter(user)))
+
+// MUST NOT TRIGGER: out-of-scope nested-combinator collapses (andThen, as, tap).
+export const outerAndThen = Effect.andThen(getUser, (user) => Effect.map(getConfig, (config) => user.name + config.locale))
+export const innerAs = Effect.flatMap(getUser, (user) => Effect.as(getConfig, user.name))
+export const innerTap = Effect.flatMap(getUser, (user) => Effect.tap(getConfig, () => Effect.log(user.name)))
+export const innerFlatMap = Effect.flatMap(getUser, (user) => Effect.flatMap(getConfig, (config) => Effect.succeed(user.name + config.locale)))
+
+// MUST NOT TRIGGER: Option and Stream combinators with the same names.
+export const optionNested = Option.flatMap(Option.some(1), (a) => Option.map(Option.some(2), (b) => a + b))
+export const streamNested = Stream.flatMap(Stream.make(1), (a) => Stream.map(Stream.make(2), (b) => a + b))
+
+// MUST NOT TRIGGER: an Effect.flatMap whose inner combinator is Option.map (the callback does not return an Effect map).
+export const effectOuterOptionInner = Effect.flatMap(getUser, (user) =>
+  Effect.succeed(Option.map(Option.some(1), (n) => user.name + n)))
+
+// MUST NOT TRIGGER: service keys are out of scope; the rule only fires when both `self` and `that` are strict Effects.
+class Database extends Context.Service<Database, { readonly q: Effect.Effect<number> }>()("Database") {}
+// MUST NOT TRIGGER: self is a service key, not a strict Effect.
+export const selfIsServiceKey = Effect.flatMap(Database, (db) => Effect.map(Clock.currentTimeMillis, (t) => [db, t]))
+// MUST NOT TRIGGER: that is a service key, not a strict Effect.
+export const thatIsServiceKey = Effect.flatMap(getUser, (user) => Effect.map(Database, (db) => [db, user]))
+
+// MUST NOT TRIGGER: the Effect.gen form is out of scope.
+export const genForm = Effect.gen(function*() {
+  const user = yield* getUser
+  const config = yield* getConfig
+  return user.name + config.locale
+})
+
+// MUST NOT TRIGGER: unrelated APIs with the same method names.
+const custom = {
+  flatMap: <A, B>(self: A, f: (a: A) => B): B => f(self),
+  map: <A, B>(self: A, f: (a: A) => B): B => f(self)
+}
+export const customApis = custom.flatMap(1, (a) => custom.map(2, (b) => a + b))
+
+// ---------------------------------------------------------------------------
+// ADDED COVERAGE (pending maintainer review)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: a trailing Effect.flatMap step of Effect.fn. Fix: Effect.zipWith(getConfig, (user, config) => ...)
+export const effectFnTrailing = Effect.fn("effectFnTrailing")(
+  function*() {
+    return yield* getUser
+  },
+  Effect.flatMap((user) => Effect.map(getConfig, (config) => user.name + config.locale))
+)
+
+// MUST TRIGGER, NO FIX: explicit type arguments on the inner map would be lost by the rewrite.
+export const explicitTypeArguments = Effect.flatMap(getUser, (user) =>
+  getConfig.pipe(Effect.map<Config, string>((config) => user.name + config.locale)))
+
+// MUST TRIGGER, NO FIX: the outer callback's return annotation would be lost by the rewrite.
+export const outerReturnAnnotated = Effect.flatMap(
+  getUser,
+  (user): Effect.Effect<string, "ConfigError", "ConfigRepo"> => Effect.map(getConfig, (config) => user.name + config.locale)
+)
+
+// MUST NOT TRIGGER: the outer function's own `arguments` is read inside its returned expression, so it cannot be split.
+export const functionUsesArguments = Effect.flatMap(getUser, function(user) {
+  return Effect.map(getConfig, (config) => user.name + config.locale + arguments.length)
+})
+
+// MUST NOT TRIGGER: the mapper has statements besides its return (out of scope).
+export const innerMultiStatementTuple = Effect.flatMap(getUser, (user) =>
+  Effect.map(getConfig, (config) => {
+    console.log(config.locale)
+    return [user, config]
+  }))
+
+// MUST TRIGGER, NO FIX: the merged combiner `({ name = fallback }, fallback) => ...` would make the default
+// read the mapper's parameter instead of the outer `fallback`.
+declare const getPartialUser: Effect.Effect<{ readonly name?: string }>
+const fallback = "anonymous"
+export const mergedCapture = Effect.flatMap(getPartialUser, ({ name = fallback }) =>
+  Effect.map(getConfig, (fallback) => name + fallback.locale))
+
+// MUST TRIGGER: `that` is a const of a namespace-imported declaration file, a stable `that`.
+// Fix: Effect.zipWith(getUser, Ambient.ambientConfig, (user, config) => user.name + config.locale)
+export const thatIsDeclarationFileConst = Effect.flatMap(getUser, (user) =>
+  Effect.map(Ambient.ambientConfig, (config) => user.name + config.locale))
+
+// MUST TRIGGER, NO FIX: `that` is a `let` of a declaration file, which may be reassigned.
+export const thatIsDeclarationFileLet = Effect.flatMap(getUser, (user) =>
+  Effect.map(Ambient.ambientMutableConfig, (config) => user.name + config.locale))
+
+// MUST NOT TRIGGER: the mapper re-yields the outer result unchanged; that is Effect.tap (flatMapToTap), not a combination.
+export const mapperReturnsOuter = getUser.pipe(Effect.flatMap((user) => Effect.map(getConfig, () => user)))
+// MUST NOT TRIGGER: the mapper re-yields the outer result unchanged; that is Effect.tap (flatMapToTap), not a combination.
+export const mapperReturnsOuterSingleReturn = Effect.flatMap(getUser, (user) =>
+  Effect.map(getConfig, (config) => {
+    return user
+  }))
+// MUST NOT TRIGGER: the mapper re-yields the outer result unchanged; that is Effect.tap (flatMapToTap), not a combination.
+export const mapperReturnsOuterDestructuredParameter = Effect.flatMap(getUser, (user) =>
+  Effect.map(getConfig, ({ locale }) => user))
+
+// MUST NOT TRIGGER: the mapper has statements besides its return (out of scope).
+export const mapperReturnsOuterBlock = Effect.flatMap(getUser, (user) =>
+  Effect.map(getConfig, (config) => {
+    console.log(config.locale)
+    return user
+  }))
+
+// ---------------------------------------------------------------------------
+// REVIEW REGRESSIONS: binding the outer parameter would move from before `that` runs to after it
+// ---------------------------------------------------------------------------
+
+declare const bump: () => number
+declare const getPartialCount: Effect.Effect<{ readonly n?: number }>
+declare const keyOf: () => "name"
+interface MutableCounter {
+  count: number
+}
+declare const getCounter: Effect.Effect<MutableCounter>
+declare const increment: Effect.Effect<void>
+declare const getPair: Effect.Effect<readonly [number, string]>
+declare const getProfile: Effect.Effect<{ readonly user: { readonly name: string } }>
+
+// MUST TRIGGER, NO FIX: the default `bump()` runs before `that` in the nested form, after it in the combiner.
+export const outerDefaultEffectful = Effect.flatMap(getPartialCount, ({ n = bump() }) =>
+  Effect.map(getConfig, (config) => n + config.locale))
+
+// MUST TRIGGER, NO FIX: the computed key `keyOf()` would run after `that`.
+export const outerComputedKey = Effect.flatMap(getUser, ({ [keyOf()]: name }) =>
+  Effect.map(getConfig, (config) => name + config.locale))
+
+// MUST TRIGGER, NO FIX: `count` is mutable, so reading it after `that` runs may see a different value.
+export const outerMutableProperty = Effect.flatMap(getCounter, ({ count }) => Effect.map(increment, () => count + 1))
+
+// MUST TRIGGER, NO FIX: an array pattern runs the value's iterator, which would move after `that`.
+export const outerArrayPattern = Effect.flatMap(getPair, ([first]) =>
+  Effect.map(getConfig, (config) => first + config.locale))
+
+// MUST TRIGGER, NO FIX: an object rest copies every property, readonly or not.
+export const outerRest = Effect.flatMap(getUser, ({ ...rest }) => Effect.map(getConfig, (config) => rest.name + config.locale))
+
+// MUST TRIGGER, NO FIX: a nested pattern of readonly properties.
+// The combiner would destructure after `that` runs instead of before; `readonly` does not make the object
+// immutable (another reference can change it while `that` runs), so the binding cannot move.
+export const outerNestedReadonly = Effect.flatMap(getProfile, ({ user: { name } }) =>
+  Effect.map(getConfig, (config) => name + config.locale))
+
+// MUST TRIGGER, NO FIX: `value` is a get-only accessor (readonly to the checker); its read runs code and may
+// see state that `that` changed, so it cannot move after `that`.
+let getterCount = 0
+class GetterCounter {
+  get value(): number {
+    return getterCount
+  }
+}
+declare const getGetterCounter: Effect.Effect<GetterCounter>
+declare const bumpGetter: Effect.Effect<number>
+export const outerGetter = Effect.flatMap(getGetterCounter, ({ value }) => Effect.map(bumpGetter, (b) => value + b))
+
+// MUST TRIGGER, NO FIX: a getter reached through a nested pattern.
+declare const getGetterHolder: Effect.Effect<{ readonly inner: GetterCounter }>
+export const outerNestedGetter = Effect.flatMap(getGetterHolder, ({ inner: { value } }) =>
+  Effect.map(bumpGetter, (b) => value + b))
+
+// MUST TRIGGER, NO FIX: a getter declared in an interface.
+interface WithGetter {
+  get value(): number
+}
+declare const getWithGetter: Effect.Effect<WithGetter>
+export const outerInterfaceGetter = Effect.flatMap(getWithGetter, ({ value }) => Effect.map(bumpGetter, (b) => value + b))
+
+// MUST TRIGGER, NO FIX: a getter behind a mapped type (Readonly<T>).
+declare const getReadonlyGetter: Effect.Effect<Readonly<GetterCounter>>
+export const outerMappedGetter = Effect.flatMap(getReadonlyGetter, ({ value }) => Effect.map(bumpGetter, (b) => value + b))
+
+// MUST TRIGGER, NO FIX: the outer parameter is optional, so merging it before the required mapper parameter
+// would give `(a?: string, b) => ...`, a required parameter after an optional one (TS1016).
+declare const getName: Effect.Effect<string>
+declare const getCount: Effect.Effect<number>
+export const outerOptionalParameter = Effect.flatMap(getName, (a?: string) => Effect.map(getCount, (b) => a + String(b)))
+
+// MUST TRIGGER: an optional outer parameter followed only by optional ones is valid to merge.
+// Fix: Effect.zipWith(getName, getCount, (a?: string, b?: number) => a + String(b))
+export const outerOptionalThenOptional = Effect.flatMap(getName, (a?: string) =>
+  Effect.map(getCount, (b?: number) => a + String(b)))
+
+// MUST TRIGGER: an optional outer parameter with a parameterless mapper stays the only parameter.
+// Fix: Effect.zipWith(getName, getCount, (a?: string) => a + "!")
+export const outerOptionalAlone = Effect.flatMap(getName, (a?: string) => Effect.map(getCount, () => a + "!"))
+
+// MUST TRIGGER: optional parameters make the pair more than `[a, b]`, so the fix is zipWith, not zip.
+// Fix: Effect.zipWith(getName, getCount, (a?, b?) => [a, b])
+export const tupleOptionalParameters = Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
+
+// MUST NOT TRIGGER: the mapper has two parameters (its `this` parameter counts).
+export const mapperThisParameter = Effect.flatMap(getUser, (user) =>
+  Effect.map(getConfig, function(this: void, config: Config) {
+    return user.name + config.locale
+  }))
+
+// MUST TRIGGER, NO FIX (adversarial regression): readonly does not make the backing object immutable.
+// The original returns 11; moving destructuring after `aliasSecond` runs would return 12.
+const aliasMutable = { value: 1 }
+const aliasView: { readonly value: number } = aliasMutable
+const aliasFirst = Effect.succeed(aliasView)
+const aliasSecond = Effect.sync(() => {
+  aliasMutable.value = 2
+  return 10
+})
+export const readonlyAlias = Effect.flatMap(aliasFirst, ({ value }) =>
+  Effect.map(aliasSecond, (n) => value + n))
+
+// MUST TRIGGER, NO FIX (adversarial regression): a `this` parameter must stay first;
+// prepending `value` would emit `function(value, this: void)` (TS2680).
+const thisFirst = Effect.succeed(1)
+const thisSecond = Effect.succeed(2)
+export const explicitThis = Effect.flatMap(thisFirst, (value) =>
+  Effect.map(thisSecond, function(this: void) { return value + 1 }))
+
+// MUST NOT TRIGGER: the mapper branches between several returns (out of scope).
+declare const branchFirst: Effect.Effect<number>
+declare const branchSecond: Effect.Effect<number>
+export const innerEarlyReturn = Effect.flatMap(branchFirst, (a) =>
+  Effect.map(branchSecond, (b) => {
+    if (b > 0) return a + b
+    return a - b
+  }))
+
+// MUST NOT TRIGGER: the function mapper returns from both branches, with no final return (out of scope).
+export const innerBranchReturns = pipe(branchFirst, Effect.flatMap((a) =>
+  branchSecond.pipe(Effect.map(function (b) {
+    if (b > 0) {
+      return a + b
+    } else {
+      return a - b
+    }
+  }))))
+
+// MUST NOT TRIGGER: the mapper has no return statement (out of scope).
+export const innerNoReturn = Effect.flatMap(branchFirst, (a) =>
+  Effect.map(branchSecond, (b) => {
+    console.log(a + b)
+  }))
+
+// MUST TRIGGER, NO FIX: an arrow mapper that may call `eval` can read the outer function's `this` or
+// `arguments` by name at run time; the merged arrow would see different ones.
+declare const evalFirst: Effect.Effect<number>
+declare const evalSecond: Effect.Effect<number>
+export const evalInArrowMapper = Effect.flatMap(evalFirst, function(a) {
+  return Effect.map(evalSecond, (b) => a + b + Number(eval("arguments.length")))
+})
+
+// MUST TRIGGER, NO FIX: both callbacks are generic; the fix does not merge type parameter lists.
+export const genericBoth = Effect.flatMap(evalFirst, <A extends number>(a: A) =>
+  Effect.map(evalSecond, <B extends number>(b: B) => a + b))
+
+// MUST TRIGGER: the pair has an explicit return type, which Effect.zip would drop, so the fix is zipWith.
+// Fix: Effect.zipWith(getUser, getConfig, (user, config): unknown => [user, config])
+export const tupleAnnotated = Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config): unknown => [user, config]))
+
+void mutableConfig

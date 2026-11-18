@@ -84,13 +84,12 @@ func isIdentityCallback(tp *typeparser.TypeParser, callback *ast.Node) bool {
 	if tp.IsNodeDirectReferenceToEffectFunctionModuleApi(callback, "identity") {
 		return true
 	}
-	lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionNone)
-	if lazy == nil || lazy.Params().Len() != 1 || lazy.Node().Type() != nil {
+	lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionAtMostOneParameter|typeparser.LazyExpressionAtLeastOneParameter)
+	if lazy == nil || lazy.Node().Type() != nil {
 		return false
 	}
-	parameter := lazy.Params().At(0).AsParameterDeclaration()
-	if parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier || parameter.Type != nil ||
-		parameter.DotDotDotToken != nil || parameter.Initializer != nil || parameter.QuestionToken != nil {
+	parameter := lazy.Params().At(0)
+	if !typeparser.IsPlainIdentifierParameter(parameter) || parameter.Type() != nil || parameter.AsParameterDeclaration().QuestionToken != nil {
 		return false
 	}
 	returned := ast.SkipParentheses(lazy.Expression())

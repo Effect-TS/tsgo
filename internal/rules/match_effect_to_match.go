@@ -90,7 +90,7 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 
 func matchEffectConstructorHandler(tp *typeparser.TypeParser, node *ast.Node, constructorName string) (result *ast.Node, argument *ast.Node, ok bool) {
 	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
-	if lazy == nil || lazy.Expression() == nil {
+	if lazy == nil {
 		return nil, nil, false
 	}
 	flow := tp.LongestPipingFlowAt(lazy.Expression(), false)

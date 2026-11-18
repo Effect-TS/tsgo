@@ -170,17 +170,18 @@ pub(crate) fn is_definitely_disposable(
     tp.checker().is_type_assignable_to_exported(success, disposable)
 }
 
-// go: internal/rules/acquire_release_disposable.go:150 isDisposalRelease f2b585469555f5b4
+// go: internal/rules/acquire_release_disposable.go:150 isDisposalRelease 26c1df50e6b05355
 pub(crate) fn is_disposal_release(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
     global_symbol: P<Symbol>,
 ) -> bool {
-    let Some(release) = ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::None)
+    let Some(release) =
+        ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::AtLeastOneParameter)
     else {
         return false;
     };
-    if release.params().len() < 1 || release.params().len() > 2 {
+    if release.params().len() > 2 {
         return false;
     }
 
@@ -221,7 +222,6 @@ pub(crate) fn is_disposal_release(
     if wrapper_name == "promise" {
         flags = flags | LazyExpressionFlags::AllowAsync;
     }
-    // Rust: `ParsedLazyExpression.Expression` is never nil in Rust, so Go's nil check drops.
     let Some(thunk) = ets_typeparser::parse_lazy_expression(wrapper_args[0], flags) else {
         return false;
     };
@@ -232,21 +232,13 @@ pub(crate) fn is_disposal_release(
         || protocol == "asyncDispose" && wrapper_name == "promise")
 }
 
-// go: internal/rules/acquire_release_disposable.go:201 isPlainIdentifierParameter 74c6e6e2192550b0
+// go: internal/rules/acquire_release_disposable.go:201 isPlainIdentifierParameter f85b42c5e0c3e161
 pub(crate) fn is_plain_identifier_parameter(node: Option<P<Node>>) -> bool {
-    let Some(node) = node else {
-        return false;
-    };
-    if node.kind() != Kind::Parameter || node.name().is_none_or(|n| n.kind() != Kind::Identifier) {
-        return false;
-    }
-    let parameter = node.as_parameter_declaration();
-    parameter.dot_dot_dot_token().is_none()
-        && parameter.question_token().is_none()
-        && parameter.initializer().is_none()
+    ets_typeparser::is_plain_identifier_parameter(node)
+        && node.is_some_and(|node| node.as_parameter_declaration().question_token().is_none())
 }
 
-// go: internal/rules/acquire_release_disposable.go:209 disposalProtocolCall 770e22371150945d
+// go: internal/rules/acquire_release_disposable.go:205 disposalProtocolCall 770e22371150945d
 pub(crate) fn disposal_protocol_call(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
