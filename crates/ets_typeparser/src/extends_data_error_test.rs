@@ -61,7 +61,7 @@ function aliasedData() {
             node: P<Node>,
         ) -> bool {
             if node.kind() == Kind::ClassDeclaration {
-                let name = node.name().map(|name| name.text().to_string()).unwrap_or_default();
+                let name = node.name().map_or_default(|name| name.text().to_string());
                 let result = tp.extends_data_error(node);
                 if name == "Tagged" || name == "Shadowed" {
                     if result.is_some() {

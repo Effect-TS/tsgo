@@ -134,7 +134,7 @@ fn test_edge_operations() {
         }
         g.update_edge(ei, |_| "new".into());
         g.update_edge(999, |_| "x".into());
-        let data = g.get_edge(ei).map(|edge| edge.data.clone()).unwrap_or_default();
+        let data = g.get_edge(ei).map_or_default(|edge| edge.data.clone());
         if data != "new" {
             t.fatal(sprintf!("expected updated edge data, got %q", data));
         }

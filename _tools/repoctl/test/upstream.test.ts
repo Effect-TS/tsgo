@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
-import { buildOxlintTestMatrix } from "../src/matrix.ts"
+import { buildOxlintVerifyCases } from "../src/oxlintVerify.ts"
 import {
   buildUpstream,
   decodeLatestNpmVersion,
@@ -18,6 +18,7 @@ import {
   formatUpstreamUpdateDescription,
   getComponent,
   getTsrsComponent,
+  compareTsrsVersions,
   parseTsrsNpmVersion,
   parseTsrsTypeScriptMetadata,
   parseTypeScriptOverrideFolderName,
@@ -169,12 +170,18 @@ test("rejects a dangling TypeScript beta tag", async() => {
   )
 })
 
-test("requires runtime profiles to declare both patched components", async() => {
+test("requires runtime profiles to declare oxlint and a type-aware linter", async() => {
   const upstream = manifest()
   delete (upstream.profiles[0]!.dependencies as Record<string, string>)["oxlint-tsgolint"]
   await assert.rejects(
     Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
-    /Profile vite-plus must depend on oxlint-tsgolint/
+    /Profile vite-plus must depend on oxlint-tsgolint or tsrs/
+  )
+  const withoutOxlint = manifest()
+  delete (withoutOxlint.profiles[0]!.dependencies as Record<string, string>).oxlint
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify(withoutOxlint))),
+    /Profile vite-plus must depend on oxlint/
   )
 })
 
@@ -348,7 +355,8 @@ test("builds deterministic normalized metadata and deduplicates components", () 
     oxlint: { latest: "1.77.0" },
     "oxlint-tsgolint": { latest: "7.0.2001" }
   })
-  assert.equal(buildOxlintTestMatrix(upstream).include.length, 6)
+  // One verify case per retained oxlint runtime; the `vite-plus` profile names no version of its own.
+  assert.equal(buildOxlintVerifyCases(upstream).length, 6)
   assert.deepEqual(upstream.profiles.slice(1).map((profile) => profile.dependencies.oxlint), [
     "1.72.0", "1.73.0", "1.74.0", "1.75.0", "1.76.0", "1.77.0"
   ])
@@ -358,6 +366,57 @@ test("builds deterministic normalized metadata and deduplicates components", () 
       description: "Vite+ 0.2.8 compatibility runtime",
       dependencies: { oxlint: "1.76.0", "oxlint-tsgolint": "7.0.2001" }
     }
+  ])
+})
+
+test("records the tsrs a vite-plus runtime pins instead of oxlint-tsgolint", async() => {
+  const typescriptGo = { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" } as const
+  const oxlint = {
+    oxlint: { npmVersion: "1.94.0", gitHead: thirdRevision },
+    tsgolint: { npmVersion: "7.0.2007", gitHead: secondRevision },
+    ts: typescriptGo
+  }
+  const latestTsrs = { gitHead: secondRevision, typescript: { version: "7.1.0-beta", gitHead: thirdRevision } }
+  const pinnedTsrs = {
+    npmVersion: "7.1.0-beta.tsrs2",
+    gitHead: thirdRevision,
+    typescript: { version: "7.1.0-beta", gitHead: thirdRevision }
+  }
+  const vitePlus = { oxlint: oxlint.oxlint, tsrs: pinnedTsrs }
+  const upstream = buildUpstream({
+    next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0-beta", gitHead: thirdRevision, provider: "typescript" },
+    latest: typescriptGo,
+    oxlint,
+    retainedRuntimes: [
+      { ...oxlint, name: "oxlint@1.94.0", description: "Oxlint 1.94.0 compatibility runtime" },
+      { ...vitePlus, name: "vite-plus@1.7.0", description: "Vite+ 1.7.0 compatibility runtime" },
+      { ...oxlint, name: "vite-plus@1.6.0", description: "Vite+ 1.6.0 compatibility runtime" }
+    ],
+    vitePlus: { ...vitePlus, vitePlusVersion: "1.7.0" },
+    tsrs: { tags: { latest: "0.25.0-ts7.1.0-beta" }, components: { "0.25.0-ts7.1.0-beta": latestTsrs } }
+  })
+  // The latest tsrs release stays the tag; the pinned one is recorded next to it, so it is built and released.
+  assert.deepEqual(upstream.tags.tsrs, { latest: "0.25.0-ts7.1.0-beta" })
+  assert.deepEqual(upstream.components.tsrs, {
+    "0.25.0-ts7.1.0-beta": latestTsrs,
+    "7.1.0-beta.tsrs2": { gitHead: pinnedTsrs.gitHead, typescript: pinnedTsrs.typescript }
+  })
+  assert.deepEqual(Object.keys(upstream.components["oxlint-tsgolint"]), ["7.0.2007"])
+  assert.deepEqual(upstream.profiles.map(({ dependencies, name }) => ({ name, dependencies })), [
+    { name: "vite-plus", dependencies: { oxlint: "1.94.0", tsrs: "7.1.0-beta.tsrs2" } },
+    { name: "oxlint@1.94.0", dependencies: { oxlint: "1.94.0", "oxlint-tsgolint": "7.0.2007" } },
+    { name: "vite-plus@1.7.0", dependencies: { oxlint: "1.94.0", tsrs: "7.1.0-beta.tsrs2" } },
+    { name: "vite-plus@1.6.0", dependencies: { oxlint: "1.94.0", "oxlint-tsgolint": "7.0.2007" } }
+  ])
+  // The manifest stays valid, and the tsrs-only vite-plus runtime is verified on its installed tsrs.
+  await Effect.runPromise(decodeUpstream(JSON.stringify(upstream)))
+  assert.deepEqual(buildOxlintVerifyCases(upstream).map(({ name }) => name), [
+    "oxlint@1.94.0 + oxlint-tsgolint@7.0.2007",
+    "oxlint@1.94.0 + tsrs@0.25.0-ts7.1.0-beta",
+    "oxlint@1.94.0 + tsrs@7.1.0-beta.tsrs2",
+    "vite-plus@1.6.0 (oxlint 1.94.0, tsgolint 7.0.2007)",
+    "vite-plus@1.7.0 (oxlint 1.94.0, tsrs 7.1.0-beta.tsrs2)"
   ])
 })
 
@@ -629,6 +688,14 @@ test("maps tsrs npm releases to their GitHub tag and ported TypeScript", () => {
     typescriptVersion: "7.1.0-dev.20260929"
   })
   assert.deepEqual(parseTsrsNpmVersion("1.2.3-ts7.1.0"), { tag: "v1.2.3", typescriptVersion: "7.1.0" })
+  // The scheme vite-plus pins since 1.7.0: the TypeScript version with a tsrs build number, tagged as is.
+  assert.deepEqual(parseTsrsNpmVersion("7.1.0-beta.tsrs2"), { tag: "v7.1.0-beta.tsrs2", typescriptVersion: "7.1.0-beta" })
+  assert.deepEqual(parseTsrsNpmVersion("7.1.0-tsrs1"), { tag: "v7.1.0-tsrs1", typescriptVersion: "7.1.0" })
+  assert.deepEqual(parseTsrsNpmVersion("7.1.0-dev.20261116.1.tsrs3"), {
+    tag: "v7.1.0-dev.20261116.1.tsrs3",
+    typescriptVersion: "7.1.0-dev.20261116.1"
+  })
+  assert.equal(parseTsrsNpmVersion("7.1.0-beta.tsrs"), undefined)
   assert.equal(parseTsrsNpmVersion("0.0.0-snapshot-20240905062806"), undefined)
   assert.equal(parseTsrsNpmVersion("0.18.0"), undefined)
 
@@ -682,8 +749,8 @@ test("describes tsrs updates", () => {
     `- Compare: https://github.com/oxc-project/tsrs/compare/${revision}...${thirdRevision}`,
     `- Ports TypeScript \`7.1.0\` ([\`${secondRevision}\`](https://github.com/microsoft/TypeScript/commit/${secondRevision}))`,
     "",
-    "The Rust port follows tsrs: `_patches/tsrs` must apply with zero fuzz, and `rust-toolchain.toml` and",
-    "`[profile.release]` in `Cargo.toml` must match tsrs's (`sync-upstream` skill)."
+    "The Rust port follows tsrs: `_patches/tsrs` must apply with zero fuzz, `rust-toolchain.toml` must be at least",
+    "tsrs's, and `[profile.release]` in `Cargo.toml` must match tsrs's (`sync-upstream` skill)."
   ].join("\n"))
 
   const added = formatUpstreamUpdateDescription({ ...options, before, after: updated })
@@ -797,4 +864,17 @@ test("formats an Oxlint configuration schema", () => {
     ""
   ].join("\n"))
   assert.equal(formatOxlintConfigurationSchema({ definitions: {} }), undefined)
+})
+
+test("orders tsrs versions by the TypeScript they port, the scheme and the build number", () => {
+  const versions = ["7.1.0-beta.tsrs10", "0.25.0-ts7.1.0-beta", "7.1.0-tsrs1", "7.1.0-beta.tsrs2", "0.18.0-ts7.1.0-dev.20260929", "0.20.0-ts7.1.0-beta"]
+  // Semver puts tsrs10 below tsrs2 (a textual prerelease identifier).
+  assert.deepEqual([...versions].sort(compareTsrsVersions), [
+    "0.18.0-ts7.1.0-dev.20260929",
+    "0.20.0-ts7.1.0-beta",
+    "0.25.0-ts7.1.0-beta",
+    "7.1.0-beta.tsrs2",
+    "7.1.0-beta.tsrs10",
+    "7.1.0-tsrs1"
+  ])
 })

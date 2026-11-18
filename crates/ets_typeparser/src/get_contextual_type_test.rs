@@ -172,7 +172,7 @@ const gen = function* () { const options: Options = { value: 42 }; };",
                 if got.is_none_or(|got| type_string(&mut tp, got) != "Options") {
                     t.fatal(sprintf!(
                         "normal context = %v, want Options",
-                        got.map(|got| type_string(&mut tp, got)).unwrap_or_default()
+                        got.map_or_default(|got| type_string(&mut tp, got))
                     ));
                 }
                 if let Some(got) = tp.cached_object_literal_constraint_contextual_type(node) {
@@ -198,7 +198,7 @@ const gen = function* () { const options: Options = { value: 42 }; };",
                 if got.is_none_or(|got| type_string(&mut other, got) != "Options") {
                     t.fatal(sprintf!(
                         "shared normal context = %v, want Options",
-                        got.map(|got| type_string(&mut other, got)).unwrap_or_default()
+                        got.map_or_default(|got| type_string(&mut other, got))
                     ));
                 }
                 if let Some(got) = other.cached_object_literal_constraint_contextual_type(node) {

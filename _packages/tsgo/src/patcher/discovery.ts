@@ -210,25 +210,24 @@ const discoverTsrs: (
     } satisfies DiscoveredBinaryLocation]
   })
 
-const discoverVitePlusOxlint: (
-  cwdRequire: NodeJS.Require
-) => Effect.Effect<DiscoveredBinaryLocation[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
+// The scopes the project's packages resolve from: the project, then vite-plus, which installs its own oxlint and tsrs.
+export const packageScopes: (
+  cwd: string
+) => Effect.Effect<ReadonlyArray<NodeJS.Require>, DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwd) =>
   Effect.gen(function*() {
+    const path = yield* Path.Path
+    const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
     const vitePlus = yield* optionally(readPackage(cwdRequire, "vite-plus"))
-    if (vitePlus === undefined) return []
-    return yield* discoverOxlint(nodeModule.createRequire(vitePlus.packageJsonPath))
+    return vitePlus === undefined ? [cwdRequire] : [cwdRequire, nodeModule.createRequire(vitePlus.packageJsonPath)]
   })
 
 export const discoverBinaries = (cwd: string, preferredTypescriptPackage?: string) => Effect.gen(function*() {
-  const path = yield* Path.Path
-  const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
-  const typescript = yield* discoverTypeScript(cwdRequire, preferredTypescriptPackage)
-  const oxlint = yield* discoverOxlint(cwdRequire)
-  const vitePlusOxlint = yield* discoverVitePlusOxlint(cwdRequire)
-  const tsrs = yield* discoverTsrs(cwdRequire)
-  const discovered = [...new Map(
-    [...typescript, ...oxlint, ...vitePlusOxlint, ...tsrs].map((binary) => [binary.binaryPath, binary])
-  ).values()]
+  const scopes = yield* packageScopes(cwd)
+  const typescript = yield* discoverTypeScript(scopes[0], preferredTypescriptPackage)
+  const scoped = yield* Effect.forEach(scopes, (require) =>
+    Effect.zipWith(discoverOxlint(require), discoverTsrs(require), (oxlint, tsrs) => [...oxlint, ...tsrs]))
+  const located = [...typescript, ...scoped.flat()]
+  const discovered = [...new Map(located.map((binary) => [binary.binaryPath, binary])).values()]
   return yield* Effect.forEach(discovered, (binary) => hashFile(binary.binaryPath).pipe(
     Effect.map((fileHash) => ({ ...binary, fileHash })),
     Effect.mapError(() => new DiscoveryError({ reason: `Unable to read discovered binary ${binary.binaryPath}.` }))

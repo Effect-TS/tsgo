@@ -13,7 +13,10 @@ import {
   getTsrsComponent,
   readUpstream,
   resolveComponent,
+  tsrsOverrideFolderName,
+  tsrsPatchesFolder,
   tsrsRepository,
+  typeScriptPatchesRoot,
   type TypeScriptSource
 } from "./upstream.ts"
 
@@ -245,21 +248,29 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
     { name: compiler.checkoutDir, patches: path.join(repositoryRoot, compiler.patchDir) },
     { name: "tsgolint", patches: path.join(repositoryRoot, "_patches", "tsgolint") },
     { name: "oxlint", patches: path.join(repositoryRoot, "_patches", "oxlint") },
-    { name: "tsrs", patches: path.join(repositoryRoot, "_patches", "tsrs") }
+    { name: "tsrs", patches: path.join(repositoryRoot, tsrsPatchesFolder) }
   ] as const
 
   for (const target of targets) {
     const checkout = path.join(repositoryRoot, target.name)
-    if (!(yield* fs.exists(path.join(checkout, ".git"))) || !(yield* fs.exists(target.patches))) {
+    if (!(yield* fs.exists(path.join(checkout, ".git")))) {
+      continue
+    }
+    // A tsrs commit with an override folder (`_patches/tsrs-<gitHead>`) is patched from it instead.
+    const override = target.name === "tsrs"
+      ? path.join(repositoryRoot, typeScriptPatchesRoot, tsrsOverrideFolderName(yield* readGit(checkout, ["rev-parse", "HEAD"])))
+      : undefined
+    const patchesDirectory = override !== undefined && (yield* fs.exists(override)) ? override : target.patches
+    if (!(yield* fs.exists(patchesDirectory))) {
       continue
     }
 
-    const patches = (yield* fs.readDirectory(target.patches))
+    const patches = (yield* fs.readDirectory(patchesDirectory))
       .filter((file) => file.endsWith(".patch"))
       .sort()
 
     for (const file of patches) {
-      const patch = path.join(target.patches, file)
+      const patch = path.join(patchesDirectory, file)
       const relativePatch = path.relative(repositoryRoot, patch)
       yield* Console.log(`Applying ${target.name} patch: ${relativePatch}`)
       const check = yield* runCommandCaptureSplit("git", checkout, ["apply", "--check", patch])

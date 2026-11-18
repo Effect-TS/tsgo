@@ -344,17 +344,13 @@ pub(crate) fn is_conditional_succeed(
         return false;
     }
     let value = value_node.as_property_access_expression();
-    if value_node.question_dot_token().is_some()
+    !(value_node.question_dot_token().is_some()
         || ets_shim::scanner::get_text_of_node(value.name) != "value"
         || !same_identifier_reference(
             tp,
             option_node,
             Some(ast::skip_parentheses(value.expression)),
-        )
-    {
-        return false;
-    }
-    true
+        ))
 }
 
 // go: internal/rules/option_match_to_from_option.go:284 analyzeEffectFailCall 00e9735250958be4

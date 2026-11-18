@@ -85,7 +85,7 @@ You can then run Oxlint normally:
 pnpm exec oxlint .
 ```
 
-The installed `oxlint` and `oxlint-tsgolint` versions must match the versions supported by the installed `@effect/tsgo` release. The patch command validates this before changing either integration.
+The installed `oxlint` version, and the installed `oxlint-tsgolint` version where `oxlint-tsgolint` is installed, must match the versions supported by the installed `@effect/tsgo` release. The patch command validates this before changing either integration.
 
 Use the same integration flags when restoring binaries:
 

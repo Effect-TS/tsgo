@@ -1093,7 +1093,7 @@ fn annotate_preview(
             result.push('\n');
         }
         result.push_str(line);
-        for current in annotations.get(&index).map(Vec::as_slice).unwrap_or_default() {
+        for current in annotations.get(&index).map_or_default(Vec::as_slice) {
             result.push_str("\n/**\n");
             result.push_str(&current.padding);
             result.push_str(&"^".repeat(current.width));
@@ -1840,11 +1840,7 @@ impl MetadataDocument {
             value.get(key).and_then(serde_json::Value::as_i64).unwrap_or_default()
         }
         fn array<'v>(value: &'v serde_json::Value, key: &str) -> &'v [serde_json::Value] {
-            value
-                .get(key)
-                .and_then(serde_json::Value::as_array)
-                .map(Vec::as_slice)
-                .unwrap_or_default()
+            value.get(key).and_then(serde_json::Value::as_array).map_or_default(Vec::as_slice)
         }
         let value: serde_json::Value = serde_json::from_str(data).map_err(|err| err.to_string())?;
         let groups = array(&value, "groups")

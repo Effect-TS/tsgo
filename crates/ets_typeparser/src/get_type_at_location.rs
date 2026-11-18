@@ -104,11 +104,7 @@ pub(crate) fn is_type_at_location_candidate(node: P<Node>) -> bool {
         return false;
     }
 
-    if is_inside_type_only_heritage_expression(node) {
-        return false;
-    }
-
-    true
+    !is_inside_type_only_heritage_expression(node)
 }
 
 // go: internal/typeparser/get_type_at_location.go:97 isInsideTypeOnlyHeritageExpression 1fbd83fdccf81b5d

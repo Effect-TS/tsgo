@@ -70,9 +70,8 @@ const s = "test" satisfies string
 
         let mut got: Vec<String> = Vec::new();
         for r in tp.expected_and_real_types(sf).as_deref().unwrap_or_default() {
-            let expected =
-                r.expected_type(&mut tp).map(|ty| type_string(&mut tp, ty)).unwrap_or_default();
-            let real = r.real_type(&mut tp).map(|ty| type_string(&mut tp, ty)).unwrap_or_default();
+            let expected = r.expected_type(&mut tp).map_or_default(|ty| type_string(&mut tp, ty));
+            let real = r.real_type(&mut tp).map_or_default(|ty| type_string(&mut tp, ty));
             got.push(format!(
                 "Kind{:?} | {} | {} | {}",
                 r.node().kind(),

@@ -77,3 +77,17 @@ export const buildReleasePlan = (upstream: typeof Upstream.Type): ReadonlyArray<
         timeoutMinutes: target.startsWith("win32-") ? 180 : 120
       })))
 ]
+
+// The artifacts the Validate Oxlint workflow builds (each once, by `repoctl build artifact`) and verifies together
+// (`repoctl oxlint verify`): the Oxlint bindings, tsgolint and tsrs releases of the linux-x64 platform package. tsrs
+// is built without the release optimizations (PGO, BOLT), which only change its speed.
+export const oxlintValidationTarget = "linux-x64" satisfies BuildTarget
+
+const oxlintValidationComponents: ReadonlyArray<ComponentName> = ["oxlint", "oxlint-tsgolint", "tsrs"]
+
+export const buildOxlintArtifactPlan = (upstream: typeof Upstream.Type): ReadonlyArray<ReleaseArtifactPlan> =>
+  buildReleasePlan(upstream)
+    .filter((artifact) =>
+      artifact.target === oxlintValidationTarget && oxlintValidationComponents.includes(artifact.component)
+    )
+    .map(({ optimize: _optimize, ...artifact }) => artifact)

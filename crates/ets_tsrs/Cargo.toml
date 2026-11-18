@@ -21,7 +21,7 @@ ets_etscheckerhooks.workspace = true
 ets_etsdiagnostics.workspace = true
 ets_etsexecutehooks.workspace = true
 ets_etslshooks.workspace = true
-ets_etsoxlintrunner.workspace = true
+ets_etsoxlintrunner = { workspace = true, optional = true }
 ets_rules.workspace = true
 ets_shim.workspace = true
 rustc-hash.workspace = true
@@ -31,7 +31,7 @@ tsrs_lint = { path = "../../tsrs/crates/tsrs_lint", optional = true }
 [features]
 # tsrs's CLI links mimalloc, whose build needs CMake. It is opt-in so that `cargo check/clippy/test --workspace` work
 # without CMake; `repoctl test` builds the binary with it (`cargo build -p ets_tsrs --features cli`).
-cli = ["dep:tsrs_cli", "tsrs_cli/effect-main", "dep:tsrs_lint"]
+cli = ["dep:tsrs_cli", "tsrs_cli/effect-main", "dep:tsrs_lint", "dep:ets_etsoxlintrunner"]
 
 [[bin]]
 name = "tsrs"

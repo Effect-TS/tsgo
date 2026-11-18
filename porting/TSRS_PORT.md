@@ -212,7 +212,11 @@ tsrs targets and reject an `artifacts/tsrs` directory anywhere else. `repoctl bu
 only with a tsrs checkout, cargo and CMake, and otherwise says why it skipped it. The update-upstreams workflow runs the tsrs setup (so a
 `_patches/tsrs` patch that no longer applies is reported and `crates/ets_shim` is regenerated), then the default setup
 again, so the generated pull request commits no tsrs submodule. `repoctl upstream update` records `tsrs@latest` (tag
-`v<crate version>`, TypeScript from its `[workspace.metadata.typescript]`); a patch that no longer applies sets the
+`v<crate version>`, TypeScript from its `[workspace.metadata.typescript]`) and every tsrs a vite-plus release pins (since
+vite-plus 1.7.0, versions like `7.1.0-beta.tsrs2`, tagged `v<npm version>`), each built and released; a recorded
+tsrs that `_patches/tsrs` does not fit is patched from `_patches/tsrs-<gitHead>` (`_patches/tsrs/README.md`), all of
+them built with one toolchain (`rust-toolchain.toml`, the newest any recorded tsrs pins), and the tsrs setup sets the
+tsrs crate versions in `Cargo.lock` to the checkout (committed for the tsrs the port follows, `tags.tsrs.latest`); a patch that no longer applies sets the
 `patch_failure` output of `repoctl submodules setup`, which the update-upstreams workflow writes into the pull request
 body and the generation check.
 
