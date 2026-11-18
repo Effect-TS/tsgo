@@ -1,8 +1,9 @@
 import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
+import { compare } from "semver"
 import { runCommandString } from "./process.ts"
 import { buildOxlintArtifactPlan, buildReleasePlan, type ReleaseArtifactPlan } from "./releasePlan.ts"
-import { decodeUpstream, readUpstream, type Upstream } from "./upstream.ts"
+import { compareTsrsVersions, decodeUpstream, readUpstream, type Upstream } from "./upstream.ts"
 
 export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
   include: Object.keys(upstream.components.typescript)
@@ -73,12 +74,24 @@ export const buildPerfMatrix = (
   return { build: { include: build }, measure: { include: [...measure.values()] } }
 }
 
-// One job per artifact of buildOxlintArtifactPlan: the slow tsrs builds first, then the Oxlint bindings and tsgolint.
+// One job per artifact of buildOxlintArtifactPlan, latest first: the jobs run max-parallel at a time in matrix order,
+// so the newest version of every component comes before the second newest of any, and within a round the slow tsrs
+// build starts first, then the Oxlint binding, then tsgolint.
 export const buildOxlintBuildMatrix = (upstream: typeof Upstream.Type) => {
   const rank = { tsrs: 0, oxlint: 1, "oxlint-tsgolint": 2 } as Readonly<Record<string, number>>
+  const plan = buildOxlintArtifactPlan(upstream)
+  const newestFirst = (component: string) =>
+    plan.filter((artifact) => artifact.component === component).map((artifact) => artifact.version)
+      .sort((left, right) => component === "tsrs" ? compareTsrsVersions(right, left) : compare(right, left))
+  const rounds = new Map(Object.keys(rank).flatMap((component) =>
+    newestFirst(component).map((version, round) => [`${component}\0${version}`, round] as const)
+  ))
+  const round = (artifact: ReleaseArtifactPlan) => rounds.get(`${artifact.component}\0${artifact.version}`) ?? 0
   return {
-    include: [...buildOxlintArtifactPlan(upstream)]
-      .sort((left, right) => (rank[left.component] ?? 3) - (rank[right.component] ?? 3))
+    include: [...plan]
+      .sort((left, right) =>
+        round(left) - round(right) || (rank[left.component] ?? 3) - (rank[right.component] ?? 3)
+      )
       .map((artifact) => ({
         name: `${artifact.component} ${artifact.version}`,
         component: artifact.component,

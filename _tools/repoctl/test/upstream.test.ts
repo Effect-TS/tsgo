@@ -18,6 +18,7 @@ import {
   formatUpstreamUpdateDescription,
   getComponent,
   getTsrsComponent,
+  compareTsrsVersions,
   parseTsrsNpmVersion,
   parseTsrsTypeScriptMetadata,
   parseTypeScriptOverrideFolderName,
@@ -863,4 +864,17 @@ test("formats an Oxlint configuration schema", () => {
     ""
   ].join("\n"))
   assert.equal(formatOxlintConfigurationSchema({ definitions: {} }), undefined)
+})
+
+test("orders tsrs versions by the TypeScript they port, the scheme and the build number", () => {
+  const versions = ["7.1.0-beta.tsrs10", "0.25.0-ts7.1.0-beta", "7.1.0-tsrs1", "7.1.0-beta.tsrs2", "0.18.0-ts7.1.0-dev.20260929", "0.20.0-ts7.1.0-beta"]
+  // Semver puts tsrs10 below tsrs2 (a textual prerelease identifier).
+  assert.deepEqual([...versions].sort(compareTsrsVersions), [
+    "0.18.0-ts7.1.0-dev.20260929",
+    "0.20.0-ts7.1.0-beta",
+    "0.25.0-ts7.1.0-beta",
+    "7.1.0-beta.tsrs2",
+    "7.1.0-beta.tsrs10",
+    "7.1.0-tsrs1"
+  ])
 })

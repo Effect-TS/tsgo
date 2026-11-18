@@ -98,16 +98,9 @@ test("builds the Oxlint validation artifacts once each and the release plan", ()
     ]
   }
 
-  // One build per Oxlint binding and tsgolint version, on linux-x64 only.
+  // One build per Oxlint binding and tsgolint version, on linux-x64 only, the newest of each first.
   assert.deepEqual(buildOxlintBuildMatrix(upstream), {
     include: [
-      {
-        name: "oxlint 1.76.0",
-        component: "oxlint",
-        version: "1.76.0",
-        target: "linux-x64",
-        artifactName: "linux-x64__oxlint__1.76.0"
-      },
       {
         name: "oxlint 1.77.0",
         component: "oxlint",
@@ -121,6 +114,13 @@ test("builds the Oxlint validation artifacts once each and the release plan", ()
         version: "7.0.2001",
         target: "linux-x64",
         artifactName: "linux-x64__oxlint-tsgolint__7.0.2001"
+      },
+      {
+        name: "oxlint 1.76.0",
+        component: "oxlint",
+        version: "1.76.0",
+        target: "linux-x64",
+        artifactName: "linux-x64__oxlint__1.76.0"
       }
     ]
   })

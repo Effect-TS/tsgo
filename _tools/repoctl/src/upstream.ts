@@ -6,7 +6,7 @@ import * as Schema from "effect/Schema"
 import { appendFile, mkdtemp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { maxSatisfying, rcompare, satisfies } from "semver"
+import { compare, maxSatisfying, rcompare, satisfies } from "semver"
 import { runCommand, runCommandString } from "./process.ts"
 
 // tsrs: the Rust port's upstream (tsrs/), released as the patched `tsrs` binary per tsrs version.
@@ -1083,6 +1083,22 @@ export const parseTsrsNpmVersion = (npmVersion: string) => {
   if (crate !== null) return { tag: `v${crate[1]!}`, typescriptVersion: crate[2]! }
   const typescript = /^(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+?)?)[.-]tsrs\d+$/.exec(npmVersion)
   return typescript === null ? undefined : { tag: `v${npmVersion}`, typescriptVersion: typescript[1]! }
+}
+
+// Orders tsrs npm versions oldest first. Plain semver misorders them: the build number of `7.1.0-beta.tsrs10` is a
+// textual prerelease identifier, below `tsrs2`, and `7.1.0-dev.<date>` sorts above `7.1.0-beta`. The older
+// `<crate>-ts<TypeScript>` releases order by their crate version; the TypeScript-aligned ones (tsrs#973) come after
+// them and order by the TypeScript version they port, then the build number.
+export const compareTsrsVersions = (left: string, right: string) => {
+  const key = (version: string) => {
+    const aligned = /^(.+)[.-]tsrs(\d+)$/.exec(version)
+    return aligned === null
+      ? { scheme: 0, version: /^(\d+\.\d+\.\d+)-ts/.exec(version)?.[1] ?? "0.0.0", build: 0 }
+      : { scheme: 1, version: aligned[1]!, build: Number(aligned[2]) }
+  }
+  const a = key(left)
+  const b = key(right)
+  return a.scheme - b.scheme || compare(a.version, b.version) || a.build - b.build
 }
 
 // The microsoft/TypeScript version and commit a tsrs release ports: its Cargo.toml `[workspace.metadata.typescript]`.
