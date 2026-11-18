@@ -15,6 +15,7 @@ import {
   isNativeTypescriptVersion,
   type PackageMetadata,
   packagedComponentPath,
+  packageScopes,
   supportedVersions,
   tsrsExecutableName,
   tsrsReplacementTargets,
@@ -111,10 +112,15 @@ const installedTypescriptVersion = (context: ProxyContext) => Effect.gen(functio
   return undefined
 })
 
-const installedTsrsVersion = (context: ProxyContext) => Effect.gen(function*() {
-  const require = yield* projectRequire(context)
-  const installed = yield* findInstalledPackage(require, "tsrs").pipe(Effect.mapError(toProxyError))
-  return installed?.version
+// The tsrs version installed in the project, directly or through vite-plus: the project's first, except under vite-plus
+// (`vitePlusFirst`), which resolves tsrs from its own directory before the project (`resolveBundled` in its bin.js).
+const installedTsrsVersion = (context: ProxyContext, vitePlusFirst = false) => Effect.gen(function*() {
+  const scopes = yield* packageScopes(context.cwd).pipe(Effect.mapError(toProxyError))
+  for (const require of vitePlusFirst ? [...scopes].reverse() : scopes) {
+    const installed = yield* findInstalledPackage(require, "tsrs").pipe(Effect.mapError(toProxyError))
+    if (installed !== undefined) return installed.version
+  }
+  return undefined
 })
 
 const requireArtifact = (artifactPath: string) => Effect.gen(function*() {
@@ -164,6 +170,27 @@ const resolveTsc = (context: ProxyContext, invocation: ProxyInvocation) => Effec
 // The packaged tsrs binary of the requested version or tag, else of the installed tsrs version when a build of it
 // ships, else of the latest one.
 const packagedTsrs = (context: ProxyContext, requested: string | undefined) => Effect.gen(function*() {
+  const installed = requested === undefined ? yield* installedTsrsVersion(context) : undefined
+  return yield* packagedTsrsBuild(context, yield* selectVersion("tsrs", "tsrs", requested, installed))
+})
+
+// The packaged tsrs binary of the installed tsrs version, which must be supported.
+const packagedInstalledTsrs = (context: ProxyContext, version: string) => Effect.gen(function*() {
+  const versions = supportedVersions("tsrs")
+  if (!versions.includes(version)) {
+    return yield* new UnsupportedProxyVersionError({
+      packageName: "tsrs",
+      version,
+      source: "installed",
+      supportedVersions: versions,
+      tags: {}
+    })
+  }
+  return yield* packagedTsrsBuild(context, version)
+})
+
+// The packaged tsrs binary of a supported version, with its lib*.d.ts files.
+const packagedTsrsBuild = (context: ProxyContext, version: string) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   if (context.platform === "linux" && !context.isGlibc()) {
@@ -179,8 +206,6 @@ const packagedTsrs = (context: ProxyContext, requested: string | undefined) => E
       }.`
     })
   }
-  const installed = requested === undefined ? yield* installedTsrsVersion(context) : undefined
-  const version = yield* selectVersion("tsrs", "tsrs", requested, installed)
   const executable = yield* requireArtifact(yield* tsrsExecutable(context, version))
   // tsrs loads its lib*.d.ts files from the directory of its binary.
   const libraryPath = path.join(path.dirname(executable), "lib.d.ts")
@@ -211,13 +236,9 @@ export interface OxlintInstallation {
 // The oxlint package of the project, installed directly or through vite-plus, with the oxlint-tsgolint package next to
 // it when installed.
 export const findOxlintInstallation = (cwd: string) => Effect.gen(function*() {
-  const path = yield* Path.Path
   const find = (require: NodeJS.Require, packageName: string) =>
     findInstalledPackage(require, packageName).pipe(Effect.mapError(toProxyError))
-  const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
-  const vitePlus = yield* find(cwdRequire, "vite-plus")
-  const scopes = [cwdRequire, ...(vitePlus === undefined ? [] : [nodeModule.createRequire(vitePlus.packageJsonPath)])]
-  for (const require of scopes) {
+  for (const require of yield* packageScopes(cwd).pipe(Effect.mapError(toProxyError))) {
     const oxlint = yield* find(require, "oxlint")
     if (oxlint !== undefined) return { oxlint, tsgolint: yield* find(require, "oxlint-tsgolint") } satisfies OxlintInstallation
   }
@@ -260,6 +281,10 @@ export interface TypeAwareLinter {
 export interface OxlintArtifacts {
   readonly binding: string
   readonly linter: TypeAwareLinter | undefined
+  // The packaged build of the tsrs installed in the project, as TSRS_BINARY: tsrs's launchers (`tsrs`, and the
+  // `tsrs-lint` that vite-plus sets as OXLINT_TSGOLINT_PATH) run it instead of the stock binary. Undefined without an
+  // installed tsrs, or when no packaged build of it is available and tsrs is not the linter.
+  readonly tsrsBinary: string | undefined
 }
 
 // The packaged tsgolint of the installed oxlint-tsgolint version, undefined when oxlint-tsgolint is not installed.
@@ -286,11 +311,13 @@ const packagedTsrsLint = (context: ProxyContext, selection: TsrsLintSelection) =
 })
 
 // The packaged Oxlint binding of the installed oxlint version and the type-aware linter it runs: the packaged tsrs
-// with `--tsrs-lint`, else the packaged tsgolint of the installed oxlint-tsgolint version, else none.
+// with `--tsrs-lint`, else the packaged tsgolint of the installed oxlint-tsgolint version, else the packaged build of
+// the installed tsrs (vite-plus 1.7.0 and later lint with tsrs instead of oxlint-tsgolint), else none.
 export const oxlintArtifacts = (
   context: ProxyContext,
   installation: OxlintInstallation,
-  tsrsLint: TsrsLintSelection | undefined
+  tsrsLint: TsrsLintSelection | undefined,
+  installedTsrs: string | undefined = undefined
 ) => Effect.gen(function*() {
   const target = yield* Effect.try({
     try: () => experimentalOxlintTarget(context.platform, context.arch, context.platform === "linux" && context.isGlibc()),
@@ -300,10 +327,19 @@ export const oxlintArtifacts = (
   const binding = yield* requireArtifact(
     yield* packagedComponentPath(context.packageDirectory, "oxlint", oxlintVersion, target.oxlintBinding)
   )
-  const linter = tsrsLint === undefined
-    ? yield* packagedTsgolint(context, installation, target)
-    : yield* packagedTsrsLint(context, tsrsLint)
-  return { binding, linter } satisfies OxlintArtifacts
+  const tsrsIsLinter = tsrsLint === undefined && installation.tsgolint === undefined && installedTsrs !== undefined
+  // The installed tsrs must have a packaged build when it lints; otherwise TSRS_BINARY is left out without one.
+  const tsrsBinary = installedTsrs === undefined
+    ? undefined
+    : tsrsIsLinter
+    ? yield* packagedInstalledTsrs(context, installedTsrs)
+    : yield* packagedInstalledTsrs(context, installedTsrs).pipe(Effect.orElseSucceed(() => undefined))
+  const linter = tsrsLint !== undefined
+    ? yield* packagedTsrsLint(context, tsrsLint)
+    : tsrsIsLinter
+    ? { kind: "tsrs", executable: tsrsBinary! } satisfies TypeAwareLinter
+    : yield* packagedTsgolint(context, installation, target)
+  return { binding, linter, tsrsBinary } satisfies OxlintArtifacts
 })
 
 // The bridge path as written into NODE_OPTIONS and BUN_OPTIONS. Node.js unescapes backslashes inside quotes and Bun
@@ -346,7 +382,8 @@ export const oxlintBridgeEnv = (context: ProxyContext, artifacts: OxlintArtifact
     ...linterEnv(context.env, artifacts.linter),
     NODE_OPTIONS: prependOption(context.env.NODE_OPTIONS, `--require "${preload}"`, preload),
     BUN_OPTIONS: prependOption(context.env.BUN_OPTIONS, `"--preload=${preload}"`, preload),
-    EFFECT_TSGO_OXLINT_BINDING: artifacts.binding
+    EFFECT_TSGO_OXLINT_BINDING: artifacts.binding,
+    ...(artifacts.tsrsBinary === undefined ? {} : { TSRS_BINARY: artifacts.tsrsBinary })
   }
   return env
 })
@@ -359,7 +396,7 @@ export const oxlintCommand = (
   installation: OxlintInstallation,
   tsrsLint: TsrsLintSelection | undefined = undefined
 ) => Effect.gen(function*() {
-  const artifacts = yield* oxlintArtifacts(context, installation, tsrsLint)
+  const artifacts = yield* oxlintArtifacts(context, installation, tsrsLint, yield* installedTsrsVersion(context))
   return {
     file: context.execPath,
     args: [yield* oxlintBinPath(installation.oxlint), ...args],
@@ -403,7 +440,9 @@ const resolveOxlint = (context: ProxyContext, invocation: ProxyInvocation) => Ef
 
 // vite-plus runs Oxlint as a child process from its own native core, so the CLI runs with the bridge environment,
 // which reaches that child. vite-plus resolves oxlint from the project before its own dependencies, as
-// findOxlintInstallation does.
+// findOxlintInstallation does, and tsrs from its own directory first. Since 1.7.0 it lints with tsrs (its `tsrs-lint`
+// as OXLINT_TSGOLINT_PATH): the patched binding runs the packaged build of that tsrs, which TSRS_BINARY also selects
+// for every other tsrs run under vite-plus.
 const resolveVitePlus = (context: ProxyContext, invocation: ProxyInvocation) => Effect.gen(function*() {
   yield* rejectVersion("vp", invocation.version)
   yield* rejectMusl(context)
@@ -417,7 +456,7 @@ const resolveVitePlus = (context: ProxyContext, invocation: ProxyInvocation) => 
   if (installation === undefined) {
     return yield* new ProxyError({ reason: `Unable to resolve the oxlint package of vite-plus from ${context.cwd}.` })
   }
-  const artifacts = yield* oxlintArtifacts(context, installation, invocation.tsrsLint)
+  const artifacts = yield* oxlintArtifacts(context, installation, invocation.tsrsLint, yield* installedTsrsVersion(context, true))
   return {
     file: context.execPath,
     args: [yield* packageBinPath(vitePlus, "vp"), ...invocation.args],

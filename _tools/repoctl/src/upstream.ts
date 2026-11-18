@@ -6,7 +6,7 @@ import * as Schema from "effect/Schema"
 import { appendFile, mkdtemp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { maxSatisfying, rcompare, satisfies } from "semver"
+import { compare, maxSatisfying, rcompare, satisfies } from "semver"
 import { runCommand, runCommandString } from "./process.ts"
 
 // tsrs: the Rust port's upstream (tsrs/), released as the patched `tsrs` binary per tsrs version.
@@ -276,12 +276,14 @@ const validateUpstream = (upstream: typeof Upstream.Type) => {
     if (profile === undefined) {
       return Effect.fail(new UpstreamManifestError({ reason: `Missing upstream profile: ${name}` }))
     }
-    for (const component of ["oxlint", "oxlint-tsgolint"]) {
-      if (profile.dependencies[component] === undefined) {
-        return Effect.fail(new UpstreamManifestError({
-          reason: `Profile ${name} must depend on ${component}`
-        }))
-      }
+    if (profile.dependencies.oxlint === undefined) {
+      return Effect.fail(new UpstreamManifestError({ reason: `Profile ${name} must depend on oxlint` }))
+    }
+    // vite-plus ships tsrs as its type-aware linter since 1.7.0, oxlint-tsgolint before.
+    if (profile.dependencies["oxlint-tsgolint"] === undefined && profile.dependencies.tsrs === undefined) {
+      return Effect.fail(new UpstreamManifestError({
+        reason: `Profile ${name} must depend on oxlint-tsgolint or tsrs`
+      }))
     }
   }
   if (upstream.profiles.some((profile) =>
@@ -369,6 +371,18 @@ export const resolveComponent = Effect.fnUntraced(function*(
 
 export const tsrsRepository = "https://github.com/oxc-project/tsrs.git"
 
+// The tsrs patches, by folder naming convention as the TypeScript ones: `_patches/tsrs/` targets the tsrs the Rust port
+// follows (`tags.tsrs.latest`); another recorded tsrs release (one a vite-plus runtime pins) whose sources they do not
+// fit gets a `_patches/tsrs-<gitHead>/` folder, the same patches file for file rebased on that commit, applied instead
+// of `_patches/tsrs/` when that commit is set up. `repoctl check` enforces the same file names and fails on a folder
+// naming no recorded tsrs commit.
+export const tsrsPatchesFolder = `${typeScriptPatchesRoot}/tsrs`
+
+export const tsrsOverrideFolderName = (gitHead: string) => `tsrs-${gitHead}`
+
+// The commit a tsrs override folder name targets, or undefined when the name is not one.
+export const parseTsrsOverrideFolderName = (name: string) => /^tsrs-([0-9a-f]{40})$/.exec(name)?.[1]
+
 // The tsrs release checked out at `tsrs/` next to the TypeScript compiler, or undefined when the manifest has none.
 export const getTsrsComponent = (upstream: typeof Upstream.Type, requestedVersion?: string) => {
   const version = requestedVersion ?? upstream.tags.tsrs?.latest
@@ -406,7 +420,14 @@ interface OxlintSelection {
   readonly tsgolintVersion: string
 }
 
-interface VitePlusSelection extends OxlintSelection {
+// A runtime pins oxlint and its type-aware linter: oxlint-tsgolint, or (vite-plus since 1.7.0) tsrs.
+interface RuntimeSelection {
+  readonly oxlintVersion: string
+  readonly tsgolintVersion?: string
+  readonly tsrsVersion?: string
+}
+
+interface VitePlusSelection extends RuntimeSelection {
   readonly vitePlusVersion: string
 }
 
@@ -515,10 +536,24 @@ const resolveLatestMatchingVersion = Effect.fnUntraced(function*(
   return yield* decodeLatestNpmVersion(output, packageSpec, spec)
 })
 
-interface ResolvedRuntime {
+interface TsrsMetadata {
+  readonly npmVersion: string
+  readonly gitHead: string
+  readonly typescript: { readonly version: string; readonly gitHead: string }
+}
+
+interface ResolvedOxlintRuntime {
   readonly oxlint: ComponentMetadata
   readonly tsgolint: ComponentMetadata
   readonly ts: TypeScriptMetadata
+}
+
+// A runtime without oxlint-tsgolint has no TypeScript of its own: the tsrs it pins records the TypeScript it ports.
+interface ResolvedRuntime {
+  readonly oxlint: ComponentMetadata
+  readonly tsgolint?: ComponentMetadata
+  readonly ts?: TypeScriptMetadata
+  readonly tsrs?: TsrsMetadata
 }
 
 interface BuildUpstreamOptions {
@@ -526,9 +561,9 @@ interface BuildUpstreamOptions {
   readonly beta: TypeScriptMetadata
   readonly latest: TypeScriptMetadata
   readonly retainedRuntimes?: ReadonlyArray<ResolvedRuntime & { readonly name: string; readonly description: string }>
-  readonly oxlint: ResolvedRuntime
+  readonly oxlint: ResolvedOxlintRuntime
   readonly vitePlus: ResolvedRuntime & { readonly vitePlusVersion: string }
-  // `upstream update` records the latest tsrs release only (resolveTsrsRelease).
+  // The latest tsrs release (resolveTsrsRelease); the tsrs releases the runtimes pin are recorded next to it.
   readonly tsrs?: {
     readonly tags: NonNullable<typeof Upstream.Type.tags.tsrs>
     readonly components: NonNullable<typeof Upstream.Type.components.tsrs>
@@ -547,29 +582,42 @@ export const buildUpstream = ({
     readonly dependencies: { readonly typescript: string }
   }>()
   const oxlintComponents = new Map<string, { readonly gitHead: string }>()
+  const tsrsComponents = new Map<string, NonNullable<typeof Upstream.Type.components.tsrs>[string]>(
+    Object.entries(tsrs?.components ?? {})
+  )
 
-  const runtimes = [...retainedRuntimes, oxlint, vitePlus]
-  for (const metadata of [latest, beta, next, ...runtimes.map((runtime) => runtime.ts)]) {
+  const runtimes: ReadonlyArray<ResolvedRuntime> = [...retainedRuntimes, oxlint, vitePlus]
+  for (const metadata of [latest, beta, next, ...runtimes.flatMap((runtime) => runtime.ts ?? [])]) {
     typescript.set(metadata.npmVersion, {
       gitHead: metadata.gitHead,
       provider: metadata.provider
     })
   }
-  // The TypeScript each recorded tsrs ports (its dependency), on microsoft/TypeScript: kept while that tsrs is recorded,
-  // dropped with it when tsrs is bumped.
-  for (const component of Object.values(tsrs?.components ?? {})) {
+  for (const runtime of runtimes) {
+    if (runtime.tsgolint !== undefined && runtime.ts !== undefined) {
+      tsgolint.set(runtime.tsgolint.npmVersion, {
+        gitHead: runtime.tsgolint.gitHead,
+        dependencies: { typescript: runtime.ts.npmVersion }
+      })
+    }
+    if (runtime.tsrs !== undefined) {
+      tsrsComponents.set(runtime.tsrs.npmVersion, { gitHead: runtime.tsrs.gitHead, typescript: runtime.tsrs.typescript })
+    }
+    oxlintComponents.set(runtime.oxlint.npmVersion, { gitHead: runtime.oxlint.gitHead })
+  }
+  // The TypeScript each recorded tsrs ports (its dependency), on microsoft/TypeScript: kept while that tsrs is recorded
+  // (the latest release, or one a runtime pins), dropped with it.
+  for (const component of tsrsComponents.values()) {
     typescript.set(component.typescript.version, {
       gitHead: component.typescript.gitHead,
       provider: "typescript"
     })
   }
-  for (const runtime of runtimes) {
-    tsgolint.set(runtime.tsgolint.npmVersion, {
-      gitHead: runtime.tsgolint.gitHead,
-      dependencies: { typescript: runtime.ts.npmVersion }
-    })
-    oxlintComponents.set(runtime.oxlint.npmVersion, { gitHead: runtime.oxlint.gitHead })
-  }
+  const runtimeDependencies = (runtime: ResolvedRuntime) => ({
+    oxlint: runtime.oxlint.npmVersion,
+    ...(runtime.tsgolint === undefined ? {} : { "oxlint-tsgolint": runtime.tsgolint.npmVersion }),
+    ...(runtime.tsrs === undefined ? {} : { tsrs: runtime.tsrs.npmVersion })
+  })
 
   return {
     schemaVersion: 5,
@@ -587,24 +635,18 @@ export const buildUpstream = ({
       typescript: sortedRecord([...typescript]),
       "oxlint-tsgolint": sortedRecord([...tsgolint]),
       oxlint: sortedRecord([...oxlintComponents]),
-      ...(tsrs === undefined ? {} : { tsrs: sortedRecord(Object.entries(tsrs.components)) })
+      ...(tsrs === undefined ? {} : { tsrs: sortedRecord([...tsrsComponents]) })
     },
     profiles: [
       {
         name: "vite-plus",
         description: `Vite+ ${vitePlus.vitePlusVersion} compatibility runtime`,
-        dependencies: {
-          oxlint: vitePlus.oxlint.npmVersion,
-          "oxlint-tsgolint": vitePlus.tsgolint.npmVersion
-        }
+        dependencies: runtimeDependencies(vitePlus)
       },
       ...retainedRuntimes.map((runtime) => ({
         name: runtime.name,
         description: runtime.description,
-        dependencies: {
-          oxlint: runtime.oxlint.npmVersion,
-          "oxlint-tsgolint": runtime.tsgolint.npmVersion
-        }
+        dependencies: runtimeDependencies(runtime)
       }))
     ]
   }
@@ -769,6 +811,13 @@ export const formatUpstreamUpdateDescription = ({
       spec: "oxlint-tsgolint",
       previous: beforeVitePlus.dependencies["oxlint-tsgolint"],
       updated: afterVitePlus.dependencies["oxlint-tsgolint"]
+    },
+    {
+      label: "Vite+ tsrs runtime",
+      packageName: "tsrs",
+      spec: "tsrs",
+      previous: beforeVitePlus.dependencies.tsrs ?? (afterVitePlus.dependencies.tsrs === undefined ? undefined : "none"),
+      updated: afterVitePlus.dependencies.tsrs
     }
   ].filter((update): update is typeof update & { readonly previous: string; readonly updated: string } =>
     update.previous !== undefined && update.updated !== undefined && update.previous !== update.updated)
@@ -837,8 +886,8 @@ export const formatUpstreamUpdateDescription = ({
         : [`- Compare: ${repository}/compare/${previousTsrsComponent.gitHead}...${updatedTsrsComponent.gitHead}`]),
       `- Ports TypeScript \`${updatedTsrsComponent.typescript.version}\` ([\`${updatedTsrsComponent.typescript.gitHead}\`](https://github.com/microsoft/TypeScript/commit/${updatedTsrsComponent.typescript.gitHead}))`,
       "",
-      "The Rust port follows tsrs: `_patches/tsrs` must apply with zero fuzz, and `rust-toolchain.toml` and",
-      "`[profile.release]` in `Cargo.toml` must match tsrs's (`sync-upstream` skill)."
+      "The Rust port follows tsrs: `_patches/tsrs` must apply with zero fuzz, `rust-toolchain.toml` must be at least",
+      "tsrs's, and `[profile.release]` in `Cargo.toml` must match tsrs's (`sync-upstream` skill)."
     ].join("\n"))
   }
   const otherUpdates = [
@@ -953,18 +1002,34 @@ const fetchVitePlusSelection = Effect.fnUntraced(function*(repositoryRoot: strin
     version: NonEmptyString,
     dependencies: Schema.Struct({
       oxlint: NonEmptyString,
-      "oxlint-tsgolint": NonEmptyString
+      "oxlint-tsgolint": Schema.optionalKey(NonEmptyString),
+      tsrs: Schema.optionalKey(NonEmptyString)
     })
   })))(output).pipe(
     Effect.mapError((error) => new UpstreamManifestError({
       reason: `Unable to resolve vite-plus@${version}: ${error.message}`
     }))
   )
-  const [oxlintVersion, tsgolintVersion] = yield* Effect.all([
+  const tsgolintSpec = vitePlus.dependencies["oxlint-tsgolint"]
+  const tsrsSpec = vitePlus.dependencies.tsrs
+  if (tsgolintSpec === undefined && tsrsSpec === undefined) {
+    return yield* new UpstreamManifestError({
+      reason: `vite-plus@${vitePlus.version} depends on neither oxlint-tsgolint nor tsrs`
+    })
+  }
+  const [oxlintVersion, tsgolintVersion, tsrsVersion] = yield* Effect.all([
     resolveLatestMatchingVersion(repositoryRoot, "oxlint", vitePlus.dependencies.oxlint),
-    resolveLatestMatchingVersion(repositoryRoot, "oxlint-tsgolint", vitePlus.dependencies["oxlint-tsgolint"])
+    tsgolintSpec === undefined
+      ? Effect.succeed(undefined)
+      : resolveLatestMatchingVersion(repositoryRoot, "oxlint-tsgolint", tsgolintSpec),
+    tsrsSpec === undefined ? Effect.succeed(undefined) : resolveLatestMatchingVersion(repositoryRoot, "tsrs", tsrsSpec)
   ], { concurrency: "unbounded" })
-  return { vitePlusVersion: vitePlus.version, oxlintVersion, tsgolintVersion }
+  return {
+    vitePlusVersion: vitePlus.version,
+    oxlintVersion,
+    ...(tsgolintVersion === undefined ? {} : { tsgolintVersion }),
+    ...(tsrsVersion === undefined ? {} : { tsrsVersion })
+  } satisfies VitePlusSelection
 })
 
 const resolveOxlintComponent = Effect.fnUntraced(function*(repositoryRoot: string, npmVersion: string) {
@@ -1010,10 +1075,30 @@ const resolveTsgolintComponent = Effect.fnUntraced(function*(
   }
 })
 
-// npm `tsrs` versions are `<crate version>-ts<TypeScript version>`; the release is tagged `v<crate version>`.
+// npm `tsrs` versions are either `<crate version>-ts<TypeScript version>`, tagged `v<crate version>`, or (since
+// 7.1.0-beta.tsrs2, the scheme vite-plus pins) `<TypeScript version>.tsrs<N>` / `<TypeScript version>-tsrs<N>`,
+// tagged `v<npm version>`.
 export const parseTsrsNpmVersion = (npmVersion: string) => {
-  const match = /^(\d+\.\d+\.\d+)-ts(\d.*)$/.exec(npmVersion)
-  return match === null ? undefined : { tag: `v${match[1]!}`, typescriptVersion: match[2]! }
+  const crate = /^(\d+\.\d+\.\d+)-ts(\d.*)$/.exec(npmVersion)
+  if (crate !== null) return { tag: `v${crate[1]!}`, typescriptVersion: crate[2]! }
+  const typescript = /^(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+?)?)[.-]tsrs\d+$/.exec(npmVersion)
+  return typescript === null ? undefined : { tag: `v${npmVersion}`, typescriptVersion: typescript[1]! }
+}
+
+// Orders tsrs npm versions oldest first. Plain semver misorders them: the build number of `7.1.0-beta.tsrs10` is a
+// textual prerelease identifier, below `tsrs2`, and `7.1.0-dev.<date>` sorts above `7.1.0-beta`. The older
+// `<crate>-ts<TypeScript>` releases order by their crate version; the TypeScript-aligned ones (tsrs#973) come after
+// them and order by the TypeScript version they port, then the build number.
+export const compareTsrsVersions = (left: string, right: string) => {
+  const key = (version: string) => {
+    const aligned = /^(.+)[.-]tsrs(\d+)$/.exec(version)
+    return aligned === null
+      ? { scheme: 0, version: /^(\d+\.\d+\.\d+)-ts/.exec(version)?.[1] ?? "0.0.0", build: 0 }
+      : { scheme: 1, version: aligned[1]!, build: Number(aligned[2]) }
+  }
+  const a = key(left)
+  const b = key(right)
+  return a.scheme - b.scheme || compare(a.version, b.version) || a.build - b.build
 }
 
 // The microsoft/TypeScript version and commit a tsrs release ports: its Cargo.toml `[workspace.metadata.typescript]`.
@@ -1048,16 +1133,15 @@ const fetchText = Effect.fnUntraced(function*(url: string) {
   })
 })
 
-// The latest tsrs release: npm `tsrs@latest`, the commit of its GitHub tag, and the TypeScript it ports.
-export const resolveTsrsRelease = Effect.fnUntraced(function*(repositoryRoot: string) {
-  const output = yield* runCommandString("npm", repositoryRoot, ["view", "tsrs@latest", "version", "--json"])
-  const npmVersion = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(NonEmptyString))(output).pipe(
-    Effect.mapError((error) => new UpstreamManifestError({ reason: `Unable to resolve tsrs@latest: ${error.message}` }))
-  )
+// One tsrs release: the commit of its GitHub tag and the TypeScript it ports.
+const resolveTsrsComponent = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  npmVersion: string
+) {
   const parsed = parseTsrsNpmVersion(npmVersion)
   if (parsed === undefined) {
     return yield* new UpstreamManifestError({
-      reason: `tsrs@latest ${npmVersion} is not a <version>-ts<TypeScript version> release`
+      reason: `tsrs ${npmVersion} is not a <version>-ts<TypeScript version> or <TypeScript version>.tsrs<N> release`
     })
   }
   const gitHead = yield* resolveRemoteTag(repositoryRoot, tsrsRepository, parsed.tag)
@@ -1073,23 +1157,51 @@ export const resolveTsrsRelease = Effect.fnUntraced(function*(repositoryRoot: st
       reason: `tsrs@${npmVersion} ports TypeScript ${parsed.typescriptVersion}, but ${parsed.tag} declares ${typescript.version}`
     })
   }
+  return { npmVersion, gitHead, typescript }
+})
+
+// The latest tsrs release: npm `tsrs@latest`, the commit of its GitHub tag, and the TypeScript it ports.
+export const resolveTsrsRelease = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const output = yield* runCommandString("npm", repositoryRoot, ["view", "tsrs@latest", "version", "--json"])
+  const npmVersion = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(NonEmptyString))(output).pipe(
+    Effect.mapError((error) => new UpstreamManifestError({ reason: `Unable to resolve tsrs@latest: ${error.message}` }))
+  )
+  const { gitHead, typescript } = yield* resolveTsrsComponent(repositoryRoot, npmVersion)
   return {
     tags: { latest: npmVersion },
     components: { [npmVersion]: { gitHead, typescript } }
   }
 })
 
-const resolveRuntime = Effect.fnUntraced(function*(
-  selection: OxlintSelection,
-  oxlint: ReadonlyMap<string, ComponentMetadata>,
-  tsgolint: ReadonlyMap<string, ComponentMetadata & { readonly ts: TypeScriptMetadata }>
-) {
-  const resolvedOxlint = oxlint.get(selection.oxlintVersion)
-  const resolvedTsgolint = tsgolint.get(selection.tsgolintVersion)
-  if (resolvedOxlint === undefined || resolvedTsgolint === undefined) {
+interface ResolvedComponents {
+  readonly oxlint: ReadonlyMap<string, ComponentMetadata>
+  readonly tsgolint: ReadonlyMap<string, ComponentMetadata & { readonly ts: TypeScriptMetadata }>
+  readonly tsrs: ReadonlyMap<string, TsrsMetadata>
+}
+
+const resolveRuntime = Effect.fnUntraced(function*(selection: RuntimeSelection, components: ResolvedComponents) {
+  const oxlint = components.oxlint.get(selection.oxlintVersion)
+  const tsgolint = selection.tsgolintVersion === undefined
+    ? undefined
+    : components.tsgolint.get(selection.tsgolintVersion)
+  const tsrs = selection.tsrsVersion === undefined ? undefined : components.tsrs.get(selection.tsrsVersion)
+  if (
+    oxlint === undefined ||
+    (selection.tsgolintVersion !== undefined && tsgolint === undefined) ||
+    (selection.tsrsVersion !== undefined && tsrs === undefined)
+  ) {
     return yield* new UpstreamManifestError({ reason: "Unable to resolve selected Oxlint runtime components" })
   }
-  return { oxlint: resolvedOxlint, tsgolint: resolvedTsgolint, ts: resolvedTsgolint.ts }
+  return {
+    oxlint,
+    ...(tsgolint === undefined ? {} : { tsgolint, ts: tsgolint.ts }),
+    ...(tsrs === undefined ? {} : { tsrs })
+  } satisfies ResolvedRuntime
+})
+
+const resolveOxlintRuntime = Effect.fnUntraced(function*(selection: OxlintSelection, components: ResolvedComponents) {
+  const runtime = yield* resolveRuntime(selection, components)
+  return { oxlint: runtime.oxlint, tsgolint: runtime.tsgolint!, ts: runtime.ts! } satisfies ResolvedOxlintRuntime
 })
 
 export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string) {
@@ -1131,7 +1243,7 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     typeof packument.versions !== "object" || packument.versions === null) {
     return yield* new UpstreamManifestError({ reason: "TypeScript npm metadata does not contain versions" })
   }
-  const selections = [
+  const selections: ReadonlyArray<RuntimeSelection & { readonly name: string; readonly description: string }> = [
     ...oxlintSelections.map((selection) => ({
       ...selection,
       name: `oxlint@${selection.oxlintVersion}`,
@@ -1145,9 +1257,14 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   ]
   const oxlintVersions = Array.from(new Set(selections.map((selection) => selection.oxlintVersion)))
     .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
-  const tsgolintVersions = Array.from(new Set(selections.map((selection) => selection.tsgolintVersion)))
-    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
-  const [resolvedOxlint, resolvedTsgolint] = yield* Effect.all([
+  const uniqueVersions = (versions: ReadonlyArray<string | undefined>) =>
+    Array.from(new Set(versions.filter((version) => version !== undefined)))
+      .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
+  const tsgolintVersions = uniqueVersions(selections.map((selection) => selection.tsgolintVersion))
+  // The latest tsrs release is resolved by resolveTsrsRelease already.
+  const tsrsVersions = uniqueVersions(selections.map((selection) => selection.tsrsVersion))
+    .filter((version) => version !== tsrs.tags.latest)
+  const [resolvedOxlint, resolvedTsgolint, resolvedTsrs] = yield* Effect.all([
     Effect.forEach(oxlintVersions, (version) => resolveOxlintComponent(repositoryRoot, version), {
       concurrency: "unbounded"
     }),
@@ -1155,17 +1272,26 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       repositoryRoot,
       version,
       packument.versions as Record<string, { readonly gitHead?: unknown }>
-    ), { concurrency: "unbounded" })
+    ), { concurrency: "unbounded" }),
+    Effect.forEach(tsrsVersions, (version) => resolveTsrsComponent(repositoryRoot, version), {
+      concurrency: "unbounded"
+    })
   ], { concurrency: "unbounded" })
-  const oxlintByVersion = new Map(resolvedOxlint.map((component) => [component.npmVersion, component]))
-  const tsgolintByVersion = new Map(resolvedTsgolint.map((component) => [component.npmVersion, component]))
+  const components: ResolvedComponents = {
+    oxlint: new Map(resolvedOxlint.map((component) => [component.npmVersion, component])),
+    tsgolint: new Map(resolvedTsgolint.map((component) => [component.npmVersion, component])),
+    tsrs: new Map([
+      ...Object.entries(tsrs.components).map(([npmVersion, component]) => [npmVersion, { npmVersion, ...component }] as const),
+      ...resolvedTsrs.map((component) => [component.npmVersion, component] as const)
+    ])
+  }
   const retainedRuntimes = yield* Effect.forEach(selections, (selection) =>
-    resolveRuntime(selection, oxlintByVersion, tsgolintByVersion).pipe(
+    resolveRuntime(selection, components).pipe(
       Effect.map((runtime) => ({ ...runtime, name: selection.name, description: selection.description }))
     ))
-  const oxlint = yield* resolveRuntime(oxlintSelections[0]!, oxlintByVersion, tsgolintByVersion)
+  const oxlint = yield* resolveOxlintRuntime(oxlintSelections[0]!, components)
   const vitePlus = {
-    ...(yield* resolveRuntime(vitePlusSelections[0]!, oxlintByVersion, tsgolintByVersion)),
+    ...(yield* resolveRuntime(vitePlusSelections[0]!, components)),
     vitePlusVersion: vitePlusSelections[0]!.vitePlusVersion
   }
   const schema = formatTSConfigSchema(remoteSchema)

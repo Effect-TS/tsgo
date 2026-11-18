@@ -85,18 +85,14 @@ impl FixtureManifest {
     fn decode(content: &[u8]) -> Result<FixtureManifest, serde_json::Error> {
         let value: serde_json::Value = serde_json::from_slice(content)?;
         let string_map = |v: Option<&serde_json::Value>| -> FxHashMap<String, String> {
-            v.and_then(serde_json::Value::as_object)
-                .map(|o| {
-                    o.iter()
-                        .map(|(k, v)| (k.clone(), v.as_str().unwrap_or_default().to_string()))
-                        .collect()
-                })
-                .unwrap_or_default()
+            v.and_then(serde_json::Value::as_object).map_or_default(|o| {
+                o.iter()
+                    .map(|(k, v)| (k.clone(), v.as_str().unwrap_or_default().to_string()))
+                    .collect()
+            })
         };
-        let profiles = value
-            .get("profiles")
-            .and_then(serde_json::Value::as_object)
-            .map(|o| {
+        let profiles =
+            value.get("profiles").and_then(serde_json::Value::as_object).map_or_default(|o| {
                 o.iter()
                     .map(|(name, profile)| {
                         (
@@ -108,8 +104,7 @@ impl FixtureManifest {
                         )
                     })
                     .collect()
-            })
-            .unwrap_or_default();
+            });
         Ok(FixtureManifest {
             schema_version: value
                 .get("schemaVersion")

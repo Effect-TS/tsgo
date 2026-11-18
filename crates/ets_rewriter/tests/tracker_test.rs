@@ -97,7 +97,7 @@ fn test_new_paths() {
                 for edit in tracker.get_changes().shift_remove(sf.file_name()).unwrap_or_default() {
                     changes.push(TextChange {
                         text_range: converters.from_lsp_range_to_original(&sf, edit.range),
-                        new_text: edit.new_text.clone(),
+                        new_text: edit.new_text,
                     });
                 }
                 let got = ets_shim::core::apply_bulk_edits(source, &changes);

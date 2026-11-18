@@ -29,7 +29,8 @@ git -C tsrs diff --stat $OLD $NEW -- crates/
 ### 2. Bump and rebase the patches
 
 1. Set the tsrs component's `gitHead` in `_packages/tsgo/upstream.json` (and its `typescript` dependency if the
-   snapshot moved), and the workspace toolchain to tsrs's. When the snapshot moves, the override folders named
+   snapshot moved), and raise the workspace toolchain to tsrs's if tsrs's is newer: one toolchain, the newest any recorded
+   tsrs pins, builds every recorded tsrs, so never lower it below what another recorded tsrs needs. When the snapshot moves, the override folders named
    after the old TypeScript `gitHead` (`_patches/typescript-<gitHead>` and
    `_tools/gen_shims/providers/typescript-<gitHead>`; convention in `_patches/typescript/README.md`) turn stale and
    `repoctl check` fails on them: delete them if `_patches/typescript` and the canonical shims apply to the new

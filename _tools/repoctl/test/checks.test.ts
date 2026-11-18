@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
-import { checkEffectV3FixtureMarkers, checkOverrideFolders } from "../src/checks.ts"
+import { checkEffectV3FixtureMarkers, checkOverrideFolders, checkTsrsOverrideFolders } from "../src/checks.ts"
 import type { Upstream } from "../src/upstream.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
@@ -119,4 +119,32 @@ test("lists every v3 fixture without the @effect-v3 marker", () =>
       assert.match(error.message, /testdata\/tests\/effect-v3\/indented\.ts\n {2}testdata\/tests\/effect-v3\/unmarked\.ts$/)
       return true
     })
+  }))
+
+test("accepts tsrs override folders of recorded tsrs commits that mirror _patches/tsrs", () =>
+  withRepository(async(repository) => {
+    const tsrs: typeof Upstream.Type.components.tsrs = {
+      "7.1.0-beta.tsrs2": { gitHead: revision, typescript: { version: "7.1.0", gitHead: secondRevision } }
+    }
+    const check = () =>
+      Effect.runPromise(checkTsrsOverrideFolders(repository, tsrs).pipe(Effect.provide(NodeServices.layer)))
+    await check()
+
+    const mirror = `_patches/tsrs-${revision}`
+    writeFiles(repository, mirror, ["001-t.patch", "README.md"])
+    await check()
+    // The TypeScript checks leave tsrs override folders alone.
+    await Effect.runPromise(checkOverrideFolders(repository, typescript).pipe(Effect.provide(NodeServices.layer)))
+
+    writeFiles(repository, mirror, ["002-u.patch"])
+    await assert.rejects(check(), (error: Error) => {
+      assert.match(error.message, new RegExp(`${mirror} must mirror _patches/tsrs patch for patch`))
+      assert.match(error.message, /Not in _patches\/tsrs: 002-u\.patch/)
+      return true
+    })
+    rmSync(join(repository, mirror), { recursive: true })
+
+    // A folder naming no recorded tsrs commit (here the TypeScript one) is stale.
+    writeFiles(repository, `_patches/tsrs-${secondRevision}`, ["001-t.patch"])
+    await assert.rejects(check(), new RegExp(`Stale override folder _patches/tsrs-${secondRevision}: .*no tsrs component`))
   }))

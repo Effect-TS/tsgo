@@ -1,0 +1,221 @@
+Port of _patches/typescript/011-ls-codeactions.patch (tsc/internal/ls/codeactions.go) to tsrs.
+
+- CodeAction.Kind: `tsrs_ls::CodeAction::kind` (an `lsproto::CodeActionKind`; empty is Go's ""). The three built-in
+  fix providers build their `CodeAction`s with `..Default::default()` for it (Go's zero value).
+- externalCodeFixProviders, RegisterCodeFixProvider: `tsrs_ls::register_code_fix_provider(&'static CodeFixProvider)`
+  (a process-wide `RwLock<Vec<..>>`); ProvideCodeActions checks the built-in providers, then the external ones.
+- RefactorProvider, externalRefactorProviders, RegisterRefactorProvider: `tsrs_ls::{RefactorProvider,
+  register_refactor_provider}`; `get_refactor_actions` is a `fn` with Go's parameters (`&'static Program`,
+  `&LanguageService`).
+- ProvideCodeActions runs the refactor providers after the quick fixes when shouldRunRefactors holds;
+  shouldRunRefactors and convertRefactorToLSPCodeAction are ported as is. tsrs's `CodeActionParams::context` is
+  not optional, so Go's `params.Context == nil` check is the `only == None` one.
+- tsrs generates the lsproto fields it never reads as private; `CodeActionParams::range` becomes `pub` for the
+  refactor providers' span. The crate root re-exports the code action types again (tsrs dropped that `pub use`).
+
+diff --git a/crates/tsrs_ls/src/codeactions.rs b/crates/tsrs_ls/src/codeactions.rs
+index b32f3744f..393311b05 100644
+--- a/crates/tsrs_ls/src/codeactions.rs
++++ b/crates/tsrs_ls/src/codeactions.rs
+@@ -45,6 +45,7 @@ pub struct CodeAction {
+     pub(crate) description: String,
+     pub(crate) changes: Vec<lsproto::TextEdit>,
+     pub(crate) fix_id: String,
++    pub kind: lsproto::CodeActionKind, // optional; used by refactors to specify the code action kind
+ }
+ 
+ impl CodeAction {
+@@ -102,6 +103,40 @@ fn code_fix_providers() -> &'static [&'static CodeFixProvider] {
+     &PROVIDERS
+ }
+ 
++// externalCodeFixProviders holds providers registered by external packages (e.g., etslshooks).
++// These are appended to the built-in providers when iterating.
++static EXTERNAL_CODE_FIX_PROVIDERS: std::sync::RwLock<Vec<&'static CodeFixProvider>> =
++    std::sync::RwLock::new(Vec::new());
++
++// RegisterCodeFixProvider registers an external code fix provider.
++// Called by external packages (e.g., etslshooks) during init() to register their providers.
++// This allows @effect/tsgo to define code fixes without modifying the typescript-go patch.
++pub fn register_code_fix_provider(provider: &'static CodeFixProvider) {
++    EXTERNAL_CODE_FIX_PROVIDERS.write().unwrap().push(provider);
++}
++
++// RefactorProvider represents a provider for selection-based refactoring actions.
++// Unlike CodeFixProvider, refactors are not tied to a specific diagnostic error code.
++pub struct RefactorProvider {
++    pub get_refactor_actions: fn(
++        ctx: &Context,
++        file: P<SourceFile>,
++        span: TextRange,
++        program: &'static Program,
++        ls: &LanguageService,
++    ) -> Result<Vec<CodeAction>, lsproto::Error>,
++}
++
++// externalRefactorProviders holds providers registered by external packages (e.g., etslshooks).
++static EXTERNAL_REFACTOR_PROVIDERS: std::sync::RwLock<Vec<&'static RefactorProvider>> =
++    std::sync::RwLock::new(Vec::new());
++
++// RegisterRefactorProvider registers an external refactor provider.
++// Called by external packages (e.g., etslshooks) during init() to register their providers.
++pub fn register_refactor_provider(provider: &'static RefactorProvider) {
++    EXTERNAL_REFACTOR_PROVIDERS.write().unwrap().push(provider);
++}
++
+ impl LanguageService {
+     // codeactions.go:80
+     // ProvideCodeActions returns code actions for the given range and context
+@@ -144,7 +179,10 @@ impl LanguageService {
+                     continue;
+                 };
+ 
+-                for &provider in code_fix_providers() {
++                // Check all code fix providers (built-in + external).
++                let mut all_providers = code_fix_providers().to_vec();
++                all_providers.extend(EXTERNAL_CODE_FIX_PROVIDERS.read().unwrap().iter().copied());
++                for provider in all_providers {
+                     if !code_fix_provider_matches_lsp_diagnostic(provider, diag) {
+                         continue;
+                     }
+@@ -193,6 +231,32 @@ impl LanguageService {
+             actions.extend(fix_all_actions);
+         }
+ 
++        // Run refactor providers when the request includes refactor.* kinds or no filter
++        if should_run_refactors(params) {
++            for mapped in self.converters.from_lsp_range_for_source_file(
++                file,
++                params.range,
++                Feature::CodeActions,
++            ) {
++                let providers = EXTERNAL_REFACTOR_PROVIDERS.read().unwrap().clone();
++                for provider in providers {
++                    let refactor_actions = (provider.get_refactor_actions)(
++                        ctx,
++                        mapped.script,
++                        mapped.span,
++                        program,
++                        self,
++                    )?;
++                    for action in &refactor_actions {
++                        actions.push(convert_refactor_to_lsp_code_action(
++                            action,
++                            &params.text_document.uri,
++                        ));
++                    }
++                }
++            }
++        }
++
+         Ok(lsproto::CommandOrCodeActionArrayOrNull { command_or_code_action_array: Some(actions) })
+     }
+ 
+@@ -459,6 +523,37 @@ pub fn contains_error_code(codes: &[i32], code: i32) -> bool {
+     codes.contains(&code)
+ }
+ 
++// shouldRunRefactors returns true when refactor providers should be invoked.
++// Refactors run when no filter is specified or when the filter includes a refactor.* kind.
++fn should_run_refactors(params: &lsproto::CodeActionParams) -> bool {
++    let Some(only) = &params.context.only else {
++        return true;
++    };
++    only.iter().any(|kind| kind.0.starts_with("refactor"))
++}
++
++// convertRefactorToLSPCodeAction converts a refactor CodeAction to an LSP CommandOrCodeAction.
++fn convert_refactor_to_lsp_code_action(
++    action: &CodeAction,
++    uri: &lsproto::DocumentUri,
++) -> lsproto::CommandOrCodeAction {
++    let mut kind = action.kind;
++    if kind.0.is_empty() {
++        kind = lsproto::CodeActionKind::REFACTOR_REWRITE;
++    }
++    let mut changes = OrderedMap::default();
++    changes.insert(uri.clone(), action.changes.clone());
++    lsproto::CommandOrCodeAction {
++        code_action: Some(lsproto::CodeAction {
++            title: action.description.clone(),
++            kind: Some(kind),
++            edit: Some(lsproto::WorkspaceEdit { changes: Some(changes), ..Default::default() }),
++            ..Default::default()
++        }),
++        ..Default::default()
++    }
++}
++
+ // codeactions.go:383
+ // convertToLSPCodeAction converts an internal CodeAction to an LSP CodeAction
+ fn convert_to_lsp_code_action(
+diff --git a/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs b/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
+index 38bfd755e..cf825215b 100644
+--- a/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
++++ b/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
+@@ -88,6 +88,7 @@ fn get_code_actions_to_fix_class_incorrectly_implements_interface(
+                 .localize(&[&scanner::get_text_of_node(implemented_type_node)]),
+             changes,
+             fix_id: FIX_CLASS_INCORRECTLY_IMPLEMENTS_INTERFACE_FIX_ID.to_string(),
++            ..Default::default()
+         });
+     }
+     Ok(actions)
+diff --git a/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs b/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
+index a0f5e5796..4268a4d15 100644
+--- a/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
++++ b/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
+@@ -260,6 +260,7 @@ fn try_code_action(
+         description,
+         changes: file_changes,
+         fix_id: FIX_MISSING_TYPE_ANNOTATION_ON_EXPORTS_FIX_ID.to_string(),
++        ..Default::default()
+     })
+ }
+ 
+diff --git a/crates/tsrs_ls/src/codeactions_importfixes.rs b/crates/tsrs_ls/src/codeactions_importfixes.rs
+index 2d7dc6dc8..c05044e6b 100644
+--- a/crates/tsrs_ls/src/codeactions_importfixes.rs
++++ b/crates/tsrs_ls/src/codeactions_importfixes.rs
+@@ -94,7 +94,12 @@ fn get_import_code_actions(
+         );
+ 
+         if ok {
+-            Some(CodeAction { description, changes: edits, fix_id: IMPORT_FIX_ID.to_string() })
++            Some(CodeAction {
++                description,
++                changes: edits,
++                fix_id: IMPORT_FIX_ID.to_string(),
++                ..Default::default()
++            })
+         } else {
+             None
+         }
+diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
+index 87f03ca44..b64545eba 100644
+--- a/crates/tsrs_ls/src/lib.rs
++++ b/crates/tsrs_ls/src/lib.rs
+@@ -50,6 +50,10 @@ pub mod string_completions;
+ mod symbols;
+ mod utilities;
+ mod visitedchildren;
++pub use codeactions::{
++    CodeAction, CodeFixContext, CodeFixProvider, CombinedCodeActions, RefactorProvider,
++    register_code_fix_provider, register_refactor_provider,
++};
+ pub use completions::{
+     COMPLETION_TRIGGER_CHARACTERS, CompletionItem, CompletionList, is_err_needs_auto_imports,
+ };
+diff --git a/crates/tsrs_lsproto/src/lsp_generated.rs b/crates/tsrs_lsproto/src/lsp_generated.rs
+index 58531fbc8..407c1f888 100644
+--- a/crates/tsrs_lsproto/src/lsp_generated.rs
++++ b/crates/tsrs_lsproto/src/lsp_generated.rs
+@@ -6826,7 +6826,7 @@ pub struct CodeActionParams {
+     pub text_document: TextDocumentIdentifier,
+ 
+     // The range for which the command was invoked.
+-    range: Range,
++    pub range: Range,
+ 
+     // Context carrying additional information.
+     pub context: CodeActionContext,

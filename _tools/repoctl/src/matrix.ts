@@ -2,8 +2,8 @@ import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import { compare } from "semver"
 import { runCommandString } from "./process.ts"
-import { buildReleasePlan, type ReleaseArtifactPlan } from "./releasePlan.ts"
-import { decodeUpstream, readUpstream, type Upstream } from "./upstream.ts"
+import { buildOxlintArtifactPlan, buildReleasePlan, type ReleaseArtifactPlan } from "./releasePlan.ts"
+import { compareTsrsVersions, decodeUpstream, readUpstream, type Upstream } from "./upstream.ts"
 
 export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
   include: Object.keys(upstream.components.typescript)
@@ -74,61 +74,30 @@ export const buildPerfMatrix = (
   return { build: { include: build }, measure: { include: [...measure.values()] } }
 }
 
-export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
-  const runtimes = new Map<string, {
-    readonly oxlintVersion: string
-    readonly tsgolintVersion: string
-  }>()
-  const defaultRuntime = {
-    oxlintVersion: upstream.tags.oxlint.latest,
-    tsgolintVersion: upstream.tags["oxlint-tsgolint"].latest
-  }
-  runtimes.set(`${defaultRuntime.oxlintVersion}\0${defaultRuntime.tsgolintVersion}`, defaultRuntime)
-  for (const profile of upstream.profiles) {
-    const oxlintVersion = profile.dependencies.oxlint
-    const tsgolintVersion = profile.dependencies["oxlint-tsgolint"]
-    if (oxlintVersion === undefined || tsgolintVersion === undefined) continue
-    const key = `${oxlintVersion}\0${tsgolintVersion}`
-    if (!runtimes.has(key)) {
-      runtimes.set(key, { oxlintVersion, tsgolintVersion })
-    }
-  }
-  // Each version is built on its own, so only the smoke test depends on the pair: test every oxlint and tsgolint
-  // version at least once instead of every known pair. Start from the default pair, then greedily add the known pair
-  // covering the most untested versions, preferring the newest oxlint and then the newest tsgolint.
-  const untested = new Set<string>()
-  for (const runtime of runtimes.values()) {
-    untested.add(`oxlint\0${runtime.oxlintVersion}`)
-    untested.add(`tsgolint\0${runtime.tsgolintVersion}`)
-  }
-  const coverage = (runtime: { readonly oxlintVersion: string; readonly tsgolintVersion: string }) =>
-    Number(untested.has(`oxlint\0${runtime.oxlintVersion}`)) +
-    Number(untested.has(`tsgolint\0${runtime.tsgolintVersion}`))
-  const candidates = [...runtimes].sort(([, left], [, right]) =>
-    compare(right.oxlintVersion, left.oxlintVersion) || compare(right.tsgolintVersion, left.tsgolintVersion)
-  )
-  const selected: Array<[string, typeof defaultRuntime]> = []
-  let next: [string, typeof defaultRuntime] | undefined = [
-    `${defaultRuntime.oxlintVersion}\0${defaultRuntime.tsgolintVersion}`,
-    defaultRuntime
-  ]
-  while (next !== undefined) {
-    selected.push(next)
-    untested.delete(`oxlint\0${next[1].oxlintVersion}`)
-    untested.delete(`tsgolint\0${next[1].tsgolintVersion}`)
-    next = candidates.reduce<[string, typeof defaultRuntime] | undefined>(
-      (best, candidate) =>
-        coverage(candidate[1]) > (best === undefined ? 0 : coverage(best[1])) ? candidate : best,
-      undefined
-    )
-  }
+// One job per artifact of buildOxlintArtifactPlan, latest first: the jobs run max-parallel at a time in matrix order,
+// so the newest version of every component comes before the second newest of any, and within a round the slow tsrs
+// build starts first, then the Oxlint binding, then tsgolint.
+export const buildOxlintBuildMatrix = (upstream: typeof Upstream.Type) => {
+  const rank = { tsrs: 0, oxlint: 1, "oxlint-tsgolint": 2 } as Readonly<Record<string, number>>
+  const plan = buildOxlintArtifactPlan(upstream)
+  const newestFirst = (component: string) =>
+    plan.filter((artifact) => artifact.component === component).map((artifact) => artifact.version)
+      .sort((left, right) => component === "tsrs" ? compareTsrsVersions(right, left) : compare(right, left))
+  const rounds = new Map(Object.keys(rank).flatMap((component) =>
+    newestFirst(component).map((version, round) => [`${component}\0${version}`, round] as const)
+  ))
+  const round = (artifact: ReleaseArtifactPlan) => rounds.get(`${artifact.component}\0${artifact.version}`) ?? 0
   return {
-    include: selected
-      .sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
-      .map(([, runtime]) => ({
-        name: `oxlint (${runtime.oxlintVersion}) + oxlint-tsgolint (${runtime.tsgolintVersion})`,
-        oxlint: { component: "oxlint", version: runtime.oxlintVersion },
-        tsgolint: { component: "oxlint-tsgolint", version: runtime.tsgolintVersion }
+    include: [...plan]
+      .sort((left, right) =>
+        round(left) - round(right) || (rank[left.component] ?? 3) - (rank[right.component] ?? 3)
+      )
+      .map((artifact) => ({
+        name: `${artifact.component} ${artifact.version}`,
+        component: artifact.component,
+        version: artifact.version,
+        target: artifact.target,
+        artifactName: artifact.artifactName
       }))
   }
 }
@@ -183,9 +152,9 @@ export const printPerfMatrix = Effect.fnUntraced(function*(
   yield* Console.log(JSON.stringify(buildPerfMatrix(base, head, baseRef, headRef)))
 })
 
-export const printOxlintTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+export const printOxlintBuildMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
-  yield* Console.log(JSON.stringify(buildOxlintTestMatrix(upstream)))
+  yield* Console.log(JSON.stringify(buildOxlintBuildMatrix(upstream)))
 })
 
 export const printReleaseMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {

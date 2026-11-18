@@ -306,8 +306,7 @@ const schemaTag = "dynamic-tag"
                 .expression()
                 .as_call_expression();
             let inner = outer.expression().as_call_expression();
-            let inner_type_arguments =
-                inner.type_arguments().map(|l| l.nodes()).unwrap_or_default();
+            let inner_type_arguments = inner.type_arguments().map_or_default(|l| l.nodes());
             if self_ != Some(inner_type_arguments[0]) {
                 t.fatal("SelfTypeNode is not the original first type argument");
             }

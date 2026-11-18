@@ -423,15 +423,18 @@ export interface UnpatchOptions {
   readonly preferredTypescriptPackage?: string
 }
 
+// --oxlint requires the Oxlint binding and declarations and includes oxlint-tsgolint where it is installed.
 const discoverSelected = (
   cwd: string,
   components: ReadonlySet<Component>,
   preferredTypescriptPackage?: string
 ) => Effect.gen(function*() {
   const discovered = yield* discoverBinaries(cwd, preferredTypescriptPackage)
-  const selectedComponents = new Set(components)
-  if (selectedComponents.has("oxlint")) selectedComponents.add("oxlint-dts")
-  return yield* requireComponents(selectComponents(discovered, selectedComponents), selectedComponents)
+  const required = new Set(components)
+  if (required.has("oxlint")) required.add("oxlint-dts")
+  const selected = new Set(required)
+  if (selected.has("oxlint")) selected.add("oxlint-tsgolint")
+  return yield* requireComponents(selectComponents(discovered, selected), required)
 })
 
 const changedTargets = (targets: ReadonlyArray<DiscoveredBinary>, skipped: ReadonlyArray<SkippedTarget>) => {

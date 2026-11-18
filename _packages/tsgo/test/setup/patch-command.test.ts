@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest"
-import { getPatchIntegrations, hasPatchCommand, updatePatchCommand } from "../../src/cli/setup/patch-command.js"
+import {
+  getPatchCommand,
+  getPatchIntegrations,
+  hasPatchCommand,
+  updatePatchCommand,
+  vitePlusLintsWithTsrs
+} from "../../src/cli/setup/patch-command.js"
 
 describe("setup patch command", () => {
   it.each([
@@ -29,6 +35,23 @@ describe("setup patch command", () => {
       found: true
     })
     expect(getPatchIntegrations("effect-tsgo patch --tsrs")).toEqual(["typescript"])
+  })
+
+  it("adds --tsrs for the tsrs integration, once", () => {
+    expect(getPatchCommand(["typescript", "oxlint", "tsrs"])).toBe("effect-tsgo patch --typescript --oxlint --tsrs")
+    expect(updatePatchCommand("effect-tsgo patch --typescript --oxlint", ["typescript", "oxlint", "tsrs"])).toEqual({
+      script: "effect-tsgo patch --typescript --oxlint --tsrs",
+      found: true
+    })
+    expect(updatePatchCommand("effect-tsgo patch --tsrs --typescript --oxlint", ["typescript", "oxlint", "tsrs"])).toEqual({
+      script: "effect-tsgo patch --typescript --oxlint --tsrs",
+      found: true
+    })
+  })
+
+  it("detects a vite-plus that lints with tsrs from its version spec", () => {
+    for (const spec of ["1.7.0", "^1.7.0", "~1.8.2", ">=1.7.0", "2.0.0-beta.1"]) expect(vitePlusLintsWithTsrs(spec)).toBe(true)
+    for (const spec of ["1.6.0", "^1.5.1", "latest", "catalog:", "workspace:*"]) expect(vitePlusLintsWithTsrs(spec)).toBe(false)
   })
 
   it("removes only the patch invocation from a command list", () => {

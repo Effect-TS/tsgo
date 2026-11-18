@@ -19,6 +19,96 @@ export const tsrsCheckedOut = Effect.fnUntraced(function*(repositoryRoot: string
   return yield* fs.exists(path.join(repositoryRoot, "tsrs", "Cargo.toml"))
 })
 
+// The `[package]` name and version of a Cargo.toml (`version.workspace = true` takes the workspace's), or undefined.
+export const parseCargoPackage = (cargoToml: string, workspaceVersion: string | undefined) => {
+  const section = (name: string) => {
+    const lines = cargoToml.split(/\r?\n/)
+    const start = lines.findIndex((line) => line.trim() === `[${name}]`)
+    if (start < 0) return new Map<string, string>()
+    const fields = new Map<string, string>()
+    for (const line of lines.slice(start + 1)) {
+      if (line.trim().startsWith("[")) break
+      const field = /^\s*([A-Za-z_.-]+)\s*=\s*(.+?)\s*$/.exec(line)
+      if (field !== null) fields.set(field[1]!, field[2]!)
+    }
+    return fields
+  }
+  const fields = section("package")
+  const name = /^"([^"]+)"/.exec(fields.get("name") ?? "")?.[1]
+  const version = fields.get("version.workspace") === "true"
+    ? workspaceVersion
+    : /^"([^"]+)"/.exec(fields.get("version") ?? "")?.[1]
+  return name === undefined || version === undefined ? undefined : { name, version }
+}
+
+// The workspace package version of a Cargo.toml (`[workspace.package]` version), or undefined.
+export const parseCargoWorkspaceVersion = (cargoToml: string) =>
+  parseCargoPackage(cargoToml.replace("[workspace.package]", "[package]\nname = \"workspace\""), undefined)?.version
+
+// Cargo.lock with the version of each path package (no `source`) named in `versions` set to it.
+export const syncCargoLockVersions = (cargoLock: string, versions: ReadonlyMap<string, string>) =>
+  cargoLock.split("\n[[package]]\n").map((block) => {
+    const name = /^name = "([^"]+)"$/m.exec(block)?.[1]
+    const version = name === undefined ? undefined : versions.get(name)
+    return version === undefined || /^source = /m.test(block)
+      ? block
+      : block.replace(/^version = "[^"]*"$/m, `version = "${version}"`)
+  }).join("\n[[package]]\n")
+
+// The versions of the path packages (no `source`) of a Cargo.lock whose name passes `include`.
+export const cargoLockPathVersions = (cargoLock: string, include: (name: string) => boolean) =>
+  new Map(cargoLock.split("\n[[package]]\n").slice(1).flatMap((block) => {
+    const name = /^name = "([^"]+)"$/m.exec(block)?.[1]
+    const version = /^version = "([^"]*)"$/m.exec(block)?.[1]
+    return name === undefined || version === undefined || /^source = /m.test(block) || !include(name)
+      ? []
+      : [[name, version] as const]
+  }))
+
+// Cargo.lock records the version of every tsrs crate (path dependencies into tsrs/crates), which differs between the
+// recorded tsrs releases (0.25.0, 7.1.0-beta.tsrs2, ...). The tsrs setup brings them to the checked-out tsrs, so that
+// `cargo --locked` accepts the lock with any recorded tsrs; for the tsrs the Rust port follows this is the committed
+// lock (commit no other).
+export const syncTsrsCargoLock = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const tsrs = path.join(repositoryRoot, "tsrs")
+  const workspaceVersion = parseCargoWorkspaceVersion(yield* fs.readFileString(path.join(tsrs, "Cargo.toml")))
+  const versions = new Map<string, string>()
+  for (const crate of (yield* fs.readDirectory(path.join(tsrs, "crates"))).sort()) {
+    const manifest = path.join(tsrs, "crates", crate, "Cargo.toml")
+    if (!(yield* fs.exists(manifest))) continue
+    const cratePackage = parseCargoPackage(yield* fs.readFileString(manifest), workspaceVersion)
+    if (cratePackage !== undefined) versions.set(cratePackage.name, cratePackage.version)
+  }
+  const lockPath = path.join(repositoryRoot, "Cargo.lock")
+  const lock = yield* fs.readFileString(lockPath)
+  const synced = syncCargoLockVersions(lock, versions)
+  if (synced !== lock) {
+    yield* Console.log("Updated the tsrs crate versions in Cargo.lock to the tsrs checkout")
+    yield* fs.writeFileString(lockPath, synced)
+  }
+})
+
+// The setups without tsrs put the committed tsrs crate versions back (HEAD's Cargo.lock), which a tsrs setup of
+// another recorded tsrs changed; other changes to Cargo.lock stay.
+export const restoreTsrsCargoLock = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const lockPath = path.join(repositoryRoot, "Cargo.lock")
+  if (!(yield* fs.exists(lockPath))) return
+  const committed = yield* runCommandString("git", repositoryRoot, ["show", "HEAD:Cargo.lock"]).pipe(
+    Effect.orElseSucceed(() => undefined)
+  )
+  if (committed === undefined) return
+  const lock = yield* fs.readFileString(lockPath)
+  const restored = syncCargoLockVersions(lock, cargoLockPathVersions(committed, (name) => name.startsWith("tsrs")))
+  if (restored !== lock) {
+    yield* Console.log("Restored the committed tsrs crate versions in Cargo.lock")
+    yield* fs.writeFileString(lockPath, restored)
+  }
+})
+
 export class TsrsCheckoutMissingError extends Data.TaggedError("TsrsCheckoutMissingError")<{}> {
   get message(): string {
     return `tsrs/ is not checked out: run \`${tsrsSetupCommand}\``

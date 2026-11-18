@@ -49,7 +49,7 @@ pub(crate) fn check_effect_gen_uses_adapter(
     let gen_result = ctx.type_parser.effect_gen_call(n)?;
 
     let parameters = gen_result.generator_function().as_function_expression().parameters();
-    let parameters = parameters.map(|p| p.nodes()).unwrap_or_default();
+    let parameters = parameters.map_or_default(|p| p.nodes());
     if parameters.is_empty() {
         return None;
     }

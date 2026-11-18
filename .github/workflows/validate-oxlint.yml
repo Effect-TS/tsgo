@@ -20,14 +20,17 @@ jobs:
     permissions:
       contents: read
     with:
-      name: test-oxlint
+      name: oxlint-build
 
-  validate:
-    name: Validate ${{ matrix.name }}
+  # Each Oxlint binding, tsgolint and tsrs version of _packages/tsgo/upstream.json, built once for linux-x64
+  # (`repoctl matrix oxlint-build`; tsrs without the release's PGO and BOLT).
+  build:
+    name: Build ${{ matrix.name }}
     needs: matrix
     if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # A cold release build of tsrs or of an Oxlint binding.
+    timeout-minutes: 60
     permissions:
       contents: read
     strategy:
@@ -39,52 +42,49 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v7
 
-      - name: Setup ${{ matrix.tsgolint.component }} ${{ matrix.tsgolint.version }}
+      - name: Setup ${{ matrix.component }} ${{ matrix.version }}
         uses: ./.github/actions/setup-repo
         with:
-          component: ${{ matrix.tsgolint.component }}
-          version: ${{ matrix.tsgolint.version }}
-
-      - name: Build tsgolint
-        id: tsgolint
-        run: >
-          pnpm exec repoctl build artifact
-          --component "${{ matrix.tsgolint.component }}"
-          --version "${{ matrix.tsgolint.version }}"
-          --target linux-x64
-
-      - name: Setup ${{ matrix.oxlint.component }} ${{ matrix.oxlint.version }}
-        uses: ./.github/actions/setup-repo
-        with:
-          component: ${{ matrix.oxlint.component }}
-          version: ${{ matrix.oxlint.version }}
-          target: linux-x64
+          component: ${{ matrix.component }}
+          version: ${{ matrix.version }}
+          target: ${{ matrix.target }}
 
       - name: Build Oxlint binding
+        if: matrix.component == 'oxlint'
+        id: build-oxlint
         env:
           TARGET_CC: clang
         run: >
           pnpm exec repoctl build artifact
-          --component "${{ matrix.oxlint.component }}"
-          --version "${{ matrix.oxlint.version }}"
-          --target linux-x64
+          --component oxlint
+          --version "${{ matrix.version }}"
+          --target "${{ matrix.target }}"
 
-      - name: Build @effect/tsgo package
-        run: pnpm --filter @effect/tsgo build
+      - name: Build ${{ matrix.component }}
+        if: matrix.component != 'oxlint'
+        id: build
+        run: >
+          pnpm exec repoctl build artifact
+          --component "${{ matrix.component }}"
+          --version "${{ matrix.version }}"
+          --target "${{ matrix.target }}"
 
-      - name: Smoke test Oxlint runtime
-        env:
-          TSGOLINT_PATH: ${{ steps.tsgolint.outputs.artifact_path }}
-        run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE" "$TSGOLINT_PATH"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifactName }}
+          path: ${{ steps.build-oxlint.outputs.artifact_path || steps.build.outputs.artifact_path }}
+          if-no-files-found: error
+          retention-days: 1
 
-  # `effect-tsgo --tsrs-lint`: the patched Oxlint runs the type-aware rules, Effect ones included, on the patched tsrs
-  # (`tsrs --lint`) that EFFECT_TSGO_TSGOLINT_PATH and EFFECT_TSGO_TSGOLINT_MODE=tsrs select.
-  validate-tsrs-lint:
-    name: Validate Oxlint on tsrs
+  # Every supported runtime (each profile of upstream.json, and each tsrs version) through the effect-tsgo proxy
+  # commands, on a project per runtime with its exact npm packages installed: `repoctl oxlint verify`.
+  verify:
+    name: Verify the Oxlint integration
+    needs: build
     if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
-    # A cold release build of tsrs and of the Oxlint binding.
-    timeout-minutes: 60
+    timeout-minutes: 30
     permissions:
       contents: read
 
@@ -92,46 +92,28 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v7
 
-      - name: Resolve versions
-        id: versions
-        run: |
-          echo "tsrs=$(node -p "require('./_packages/tsgo/upstream.json').tags.tsrs.latest")" >> "$GITHUB_OUTPUT"
-          echo "oxlint=$(node -p "require('./_packages/tsgo/upstream.json').tags.oxlint.latest")" >> "$GITHUB_OUTPUT"
-
-      - name: Setup tsrs ${{ steps.versions.outputs.tsrs }}
-        uses: ./.github/actions/setup-repo
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          component: tsrs
-          version: ${{ steps.versions.outputs.tsrs }}
+          node-version: "24"
 
-      - name: Build tsrs
-        id: tsrs
-        run: >
-          pnpm exec repoctl build artifact
-          --component tsrs
-          --version "${{ steps.versions.outputs.tsrs }}"
-          --target linux-x64
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
 
-      - name: Setup oxlint ${{ steps.versions.outputs.oxlint }}
-        uses: ./.github/actions/setup-repo
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
         with:
-          component: oxlint
-          version: ${{ steps.versions.outputs.oxlint }}
-          target: linux-x64
+          pattern: "linux-x64__*"
+          path: _oxlint-artifacts
 
-      - name: Build Oxlint binding
-        env:
-          TARGET_CC: clang
-        run: >
-          pnpm exec repoctl build artifact
-          --component oxlint
-          --version "${{ steps.versions.outputs.oxlint }}"
-          --target linux-x64
+      - name: Assemble the linux-x64 platform package
+        run: pnpm exec repoctl packages assemble --artifacts _oxlint-artifacts --plan oxlint
 
       - name: Build @effect/tsgo package
         run: pnpm --filter @effect/tsgo build
 
-      - name: Smoke test Oxlint runtime on tsrs
-        env:
-          TSRS_PATH: ${{ steps.tsrs.outputs.artifact_path }}/tsrs
-        run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE" "$TSRS_PATH" tsrs
+      - name: Verify every Oxlint runtime
+        run: pnpm exec repoctl oxlint verify --summary "$GITHUB_STEP_SUMMARY"

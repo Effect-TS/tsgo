@@ -72,6 +72,13 @@
           "version": "7.1.0-beta",
           "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a"
         }
+      },
+      "7.1.0-beta.tsrs2": {
+        "gitHead": "b12862d0636c21a98d53d01c6b29570ef5f604e7",
+        "typescript": {
+          "version": "7.1.0-beta",
+          "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a"
+        }
       }
     }
   },

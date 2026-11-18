@@ -1,6 +1,0 @@
-{
-  "extends": ["../../../oxlint-presets/recommended.json"],
-  "rules": {
-    "effecttsgo/floating-effect": "off"
-  }
-}

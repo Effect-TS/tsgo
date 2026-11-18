@@ -8,8 +8,10 @@ import { portCheck } from "./port.ts"
 import { runCommand } from "./process.ts"
 import {
   getTypeScriptSource,
+  parseTsrsOverrideFolderName,
   parseTypeScriptOverrideFolderName,
   readUpstream,
+  tsrsPatchesFolder,
   typeScriptPatchesRoot,
   typeScriptShimProvidersRoot,
   type Upstream
@@ -17,11 +19,16 @@ import {
 
 export class StaleOverrideFolderError extends Data.TaggedError("StaleOverrideFolderError")<{
   readonly folder: string
+  readonly component?: "typescript" | "tsrs"
 }> {
   get message(): string {
-    return `Stale override folder ${this.folder}: its name targets no TypeScript component of _packages/tsgo/upstream.json ` +
-      "(provider and gitHead), so nothing uses it. Delete it, or rename it to the gitHead of the TypeScript it was " +
-      "made for (see _patches/typescript/README.md)."
+    return this.component === "tsrs"
+      ? `Stale override folder ${this.folder}: its name targets no tsrs component of _packages/tsgo/upstream.json ` +
+        "(gitHead), so nothing uses it. Delete it, or rename it to the gitHead of the tsrs it was made for " +
+        "(see _patches/tsrs/README.md)."
+      : `Stale override folder ${this.folder}: its name targets no TypeScript component of _packages/tsgo/upstream.json ` +
+        "(provider and gitHead), so nothing uses it. Delete it, or rename it to the gitHead of the TypeScript it was " +
+        "made for (see _patches/typescript/README.md)."
   }
 }
 
@@ -122,11 +129,51 @@ export const checkOverrideFolders = Effect.fnUntraced(function*(
   }
 })
 
+// The `_patches/tsrs-<gitHead>` override folders (upstream.ts, tsrsPatchesFolder): each one names the gitHead of a
+// recorded tsrs component and holds the same patch files as `_patches/tsrs`, rebased on that commit.
+export const checkTsrsOverrideFolders = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  tsrs: typeof Upstream.Type.components.tsrs
+) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const root = path.join(repositoryRoot, typeScriptPatchesRoot)
+  if (!(yield* fs.exists(root))) {
+    return
+  }
+  const patchNames = (directory: string) =>
+    fs.readDirectory(path.join(repositoryRoot, directory)).pipe(
+      Effect.map((files) => files.filter((file) => file.endsWith(".patch")).sort())
+    )
+  const gitHeads = new Set(Object.values(tsrs ?? {}).map((component) => component.gitHead))
+  for (const name of (yield* fs.readDirectory(root)).sort()) {
+    const gitHead = parseTsrsOverrideFolderName(name)
+    if (gitHead === undefined) {
+      continue
+    }
+    const folder = `${typeScriptPatchesRoot}/${name}`
+    if (!gitHeads.has(gitHead)) {
+      return yield* new StaleOverrideFolderError({ folder, component: "tsrs" })
+    }
+    const expected = (yield* fs.exists(path.join(repositoryRoot, tsrsPatchesFolder)))
+      ? yield* patchNames(tsrsPatchesFolder)
+      : []
+    const actual = yield* patchNames(folder)
+    const missing = expected.filter((patch) => !actual.includes(patch))
+    const extra = actual.filter((patch) => !expected.includes(patch))
+    if (missing.length > 0 || extra.length > 0) {
+      return yield* new PatchParityError({ canonical: tsrsPatchesFolder, mirror: folder, missing, extra })
+    }
+  }
+})
+
 export const runChecks = Effect.fnUntraced(function*(repositoryRoot: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   yield* Console.log("Checking TypeScript override folders")
-  yield* checkOverrideFolders(repositoryRoot, (yield* readUpstream(repositoryRoot)).components.typescript)
+  const upstream = yield* readUpstream(repositoryRoot)
+  yield* checkOverrideFolders(repositoryRoot, upstream.components.typescript)
+  yield* checkTsrsOverrideFolders(repositoryRoot, upstream.components.tsrs)
   yield* Console.log("Checking Effect v3 fixture markers")
   yield* checkEffectV3FixtureMarkers(repositoryRoot)
   yield* ensureEffectFixtures(repositoryRoot)

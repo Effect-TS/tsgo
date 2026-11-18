@@ -2,7 +2,7 @@ import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import { Command } from "effect/cli"
 import { describe, expect, it } from "vitest"
-import { ensureIntegrationSelected, integrationFlags } from "../src/cli/integrationFlags.js"
+import { ensureIntegrationSelected, integrationFlags, selectedComponents } from "../src/cli/integrationFlags.js"
 
 const parseIntegrationFlags = async (args: ReadonlyArray<string>) => {
   let result: { readonly typescript: boolean; readonly oxlint: boolean; readonly tsrs: boolean } | undefined
@@ -36,6 +36,12 @@ describe("integration flags", () => {
     await expect(parseIntegrationFlags(["--no-typescript", "--tsrs"]))
       .resolves.toEqual({ typescript: false, oxlint: false, tsrs: true })
     await Effect.runPromise(ensureIntegrationSelected(false, false, true))
+  })
+
+  it("selects one component per integration flag", () => {
+    expect(selectedComponents(false, true, false)).toEqual(new Set(["oxlint"]))
+    expect(selectedComponents(true, true, false)).toEqual(new Set(["typescript", "oxlint"]))
+    expect(selectedComponents(true, true, true)).toEqual(new Set(["typescript", "oxlint", "tsrs"]))
   })
 
   it("rejects disabling every integration", async () => {

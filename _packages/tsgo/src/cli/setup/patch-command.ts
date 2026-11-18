@@ -28,7 +28,17 @@ export const getPatchCommand = (integrations: ReadonlyArray<Integration>): strin
 
   return `effect-tsgo patch ${typescript ? "--typescript" : "--no-typescript"} ${
     oxlint ? "--oxlint" : "--no-oxlint"
-  }`
+  }${integrations.includes("tsrs") ? " --tsrs" : ""}`
+}
+
+// vite-plus lints with the tsrs it depends on (its `tsrs-lint`) instead of oxlint-tsgolint since 1.7.0, so a project on
+// it patches that tsrs too. Only a spec whose version is 1.7.0 or later counts: one without a version (`latest`,
+// `catalog:`, `workspace:`) may be older, and `patch --tsrs` fails where no tsrs is installed.
+export const vitePlusLintsWithTsrs = (spec: string): boolean => {
+  const match = /(\d+)\.(\d+)\.(\d+)/.exec(spec)
+  if (match === null) return false
+  const major = Number(match[1])
+  return major > 1 || (major === 1 && Number(match[2]) >= 7)
 }
 
 const splitCommands = (script: string): ReadonlyArray<CommandSegment> => {
@@ -202,7 +212,9 @@ export const updatePatchCommand = (
         const whitespaceStart = suffix.slice(0, relativeStart).search(/\s+$/)
         suffix = suffix.slice(0, whitespaceStart < 0 ? relativeStart : whitespaceStart) + suffix.slice(relativeEnd)
       }
-      updated = updated.slice(0, match.patchEnd) + flags + suffix + updated.slice(match.end)
+      // A `--tsrs` the command already has (added by hand, or by an earlier setup) stays where it is.
+      const matchFlags = /(?:^|\s)--tsrs(?:\s|$)/.test(suffix) ? flags.replace(/ --tsrs$/, "") : flags
+      updated = updated.slice(0, match.patchEnd) + matchFlags + suffix + updated.slice(match.end)
     }
     return { script: updated, found: true }
   }

@@ -308,7 +308,7 @@ fn callback_shadows_names_used_by_thunk_parameters(
     thunk: P<Node>,
     callback: P<Node>,
 ) -> bool {
-    let entries = callback.locals().map(|locals| locals.entries()).unwrap_or_default();
+    let entries = callback.locals().map_or_default(|locals| locals.entries());
     for (name, local) in entries {
         let outer = ctx.checker().resolve_name_exported(name, thunk, SymbolFlags::All, false);
         let Some(outer) = outer else {
