@@ -213,7 +213,7 @@ fn flat_map_map_to_zip_with_map_callback_is_tied_to_its_function(
     false
 }
 
-// go: internal/fixables/flat_map_map_to_zip_with.go:145 flatMapMapToZipWithMapCallbackIsZip 918565b9cf452966
+// go: internal/fixables/flat_map_map_to_zip_with.go:145 flatMapMapToZipWithMapCallbackIsZip ca905bfb05873de1
 //
 // Rust: the parameters' names are set (the rule accepts only plain parameters), as Go assumes; an array literal's
 // element list is never nil in tsrs, so that check drops.
@@ -223,9 +223,6 @@ fn flat_map_map_to_zip_with_map_callback_is_zip(
 ) -> bool {
     let map_callback = m.map_callback;
     let pair = m.map_result;
-    let Some(pair) = pair else {
-        return false;
-    };
     if map_callback.parameters().len() != 1 {
         return false;
     }

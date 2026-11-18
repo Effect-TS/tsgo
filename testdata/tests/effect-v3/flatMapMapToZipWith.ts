@@ -113,9 +113,7 @@ const thisSecond = Effect.succeed(2)
 export const explicitThis = Effect.flatMap(thisFirst, (value) =>
   Effect.map(thisSecond, function(this: void) { return value + 1 }))
 
-// MUST TRIGGER (adversarial regression): only the inner mapper branches; the outer callback only returns map.
-// The combiner keeps the mapper body as written.
-// Fix: Effect.zipWith(branchFirst, branchSecond, (a, b) => { if (b > 0) return a + b; return a - b })
+// MUST NOT TRIGGER: the mapper branches between several returns (out of scope).
 declare const branchFirst: Effect.Effect<number>
 declare const branchSecond: Effect.Effect<number>
 export const innerEarlyReturn = Effect.flatMap(branchFirst, (a) =>
@@ -124,8 +122,7 @@ export const innerEarlyReturn = Effect.flatMap(branchFirst, (a) =>
     return a - b
   }))
 
-// MUST TRIGGER (adversarial regression): a function mapper can return from both branches, with no final return.
-// Fix: pipe(branchFirst, Effect.zipWith(branchSecond, function (a, b) { if (b > 0) { return a + b } else { return a - b } }))
+// MUST NOT TRIGGER: the function mapper returns from both branches, with no final return (out of scope).
 export const innerBranchReturns = pipe(branchFirst, Effect.flatMap((a) =>
   branchSecond.pipe(Effect.map(function (b) {
     if (b > 0) {
@@ -135,8 +132,7 @@ export const innerBranchReturns = pipe(branchFirst, Effect.flatMap((a) =>
     }
   }))))
 
-// MUST TRIGGER: a mapper with no return statement at all (its result is void) is still a combiner.
-// Fix: Effect.zipWith(branchFirst, branchSecond, (a, b) => { console.log(a + b) })
+// MUST NOT TRIGGER: the mapper has no return statement (out of scope).
 export const innerNoReturn = Effect.flatMap(branchFirst, (a) =>
   Effect.map(branchSecond, (b) => {
     console.log(a + b)

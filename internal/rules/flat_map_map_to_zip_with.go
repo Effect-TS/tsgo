@@ -38,8 +38,8 @@ type FlatMapMapToZipWithMatch struct {
 	FlatMapCallback *ast.Node
 	ReturnedFlow    *typeparser.PipingFlow
 	MapCallback     *ast.Node
-	// MapResult is what MapCallback returns when its body is an expression or a
-	// single return, and nil otherwise.
+	// MapResult is what MapCallback returns: its expression body or the
+	// expression of its single return.
 	MapResult *ast.Node
 }
 
@@ -74,14 +74,12 @@ func AnalyzeFlatMapMapToZipWith(tp *typeparser.TypeParser, _ *checker.Checker, s
 				continue
 			}
 
-			mapCallback := flatMapMapToZipWithMapCallback(mapStep.Args().At(0))
-			if mapCallback == nil || !flatMapMapToZipWithUnaryMapper(mapCallback) {
+			parsedMapCallback := typeparser.ParseLazyExpression(mapStep.Args().At(0), typeparser.LazyExpressionAllowTypeParameters)
+			if parsedMapCallback == nil || !flatMapMapToZipWithUnaryMapper(parsedMapCallback.Node()) {
 				continue
 			}
-			var mapResult *ast.Node
-			if parsedMapCallback := typeparser.ParseLazyExpression(mapCallback, typeparser.LazyExpressionAllowTypeParameters); parsedMapCallback != nil {
-				mapResult = ast.SkipParentheses(parsedMapCallback.Expression())
-			}
+			mapCallback := parsedMapCallback.Node()
+			mapResult := ast.SkipParentheses(parsedMapCallback.Expression())
 
 			var outerSymbols []*ast.Symbol
 			for _, symbol := range ast.TSGetSymbolTableEntries(flatMapCallback.Locals()) {
@@ -153,7 +151,7 @@ func flatMapMapToZipWithReyieldsOuter(tp *typeparser.TypeParser, flatMapCallback
 	if name.Kind != ast.KindIdentifier {
 		return false
 	}
-	return mapResult != nil && mapResult.Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(mapResult) == tp.GetSymbolAtLocation(name)
+	return mapResult.Kind == ast.KindIdentifier && tp.GetSymbolAtLocation(mapResult) == tp.GetSymbolAtLocation(name)
 }
 
 func flatMapMapToZipWithUnaryMapper(mapper *ast.Node) bool {
@@ -168,19 +166,4 @@ func flatMapMapToZipWithUnaryMapper(mapper *ast.Node) bool {
 		}
 	}
 	return true
-}
-
-// flatMapMapToZipWithMapCallback accepts any body shape, unlike
-// ParseLazyExpression: the whole body moves into the combiner, so a mapper that
-// branches between several returns is still fine.
-func flatMapMapToZipWithMapCallback(node *ast.Node) *ast.Node {
-	node = ast.SkipParentheses(node)
-	if node == nil {
-		return nil
-	}
-	isNonGeneratorFunction := ast.IsArrowFunction(node) || ast.IsFunctionExpression(node) && node.AsFunctionExpression().AsteriskToken == nil
-	if !isNonGeneratorFunction || node.Body() == nil || ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsAsync != 0 {
-		return nil
-	}
-	return node
 }

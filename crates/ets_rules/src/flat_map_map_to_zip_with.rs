@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, ModifierFlags, Node, NodeFlags, SourceFile, Symbol};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, NodeFlags, SourceFile, Symbol};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
@@ -33,7 +33,7 @@ pub static FLAT_MAP_MAP_TO_ZIP_WITH: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/flat_map_map_to_zip_with.go:34 FlatMapMapToZipWithMatch 9e9dac774127a643
+// go: internal/rules/flat_map_map_to_zip_with.go:34 FlatMapMapToZipWithMatch 42e415d0a83b4acb
 #[derive(Clone)]
 pub struct FlatMapMapToZipWithMatch {
     pub source_file: P<SourceFile>,
@@ -42,12 +42,12 @@ pub struct FlatMapMapToZipWithMatch {
     pub flat_map_callback: P<Node>,
     pub returned_flow: PipingFlow,
     pub map_callback: P<Node>,
-    // MapResult is what MapCallback returns when its body is an expression or a
-    // single return, and nil otherwise.
-    pub map_result: Option<P<Node>>,
+    // MapResult is what MapCallback returns: its expression body or the
+    // expression of its single return.
+    pub map_result: P<Node>,
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:46 AnalyzeFlatMapMapToZipWith 9fcbd750c4d8d203
+// go: internal/rules/flat_map_map_to_zip_with.go:46 AnalyzeFlatMapMapToZipWith 8a78aa7027131600
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go's `isEffectApiStep` and `isFlatMap`
 // closures capture the parser, so they are nested functions that take it; a transformation's callee is never nil,
@@ -105,19 +105,18 @@ pub fn analyze_flat_map_map_to_zip_with(
                 continue;
             }
 
-            let map_callback = flat_map_map_to_zip_with_map_callback(*map_step.args().at(0));
-            let Some(map_callback) = map_callback else {
+            let parsed_map_callback = parse_lazy_expression(
+                *map_step.args().at(0),
+                LazyExpressionFlags::AllowTypeParameters,
+            );
+            let Some(parsed_map_callback) = parsed_map_callback else {
                 continue;
             };
-            if !flat_map_map_to_zip_with_unary_mapper(map_callback) {
+            if !flat_map_map_to_zip_with_unary_mapper(parsed_map_callback.node()) {
                 continue;
             }
-            let mut map_result = None;
-            if let Some(parsed_map_callback) =
-                parse_lazy_expression(map_callback, LazyExpressionFlags::AllowTypeParameters)
-            {
-                map_result = Some(ast::skip_parentheses(parsed_map_callback.expression()));
-            }
+            let map_callback = parsed_map_callback.node();
+            let map_result = ast::skip_parentheses(parsed_map_callback.expression());
 
             let mut outer_symbols: Vec<P<Symbol>> = Vec::new();
             let entries =
@@ -165,7 +164,7 @@ pub fn analyze_flat_map_map_to_zip_with(
     matches
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:120 flatMapMapToZipWithPlainParameter 25e62a13050d6c8b
+// go: internal/rules/flat_map_map_to_zip_with.go:118 flatMapMapToZipWithPlainParameter 25e62a13050d6c8b
 //
 // Rust: the parameter is a node of a parameter list, never nil, so Go's nil check drops.
 pub(crate) fn flat_map_map_to_zip_with_plain_parameter(parameter: P<Node>) -> bool {
@@ -184,7 +183,7 @@ pub(crate) fn flat_map_map_to_zip_with_plain_parameter(parameter: P<Node>) -> bo
         || name.kind() == Kind::ArrayBindingPattern
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:138 flatMapMapToZipWithOnlyMapperUsesOuter 8ef4454430488d95
+// go: internal/rules/flat_map_map_to_zip_with.go:136 flatMapMapToZipWithOnlyMapperUsesOuter 8ef4454430488d95
 // flatMapMapToZipWithOnlyMapperUsesOuter reports whether the outer parameter is
 // used in returned, and only inside mapper: everything else in returned becomes
 // the independent effect that zipWith runs on its own.
@@ -206,27 +205,24 @@ pub(crate) fn flat_map_map_to_zip_with_only_mapper_uses_outer(
     used
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:151 flatMapMapToZipWithReyieldsOuter df461a6efd9ff5ea
+// go: internal/rules/flat_map_map_to_zip_with.go:149 flatMapMapToZipWithReyieldsOuter 18d76e458c8bccf0
 //
 // Rust: the outer parameter's name is set (checked by `flat_map_map_to_zip_with_plain_parameter`), as Go assumes.
 pub(crate) fn flat_map_map_to_zip_with_reyields_outer(
     tp: &mut TypeParser<'_>,
     flat_map_callback: P<Node>,
-    map_result: Option<P<Node>>,
+    map_result: P<Node>,
 ) -> bool {
     let name =
         flat_map_callback.parameters()[0].name().expect("the outer parameter is a plain parameter");
     if name.kind() != Kind::Identifier {
         return false;
     }
-    let Some(map_result) = map_result else {
-        return false;
-    };
     map_result.kind() == Kind::Identifier
         && tp.get_symbol_at_location(map_result) == tp.get_symbol_at_location(name)
 }
 
-// go: internal/rules/flat_map_map_to_zip_with.go:159 flatMapMapToZipWithUnaryMapper 626c6e5add2b9bfa
+// go: internal/rules/flat_map_map_to_zip_with.go:157 flatMapMapToZipWithUnaryMapper 626c6e5add2b9bfa
 pub(crate) fn flat_map_map_to_zip_with_unary_mapper(mapper: P<Node>) -> bool {
     let mut values = 0;
     for &parameter in mapper.parameters() {
@@ -239,25 +235,4 @@ pub(crate) fn flat_map_map_to_zip_with_unary_mapper(mapper: P<Node>) -> bool {
         }
     }
     true
-}
-
-// go: internal/rules/flat_map_map_to_zip_with.go:176 flatMapMapToZipWithMapCallback 998daecccf0f398a
-// flatMapMapToZipWithMapCallback accepts any body shape, unlike
-// ParseLazyExpression: the whole body moves into the combiner, so a mapper that
-// branches between several returns is still fine.
-//
-// Rust: a node is never nil, so Go's nil check drops; Go's `ast.IsArrowFunction` /
-// `ast.IsFunctionExpression` are kind comparisons.
-pub(crate) fn flat_map_map_to_zip_with_map_callback(node: P<Node>) -> Option<P<Node>> {
-    let node = ast::skip_parentheses(node);
-    let is_non_generator_function = node.kind() == Kind::ArrowFunction
-        || node.kind() == Kind::FunctionExpression
-            && node.as_function_expression().asterisk_token().is_none();
-    if !is_non_generator_function
-        || node.body().is_none()
-        || ast::get_combined_modifier_flags(node).intersects(ModifierFlags::Async)
-    {
-        return None;
-    }
-    Some(node)
 }

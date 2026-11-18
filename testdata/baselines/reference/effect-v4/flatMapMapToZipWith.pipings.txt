@@ -2125,7 +2125,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 345:40 - 349:6
+Location: 344:40 - 348:6
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, (config) => {\n    console.log(config.locale)\n    return [user, config]\n  }))
 Node Kind: KindCallExpression
 
@@ -2139,7 +2139,7 @@ Transformations (1):
       outType: Effect<(Config | User)[], "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 345:74 - 349:5
+Location: 344:74 - 348:5
 Node: Effect.map(getConfig, (config) => {\n    console.log(config.locale)\n    return [user, config]\n  })
 Node Kind: KindCallExpression
 
@@ -2153,7 +2153,7 @@ Transformations (1):
       outType: Effect<(Config | User)[], "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 346:38 - 347:31
+Location: 345:38 - 346:31
 Node: console.log(config.locale)
 Node Kind: KindCallExpression
 
@@ -2167,7 +2167,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 355:29 - 356:63
+Location: 354:29 - 355:63
 Node: Effect.flatMap(getPartialUser, ({ name = fallback }) =>\n  Effect.map(getConfig, (fallback) => name + fallback.locale))
 Node Kind: KindCallExpression
 
@@ -2181,7 +2181,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 355:85 - 356:62
+Location: 354:85 - 355:62
 Node: Effect.map(getConfig, (fallback) => name + fallback.locale)
 Node Kind: KindCallExpression
 
@@ -2195,7 +2195,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 360:42 - 361:76
+Location: 359:42 - 360:76
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(Ambient.ambientConfig, (config) => user.name + config.locale))
 Node Kind: KindCallExpression
 
@@ -2209,7 +2209,7 @@ Transformations (1):
       outType: Effect<string, "UserError", "UserRepo">
 
 === Piping Flow ===
-Location: 360:76 - 361:75
+Location: 359:76 - 360:75
 Node: Effect.map(Ambient.ambientConfig, (config) => user.name + config.locale)
 Node Kind: KindCallExpression
 
@@ -2223,7 +2223,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 364:40 - 365:83
+Location: 363:40 - 364:83
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(Ambient.ambientMutableConfig, (config) => user.name + config.locale))
 Node Kind: KindCallExpression
 
@@ -2237,7 +2237,7 @@ Transformations (1):
       outType: Effect<string, "UserError", "UserRepo">
 
 === Piping Flow ===
-Location: 364:74 - 365:82
+Location: 363:74 - 364:82
 Node: Effect.map(Ambient.ambientMutableConfig, (config) => user.name + config.locale)
 Node Kind: KindCallExpression
 
@@ -2251,7 +2251,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 368:34 - 368:108
+Location: 367:34 - 367:108
 Node: getUser.pipe(Effect.flatMap((user) => Effect.map(getConfig, () => user)))
 Node Kind: KindCallExpression
 
@@ -2265,7 +2265,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 368:72 - 368:106
+Location: 367:72 - 367:106
 Node: Effect.map(getConfig, () => user)
 Node Kind: KindCallExpression
 
@@ -2279,7 +2279,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 370:46 - 373:6
+Location: 369:46 - 372:6
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, (config) => {\n    return user\n  }))
 Node Kind: KindCallExpression
 
@@ -2293,7 +2293,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 370:80 - 373:5
+Location: 369:80 - 372:5
 Node: Effect.map(getConfig, (config) => {\n    return user\n  })
 Node Kind: KindCallExpression
 
@@ -2307,7 +2307,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 375:55 - 376:47
+Location: 374:55 - 375:47
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, ({ locale }) => user))
 Node Kind: KindCallExpression
 
@@ -2321,7 +2321,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 375:89 - 376:46
+Location: 374:89 - 375:46
 Node: Effect.map(getConfig, ({ locale }) => user)
 Node Kind: KindCallExpression
 
@@ -2335,7 +2335,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 380:39 - 384:6
+Location: 378:39 - 382:6
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, (config) => {\n    console.log(config.locale)\n    return user\n  }))
 Node Kind: KindCallExpression
 
@@ -2349,7 +2349,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 380:73 - 384:5
+Location: 378:73 - 382:5
 Node: Effect.map(getConfig, (config) => {\n    console.log(config.locale)\n    return user\n  })
 Node Kind: KindCallExpression
 
@@ -2363,7 +2363,7 @@ Transformations (1):
       outType: Effect<User, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 381:38 - 382:31
+Location: 379:38 - 380:31
 Node: console.log(config.locale)
 Node Kind: KindCallExpression
 
@@ -2377,7 +2377,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 402:37 - 403:56
+Location: 400:37 - 401:56
 Node: Effect.flatMap(getPartialCount, ({ n = bump() }) =>\n  Effect.map(getConfig, (config) => n + config.locale))
 Node Kind: KindCallExpression
 
@@ -2391,7 +2391,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 402:89 - 403:55
+Location: 400:89 - 401:55
 Node: Effect.map(getConfig, (config) => n + config.locale)
 Node Kind: KindCallExpression
 
@@ -2405,7 +2405,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 406:32 - 407:59
+Location: 404:32 - 405:59
 Node: Effect.flatMap(getUser, ({ [keyOf()]: name }) =>\n  Effect.map(getConfig, (config) => name + config.locale))
 Node Kind: KindCallExpression
 
@@ -2419,7 +2419,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 406:81 - 407:58
+Location: 404:81 - 405:58
 Node: Effect.map(getConfig, (config) => name + config.locale)
 Node Kind: KindCallExpression
 
@@ -2433,7 +2433,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 410:36 - 410:118
+Location: 408:36 - 408:118
 Node: Effect.flatMap(getCounter, ({ count }) => Effect.map(increment, () => count + 1))
 Node Kind: KindCallExpression
 
@@ -2447,7 +2447,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 410:78 - 410:117
+Location: 408:78 - 408:117
 Node: Effect.map(increment, () => count + 1)
 Node Kind: KindCallExpression
 
@@ -2461,7 +2461,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 413:33 - 414:60
+Location: 411:33 - 412:60
 Node: Effect.flatMap(getPair, ([first]) =>\n  Effect.map(getConfig, (config) => first + config.locale))
 Node Kind: KindCallExpression
 
@@ -2475,7 +2475,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 413:70 - 414:59
+Location: 411:70 - 412:59
 Node: Effect.map(getConfig, (config) => first + config.locale)
 Node Kind: KindCallExpression
 
@@ -2489,7 +2489,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 417:25 - 417:128
+Location: 415:25 - 415:128
 Node: Effect.flatMap(getUser, ({ ...rest }) => Effect.map(getConfig, (config) => rest.name + config.locale))
 Node Kind: KindCallExpression
 
@@ -2503,7 +2503,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 417:66 - 417:127
+Location: 415:66 - 415:127
 Node: Effect.map(getConfig, (config) => rest.name + config.locale)
 Node Kind: KindCallExpression
 
@@ -2517,7 +2517,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 422:35 - 423:59
+Location: 420:35 - 421:59
 Node: Effect.flatMap(getProfile, ({ user: { name } }) =>\n  Effect.map(getConfig, (config) => name + config.locale))
 Node Kind: KindCallExpression
 
@@ -2531,7 +2531,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 422:86 - 423:58
+Location: 420:86 - 421:58
 Node: Effect.map(getConfig, (config) => name + config.locale)
 Node Kind: KindCallExpression
 
@@ -2545,7 +2545,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 435:27 - 435:117
+Location: 433:27 - 433:117
 Node: Effect.flatMap(getGetterCounter, ({ value }) => Effect.map(bumpGetter, (b) => value + b))
 Node Kind: KindCallExpression
 
@@ -2559,7 +2559,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 435:75 - 435:116
+Location: 433:75 - 433:116
 Node: Effect.map(bumpGetter, (b) => value + b)
 Node Kind: KindCallExpression
 
@@ -2573,7 +2573,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 439:33 - 440:44
+Location: 437:33 - 438:44
 Node: Effect.flatMap(getGetterHolder, ({ inner: { value } }) =>\n  Effect.map(bumpGetter, (b) => value + b))
 Node Kind: KindCallExpression
 
@@ -2587,7 +2587,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 439:91 - 440:43
+Location: 437:91 - 438:43
 Node: Effect.map(bumpGetter, (b) => value + b)
 Node Kind: KindCallExpression
 
@@ -2601,7 +2601,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 447:36 - 447:123
+Location: 445:36 - 445:123
 Node: Effect.flatMap(getWithGetter, ({ value }) => Effect.map(bumpGetter, (b) => value + b))
 Node Kind: KindCallExpression
 
@@ -2615,7 +2615,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 447:81 - 447:122
+Location: 445:81 - 445:122
 Node: Effect.map(bumpGetter, (b) => value + b)
 Node Kind: KindCallExpression
 
@@ -2629,7 +2629,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 451:33 - 451:124
+Location: 449:33 - 449:124
 Node: Effect.flatMap(getReadonlyGetter, ({ value }) => Effect.map(bumpGetter, (b) => value + b))
 Node Kind: KindCallExpression
 
@@ -2643,7 +2643,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 451:82 - 451:123
+Location: 449:82 - 449:123
 Node: Effect.map(bumpGetter, (b) => value + b)
 Node Kind: KindCallExpression
 
@@ -2657,7 +2657,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 457:38 - 457:122
+Location: 455:38 - 455:122
 Node: Effect.flatMap(getName, (a?: string) => Effect.map(getCount, (b) => a + String(b)))
 Node Kind: KindCallExpression
 
@@ -2671,7 +2671,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 457:78 - 457:121
+Location: 455:78 - 455:121
 Node: Effect.map(getCount, (b) => a + String(b))
 Node Kind: KindCallExpression
 
@@ -2685,7 +2685,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 457:110 - 457:120
+Location: 455:110 - 455:120
 Node: String(b)
 Node Kind: KindCallExpression
 
@@ -2699,7 +2699,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 461:41 - 462:55
+Location: 459:41 - 460:55
 Node: Effect.flatMap(getName, (a?: string) =>\n  Effect.map(getCount, (b?: number) => a + String(b)))
 Node Kind: KindCallExpression
 
@@ -2713,7 +2713,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 461:81 - 462:54
+Location: 459:81 - 460:54
 Node: Effect.map(getCount, (b?: number) => a + String(b))
 Node Kind: KindCallExpression
 
@@ -2727,7 +2727,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 462:43 - 462:53
+Location: 460:43 - 460:53
 Node: String(b)
 Node Kind: KindCallExpression
 
@@ -2741,7 +2741,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 466:34 - 466:111
+Location: 464:34 - 464:111
 Node: Effect.flatMap(getName, (a?: string) => Effect.map(getCount, () => a + "!"))
 Node Kind: KindCallExpression
 
@@ -2755,7 +2755,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 466:74 - 466:110
+Location: 464:74 - 464:110
 Node: Effect.map(getCount, () => a + "!")
 Node Kind: KindCallExpression
 
@@ -2769,7 +2769,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 470:39 - 470:109
+Location: 468:39 - 468:109
 Node: Effect.flatMap(getName, (a?) => Effect.map(getCount, (b?) => [a, b]))
 Node Kind: KindCallExpression
 
@@ -2783,7 +2783,7 @@ Transformations (1):
       outType: Effect<(string | number | undefined)[], never, never>
 
 === Piping Flow ===
-Location: 470:71 - 470:108
+Location: 468:71 - 468:108
 Node: Effect.map(getCount, (b?) => [a, b])
 Node Kind: KindCallExpression
 
@@ -2797,7 +2797,7 @@ Transformations (1):
       outType: Effect<(string | number | undefined)[], never, never>
 
 === Piping Flow ===
-Location: 474:35 - 477:6
+Location: 472:35 - 475:6
 Node: Effect.flatMap(getUser, (user) =>\n  Effect.map(getConfig, function(this: void, config: Config) {\n    return user.name + config.locale\n  }))
 Node Kind: KindCallExpression
 
@@ -2811,7 +2811,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 474:69 - 477:5
+Location: 472:69 - 475:5
 Node: Effect.map(getConfig, function(this: void, config: Config) {\n    return user.name + config.locale\n  })
 Node Kind: KindCallExpression
 
@@ -2825,7 +2825,7 @@ Transformations (1):
       outType: Effect<string, "ConfigError", "ConfigRepo">
 
 === Piping Flow ===
-Location: 483:19 - 483:45
+Location: 481:19 - 481:45
 Node: Effect.succeed(aliasView)
 Node Kind: KindCallExpression
 
@@ -2839,7 +2839,7 @@ Transformations (1):
       outType: Effect<{ readonly value: number; }, never, never>
 
 === Piping Flow ===
-Location: 484:20 - 487:3
+Location: 482:20 - 485:3
 Node: Effect.sync(() => {\n  aliasMutable.value = 2\n  return 10\n})
 Node Kind: KindCallExpression
 
@@ -2853,7 +2853,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 488:29 - 489:45
+Location: 486:29 - 487:45
 Node: Effect.flatMap(aliasFirst, ({ value }) =>\n  Effect.map(aliasSecond, (n) => value + n))
 Node Kind: KindCallExpression
 
@@ -2867,7 +2867,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 488:71 - 489:44
+Location: 486:71 - 487:44
 Node: Effect.map(aliasSecond, (n) => value + n)
 Node Kind: KindCallExpression
 
@@ -2881,7 +2881,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 493:18 - 493:36
+Location: 491:18 - 491:36
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -2895,7 +2895,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 494:19 - 494:37
+Location: 492:19 - 492:37
 Node: Effect.succeed(2)
 Node Kind: KindCallExpression
 
@@ -2909,7 +2909,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 495:28 - 496:69
+Location: 493:28 - 494:69
 Node: Effect.flatMap(thisFirst, (value) =>\n  Effect.map(thisSecond, function(this: void) { return value + 1 }))
 Node Kind: KindCallExpression
 
@@ -2923,7 +2923,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 495:65 - 496:68
+Location: 493:65 - 494:68
 Node: Effect.map(thisSecond, function(this: void) { return value + 1 })
 Node Kind: KindCallExpression
 
@@ -2937,7 +2937,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 503:32 - 507:6
+Location: 499:32 - 503:6
 Node: Effect.flatMap(branchFirst, (a) =>\n  Effect.map(branchSecond, (b) => {\n    if (b > 0) return a + b\n    return a - b\n  }))
 Node Kind: KindCallExpression
 
@@ -2951,7 +2951,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 503:67 - 507:5
+Location: 499:67 - 503:5
 Node: Effect.map(branchSecond, (b) => {\n    if (b > 0) return a + b\n    return a - b\n  })
 Node Kind: KindCallExpression
 
@@ -2965,7 +2965,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 511:34 - 518:8
+Location: 506:34 - 513:8
 Node: pipe(branchFirst, Effect.flatMap((a) =>\n  branchSecond.pipe(Effect.map(function (b) {\n    if (b > 0) {\n      return a + b\n    } else {\n      return a - b\n    }\n  }))))
 Node Kind: KindCallExpression
 
@@ -2979,7 +2979,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 511:74 - 518:6
+Location: 506:74 - 513:6
 Node: branchSecond.pipe(Effect.map(function (b) {\n    if (b > 0) {\n      return a + b\n    } else {\n      return a - b\n    }\n  }))
 Node Kind: KindCallExpression
 
@@ -2993,7 +2993,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 522:29 - 525:6
+Location: 516:29 - 519:6
 Node: Effect.flatMap(branchFirst, (a) =>\n  Effect.map(branchSecond, (b) => {\n    console.log(a + b)\n  }))
 Node Kind: KindCallExpression
 
@@ -3007,7 +3007,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 522:64 - 525:5
+Location: 516:64 - 519:5
 Node: Effect.map(branchSecond, (b) => {\n    console.log(a + b)\n  })
 Node Kind: KindCallExpression
 
@@ -3021,7 +3021,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 523:36 - 524:23
+Location: 517:36 - 518:23
 Node: console.log(a + b)
 Node Kind: KindCallExpression
 
@@ -3035,7 +3035,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 531:33 - 533:3
+Location: 525:33 - 527:3
 Node: Effect.flatMap(evalFirst, function(a) {\n  return Effect.map(evalSecond, (b) => a + b + Number(eval("arguments.length")))\n})
 Node Kind: KindCallExpression
 
@@ -3049,7 +3049,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 532:9 - 532:81
+Location: 526:9 - 526:81
 Node: Effect.map(evalSecond, (b) => a + b + Number(eval("arguments.length")))
 Node Kind: KindCallExpression
 
@@ -3063,7 +3063,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 532:47 - 532:80
+Location: 526:47 - 526:80
 Node: Number(eval("arguments.length"))
 Node Kind: KindCallExpression
 
@@ -3081,7 +3081,7 @@ Transformations (2):
       outType: number
 
 === Piping Flow ===
-Location: 536:27 - 537:61
+Location: 530:27 - 531:61
 Node: Effect.flatMap(evalFirst, <A extends number>(a: A) =>\n  Effect.map(evalSecond, <B extends number>(b: B) => a + b))
 Node Kind: KindCallExpression
 
@@ -3095,7 +3095,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 536:81 - 537:60
+Location: 530:81 - 531:60
 Node: Effect.map(evalSecond, <B extends number>(b: B) => a + b)
 Node Kind: KindCallExpression
 
@@ -3109,7 +3109,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 541:30 - 541:124
+Location: 535:30 - 535:124
 Node: Effect.flatMap(getUser, (user) => Effect.map(getConfig, (config): unknown => [user, config]))
 Node Kind: KindCallExpression
 
@@ -3123,7 +3123,7 @@ Transformations (1):
       outType: Effect<unknown, "ConfigError" | "UserError", "ConfigRepo" | "UserRepo">
 
 === Piping Flow ===
-Location: 541:64 - 541:123
+Location: 535:64 - 535:123
 Node: Effect.map(getConfig, (config): unknown => [user, config])
 Node Kind: KindCallExpression
 
