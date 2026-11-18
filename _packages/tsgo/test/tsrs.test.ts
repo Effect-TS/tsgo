@@ -7,7 +7,7 @@ import * as Path from "effect/Path"
 import * as Scope from "effect/Scope"
 import { createHash } from "node:crypto"
 import { existsSync } from "node:fs"
-import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, rm, rmdir, stat, writeFile } from "node:fs/promises"
 import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
@@ -70,7 +70,8 @@ const hostTarget = tsrsTarget(process.platform, process.arch, isGlibc())
 const hostReplacementAvailable = (tsrsReplacementTargets as ReadonlyArray<string | undefined>).includes(hostTarget)
 
 // The patched tsrs artifact in this host's @effect/tsgo-<platform> package, written for the test unless a local build
-// already provides one.
+// already provides one. Only the artifact and the directories above it are removed, and those only once empty, as other
+// test files write their artifacts into the same package concurrently.
 const providePackagedTsrs = async (version: string) => {
   const packageJson = createRequire(import.meta.url).resolve(
     `@effect/tsgo-${process.platform}-${process.arch}/package.json`,
@@ -79,10 +80,14 @@ const providePackagedTsrs = async (version: string) => {
   const binary = join(dirname(packageJson), "artifacts", "tsrs", version, "tsrs")
   if (existsSync(binary)) return { binary, contents: await readFile(binary, "utf8") }
   const artifacts = join(dirname(packageJson), "artifacts")
-  const created = existsSync(artifacts) ? join(artifacts, "tsrs", version) : artifacts
   await mkdir(dirname(binary), { recursive: true })
   await writeFile(binary, "patched tsrs")
-  cleanups.push(() => rm(created, { recursive: true, force: true }))
+  cleanups.push(async () => {
+    await rm(binary, { force: true })
+    for (const directory of [dirname(binary), join(artifacts, "tsrs"), artifacts]) {
+      await rmdir(directory).catch(() => undefined)
+    }
+  })
   return { binary, contents: "patched tsrs" }
 }
 
