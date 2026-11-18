@@ -6,6 +6,7 @@ import { join } from "node:path"
 import test from "node:test"
 import * as Effect from "effect/Effect"
 import {
+  cargoLockPathVersions,
   parseCargoPackage,
   parseCargoWorkspaceVersion,
   requireTsrsCheckout,
@@ -77,4 +78,32 @@ test("sets the versions of path packages in Cargo.lock only", () => {
   const synced = syncCargoLockVersions(lock, new Map([["tsrs_ast", "7.1.0-beta.tsrs2"], ["bitflags", "3.0.0"]]))
   assert.equal(synced, lock.replace("version = \"0.25.0\"", "version = \"7.1.0-beta.tsrs2\""))
   assert.equal(syncCargoLockVersions(synced, new Map([["tsrs_ast", "7.1.0-beta.tsrs2"]])), synced)
+})
+
+test("reads the versions of the tsrs path packages of a Cargo.lock", () => {
+  const lock = [
+    "version = 4",
+    "",
+    "[[package]]",
+    "name = \"tsrs_ast\"",
+    "version = \"0.25.0\"",
+    "",
+    "[[package]]",
+    "name = \"tsrs_lsp_types\"",
+    "version = \"0.1.0\"",
+    "source = \"registry+https://github.com/rust-lang/crates.io-index\"",
+    "",
+    "[[package]]",
+    "name = \"ets_shim\"",
+    "version = \"0.0.0\"",
+    ""
+  ].join("\n")
+  assert.deepEqual(
+    [...cargoLockPathVersions(lock, (name) => name.startsWith("tsrs"))],
+    [["tsrs_ast", "0.25.0"]]
+  )
+  // A tsrs setup of another release and the restore of the committed versions round-trip.
+  const other = syncCargoLockVersions(lock, new Map([["tsrs_ast", "7.1.0-beta.tsrs2"]]))
+  assert.notEqual(other, lock)
+  assert.equal(syncCargoLockVersions(other, cargoLockPathVersions(lock, (name) => name.startsWith("tsrs"))), lock)
 })

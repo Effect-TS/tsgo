@@ -12,7 +12,7 @@ import {
   oxlintBuildTargets,
   tsrsBinaryName
 } from "./build.ts"
-import { buildReleasePlan } from "./releasePlan.ts"
+import { buildOxlintArtifactPlan, buildReleasePlan } from "./releasePlan.ts"
 import { readUpstream } from "./upstream.ts"
 
 export class PackagePreparationError extends Data.TaggedError("PackagePreparationError")<{
@@ -37,14 +37,18 @@ export const bundleUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   yield* Console.log("Bundled upstream.json in platform packages")
 })
 
+// `release`: every artifact of the release plan; `oxlint`: the Validate Oxlint workflow's (buildOxlintArtifactPlan).
+export type ArtifactPlanName = "release" | "oxlint"
+
 export const assembleReleaseArtifacts = Effect.fnUntraced(function*(
   repositoryRoot: string,
-  artifactsDirectory: string
+  artifactsDirectory: string,
+  planName: ArtifactPlanName = "release"
 ) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const upstream = yield* readUpstream(repositoryRoot)
-  const plan = buildReleasePlan(upstream)
+  const plan = planName === "oxlint" ? buildOxlintArtifactPlan(upstream) : buildReleasePlan(upstream)
   const sourceRoot = path.resolve(repositoryRoot, artifactsDirectory)
   const actualArtifacts = (yield* fs.readDirectory(sourceRoot)).sort()
   const expectedArtifacts = plan.map((artifact) => artifact.artifactName).sort()

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
-  buildOxlintTestMatrix,
+  buildOxlintBuildMatrix,
   buildPerfMatrix,
   buildReleaseMatrix,
   buildTypeScriptTestMatrix
@@ -63,7 +63,7 @@ test("combines channel labels when latest, beta and next resolve to the same com
   })
 })
 
-test("builds a deduplicated matrix of compatible Oxlint component pairs", () => {
+test("builds the Oxlint validation artifacts once each and the release plan", () => {
   const upstream: typeof Upstream.Type = {
     schemaVersion: 5,
     tags: {
@@ -98,17 +98,29 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     ]
   }
 
-  assert.deepEqual(buildOxlintTestMatrix(upstream), {
+  // One build per Oxlint binding and tsgolint version, on linux-x64 only.
+  assert.deepEqual(buildOxlintBuildMatrix(upstream), {
     include: [
       {
-        name: "oxlint (1.76.0) + oxlint-tsgolint (7.0.2001)",
-        oxlint: { component: "oxlint", version: "1.76.0" },
-        tsgolint: { component: "oxlint-tsgolint", version: "7.0.2001" }
+        name: "oxlint 1.76.0",
+        component: "oxlint",
+        version: "1.76.0",
+        target: "linux-x64",
+        artifactName: "linux-x64__oxlint__1.76.0"
       },
       {
-        name: "oxlint (1.77.0) + oxlint-tsgolint (7.0.2001)",
-        oxlint: { component: "oxlint", version: "1.77.0" },
-        tsgolint: { component: "oxlint-tsgolint", version: "7.0.2001" }
+        name: "oxlint 1.77.0",
+        component: "oxlint",
+        version: "1.77.0",
+        target: "linux-x64",
+        artifactName: "linux-x64__oxlint__1.77.0"
+      },
+      {
+        name: "oxlint-tsgolint 7.0.2001",
+        component: "oxlint-tsgolint",
+        version: "7.0.2001",
+        target: "linux-x64",
+        artifactName: "linux-x64__oxlint-tsgolint__7.0.2001"
       }
     ]
   })
@@ -138,44 +150,6 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
 ,
     timeoutMinutes: 45
   })
-})
-
-test("tests every Oxlint and tsgolint version once instead of every known pair", () => {
-  const pair = (oxlint: string, tsgolint: string) => ({
-    name: `oxlint@${oxlint}+${tsgolint}`,
-    description: "Oxlint runtime",
-    dependencies: { oxlint, "oxlint-tsgolint": tsgolint }
-  })
-  const upstream: typeof Upstream.Type = {
-    schemaVersion: 5,
-    tags: {
-      typescript: { latest: "7.0.2", beta: "7.0.2", next: "7.0.2" },
-      "oxlint-tsgolint": { latest: "7.0.2005" },
-      oxlint: { latest: "1.90.0" }
-    },
-    components: {
-      typescript: { "7.0.2": { gitHead: revision, provider: "typescript-go" } },
-      "oxlint-tsgolint": {
-        "7.0.2004": { gitHead: revision, dependencies: { typescript: "7.0.2" } },
-        "7.0.2005": { gitHead: revision, dependencies: { typescript: "7.0.2" } }
-      },
-      oxlint: { "1.88.0": { gitHead: revision }, "1.89.0": { gitHead: revision }, "1.90.0": { gitHead: revision } }
-    },
-    profiles: [
-      pair("1.88.0", "7.0.2004"),
-      pair("1.88.0", "7.0.2005"),
-      pair("1.89.0", "7.0.2004"),
-      pair("1.89.0", "7.0.2005"),
-      pair("1.90.0", "7.0.2005")
-    ]
-  }
-
-  // The default pair first, the newer oxlint takes the older tsgolint, and the rest the newest tsgolint they support.
-  assert.deepEqual(buildOxlintTestMatrix(upstream).include.map(({ name }) => name), [
-    "oxlint (1.88.0) + oxlint-tsgolint (7.0.2005)",
-    "oxlint (1.89.0) + oxlint-tsgolint (7.0.2004)",
-    "oxlint (1.90.0) + oxlint-tsgolint (7.0.2005)"
-  ])
 })
 
 test("builds the tsrs binary once per tsrs version and tsrs platform, natively", () => {

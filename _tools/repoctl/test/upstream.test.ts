@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
-import { buildOxlintTestMatrix } from "../src/matrix.ts"
+import { buildOxlintVerifyCases } from "../src/oxlintVerify.ts"
 import {
   buildUpstream,
   decodeLatestNpmVersion,
@@ -354,7 +354,8 @@ test("builds deterministic normalized metadata and deduplicates components", () 
     oxlint: { latest: "1.77.0" },
     "oxlint-tsgolint": { latest: "7.0.2001" }
   })
-  assert.equal(buildOxlintTestMatrix(upstream).include.length, 6)
+  // One verify case per retained oxlint runtime; the `vite-plus` profile names no version of its own.
+  assert.equal(buildOxlintVerifyCases(upstream).length, 6)
   assert.deepEqual(upstream.profiles.slice(1).map((profile) => profile.dependencies.oxlint), [
     "1.72.0", "1.73.0", "1.74.0", "1.75.0", "1.76.0", "1.77.0"
   ])
@@ -407,10 +408,14 @@ test("records the tsrs a vite-plus runtime pins instead of oxlint-tsgolint", asy
     { name: "vite-plus@1.7.0", dependencies: { oxlint: "1.94.0", tsrs: "7.1.0-beta.tsrs2" } },
     { name: "vite-plus@1.6.0", dependencies: { oxlint: "1.94.0", "oxlint-tsgolint": "7.0.2007" } }
   ])
-  // The manifest stays valid, and the oxlint matrix skips the tsrs-only runtime.
+  // The manifest stays valid, and the tsrs-only vite-plus runtime is verified on its installed tsrs.
   await Effect.runPromise(decodeUpstream(JSON.stringify(upstream)))
-  assert.deepEqual(buildOxlintTestMatrix(upstream).include.map(({ name }) => name), [
-    "oxlint (1.94.0) + oxlint-tsgolint (7.0.2007)"
+  assert.deepEqual(buildOxlintVerifyCases(upstream).map(({ name }) => name), [
+    "oxlint@1.94.0 + oxlint-tsgolint@7.0.2007",
+    "oxlint@1.94.0 + tsrs@0.25.0-ts7.1.0-beta",
+    "oxlint@1.94.0 + tsrs@7.1.0-beta.tsrs2",
+    "vite-plus@1.6.0 (oxlint 1.94.0, tsgolint 7.0.2007)",
+    "vite-plus@1.7.0 (oxlint 1.94.0, tsrs 7.1.0-beta.tsrs2)"
   ])
 })
 

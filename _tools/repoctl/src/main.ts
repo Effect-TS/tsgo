@@ -22,7 +22,7 @@ import { completeCheck, openPullRequestIfChanged } from "./github.ts"
 import { parseByteSize, trimGoCache } from "./goCache.ts"
 import { runLint } from "./lint.ts"
 import {
-  printOxlintTestMatrix,
+  printOxlintBuildMatrix,
   printPerfMatrix,
   printReleaseMatrix,
   printTypeScriptTestMatrix
@@ -45,7 +45,8 @@ import {
   portTodo
 } from "./port.ts"
 import { runPipings } from "./pipings.ts"
-import { runRustChecks, runRustLint, runRustTests, syncTsrsCargoLock } from "./rust.ts"
+import { verifyOxlint } from "./oxlintVerify.ts"
+import { restoreTsrsCargoLock, runRustChecks, runRustLint, runRustTests, syncTsrsCargoLock } from "./rust.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
 import { runTests } from "./tests.ts"
 import { readUpstream, resolveComponent, updateUpstream } from "./upstream.ts"
@@ -66,6 +67,9 @@ const setup = Command.make("setup", {
   )
 }, ({ component, version }) => Effect.gen(function*() {
   const selected = yield* cloneSubmodules(repositoryRoot, component, Option.getOrUndefined(version))
+  if (selected.name !== "tsrs") {
+    yield* restoreTsrsCargoLock(repositoryRoot)
+  }
   if (selected.name === "oxlint-tsgolint") {
     yield* prepareTsgolintComponent(repositoryRoot, {
       version: selected.version,
@@ -439,8 +443,12 @@ const preparePackages = Command.make("prepare", {}, () => preparePlatformPackage
 )
 
 const assemblePackages = Command.make("assemble", {
-  artifacts: Flag.String("artifacts").pipe(Flag.withDefault("_release-artifacts"))
-}, ({ artifacts }) => assembleReleaseArtifacts(repositoryRoot, artifacts)).pipe(
+  artifacts: Flag.String("artifacts").pipe(Flag.withDefault("_release-artifacts")),
+  plan: Flag.Literals("plan", ["release", "oxlint"]).pipe(
+    Flag.withDefault("release"),
+    Flag.withDescription("The artifacts to expect: the release plan, or the Validate Oxlint workflow's")
+  )
+}, ({ artifacts, plan }) => assembleReleaseArtifacts(repositoryRoot, artifacts, plan)).pipe(
   Command.withDescription("Assemble downloaded release artifacts into platform packages")
 )
 
@@ -453,8 +461,8 @@ const matrixTestTypeScript = Command.make("test-typescript", {}, () => printType
   Command.withDescription("Print the TypeScript component test matrix as JSON")
 )
 
-const matrixTestOxlint = Command.make("test-oxlint", {}, () => printOxlintTestMatrix(repositoryRoot)).pipe(
-  Command.withDescription("Print the Oxlint runtime test matrix as JSON")
+const matrixOxlintBuild = Command.make("oxlint-build", {}, () => printOxlintBuildMatrix(repositoryRoot)).pipe(
+  Command.withDescription("Print the Validate Oxlint build matrix (one job per Oxlint, tsgolint and tsrs artifact) as JSON")
 )
 
 const matrixPerf = Command.make("perf", {
@@ -470,7 +478,7 @@ const matrixRelease = Command.make("release", {}, () => printReleaseMatrix(repos
 
 const matrix = Command.make("matrix").pipe(
   Command.withDescription("Generate CI matrices"),
-  Command.withSubcommands([matrixPerf, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
+  Command.withSubcommands([matrixOxlintBuild, matrixPerf, matrixRelease, matrixTestTypeScript])
 )
 
 const portManifestCommand = Command.make("port-manifest", {}, () => portManifest(repositoryRoot)).pipe(
@@ -558,6 +566,32 @@ const tsrsTestCommand = Command.make("test", {}, () => runRustTests(repositoryRo
   Command.withDescription("Run Clippy (warnings denied) and the Rust workspace tests, then build the tsrs binary and run its --version smoke test")
 )
 
+const oxlintVerifyCommand = Command.make("verify", {
+  summary: Flag.String("summary").pipe(
+    Flag.optional,
+    Flag.withDescription("Append the markdown summary to this file (GITHUB_STEP_SUMMARY)")
+  ),
+  filter: Flag.String("filter").pipe(
+    Flag.optional,
+    Flag.withDescription("Run only the runtimes whose name contains this text")
+  ),
+  keep: Flag.Boolean("keep").pipe(Flag.withDefault(false), Flag.withDescription("Keep the generated projects"))
+}, ({ filter, keep, summary }) =>
+  verifyOxlint(repositoryRoot, {
+    summary: Option.getOrUndefined(summary),
+    filter: Option.getOrUndefined(filter),
+    keep
+  })).pipe(
+    Command.withDescription(
+      "Run the effect-tsgo oxlint/vp proxy commands on a project per supported Oxlint runtime (needs the packaged artifacts and `pnpm --filter @effect/tsgo build`)"
+    )
+  )
+
+const oxlint = Command.make("oxlint").pipe(
+  Command.withDescription("Verify the Oxlint integration"),
+  Command.withSubcommands([oxlintVerifyCommand])
+)
+
 const tsrs = Command.make("tsrs").pipe(
   Command.withDescription(
     "The Rust port (crates/ on tsrs): cargo steps (they need `repoctl submodules setup --component tsrs`) and the port bookkeeping (porting/)"
@@ -592,6 +626,7 @@ Command.make("repoctl").pipe(
     goCache,
     lint,
     matrix,
+    oxlint,
     packages,
     perf,
     pipings,
