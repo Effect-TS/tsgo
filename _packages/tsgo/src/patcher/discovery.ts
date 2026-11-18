@@ -223,10 +223,10 @@ export const packageScopes: (
 
 export const discoverBinaries = (cwd: string, preferredTypescriptPackage?: string) => Effect.gen(function*() {
   const scopes = yield* packageScopes(cwd)
-  const located = [...yield* discoverTypeScript(scopes[0], preferredTypescriptPackage)]
-  for (const require of scopes) {
-    located.push(...yield* discoverOxlint(require), ...yield* discoverTsrs(require))
-  }
+  const typescript = yield* discoverTypeScript(scopes[0], preferredTypescriptPackage)
+  const scoped = yield* Effect.forEach(scopes, (require) =>
+    Effect.zipWith(discoverOxlint(require), discoverTsrs(require), (oxlint, tsrs) => [...oxlint, ...tsrs]))
+  const located = [...typescript, ...scoped.flat()]
   const discovered = [...new Map(located.map((binary) => [binary.binaryPath, binary])).values()]
   return yield* Effect.forEach(discovered, (binary) => hashFile(binary.binaryPath).pipe(
     Effect.map((fileHash) => ({ ...binary, fileHash })),
