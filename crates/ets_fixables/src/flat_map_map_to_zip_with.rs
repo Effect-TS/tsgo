@@ -168,7 +168,7 @@ fn flat_map_map_to_zip_with_map_parameters_capture_outer_names(
 ) -> bool {
     let flat_map_callback = m.flat_map_callback;
     let outer_parameter = flat_map_callback.parameters()[0];
-    let entries = m.map_callback.locals().map(|locals| locals.entries()).unwrap_or_default();
+    let entries = m.map_callback.locals().map_or_default(|locals| locals.entries());
     for (name, _) in entries {
         if flat_map_callback.locals().and_then(|locals| SymbolTable::get(&locals, name)).is_some() {
             return true;

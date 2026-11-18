@@ -121,8 +121,7 @@ pub fn analyze_flat_map_map_to_zip_with(
             let map_result = ast::skip_parentheses(parsed_map_callback.expression());
 
             let mut outer_symbols: Vec<P<Symbol>> = Vec::new();
-            let entries =
-                flat_map_callback.locals().map(|locals| locals.entries()).unwrap_or_default();
+            let entries = flat_map_callback.locals().map_or_default(|locals| locals.entries());
             for (_, symbol) in entries {
                 outer_symbols.push(symbol);
             }
