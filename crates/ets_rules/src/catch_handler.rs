@@ -6,7 +6,7 @@ use ets_typeparser::{
 
 use crate::prefer_succeed_some_or_none::is_option_none_call;
 
-// go: internal/rules/catch_handler.go:10 catchHandlerIgnoresError dd82c82f3e583965
+// go: internal/rules/catch_handler.go:10 catchHandlerIgnoresError 1fc588a81431eb8b
 // Restrict callbacks to arrows so the caught error cannot be observed through
 // a function's arguments object. An unused plain parameter can be removed.
 pub(crate) fn catch_handler_ignores_error(
@@ -33,11 +33,8 @@ pub(crate) fn catch_handler_ignores_error(
     if params.nodes().len() != 1 {
         return false;
     }
-    let parameter = params.nodes()[0].as_parameter_declaration();
-    if parameter.name().kind() != Kind::Identifier
-        || parameter.initializer().is_some()
-        || parameter.dot_dot_dot_token().is_some()
-    {
+    let parameter = params.nodes()[0];
+    if !ets_typeparser::is_plain_identifier_parameter(parameter) {
         return false;
     }
     let Some(symbol) = tp.get_symbol_at_location(parameter.name()) else {

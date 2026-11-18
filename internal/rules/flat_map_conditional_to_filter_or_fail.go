@@ -77,11 +77,7 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 			}
 
 			parameter := parsed.Params().At(0)
-			if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
-				continue
-			}
-			declaration := parameter.AsParameterDeclaration()
-			if declaration == nil || declaration.DotDotDotToken != nil || declaration.Initializer != nil {
+			if !typeparser.IsPlainIdentifierParameter(parameter) {
 				continue
 			}
 			parameterSymbol := tp.GetSymbolAtLocation(parameter.Name())

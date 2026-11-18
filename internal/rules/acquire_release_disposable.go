@@ -148,8 +148,8 @@ func isDefinitelyDisposable(tp *typeparser.TypeParser, c *checker.Checker, succe
 }
 
 func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, globalSymbol *ast.Symbol) bool {
-	release := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
-	if release == nil || release.Params().Len() < 1 || release.Params().Len() > 2 {
+	release := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionAtLeastOneParameter)
+	if release == nil || release.Params().Len() > 2 {
 		return false
 	}
 
@@ -190,7 +190,7 @@ func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 		flags |= typeparser.LazyExpressionAllowAsync
 	}
 	thunk := typeparser.ParseLazyExpression(wrapper.Arguments.Nodes[0], flags)
-	if thunk == nil || thunk.Expression() == nil {
+	if thunk == nil {
 		return false
 	}
 
@@ -199,11 +199,7 @@ func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 }
 
 func isPlainIdentifierParameter(node *ast.Node) bool {
-	if node == nil || node.Kind != ast.KindParameter || node.Name() == nil || node.Name().Kind != ast.KindIdentifier {
-		return false
-	}
-	parameter := node.AsParameterDeclaration()
-	return parameter != nil && parameter.DotDotDotToken == nil && parameter.QuestionToken == nil && parameter.Initializer == nil
+	return typeparser.IsPlainIdentifierParameter(node) && node.AsParameterDeclaration().QuestionToken == nil
 }
 
 func disposalProtocolCall(

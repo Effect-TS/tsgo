@@ -136,7 +136,7 @@ pub(crate) fn conditional_refail_methods(
     }
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:122 analyzeConditionalRefailHandler 77b45701c5c2baf4
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:122 analyzeConditionalRefailHandler 1ca4ec176d0c70ac
 pub(crate) fn analyze_conditional_refail_handler(
     tp: &mut TypeParser<'_>,
     handler_node: P<Node>,
@@ -149,17 +149,10 @@ pub(crate) fn analyze_conditional_refail_handler(
     }
     let fallback = result_dispatch.fallback()?;
     let parameter = *dispatch.params().at(0);
-    let parameter_name = parameter.name()?;
-    if parameter_name.kind() != Kind::Identifier {
+    if !ets_typeparser::is_plain_identifier_parameter(parameter) {
         return None;
     }
-    let parameter_declaration = parameter.as_parameter_declaration();
-    if parameter_declaration.dot_dot_dot_token().is_some()
-        || parameter_declaration.initializer().is_some()
-    {
-        return None;
-    }
-    let parameter_symbol = tp.get_symbol_at_location(parameter_name)?;
+    let parameter_symbol = tp.get_symbol_at_location(parameter.name())?;
     if tp.checker().is_symbol_assigned(parameter_symbol) {
         return None;
     }
@@ -234,7 +227,7 @@ pub(crate) fn analyze_conditional_refail_handler(
     Some(methods.preferred_method_name)
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:192 isConditionalRefailExpression 6df58588a22b4e95
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:188 isConditionalRefailExpression 6df58588a22b4e95
 pub(crate) fn is_conditional_refail_expression(
     tp: &mut TypeParser<'_>,
     expression: Option<P<Node>>,
@@ -264,7 +257,7 @@ pub(crate) fn is_conditional_refail_expression(
     tp.checker().get_symbol_if_same_reference(actual_symbol, parameter_symbol).is_some()
 }
 
-// go: internal/rules/catch_conditional_refail_to_catch_if.go:210 isConditionalRefailPredicate 93451710a9cadb3f
+// go: internal/rules/catch_conditional_refail_to_catch_if.go:206 isConditionalRefailPredicate 93451710a9cadb3f
 pub(crate) fn is_conditional_refail_predicate(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

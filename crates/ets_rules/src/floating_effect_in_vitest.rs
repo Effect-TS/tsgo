@@ -53,7 +53,7 @@ pub(crate) static EFFECT_AWARE_VITEST_METHODS: &[&str] =
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_VITEST_CALLBACK_RETURNS_AN_EFFECT_THAT_VITEST_DOES_NOT_RUN_USE_AN_EFFECT_AWARE_TEST_API_OR_RUN_THE_EFFECT_WITH_EFFECT_RUN_PROMISE_EFFECT_FLOATING_EFFECT_IN_VITEST;
 
-// go: internal/rules/floating_effect_in_vitest.go:55 FloatingEffectInVitest 53a9b697004b3191
+// go: internal/rules/floating_effect_in_vitest.go:55 FloatingEffectInVitest c1b9c234bb84d87c
 // FloatingEffectInVitest detects Effects returned from Vitest callbacks that do
 // not execute returned Effect values.
 pub static FLOATING_EFFECT_IN_VITEST: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -204,7 +204,7 @@ pub(crate) fn classify_vitest_callback(root: VitestRoot, members: &[&str]) -> Vi
     VitestCallbackKind::Test
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:205 vitestCallbackReturnsEffect d814c01a545f512d
+// go: internal/rules/floating_effect_in_vitest.go:205 vitestCallbackReturnsEffect 0040075109cb5021
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn vitest_callback_returns_effect(tp: &mut TypeParser<'_>, callback: P<Node>) -> bool {

@@ -23,21 +23,16 @@ func (tp *TypeParser) UnwrapIdentityForwarder(node *ast.Node) (target *ast.Node,
 	if tp == nil || tp.checker == nil {
 		return node, nil, nil
 	}
-	lazy := ParseLazyExpression(node, LazyExpressionNone)
-	if lazy == nil || len(lazy.params) != 1 || lazy.expression == nil {
+	lazy := ParseLazyExpression(node, LazyExpressionAtMostOneParameter|LazyExpressionAtLeastOneParameter)
+	if lazy == nil {
 		return node, nil, nil
 	}
 
 	parameterNode := lazy.params[0]
-	if parameterNode == nil || parameterNode.Kind != ast.KindParameter {
+	if !IsPlainIdentifierParameter(parameterNode) {
 		return node, nil, nil
 	}
-	parameterDeclaration := parameterNode.AsParameterDeclaration()
-	if parameterDeclaration == nil || parameterDeclaration.Name() == nil || parameterDeclaration.Name().Kind != ast.KindIdentifier ||
-		parameterDeclaration.DotDotDotToken != nil || parameterDeclaration.Initializer != nil {
-		return node, nil, nil
-	}
-	parameterSymbol := tp.GetSymbolAtLocation(parameterDeclaration.Name())
+	parameterSymbol := tp.GetSymbolAtLocation(parameterNode.Name())
 	if parameterSymbol == nil {
 		return node, nil, nil
 	}

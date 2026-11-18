@@ -81,15 +81,15 @@ pub fn analyze_catch_if_tag_to_catch_tag(
     matches
 }
 
-// go: internal/rules/catch_if_tag_to_catch_tag.go:67 catchIfTagPredicate 35321ff688773ead
+// go: internal/rules/catch_if_tag_to_catch_tag.go:67 catchIfTagPredicate e17f4db8818dede8
 pub(crate) fn catch_if_tag_predicate(
     tp: &mut TypeParser<'_>,
     predicate_node: P<Node>,
 ) -> Option<String> {
-    let lazy = parse_lazy_expression(predicate_node, LazyExpressionFlags::None)?;
-    if lazy.params().len() != 1 {
-        return None;
-    }
+    let lazy = parse_lazy_expression(
+        predicate_node,
+        LazyExpressionFlags::AtMostOneParameter | LazyExpressionFlags::AtLeastOneParameter,
+    )?;
     let parameter = *lazy.params().at(0);
     let parameter_name = parameter.name()?;
     if parameter_name.kind() != Kind::Identifier {

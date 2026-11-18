@@ -100,7 +100,7 @@ func AnalyzeManualMetricTapToTrack(tp *typeparser.TypeParser, _ *checker.Checker
 			var update *ast.CallExpression
 			var params readonly.Slice[*ast.Node]
 			if lazy := typeparser.ParseLazyExpression(arg, typeparser.LazyExpressionNone); lazy != nil {
-				if lazy.Expression() == nil || hasThisParameter(lazy.Params()) {
+				if hasThisParameter(lazy.Params()) {
 					continue
 				}
 				update = metricUpdateCall(tp, lazy.Expression())
@@ -186,8 +186,7 @@ func isParameterVerbatim(tp *typeparser.TypeParser, params readonly.Slice[*ast.N
 		return false
 	}
 	param := params.At(0)
-	declaration := param.AsParameterDeclaration()
-	if !ast.IsIdentifier(param.Name()) || declaration.DotDotDotToken != nil || declaration.Initializer != nil {
+	if !typeparser.IsPlainIdentifierParameter(param) {
 		return false
 	}
 	input = ast.SkipParentheses(input)

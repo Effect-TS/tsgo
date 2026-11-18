@@ -3,10 +3,10 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::TypeParser;
+use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_ARROW_FUNCTION_BLOCK_ONLY_RETURNS_AN_EXPRESSION_AND_CAN_USE_A_CONCISE_BODY_EFFECT_UNNECESSARY_ARROW_BLOCK;
@@ -68,33 +68,24 @@ pub fn analyze_unnecessary_arrow_block(
     matches
 }
 
-// go: internal/rules/unnecessary_arrow_block.go:72 analyzeUnnecessaryArrowBlockNode 6336a9cc5e8ea697
+// go: internal/rules/unnecessary_arrow_block.go:72 analyzeUnnecessaryArrowBlockNode dfa48849de102d3e
 pub(crate) fn analyze_unnecessary_arrow_block_node(
     sf: P<SourceFile>,
     n: P<Node>,
 ) -> Option<UnnecessaryArrowBlockMatch> {
-    let arrow_body = n.body()?;
-    if arrow_body.kind() != Kind::Block {
+    let lazy = parse_lazy_expression(
+        n,
+        LazyExpressionFlags::AllowAsync | LazyExpressionFlags::AllowTypeParameters,
+    )?;
+    if !ast::is_block(lazy.body()) {
         return None;
     }
-
-    let statements = arrow_body.statements();
-    if statements.len() != 1 {
-        return None;
-    }
-
-    let stmt = statements[0];
-    if stmt.kind() != Kind::ReturnStatement {
-        return None;
-    }
-
-    let returned_expression = stmt.as_return_statement().expression()?;
 
     Some(UnnecessaryArrowBlockMatch {
         source_file: sf,
-        location: ets_shim::scanner::get_error_range_for_node(sf, arrow_body),
+        location: ets_shim::scanner::get_error_range_for_node(sf, lazy.body()),
         arrow_function: n,
-        body_block: arrow_body,
-        returned_expression,
+        body_block: lazy.body(),
+        returned_expression: lazy.expression(),
     })
 }

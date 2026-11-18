@@ -59,7 +59,7 @@ pub struct FlatMapConditionalToFilterOrFailMatch {
     pub negate_predicate: bool,
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:57 AnalyzeFlatMapConditionalToFilterOrFail 711bc0bc9148b908
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:57 AnalyzeFlatMapConditionalToFilterOrFail b980eec18607340e
 // AnalyzeFlatMapConditionalToFilterOrFail finds flatMap transformations whose
 // callback is a two-way conditional with one identity Effect.succeed branch.
 //
@@ -92,17 +92,10 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
             }
 
             let parameter = *parsed.params().at(0);
-            let Some(parameter_name) = parameter.name() else {
-                continue;
-            };
-            if parameter_name.kind() != Kind::Identifier {
+            if !ets_typeparser::is_plain_identifier_parameter(parameter) {
                 continue;
             }
-            let declaration = parameter.as_parameter_declaration();
-            if declaration.dot_dot_dot_token().is_some() || parameter.initializer().is_some() {
-                continue;
-            }
-            let Some(parameter_symbol) = tp.get_symbol_at_location(parameter_name) else {
+            let Some(parameter_symbol) = tp.get_symbol_at_location(parameter.name()) else {
                 continue;
             };
             if tp.checker().is_symbol_assigned(parameter_symbol) {
@@ -151,7 +144,7 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
     matches
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:132 isIdentitySucceed 002a49d8d61b7181
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:128 isIdentitySucceed 002a49d8d61b7181
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn is_identity_succeed(
@@ -183,7 +176,7 @@ pub(crate) fn is_identity_succeed(
     })
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:151 effectFailArgument 9e6e7c4cf93bfd84
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:147 effectFailArgument 9e6e7c4cf93bfd84
 pub(crate) fn effect_fail_argument(
     tp: &mut TypeParser<'_>,
     expression: Option<P<Node>>,

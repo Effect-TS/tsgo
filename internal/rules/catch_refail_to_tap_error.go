@@ -50,13 +50,12 @@ var CatchRefailToTapError = rule.Rule{
 }
 
 func catchHandlerRefailsOriginalError(tp *typeparser.TypeParser, c *checker.Checker, handler *ast.Node) bool {
-	lazy := typeparser.ParseLazyExpression(handler, typeparser.LazyExpressionNone)
-	if lazy == nil || lazy.Params().Len() != 1 {
+	lazy := typeparser.ParseLazyExpression(handler, typeparser.LazyExpressionAtMostOneParameter|typeparser.LazyExpressionAtLeastOneParameter)
+	if lazy == nil {
 		return false
 	}
-	parameter := lazy.Params().At(0).AsParameterDeclaration()
-	if parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier ||
-		parameter.Initializer != nil || parameter.DotDotDotToken != nil {
+	parameter := lazy.Params().At(0)
+	if !typeparser.IsPlainIdentifierParameter(parameter) {
 		return false
 	}
 	errorSymbol := tp.GetSymbolAtLocation(parameter.Name())

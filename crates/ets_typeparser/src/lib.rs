@@ -136,6 +136,9 @@ mod piping_flow_input_type_test;
 mod piping_flow_sequence_test;
 #[cfg(test)]
 mod piping_flow_shape_test;
+mod plain_parameter;
+#[cfg(test)]
+mod plain_parameter_test;
 mod platform_runtime_api;
 mod predicate_type;
 #[cfg(test)]
@@ -223,6 +226,7 @@ pub use object_literal::*;
 pub(crate) use packagejson::*;
 pub(crate) use pipeable_signature_shape::*;
 pub use piping_flow::*;
+pub use plain_parameter::*;
 pub use reconstruct::*;
 pub use returning_dispatch::*;
 pub use schema_type::*;

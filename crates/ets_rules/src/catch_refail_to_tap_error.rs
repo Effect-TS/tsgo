@@ -65,31 +65,24 @@ pub static CATCH_REFAIL_TO_TAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_refail_to_tap_error.go:52 catchHandlerRefailsOriginalError e1a402ea3623bbb3
+// go: internal/rules/catch_refail_to_tap_error.go:52 catchHandlerRefailsOriginalError e440e461d7d72993
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn catch_handler_refails_original_error(
     tp: &mut TypeParser<'_>,
     handler: P<Node>,
 ) -> bool {
-    let Some(lazy) = parse_lazy_expression(handler, LazyExpressionFlags::None) else {
+    let Some(lazy) = parse_lazy_expression(
+        handler,
+        LazyExpressionFlags::AtMostOneParameter | LazyExpressionFlags::AtLeastOneParameter,
+    ) else {
         return false;
     };
-    if lazy.params().len() != 1 {
+    let parameter = *lazy.params().at(0);
+    if !ets_typeparser::is_plain_identifier_parameter(parameter) {
         return false;
     }
-    let parameter_node = *lazy.params().at(0);
-    let parameter = parameter_node.as_parameter_declaration();
-    let Some(parameter_name) = parameter_node.name() else {
-        return false;
-    };
-    if parameter_name.kind() != Kind::Identifier
-        || parameter.initializer().is_some()
-        || parameter.dot_dot_dot_token().is_some()
-    {
-        return false;
-    }
-    let Some(error_symbol) = tp.get_symbol_at_location(parameter_name) else {
+    let Some(error_symbol) = tp.get_symbol_at_location(parameter.name()) else {
         return false;
     };
     if tp.checker().is_symbol_assigned(error_symbol) {

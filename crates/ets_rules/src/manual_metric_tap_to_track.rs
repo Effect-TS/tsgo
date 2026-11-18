@@ -88,13 +88,13 @@ static MANUAL_METRIC_TAP_APIS: [ManualMetricTapApi; 3] = [
     ManualMetricTapApi { tap: "tapDefect", track: "trackDefects", channel: "defect" },
 ];
 
-// go: internal/rules/manual_metric_tap_to_track.go:84 AnalyzeManualMetricTapToTrack 2681413a6b698952
+// go: internal/rules/manual_metric_tap_to_track.go:84 AnalyzeManualMetricTapToTrack bd40ff2a9a828bf6
 // AnalyzeManualMetricTapToTrack finds Effect.tap/tapError/tapDefect calls whose
 // argument only performs a data-first Metric.update, either as the whole body
 // of a callback or as tap's direct-effect argument.
 //
 // Rust: Go's unused checker argument is dropped (the parser holds the checker); Go's
-// `callee == nil` and `lazy.Expression() == nil` checks drop, both are non-optional here.
+// `callee == nil` check drops, the callee is non-optional here.
 pub fn analyze_manual_metric_tap_to_track(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -224,7 +224,7 @@ pub(crate) fn has_this_parameter(params: Slice<'_, P<Node>>) -> bool {
     false
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:184 isParameterVerbatim a0b556ea8c2ee4a2
+// go: internal/rules/manual_metric_tap_to_track.go:184 isParameterVerbatim 230df5ec30833d4d
 // isParameterVerbatim reports whether input is the single plain callback parameter itself.
 pub(crate) fn is_parameter_verbatim(
     tp: &mut TypeParser<'_>,
@@ -235,11 +235,7 @@ pub(crate) fn is_parameter_verbatim(
         return false;
     }
     let param = *params.at(0);
-    let declaration = param.as_parameter_declaration();
-    if !param.name().is_some_and(ast::is_identifier)
-        || declaration.dot_dot_dot_token().is_some()
-        || declaration.initializer().is_some()
-    {
+    if !ets_typeparser::is_plain_identifier_parameter(param) {
         return false;
     }
     let input = ast::skip_parentheses(input);
@@ -250,7 +246,7 @@ pub(crate) fn is_parameter_verbatim(
     symbol.is_some() && symbol == tp.get_symbol_at_location(param.name())
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:205 usesFunctionExpressionBindings 6b27cc85200c097d
+// go: internal/rules/manual_metric_tap_to_track.go:204 usesFunctionExpressionBindings 6b27cc85200c097d
 // usesFunctionExpressionBindings reports whether the parameters or the input of
 // the function expression fn read a binding that fn itself provides: this,
 // super, arguments, new.target or fn's own name. An arrow function in the
@@ -269,7 +265,7 @@ pub(crate) fn uses_function_expression_bindings(
     tp.uses_function_own_bindings(fn_, input)
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:214 resolveManualMetricTapAPI 0af0435b267899a2
+// go: internal/rules/manual_metric_tap_to_track.go:213 resolveManualMetricTapAPI 0af0435b267899a2
 pub(crate) fn resolve_manual_metric_tap_api(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,

@@ -45,8 +45,8 @@ func runPromiseAllInEffectFix(ctx *fixable.Context) []ls.CodeAction {
 		if node == nil || node.Kind != ast.KindArrowFunction {
 			return false
 		}
-		thunk := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
-		return thunk != nil && !ast.IsBlock(thunk.Body()) && thunk.Params().Len() <= 1 && node.Type() == nil
+		thunk := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionAtMostOneParameter)
+		return thunk != nil && !ast.IsBlock(thunk.Body()) && node.Type() == nil
 	}
 	isPromiseConstructor := func(transformation typeparser.PipingFlowTransformation) bool {
 		return transformation.Kind() == typeparser.TransformationKindCall && transformation.Args().Len() == 0 &&

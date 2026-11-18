@@ -84,7 +84,7 @@ pub fn analyze_on_exit_failure_to_on_error(
     matches
 }
 
-// go: internal/rules/on_exit_failure_to_on_error.go:70 analyzeOnExitFailureCallback 5a7e040f7d1ca44e
+// go: internal/rules/on_exit_failure_to_on_error.go:70 analyzeOnExitFailureCallback 091b7a4c5bfcb475
 //
 // Rust: Go's `(match, ok)` is an `Option`; the checker is the parser's. The transformation is borrowed, not
 // copied as in Go, since the match does not keep it.
@@ -107,15 +107,10 @@ pub(crate) fn analyze_on_exit_failure_callback(
     }
 
     let parameter = *parsed.params().at(0);
-    let parameter_name = parameter.name()?;
-    if parameter_name.kind() != Kind::Identifier {
+    if !ets_typeparser::is_plain_identifier_parameter(parameter) {
         return None;
     }
-    let declaration = parameter.as_parameter_declaration();
-    if declaration.dot_dot_dot_token().is_some() || declaration.initializer().is_some() {
-        return None;
-    }
-    let parameter_symbol = tp.get_symbol_at_location(parameter_name)?;
+    let parameter_symbol = tp.get_symbol_at_location(parameter.name())?;
     if tp.checker().is_symbol_assigned(parameter_symbol) {
         return None;
     }
@@ -138,7 +133,7 @@ pub(crate) fn analyze_on_exit_failure_callback(
     })
 }
 
-// go: internal/rules/on_exit_failure_to_on_error.go:117 onExitConditionChecksFailure e2db8f838d6638b5
+// go: internal/rules/on_exit_failure_to_on_error.go:113 onExitConditionChecksFailure e2db8f838d6638b5
 //
 // Rust: Go's `(failureWhenTrue, ok)` is `Some(failureWhenTrue)` when ok; the checker is the parser's.
 pub(crate) fn on_exit_condition_checks_failure(
@@ -160,7 +155,7 @@ pub(crate) fn on_exit_condition_checks_failure(
     }
 }
 
-// go: internal/rules/on_exit_failure_to_on_error.go:135 decodeOnExitFailurePredicate 42a624c546b75642
+// go: internal/rules/on_exit_failure_to_on_error.go:131 decodeOnExitFailurePredicate 42a624c546b75642
 //
 // Rust: Go's `(isFailure, ok)` is `Some(isFailure)` when ok; the checker is the parser's. A binary expression's
 // operator token and operands are never nil, so Go's nil checks drop.
@@ -252,7 +247,7 @@ pub(crate) fn decode_on_exit_failure_predicate(
     }
 }
 
-// go: internal/rules/on_exit_failure_to_on_error.go:203 exitTagIsFailure 640fe63e4f16a9a5
+// go: internal/rules/on_exit_failure_to_on_error.go:199 exitTagIsFailure 640fe63e4f16a9a5
 //
 // Rust: Go's `(isFailure, ok)` is `Some(isFailure)` when ok.
 pub(crate) fn exit_tag_is_failure(tag: &str) -> Option<bool> {

@@ -77,8 +77,7 @@ func AnalyzeSuspendFailToFailSync(tp *typeparser.TypeParser, c *checker.Checker,
 	// An arrow or function expression is always the subject of its flow, so
 	// Effect.suspend is the first transformation.
 	isThunkSubject := func(subject typeparser.PipingFlowSubject) bool {
-		return subject.Node() != nil &&
-			(subject.Node().Kind == ast.KindArrowFunction || subject.Node().Kind == ast.KindFunctionExpression)
+		return typeparser.ParseLazyExpression(subject.Node(), typeparser.LazyExpressionThunk) != nil
 	}
 	// Explicit type arguments on suspend pin an error channel that failSync would narrow.
 	isSuspend := func(transformation typeparser.PipingFlowTransformation) bool {
@@ -92,7 +91,7 @@ func AnalyzeSuspendFailToFailSync(tp *typeparser.TypeParser, c *checker.Checker,
 		}
 		thunk := typeparser.ParseLazyExpression(flow.Subject().Node(), typeparser.LazyExpressionThunk)
 		// A return type annotation pins the error channel independently of the value.
-		if thunk == nil || thunk.Expression() == nil || thunk.Node().Type() != nil {
+		if thunk == nil || thunk.Node().Type() != nil {
 			continue
 		}
 		inner := tp.LongestPipingFlowAt(thunk.Expression(), true)

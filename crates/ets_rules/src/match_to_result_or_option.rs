@@ -202,7 +202,7 @@ fn push_match_to_result_or_option_match(
     });
 }
 
-// go: internal/rules/match_to_result_or_option.go:131 reifyingHandler 4e1408a343c8af76
+// go: internal/rules/match_to_result_or_option.go:131 reifyingHandler 25b47794d8a12be4
 // reifyingHandler classifies a handler that wraps its argument into a
 // container: the constructor itself, an identity forwarder to it, or a
 // function whose body is Option.none().
@@ -219,14 +219,14 @@ pub(crate) fn reifying_handler(
             .is_none_or(|type_arguments| type_arguments.nodes().is_empty())
             .then_some(kind);
     }
-    let lazy = ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::None);
+    let lazy = ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::AtMostOneParameter);
     let matched = lazy.is_some_and(|lazy| {
         has_plain_parameters(&lazy) && is_reifying_none_call(tp, Some(lazy.expression()))
     });
     matched.then_some(REIFYING_NONE)
 }
 
-// go: internal/rules/match_to_result_or_option.go:146 succeedReifyingHandler 90f0c50c24e2d6d7
+// go: internal/rules/match_to_result_or_option.go:146 succeedReifyingHandler a3dc5a783cd51555
 // succeedReifyingHandler classifies a handler whose body lifts a reified
 // value with Effect.succeed: Effect.succeed(Result.fail(e)) for its parameter
 // e, or Effect.succeed(Option.none()), in any flow spelling.
@@ -236,7 +236,8 @@ pub(crate) fn succeed_reifying_handler(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
 ) -> Option<ReifyingKind> {
-    let lazy = ets_typeparser::parse_lazy_expression(node?, LazyExpressionFlags::None)?;
+    let lazy =
+        ets_typeparser::parse_lazy_expression(node?, LazyExpressionFlags::AtMostOneParameter)?;
     if !has_plain_parameters(&lazy) {
         return None;
     }
@@ -328,26 +329,14 @@ pub(crate) fn is_reifying_none_call(tp: &mut TypeParser<'_>, node: Option<P<Node
     reifying_constructor(tp, Some(call.expression())) == Some(REIFYING_NONE)
 }
 
-// go: internal/rules/match_to_result_or_option.go:214 hasPlainParameters 2d488e95f01f3bed
-// hasPlainParameters reports whether a handler declares at most one
-// parameter, bound to an identifier without a default or rest marker.
+// go: internal/rules/match_to_result_or_option.go:214 hasPlainParameters 88f26d476bccb734
+// hasPlainParameters reports whether a handler, parsed with
+// LazyExpressionAtMostOneParameter, declares no parameter or a plain identifier one.
 pub(crate) fn has_plain_parameters(lazy: &ParsedLazyExpression) -> bool {
-    if lazy.params().len() > 1 {
-        return false;
-    }
-    for (_, &parameter) in lazy.params().all() {
-        let declaration = parameter.as_parameter_declaration();
-        if declaration.name().kind() != Kind::Identifier
-            || declaration.dot_dot_dot_token().is_some()
-            || declaration.initializer().is_some()
-        {
-            return false;
-        }
-    }
-    true
+    lazy.params().len() == 0 || ets_typeparser::is_plain_identifier_parameter(*lazy.params().at(0))
 }
 
-// go: internal/rules/match_to_result_or_option.go:230 matchToResultCatchName c474ed6b4ca700f3
+// go: internal/rules/match_to_result_or_option.go:220 matchToResultCatchName c474ed6b4ca700f3
 // matchToResultCatchName returns catch or catchAll for an Effect catch step,
 // and "" for any other step.
 pub(crate) fn match_to_result_catch_name(

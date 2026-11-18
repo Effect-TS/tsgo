@@ -111,7 +111,7 @@ func booleanLiteralHandler(handler *ast.Node) (value bool, ok bool) {
 	if handler == nil {
 		return false, false
 	}
-	lazy := typeparser.ParseLazyExpression(handler, typeparser.LazyExpressionNone)
+	lazy := typeparser.ParseLazyExpression(handler, typeparser.LazyExpressionAtMostOneParameter)
 	if lazy == nil || !isIgnorableMapParameterList(lazy.Params()) {
 		return false, false
 	}

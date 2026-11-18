@@ -64,12 +64,12 @@ func AnalyzeFlatMapToTap(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.
 				!tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") && !tp.IsNodeReferenceToEffectModuleApi(callee, "andThen") {
 				continue
 			}
-			callback := typeparser.ParseLazyExpression(args.At(0), typeparser.LazyExpressionAllowMultiStatementBlock)
-			if callback == nil || callback.Params().Len() != 1 || callback.Node().Type() != nil {
+			callback := typeparser.ParseLazyExpression(args.At(0), typeparser.LazyExpressionAllowMultiStatementBlock|typeparser.LazyExpressionAtMostOneParameter|typeparser.LazyExpressionAtLeastOneParameter)
+			if callback == nil || callback.Node().Type() != nil {
 				continue
 			}
-			parameter := callback.Params().At(0).AsParameterDeclaration()
-			if !plainTapParameter(parameter) || step.Kind() == typeparser.TransformationKindCall && parameter.Type != nil {
+			parameter := callback.Params().At(0)
+			if !typeparser.IsPlainIdentifierParameter(parameter) || step.Kind() == typeparser.TransformationKindCall && parameter.Type() != nil {
 				continue
 			}
 			input := tp.StrictEffectType(flow.TransformationInputType(i))
@@ -95,9 +95,8 @@ func AnalyzeFlatMapToTap(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.
 			switch {
 			case tp.IsNodeReferenceToEffectModuleApi(terminal.Callee(), "as"):
 			case tp.IsNodeReferenceToEffectModuleApi(terminal.Callee(), "map"):
-				mapper := typeparser.ParseLazyExpression(ref, typeparser.LazyExpressionNone)
-				if mapper == nil || mapper.Params().Len() > 1 ||
-					mapper.Params().Len() == 1 && !plainTapParameter(mapper.Params().At(0).AsParameterDeclaration()) {
+				mapper := typeparser.ParseLazyExpression(ref, typeparser.LazyExpressionAtMostOneParameter)
+				if mapper == nil || mapper.Params().Len() == 1 && !typeparser.IsPlainIdentifierParameter(mapper.Params().At(0)) {
 					continue
 				}
 				ref = mapper.Expression()
@@ -117,9 +116,4 @@ func AnalyzeFlatMapToTap(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.
 		}
 	}
 	return matches
-}
-
-func plainTapParameter(parameter *ast.ParameterDeclaration) bool {
-	return parameter.Name() != nil && parameter.Name().Kind == ast.KindIdentifier &&
-		parameter.Initializer == nil && parameter.DotDotDotToken == nil
 }

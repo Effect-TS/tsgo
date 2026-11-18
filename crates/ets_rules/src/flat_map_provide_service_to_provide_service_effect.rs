@@ -11,8 +11,6 @@ use ets_typeparser::{
     LazyExpressionFlags, PipingFlow, PipingFlowTransformation, TypeParser, parse_lazy_expression,
 };
 
-use crate::*;
-
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_PROVIDE_SERVICE_EFFECT_PROVIDES_THIS_SERVICE_FROM_THE_ACQUIRING_EFFECT_DIRECTLY_INSTEAD_OF_EFFECT_0_FORWARDING_ITS_PARAMETER_TO_EFFECT_PROVIDE_SERVICE_EFFECT_FLAT_MAP_PROVIDE_SERVICE_TO_PROVIDE_SERVICE_EFFECT;
 
@@ -66,7 +64,7 @@ pub struct FlatMapProvideServiceToProvideServiceEffectMatch {
     pub key: P<Node>,
 }
 
-// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:51 AnalyzeFlatMapProvideServiceToProvideServiceEffect a3774334fbe7cfc2
+// go: internal/rules/flat_map_provide_service_to_provide_service_effect.go:51 AnalyzeFlatMapProvideServiceToProvideServiceEffect 5259d1af3a943b81
 // AnalyzeFlatMapProvideServiceToProvideServiceEffect finds flatMap and andThen
 // callbacks that are a manual Effect.provideServiceEffect.
 //
@@ -96,15 +94,15 @@ pub fn analyze_flat_map_provide_service_to_provide_service_effect(
             if tp.is_node_reference_to_effect_module_api(callee, "andThen") {
                 method = "andThen";
             }
-            let callback = parse_lazy_expression(*step.args().at(0), LazyExpressionFlags::None);
+            let callback = parse_lazy_expression(
+                *step.args().at(0),
+                LazyExpressionFlags::AtMostOneParameter | LazyExpressionFlags::AtLeastOneParameter,
+            );
             let Some(callback) = callback else {
                 continue;
             };
-            if callback.params().len() != 1 {
-                continue;
-            }
             let parameter = *callback.params().at(0);
-            if !plain_tap_parameter(parameter) {
+            if !ets_typeparser::is_plain_identifier_parameter(parameter) {
                 continue;
             }
             let Some(parameter_symbol) = tp.get_symbol_at_location(parameter.name()) else {

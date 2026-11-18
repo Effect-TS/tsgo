@@ -91,7 +91,7 @@ pub fn analyze_flat_map_identity_to_flatten(
     matches
 }
 
-// go: internal/rules/flat_map_identity_to_flatten.go:82 isIdentityCallback 486079f3d322bf8a
+// go: internal/rules/flat_map_identity_to_flatten.go:82 isIdentityCallback c6fe9760c0a2df94
 // isIdentityCallback reports whether callback names Effect's identity export
 // without a local variable in between, or is an arrow function or function
 // expression without type annotations whose body returns its single parameter. Annotations and typed
@@ -101,20 +101,20 @@ pub(crate) fn is_identity_callback(tp: &mut TypeParser<'_>, callback: P<Node>) -
     if tp.is_node_direct_reference_to_effect_function_module_api(callback, "identity") {
         return true;
     }
-    let lazy = parse_lazy_expression(callback, LazyExpressionFlags::None);
+    let lazy = parse_lazy_expression(
+        callback,
+        LazyExpressionFlags::AtMostOneParameter | LazyExpressionFlags::AtLeastOneParameter,
+    );
     let Some(lazy) = lazy else {
         return false;
     };
-    if lazy.params().len() != 1 || lazy.node().type_node().is_some() {
+    if lazy.node().type_node().is_some() {
         return false;
     }
     let parameter = *lazy.params().at(0);
-    let declaration = parameter.as_parameter_declaration();
-    if parameter.name().is_none_or(|name| name.kind() != Kind::Identifier)
+    if !ets_typeparser::is_plain_identifier_parameter(parameter)
         || parameter.type_node().is_some()
-        || declaration.dot_dot_dot_token().is_some()
-        || parameter.initializer().is_some()
-        || declaration.question_token().is_some()
+        || parameter.as_parameter_declaration().question_token().is_some()
     {
         return false;
     }

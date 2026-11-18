@@ -82,11 +82,7 @@ func analyzeOnExitFailureCallback(tp *typeparser.TypeParser, c *checker.Checker,
 	}
 
 	parameter := parsed.Params().At(0)
-	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
-		return OnExitFailureToOnErrorMatch{}, false
-	}
-	declaration := parameter.AsParameterDeclaration()
-	if declaration == nil || declaration.DotDotDotToken != nil || declaration.Initializer != nil {
+	if !typeparser.IsPlainIdentifierParameter(parameter) {
 		return OnExitFailureToOnErrorMatch{}, false
 	}
 	parameterSymbol := tp.GetSymbolAtLocation(parameter.Name())

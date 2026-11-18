@@ -21,8 +21,8 @@ func catchHandlerIgnoresError(tp *typeparser.TypeParser, handler *ast.Node) bool
 	if len(params.Nodes) != 1 {
 		return false
 	}
-	parameter := params.Nodes[0].AsParameterDeclaration()
-	if parameter == nil || parameter.Name().Kind != ast.KindIdentifier || parameter.Initializer != nil || parameter.DotDotDotToken != nil {
+	parameter := params.Nodes[0]
+	if !typeparser.IsPlainIdentifierParameter(parameter) {
 		return false
 	}
 	symbol := tp.GetSymbolAtLocation(parameter.Name())

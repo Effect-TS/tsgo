@@ -136,7 +136,7 @@ func reifyingHandler(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.No
 	if kind, ok := reifyingConstructor(tp, target); ok {
 		return kind, typeArguments == nil || len(typeArguments.Nodes) == 0
 	}
-	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
+	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionAtMostOneParameter)
 	return reifyingNone, lazy != nil && hasPlainParameters(lazy) && isReifyingNoneCall(tp, lazy.Expression())
 }
 
@@ -147,7 +147,7 @@ func succeedReifyingHandler(tp *typeparser.TypeParser, c *checker.Checker, node 
 	if node == nil {
 		return reifyingKind{}, false
 	}
-	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
+	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionAtMostOneParameter)
 	if lazy == nil || !hasPlainParameters(lazy) {
 		return reifyingKind{}, false
 	}
@@ -209,20 +209,10 @@ func isReifyingNoneCall(tp *typeparser.TypeParser, node *ast.Node) bool {
 	return ok && kind == reifyingNone
 }
 
-// hasPlainParameters reports whether a handler declares at most one
-// parameter, bound to an identifier without a default or rest marker.
+// hasPlainParameters reports whether a handler, parsed with
+// LazyExpressionAtMostOneParameter, declares no parameter or a plain identifier one.
 func hasPlainParameters(lazy *typeparser.ParsedLazyExpression) bool {
-	if lazy.Params().Len() > 1 {
-		return false
-	}
-	for _, parameter := range lazy.Params().All() {
-		declaration := parameter.AsParameterDeclaration()
-		if declaration.Name() == nil || declaration.Name().Kind != ast.KindIdentifier ||
-			declaration.DotDotDotToken != nil || declaration.Initializer != nil {
-			return false
-		}
-	}
-	return true
+	return lazy.Params().Len() == 0 || typeparser.IsPlainIdentifierParameter(lazy.Params().At(0))
 }
 
 // matchToResultCatchName returns catch or catchAll for an Effect catch step,

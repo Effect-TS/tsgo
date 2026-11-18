@@ -107,15 +107,14 @@ func AnalyzeFailCauseToConstructor(tp *typeparser.TypeParser, c *checker.Checker
 		// An arrow or function expression is always the subject of its flow,
 		// so Effect.failCauseSync is the first transformation.
 		isThunkSubject := func(subject typeparser.PipingFlowSubject) bool {
-			return subject.Node() != nil &&
-				(subject.Node().Kind == ast.KindArrowFunction || subject.Node().Kind == ast.KindFunctionExpression)
+			return typeparser.ParseLazyExpression(subject.Node(), typeparser.LazyExpressionThunk) != nil
 		}
 		if !flow.MatchesPrefix(isThunkSubject, isEffectApi("failCauseSync")) {
 			continue
 		}
 		lazy := typeparser.ParseLazyExpression(flow.Subject().Node(), typeparser.LazyExpressionThunk)
 		// A return type annotation pins the cause type independently of the value.
-		if lazy == nil || lazy.Expression() == nil || lazy.Node().Type() != nil {
+		if lazy == nil || lazy.Node().Type() != nil {
 			continue
 		}
 		inner := tp.LongestPipingFlowAt(lazy.Expression(), true)
