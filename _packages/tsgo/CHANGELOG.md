@@ -1,5 +1,41 @@
 # @effect/tsgo
 
+## 0.72.0
+
+### Minor Changes
+
+- ed173b0: Run the Effect rules on Vite+ 1.7.0, which lints with its own `tsrs` instead of `oxlint-tsgolint` (#1062).
+  
+  - `effect-tsgo setup` writes `effect-tsgo patch --typescript --oxlint --tsrs` for a project whose `vite-plus` is 1.7.0 or later, so that the `tsrs` Vite+ lints with is Effect-patched and plain `vp lint` and `vp check` report the Effect rules:
+  
+    ```json
+    {
+      "scripts": {
+        "prepare": "effect-tsgo patch --typescript --oxlint --tsrs"
+      }
+    }
+    ```
+  
+  - `effect-tsgo vp` and `effect-tsgo oxlint` run the type-aware rules on the Effect-patched build of the installed `tsrs` when `oxlint-tsgolint` is not installed, with no `--tsrs-lint` flag, and set `TSRS_BINARY` to that build, so every `tsrs` started under them through tsrs's launcher, such as `vp exec tsrs`, is the patched one:
+  
+    ```sh
+    npx effect-tsgo vp check   # Effect rules on Vite+ 1.7.0, without patching node_modules
+    ```
+
+### Patch Changes
+
+- ed173b0: `patch --tsrs` and `unpatch --tsrs` now find the `tsrs` installed through `vite-plus` when it is not hoisted to the project root, as with npm's `install-strategy=linked` or pnpm. `effect-tsgo tsrs` and `--tsrs-lint` now pick that installed version when this release ships a build of it.
+- ed173b0: `effect-tsgo patch --oxlint` and `effect-tsgo unpatch --oxlint` no longer require `oxlint-tsgolint`. They patch and restore the Oxlint binding and declarations, and `oxlint-tsgolint` only where it is installed, so the Oxlint integration now works in projects that do not install it, such as projects on Vite+ 1.7.0, which no longer installs `oxlint-tsgolint`.
+  
+  ```json
+  {
+    "scripts": {
+      "prepare": "effect-tsgo patch --oxlint"
+    }
+  }
+  ```
+- ed173b0: Ship a patched tsrs build for every tsrs version that vite-plus pins. Since vite-plus 1.7.0 the type-aware linter is `tsrs` instead of `oxlint-tsgolint`: vite-plus 1.7.0 depends on `tsrs@7.1.0-beta.tsrs2`, which `@effect/tsgo` now packages next to the latest tsrs (`0.25.0-ts7.1.0-beta`), so a project on vite-plus 1.7.0 gets a patched tsrs matching its installed one.
+
 ## 0.71.0
 
 ### Minor Changes
