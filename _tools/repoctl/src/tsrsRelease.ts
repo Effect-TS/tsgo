@@ -21,7 +21,7 @@ import * as Path from "effect/Path"
 import { createHash } from "node:crypto"
 import type { BuildTarget } from "./build.ts"
 import { prepareWorkload } from "./perfCi.ts"
-import { runCommand, runCommandExitCode, runCommandString } from "./process.ts"
+import { runCommand, runCommandCaptureSplit, runCommandExitCode, runCommandString } from "./process.ts"
 
 // How a target's release binary is optimized: `none` is the plain release profile (fat LTO, Cargo.toml).
 export const tsrsOptimizations = ["none", "pgo", "pgo-bolt"] as const
@@ -278,15 +278,13 @@ const trainEffectWorkload = Effect.fnUntraced(function*(
   }
 })
 
-// tsrs's "Merge profiles" step: the profile's hash is part of its path, and so of RUSTFLAGS, so that cargo rebuilds
-// the dependencies whenever the profile changes.
-const mergeProfiles = Effect.fnUntraced(function*(repositoryRoot: string, layout: TsrsReleaseLayout) {
-  const fs = yield* FileSystem.FileSystem
+// The llvm-profdata of the toolchain's llvm-tools component.
+const llvmProfdata = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   const sysroot = (yield* runCommandString("rustc", repositoryRoot, ["--print", "sysroot"])).trim()
   const host = /^host: (\S+)$/m.exec(yield* runCommandString("rustc", repositoryRoot, ["-vV"]))?.[1]
   if (host === undefined) return yield* new TsrsReleaseError({ reason: "rustc -vV printed no host" })
-  const profdata = path.join(
+  return path.join(
     sysroot,
     "lib",
     "rustlib",
@@ -294,6 +292,28 @@ const mergeProfiles = Effect.fnUntraced(function*(repositoryRoot: string, layout
     "bin",
     process.platform === "win32" ? "llvm-profdata.exe" : "llvm-profdata"
   )
+})
+
+// The nonempty raw profiles llvm-profdata cannot read. The `%m` profiles (tsrs-test's conformance run) are written by
+// every worker process into one file through LLVM's online merging, which on Windows occasionally leaves the file
+// truncated ("malformed instrumentation profile data"), and `llvm-profdata merge` then fails as a whole.
+const malformedProfiles = Effect.fnUntraced(function*(repositoryRoot: string, profdata: string, rawProfiles: string) {
+  const malformed: Array<string> = []
+  for (const file of yield* nonEmptyFiles(rawProfiles, "")) {
+    const result = yield* runCommandCaptureSplit(profdata, repositoryRoot, ["show", file])
+    if (result.exitCode !== 0) {
+      yield* Console.log(`Malformed profile ${file}:\n${result.stderr.trim()}`)
+      malformed.push(file)
+    }
+  }
+  return malformed
+})
+
+// tsrs's "Merge profiles" step: the profile's hash is part of its path, and so of RUSTFLAGS, so that cargo rebuilds
+// the dependencies whenever the profile changes.
+const mergeProfiles = Effect.fnUntraced(function*(repositoryRoot: string, profdata: string, layout: TsrsReleaseLayout) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
   const profiles = yield* nonEmptyFiles(layout.rawProfiles, "")
   if (profiles.length === 0) return yield* new TsrsReleaseError({ reason: `no profiles in ${layout.rawProfiles}` })
   const merged = path.join(layout.work, "pgo", "merged.profdata")
@@ -345,6 +365,9 @@ const buildDeterminism = Effect.fnUntraced(function*(repositoryRoot: string, lay
   return path.join(layout.determinismTarget, "debug", "tsrs_determinism")
 })
 
+// Training runs before a build fails on malformed profiles.
+const trainingAttempts = 3
+
 const releaseWorkDirectory = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   return process.env.RUNNER_TEMP === undefined
@@ -377,8 +400,6 @@ export const buildOptimizedTsrsBinary = Effect.fnUntraced(function*(
   const libraries = { TSRS_LIB_PATH: path.join(tsrsDirectory, "crates", "tsrs_vfs", "libs") }
 
   // Instrumented build, training and merge, from fresh profiles.
-  yield* fs.remove(layout.rawProfiles, { recursive: true, force: true })
-  yield* fs.makeDirectory(layout.rawProfiles, { recursive: true })
   yield* Console.log("Instrumented build")
   yield* runCommand(
     "cargo",
@@ -395,29 +416,46 @@ export const buildOptimizedTsrsBinary = Effect.fnUntraced(function*(
     }
   )
   const instrumented = path.join(layout.instrumentedTarget, rustTarget, "release")
-  yield* Console.log("Training run")
-  if (windows) {
-    // pgo-train-windows.ps1 reads its paths from the GitHub variables of tsrs's job.
-    yield* runCommand("pwsh", tsrsDirectory, [
-      "-NoProfile",
-      "-File",
-      path.join(".github", "scripts", "pgo-train-windows.ps1"),
-      "-BinDir",
-      instrumented,
-      "-RawDir",
-      layout.rawProfiles
-    ], false, { ...reference, GITHUB_WORKSPACE: tsrsDirectory, RUNNER_TEMP: layout.work })
-  } else {
-    const pnpmBin = yield* installTsrsPnpm(tsrsDirectory, layout)
-    yield* runCommand("bash", tsrsDirectory, [
-      path.join(".github", "scripts", "pgo-train.sh"),
-      instrumented,
-      layout.rawProfiles,
-      layout.bench
-    ], false, { ...reference, ...libraries, PATH: `${pnpmBin}:${process.env.PATH ?? ""}` })
+  const train = Effect.gen(function*() {
+    yield* fs.remove(layout.rawProfiles, { recursive: true, force: true })
+    yield* fs.makeDirectory(layout.rawProfiles, { recursive: true })
+    yield* Console.log("Training run")
+    if (windows) {
+      // pgo-train-windows.ps1 reads its paths from the GitHub variables of tsrs's job.
+      yield* runCommand("pwsh", tsrsDirectory, [
+        "-NoProfile",
+        "-File",
+        path.join(".github", "scripts", "pgo-train-windows.ps1"),
+        "-BinDir",
+        instrumented,
+        "-RawDir",
+        layout.rawProfiles
+      ], false, { ...reference, GITHUB_WORKSPACE: tsrsDirectory, RUNNER_TEMP: layout.work })
+    } else {
+      const pnpmBin = yield* installTsrsPnpm(tsrsDirectory, layout)
+      yield* runCommand("bash", tsrsDirectory, [
+        path.join(".github", "scripts", "pgo-train.sh"),
+        instrumented,
+        layout.rawProfiles,
+        layout.bench
+      ], false, { ...reference, ...libraries, PATH: `${pnpmBin}:${process.env.PATH ?? ""}` })
+    }
+    yield* trainEffectWorkload(layout, path.join(instrumented, `tsrs${exe}`), libraries)
+  })
+  // A training run whose profiles came out malformed is run again from fresh profiles (see `malformedProfiles`).
+  const profdata = yield* llvmProfdata(repositoryRoot)
+  for (let attempt = 1;; attempt++) {
+    yield* train
+    const malformed = yield* malformedProfiles(repositoryRoot, profdata, layout.rawProfiles)
+    if (malformed.length === 0) break
+    if (attempt === trainingAttempts) {
+      return yield* new TsrsReleaseError({
+        reason: `malformed profiles after ${attempt} training runs: ${malformed.join(", ")}`
+      })
+    }
+    yield* Console.log(`Training run ${attempt} of ${trainingAttempts} left malformed profiles, training again`)
   }
-  yield* trainEffectWorkload(layout, path.join(instrumented, `tsrs${exe}`), libraries)
-  const profile = yield* mergeProfiles(repositoryRoot, layout)
+  const profile = yield* mergeProfiles(repositoryRoot, profdata, layout)
 
   yield* Console.log("Final build")
   yield* runCommand(
