@@ -1,5 +1,26 @@
 # @effect/tsgo
 
+## 0.73.0
+
+### Minor Changes
+
+- d7d4986: Add the `flatMapMapToZipWith` style diagnostic. `Effect.flatMap(self, (a) => Effect.map(that, (b) => f(a, b)))`, where `that` does not use `a`, is reported, with a quick fix to `Effect.zipWith(self, that, (a, b) => f(a, b))`, or to `Effect.zip(self, that)` when the combiner is exactly `[a, b]`:
+  
+  ```ts
+  // before
+  const greeting = Effect.flatMap(getUser, (user) =>
+    Effect.map(getConfig, (config) => `${user.name} (${config.locale})`))
+  
+  // after
+  const greeting = Effect.zipWith(getUser, getConfig, (user, config) => `${user.name} (${config.locale})`)
+  ```
+  
+  The rule stays silent when the mapper returns the outer value unchanged (`Effect.map(that, () => a)`), because `flatMapToTap` covers that. The fix is offered only when `that` can be evaluated eagerly without changing behavior (a `const` declared earlier, or a `const` exported by a package such as `Clock.currentTimeMillis`).
+
+### Patch Changes
+
+- ebe5f55: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261118.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/e086ad3b8205668290a81baed890c536047003db) commit `e086ad3b8205668290a81baed890c536047003db`, and update tsrs to [`tsrs@7.1.0-beta.tsrs3`](https://www.npmjs.com/package/tsrs/v/7.1.0-beta.tsrs3). The `tsconfig` schema now requires `path` in project references.
+
 ## 0.72.0
 
 ### Minor Changes
