@@ -39,6 +39,9 @@
           "$ref": "#/definitions/referencesDefinition"
         }
       ]
+    },
+    {
+      "$ref": "#/definitions/referencesDefinition"
     }
   ],
   "allowTrailingCommas": true,
@@ -3639,6 +3642,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "path"
+            ],
             "type": "object"
           },
           "markdownDescription": "Referenced projects. Requires TypeScript version 3.0 or later.\n\n---\n\nProject references are a way to structure your TypeScript programs into smaller pieces.\nUsing Project References can greatly improve build and editor interaction times, enforce logical separation between components, and organize your code in new and improved ways.\n\nYou can read more about how references works in the [Project References](https://typescriptlang.org/docs/handbook/project-references.html) section of the handbook",
