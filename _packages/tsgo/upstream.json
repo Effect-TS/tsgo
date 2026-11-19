@@ -4,7 +4,7 @@
     "typescript": {
       "latest": "7.0.2",
       "beta": "7.1.0-beta",
-      "next": "7.1.0-dev.20261116.1"
+      "next": "7.1.0-dev.20261118.1"
     },
     "oxlint": {
       "latest": "1.94.0"
@@ -13,7 +13,7 @@
       "latest": "7.0.2007"
     },
     "tsrs": {
-      "latest": "0.25.0-ts7.1.0-beta"
+      "latest": "7.1.0-beta.tsrs3"
     }
   },
   "components": {
@@ -26,8 +26,8 @@
         "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a",
         "provider": "typescript"
       },
-      "7.1.0-dev.20261116.1": {
-        "gitHead": "6bdcb54d23f41bc7098c1f3488ac599c75b852ca",
+      "7.1.0-dev.20261118.1": {
+        "gitHead": "e086ad3b8205668290a81baed890c536047003db",
         "provider": "typescript"
       }
     },
@@ -66,15 +66,15 @@
       }
     },
     "tsrs": {
-      "0.25.0-ts7.1.0-beta": {
-        "gitHead": "0f82b670e4ff861840b1315f8610816229e73e3a",
+      "7.1.0-beta.tsrs2": {
+        "gitHead": "b12862d0636c21a98d53d01c6b29570ef5f604e7",
         "typescript": {
           "version": "7.1.0-beta",
           "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a"
         }
       },
-      "7.1.0-beta.tsrs2": {
-        "gitHead": "b12862d0636c21a98d53d01c6b29570ef5f604e7",
+      "7.1.0-beta.tsrs3": {
+        "gitHead": "eba9b2b796ef5e4a80b793e0b94b72bc7d4a9c05",
         "typescript": {
           "version": "7.1.0-beta",
           "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a"
@@ -85,10 +85,10 @@
   "profiles": [
     {
       "name": "vite-plus",
-      "description": "Vite+ 1.6.0 compatibility runtime",
+      "description": "Vite+ 1.7.0 compatibility runtime",
       "dependencies": {
-        "oxlint": "1.93.0",
-        "oxlint-tsgolint": "7.0.2006"
+        "oxlint": "1.94.0",
+        "tsrs": "7.1.0-beta.tsrs2"
       }
     },
     {
@@ -116,6 +116,14 @@
       }
     },
     {
+      "name": "vite-plus@1.7.0",
+      "description": "Vite+ 1.7.0 compatibility runtime",
+      "dependencies": {
+        "oxlint": "1.94.0",
+        "tsrs": "7.1.0-beta.tsrs2"
+      }
+    },
+    {
       "name": "vite-plus@1.6.0",
       "description": "Vite+ 1.6.0 compatibility runtime",
       "dependencies": {
@@ -126,14 +134,6 @@
     {
       "name": "vite-plus@1.5.1",
       "description": "Vite+ 1.5.1 compatibility runtime",
-      "dependencies": {
-        "oxlint": "1.91.0",
-        "oxlint-tsgolint": "7.0.2005"
-      }
-    },
-    {
-      "name": "vite-plus@1.5.0",
-      "description": "Vite+ 1.5.0 compatibility runtime",
       "dependencies": {
         "oxlint": "1.91.0",
         "oxlint-tsgolint": "7.0.2005"
