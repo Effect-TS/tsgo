@@ -130,7 +130,8 @@ export const checkOverrideFolders = Effect.fnUntraced(function*(
 })
 
 // The `_patches/tsrs-<gitHead>` override folders (upstream.ts, tsrsPatchesFolder): each one names the gitHead of a
-// recorded tsrs component and holds the same patch files as `_patches/tsrs`, rebased on that commit.
+// recorded tsrs component and holds every patch file of `_patches/tsrs`, rebased on that commit. It may hold more: a
+// backport `_patches/tsrs` dropped because the latest tsrs carries it stays for the older commit that lacks it.
 export const checkTsrsOverrideFolders = Effect.fnUntraced(function*(
   repositoryRoot: string,
   tsrs: typeof Upstream.Type.components.tsrs
@@ -160,9 +161,8 @@ export const checkTsrsOverrideFolders = Effect.fnUntraced(function*(
       : []
     const actual = yield* patchNames(folder)
     const missing = expected.filter((patch) => !actual.includes(patch))
-    const extra = actual.filter((patch) => !expected.includes(patch))
-    if (missing.length > 0 || extra.length > 0) {
-      return yield* new PatchParityError({ canonical: tsrsPatchesFolder, mirror: folder, missing, extra })
+    if (missing.length > 0) {
+      return yield* new PatchParityError({ canonical: tsrsPatchesFolder, mirror: folder, missing, extra: [] })
     }
   }
 })

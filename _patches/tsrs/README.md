@@ -27,5 +27,6 @@ When these patches do not apply to another recorded commit, that commit gets a
 `_patches/tsrs-<gitHead>/` folder: the same patches, file for file, rebased on it,
 applied instead of this folder when that commit is set up
 (`repoctl submodules setup --component tsrs --version <v>`). Every change here is
-mirrored into each override folder. `repoctl check` fails when an override folder's
-patch file names differ from these, or when it names no recorded tsrs commit.
+mirrored into each override folder. A patch dropped here because the latest tsrs carries
+it stays in the folders of older commits that lack it. `repoctl check` fails when an
+override folder misses a patch file of this folder, or when it names no recorded tsrs commit.
