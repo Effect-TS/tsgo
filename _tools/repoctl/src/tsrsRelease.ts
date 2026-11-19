@@ -321,7 +321,10 @@ const ensureBoltTools = Effect.fnUntraced(function*(repositoryRoot: string, layo
   yield* fs.makeDirectory(layout.llvm, { recursive: true })
   yield* runCommand("bash", repositoryRoot, [
     "-c",
-    `curl -fsSL "$0" | tar -x --zstd -C "$1" --strip-components=1 --wildcards ${tools.files.map(shellQuote).join(" ")}`,
+    // LLVM's release tarballs use a 1 GiB zstd window, above zstd's default 128 MiB decode limit (as tsrs does).
+    `curl -fsSL "$0" | zstd -d --long=30 | tar -x -C "$1" --strip-components=1 --wildcards ${
+      tools.files.map(shellQuote).join(" ")
+    }`,
     tools.url,
     layout.llvm
   ])
@@ -486,6 +489,7 @@ export const tsrsReleaseWorkflowSnippets = [
   "cargo build --release --locked \"${targets[@]}\" --features \"$TSRS_CARGO_FEATURES\" --target ${{ matrix.target }}",
   "llvm=$(rustc -vV | sed -n 's/^LLVM version: //p')",
   "curl -fsSL \"https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/$name.tar.zst\" |",
+  "zstd -d --long=30 |",
   "run: .github/scripts/bolt.sh \"target/${{ matrix.target }}/release\" \"$RUNNER_TEMP/bolt\" \"$RUNNER_TEMP/pgo/bench\"",
   // `build-windows`
   "CARGO_PROFILE_RELEASE_STRIP: symbols",
