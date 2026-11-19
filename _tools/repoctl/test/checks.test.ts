@@ -121,7 +121,7 @@ test("lists every v3 fixture without the @effect-v3 marker", () =>
     })
   }))
 
-test("accepts tsrs override folders of recorded tsrs commits that mirror _patches/tsrs", () =>
+test("accepts tsrs override folders of recorded tsrs commits that hold every _patches/tsrs patch", () =>
   withRepository(async(repository) => {
     const tsrs: typeof Upstream.Type.components.tsrs = {
       "7.1.0-beta.tsrs2": { gitHead: revision, typescript: { version: "7.1.0", gitHead: secondRevision } }
@@ -136,10 +136,14 @@ test("accepts tsrs override folders of recorded tsrs commits that mirror _patche
     // The TypeScript checks leave tsrs override folders alone.
     await Effect.runPromise(checkOverrideFolders(repository, typescript).pipe(Effect.provide(NodeServices.layer)))
 
+    // A backport the latest tsrs carries (dropped from _patches/tsrs) stays in the older commit's folder.
     writeFiles(repository, mirror, ["002-u.patch"])
+    await check()
+
+    rmSync(join(repository, mirror, "001-t.patch"))
     await assert.rejects(check(), (error: Error) => {
       assert.match(error.message, new RegExp(`${mirror} must mirror _patches/tsrs patch for patch`))
-      assert.match(error.message, /Not in _patches\/tsrs: 002-u\.patch/)
+      assert.match(error.message, /Missing from _patches\/tsrs-[0-9a-f]+: 001-t\.patch/)
       return true
     })
     rmSync(join(repository, mirror), { recursive: true })

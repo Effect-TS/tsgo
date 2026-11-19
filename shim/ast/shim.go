@@ -514,8 +514,6 @@ func HasModifier(node *ast.Node, flags ast.ModifierFlags) bool
 func HasQuestionToken(node *ast.Node) bool
 //go:linkname HasResolutionModeOverride github.com/microsoft/TypeScript/tsc/internal/ast.HasResolutionModeOverride
 func HasResolutionModeOverride(node *ast.Node) bool
-//go:linkname HasSamePropertyAccessName github.com/microsoft/TypeScript/tsc/internal/ast.HasSamePropertyAccessName
-func HasSamePropertyAccessName(node1 *ast.Node, node2 *ast.Node) bool
 //go:linkname HasStaticModifier github.com/microsoft/TypeScript/tsc/internal/ast.HasStaticModifier
 func HasStaticModifier(node *ast.Node) bool
 //go:linkname HasSyntacticModifier github.com/microsoft/TypeScript/tsc/internal/ast.HasSyntacticModifier

@@ -10,12 +10,12 @@ script unchanged otherwise. No Go counterpart: it changes no compiler code.
   checkout, whose Cargo.lock lacks the Effect crates that the other patches add as path dependencies.
 
 diff --git a/.github/scripts/bolt.sh b/.github/scripts/bolt.sh
-index bc878af..9edcfa0 100755
+index 95e047c..7a04bbf 100755
 --- a/.github/scripts/bolt.sh
 +++ b/.github/scripts/bolt.sh
-@@ -46,6 +46,14 @@ for p in xstate-main webpack; do
+@@ -49,6 +49,14 @@ for p in xstate-main webpack; do
      > /dev/null 2>> "$work/tsrs-train-stderr.log") && status=0 || status=$?
-   check_exit "$status" "instrumented tsrs -p $p"
+   check_exit "$status" "instrumented tsrs -p $p --fast"
  done
 +# effect-tsgo: BOLT_EXTRA_WORKLOAD=<command> adds a workload of the embedder's own; `<command> <tsrs> <output file>
 +# [tsrs arguments...]` runs the given tsrs on it, writes its output and returns its exit status. It trains the
@@ -28,7 +28,7 @@ index bc878af..9edcfa0 100755
  if [ ${#bins[@]} -gt 1 ]; then
    TSRS_TEST_RESULTS="$work/train-test-results" "$work/tsrs-test.inst" run --suite all --timeout 300 > /dev/null \
      && status=0 || status=$?
-@@ -64,7 +72,11 @@ done
+@@ -67,7 +75,11 @@ done
  
  # All compiler baselines on the BOLT-optimized binaries, in both checker histories.
  if [ ${#bins[@]} -gt 1 ]; then
@@ -41,7 +41,7 @@ index bc878af..9edcfa0 100755
      --out-dir "$work/test-results" | tail -1
    TSRS_FOURSLASH_SERVER="$work/fourslash_server.bolt" TSRS_GO_FOURSLASH_WORK="$work/go-fourslash" \
      .github/scripts/go-fourslash-gate.sh | tail -1
-@@ -82,6 +94,18 @@ for p in xstate-main webpack; do
+@@ -85,6 +97,18 @@ for p in xstate-main webpack; do
        || { echo "::error::BOLT-optimized tsrs prints different output on $p (--checkers $c)"; exit 1; }
    done
  done

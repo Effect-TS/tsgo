@@ -16,7 +16,7 @@ type AutoGenerateInfo = printer.AutoGenerateInfo
 type AutoGenerateOptions = printer.AutoGenerateOptions
 type ChangeTrackerWriter = printer.ChangeTrackerWriter
 //go:linkname CreateSyntheticSourceFile github.com/microsoft/TypeScript/tsc/internal/printer.CreateSyntheticSourceFile
-func CreateSyntheticSourceFile(factory *ast.NodeFactory, node *ast.Node, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile
+func CreateSyntheticSourceFile(factory *ast.NodeFactory, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile
 const EFAsyncFunctionBody = printer.EFAsyncFunctionBody
 const EFCustomPrologue = printer.EFCustomPrologue
 const EFExportName = printer.EFExportName
