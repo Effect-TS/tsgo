@@ -516,7 +516,6 @@ type extra_Checker struct {
   syncIterationTypesResolver *checker.IterationTypesResolver
   asyncIterationTypesResolver *checker.IterationTypesResolver
   isPrimitiveOrObjectOrEmptyType func(*checker.Type) bool
-  containsMissingType func(*checker.Type) bool
   couldContainTypeVariables func(*checker.Type) bool
   isStringIndexSignatureOnlyType func(*checker.Type) bool
   markNodeAssignments func(*ast.Node) bool
