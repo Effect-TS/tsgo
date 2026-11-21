@@ -5,12 +5,12 @@ A wrapper for both [TSRS](https://github.com/oxc-project/tsrs) and [TypeScript-G
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.73.2`:
+The following target package versions are supported by `@effect/tsgo@0.73.3`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261118.1` |
-| tsrs | `7.1.0-beta.tsrs2`, `7.1.0-beta.tsrs3` |
+| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261120.1` |
+| tsrs | `7.1.0-beta.tsrs2`, `7.1.0-beta.tsrs4` |
 | Oxlint | `1.91.0`, `1.92.0`, `1.93.0`, `1.94.0` |
 | oxlint-tsgolint | `7.0.2005`, `7.0.2006`, `7.0.2007` |
 <!-- supported-components:end -->
