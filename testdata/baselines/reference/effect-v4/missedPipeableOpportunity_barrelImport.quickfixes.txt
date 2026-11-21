@@ -1,0 +1,127 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:19-10:55) TS377050: This nested call structure has a pipeable form. `e.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+[D2] (11:19-11:64) TS377050: This nested call structure has a pipeable form. `oo.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+[D3] (14:19-14:51) TS377050: This nested call structure has a pipeable form. `e.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+[D4] (15:19-15:60) TS377050: This nested call structure has a pipeable form. `oo.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_barrelImport.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import * as EffectNs from "effect/Effect"
+import * as OptionNs from "effect/Option"
+import { Effect, Option } from "effect"
+
+declare const e: Effect.Effect<Effect.Effect<number>>
+declare const oo: Option.Option<Option.Option<number>>
+
+// Should trigger: modules imported as namespaces
+export const a1 = e.pipe(EffectNs.flatten, EffectNs.asVoid)
+export const a2 = OptionNs.getOrUndefined(OptionNs.flatten(oo))
+
+// Should trigger: modules imported by name from the effect barrel
+export const b1 = Effect.asVoid(Effect.flatten(e))
+export const b2 = Option.getOrUndefined(Option.flatten(oo))
+
+
+=== [D2] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_barrelImport.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import * as EffectNs from "effect/Effect"
+import * as OptionNs from "effect/Option"
+import { Effect, Option } from "effect"
+
+declare const e: Effect.Effect<Effect.Effect<number>>
+declare const oo: Option.Option<Option.Option<number>>
+
+// Should trigger: modules imported as namespaces
+export const a1 = EffectNs.asVoid(EffectNs.flatten(e))
+export const a2 = oo.pipe(OptionNs.flatten, OptionNs.getOrUndefined)
+
+// Should trigger: modules imported by name from the effect barrel
+export const b1 = Effect.asVoid(Effect.flatten(e))
+export const b2 = Option.getOrUndefined(Option.flatten(oo))
+
+
+=== [D3] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_barrelImport.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import * as EffectNs from "effect/Effect"
+import * as OptionNs from "effect/Option"
+import { Effect, Option } from "effect"
+
+declare const e: Effect.Effect<Effect.Effect<number>>
+declare const oo: Option.Option<Option.Option<number>>
+
+// Should trigger: modules imported as namespaces
+export const a1 = EffectNs.asVoid(EffectNs.flatten(e))
+export const a2 = OptionNs.getOrUndefined(OptionNs.flatten(oo))
+
+// Should trigger: modules imported by name from the effect barrel
+export const b1 = e.pipe(Effect.flatten, Effect.asVoid)
+export const b2 = Option.getOrUndefined(Option.flatten(oo))
+
+
+=== [D4] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_barrelImport.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import * as EffectNs from "effect/Effect"
+import * as OptionNs from "effect/Option"
+import { Effect, Option } from "effect"
+
+declare const e: Effect.Effect<Effect.Effect<number>>
+declare const oo: Option.Option<Option.Option<number>>
+
+// Should trigger: modules imported as namespaces
+export const a1 = EffectNs.asVoid(EffectNs.flatten(e))
+export const a2 = OptionNs.getOrUndefined(OptionNs.flatten(oo))
+
+// Should trigger: modules imported by name from the effect barrel
+export const b1 = Effect.asVoid(Effect.flatten(e))
+export const b2 = oo.pipe(Option.flatten, Option.getOrUndefined)
+

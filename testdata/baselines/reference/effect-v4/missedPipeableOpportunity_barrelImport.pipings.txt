@@ -1,0 +1,73 @@
+==== /.src/missedPipeableOpportunity_barrelImport.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 10:18 - 10:55
+Node: EffectNs.asVoid(EffectNs.flatten(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: Effect<Effect<number, never, never>, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: EffectNs.flatten
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: EffectNs.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 11:18 - 11:64
+Node: OptionNs.getOrUndefined(OptionNs.flatten(oo))
+Node Kind: KindCallExpression
+
+Subject: oo
+Subject Type: Option<Option<number>>
+
+Transformations (2):
+  [0] kind: call
+      callee: OptionNs.flatten
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: OptionNs.getOrUndefined
+      args: (constant)
+      outType: number | undefined
+
+=== Piping Flow ===
+Location: 14:18 - 14:51
+Node: Effect.asVoid(Effect.flatten(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: Effect<Effect<number, never, never>, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.flatten
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 15:18 - 15:60
+Node: Option.getOrUndefined(Option.flatten(oo))
+Node Kind: KindCallExpression
+
+Subject: oo
+Subject Type: Option<Option<number>>
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.flatten
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Option.getOrUndefined
+      args: (constant)
+      outType: number | undefined
