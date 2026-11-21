@@ -119,7 +119,9 @@ func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
 	if ast.IsPropertyAccessExpression(callee) {
 		propAccess := callee.AsPropertyAccessExpression()
 		subject := propAccess.Expression
-		sym := tp.GetSymbolAtLocation(subject)
+		// Named imports such as `import { Effect } from "effect"` are aliases
+		// of the module re-exported by the barrel.
+		sym := tp.resolveAliasedSymbol(tp.GetSymbolAtLocation(subject))
 		if sym == nil {
 			return false
 		}

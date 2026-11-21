@@ -1,0 +1,46 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/missedPipeableOpportunity_barrelImport.ts(10,19): warning TS377050: This nested call structure has a pipeable form. `e.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+/.src/missedPipeableOpportunity_barrelImport.ts(11,19): warning TS377050: This nested call structure has a pipeable form. `oo.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+/.src/missedPipeableOpportunity_barrelImport.ts(14,19): warning TS377050: This nested call structure has a pipeable form. `e.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+/.src/missedPipeableOpportunity_barrelImport.ts(15,19): warning TS377050: This nested call structure has a pipeable form. `oo.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service"
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/missedPipeableOpportunity_barrelImport.ts (4 errors) ====
+    // @effect-diagnostics missedPipeableOpportunity:warning
+    import * as EffectNs from "effect/Effect"
+    import * as OptionNs from "effect/Option"
+    import { Effect, Option } from "effect"
+    
+    declare const e: Effect.Effect<Effect.Effect<number>>
+    declare const oo: Option.Option<Option.Option<number>>
+    
+    // Should trigger: modules imported as namespaces
+    export const a1 = EffectNs.asVoid(EffectNs.flatten(e))
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: This nested call structure has a pipeable form. `e.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+    export const a2 = OptionNs.getOrUndefined(OptionNs.flatten(oo))
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: This nested call structure has a pipeable form. `oo.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+    
+    // Should trigger: modules imported by name from the effect barrel
+    export const b1 = Effect.asVoid(Effect.flatten(e))
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: This nested call structure has a pipeable form. `e.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+    export const b2 = Option.getOrUndefined(Option.flatten(oo))
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: This nested call structure has a pipeable form. `oo.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+    

@@ -83,7 +83,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/pipeable.go:65 TypeParser.IsSafelyPipeableCallee e829f4254f27fd53
+    // go: internal/typeparser/pipeable.go:65 TypeParser.IsSafelyPipeableCallee a576d6a401b0bc95
     // IsSafelyPipeableCallee returns true if a callee expression can be safely
     // extracted into a pipe argument without losing `this` context.
     // This is used by the missedPipeableOpportunity rule to determine which
@@ -147,7 +147,10 @@ impl TypeParser<'_> {
         if ets_shim::ast::is_property_access_expression(callee) {
             let prop_access = callee.as_property_access_expression();
             let subject = prop_access.expression();
-            let Some(sym) = self.get_symbol_at_location(subject) else {
+            // Named imports such as `import { Effect } from "effect"` are aliases
+            // of the module re-exported by the barrel.
+            let sym = self.get_symbol_at_location(subject);
+            let Some(sym) = self.resolve_aliased_symbol(sym) else {
                 return false;
             };
 
