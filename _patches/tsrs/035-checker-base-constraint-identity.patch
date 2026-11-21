@@ -1,0 +1,35 @@
+Port of _patches/typescript/035-checker-base-constraint-identity.patch.
+The constraint stack uses the normalized parameter type rather than its symbol for indexed accesses.
+Shared recursion identities and cycle/depth limits remain unchanged.
+The target-normalization helper is crate-visible solely for this sibling-module call.
+
+diff --git a/crates/tsrs_checker/src/checker_13.rs b/crates/tsrs_checker/src/checker_13.rs
+--- a/crates/tsrs_checker/src/checker_13.rs
++++ b/crates/tsrs_checker/src/checker_13.rs
+@@ -3556,7 +3556,13 @@
+         // levels of nesting, we are presumably exploring a repeating pattern with a long cycle that hasn't
+         // yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
+         // nesting, so it is effectively just a safety stop.
+-        let identity = get_recursion_identity(self, t);
++        let mut identity = get_recursion_identity(self, t);
++        if t.flags().intersects(TypeFlags::IndexedAccess) {
++            let target = get_recursion_identity_target(self, t);
++            if target.flags().intersects(TypeFlags::TypeParameter) {
++                identity = RecursionId::Type(target);
++            }
++        }
+         if stack.len < 10 || stack.len < 50 && !stack.contains(identity) {
+             let simplified = self.get_simplified_type(t, false /*writing*/);
+             let frame = (identity, stack);
+diff --git a/crates/tsrs_checker/src/relater_1.rs b/crates/tsrs_checker/src/relater_1.rs
+--- a/crates/tsrs_checker/src/relater_1.rs
++++ b/crates/tsrs_checker/src/relater_1.rs
+@@ -1800,7 +1800,7 @@
+ // each of the mapped type applications will have a unique recursion identity (that of their target object type
+ // literal) and thus avoid appearing deeply nested.
+ #[inline]
+-fn get_recursion_identity_target(c: &mut Checker, t: P<Type>) -> P<Type> {
++pub(crate) fn get_recursion_identity_target(c: &mut Checker, t: P<Type>) -> P<Type> {
+     // Most types are their own target; the unwrapping is out of line.
+     if t.flags().intersects(TypeFlags::IndexedAccess)
+         || t.object_flags().contains(ObjectFlags::InstantiatedMapped)

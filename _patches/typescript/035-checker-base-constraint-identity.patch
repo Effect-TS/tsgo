@@ -1,0 +1,186 @@
+Owning compiler correction for microsoft/TypeScript#65508.
+Keep indexed parameter identities distinct only in base-constraint resolution;
+shared relation/inference nesting, depth bounds and exact-cycle detection stay unchanged.
+The paired tsrs patch 035 applies the same semantic correction.
+
+diff --git a/tsc/internal/checker/checker.go b/tsc/internal/checker/checker.go
+--- a/tsc/internal/checker/checker.go
++++ b/tsc/internal/checker/checker.go
+@@ -28288,6 +28288,14 @@
+ 	// yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
+ 	// nesting, so it is effectively just a safety stop.
+ 	identity := getRecursionIdentity(t)
++	if t.flags&TypeFlagsIndexedAccess != 0 {
++		// Preserve mapped-type normalization, but distinguish the indexed
++		// parameter TYPE from its direct constraint SYMBOL in this stack.
++		target := getRecursionIdentityTarget(t)
++		if target.flags&TypeFlagsTypeParameter != 0 {
++			identity = asRecursionId(target)
++		}
++	}
+ 	if len(stack) < 10 || len(stack) < 50 && !slices.Contains(stack, identity) {
+ 		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, identity))
+ 	}
+diff --git a/tsc/internal/compiler/base_constraint_history_test.go b/tsc/internal/compiler/base_constraint_history_test.go
+new file mode 100644
+--- /dev/null
++++ b/tsc/internal/compiler/base_constraint_history_test.go
+@@ -0,0 +1,117 @@
++package compiler
++
++import (
++	"context"
++	"fmt"
++	"os"
++	"path/filepath"
++	"strings"
++	"sync"
++	"testing"
++
++	"github.com/microsoft/TypeScript/tsc/internal/ast"
++	"github.com/microsoft/TypeScript/tsc/internal/bundled"
++	"github.com/microsoft/TypeScript/tsc/internal/checker"
++	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
++	"github.com/microsoft/TypeScript/tsc/internal/tspath"
++	"github.com/microsoft/TypeScript/tsc/internal/vfs"
++	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
++)
++
++type historyPool struct {
++	checker *checker.Checker
++	lock    *sync.Mutex
++}
++
++func (p *historyPool) GetChecker(_ context.Context, _ *ast.SourceFile) (*checker.Checker, func()) {
++	p.lock.Lock()
++	return p.checker, p.lock.Unlock
++}
++func newHistoryPool(p *Program) CheckerPool {
++	c, lock := checker.NewChecker(p, nil)
++	return &historyPool{c, lock}
++}
++func TestBaseConstraintHistory(t *testing.T) {
++	read := func(name string) string {
++		data, err := os.ReadFile(filepath.Join("testdata/base_constraint_history", name))
++		if err != nil {
++			t.Fatal(err)
++		}
++		return string(data)
++	}
++	a, b, lone, cycle := read("a.ts"), read("b.ts"), read("lone.ts"), read("cycle.ts")
++	mapped := "type Mapped<T> = { [K in keyof T]: T[K] };\n" +
++		strings.Replace(b, `y: T["a"]`, `y: Mapped<T>["a"]`, 1)
++	intersection := strings.Replace(b, `y: T["a"]`, `y: (T & { marker?: never })["a"]`, 1)
++	cases := []struct {
++		name, a, b string
++		code       int32
++		token      string
++	}{
++		{"pair", a, b, 0, ""},
++		{"pair-both", a, strings.ReplaceAll(b, "return x.b;", "return x.b + y.b;"), 0, ""},
++		{"mapped-leftmost", a, mapped, 0, ""},
++		{"intersection-leftmost", a, intersection, 0, ""},
++		{"missing", a, strings.ReplaceAll(b, "x.b;", "x.missing;"), 2339, "missing"},
++		{"lone", "", lone, 0, ""},
++		{"wrong-return", "", strings.ReplaceAll(lone, "): string", "): number"), 2322, "return"},
++		{"cycle", "", cycle, 2313, "T>("},
++		{"indexed-expansion", "", read("expanding.ts"), 2589, "Expand<{ a: {} }>"},
++	}
++	for _, c := range cases {
++		histories := [][]string{{"a.ts", "b.ts"}, {"b.ts", "a.ts"}, {"b.ts"}}
++		if c.a == "" {
++			histories = [][]string{{"b.ts"}}
++		}
++		for _, history := range histories {
++			t.Run(c.name+"/"+strings.Join(history, "-"), func(t *testing.T) {
++				roots := `"a.ts","b.ts"`
++				if c.a == "" || len(history) == 1 {
++					roots = `"b.ts"`
++				}
++				configText := fmt.Sprintf(`{"compilerOptions":{"strict":true,"noEmit":true,"target":"es2020","types":[]},"files":[%s]}`, roots)
++				fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
++					"/src/tsconfig.json": configText, "/src/a.ts": c.a, "/src/b.ts": c.b,
++				}, tspath.CaseSensitive))
++				program := newHistoryProgram(t, fs)
++				var observed []*ast.Diagnostic
++				for _, file := range history {
++					source := program.GetSourceFile(tspath.RootedFilePathFromNormalized("/src/" + file))
++					if source == nil {
++						t.Fatalf("missing fixture source: %s", file)
++					}
++					observed = append(observed, program.GetSemanticDiagnostics(context.Background(), source)...)
++				}
++				for _, d := range observed {
++					t.Logf("%s:%d:%d TS%d", d.File().FileName(), d.Pos(), d.End(), d.Code())
++				}
++				if c.code == 0 {
++					if len(observed) != 0 {
++						t.Errorf("expected no diagnostics, got %d", len(observed))
++					}
++					return
++				}
++				start := strings.Index(c.b, c.token)
++				end := start + len(c.token)
++				if c.name == "cycle" {
++					end = start + 1
++				}
++				if len(observed) != 1 || observed[0].Code() != c.code || observed[0].File().FileName() != "/src/b.ts" || observed[0].Pos() != start || observed[0].End() != end {
++					t.Errorf("expected TS%d at /src/b.ts:%d:%d", c.code, start, end)
++				}
++			})
++		}
++	}
++}
++
++func newHistoryProgram(t *testing.T, fs vfs.FS) *Program {
++	t.Helper()
++	config, errors := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, fs, nil)
++	if len(errors) != 0 {
++		t.Fatal(errors)
++	}
++	return NewProgram(ProgramOptions{
++		Config: config, Host: NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
++		CreateCheckerPool: newHistoryPool,
++	})
++}
+diff --git a/tsc/internal/compiler/testdata/base_constraint_history/a.ts b/tsc/internal/compiler/testdata/base_constraint_history/a.ts
+new file mode 100644
+--- /dev/null
++++ b/tsc/internal/compiler/testdata/base_constraint_history/a.ts
+@@ -0,0 +1,1 @@
++const f: typeof victim = <U extends Box>(x: U, y: { b: string }) => x.b;
+diff --git a/tsc/internal/compiler/testdata/base_constraint_history/b.ts b/tsc/internal/compiler/testdata/base_constraint_history/b.ts
+new file mode 100644
+--- /dev/null
++++ b/tsc/internal/compiler/testdata/base_constraint_history/b.ts
+@@ -0,0 +1,7 @@
++interface Box { a: Box; b: string }
++function victim<T extends Box>(
++  x: T,
++  y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
++): string {
++  return x.b;
++}
+diff --git a/tsc/internal/compiler/testdata/base_constraint_history/lone.ts b/tsc/internal/compiler/testdata/base_constraint_history/lone.ts
+new file mode 100644
+--- /dev/null
++++ b/tsc/internal/compiler/testdata/base_constraint_history/lone.ts
+@@ -0,0 +1,4 @@
++interface Box { a: Box; b: string }
++function ten<U extends Box>(
++  y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
++): string { return y.b; }
+diff --git a/tsc/internal/compiler/testdata/base_constraint_history/cycle.ts b/tsc/internal/compiler/testdata/base_constraint_history/cycle.ts
+new file mode 100644
+--- /dev/null
++++ b/tsc/internal/compiler/testdata/base_constraint_history/cycle.ts
+@@ -0,0 +1,1 @@
++function cycle<T extends T>(x: T) { return x; }
+diff --git a/tsc/internal/compiler/testdata/base_constraint_history/expanding.ts b/tsc/internal/compiler/testdata/base_constraint_history/expanding.ts
+new file mode 100644
+--- /dev/null
++++ b/tsc/internal/compiler/testdata/base_constraint_history/expanding.ts
+@@ -0,0 +1,3 @@
++type Expand<T extends { a: unknown }> =
++  T extends unknown ? Expand<T["a"] & { a: unknown }> : never;
++type Result = Expand<{ a: {} }>;
