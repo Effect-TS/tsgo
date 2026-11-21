@@ -1,5 +1,35 @@
 # @effect/tsgo
 
+## 0.73.3
+
+### Patch Changes
+
+- 5fc42e2: Fix `missedPipeableOpportunity` missing nested calls on modules imported by name from the `effect` barrel. Calls such as these are now reported just like their `import * as Effect from "effect/Effect"` equivalents:
+  
+  ```ts
+  import { Effect, Option } from "effect"
+  
+  export const b1 = Effect.asVoid(Effect.flatten(e))
+  // -> e.pipe(Effect.flatten, Effect.asVoid)
+  export const b2 = Option.getOrUndefined(Option.flatten(oo))
+  // -> oo.pipe(Option.flatten, Option.getOrUndefined)
+  ```
+- 1a9e8b9: Fix `preferSchemaTypeProperty` reporting a `Schema.Schema.Type<typeof X>`-style helper used as an interface `extends` or class `implements` entry on TypeScript 7.1, where the suggested `typeof X.Type` is not valid syntax.
+  
+  ```ts
+  export const Person = Schema.Struct({ name: Schema.String })
+  
+  // no longer reported: `extends typeof Person.Type` does not parse
+  export interface Person extends Schema.Schema.Type<typeof Person> {}
+  export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+    name = ""
+  }
+  
+  // still reported: can be replaced with `Readonly<typeof Person.Type>`
+  export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
+  ```
+- 113e18a: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261120.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/f5a247c0ca4e85f1f6ed304c71f149c9f6b3290e) commit `f5a247c0ca4e85f1f6ed304c71f149c9f6b3290e`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Drop the `GetTypeArgumentsForResolvedSignature` compiler patch, now provided upstream.
+
 ## 0.73.2
 
 ### Patch Changes
