@@ -7,6 +7,7 @@ Effect version: 3.19.19
 /.src/test.ts(12,30): error TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Type'.
 /.src/test.ts(14,30): error TS377104: Do not use `Schema.Schema.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
 /.src/test.ts(15,30): error TS377104: Do not use `S.Schema.Context<typeof X>`. Use `typeof X.Context` instead. effect(preferSchemaTypeProperty)
+/.src/test.ts(26,50): error TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -20,7 +21,7 @@ Effect version: 3.19.19
       }
     }
 
-==== /.src/test.ts (6 errors) ====
+==== /.src/test.ts (7 errors) ====
     // @effect-v3
     // @effect-diagnostics preferSchemaTypeProperty:error
     import { Schema, Schema as S } from "effect"
@@ -48,4 +49,17 @@ Effect version: 3.19.19
     export type AddressContext = S.Schema.Context<typeof Address>
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377104: Do not use `S.Schema.Context<typeof X>`. Use `typeof X.Context` instead. effect(preferSchemaTypeProperty)
+    
+    // https://github.com/Effect-TS/tsgo/issues/1074
+    // `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+    export const Person = Schema.Struct({ name: Schema.String })
+    export interface Person extends Schema.Schema.Type<typeof Person> {}
+    export interface PersonEncoded extends S.Schema.Encoded<typeof Person> {}
+    export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+      name = ""
+    }
+    // a type argument inside a heritage clause entry is still reported
+    export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
     

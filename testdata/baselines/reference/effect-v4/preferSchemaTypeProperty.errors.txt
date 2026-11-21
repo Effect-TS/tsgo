@@ -10,6 +10,7 @@ Effect version: 4.1.2
 /.src/test.ts(27,36): error TS377104: Do not use `Schema.Codec.DecodingServices<typeof X>`. Use `typeof X.DecodingServices` instead. effect(preferSchemaTypeProperty)
 /.src/test.ts(28,36): error TS377104: Do not use `S.Codec.EncodingServices<typeof X>`. Use `typeof X.EncodingServices` instead. effect(preferSchemaTypeProperty)
 /.src/test.ts(29,39): error TS2694: Namespace '"/node_modules/effect/dist/Schema".Codec' has no exported member 'Type'.
+/.src/test.ts(40,50): error TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -23,7 +24,7 @@ Effect version: 4.1.2
       }
     }
 
-==== /.src/test.ts (9 errors) ====
+==== /.src/test.ts (10 errors) ====
     // @effect-diagnostics preferSchemaTypeProperty:error
     import { Schema, Schema as S } from "effect"
     
@@ -71,4 +72,17 @@ Effect version: 4.1.2
     export type NotAHelper = Schema.Codec.Type<typeof User>
                                           ~~~~
 !!! error TS2694: Namespace '"/node_modules/effect/dist/Schema".Codec' has no exported member 'Type'.
+    
+    // https://github.com/Effect-TS/tsgo/issues/1074
+    // `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+    export const Person = Schema.Struct({ name: Schema.String })
+    export interface Person extends Schema.Schema.Type<typeof Person> {}
+    export interface PersonEncoded extends S.Codec.Encoded<typeof Person> {}
+    export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+      name = ""
+    }
+    // a type argument inside a heritage clause entry is still reported
+    export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
     
