@@ -57,8 +57,10 @@ pub(crate) fn get_resolved_target(c: &mut Checker, symbol: Option<P<Symbol>>) ->
     Some(c.get_merged_symbol(resolved))
 }
 
-// Rust-only: Checker.GetTypeArgumentsForResolvedSignature (effect-tsgo patch 003-checker-exports) is not in tsrs.
-// Go: nil without a mapper or type parameters, else `instantiateTypes(typeParams, sig.mapper)`. Instantiating a
+// Rust-only: Checker.GetTypeArgumentsForResolvedSignature (upstream `checker/services.go`, microsoft/TypeScript#65589;
+// formerly effect-tsgo patch 003-checker-exports) is not in tsrs yet.
+// Go: nil without a mapper, else `instantiateTypes(target.TypeParameters(), signature.mapper)` with
+// `target = core.OrElse(signature.target, signature)`; no type parameters instantiate to no type arguments. Instantiating a
 // type parameter is applying the mapper to it (`instantiateType` -> `getMappedType`), which tsrs's public
 // `TypeMapper::map` does.
 pub(crate) fn get_type_arguments_for_resolved_signature(

@@ -34,6 +34,8 @@ const FidelityApproximate = spanmap.FidelityApproximate
 const FidelityAtom = spanmap.FidelityAtom
 const FidelityExact = spanmap.FidelityExact
 const FidelityNone = spanmap.FidelityNone
+//go:linkname FromTuples github.com/microsoft/TypeScript/tsc/internal/spanmap.FromTuples
+func FromTuples(tuples []spanmap.SegmentTuple) (*spanmap.SpanMap, error)
 type Kind = spanmap.Kind
 const KindAlias = spanmap.KindAlias
 const KindAtom = spanmap.KindAtom
@@ -50,6 +52,7 @@ const MappingErrorKindVerbatimMismatch = spanmap.MappingErrorKindVerbatimMismatc
 //go:linkname New github.com/microsoft/TypeScript/tsc/internal/spanmap.New
 func New(segments []spanmap.Segment) *spanmap.SpanMap
 type Segment = spanmap.Segment
+type SegmentTuple = spanmap.SegmentTuple
 type SpanMap = spanmap.SpanMap
 //go:linkname Unmarshal github.com/microsoft/TypeScript/tsc/internal/spanmap.Unmarshal
 func Unmarshal(data []byte) (*spanmap.SpanMap, error)

@@ -21,7 +21,8 @@ plain folder as a whole when that commit is set up (`repoctl submodules setup`,
 `getTypeScriptComponentSource` in `_tools/repoctl/src/upstream.ts`):
 
 - `_patches/typescript-<gitHead>/` is applied instead of this folder. It holds
-  the same patches, file for file, backported to that commit;
+  the same patches, file for file, backported to that commit, plus any patch
+  dropped here because the newer TypeScript carries the change upstream;
 - `_tools/gen_shims/providers/typescript-<gitHead>/` is the only shim overlay
   instead of `providers/typescript/`, so it is self-contained, and the shims are
   generated through the backport prefix
@@ -39,15 +40,18 @@ own folder. Today:
   `7.1.0-beta`, which is also the TypeScript the pinned tsrs ports. Its patches
   are this folder's, except `028-incremental-effect-options.patch`, which keeps
   the pre-`BuildInfoCompilerOptions` / `||`-chain form of `buildInfo.go` and
-  `options_generated.go` that the beta still has.
+  `options_generated.go` that the beta still has, plus
+  `003-checker-exports.patch` (`Checker.GetTypeArgumentsForResolvedSignature`),
+  which next has upstream since microsoft/TypeScript#65589.
 
 Rules, enforced by `repoctl check` where they can be:
 
 - **Mirroring.** Any change to a patch here (added, changed, renamed or removed)
   is mirrored into every `_patches/typescript-<gitHead>/` in the same pull
   request, and into `_patches/tsrs/` where the patch has a tsrs counterpart.
-  `repoctl check` fails when an override folder does not hold the same patch
-  file names as this one. Likewise, a change to
+  `repoctl check` fails when an override folder lacks a patch file of this one.
+  An override folder may hold extra patches: one removed here because the newer
+  TypeScript carries the change stays for the older commit that lacks it. Likewise, a change to
   `_tools/gen_shims/providers/typescript/` is mirrored into the self-contained
   shim override copies where it applies (the beta one is a copy of it plus its
   own `tsoptions/` adapters; the tsrs one has its own set). Shim folders are not

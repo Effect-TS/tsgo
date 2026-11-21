@@ -36,14 +36,12 @@ export class PatchParityError extends Data.TaggedError("PatchParityError")<{
   readonly canonical: string
   readonly mirror: string
   readonly missing: ReadonlyArray<string>
-  readonly extra: ReadonlyArray<string>
 }> {
   get message(): string {
     return [
-      `${this.mirror} must mirror ${this.canonical} patch for patch (same file names), backported to the TypeScript ` +
+      `${this.mirror} must mirror ${this.canonical} patch for patch (every file name), backported to the TypeScript ` +
       `it targets: every change to ${this.canonical} is made to ${this.mirror} too (see ${this.mirror}/README.md).`,
-      ...(this.missing.length === 0 ? [] : [`Missing from ${this.mirror}: ${this.missing.join(", ")}`]),
-      ...(this.extra.length === 0 ? [] : [`Not in ${this.canonical}: ${this.extra.join(", ")}`])
+      `Missing from ${this.mirror}: ${this.missing.join(", ")}`
     ].join("\n")
   }
 }
@@ -85,8 +83,9 @@ export const checkEffectV3FixtureMarkers = Effect.fnUntraced(function*(repositor
 // The `<provider>-<gitHead>` override folders (upstream.ts, getTypeScriptComponentSource). Node only: names, no
 // checkout needed.
 // - Each one must name the gitHead of a TypeScript component with that provider, or it is stale.
-// - A patch override folder holds the provider's patches backported to an older TypeScript, so it must contain the
-//   same patch files as the provider's folder. Shim override folders are not compared: they are self-contained and
+// - A patch override folder holds the provider's patches backported to an older TypeScript, so it must contain every
+//   patch file of the provider's folder. It may hold more: a patch dropped from the provider's folder because the newer
+//   TypeScript carries the change upstream stays for the older commit that lacks it. Shim override folders are not compared: they are self-contained and
 //   legitimately hold other packages (a change to the provider's shim folder is mirrored by hand where it applies).
 export const checkOverrideFolders = Effect.fnUntraced(function*(
   repositoryRoot: string,
@@ -121,9 +120,8 @@ export const checkOverrideFolders = Effect.fnUntraced(function*(
       const expected = (yield* fs.exists(path.join(repositoryRoot, canonical))) ? yield* patchNames(canonical) : []
       const actual = yield* patchNames(folder)
       const missing = expected.filter((patch) => !actual.includes(patch))
-      const extra = actual.filter((patch) => !expected.includes(patch))
-      if (missing.length > 0 || extra.length > 0) {
-        return yield* new PatchParityError({ canonical, mirror: folder, missing, extra })
+      if (missing.length > 0) {
+        return yield* new PatchParityError({ canonical, mirror: folder, missing })
       }
     }
   }
@@ -162,7 +160,7 @@ export const checkTsrsOverrideFolders = Effect.fnUntraced(function*(
     const actual = yield* patchNames(folder)
     const missing = expected.filter((patch) => !actual.includes(patch))
     if (missing.length > 0) {
-      return yield* new PatchParityError({ canonical: tsrsPatchesFolder, mirror: folder, missing, extra: [] })
+      return yield* new PatchParityError({ canonical: tsrsPatchesFolder, mirror: folder, missing })
     }
   }
 })
