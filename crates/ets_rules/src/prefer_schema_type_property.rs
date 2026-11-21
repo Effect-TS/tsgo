@@ -63,7 +63,7 @@ pub(crate) static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
     ])
 });
 
-// go: internal/rules/prefer_schema_type_property.go:51 AnalyzePreferSchemaTypeProperty e7c41852f6919645
+// go: internal/rules/prefer_schema_type_property.go:51 AnalyzePreferSchemaTypeProperty 71814bbc7cf5ff38
 pub fn analyze_prefer_schema_type_property(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -77,7 +77,10 @@ pub fn analyze_prefer_schema_type_property(
         node: P<Node>,
         matches: &mut Vec<PreferSchemaTypePropertyMatch>,
     ) -> bool {
+        // A heritage clause entry (interface extends, class implements) cannot be
+        // written as `typeof X.Type`, so only its type arguments are checked.
         if node.kind() == Kind::TypeReference
+            && !node.parent().is_some_and(ets_shim::ast::is_heritage_clause)
             && let Some(m) = analyze_prefer_schema_type_property_node(tp, sf, node)
         {
             matches.push(m);
@@ -91,7 +94,7 @@ pub fn analyze_prefer_schema_type_property(
     matches
 }
 
-// go: internal/rules/prefer_schema_type_property.go:72 analyzePreferSchemaTypePropertyNode d3f1de4ef2254a76
+// go: internal/rules/prefer_schema_type_property.go:74 analyzePreferSchemaTypePropertyNode d3f1de4ef2254a76
 pub(crate) fn analyze_prefer_schema_type_property_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
