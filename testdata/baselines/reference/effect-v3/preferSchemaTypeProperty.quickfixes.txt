@@ -34,6 +34,11 @@
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof Address.Context'"
 
+[D9] (26:50-26:83) TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof Person.Type'"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
@@ -61,6 +66,17 @@ type GoodSchemaType = Schema.Type<typeof Address>
 export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
 export type AddressContext = S.Schema.Context<typeof Address>
 
+// https://github.com/Effect-TS/tsgo/issues/1074
+// `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+export const Person = Schema.Struct({ name: Schema.String })
+export interface Person extends Schema.Schema.Type<typeof Person> {}
+export interface PersonEncoded extends S.Schema.Encoded<typeof Person> {}
+export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+  name = ""
+}
+// a type argument inside a heritage clause entry is still reported
+export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
+
 
 === [D2] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
 skipped by default
@@ -86,6 +102,17 @@ type GoodSchemaType = Schema.Type<typeof Address>
 
 export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
 export type AddressContext = S.Schema.Context<typeof Address>
+
+// https://github.com/Effect-TS/tsgo/issues/1074
+// `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+export const Person = Schema.Struct({ name: Schema.String })
+export interface Person extends Schema.Schema.Type<typeof Person> {}
+export interface PersonEncoded extends S.Schema.Encoded<typeof Person> {}
+export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+  name = ""
+}
+// a type argument inside a heritage clause entry is still reported
+export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
 
 
 === [D4] Fix 0: "Disable unnecessaryTypeofType for this line" ===
@@ -113,6 +140,17 @@ type GoodSchemaType = Schema.Type<typeof Address>
 export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
 export type AddressContext = S.Schema.Context<typeof Address>
 
+// https://github.com/Effect-TS/tsgo/issues/1074
+// `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+export const Person = Schema.Struct({ name: Schema.String })
+export interface Person extends Schema.Schema.Type<typeof Person> {}
+export interface PersonEncoded extends S.Schema.Encoded<typeof Person> {}
+export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+  name = ""
+}
+// a type argument inside a heritage clause entry is still reported
+export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
+
 
 === [D7] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
 skipped by default
@@ -139,6 +177,17 @@ type GoodSchemaType = Schema.Type<typeof Address>
 export type AddressEncoded = typeof Address.Encoded
 export type AddressContext = S.Schema.Context<typeof Address>
 
+// https://github.com/Effect-TS/tsgo/issues/1074
+// `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+export const Person = Schema.Struct({ name: Schema.String })
+export interface Person extends Schema.Schema.Type<typeof Person> {}
+export interface PersonEncoded extends S.Schema.Encoded<typeof Person> {}
+export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+  name = ""
+}
+// a type argument inside a heritage clause entry is still reported
+export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
+
 
 === [D8] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
 skipped by default
@@ -164,4 +213,52 @@ type GoodSchemaType = Schema.Type<typeof Address>
 
 export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
 export type AddressContext = typeof Address.Context
+
+// https://github.com/Effect-TS/tsgo/issues/1074
+// `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+export const Person = Schema.Struct({ name: Schema.String })
+export interface Person extends Schema.Schema.Type<typeof Person> {}
+export interface PersonEncoded extends S.Schema.Encoded<typeof Person> {}
+export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+  name = ""
+}
+// a type argument inside a heritage clause entry is still reported
+export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
+
+
+=== [D9] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with 'typeof Person.Type'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = Schema.Schema.Type<typeof AddressId>
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = S.Schema.Type<typeof Address>
+
+type GoodTypeQuery = typeof Address.Type
+type GoodSchemaType = Schema.Type<typeof Address>
+
+export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
+export type AddressContext = S.Schema.Context<typeof Address>
+
+// https://github.com/Effect-TS/tsgo/issues/1074
+// `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+export const Person = Schema.Struct({ name: Schema.String })
+export interface Person extends Schema.Schema.Type<typeof Person> {}
+export interface PersonEncoded extends S.Schema.Encoded<typeof Person> {}
+export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+  name = ""
+}
+// a type argument inside a heritage clause entry is still reported
+export interface ReadonlyPerson extends Readonly<typeof Person.Type> {}
 

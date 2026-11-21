@@ -55,7 +55,9 @@ func AnalyzePreferSchemaTypeProperty(tp *typeparser.TypeParser, sf *ast.SourceFi
 		if node == nil {
 			return false
 		}
-		if node.Kind == ast.KindTypeReference {
+		// A heritage clause entry (interface extends, class implements) cannot be
+		// written as `typeof X.Type`, so only its type arguments are checked.
+		if node.Kind == ast.KindTypeReference && !ast.IsHeritageClause(node.Parent) {
 			if match := analyzePreferSchemaTypePropertyNode(tp, sf, node); match != nil {
 				matches = append(matches, *match)
 				return false

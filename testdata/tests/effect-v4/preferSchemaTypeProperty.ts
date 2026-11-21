@@ -38,3 +38,14 @@ export type UserEncoded = Schema.Codec.Encoded<typeof User>
 export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
 export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
 export type NotAHelper = Schema.Codec.Type<typeof User>
+
+// https://github.com/Effect-TS/tsgo/issues/1074
+// `typeof X.Type` is not valid as a heritage clause entry, so these must not be reported
+export const Person = Schema.Struct({ name: Schema.String })
+export interface Person extends Schema.Schema.Type<typeof Person> {}
+export interface PersonEncoded extends S.Codec.Encoded<typeof Person> {}
+export class PersonImpl implements Schema.Schema.Type<typeof Person> {
+  name = ""
+}
+// a type argument inside a heritage clause entry is still reported
+export interface ReadonlyPerson extends Readonly<Schema.Schema.Type<typeof Person>> {}
