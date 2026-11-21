@@ -75,13 +75,17 @@ test("requires a patch override folder to mirror the provider's folder patch for
     writeFiles(repository, mirror, ["001-a.patch", "002-b.patch"])
     await check()
 
-    // A patch added to _patches/typescript only, and one only in the mirror (READMEs are not patches).
-    writeFiles(repository, "_patches/typescript", ["003-c.patch"])
+    // A patch the newer TypeScript carries upstream (dropped from _patches/typescript) stays in the older commit's
+    // folder (READMEs are not patches).
     writeFiles(repository, mirror, ["004-d.patch", "README.md"])
+    await check()
+
+    // A patch added to _patches/typescript only.
+    writeFiles(repository, "_patches/typescript", ["003-c.patch"])
     await assert.rejects(check(), (error: Error) => {
       assert.match(error.message, new RegExp(`${mirror} must mirror _patches/typescript patch for patch`))
       assert.match(error.message, new RegExp(`Missing from ${mirror}: 003-c\\.patch`))
-      assert.match(error.message, /Not in _patches\/typescript: 004-d\.patch/)
+      assert.doesNotMatch(error.message, /Not in _patches\/typescript/)
       return true
     })
   }))

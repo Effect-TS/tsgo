@@ -15,6 +15,8 @@ type AutoGenerateId = printer.AutoGenerateId
 type AutoGenerateInfo = printer.AutoGenerateInfo
 type AutoGenerateOptions = printer.AutoGenerateOptions
 type ChangeTrackerWriter = printer.ChangeTrackerWriter
+//go:linkname CreateEntityNameFromExpression github.com/microsoft/TypeScript/tsc/internal/printer.CreateEntityNameFromExpression
+func CreateEntityNameFromExpression(f *ast.NodeFactory, node *ast.Expression) *ast.EntityName
 //go:linkname CreateSyntheticSourceFile github.com/microsoft/TypeScript/tsc/internal/printer.CreateSyntheticSourceFile
 func CreateSyntheticSourceFile(factory *ast.NodeFactory, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile
 const EFAsyncFunctionBody = printer.EFAsyncFunctionBody

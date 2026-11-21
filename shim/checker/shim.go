@@ -516,7 +516,6 @@ type extra_Checker struct {
   syncIterationTypesResolver *checker.IterationTypesResolver
   asyncIterationTypesResolver *checker.IterationTypesResolver
   isPrimitiveOrObjectOrEmptyType func(*checker.Type) bool
-  containsMissingType func(*checker.Type) bool
   couldContainTypeVariables func(*checker.Type) bool
   isStringIndexSignatureOnlyType func(*checker.Type) bool
   markNodeAssignments func(*ast.Node) bool
@@ -1005,6 +1004,8 @@ func NewChecker(program checker.Program, tracer *checker.Tracer) (*checker.Check
 func NewDiagnosticChainForNode(chain *ast.Diagnostic, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic
 //go:linkname NewDiagnosticForNode github.com/microsoft/TypeScript/tsc/internal/checker.NewDiagnosticForNode
 func NewDiagnosticForNode(node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic
+//go:linkname NewIndexInfo github.com/microsoft/TypeScript/tsc/internal/checker.NewIndexInfo
+func NewIndexInfo(keyType *checker.Type, valueType *checker.Type, isReadonly bool, declaration *ast.Node) *checker.IndexInfo
 //go:linkname NewNodeBuilder github.com/microsoft/TypeScript/tsc/internal/checker.NewNodeBuilder
 func NewNodeBuilder(ch *checker.Checker, e *printer.EmitContext) *checker.NodeBuilder
 //go:linkname NewNodeBuilderEx github.com/microsoft/TypeScript/tsc/internal/checker.NewNodeBuilderEx
@@ -1013,6 +1014,8 @@ func NewNodeBuilderEx(ch *checker.Checker, e *printer.EmitContext, idToSymbol ma
 func NewSymbolTrackerImpl(context *checker.NodeBuilderContext, tracker nodebuilder.SymbolTracker) *checker.SymbolTrackerImpl
 //go:linkname NewTracer github.com/microsoft/TypeScript/tsc/internal/checker.NewTracer
 func NewTracer(tr *tracing.Tracing, checkerIndex int) *checker.Tracer
+//go:linkname NewTypePredicate github.com/microsoft/TypeScript/tsc/internal/checker.NewTypePredicate
+func NewTypePredicate(kind checker.TypePredicateKind, parameterName string, parameterIndex int32, t *checker.Type) *checker.TypePredicate
 type NodeBuilder = checker.NodeBuilder
 type NodeBuilderContext = checker.NodeBuilderContext
 type NodeBuilderImpl = checker.NodeBuilderImpl

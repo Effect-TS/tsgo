@@ -93,6 +93,7 @@ type Result = contentmapper.Result
 //go:linkname RewritesForImport github.com/microsoft/TypeScript/tsc/internal/contentmapper.RewritesForImport
 func RewritesForImport(rewrites []tspath.ExtensionRewrite, importingFile tspath.RootedFilePath, specifier tspath.ModuleSpecifier, extensionForFileName func(tspath.RootedFilePath) string, caseSensitivity tspath.CaseSensitivity) []tspath.ExtensionRewrite
 type SourceFiles = contentmapper.SourceFiles
+type SpanMapSegment = contentmapper.SpanMapSegment
 type Spawner = contentmapper.Spawner
 type SpawnerFunc = contentmapper.SpawnerFunc
 type SupplementalFileCollisionError = contentmapper.SupplementalFileCollisionError

@@ -66,7 +66,7 @@ export const getTypeScriptSource = (provider: TypeScriptProvider): TypeScriptSou
 // they no longer fit (beta, the TypeScript the pinned tsrs ports) gets a `<provider>-<gitHead>` folder next to them,
 // which replaces the plain folder as a whole when that commit is set up:
 // - `_patches/<provider>-<gitHead>/` is applied instead of `_patches/<provider>/` (the same patches, file for file,
-//   backported to that commit; `repoctl check` enforces the same file names);
+//   backported to that commit, plus any the newer TypeScript carries upstream; `repoctl check` enforces the file names);
 // - `_tools/gen_shims/providers/<provider>-<gitHead>/` is the only shim overlay instead of the provider's (so it is
 //   self-contained), and the shims are generated through the provider's backport prefix, whose `compatibility.go`
 //   adapters present the canonical (next) shim API over that older compiler.
