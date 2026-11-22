@@ -10,6 +10,8 @@ import _ "unsafe"
 func FromString(s string) jsnum.Number
 //go:linkname Inf github.com/microsoft/TypeScript/tsc/internal/jsnum.Inf
 func Inf(sign int) jsnum.Number
+//go:linkname IsNumericLiteralName github.com/microsoft/TypeScript/tsc/internal/jsnum.IsNumericLiteralName
+func IsNumericLiteralName(name string) bool
 const MaxSafeInteger = jsnum.MaxSafeInteger
 const MinSafeInteger = jsnum.MinSafeInteger
 //go:linkname NaN github.com/microsoft/TypeScript/tsc/internal/jsnum.NaN
