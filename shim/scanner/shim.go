@@ -55,6 +55,8 @@ func GetScannerForSourceFile(sourceFile *ast.SourceFile, pos int) *scanner.Scann
 func GetShebang(text string) string
 //go:linkname GetSourceTextOfNodeFromSourceFile github.com/microsoft/TypeScript/tsc/internal/scanner.GetSourceTextOfNodeFromSourceFile
 func GetSourceTextOfNodeFromSourceFile(sourceFile *ast.SourceFile, node *ast.Node, includeTrivia bool) string
+//go:linkname GetStringLiteralSourceOffset github.com/microsoft/TypeScript/tsc/internal/scanner.GetStringLiteralSourceOffset
+func GetStringLiteralSourceOffset(contents string, valueOffset int, isTemplate bool) int
 //go:linkname GetTextOfJSDocComment github.com/microsoft/TypeScript/tsc/internal/scanner.GetTextOfJSDocComment
 func GetTextOfJSDocComment(comment *ast.NodeList) string
 //go:linkname GetTextOfNode github.com/microsoft/TypeScript/tsc/internal/scanner.GetTextOfNode

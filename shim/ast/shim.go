@@ -1814,7 +1814,6 @@ const KindHeritageClause = ast.KindHeritageClause
 const KindIdentifier = ast.KindIdentifier
 const KindIfKeyword = ast.KindIfKeyword
 const KindIfStatement = ast.KindIfStatement
-const KindImmediateKeyword = ast.KindImmediateKeyword
 const KindImplementsKeyword = ast.KindImplementsKeyword
 const KindImportAttribute = ast.KindImportAttribute
 const KindImportAttributes = ast.KindImportAttributes
