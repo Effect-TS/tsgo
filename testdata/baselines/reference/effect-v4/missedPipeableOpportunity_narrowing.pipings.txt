@@ -1,0 +1,77 @@
+==== /.src/missedPipeableOpportunity_narrowing.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 12:33 - 13:35
+Node: assert(Result.isFailure(result))
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Result<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.isFailure
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 18:37 - 19:42
+Node: assert(Result.isFailure(holder.result))
+Node Kind: KindCallExpression
+
+Subject: holder.result
+Subject Type: Result<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.isFailure
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 26:12 - 27:42
+Node: assert(Result.isFailure(this.result))
+Node Kind: KindCallExpression
+
+Subject: this.result
+Subject Type: Result<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Result.isFailure
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 33:33 - 34:53
+Node: assert(Option.isSome(Option.map(o, (n) => n + 1)))
+Node Kind: KindCallExpression
+
+Subject: o
+Subject Type: Option<number>
+
+Transformations (3):
+  [0] kind: dataFirst
+      callee: Option.map
+      args: [(n) => n + 1]
+      outType: Option<number>
+  [1] kind: call
+      callee: Option.isSome
+      args: (constant)
+      outType: boolean
+  [2] kind: call
+      callee: assert
+      args: (constant)
+      outType: void

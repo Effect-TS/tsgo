@@ -82,6 +82,9 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			if run.callCount < minArgCount || !isPipeableAtIndex(tp, flow, firstPipeableIndex) {
 				continue
 			}
+			if firstPipeableIndex == 0 && firstTransformationNarrowsSubject(c, flow) {
+				continue
+			}
 			subjectText := trimmedNodeText(sf, flow.TransformationInputNode(firstPipeableIndex))
 
 			matches = append(matches, MissedPipeableOpportunityMatch{
@@ -143,6 +146,40 @@ func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, i
 		return false
 	}
 	return tp.IsPipeableType(t.OutType())
+}
+
+// firstTransformationNarrowsSubject reports whether the first step is a call
+// to a type predicate or assertion function on a narrowable reference, as in
+// `assert(Result.isFailure(result))`. TypeScript narrows only on that direct
+// call, so the pipe form `result.pipe(Result.isFailure, assert)` would lose
+// the narrowing.
+func firstTransformationNarrowsSubject(c *checker.Checker, flow *typeparser.PipingFlow) bool {
+	input := flow.TransformationInputNode(0)
+	if input == nil || !isNarrowableReference(input) {
+		return false
+	}
+	call := ast.WalkUpParenthesizedExpressions(input.Parent)
+	if call == nil || !ast.IsCallExpression(call) {
+		return false
+	}
+	signature := c.GetResolvedSignature(call)
+	return signature != nil && c.GetTypePredicateOfSignature(signature) != nil
+}
+
+// isNarrowableReference mirrors the binder's check for expressions that
+// control flow analysis can narrow.
+func isNarrowableReference(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindIdentifier, ast.KindThisKeyword, ast.KindSuperKeyword, ast.KindMetaProperty:
+		return true
+	case ast.KindPropertyAccessExpression, ast.KindParenthesizedExpression, ast.KindNonNullExpression:
+		return isNarrowableReference(node.Expression())
+	case ast.KindElementAccessExpression:
+		access := node.AsElementAccessExpression()
+		return ast.IsStringOrNumericLiteralLike(access.ArgumentExpression) ||
+			ast.IsEntityNameExpression(access.ArgumentExpression) && isNarrowableReference(access.Expression)
+	}
+	return false
 }
 
 // reportableTransformationCount returns how many leading transformations of

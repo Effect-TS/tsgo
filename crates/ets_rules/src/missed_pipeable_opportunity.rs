@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::{ResolvedEffectPluginOptions, Severity};
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
 use ets_shim::checker::SignatureKind;
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
@@ -66,7 +66,7 @@ pub struct MissedPipeableOpportunityMatch {
     pub subject_text: String,
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:63 AnalyzeMissedPipeableOpportunity 7f71358f6343075a
+// go: internal/rules/missed_pipeable_opportunity.go:63 AnalyzeMissedPipeableOpportunity 6c3e28612ee7fc20
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -98,6 +98,9 @@ pub fn analyze_missed_pipeable_opportunity(
             {
                 continue;
             }
+            if first_pipeable_index == 0 && first_transformation_narrows_subject(tp, flow) {
+                continue;
+            }
             let subject_text = trimmed_node_text(
                 Some(sf),
                 PipingFlow::transformation_input_node(Some(flow), first_pipeable_index),
@@ -122,14 +125,14 @@ pub fn analyze_missed_pipeable_opportunity(
     matches
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:106 safelyPipeableRun 8da24950a3b99dec
+// go: internal/rules/missed_pipeable_opportunity.go:109 safelyPipeableRun 8da24950a3b99dec
 #[derive(Clone, Copy, Default)]
 pub(crate) struct SafelyPipeableRun {
     pub(crate) length: i64,
     pub(crate) call_count: i64,
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:111 safelyPipeableRuns b3cfca200a4bd664
+// go: internal/rules/missed_pipeable_opportunity.go:114 safelyPipeableRuns b3cfca200a4bd664
 pub(crate) fn safely_pipeable_runs(
     tp: &mut TypeParser<'_>,
     flow: &PipingFlow,
@@ -156,7 +159,7 @@ pub(crate) fn safely_pipeable_runs(
     runs
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:129 isPipeableAtIndex 933d04bdf025ee66
+// go: internal/rules/missed_pipeable_opportunity.go:132 isPipeableAtIndex 933d04bdf025ee66
 // isPipeableAtIndex checks if the type at a given index in a flow is pipeable.
 // Index 0 = subject, index > 0 = transformations[index - 1].outType
 pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, index: i64) -> bool {
@@ -177,7 +180,54 @@ pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, i
     tp.is_pipeable_type(out_type)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:153 reportableTransformationCount 9db8b89b91246414
+// go: internal/rules/missed_pipeable_opportunity.go:156 firstTransformationNarrowsSubject 03a52caa9ffa2bb0
+// firstTransformationNarrowsSubject reports whether the first step is a call
+// to a type predicate or assertion function on a narrowable reference, as in
+// `assert(Result.isFailure(result))`. TypeScript narrows only on that direct
+// call, so the pipe form `result.pipe(Result.isFailure, assert)` would lose
+// the narrowing.
+//
+// Rust: Go's checker argument is the parser's checker (`tp.checker()`).
+pub(crate) fn first_transformation_narrows_subject(
+    tp: &mut TypeParser<'_>,
+    flow: &PipingFlow,
+) -> bool {
+    let Some(input) = PipingFlow::transformation_input_node(Some(flow), 0) else {
+        return false;
+    };
+    if !is_narrowable_reference(input) {
+        return false;
+    }
+    let Some(call) = ets_shim::ast::walk_up_parenthesized_expressions(input.parent()) else {
+        return false;
+    };
+    if !ets_shim::ast::is_call_expression(call) {
+        return false;
+    }
+    let signature = tp.checker().get_resolved_signature_exported(call);
+    tp.checker().get_type_predicate_of_signature_exported(signature).is_some()
+}
+
+// go: internal/rules/missed_pipeable_opportunity.go:171 isNarrowableReference 765f1ab550dac4bc
+// isNarrowableReference mirrors the binder's check for expressions that
+// control flow analysis can narrow.
+pub(crate) fn is_narrowable_reference(node: P<Node>) -> bool {
+    match node.kind() {
+        Kind::Identifier | Kind::ThisKeyword | Kind::SuperKeyword | Kind::MetaProperty => true,
+        Kind::PropertyAccessExpression
+        | Kind::ParenthesizedExpression
+        | Kind::NonNullExpression => node.expression().is_some_and(is_narrowable_reference),
+        Kind::ElementAccessExpression => {
+            let access = node.as_element_access_expression();
+            ets_shim::ast::is_string_or_numeric_literal_like(access.argument_expression())
+                || ets_shim::ast::is_entity_name_expression(access.argument_expression())
+                    && is_narrowable_reference(access.expression())
+        }
+        _ => false,
+    }
+}
+
+// go: internal/rules/missed_pipeable_opportunity.go:190 reportableTransformationCount 9db8b89b91246414
 // reportableTransformationCount returns how many leading transformations of
 // the flow may be reported, and the expression they produce. Flows whose
 // output is callable are not reported; when that output comes after a
@@ -215,7 +265,7 @@ pub(crate) fn reportable_transformation_count(
     (0, None)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:177 trimmedNodeText fbfa3a4a1c8bc526
+// go: internal/rules/missed_pipeable_opportunity.go:214 trimmedNodeText fbfa3a4a1c8bc526
 // trimmedNodeText extracts the source text of a node, trimmed of leading trivia.
 pub(crate) fn trimmed_node_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> String {
     let (Some(node), Some(sf)) = (node, sf) else {
