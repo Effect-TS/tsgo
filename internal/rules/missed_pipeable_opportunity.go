@@ -82,7 +82,7 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			if run.callCount < minArgCount || !isPipeableAtIndex(tp, flow, firstPipeableIndex) {
 				continue
 			}
-			if firstPipeableIndex == 0 && firstTransformationNarrowsSubject(c, flow) {
+			if transformationNarrowsInput(c, flow, firstPipeableIndex) {
 				continue
 			}
 			subjectText := trimmedNodeText(sf, flow.TransformationInputNode(firstPipeableIndex))
@@ -148,16 +148,18 @@ func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, i
 	return tp.IsPipeableType(t.OutType())
 }
 
-// firstTransformationNarrowsSubject reports whether the first step is a call
-// to a type predicate or assertion function on a narrowable reference, as in
+// transformationNarrowsInput reports whether the step at index is a call to
+// a type predicate or assertion function on a narrowable reference, as in
 // `assert(Result.isFailure(result))`. TypeScript narrows only on that direct
-// call, so the pipe form `result.pipe(Result.isFailure, assert)` would lose
-// the narrowing.
-func firstTransformationNarrowsSubject(c *checker.Checker, flow *typeparser.PipingFlow) bool {
-	input := flow.TransformationInputNode(0)
+// call, so a pipe starting at that step, `result.pipe(Result.isFailure,
+// assert)`, would lose the narrowing.
+func transformationNarrowsInput(c *checker.Checker, flow *typeparser.PipingFlow, index int) bool {
+	input := flow.TransformationInputNode(index)
 	if input == nil || !isNarrowableReference(input) {
 		return false
 	}
+	// The flow API does not expose a step's call expression (see "Known gaps"
+	// in docs/agents/piping-flows.md), so it is found from its input.
 	call := ast.WalkUpParenthesizedExpressions(input.Parent)
 	if call == nil || !ast.IsCallExpression(call) {
 		return false
@@ -166,8 +168,8 @@ func firstTransformationNarrowsSubject(c *checker.Checker, flow *typeparser.Pipi
 	return signature != nil && c.GetTypePredicateOfSignature(signature) != nil
 }
 
-// isNarrowableReference mirrors the binder's check for expressions that
-// control flow analysis can narrow.
+// isNarrowableReference mirrors the binder's isNarrowableReference: the
+// expressions that control flow analysis can narrow.
 func isNarrowableReference(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindIdentifier, ast.KindThisKeyword, ast.KindSuperKeyword, ast.KindMetaProperty:
@@ -178,6 +180,10 @@ func isNarrowableReference(node *ast.Node) bool {
 		access := node.AsElementAccessExpression()
 		return ast.IsStringOrNumericLiteralLike(access.ArgumentExpression) ||
 			ast.IsEntityNameExpression(access.ArgumentExpression) && isNarrowableReference(access.Expression)
+	case ast.KindBinaryExpression:
+		binary := node.AsBinaryExpression()
+		return binary.OperatorToken.Kind == ast.KindCommaToken && isNarrowableReference(binary.Right) ||
+			ast.IsAssignmentOperator(binary.OperatorToken.Kind) && ast.IsLeftHandSideExpression(binary.Left)
 	}
 	return false
 }

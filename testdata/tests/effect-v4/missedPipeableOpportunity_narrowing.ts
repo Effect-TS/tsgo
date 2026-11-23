@@ -18,6 +18,9 @@ declare function assert(value: unknown): asserts value
 declare const result: Result.Result<number, string>
 declare const holder: { readonly result: Result.Result<number, string> }
 declare const o: Option.Option<number>
+declare const results: ReadonlyArray<Result.Result<number, string>>
+declare const maybe: Result.Result<number, string> | undefined
+declare function compute(): Result.Result<number, string>
 
 // Should not trigger: the predicate narrows `result` only when called on it directly.
 // `result.pipe(Result.isFailure, assert)` would leave `result` un-narrowed.
@@ -39,6 +42,25 @@ export class Holder {
     assert(Result.isFailure(this.result))
     return this.result.failure
   }
+}
+
+// Should not trigger: same for an element access reference
+export function onElementAccess() {
+  assert(Result.isFailure(results[0]))
+  return results[0].failure
+}
+
+// Should not trigger: same for a non-null assertion on a reference
+export function onNonNull() {
+  assert(Result.isFailure(maybe!))
+  return maybe.failure
+}
+
+// Should not trigger: same for an assignment
+export function onAssignment() {
+  let assigned: Result.Result<number, string>
+  assert(Result.isFailure((assigned = compute())))
+  return assigned.failure
 }
 
 // Should trigger: the predicate is applied to a call result, nothing is narrowed

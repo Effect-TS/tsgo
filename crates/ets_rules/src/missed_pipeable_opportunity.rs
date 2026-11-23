@@ -98,7 +98,7 @@ pub fn analyze_missed_pipeable_opportunity(
             {
                 continue;
             }
-            if first_pipeable_index == 0 && first_transformation_narrows_subject(tp, flow) {
+            if transformation_narrows_input(tp, flow, first_pipeable_index) {
                 continue;
             }
             let subject_text = trimmed_node_text(
@@ -180,24 +180,27 @@ pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, i
     tp.is_pipeable_type(out_type)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:156 firstTransformationNarrowsSubject 03a52caa9ffa2bb0
-// firstTransformationNarrowsSubject reports whether the first step is a call
-// to a type predicate or assertion function on a narrowable reference, as in
+// go: internal/rules/missed_pipeable_opportunity.go:151 transformationNarrowsInput
+// transformationNarrowsInput reports whether the step at index is a call to
+// a type predicate or assertion function on a narrowable reference, as in
 // `assert(Result.isFailure(result))`. TypeScript narrows only on that direct
-// call, so the pipe form `result.pipe(Result.isFailure, assert)` would lose
-// the narrowing.
+// call, so a pipe starting at that step, `result.pipe(Result.isFailure,
+// assert)`, would lose the narrowing.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
-pub(crate) fn first_transformation_narrows_subject(
+pub(crate) fn transformation_narrows_input(
     tp: &mut TypeParser<'_>,
     flow: &PipingFlow,
+    index: i64,
 ) -> bool {
-    let Some(input) = PipingFlow::transformation_input_node(Some(flow), 0) else {
+    let Some(input) = PipingFlow::transformation_input_node(Some(flow), index) else {
         return false;
     };
     if !is_narrowable_reference(input) {
         return false;
     }
+    // The flow API does not expose a step's call expression (see "Known gaps"
+    // in docs/agents/piping-flows.md), so it is found from its input.
     let Some(call) = ets_shim::ast::walk_up_parenthesized_expressions(input.parent()) else {
         return false;
     };
@@ -208,9 +211,9 @@ pub(crate) fn first_transformation_narrows_subject(
     tp.checker().get_type_predicate_of_signature_exported(signature).is_some()
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:171 isNarrowableReference 765f1ab550dac4bc
-// isNarrowableReference mirrors the binder's check for expressions that
-// control flow analysis can narrow.
+// go: internal/rules/missed_pipeable_opportunity.go:171 isNarrowableReference
+// isNarrowableReference mirrors the binder's isNarrowableReference: the
+// expressions that control flow analysis can narrow.
 pub(crate) fn is_narrowable_reference(node: P<Node>) -> bool {
     match node.kind() {
         Kind::Identifier | Kind::ThisKeyword | Kind::SuperKeyword | Kind::MetaProperty => true,
@@ -222,6 +225,13 @@ pub(crate) fn is_narrowable_reference(node: P<Node>) -> bool {
             ets_shim::ast::is_string_or_numeric_literal_like(access.argument_expression())
                 || ets_shim::ast::is_entity_name_expression(access.argument_expression())
                     && is_narrowable_reference(access.expression())
+        }
+        Kind::BinaryExpression => {
+            let binary = node.as_binary_expression();
+            binary.operator_token().kind() == Kind::CommaToken
+                && is_narrowable_reference(binary.right())
+                || ets_shim::ast::is_assignment_operator(binary.operator_token().kind())
+                    && ets_shim::ast::is_left_hand_side_expression(binary.left())
         }
         _ => false,
     }
