@@ -66,7 +66,7 @@ pub struct MissedPipeableOpportunityMatch {
     pub subject_text: String,
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:63 AnalyzeMissedPipeableOpportunity 6c3e28612ee7fc20
+// go: internal/rules/missed_pipeable_opportunity.go:63 AnalyzeMissedPipeableOpportunity b27f9d89ae841ca1
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -180,7 +180,7 @@ pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, i
     tp.is_pipeable_type(out_type)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:151 transformationNarrowsInput
+// go: internal/rules/missed_pipeable_opportunity.go:156 transformationNarrowsInput 7263e0ae069e5685
 // transformationNarrowsInput reports whether the step at index is a call to
 // a type predicate or assertion function on a narrowable reference, as in
 // `assert(Result.isFailure(result))`. TypeScript narrows only on that direct
@@ -211,7 +211,7 @@ pub(crate) fn transformation_narrows_input(
     tp.checker().get_type_predicate_of_signature_exported(signature).is_some()
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:171 isNarrowableReference
+// go: internal/rules/missed_pipeable_opportunity.go:173 isNarrowableReference 411bb879a6ac5f3a
 // isNarrowableReference mirrors the binder's isNarrowableReference: the
 // expressions that control flow analysis can narrow.
 pub(crate) fn is_narrowable_reference(node: P<Node>) -> bool {
@@ -237,7 +237,7 @@ pub(crate) fn is_narrowable_reference(node: P<Node>) -> bool {
     }
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:190 reportableTransformationCount 9db8b89b91246414
+// go: internal/rules/missed_pipeable_opportunity.go:196 reportableTransformationCount 9db8b89b91246414
 // reportableTransformationCount returns how many leading transformations of
 // the flow may be reported, and the expression they produce. Flows whose
 // output is callable are not reported; when that output comes after a
@@ -275,7 +275,7 @@ pub(crate) fn reportable_transformation_count(
     (0, None)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:214 trimmedNodeText fbfa3a4a1c8bc526
+// go: internal/rules/missed_pipeable_opportunity.go:220 trimmedNodeText fbfa3a4a1c8bc526
 // trimmedNodeText extracts the source text of a node, trimmed of leading trivia.
 pub(crate) fn trimmed_node_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> String {
     let (Some(node), Some(sf)) = (node, sf) else {
