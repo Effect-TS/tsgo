@@ -82,6 +82,9 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			if run.callCount < minArgCount || !isPipeableAtIndex(tp, flow, firstPipeableIndex) {
 				continue
 			}
+			if transformationNarrowsInput(c, flow, firstPipeableIndex) {
+				continue
+			}
 			subjectText := trimmedNodeText(sf, flow.TransformationInputNode(firstPipeableIndex))
 
 			matches = append(matches, MissedPipeableOpportunityMatch{
@@ -143,6 +146,46 @@ func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, i
 		return false
 	}
 	return tp.IsPipeableType(t.OutType())
+}
+
+// transformationNarrowsInput reports whether the step at index is a call to
+// a type predicate or assertion function on a narrowable reference, as in
+// `assert(Result.isFailure(result))`. TypeScript narrows only on that direct
+// call, so a pipe starting at that step, `result.pipe(Result.isFailure,
+// assert)`, would lose the narrowing.
+func transformationNarrowsInput(c *checker.Checker, flow *typeparser.PipingFlow, index int) bool {
+	input := flow.TransformationInputNode(index)
+	if input == nil || !isNarrowableReference(input) {
+		return false
+	}
+	// The flow API does not expose a step's call expression (see "Known gaps"
+	// in docs/agents/piping-flows.md), so it is found from its input.
+	call := ast.WalkUpParenthesizedExpressions(input.Parent)
+	if call == nil || !ast.IsCallExpression(call) {
+		return false
+	}
+	signature := c.GetResolvedSignature(call)
+	return signature != nil && c.GetTypePredicateOfSignature(signature) != nil
+}
+
+// isNarrowableReference mirrors the binder's isNarrowableReference: the
+// expressions that control flow analysis can narrow.
+func isNarrowableReference(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindIdentifier, ast.KindThisKeyword, ast.KindSuperKeyword, ast.KindMetaProperty:
+		return true
+	case ast.KindPropertyAccessExpression, ast.KindParenthesizedExpression, ast.KindNonNullExpression:
+		return isNarrowableReference(node.Expression())
+	case ast.KindElementAccessExpression:
+		access := node.AsElementAccessExpression()
+		return ast.IsStringOrNumericLiteralLike(access.ArgumentExpression) ||
+			ast.IsEntityNameExpression(access.ArgumentExpression) && isNarrowableReference(access.Expression)
+	case ast.KindBinaryExpression:
+		binary := node.AsBinaryExpression()
+		return binary.OperatorToken.Kind == ast.KindCommaToken && isNarrowableReference(binary.Right) ||
+			ast.IsAssignmentOperator(binary.OperatorToken.Kind) && ast.IsLeftHandSideExpression(binary.Left)
+	}
+	return false
 }
 
 // reportableTransformationCount returns how many leading transformations of

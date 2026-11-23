@@ -1,0 +1,79 @@
+=== Quick Fix Inventory ===
+
+[D1] (2:10-2:16) TS2305: Module '"effect"' has no exported member 'Either'.
+  (no quick fixes)
+
+[D2] (56:3-56:53) TS377050: This nested call structure has a pipeable form. `o.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_narrowing.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { Either, Option } from "effect"
+
+declare function assert(value: unknown): asserts value
+
+declare const result: Either.Either<number, string>
+declare const holder: { readonly result: Either.Either<number, string> }
+declare const o: Option.Option<number>
+declare const results: ReadonlyArray<Either.Either<number, string>>
+declare const maybe: Either.Either<number, string> | undefined
+declare function compute(): Either.Either<number, string>
+
+// Should not trigger: the predicate narrows `result` only when called on it directly.
+// `result.pipe(Either.isLeft, assert)` would leave `result` un-narrowed.
+export function onIdentifier() {
+  assert(Either.isLeft(result))
+  return result.left
+}
+
+// Should not trigger: same for a property access reference
+export function onPropertyAccess() {
+  assert(Either.isLeft(holder.result))
+  return holder.result.left
+}
+
+// Should not trigger: same for a `this` reference
+export class Holder {
+  constructor(readonly result: Either.Either<number, string>) {}
+  check() {
+    assert(Either.isLeft(this.result))
+    return this.result.left
+  }
+}
+
+// Should not trigger: same for an element access reference
+export function onElementAccess() {
+  assert(Either.isLeft(results[0]))
+  return results[0].left
+}
+
+// Should not trigger: same for a non-null assertion on a reference
+export function onNonNull() {
+  assert(Either.isLeft(maybe!))
+  return maybe.left
+}
+
+// Should not trigger: same for an assignment
+export function onAssignment() {
+  let assigned: Either.Either<number, string>
+  assert(Either.isLeft((assigned = compute())))
+  return assigned.left
+}
+
+// Should trigger: the predicate is applied to a call result, nothing is narrowed
+export function onCallResult() {
+  o.pipe(Option.map(n => n + 1), Option.isSome, assert)
+}
+

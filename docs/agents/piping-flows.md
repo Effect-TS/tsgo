@@ -98,4 +98,5 @@ Record new ones here once the user agrees they belong in the parser or rewriter.
 - A data-last factory called with two or more arguments and not applied in place (`Effect.flatMap(Effect.forEach(f, { discard: true }))`) is not a step.
 - A step does not record instantiation type arguments or optional-chain (`?.`) calls.
 - The rewriter's lookup of a step's enclosing pipe call is not exported.
+- A step's call expression is not exposed. `missedPipeableOpportunity` finds it by walking up from the step's `TransformationInputNode` to resolve its signature.
 - Edits other than `CollapsePipingFlowTransformations` may drop comments or re-indent the nodes they move.

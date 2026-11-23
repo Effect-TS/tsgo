@@ -1,0 +1,131 @@
+==== /.src/missedPipeableOpportunity_narrowing.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 15:33 - 16:32
+Node: assert(Either.isLeft(result))
+Node Kind: KindCallExpression
+
+Subject: result
+Subject Type: Either<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.isLeft
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 21:37 - 22:39
+Node: assert(Either.isLeft(holder.result))
+Node Kind: KindCallExpression
+
+Subject: holder.result
+Subject Type: Either<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.isLeft
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 29:12 - 30:39
+Node: assert(Either.isLeft(this.result))
+Node Kind: KindCallExpression
+
+Subject: this.result
+Subject Type: Either<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.isLeft
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 36:36 - 37:36
+Node: assert(Either.isLeft(results[0]))
+Node Kind: KindCallExpression
+
+Subject: results[0]
+Subject Type: Either<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.isLeft
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 42:30 - 43:32
+Node: assert(Either.isLeft(maybe!))
+Node Kind: KindCallExpression
+
+Subject: maybe!
+Subject Type: Either<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.isLeft
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 49:46 - 50:48
+Node: assert(Either.isLeft((assigned = compute())))
+Node Kind: KindCallExpression
+
+Subject: assigned = compute()
+Subject Type: Either<number, string>
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.isLeft
+      args: (constant)
+      outType: boolean
+  [1] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 55:33 - 56:53
+Node: assert(Option.isSome(Option.map(o, (n) => n + 1)))
+Node Kind: KindCallExpression
+
+Subject: o
+Subject Type: Option<number>
+
+Transformations (3):
+  [0] kind: dataFirst
+      callee: Option.map
+      args: [(n) => n + 1]
+      outType: Option<number>
+  [1] kind: call
+      callee: Option.isSome
+      args: (constant)
+      outType: boolean
+  [2] kind: call
+      callee: assert
+      args: (constant)
+      outType: void
