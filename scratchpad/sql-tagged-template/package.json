@@ -1,0 +1,12 @@
+{
+  "name": "sql-tagged-template-spike",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "../../tsgo -p . --pretty false",
+    "demo": "node main.ts",
+    "snapshot": "node snapshot.ts",
+    "verify": "node verify.ts",
+    "measure": "node measure.mjs"
+  }
+}
