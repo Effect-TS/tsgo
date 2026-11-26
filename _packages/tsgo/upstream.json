@@ -4,7 +4,7 @@
     "typescript": {
       "latest": "7.0.2",
       "beta": "7.1.0-beta",
-      "next": "7.1.0-dev.20261124.1"
+      "next": "7.1.0-dev.20261125.1"
     },
     "oxlint": {
       "latest": "1.95.0"
@@ -26,8 +26,8 @@
         "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a",
         "provider": "typescript"
       },
-      "7.1.0-dev.20261124.1": {
-        "gitHead": "88071f4e84b1517c58429b4e10908275824c225c",
+      "7.1.0-dev.20261125.1": {
+        "gitHead": "502a981024b79219b447ed5f376a529df50118e3",
         "provider": "typescript"
       }
     },
