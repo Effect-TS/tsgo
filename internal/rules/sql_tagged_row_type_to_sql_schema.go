@@ -9,7 +9,7 @@ import (
 
 var SqlTaggedRowTypeToSqlSchema = rule.Rule{
 	Name:            "sqlTaggedRowTypeToSqlSchema",
-	Group:           "effectNative",
+	Group:           "style",
 	Description:     "Suggests SqlSchema instead of an explicit row type argument on Effect's sql tagged template",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v4"},

@@ -6,7 +6,7 @@ Suggests SqlSchema instead of an explicit row type argument on Effect's sql tagg
 
 | Property | Value |
 | --- | --- |
-| Category | Effect-native |
+| Category | Style |
 | Default severity | `off` |
 | Fixable | No |
 | Effect versions | v4 |

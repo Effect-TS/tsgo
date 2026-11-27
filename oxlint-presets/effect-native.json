@@ -33,7 +33,6 @@
     "effecttsgo/process-env-in-effect": "warn",
     "effecttsgo/promise-all-in-effect": "warn",
     "effecttsgo/promise-race-in-effect": "warn",
-    "effecttsgo/schema-sync": "warn",
-    "effecttsgo/sql-tagged-row-type-to-sql-schema": "warn"
+    "effecttsgo/schema-sync": "warn"
   }
 }

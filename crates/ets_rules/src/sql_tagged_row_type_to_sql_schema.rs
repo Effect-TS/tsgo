@@ -9,10 +9,10 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THE_SQL_TAGGED_TEMPLATE_ONLY_ASSERTS_ITS_ROW_TYPE_0_AND_DOES_NOT_VALIDATE_IT_AT_RUNTIME_USE_SQL_SCHEMA_FIND_ALL_FIND_ONE_FIND_ONE_OPTION_FIND_NON_EMPTY_VOID_WITH_A_SCHEMA_FOR_RESULT_TO_DECODE_ROWS_EFFECT_SQL_TAGGED_ROW_TYPE_TO_SQL_SCHEMA;
 
-// go: internal/rules/sql_tagged_row_type_to_sql_schema.go:10 SqlTaggedRowTypeToSqlSchema 03457c3c6f3acbdc
+// go: internal/rules/sql_tagged_row_type_to_sql_schema.go:10 SqlTaggedRowTypeToSqlSchema a24d113f0d794132
 pub static SQL_TAGGED_ROW_TYPE_TO_SQL_SCHEMA: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "sqlTaggedRowTypeToSqlSchema",
-    group: "effectNative",
+    group: "style",
     description: "Suggests SqlSchema instead of an explicit row type argument on Effect's sql tagged template",
     default_severity: Severity::Off,
     supported_effect: vec!["v4"],
