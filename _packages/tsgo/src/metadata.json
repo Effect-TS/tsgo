@@ -401,6 +401,7 @@
         "schemaStructWithTag": "warning",
         "schemaUnionOfLiterals": "warning",
         "serviceNotAsClass": "warning",
+        "sqlTaggedRowTypeToSqlSchema": "warning",
         "strictBooleanExpressions": "warning",
         "suspendFailToFailSync": "warning",
         "syncToSucceed": "warning",
@@ -3825,6 +3826,29 @@
             "start": 57,
             "end": 101,
             "text": "`Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends Context.Service\u003cPreview, { port: number }\u003e()(\"Preview\") {}`. effect(serviceNotAsClass)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "sqlTaggedRowTypeToSqlSchema",
+      "group": "style",
+      "description": "Suggests SqlSchema instead of an explicit row type argument on Effect's sql tagged template",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377224
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\nimport { SqlClient } from \"effect/sql\"\n\ninterface CommandRow {\n  readonly command_id: string\n}\n\nexport const program = Effect.gen(function*() {\n  const sql = yield* SqlClient.SqlClient\n  return yield* sql\u003cCommandRow\u003e`SELECT command_id FROM commands`\n})\n",
+        "diagnostics": [
+          {
+            "start": 233,
+            "end": 236,
+            "text": "The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)"
           }
         ]
       }

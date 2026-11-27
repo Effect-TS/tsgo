@@ -1,0 +1,1 @@
+==== /.src/sqlTaggedRowTypeToSqlSchemaAdversarial1.ts (0 layer exports) ====

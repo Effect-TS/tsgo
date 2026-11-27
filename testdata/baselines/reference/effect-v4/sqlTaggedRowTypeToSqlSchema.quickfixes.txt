@@ -1,0 +1,163 @@
+=== Quick Fix Inventory ===
+
+[D1] (21:27-21:30) TS377224: The sql tagged template only asserts its row type { command_id: string; } and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D2] (30:29-30:32) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D3] (42:22-42:25) TS377224: The sql tagged template only asserts its row type CommandIdRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D4] (45:21-45:24) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D5] (48:27-48:30) TS377224: The sql tagged template only asserts its row type CommandRow & { readonly extra: number; } and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D6] (51:23-51:31) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D7] (54:22-54:45) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D8] (58:26-58:28) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D9] (61:32-61:37) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D10] (68:27-68:30) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D11] (72:60-72:63) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D12] (76:32-76:43) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D13] (79:72-79:75) TS377224: The sql tagged template only asserts its row type A and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D14] (87:23-87:26) TS377224: The sql tagged template only asserts its row type CommandIdRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D15] (94:17-94:20) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+[D16] (100:22-100:25) TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+  Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line"
+  Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable sqlTaggedRowTypeToSqlSchema for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable sqlTaggedRowTypeToSqlSchema for entire file" ===
+skipped by default

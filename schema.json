@@ -3049,6 +3049,11 @@
           "default": "off",
           "description": "Warns when Context.Service is used as a variable instead of a class declaration"
         },
+        "sqlTaggedRowTypeToSqlSchema": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests SqlSchema instead of an explicit row type argument on Effect's sql tagged template"
+        },
         "strictBooleanExpressions": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

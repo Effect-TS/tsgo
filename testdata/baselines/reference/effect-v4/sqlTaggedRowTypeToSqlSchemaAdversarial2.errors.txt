@@ -1,0 +1,32 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/sqlTaggedRowTypeToSqlSchemaAdversarial2.ts(19,22): warning TS377224: The sql tagged template only asserts its row type Row and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+
+
+==== /.src/sqlTaggedRowTypeToSqlSchemaAdversarial2.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics sqlTaggedRowTypeToSqlSchema:warning
+    import { SqlClient } from "effect/sql"
+    
+    interface Row {
+      readonly id: string
+    }
+    
+    interface PrimaryClient extends SqlClient.SqlClient {
+      readonly connection: "primary"
+    }
+    interface ReplicaClient extends SqlClient.SqlClient {
+      readonly connection: "replica"
+    }
+    declare const sql: PrimaryClient | ReplicaClient
+    
+    // Both union members are Effect SqlClients; choosing a connection does not validate rows.
+    // MUST TRIGGER: an explicit row type on a union of Effect SqlClient extensions.
+    export const typed = sql<Row>`SELECT id FROM rows`
+                         ~~~
+!!! warning TS377224: The sql tagged template only asserts its row type Row and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+    
+    // MUST NOT TRIGGER: the same union client without an explicit row type.
+    export const untyped = sql`SELECT id FROM rows`
+    

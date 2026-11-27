@@ -1,0 +1,44 @@
+// @filename: otherLibrary.ts
+// A third-party library with its own generic `sql` tag, structurally like Effect's.
+export interface Query<A> {
+  readonly rows: ReadonlyArray<A>
+}
+export interface Sql {
+  <A extends object = Record<string, unknown>>(strings: TemplateStringsArray, ...args: Array<any>): Query<A>
+  (value: string): string
+}
+export declare const sql: Sql
+
+// @filename: usage.ts
+// @effect-diagnostics *:off
+// @effect-diagnostics sqlTaggedRowTypeToSqlSchema:warning
+import { sql as librarySql } from "./otherLibrary"
+import * as Other from "./otherLibrary"
+
+interface Row {
+  readonly id: string
+}
+
+// MUST NOT TRIGGER: another library's sql tag with a type argument
+export const fromLibrary = librarySql<Row>`SELECT id FROM rows`
+
+// MUST NOT TRIGGER: another library's sql tag through a namespace import
+export const fromNamespace = Other.sql<Row>`SELECT id FROM rows`
+
+// MUST NOT TRIGGER: a user-defined tag named `sql` with a type argument
+const sql = <A>(_strings: TemplateStringsArray, ..._args: Array<unknown>): ReadonlyArray<A> => []
+export const userDefined = sql<Row>`SELECT id FROM rows`
+
+// MUST NOT TRIGGER: a local interface named SqlClient that copies Effect's call signature
+interface SqlClient {
+  <A extends object = Record<string, unknown>>(strings: TemplateStringsArray, ...args: Array<any>): ReadonlyArray<A>
+}
+declare const localClient: SqlClient
+export const lookalike = localClient<Row>`SELECT id FROM rows`
+
+// MUST NOT TRIGGER: an unrelated generic tag with a type argument
+declare const html: <A>(strings: TemplateStringsArray, ...args: Array<unknown>) => A
+export const markup = html<string>`<p>${"hi"}</p>`
+
+// MUST NOT TRIGGER: String.raw is not a sql tag
+export const rawText = String.raw`SELECT id FROM rows`

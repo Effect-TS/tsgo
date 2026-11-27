@@ -20,12 +20,12 @@ pub(crate) struct PackageSourceFileDescriptor {
 }
 
 // go: internal/typeparser/module_export_reference.go:17 moduleDescriptorID c0c57ce60025df85
-// go: internal/typeparser/module_export_reference.go:19 moduleDescriptorEffect 78f55429bd2843c6
+// go: internal/typeparser/module_export_reference.go:19 moduleDescriptorEffect 821fb9ae5a2b169d
 // Rust: a newtype over Go's `uint8`, since ids past `moduleDescriptorCount` are valid (Go's tests use them).
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) struct ModuleDescriptorId(pub(crate) u8);
 
-// go: internal/typeparser/module_export_reference.go:19 moduleDescriptorEffect 78f55429bd2843c6
+// go: internal/typeparser/module_export_reference.go:19 moduleDescriptorEffect 821fb9ae5a2b169d
 impl ModuleDescriptorId {
     pub(crate) const Effect: ModuleDescriptorId = ModuleDescriptorId(0);
     pub(crate) const EffectPackage: ModuleDescriptorId = ModuleDescriptorId(1);
@@ -52,24 +52,25 @@ impl ModuleDescriptorId {
     pub(crate) const Result: ModuleDescriptorId = ModuleDescriptorId(22);
     pub(crate) const Either: ModuleDescriptorId = ModuleDescriptorId(23);
     pub(crate) const Exit: ModuleDescriptorId = ModuleDescriptorId(24);
+    pub(crate) const SqlStatement: ModuleDescriptorId = ModuleDescriptorId(25);
     #[cfg_attr(not(test), expect(dead_code, reason = "only the tests read it, as in Go"))]
-    pub(crate) const Count: ModuleDescriptorId = ModuleDescriptorId(25);
+    pub(crate) const Count: ModuleDescriptorId = ModuleDescriptorId(26);
 }
 
-// go: internal/typeparser/module_export_reference.go:48 moduleDescriptorMask 2ec1f65c138b974c
+// go: internal/typeparser/module_export_reference.go:49 moduleDescriptorMask 2ec1f65c138b974c
 pub(crate) type ModuleDescriptorMask = u32;
 
-// go: internal/typeparser/module_export_reference.go:50 maxModuleDescriptors 83aab3d89b4b8823
+// go: internal/typeparser/module_export_reference.go:51 maxModuleDescriptors 83aab3d89b4b8823
 pub(crate) const MAX_MODULE_DESCRIPTORS: u8 = 32;
 
-// go: internal/typeparser/module_export_reference.go:52 moduleExportFilter b15675d64f1625f8
+// go: internal/typeparser/module_export_reference.go:53 moduleExportFilter b15675d64f1625f8
 #[derive(Clone, Copy, Default)]
 pub(crate) struct ModuleExportFilter {
     checked: ModuleDescriptorMask,
     has_declaration: ModuleDescriptorMask,
 }
 
-// go: internal/typeparser/module_export_reference.go:59 moduleExportIdentity c49ea6a711fe42f8
+// go: internal/typeparser/module_export_reference.go:60 moduleExportIdentity c49ea6a711fe42f8
 // moduleExportIdentity is one module file declaring a symbol, with the names
 // that module exports the symbol under.
 #[derive(Clone)]
@@ -81,7 +82,7 @@ pub(crate) struct ModuleExportIdentity {
     export_equals: bool,
 }
 
-// go: internal/typeparser/module_export_reference.go:68 moduleExportNames e7c3e4e16385b040
+// go: internal/typeparser/module_export_reference.go:69 moduleExportNames e7c3e4e16385b040
 // moduleExportNames indexes a module's export names by resolved target.
 //
 // Rust: the map is shared between the cache and its readers, as Go's map is when the struct is copied.
@@ -91,7 +92,7 @@ pub(crate) struct ModuleExportNames {
     export_equals: bool,
 }
 
-// go: internal/typeparser/module_export_reference.go:73 newPackageSourceFileDescriptor 032990b1c4133a90
+// go: internal/typeparser/module_export_reference.go:74 newPackageSourceFileDescriptor 032990b1c4133a90
 pub(crate) const fn new_package_source_file_descriptor(
     id: ModuleDescriptorId,
     package_name: &'static str,
@@ -105,7 +106,7 @@ pub(crate) const fn new_package_source_file_descriptor(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/module_export_reference.go:88 TypeParser.ReferenceSymbolAtNode 6d4ef47fdf0bf00e
+    // go: internal/typeparser/module_export_reference.go:89 TypeParser.ReferenceSymbolAtNode 6d4ef47fdf0bf00e
     pub fn reference_symbol_at_node(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -127,7 +128,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/module_export_reference.go:106 canHaveSymbolAtLocation e32e68707bed4abc
+// go: internal/typeparser/module_export_reference.go:107 canHaveSymbolAtLocation e32e68707bed4abc
 // canHaveSymbolAtLocation reports whether the checker's getSymbolAtLocation
 // can return a symbol for a node of this kind: the source file, the
 // declaration names it resolves before its switch, and the kinds its switch
@@ -166,7 +167,7 @@ pub(crate) fn can_have_symbol_at_location(kind: Kind) -> bool {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/module_export_reference.go:123 TypeParser.SymbolAndReferenceSymbolAtNode f7dce8e903e7c864
+    // go: internal/typeparser/module_export_reference.go:124 TypeParser.SymbolAndReferenceSymbolAtNode f7dce8e903e7c864
     pub fn symbol_and_reference_symbol_at_node(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -188,7 +189,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/module_export_reference.go:134 TypeParser.referenceSymbolFrom 1388caa3f5e9db4c
+    // go: internal/typeparser/module_export_reference.go:135 TypeParser.referenceSymbolFrom 1388caa3f5e9db4c
     pub(crate) fn reference_symbol_from(
         &mut self,
         node: P<Node>,
@@ -207,7 +208,7 @@ impl TypeParser<'_> {
         sym
     }
 
-    // go: internal/typeparser/module_export_reference.go:148 TypeParser.resolveConstantAliasSymbol 2c981f2a8e17f156
+    // go: internal/typeparser/module_export_reference.go:149 TypeParser.resolveConstantAliasSymbol 2c981f2a8e17f156
     pub(crate) fn resolve_constant_alias_symbol(
         &mut self,
         sym: Option<P<Symbol>>,
@@ -247,7 +248,7 @@ impl TypeParser<'_> {
         None
     }
 
-    // go: internal/typeparser/module_export_reference.go:176 TypeParser.IsSourceFileInPackage e80222d19be62dbb
+    // go: internal/typeparser/module_export_reference.go:177 TypeParser.IsSourceFileInPackage e80222d19be62dbb
     pub fn is_source_file_in_package(
         &mut self,
         sf: impl Into<Option<P<SourceFile>>>,
@@ -264,7 +265,7 @@ impl TypeParser<'_> {
         pkg.name.get_value().is_some_and(|name| name.eq_ignore_ascii_case(package_name))
     }
 
-    // go: internal/typeparser/module_export_reference.go:188 TypeParser.IsNodeReferenceToModuleExport 5c8dfbb75b08b11f
+    // go: internal/typeparser/module_export_reference.go:189 TypeParser.IsNodeReferenceToModuleExport 5c8dfbb75b08b11f
     pub(crate) fn is_node_reference_to_module_export(
         &mut self,
         node: P<Node>,
@@ -293,7 +294,7 @@ impl TypeParser<'_> {
         false
     }
 
-    // go: internal/typeparser/module_export_reference.go:215 TypeParser.moduleExportIdentities 17415ec68022e5e7
+    // go: internal/typeparser/module_export_reference.go:216 TypeParser.moduleExportIdentities 17415ec68022e5e7
     // moduleExportIdentities lists, once per symbol, the modules declaring sym
     // and the names each exports it under. Only files inside a package can match a
     // module descriptor, so other declarations are skipped.
@@ -338,7 +339,7 @@ impl TypeParser<'_> {
         identities
     }
 
-    // go: internal/typeparser/module_export_reference.go:244 TypeParser.moduleExportNamesOf 38895268011dbf2f
+    // go: internal/typeparser/module_export_reference.go:245 TypeParser.moduleExportNamesOf 38895268011dbf2f
     // moduleExportNamesOf groups a module's export names by the symbol each
     // resolves to, comparing symbols the way getSymbolIfSameReference does.
     pub(crate) fn module_export_names_of(&mut self, sf: P<SourceFile>) -> ModuleExportNames {
@@ -375,14 +376,14 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/module_export_reference.go:265 TypeParser.resolvedTarget 8ece49eeeffa4da9
+    // go: internal/typeparser/module_export_reference.go:266 TypeParser.resolvedTarget 8ece49eeeffa4da9
     // resolvedTarget mirrors the checker's getResolvedTarget, the key
     // getSymbolIfSameReference compares.
     pub(crate) fn resolved_target(&mut self, sym: Option<P<Symbol>>) -> Option<P<Symbol>> {
         get_resolved_target(self.checker, sym)
     }
 
-    // go: internal/typeparser/module_export_reference.go:272 TypeParser.sourceFileMatchesModuleCached 30688fc60e854f15
+    // go: internal/typeparser/module_export_reference.go:273 TypeParser.sourceFileMatchesModuleCached 30688fc60e854f15
     pub(crate) fn source_file_matches_module_cached(
         &mut self,
         sf: P<SourceFile>,
@@ -406,7 +407,7 @@ impl TypeParser<'_> {
         self.links().module_file_filter.entry(sf).or_default().has_declaration & bit != 0
     }
 
-    // go: internal/typeparser/module_export_reference.go:284 TypeParser.sourceFileMatchesModule cb2f50ce455060c1
+    // go: internal/typeparser/module_export_reference.go:285 TypeParser.sourceFileMatchesModule cb2f50ce455060c1
     pub(crate) fn source_file_matches_module(
         &mut self,
         sf: P<SourceFile>,
@@ -418,7 +419,7 @@ impl TypeParser<'_> {
                 .is_none_or(|matches_source_file| matches_source_file(self, sf))
     }
 
-    // go: internal/typeparser/module_export_reference.go:289 TypeParser.symbolHasDeclarationInModuleCached e4f37277548be2d4
+    // go: internal/typeparser/module_export_reference.go:290 TypeParser.symbolHasDeclarationInModuleCached e4f37277548be2d4
     pub(crate) fn symbol_has_declaration_in_module_cached(
         &mut self,
         sym: P<Symbol>,
@@ -446,7 +447,7 @@ impl TypeParser<'_> {
         self.links().module_export_filter.entry(sym).or_default().has_declaration & bit != 0
     }
 
-    // go: internal/typeparser/module_export_reference.go:305 TypeParser.symbolHasDeclarationInModule 2d9a56ae98119695
+    // go: internal/typeparser/module_export_reference.go:306 TypeParser.symbolHasDeclarationInModule 2d9a56ae98119695
     pub(crate) fn symbol_has_declaration_in_module(
         &mut self,
         sym: P<Symbol>,
@@ -462,7 +463,7 @@ impl TypeParser<'_> {
         false
     }
 
-    // go: internal/typeparser/module_export_reference.go:319 TypeParser.isSymbolExportedFromModuleFile fba029652f1112eb
+    // go: internal/typeparser/module_export_reference.go:320 TypeParser.isSymbolExportedFromModuleFile fba029652f1112eb
     // isSymbolExportedFromModuleFile looks memberName up in one module, including
     // the members of an `export =` value.
     pub(crate) fn is_symbol_exported_from_module_file(
@@ -480,7 +481,7 @@ impl TypeParser<'_> {
         get_symbol_if_same_reference(self.checker, export_sym, Some(sym)).is_some()
     }
 
-    // go: internal/typeparser/module_export_reference.go:328 TypeParser.IsNodeReferenceToModule c6800facbd61272b
+    // go: internal/typeparser/module_export_reference.go:329 TypeParser.IsNodeReferenceToModule c6800facbd61272b
     pub(crate) fn is_node_reference_to_module(
         &mut self,
         node: impl Into<Option<P<Node>>>,

@@ -73,6 +73,7 @@ var All = []rule.Rule{
 	GlobalTimersInEffect,
 	RunEffectInsideEffect,
 	PreferSchemaOverJson,
+	SqlTaggedRowTypeToSqlSchema,
 	EffectGenUsesAdapter,
 	EffectFnImplicitAny,
 	StrictBooleanExpressions,
