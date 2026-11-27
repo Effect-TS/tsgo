@@ -1,0 +1,77 @@
+=== Quick Fix Inventory ===
+
+[D1] (17:13-17:76) TS377050: This nested call structure has a pipeable form. `Effect.succeed(1).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+[D2] (19:13-19:53) TS377050: This nested call structure has a pipeable form. `Effect.succeed(1).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_hooks.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { Effect } from "effect"
+import * as React from "react"
+
+declare function useEffectValue<A>(effect: Effect.Effect<A>): A
+declare function use2D<A>(effect: Effect.Effect<A>): A
+declare function useful<A>(effect: Effect.Effect<A>): A
+
+export function Component() {
+  // should not trigger: a hook ends the pipeable run
+  const a = useEffectValue(Effect.asVoid(Effect.succeed(1)))
+  // should not trigger: hook names may continue with a digit
+  const b = use2D(Effect.asVoid(Effect.succeed(1)))
+  // should not trigger: hooks read from a namespace
+  const c = React.useRef(Effect.asVoid(Effect.succeed(1)))
+  // should trigger on the run before the hook
+  const d = useEffectValue(Effect.succeed(1).pipe(Effect.asVoid, Effect.asVoid))
+  // should trigger: `useful` is not a hook name
+  const e = useful(Effect.asVoid(Effect.succeed(1)))
+  return [a, b, c, d, e]
+}
+
+
+=== [D2] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_hooks.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { Effect } from "effect"
+import * as React from "react"
+
+declare function useEffectValue<A>(effect: Effect.Effect<A>): A
+declare function use2D<A>(effect: Effect.Effect<A>): A
+declare function useful<A>(effect: Effect.Effect<A>): A
+
+export function Component() {
+  // should not trigger: a hook ends the pipeable run
+  const a = useEffectValue(Effect.asVoid(Effect.succeed(1)))
+  // should not trigger: hook names may continue with a digit
+  const b = use2D(Effect.asVoid(Effect.succeed(1)))
+  // should not trigger: hooks read from a namespace
+  const c = React.useRef(Effect.asVoid(Effect.succeed(1)))
+  // should trigger on the run before the hook
+  const d = useEffectValue(Effect.asVoid(Effect.asVoid(Effect.succeed(1))))
+  // should trigger: `useful` is not a hook name
+  const e = Effect.succeed(1).pipe(Effect.asVoid, useful)
+  return [a, b, c, d, e]
+}
+

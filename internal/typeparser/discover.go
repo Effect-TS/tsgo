@@ -4,11 +4,14 @@ import "github.com/effect-ts/tsgo/internal/readonly"
 
 import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
+import "github.com/microsoft/TypeScript/tsc/shim/packagejson"
+
 // DiscoveredPackage represents a package found in the program's source files.
 type DiscoveredPackage struct {
 	name             string
 	version          *string
 	dependsOnEffect  bool
+	referencesReact  bool
 	packageDirectory string
 }
 
@@ -22,6 +25,10 @@ func (r DiscoveredPackage) Version() (string, bool) {
 }
 
 func (r DiscoveredPackage) DependsOnEffect() bool { return r.dependsOnEffect }
+
+// ReferencesReact reports whether the package is React (`react` or
+// `@types/react`) or lists `react` among its dependencies of any kind.
+func (r DiscoveredPackage) ReferencesReact() bool { return r.referencesReact }
 
 func (r DiscoveredPackage) PackageDirectory() string { return r.packageDirectory }
 
@@ -157,6 +164,28 @@ func (tp *TypeParser) DetectEffectVersionString() string {
 	return detected
 }
 
+// ReferencesReact reports whether any package discovered in the program,
+// including the project's own package.json, is React or depends on it.
+// The result is cached per checker lifetime.
+func (tp *TypeParser) ReferencesReact() bool {
+	if tp == nil || tp.checker == nil {
+		return false
+	}
+	if tp.links.referencesReactComputed {
+		return tp.links.referencesReactValue
+	}
+	result := false
+	for _, pkg := range tp.DiscoverPackages().All() {
+		if pkg.referencesReact {
+			result = true
+			break
+		}
+	}
+	tp.links.referencesReactValue = result
+	tp.links.referencesReactComputed = true
+	return result
+}
+
 // DiscoverPackages iterates all source files in the program, resolves each one's
 // nearest package.json, and returns a deduplicated list of discovered packages.
 // Results are cached per checker so repeated calls within the same check cycle
@@ -222,6 +251,8 @@ func (tp *TypeParser) discoverPackagesUncached() []DiscoveredPackage {
 			_, dependsOnEffect = peerDeps["effect"]
 		}
 
+		referencesReact := name == "react" || name == "@types/react" || packageDependsOn(pkg, "react")
+
 		var pkgDir string
 		if hasPjProg {
 			meta := pjProg.GetSourceFileMetaData(ast.SourceFilePath(sf))
@@ -232,9 +263,28 @@ func (tp *TypeParser) discoverPackagesUncached() []DiscoveredPackage {
 			name:             name,
 			version:          verPtr,
 			dependsOnEffect:  dependsOnEffect,
+			referencesReact:  referencesReact,
 			packageDirectory: pkgDir,
 		})
 	}
 
 	return result
+}
+
+// packageDependsOn reports whether name is listed in the dependencies,
+// devDependencies, peerDependencies or optionalDependencies of pkg.
+func packageDependsOn(pkg *packagejson.PackageJson, name string) bool {
+	for _, field := range []packagejson.Expected[map[string]string]{
+		pkg.Dependencies,
+		pkg.DevDependencies,
+		pkg.PeerDependencies,
+		pkg.OptionalDependencies,
+	} {
+		if deps, ok := field.GetValue(); ok {
+			if _, ok := deps[name]; ok {
+				return true
+			}
+		}
+	}
+	return false
 }

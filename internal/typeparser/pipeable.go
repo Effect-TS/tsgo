@@ -1,6 +1,8 @@
 package typeparser
 
 import (
+	"strings"
+
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
@@ -64,6 +66,13 @@ func (tp *TypeParser) globalInterfaceHasPipe(name string) bool {
 // call expressions can be converted to pipe style.
 func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
 	if callee == nil {
+		return false
+	}
+
+	// React hooks must be called directly: `atom.pipe(useAtomValue)` passes
+	// the hook as a value, which the Rules of Hooks forbid. Only programs that
+	// reference React can call hooks.
+	if isReactHookName(referenceNodeName(callee)) && tp.ReferencesReact() {
 		return false
 	}
 
@@ -146,4 +155,16 @@ func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
 	}
 
 	return false
+}
+
+// isReactHookName reports whether name follows the React hook naming
+// convention used by eslint-plugin-react-hooks: `use` followed by an
+// uppercase letter or a digit. The bare `use` is excluded, since Effect
+// exports `Scope.use`, `Pool.use` and `Context.use`.
+func isReactHookName(name string) bool {
+	rest, ok := strings.CutPrefix(name, "use")
+	if !ok || rest == "" {
+		return false
+	}
+	return 'A' <= rest[0] && rest[0] <= 'Z' || '0' <= rest[0] && rest[0] <= '9'
 }
