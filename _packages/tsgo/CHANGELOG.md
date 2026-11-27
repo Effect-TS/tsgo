@@ -1,5 +1,25 @@
 # @effect/tsgo
 
+## 0.74.0
+
+### Minor Changes
+
+- c001a43: Add the `sqlTaggedRowTypeToSqlSchema` diagnostic (off by default, Effect v4). It flags Effect's `sql` tagged template when it is given an explicit row type, which only asserts the row shape, and suggests `SqlSchema` with a `Result` Schema so rows are decoded at runtime.
+  
+  ```ts
+  const [existing] = yield* sql<CommandRow>`SELECT command_id, fingerprint FROM commands WHERE key_hash = ${keyHash}`
+  // Suggested instead:
+  const findByKey = SqlSchema.findOne({
+    Request: Schema.String,
+    Result: CommandRow,
+    execute: (key) => sql`SELECT command_id, fingerprint FROM commands WHERE key_hash = ${key}`
+  })
+  ```
+
+### Patch Changes
+
+- b1e2dc1: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261126.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/e0fce98eec043375c0d9cf5906542e7922570237) commit `e0fce98eec043375c0d9cf5906542e7922570237`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.73.7
 
 ### Patch Changes
