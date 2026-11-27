@@ -1,0 +1,15 @@
+==== /.src/sqlTaggedRowTypeToSqlSchema_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:23 - 13:3
+Node: Effect.gen(function*() {\n  const sql = yield* SqlClient.SqlClient\n  return yield* sql<CommandRow>`SELECT command_id FROM commands`\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const sql = yield* SqlClient.SqlClient\n  return yield* sql<CommandRow>`SELECT command_id FROM commands`\n}
+Subject Type: () => Generator<Effect<readonly CommandRow[], SqlError, never> | Effect<SqlClient, never, SqlClient>, readonly CommandRow[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly CommandRow[], SqlError, SqlClient>

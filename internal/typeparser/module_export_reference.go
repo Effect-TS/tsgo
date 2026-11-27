@@ -42,6 +42,7 @@ const (
 	moduleDescriptorResult
 	moduleDescriptorEither
 	moduleDescriptorExit
+	moduleDescriptorSqlStatement
 	moduleDescriptorCount
 )
 

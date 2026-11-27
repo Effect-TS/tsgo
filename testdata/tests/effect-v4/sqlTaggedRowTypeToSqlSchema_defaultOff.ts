@@ -1,0 +1,13 @@
+// No directive enables sqlTaggedRowTypeToSqlSchema here: the rule is off by default.
+import { Effect } from "effect"
+import { SqlClient } from "effect/sql"
+
+interface CommandRow {
+  readonly command_id: string
+}
+
+export const program = Effect.gen(function*() {
+  const sql = yield* SqlClient.SqlClient
+  // MUST NOT TRIGGER: the rule's default severity is off
+  return yield* sql<CommandRow>`SELECT command_id FROM commands`
+})

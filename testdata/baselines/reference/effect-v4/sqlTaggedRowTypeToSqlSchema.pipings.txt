@@ -1,0 +1,253 @@
+==== /.src/sqlTaggedRowTypeToSqlSchema.ts (18 flows) ====
+
+=== Piping Flow ===
+Location: 17:27 - 36:3
+Node: Effect.gen(function*() {\n  const sql = yield* SqlClient.SqlClient\n\n  // MUST TRIGGER: inline object row type on the sql tag (the reported example)\n  const inserted = yield* sql<{ command_id: string }>`\n    INSERT INTO commands (command_id, key_hash)\n    VALUES (${minted}, ${keyHash})\n    ON CONFLICT (key_hash) DO NOTHING\n    RETURNING command_id\n  `.pipe(Effect.orDie)\n  if (inserted.length > 0) return minted\n\n  // MUST TRIGGER: named interface row type, result destructured (the reported example)\n  const [existing] = yield* sql<CommandRow>`\n    SELECT command_id, fingerprint, fingerprint_version\n    FROM commands\n    WHERE key_hash = ${keyHash}\n  `.pipe(Effect.orDie)\n  return existing.command_id\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const sql = yield* SqlClient.SqlClient\n\n  // MUST TRIGGER: inline object row type on the sql tag (the reported example)\n  const inserted = yield* sql<{ command_id: string }>`\n    INSERT INTO commands (command_id, key_hash)\n    VALUES (${minted}, ${keyHash})\n    ON CONFLICT (key_hash) DO NOTHING\n    RETURNING command_id\n  `.pipe(Effect.orDie)\n  if (inserted.length > 0) return minted\n\n  // MUST TRIGGER: named interface row type, result destructured (the reported example)\n  const [existing] = yield* sql<CommandRow>`\n    SELECT command_id, fingerprint, fingerprint_version\n    FROM commands\n    WHERE key_hash = ${keyHash}\n  `.pipe(Effect.orDie)\n  return existing.command_id\n}
+Subject Type: () => Generator<Effect<readonly CommandRow[], never, never> | Effect<readonly { command_id: string; }[], never, never> | Effect<SqlClient, never, SqlClient>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, SqlClient>
+
+=== Piping Flow ===
+Location: 21:26 - 26:23
+Node: sql<{ command_id: string }>`\n    INSERT INTO commands (command_id, key_hash)\n    VALUES (${minted}, ${keyHash})\n    ON CONFLICT (key_hash) DO NOTHING\n    RETURNING command_id\n  `.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: sql<{ command_id: string }>`\n    INSERT INTO commands (command_id, key_hash)\n    VALUES (${minted}, ${keyHash})\n    ON CONFLICT (key_hash) DO NOTHING\n    RETURNING command_id\n  `
+Subject Type: Statement<{ command_id: string; }>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<readonly { command_id: string; }[], never, never>
+
+=== Piping Flow ===
+Location: 30:28 - 34:23
+Node: sql<CommandRow>`\n    SELECT command_id, fingerprint, fingerprint_version\n    FROM commands\n    WHERE key_hash = ${keyHash}\n  `.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: sql<CommandRow>`\n    SELECT command_id, fingerprint, fingerprint_version\n    FROM commands\n    WHERE key_hash = ${keyHash}\n  `
+Subject Type: Statement<CommandRow>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<readonly CommandRow[], never, never>
+
+=== Piping Flow ===
+Location: 38:22 - 64:3
+Node: Effect.gen(function*() {\n  const sql = yield* SqlClient.SqlClient\n\n  // MUST TRIGGER: type alias row type, template without substitutions\n  const all = yield* sql<CommandIdRow>`SELECT command_id FROM commands`\n\n  // MUST TRIGGER: statement stored without being yielded\n  const statement = sql<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: intersection row type\n  const extended = yield* sql<CommandRow & { readonly extra: number }>`SELECT * FROM commands`\n\n  // MUST TRIGGER: the tag is `sql.safe`, which is typed as the SqlClient itself\n  const safe = yield* sql.safe<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: the tag is the SqlClient returned by `withoutTransforms()`\n  const raw = yield* sql.withoutTransforms()<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: the client is aliased under another name; detection is by type, not identifier\n  const db = sql\n  const aliased = yield* db<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: parenthesized tag\n  const parenthesized = yield* (sql)<CommandRow>`SELECT * FROM commands`\n\n  return [all, statement, extended, safe, raw, aliased, parenthesized] as const\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const sql = yield* SqlClient.SqlClient\n\n  // MUST TRIGGER: type alias row type, template without substitutions\n  const all = yield* sql<CommandIdRow>`SELECT command_id FROM commands`\n\n  // MUST TRIGGER: statement stored without being yielded\n  const statement = sql<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: intersection row type\n  const extended = yield* sql<CommandRow & { readonly extra: number }>`SELECT * FROM commands`\n\n  // MUST TRIGGER: the tag is `sql.safe`, which is typed as the SqlClient itself\n  const safe = yield* sql.safe<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: the tag is the SqlClient returned by `withoutTransforms()`\n  const raw = yield* sql.withoutTransforms()<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: the client is aliased under another name; detection is by type, not identifier\n  const db = sql\n  const aliased = yield* db<CommandRow>`SELECT * FROM commands`\n\n  // MUST TRIGGER: parenthesized tag\n  const parenthesized = yield* (sql)<CommandRow>`SELECT * FROM commands`\n\n  return [all, statement, extended, safe, raw, aliased, parenthesized] as const\n}
+Subject Type: () => Generator<Effect<readonly CommandIdRow[], SqlError, never> | Effect<SqlClient, never, SqlClient>, readonly [readonly CommandIdRow[], Statement<CommandRow>, readonly (CommandRow & { readonly extra: number; })[], readonly CommandRow[], readonly CommandRow[], readonly CommandRow[], readonly CommandRow[]], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly [readonly CommandIdRow[], Statement<CommandRow>, readonly (CommandRow & { readonly extra: number; })[], readonly CommandRow[], readonly CommandRow[], readonly CommandRow[], readonly CommandRow[]], SqlError, SqlClient>
+
+=== Piping Flow ===
+Location: 67:26 - 69:2
+Node: SqlClient.SqlClient.pipe(\n  Effect.flatMap((sql) => sql<CommandRow>`SELECT * FROM commands`)\n)
+Node Kind: KindCallExpression
+
+Subject: SqlClient.SqlClient
+Subject Type: Service<SqlClient, SqlClient>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(sql) => sql<CommandRow>`SELECT * FROM commands`]
+      outType: Effect<readonly CommandRow[], SqlError, SqlClient>
+
+=== Piping Flow ===
+Location: 82:31 - 89:3
+Node: Effect.gen(function*() {\n  const sql = yield* SqlClient.SqlClient\n  return SqlSchema.findAll({\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String }),\n    execute: (key) => sql<CommandIdRow>`SELECT command_id FROM commands WHERE key_hash = ${key}`\n  })\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const sql = yield* SqlClient.SqlClient\n  return SqlSchema.findAll({\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String }),\n    execute: (key) => sql<CommandIdRow>`SELECT command_id FROM commands WHERE key_hash = ${key}`\n  })\n}
+Subject Type: () => Generator<Effect<SqlClient, never, SqlClient>, (request: string) => Effect<{ readonly command_id: string; }[], SchemaError | SqlError, never>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<(request: string) => Effect<{ readonly command_id: string; }[], SchemaError | SqlError, never>, never, SqlClient>
+
+=== Piping Flow ===
+Location: 84:9 - 88:5
+Node: SqlSchema.findAll({\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String }),\n    execute: (key) => sql<CommandIdRow>`SELECT command_id FROM commands WHERE key_hash = ${key}`\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String }),\n    execute: (key) => sql<CommandIdRow>`SELECT command_id FROM commands WHERE key_hash = ${key}`\n  }
+Subject Type: { Request: String; Result: Struct<{ readonly command_id: String; }>; execute: (key: string) => Statement<CommandIdRow>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: SqlSchema.findAll
+      args: (constant)
+      outType: (request: string) => Effect<{ readonly command_id: string; }[], SchemaError | SqlError, never>
+
+=== Piping Flow ===
+Location: 86:12 - 86:57
+Node: Schema.Struct({ command_id: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { command_id: Schema.String }
+Subject Type: { command_id: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly command_id: String; }>
+
+=== Piping Flow ===
+Location: 92:27 - 95:3
+Node: Effect.fn("findCommand")(function*(key: string) {\n  const sql = yield* SqlClient.SqlClient\n  return yield* sql<CommandRow>`SELECT * FROM commands WHERE key_hash = ${key}`\n})
+Node Kind: KindCallExpression
+
+Subject: function*(key: string) {\n  const sql = yield* SqlClient.SqlClient\n  return yield* sql<CommandRow>`SELECT * FROM commands WHERE key_hash = ${key}`\n}
+Subject Type: (key: string) => Generator<Effect<readonly CommandRow[], SqlError, never> | Effect<SqlClient, never, SqlClient>, readonly CommandRow[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("findCommand")
+      args: (constant)
+      outType: (key: string) => Effect<readonly CommandRow[], SqlError, SqlClient>
+
+=== Piping Flow ===
+Location: 97:29 - 101:3
+Node: Effect.gen(function*() {\n  const sql = yield* SqlClient.SqlClient\n  // MUST TRIGGER: typed sql tag as the subject of a data-first pipe\n  return yield* pipe(sql<CommandRow>`SELECT * FROM commands`, Effect.orDie)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const sql = yield* SqlClient.SqlClient\n  // MUST TRIGGER: typed sql tag as the subject of a data-first pipe\n  return yield* pipe(sql<CommandRow>`SELECT * FROM commands`, Effect.orDie)\n}
+Subject Type: () => Generator<Effect<readonly CommandRow[], never, never> | Effect<SqlClient, never, SqlClient>, readonly CommandRow[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly CommandRow[], never, SqlClient>
+
+=== Piping Flow ===
+Location: 100:16 - 100:76
+Node: pipe(sql<CommandRow>`SELECT * FROM commands`, Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: sql<CommandRow>`SELECT * FROM commands`
+Subject Type: Statement<CommandRow>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<readonly CommandRow[], never, never>
+
+=== Piping Flow ===
+Location: 104:34 - 107:3
+Node: Effect.fn("findCommandUntyped")(function*(key: string) {\n  const sql = yield* SqlClient.SqlClient\n  return yield* sql`SELECT * FROM commands WHERE key_hash = ${key}`\n})
+Node Kind: KindCallExpression
+
+Subject: function*(key: string) {\n  const sql = yield* SqlClient.SqlClient\n  return yield* sql`SELECT * FROM commands WHERE key_hash = ${key}`\n}
+Subject Type: (key: string) => Generator<Effect<readonly Row[], SqlError, never> | Effect<SqlClient, never, SqlClient>, readonly Row[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("findCommandUntyped")
+      args: (constant)
+      outType: (key: string) => Effect<readonly Row[], SqlError, SqlClient>
+
+=== Piping Flow ===
+Location: 109:25 - 144:3
+Node: Effect.gen(function*() {\n  const sql = yield* SqlClient.SqlClient\n\n  // MUST NOT TRIGGER: sql tag without a type argument\n  const untyped = yield* sql`SELECT * FROM commands WHERE key_hash = ${keyHash}`\n\n  // MUST NOT TRIGGER: sql tag without a type argument and without substitutions\n  yield* sql`DELETE FROM commands`\n\n  // MUST NOT TRIGGER: sql.unsafe with a type argument is a call, not a tagged template\n  const unsafe = yield* sql.unsafe<CommandRow>("SELECT * FROM commands")\n\n  // MUST NOT TRIGGER: identifier helper call, not a tagged template\n  const table = sql("commands")\n\n  // MUST NOT TRIGGER: fragment helpers nested in an untyped tagged template\n  const filtered = yield* sql`SELECT * FROM ${table} WHERE ${sql.in("command_id", [minted])}`\n\n  // MUST NOT TRIGGER: the recommended shape, SqlSchema with an untyped sql tag\n  const findByKey = SqlSchema.findOne({\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String, fingerprint: Schema.String }),\n    execute: (key) => sql`SELECT command_id, fingerprint FROM commands WHERE key_hash = ${key}`\n  })\n\n  // MUST NOT TRIGGER: SqlSchema.void with an untyped sql tag\n  const deleteByKey = SqlSchema.void({\n    Request: Schema.String,\n    execute: (key) => sql`DELETE FROM commands WHERE key_hash = ${key}`\n  })\n\n  // MUST NOT TRIGGER: the row type is given on the binding, not as a type argument of the tag\n  const annotated: ReadonlyArray<object> = yield* sql`SELECT * FROM commands`\n\n  return [untyped, unsafe, filtered, findByKey, deleteByKey, annotated] as const\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const sql = yield* SqlClient.SqlClient\n\n  // MUST NOT TRIGGER: sql tag without a type argument\n  const untyped = yield* sql`SELECT * FROM commands WHERE key_hash = ${keyHash}`\n\n  // MUST NOT TRIGGER: sql tag without a type argument and without substitutions\n  yield* sql`DELETE FROM commands`\n\n  // MUST NOT TRIGGER: sql.unsafe with a type argument is a call, not a tagged template\n  const unsafe = yield* sql.unsafe<CommandRow>("SELECT * FROM commands")\n\n  // MUST NOT TRIGGER: identifier helper call, not a tagged template\n  const table = sql("commands")\n\n  // MUST NOT TRIGGER: fragment helpers nested in an untyped tagged template\n  const filtered = yield* sql`SELECT * FROM ${table} WHERE ${sql.in("command_id", [minted])}`\n\n  // MUST NOT TRIGGER: the recommended shape, SqlSchema with an untyped sql tag\n  const findByKey = SqlSchema.findOne({\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String, fingerprint: Schema.String }),\n    execute: (key) => sql`SELECT command_id, fingerprint FROM commands WHERE key_hash = ${key}`\n  })\n\n  // MUST NOT TRIGGER: SqlSchema.void with an untyped sql tag\n  const deleteByKey = SqlSchema.void({\n    Request: Schema.String,\n    execute: (key) => sql`DELETE FROM commands WHERE key_hash = ${key}`\n  })\n\n  // MUST NOT TRIGGER: the row type is given on the binding, not as a type argument of the tag\n  const annotated: ReadonlyArray<object> = yield* sql`SELECT * FROM commands`\n\n  return [untyped, unsafe, filtered, findByKey, deleteByKey, annotated] as const\n}
+Subject Type: () => Generator<Effect<readonly CommandRow[], SqlError, never> | Effect<readonly Row[], SqlError, never> | Effect<SqlClient, never, SqlClient>, readonly [readonly Row[], readonly CommandRow[], readonly Row[], (request: string) => Effect<{ readonly command_id: string; readonly fingerprint: string; }, NoSuchElementError | SchemaError | SqlError, never>, (request: string) => Effect<void, SchemaError | SqlError, never>, readonly object[]], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly [readonly Row[], readonly CommandRow[], readonly Row[], (request: string) => Effect<{ readonly command_id: string; readonly fingerprint: string; }, NoSuchElementError | SchemaError | SqlError, never>, (request: string) => Effect<void, SchemaError | SqlError, never>, readonly object[]], SqlError, SqlClient>
+
+=== Piping Flow ===
+Location: 119:24 - 119:73
+Node: sql.unsafe<CommandRow>("SELECT * FROM commands")
+Node Kind: KindCallExpression
+
+Subject: "SELECT * FROM commands"
+Subject Type: "SELECT * FROM commands"
+
+Transformations (1):
+  [0] kind: call
+      callee: sql.unsafe
+      args: (constant)
+      outType: Statement<CommandRow>
+
+=== Piping Flow ===
+Location: 122:16 - 122:32
+Node: sql("commands")
+Node Kind: KindCallExpression
+
+Subject: "commands"
+Subject Type: "commands"
+
+Transformations (1):
+  [0] kind: call
+      callee: sql
+      args: (constant)
+      outType: Identifier
+
+=== Piping Flow ===
+Location: 128:20 - 132:5
+Node: SqlSchema.findOne({\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String, fingerprint: Schema.String }),\n    execute: (key) => sql`SELECT command_id, fingerprint FROM commands WHERE key_hash = ${key}`\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    Request: Schema.String,\n    Result: Schema.Struct({ command_id: Schema.String, fingerprint: Schema.String }),\n    execute: (key) => sql`SELECT command_id, fingerprint FROM commands WHERE key_hash = ${key}`\n  }
+Subject Type: { Request: String; Result: Struct<{ readonly command_id: String; readonly fingerprint: String; }>; execute: (key: string) => Statement<object>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: SqlSchema.findOne
+      args: (constant)
+      outType: (request: string) => Effect<{ readonly command_id: string; readonly fingerprint: string; }, NoSuchElementError | SchemaError | SqlError, never>
+
+=== Piping Flow ===
+Location: 130:12 - 130:85
+Node: Schema.Struct({ command_id: Schema.String, fingerprint: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { command_id: Schema.String, fingerprint: Schema.String }
+Subject Type: { command_id: String; fingerprint: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly command_id: String; readonly fingerprint: String; }>
+
+=== Piping Flow ===
+Location: 135:22 - 138:5
+Node: SqlSchema.void({\n    Request: Schema.String,\n    execute: (key) => sql`DELETE FROM commands WHERE key_hash = ${key}`\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    Request: Schema.String,\n    execute: (key) => sql`DELETE FROM commands WHERE key_hash = ${key}`\n  }
+Subject Type: { Request: String; execute: (key: string) => Statement<Row>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: SqlSchema.void
+      args: (constant)
+      outType: (request: string) => Effect<void, SchemaError | SqlError, never>

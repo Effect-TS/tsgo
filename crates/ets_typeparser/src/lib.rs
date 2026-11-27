@@ -161,6 +161,7 @@ mod service_type;
 #[cfg(test)]
 mod service_type_test;
 mod sql_model_type;
+mod sql_statement_type;
 mod stream_type;
 #[cfg(test)]
 mod tsrs_patches_test;

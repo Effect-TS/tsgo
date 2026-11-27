@@ -706,5 +706,9 @@
     "`Effect.zipWith` combines these two independent effects directly instead of `Effect.flatMap` nesting an `Effect.map` over an effect that does not use the outer result. effect(flatMapMapToZipWith)": {
         "category": "Suggestion",
         "code": 377218
+    },
+    "The sql tagged template only asserts its row type {0} and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)": {
+        "category": "Warning",
+        "code": 377224
     }
 }

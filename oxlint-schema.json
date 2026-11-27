@@ -2710,6 +2710,9 @@
         "effecttsgo/service-not-as-class": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/sql-tagged-row-type-to-sql-schema": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/strict-boolean-expressions": {
           "$ref": "#/definitions/RuleNoConfig"
         },

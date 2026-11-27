@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 4.1.2
+
+/.src/sqlTaggedRowTypeToSqlSchema_preview.ts(12,17): warning TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+
+
+==== /.src/sqlTaggedRowTypeToSqlSchema_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics sqlTaggedRowTypeToSqlSchema:warning
+    import { Effect } from "effect"
+    import { SqlClient } from "effect/sql"
+    
+    interface CommandRow {
+      readonly command_id: string
+    }
+    
+    export const program = Effect.gen(function*() {
+      const sql = yield* SqlClient.SqlClient
+      return yield* sql<CommandRow>`SELECT command_id FROM commands`
+                    ~~~
+!!! warning TS377224: The sql tagged template only asserts its row type CommandRow and does not validate it at runtime; use SqlSchema (findAll, findOne, findOneOption, findNonEmpty, void) with a Schema for Result to decode rows. effect(sqlTaggedRowTypeToSqlSchema)
+    })
+    
