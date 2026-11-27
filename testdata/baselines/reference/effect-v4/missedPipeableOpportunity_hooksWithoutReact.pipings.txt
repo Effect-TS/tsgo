@@ -1,0 +1,23 @@
+==== /.src/missedPipeableOpportunity_hooksWithoutReact.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:17 - 7:66
+Node: useEffectValue(Effect.asVoid(Effect.succeed(1)))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: call
+      callee: useEffectValue
+      args: (constant)
+      outType: void

@@ -2,10 +2,11 @@ use ets_shim::ast::{Kind, Node, SymbolFlags};
 use ets_shim::checker::{SignatureKind, Type};
 use ets_shim::core::P;
 
+use crate::vitest_api::reference_node_name;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/pipeable.go:10 TypeParser.IsPipeableType d0b478c5cef831b9
+    // go: internal/typeparser/pipeable.go:12 TypeParser.IsPipeableType d0b478c5cef831b9
     // IsPipeableType returns true if the type has a callable "pipe" property,
     // indicating it supports the pipeable pattern (e.g., value.pipe(f1, f2, ...)).
     pub fn is_pipeable_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
@@ -27,7 +28,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/pipeable.go:30 TypeParser.LiteralCannotBePipeable f40d4578c0d72fe2
+    // go: internal/typeparser/pipeable.go:32 TypeParser.LiteralCannotBePipeable f40d4578c0d72fe2
     // An object literal's type has only its own properties plus those of the global
     // Object interface. An array literal's type is an array or tuple whose members
     // come from Array or ReadonlyArray and Object. The global interfaces are read
@@ -65,7 +66,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/pipeable.go:50 TypeParser.globalInterfaceHasPipe 70067f647ba61c91
+    // go: internal/typeparser/pipeable.go:52 TypeParser.globalInterfaceHasPipe 70067f647ba61c91
     pub(crate) fn global_interface_has_pipe(&mut self, name: &str) -> bool {
         cached(
             self,
@@ -83,7 +84,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/pipeable.go:65 TypeParser.IsSafelyPipeableCallee a576d6a401b0bc95
+    // go: internal/typeparser/pipeable.go:67 TypeParser.IsSafelyPipeableCallee 87d1ec42b2b68018
     // IsSafelyPipeableCallee returns true if a callee expression can be safely
     // extracted into a pipe argument without losing `this` context.
     // This is used by the missedPipeableOpportunity rule to determine which
@@ -92,6 +93,13 @@ impl TypeParser<'_> {
         let Some(callee) = callee.into() else {
             return false;
         };
+
+        // React hooks must be called directly: `atom.pipe(useAtomValue)` passes
+        // the hook as a value, which the Rules of Hooks forbid. Only programs that
+        // reference React can call hooks.
+        if is_react_hook_name(reference_node_name(Some(callee))) && self.references_react() {
+            return false;
+        }
 
         // Call expressions are safe - they return a value
         if ets_shim::ast::is_call_expression(callee) {
@@ -177,4 +185,19 @@ impl TypeParser<'_> {
 
         false
     }
+}
+
+// go: internal/typeparser/pipeable.go:164 isReactHookName 0516e0067bb3e6ac
+// isReactHookName reports whether name follows the React hook naming
+// convention used by eslint-plugin-react-hooks: `use` followed by an
+// uppercase letter or a digit. The bare `use` is excluded, since Effect
+// exports `Scope.use`, `Pool.use` and `Context.use`.
+fn is_react_hook_name(name: &str) -> bool {
+    let Some(rest) = name.strip_prefix("use") else {
+        return false;
+    };
+    let Some(&first) = rest.as_bytes().first() else {
+        return false;
+    };
+    first.is_ascii_uppercase() || first.is_ascii_digit()
 }

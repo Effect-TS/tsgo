@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:18-7:66) TS377050: This nested call structure has a pipeable form. `Effect.succeed(1).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_hooksWithoutReact.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { Effect } from "effect"
+
+declare function useEffectValue<A>(effect: Effect.Effect<A>): A
+
+// should trigger: the program does not reference React, so `use*` names are not hooks
+export const a = Effect.succeed(1).pipe(Effect.asVoid, useEffectValue)
+

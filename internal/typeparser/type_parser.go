@@ -110,6 +110,8 @@ type EffectLinks struct {
 	discoverPackagesValue       []DiscoveredPackage
 	detectEffectVersionComputed bool
 	detectEffectVersionValue    EffectMajorVersion
+	referencesReactComputed     bool
+	referencesReactValue        bool
 	PackageJsonForSourceFile    core.LinkStore[*ast.SourceFile, *packagejson.PackageJson]
 	EffectContextAnalyzed       core.LinkStore[*ast.SourceFile, bool]
 	ExpectedAndRealTypes        core.LinkStore[*ast.SourceFile, []ExpectedAndRealType]
