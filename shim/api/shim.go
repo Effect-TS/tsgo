@@ -379,6 +379,7 @@ type ParseConfigFileTextToJsonParams = api.ParseConfigFileTextToJsonParams
 type ParseJsonConfigFileContentParams = api.ParseJsonConfigFileContentParams
 type PrintEmitNode = api.PrintEmitNode
 type PrintNodeParams = api.PrintNodeParams
+type PrintOriginalNode = api.PrintOriginalNode
 type PrintSynthesizedComment = api.PrintSynthesizedComment
 type ProfileParams = api.ProfileParams
 type ProfileResult = api.ProfileResult
